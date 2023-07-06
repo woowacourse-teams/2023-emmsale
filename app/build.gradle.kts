@@ -8,7 +8,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "come.emmsale"
+        applicationId = "com.emmsale"
         minSdk = 28
         targetSdk = 33
         versionCode = 1
