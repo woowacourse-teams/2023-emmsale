@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/android,androidstudio,java,kotlin
-# Edit at https://www.toptal.com/developers/gitignore?templates=android,androidstudio,java,kotlin
+# Created by https://www.toptal.com/developers/gitignore/api/android,androidstudio,kotlin,java
+# Edit at https://www.toptal.com/developers/gitignore?templates=android,androidstudio,kotlin,java
 
 ### Android ###
 # Gradle files
@@ -197,4 +197,4 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
-# End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,java,kotlin
+# End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,kotlin,java
