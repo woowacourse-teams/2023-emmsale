@@ -6,15 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.emmsale.career.application.dto.ActivityResponse;
 import com.emmsale.career.application.dto.CareerResponse;
 import com.emmsale.career.domain.ActivityType;
+import com.emmsale.helper.ServiceIntegrationTestHelper;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class CareerServiceTest {
+class CareerServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
   private CareerService careerService;
