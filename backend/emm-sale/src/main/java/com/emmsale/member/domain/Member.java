@@ -7,9 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
@@ -19,4 +21,8 @@ public class Member extends BaseEntity {
 
   @Column(nullable = false)
   private String name;
+
+  public void updateName(final String name) {
+    this.name = name;
+  }
 }
