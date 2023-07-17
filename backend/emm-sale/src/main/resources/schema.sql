@@ -1,3 +1,7 @@
+drop table if exists kerdy.career;
+drop table if exists kerdy.member;
+drop table if exists kerdy.member_career;
+
 create table kerdy.career
 (
     id       bigint auto_increment primary key,
@@ -19,5 +23,5 @@ create table kerdy.member_career
     created_at datetime(6) not null,
     updated_at datetime(6) not null,
     career_id  bigint not null,
-    member_id  bigint not null,
+    member_id  bigint not null
 );
