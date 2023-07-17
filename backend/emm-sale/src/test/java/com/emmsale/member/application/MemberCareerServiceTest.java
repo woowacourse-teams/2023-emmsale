@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.MemberCareerInitialRequest;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -11,10 +12,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class MemberCareerServiceTest {
+class MemberCareerServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
   private MemberCareerService memberCareerService;
@@ -32,7 +31,8 @@ class MemberCareerServiceTest {
     final Member member = memberRepository.findById(savedMemberId).get();
     final String updateName = "우르";
 
-    final MemberCareerInitialRequest request = new MemberCareerInitialRequest(updateName, careerIds);
+    final MemberCareerInitialRequest request = new MemberCareerInitialRequest(updateName,
+        careerIds);
 
     //when & then
     assertAll(
