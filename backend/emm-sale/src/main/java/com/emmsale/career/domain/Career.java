@@ -8,10 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Career {
 
   @Id
@@ -20,7 +22,7 @@ public class Career {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "activity", nullable = false)
-  private Activity activity;
+  private ActivityType activityType;
 
   @Column(nullable = false)
   private String name;
