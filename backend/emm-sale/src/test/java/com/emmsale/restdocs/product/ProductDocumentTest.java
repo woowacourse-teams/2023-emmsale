@@ -35,6 +35,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 public class ProductDocumentTest {
 
+  private static final String PRODUCT_PATH = "/test/restdocs/products";
   @Autowired
   private MockMvc mockMvc;
 
@@ -71,7 +72,7 @@ public class ProductDocumentTest {
         headerWithName(HttpHeaders.AUTHORIZATION).description("Basic 로그인 토큰")
     );
 
-    this.mockMvc.perform(get("/products/top-price-drop")
+    this.mockMvc.perform(get(PRODUCT_PATH + "/top-price-drop")
             .param("page", "0")
             .param("size", "4")
             .header(HttpHeaders.AUTHORIZATION, getBasicToken())
@@ -105,7 +106,7 @@ public class ProductDocumentTest {
         headerWithName(HttpHeaders.AUTHORIZATION).description("Basic 로그인 토큰")
     );
 
-    this.mockMvc.perform(get("/products/search")
+    this.mockMvc.perform(get(PRODUCT_PATH + "/search")
             .param("page", "0")
             .param("size", "2")
             .param("keyword", "keyword")
@@ -140,7 +141,7 @@ public class ProductDocumentTest {
         headerWithName(HttpHeaders.AUTHORIZATION).description("Basic 로그인 토큰")
     );
 
-    this.mockMvc.perform(get("/products/wish?notificationFilter=false")
+    this.mockMvc.perform(get(PRODUCT_PATH + "/wish?notificationFilter=false")
             .param("page", "0")
             .param("size", "2")
             .param("notificationFilter", String.valueOf(false))
@@ -175,7 +176,7 @@ public class ProductDocumentTest {
         headerWithName(HttpHeaders.AUTHORIZATION).description("Basic 로그인 토큰")
     );
 
-    this.mockMvc.perform(get("/products/wish?notificationFilter=true")
+    this.mockMvc.perform(get(PRODUCT_PATH + "/wish?notificationFilter=true")
             .param("page", "0")
             .param("size", "2")
             .param("notificationFilter", String.valueOf(true))
@@ -200,7 +201,7 @@ public class ProductDocumentTest {
         headerWithName(HttpHeaders.AUTHORIZATION).optional().description("Basic 로그인 토큰")
     );
 
-    this.mockMvc.perform(get("/products/wish?notificationFilter=true")
+    this.mockMvc.perform(get(PRODUCT_PATH + "/wish?notificationFilter=true")
             .param("page", "0")
             .param("size", "2")
             .param("notificationFilter", String.valueOf(false))
