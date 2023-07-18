@@ -1,4 +1,4 @@
-package com.emmsale;
+package com.emmsale.base;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;
