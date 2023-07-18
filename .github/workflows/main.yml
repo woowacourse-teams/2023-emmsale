@@ -1,0 +1,26 @@
+name: Kerdy Dev Server CI/CD
+
+on:
+  push:
+    branches: ["Feature/#37-자동배포_구현"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Grant execute permission for gradlew
+      run: |
+        echo "============= before cd ============="
+        ls
+        cd ~/backend/emm-sale
+        echo "============= after cd ============="
+        ls
+        chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew clean build
+    - name: deploy
+      run: |
+        ~/deploy.sh
