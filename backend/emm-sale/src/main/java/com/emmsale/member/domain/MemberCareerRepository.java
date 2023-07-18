@@ -7,8 +7,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface MemberCareerRepository extends JpaRepository<MemberCareer, Long> {
 
-  @Query("select mc from MemberCareer mc where mc.member.id = :memberId")
-  List<MemberCareer> findAllByMemberId(@Param("memberId") final Long memberId);
+  @Query("select mc from MemberCareer mc where mc.member = :member")
+  List<MemberCareer> findAllByMember(@Param("member") final Member member);
 
   @Query("select mc from MemberCareer mc "
       + "where mc.member = :member "

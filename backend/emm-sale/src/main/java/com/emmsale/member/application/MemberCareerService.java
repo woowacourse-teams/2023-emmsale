@@ -48,7 +48,7 @@ public class MemberCareerService {
     final List<Long> careerIds = memberCareerAddRequest.getCareerIds();
     saveMemberCareers(member, careerIds);
 
-    return MemberCareerResponse.from(memberCareerRepository.findAllByMemberId(member.getId()));
+    return MemberCareerResponse.from(memberCareerRepository.findAllByMember(member));
   }
 
   public List<MemberCareerResponse> deleteCareer(
@@ -65,7 +65,7 @@ public class MemberCareerService {
 
     memberCareerRepository.deleteAllByIdInBatch(savedMemberCareerIds);
 
-    return MemberCareerResponse.from(memberCareerRepository.findAllByMemberId(member.getId()));
+    return MemberCareerResponse.from(memberCareerRepository.findAllByMember(member));
   }
 }
 

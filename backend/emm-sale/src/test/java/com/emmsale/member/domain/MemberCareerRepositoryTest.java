@@ -22,13 +22,14 @@ class MemberCareerRepositoryTest {
   private MemberRepository memberRepository;
 
   @Test
-  @DisplayName("사용자의 id를 통해 사용자의 커리어들을 모두 조회할 수 있다.")
+  @DisplayName("사용자를 통해 사용자의 커리어들을 모두 조회할 수 있다.")
   void findAllByMemberId() throws Exception {
     //given
     final Long memberId = 1L;
+    final Member member = memberRepository.findById(memberId).get();
 
     //when
-    final List<MemberCareer> memberCareers = memberCareerRepository.findAllByMemberId(memberId);
+    final List<MemberCareer> memberCareers = memberCareerRepository.findAllByMember(member);
 
     //then
     final List<Long> memberCareerIds = memberCareers.stream()
