@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.member.application.MemberCareerService;
 import com.emmsale.member.application.dto.MemberCareerInitialRequest;
-import com.emmsale.member.application.dto.MemberCareerRequest;
+import com.emmsale.member.application.dto.MemberCareerAddRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class MemberApiTest extends MockMvcTestHelper {
   void addCareer() throws Exception {
     //given
     final List<Long> careerIds = List.of(4L, 5L, 6L);
-    final MemberCareerRequest request = new MemberCareerRequest(careerIds);
+    final MemberCareerAddRequest request = new MemberCareerAddRequest(careerIds);
 
     //when & then
     mockMvc.perform(post("/members/careers")

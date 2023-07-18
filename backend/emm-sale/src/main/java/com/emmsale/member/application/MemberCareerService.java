@@ -4,7 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.emmsale.career.domain.CareerRepository;
 import com.emmsale.member.application.dto.MemberCareerInitialRequest;
-import com.emmsale.member.application.dto.MemberCareerRequest;
+import com.emmsale.member.application.dto.MemberCareerAddRequest;
 import com.emmsale.member.application.dto.MemberCareerResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberCareer;
@@ -42,9 +42,9 @@ public class MemberCareerService {
 
   public List<MemberCareerResponse> addCareer(
       final Member member,
-      final MemberCareerRequest memberCareerRequest
+      final MemberCareerAddRequest memberCareerAddRequest
   ) {
-    final List<Long> careerIds = memberCareerRequest.getCareerIds();
+    final List<Long> careerIds = memberCareerAddRequest.getCareerIds();
     saveMemberCareers(member, careerIds);
 
     return MemberCareerResponse.from(memberCareerRepository.findAllByMemberId(member.getId()));

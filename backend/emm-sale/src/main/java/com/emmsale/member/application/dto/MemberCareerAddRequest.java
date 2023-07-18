@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class MemberCareerRequest {
+public class MemberCareerAddRequest {
 
   private final List<Long> careerIds;
 
-  private MemberCareerRequest() {
+  private MemberCareerAddRequest() {
     this(null);
   }
 }

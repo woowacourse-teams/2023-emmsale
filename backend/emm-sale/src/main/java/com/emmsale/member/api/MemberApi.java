@@ -1,8 +1,8 @@
 package com.emmsale.member.api;
 
 import com.emmsale.member.application.MemberCareerService;
+import com.emmsale.member.application.dto.MemberCareerAddRequest;
 import com.emmsale.member.application.dto.MemberCareerInitialRequest;
-import com.emmsale.member.application.dto.MemberCareerRequest;
 import com.emmsale.member.application.dto.MemberCareerResponse;
 import com.emmsale.member.domain.Member;
 import java.util.List;
@@ -31,9 +31,9 @@ public class MemberApi {
   @PostMapping("/members/careers")
   public ResponseEntity<List<MemberCareerResponse>> addCareer(
       final Member member,
-      @RequestBody final MemberCareerRequest memberCareerRequest
+      @RequestBody final MemberCareerAddRequest memberCareerAddRequest
   ) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(memberCareerService.addCareer(member, memberCareerRequest));
+        .body(memberCareerService.addCareer(member, memberCareerAddRequest));
   }
 }

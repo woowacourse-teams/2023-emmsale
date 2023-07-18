@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberCareerInitialRequest;
-import com.emmsale.member.application.dto.MemberCareerRequest;
+import com.emmsale.member.application.dto.MemberCareerAddRequest;
 import com.emmsale.member.application.dto.MemberCareerResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -53,7 +53,7 @@ class MemberCareerServiceTest extends ServiceIntegrationTestHelper {
     final long savedMemberId = 1L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
-    final MemberCareerRequest request = new MemberCareerRequest(careerIds);
+    final MemberCareerAddRequest request = new MemberCareerAddRequest(careerIds);
 
     final List<MemberCareerResponse> expected = List.of(
         new MemberCareerResponse("동아리",
