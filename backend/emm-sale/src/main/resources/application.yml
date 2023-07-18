@@ -21,3 +21,11 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+github:
+  client:
+    id: client_id
+    secret: client_secret
+  url:
+    access-token: access-token_url
+    profile: profile_url
