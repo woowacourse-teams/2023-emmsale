@@ -1,13 +1,15 @@
 package com.emmsale.member.api;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.member.application.MemberCareerService;
-import com.emmsale.member.application.dto.MemberCareerInitialRequest;
 import com.emmsale.member.application.dto.MemberCareerAddRequest;
+import com.emmsale.member.application.dto.MemberCareerDeleteRequest;
+import com.emmsale.member.application.dto.MemberCareerInitialRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,6 +52,21 @@ class MemberApiTest extends MockMvcTestHelper {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
+        .andDo(print());
+  }
+
+  @Test
+  @DisplayName("내 명함에서 활동이력들을 성공적으로 삭제하면, 200 OK를 반환해줄 수 있다.")
+  void test_deleteCareer() throws Exception {
+    //given
+    final List<Long> careerIds = List.of(1L, 2L);
+    final MemberCareerDeleteRequest request = new MemberCareerDeleteRequest(careerIds);
+
+    //when & then
+    mockMvc.perform(delete("/members/careers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isOk())
         .andDo(print());
   }
 }

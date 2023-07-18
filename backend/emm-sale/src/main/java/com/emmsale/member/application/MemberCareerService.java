@@ -3,8 +3,9 @@ package com.emmsale.member.application;
 import static java.util.stream.Collectors.toList;
 
 import com.emmsale.career.domain.CareerRepository;
-import com.emmsale.member.application.dto.MemberCareerInitialRequest;
 import com.emmsale.member.application.dto.MemberCareerAddRequest;
+import com.emmsale.member.application.dto.MemberCareerDeleteRequest;
+import com.emmsale.member.application.dto.MemberCareerInitialRequest;
 import com.emmsale.member.application.dto.MemberCareerResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberCareer;
@@ -46,6 +47,23 @@ public class MemberCareerService {
   ) {
     final List<Long> careerIds = memberCareerAddRequest.getCareerIds();
     saveMemberCareers(member, careerIds);
+
+    return MemberCareerResponse.from(memberCareerRepository.findAllByMemberId(member.getId()));
+  }
+
+  public List<MemberCareerResponse> deleteCareer(
+      final Member member,
+      final MemberCareerDeleteRequest memberCareerDeleteRequest
+  ) {
+    final List<Long> deleteCareerIds = memberCareerDeleteRequest.getCareerIds();
+
+    final List<Long> savedMemberCareerIds =
+        memberCareerRepository.findAllByMemberAndCareerIds(member, deleteCareerIds)
+            .stream()
+            .map(MemberCareer::getId)
+            .collect(toList());
+
+    memberCareerRepository.deleteAllByIdInBatch(savedMemberCareerIds);
 
     return MemberCareerResponse.from(memberCareerRepository.findAllByMemberId(member.getId()));
   }

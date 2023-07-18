@@ -7,8 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.MemberActivityResponse;
-import com.emmsale.member.application.dto.MemberCareerInitialRequest;
 import com.emmsale.member.application.dto.MemberCareerAddRequest;
+import com.emmsale.member.application.dto.MemberCareerDeleteRequest;
+import com.emmsale.member.application.dto.MemberCareerInitialRequest;
 import com.emmsale.member.application.dto.MemberCareerResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -78,6 +79,33 @@ class MemberCareerServiceTest extends ServiceIntegrationTestHelper {
 
     //when
     final List<MemberCareerResponse> actual = memberCareerService.addCareer(member, request);
+
+    //then
+    assertThat(expected)
+        .usingRecursiveComparison()
+        .ignoringCollectionOrder()
+        .isEqualTo(actual);
+  }
+
+  @Test
+  @DisplayName("deleteCareer() : member Id와 삭제할 career Id를 통해서 사용자의 커리어를 삭제할 수 있다.")
+  void test_deleteCareer() throws Exception {
+    //given
+    final List<Long> deleteCareerIds = List.of(1L, 2L);
+    final long savedMemberId = 1L;
+
+    final Member member = memberRepository.findById(savedMemberId).get();
+    final MemberCareerDeleteRequest request = new MemberCareerDeleteRequest(deleteCareerIds);
+
+    final List<MemberCareerResponse> expected = List.of(
+        new MemberCareerResponse("동아리",
+            List.of(
+                new MemberActivityResponse(3L, "nexters")
+            ))
+    );
+
+    //when
+    final List<MemberCareerResponse> actual = memberCareerService.deleteCareer(member, request);
 
     //then
     assertThat(expected)
