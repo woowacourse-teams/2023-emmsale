@@ -2,12 +2,14 @@ package com.emmsale.login.application;
 
 import com.emmsale.login.application.dto.GithubAccessTokenRequest;
 import com.emmsale.login.application.dto.GithubAccessTokenResponse;
+import com.emmsale.login.application.dto.GithubProfileResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -45,5 +47,22 @@ public class GithubClient {
       throw new IllegalArgumentException("code가 유효하지 않습니다.");
     }
     return accessToken;
+  }
+
+  public GithubProfileResponse getGithubProfileFromGithub(final String accessToken) {
+    final HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "token " + accessToken);
+
+    final HttpEntity httpEntity = new HttpEntity(headers);
+    final RestTemplate restTemplate = new RestTemplate();
+
+    try {
+      return restTemplate
+          .exchange(profileUrl, HttpMethod.GET, httpEntity, GithubProfileResponse.class)
+          .getBody();
+    } catch (final HttpClientErrorException e) {
+      //TODO: 커스텀 예외 정의
+      throw new IllegalArgumentException("요청이 유효하지 않습니다.");
+    }
   }
 }
