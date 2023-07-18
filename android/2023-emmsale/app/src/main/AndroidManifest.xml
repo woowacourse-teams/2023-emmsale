@@ -11,9 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Emmsale"
+        android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name="com.emmsale.MainActivity"
+            android:name=".presentation.ui.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
