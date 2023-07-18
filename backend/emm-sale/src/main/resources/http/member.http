@@ -15,3 +15,11 @@ Content-Type: application/json
 {
   "careerIds": [4, 5, 6]
 }
+
+### 사용자 커리어 제거
+DELETE http://localhost:8080/members/careers
+Content-Type: application/json
+
+{
+  "careerIds": [1, 2]
+}
