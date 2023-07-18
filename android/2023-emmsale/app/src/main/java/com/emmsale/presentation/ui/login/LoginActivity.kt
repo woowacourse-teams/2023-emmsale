@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.emmsale.databinding.ActivityLoginBinding
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
+import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.emmsale.presentation.utils.extensions.setContentView
 import com.google.android.material.snackbar.Snackbar
 
@@ -36,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToOnboarding() {
-        // startActivity(OnboardingActivity.getIntent(this))
+        OnboardingActivity.startActivity(this)
         finish()
     }
 
