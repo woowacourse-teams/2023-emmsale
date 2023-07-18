@@ -3,38 +3,27 @@ package com.emmsale.restdocs.product;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.helper.MockMvcTestHelper;
 import java.util.Base64;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.headers.RequestHeadersSnippet;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest(ProductController.class)
-@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-public class ProductDocumentTest {
+public class ProductDocumentTest extends MockMvcTestHelper {
 
   private static final String PRODUCT_PATH = "/test/restdocs/products";
 
@@ -48,19 +37,6 @@ public class ProductDocumentTest {
       fieldWithPath("[].purchaseTemperature").type(JsonFieldType.NUMBER).description("구매 온도"),
       fieldWithPath("[].notified").type(JsonFieldType.BOOLEAN).description("알림 여부")
   );
-
-  @Autowired
-  private MockMvc mockMvc;
-
-  @BeforeEach
-  void setUp(final WebApplicationContext applicationContext,
-      final RestDocumentationContextProvider provider) {
-    mockMvc = MockMvcBuilders.webAppContextSetup(applicationContext)
-        .apply(documentationConfiguration(provider).operationPreprocessors()
-            .withRequestDefaults(prettyPrint())
-            .withResponseDefaults(prettyPrint()))
-        .build();
-  }
 
   @Test
   @DisplayName("최근 가격 하락 상품 목록 조회")
