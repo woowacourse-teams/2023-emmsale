@@ -1,0 +1,9 @@
+### 사용자 초기 커리어 및 이름 저장
+
+POST http://localhost:8080/members
+Content-Type: application/json
+
+{
+  "name": "우르",
+  "careerIds": [1, 2]
+}
