@@ -25,28 +25,33 @@ class LoginServiceTest extends ServiceIntegrationTestHelper {
 
   @MockBean
   private GithubClient githubClient;
+  @MockBean
+  private JwtTokenProvider tokenProvider;
 
   @Test
   @DisplayName("깃허브 id로부터 사용자를 조회하여 토큰을 생성한다.")
   void getAccessTokenFromGithub() {
     // given
+    final String memberId = "1";
     final String validCode = "valid_code";
     final String validAccessToken = "valid_access_token";
-    final GithubProfileResponse githubProfile = new GithubProfileResponse("1", "name",
+    final GithubProfileResponse githubProfile = new GithubProfileResponse(memberId, "name",
         "username", "imageUrl");
 
-    final TokenResponse expectToken = new TokenResponse(1L, "");
+    final String expectAccessToken = "expect_access_token";
+    final TokenResponse expectTokenResponse = new TokenResponse(1L, expectAccessToken);
 
     given(githubClient.getAccessTokenFromGithub(validCode)).willReturn(validAccessToken);
     given(githubClient.getGithubProfileFromGithub(validAccessToken)).willReturn(githubProfile);
+    given(tokenProvider.createToken(memberId)).willReturn(expectAccessToken);
 
     // when
     final TokenResponse actualToken = loginService.createToken(validCode);
 
     // then
     assertAll(
-        () -> assertEquals(expectToken.getMemberId(), actualToken.getMemberId()),
-        () -> assertEquals(expectToken.getAccessToken(), actualToken.getAccessToken())
+        () -> assertEquals(expectTokenResponse.getMemberId(), actualToken.getMemberId()),
+        () -> assertEquals(expectTokenResponse.getAccessToken(), actualToken.getAccessToken())
     );
   }
 

@@ -32,3 +32,9 @@ github:
   url:
     access-token: access-token_url
     profile: profile_url
+
+security:
+  jwt:
+    token:
+      secret-key: secret_key
+      expire-length: 3_600_000_000

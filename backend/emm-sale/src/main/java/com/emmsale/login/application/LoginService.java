@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 public class LoginService {
 
   private final GithubClient githubClient;
+  private final JwtTokenProvider tokenProvider;
 
-  public LoginService(final GithubClient githubClient) {
+  public LoginService(final GithubClient githubClient, final JwtTokenProvider tokenProvider) {
     this.githubClient = githubClient;
+    this.tokenProvider = tokenProvider;
   }
 
   public TokenResponse createToken(final String code) {
@@ -18,11 +20,10 @@ public class LoginService {
     final GithubProfileResponse githubProfileFromGithub = githubClient.getGithubProfileFromGithub(
         githubAccessToken);
 
-    //TODO: memberId 조회
     final Long githubId = githubProfileFromGithub.getGithubId();
+    //TODO: githubId를 통해 memberId 조회 기능 구현
     final Long memberId = 1L;
-    //TODO: accessToken 생성
-    final String accessToken = "";
+    final String accessToken = tokenProvider.createToken(memberId.toString());
 
     return new TokenResponse(memberId, accessToken);
   }
