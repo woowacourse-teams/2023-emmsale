@@ -62,6 +62,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 }
 
 tasks.named('test') {
