@@ -1,6 +1,9 @@
 name: Kerdy Backend Dev Server CI/CD
 
-on: workflow_dispatch
+on:
+  push:
+    branches: ["main", "backend-main", "Feature/#37-자동배포_구현"]
+  workflow_dispatch:
 
 jobs:
   build:
