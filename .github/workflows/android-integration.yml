@@ -29,11 +29,11 @@ jobs:
     - name: Build with Gradle
       run: ./android/2023-emmsale/gradlew build
       
-    - name: 테스트 코드 실행
-      run: ./android/2023-emmsale/gradlew check
-      
     - name: 코틀린 Lint 체크
       run: ./android/2023-emmsale/gradlew ktlintCheck
+      
+    - name: 테스트 코드 실행
+      run: ./android/2023-emmsale/gradlew check
       
     - name: 완료 문구
       run: echo "CI를 완료하였습니다!"
