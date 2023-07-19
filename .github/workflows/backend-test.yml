@@ -3,9 +3,13 @@ name: Kerdy Backend Build Test
 on:
   workflow_dispatch:
   pull_request:
-    types: [ opened, synchronize, reopened, ]
+    types: [ opened, synchronize, reopened ]
     branches:
       - backend-main
+
+defaults:
+  run:
+    working-directory: backend/emm-sale
 
 jobs:
   build:
@@ -35,11 +39,8 @@ jobs:
           java-version: 11
           distribution: 'temurin'
 
-      - name: cd backend directory
-        run: cd backend/emm-sale
-
       - name: Give permission for Gradle
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: gradlew clean build
+        run: ./gradlew clean build
