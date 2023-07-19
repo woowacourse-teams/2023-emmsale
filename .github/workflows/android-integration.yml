@@ -23,6 +23,9 @@ jobs:
     - name: Change wrapper permissions
       run: chmod +x ./android/2023-emmsale/gradlew
       
+    - name: gradlew 초기화
+      run: ./android/2023-emmsale/gradlew init
+      
     - name: Build with Gradle
       run: ./android/2023-emmsale/gradlew build
       
