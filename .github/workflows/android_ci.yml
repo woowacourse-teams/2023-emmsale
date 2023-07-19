@@ -20,14 +20,20 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Gradle 빌드
-      run: ./gradlew build
+    - name: Change wrapper permissions
+      run: chmod +x ./gradlew
+
+    - name: Init gradle wrapper
+      run: gradle wrapper
+
+    - name: Change wrapper permissions
+      run: chmod +x ./gradlew
+      
     - name: 테스트 코드 실행
       run: ./gradlew check
+      
     - name: 코틀린 Lint 체크
       run: ./gradlew ktlintCheck
+      
     - name: 완료 문구
       run: echo "CI를 완료하였습니다!"
-      
