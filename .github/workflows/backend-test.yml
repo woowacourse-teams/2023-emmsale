@@ -1,4 +1,4 @@
-name: [ Kerdy ] Backend Build Test
+name: Kerdy Backend Build Test
 
 on:
   pull_request:
