@@ -1,6 +1,7 @@
 plugins {
     id("org.jetbrains.kotlin.android")
     id("com.android.application") version "8.0.2"
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -54,4 +55,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }
