@@ -19,6 +19,7 @@ jobs:
 
       - name: Test with Gradle
         run: |
-          ls
           cd backend/emm-sale
+          ls
+          cp ~/application.yml ./src/main/resources/application.yml
           ./gradlew test
