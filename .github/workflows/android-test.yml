@@ -24,7 +24,7 @@ jobs:
       run: cd android/2023-emmsale
       
     - name: Change wrapper permissions
-      run: chmod +x gradlew
+      run: chmod +x gradle
       
     - name: 테스트 코드 실행
       run: ./gradlew check
