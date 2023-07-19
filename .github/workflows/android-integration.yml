@@ -26,14 +26,21 @@ jobs:
     - name: gradlew 초기화
       run: ./android/2023-emmsale/gradlew init
       
-    - name: Build with Gradle
-      run: ./android/2023-emmsale/gradlew build
-      
-    - name: 코틀린 Lint 체크
+    - name: Run ktlint
       run: ./android/2023-emmsale/gradlew ktlintCheck
-      
-    - name: 테스트 코드 실행
-      run: ./android/2023-emmsale/gradlew check
-      
-    - name: 완료 문구
-      run: echo "CI를 완료하였습니다!"
+
+    - name: Run detekt
+      run: ./android/2023-emmsale/gradlew detekt
+
+    - name: Run unit tests
+      run: ./android/2023-emmsale/gradlew testDebugUnitTest
+
+    - name: Build assemble release apk
+      run: ./android/2023-emmsale/gradlew assembleRelease
+
+    - name: Create android test report
+      uses: asadmansr/android-test-report-action@v1.2.0
+      if: ${{ always() }}
+
+    - name: Build assemble release apk
+      run: ./android/2023-emmsale/gradlew assembleRelease
