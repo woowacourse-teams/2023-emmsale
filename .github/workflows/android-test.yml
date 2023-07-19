@@ -21,7 +21,7 @@ jobs:
         cache: gradle
 
     - name: Change wrapper permissions
-      run: chmod +x ./android/2023-emmsale/gradle
+      run: chmod +x ./android/2023-emmsale/gradlew
       
     - name: 테스트 코드 실행
       run: ./android/2023-emmsale/gradlew check
