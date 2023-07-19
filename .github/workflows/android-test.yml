@@ -22,11 +22,14 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: 디렉토리 확인
+      run: ls
+
     - name: 경로 점검
       run: pwd
       
     - name: Change wrapper permissions
-      run: chmod +x gradle
+      run: chmod +x gradlew
       
     - name: 테스트 코드 실행
       run: ./gradlew check
