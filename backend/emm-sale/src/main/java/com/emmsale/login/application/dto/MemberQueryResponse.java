@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class TokenResponse {
+public class MemberQueryResponse {
 
   private long memberId;
   private boolean isNewMember;
-  private String accessToken;
 }

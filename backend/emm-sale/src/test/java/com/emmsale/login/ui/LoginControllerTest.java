@@ -24,8 +24,8 @@ class LoginControllerTest extends MockMvcTestHelper {
   @DisplayName("code가 유효할 경우 200과 함께 TokenResponse를 반환해 준다.")
   void availableLoginTest() throws Exception {
     // given
-    final String code = "code1234";
-    final TokenResponse tokenResponse = new TokenResponse(1L, "access_token");
+    final String code = "code";
+    final TokenResponse tokenResponse = new TokenResponse(1L, false, "access_token");
 
     given(loginService.createToken(code)).willReturn(tokenResponse);
 

@@ -39,7 +39,7 @@ class LoginServiceTest extends ServiceIntegrationTestHelper {
         "username", "imageUrl");
 
     final String expectAccessToken = "expect_access_token";
-    final TokenResponse expectTokenResponse = new TokenResponse(1L, expectAccessToken);
+    final TokenResponse expectTokenResponse = new TokenResponse(1L, false, expectAccessToken);
 
     given(githubClient.getAccessTokenFromGithub(validCode)).willReturn(validAccessToken);
     given(githubClient.getGithubProfileFromGithub(validAccessToken)).willReturn(githubProfile);

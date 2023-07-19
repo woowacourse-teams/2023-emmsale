@@ -1,6 +1,7 @@
 package com.emmsale.login.application;
 
 import com.emmsale.login.application.dto.GithubProfileResponse;
+import com.emmsale.login.application.dto.MemberQueryResponse;
 import com.emmsale.login.application.dto.TokenResponse;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +22,16 @@ public class LoginService {
         githubAccessToken);
 
     final Long githubId = githubProfileFromGithub.getGithubId();
-    //TODO: githubId를 통해 memberId 조회 기능 구현
-    final Long memberId = 1L;
-    final String accessToken = tokenProvider.createToken(memberId.toString());
+    //TODO: githubId를 통해 memberId 조회 (처음 가입한 사용자인 경우 회원가입 후 memberId 반환)
+    final MemberQueryResponse memberQueryResponse = new MemberQueryResponse(1L, false);
+    final String accessToken = tokenProvider.createToken(
+        String.valueOf(memberQueryResponse.getMemberId())
+    );
 
-    return new TokenResponse(memberId, accessToken);
+    return new TokenResponse(
+        memberQueryResponse.getMemberId(),
+        memberQueryResponse.isNewMember(),
+        accessToken
+    );
   }
 }
