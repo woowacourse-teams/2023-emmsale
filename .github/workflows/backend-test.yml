@@ -22,10 +22,7 @@ jobs:
           cache: gradle
 
       - name: Grant execute permission for gradlew
-        run: |
-          ls
-          cd backend/emm-sale
-          chmod +x gradlew
+        run: chmod +x backend/emm-sale/gradlew
 
       - name: Test with Gradle
-        run: ./gradlew test
+        run: backend/emm-sale/gradlew test
