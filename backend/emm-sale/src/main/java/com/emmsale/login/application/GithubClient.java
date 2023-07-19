@@ -3,6 +3,8 @@ package com.emmsale.login.application;
 import com.emmsale.login.application.dto.GithubAccessTokenRequest;
 import com.emmsale.login.application.dto.GithubAccessTokenResponse;
 import com.emmsale.login.application.dto.GithubProfileResponse;
+import com.emmsale.login.exception.LoginException;
+import com.emmsale.login.exception.LoginExceptionType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -43,8 +45,7 @@ public class GithubClient {
         .getAccessToken();
 
     if (accessToken == null) {
-      //TODO: 커스텀 예외 정의
-      throw new IllegalArgumentException("code가 유효하지 않습니다.");
+      throw new LoginException(LoginExceptionType.NOT_FOUND_GITHUB_ACCESS_TOKEN);
     }
     return accessToken;
   }
@@ -61,8 +62,7 @@ public class GithubClient {
           .exchange(profileUrl, HttpMethod.GET, httpEntity, GithubProfileResponse.class)
           .getBody();
     } catch (final HttpClientErrorException e) {
-      //TODO: 커스텀 예외 정의
-      throw new IllegalArgumentException("요청이 유효하지 않습니다.");
+      throw new LoginException(LoginExceptionType.INVALID_GITHUB_ACCESS_TOKEN);
     }
   }
 }
