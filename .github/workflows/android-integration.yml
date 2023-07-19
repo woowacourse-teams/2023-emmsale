@@ -23,8 +23,8 @@ jobs:
     - name: Change wrapper permissions
       run: chmod +x ./android/2023-emmsale/gradlew
       
-    - name: gradlew 초기화
-      run: ./android/2023-emmsale/gradlew init
+    - name: Run ktlintCheck
+      run: ./android/2023-emmsale/gradlew ktlintCheck
       
     - name: Run detekt
       run: ./android/2023-emmsale/gradlew detekt
