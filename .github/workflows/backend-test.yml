@@ -1,0 +1,28 @@
+name: Kerdy Backend Build Test
+
+on:
+  push:
+    branches: ["main", "backend-main", "Feature/#37-자동배포_구현"]
+  pull_request:
+    branches: ["main", "backend-main", "Feature/#37-자동배포_구현"]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v3
+
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Test with Gradle
+        run: ./gradlew test

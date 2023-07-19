@@ -1,14 +1,13 @@
-name: Kerdy Dev Server CI/CD
+name: Kerdy Backend Dev Server CI/CD
 
 on:
-  push:
-    branches: ["Feature/#37-자동배포_구현"]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: self-hosted
-
     steps:
+    - name: kill Server
+      run: -9 $(lsof -t -i:80)
     - name: deploy
       run: ~/deploy.sh
