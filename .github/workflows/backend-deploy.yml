@@ -1,0 +1,11 @@
+name: Kerdy Backend Dev Server CI/CD
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: deploy
+      run: ~/deploy.sh
