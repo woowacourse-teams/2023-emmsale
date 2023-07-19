@@ -19,28 +19,25 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-        
-    - name: Change directory
-      run: cd ./android/2023-emmsale/
 
     - name: Change wrapper permissions
       run: chmod +x ./android/2023-emmsale/gradlew
       
     - name: Run ktlintCheck
-      run: ./gradlew ktlintCheck
+      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale ktlintCheck
       
     - name: Run detekt
-      run: ./gradlew detekt
+      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale detekt
 
     - name: Run unit tests
-      run: ./gradlew testDebugUnitTest
+      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale testDebugUnitTest
 
     - name: Build assemble release apk
-      run: ./gradlew assembleRelease
+      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale assembleRelease
 
     - name: Create android test report
       uses: asadmansr/android-test-report-action@v1.2.0
       if: ${{ always() }}
 
     - name: Build assemble release apk
-      run: ./gradlew assembleRelease
+      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale assembleRelease
