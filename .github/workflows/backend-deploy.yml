@@ -7,7 +7,5 @@ jobs:
   build:
     runs-on: self-hosted
     steps:
-    - name: kill Server
-      run: -9 $(lsof -t -i:80)
     - name: deploy
       run: ~/deploy.sh
