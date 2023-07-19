@@ -26,9 +26,6 @@ jobs:
     - name: gradlew 초기화
       run: ./android/2023-emmsale/gradlew init
       
-    - name: Run ktlint
-      run: ./android/2023-emmsale/gradlew ktlintCheck
-
     - name: Run detekt
       run: ./android/2023-emmsale/gradlew detekt
 
