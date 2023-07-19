@@ -24,7 +24,7 @@ jobs:
       run: chmod +x ./android/2023-emmsale/gradlew
       
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./android/2023-emmsale/gradlew build
       
     - name: 테스트 코드 실행
       run: ./android/2023-emmsale/gradlew check
