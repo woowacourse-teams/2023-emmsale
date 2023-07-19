@@ -14,15 +14,11 @@ jobs:
       - name: Check out Repository
         uses: actions/checkout@v3
 
-      - name: set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: gradle
-
       - name: Grant execute permission for gradlew
         run: chmod +x backend/emm-sale/gradlew
 
       - name: Test with Gradle
-        run: ./backend/emm-sale/gradlew test
+        run: |
+          ls
+          backend/emm-sale
+          ./gradlew test
