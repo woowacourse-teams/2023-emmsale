@@ -21,19 +21,19 @@ jobs:
         cache: gradle
 
     - name: Change wrapper permissions
-      run: chmod +x ./gradlew
+      run: chmod +x gradle
 
     - name: Init gradle wrapper
       run: gradle wrapper
 
     - name: Change wrapper permissions
-      run: chmod +x ./gradlew
+      run: chmod +x gradle
       
     - name: 테스트 코드 실행
-      run: ./gradlew check
+      run: gradle check
       
     - name: 코틀린 Lint 체크
-      run: ./gradlew ktlintCheck
+      run: gradle ktlintCheck
       
     - name: 완료 문구
       run: echo "CI를 완료하였습니다!"
