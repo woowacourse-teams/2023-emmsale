@@ -25,4 +25,4 @@ jobs:
         run: chmod +x backend/emm-sale/gradlew
 
       - name: Test with Gradle
-        run: backend/emm-sale/gradlew test
+        run: ./backend/emm-sale/gradlew test
