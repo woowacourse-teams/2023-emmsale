@@ -24,7 +24,7 @@ jobs:
       run: cd ./android/2023-emmsale/
 
     - name: Change wrapper permissions
-      run: chmod +x gradlew
+      run: chmod +x ./android/2023-emmsale/gradlew
       
     - name: Run ktlintCheck
       run: ./gradlew ktlintCheck
