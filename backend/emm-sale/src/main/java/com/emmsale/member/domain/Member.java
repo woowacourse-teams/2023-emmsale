@@ -1,6 +1,6 @@
 package com.emmsale.member.domain;
 
-import com.emmsale.BaseEntity;
+import com.emmsale.base.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,0 +1,89 @@
+= EMM-SALE API Docs
+:doctype: book
+:source-highlighter: highlightjs
+:toc: left
+:sectlinks:
+
+== Product
+
+=== `GET`: 최근 가격 하락 상품 목록 조회
+
+.HTTP request
+include::{snippets}/top-price-drop-products/http-request.adoc[]
+
+.HTTP request parameters
+include::{snippets}/top-price-drop-products/request-parameters.adoc[]
+
+.HTTP request headers
+include::{snippets}/top-price-drop-products/request-headers.adoc[]
+
+.HTTP response
+include::{snippets}/top-price-drop-products/http-response.adoc[]
+
+.HTTP response fields
+include::{snippets}/top-price-drop-products/response-fields.adoc[]
+
+=== `GET`: 검색 상품 목록 조회
+
+.HTTP request
+include::{snippets}/search-products/http-request.adoc[]
+
+.HTTP request parameters
+include::{snippets}/search-products/request-parameters.adoc[]
+
+.HTTP request headers
+include::{snippets}/search-products/request-headers.adoc[]
+
+.HTTP response
+include::{snippets}/search-products/http-response.adoc[]
+
+.HTTP response fields
+include::{snippets}/search-products/response-fields.adoc[]
+
+=== `GET`: 찜 상품 목록 조회
+
+.HTTP request
+include::{snippets}/wish-products/http-request.adoc[]
+
+.HTTP request parameters
+include::{snippets}/wish-products/request-parameters.adoc[]
+
+.HTTP request headers
+include::{snippets}/wish-products/request-headers.adoc[]
+
+.HTTP response
+include::{snippets}/wish-products/http-response.adoc[]
+
+.HTTP response fields
+include::{snippets}/wish-products/response-fields.adoc[]
+
+=== `GET`: 알림 설정 상품 목록 조회
+
+.HTTP request
+include::{snippets}/wish-with-notified-products/http-request.adoc[]
+
+.HTTP request parameters
+include::{snippets}/wish-with-notified-products/request-parameters.adoc[]
+
+.HTTP request headers
+include::{snippets}/wish-with-notified-products/request-headers.adoc[]
+
+.HTTP response
+include::{snippets}/wish-with-notified-products/http-response.adoc[]
+
+.HTTP response fields
+include::{snippets}/wish-with-notified-products/response-fields.adoc[]
+
+=== `GET`: AUTHORIZATION 헤더 없이 찜 목록 조회
+
+.HTTP request
+include::{snippets}/wish-with-no-authentication-products/http-request.adoc[]
+
+.HTTP request parameters
+include::{snippets}/wish-with-no-authentication-products/request-parameters.adoc[]
+
+.HTTP request headers
+include::{snippets}/wish-with-no-authentication-products/request-headers.adoc[]
+
+.HTTP response
+include::{snippets}/wish-with-no-authentication-products/http-response.adoc[]
