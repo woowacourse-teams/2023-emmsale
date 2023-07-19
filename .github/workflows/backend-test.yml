@@ -32,6 +32,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
+          distribution: 'temurin'
 
       - name: cd backend directory
         run: cd backend/emm-sale
