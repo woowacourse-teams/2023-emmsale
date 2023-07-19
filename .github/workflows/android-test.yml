@@ -10,8 +10,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./android/2023-emmsale
 
     steps:
     - uses: actions/checkout@v3
@@ -22,20 +20,14 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: 디렉토리 확인
-      run: ls
-
-    - name: 경로 점검
-      run: pwd
-      
     - name: Change wrapper permissions
-      run: chmod +x gradlew
+      run: chmod +x ./android/2023-emmsale/gradle
       
     - name: 테스트 코드 실행
-      run: ./gradlew check
+      run: ./android/2023-emmsale/gradlew check
       
     - name: 코틀린 Lint 체크
-      run: ./gradlew ktlintCheck
+      run: ./android/2023-emmsale/gradlew ktlintCheck
       
     - name: 완료 문구
       run: echo "CI를 완료하였습니다!"
