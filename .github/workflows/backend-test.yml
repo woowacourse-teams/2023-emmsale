@@ -20,5 +20,5 @@ jobs:
       - name: Test with Gradle
         run: |
           ls
-          backend/emm-sale
+          cd backend/emm-sale
           ./gradlew test
