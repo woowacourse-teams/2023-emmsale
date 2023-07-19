@@ -43,7 +43,7 @@ class DistinctListLiveData<T> : MutableLiveData<MutableList<T>>() {
     }
 
     private fun updateState() {
-        postValue(items)
+        value = items
     }
 
     fun asLiveData(): LiveData<List<T>> = this.map { it }

@@ -20,23 +20,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="이름이 무엇인가요?"
+            android:text="교육 이력이 있다면 추가해주세요"
             android:textColor="@color/black"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/et_name"
+        <Spinner
+            android:id="@+id/spinner_edu_history"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="이름"
-            android:text="@={viewModel.nameUiState}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_name_title" />
 
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipgroup_edu_history"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_edu_history" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
