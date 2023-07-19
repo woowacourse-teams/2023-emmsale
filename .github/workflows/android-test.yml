@@ -10,6 +10,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./android/2023-emmsale
 
     steps:
     - uses: actions/checkout@v3
@@ -20,13 +22,8 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: 경로 확인 before
+    - name: 경로 점검
       run: pwd
-      
-    - name: emm-sale 안드로이드 디렉토리 이동
-      run: cd android/2023-emmsale
-      
-    - name: 경로 확인 after
       run: pwd
       
     - name: Change wrapper permissions
