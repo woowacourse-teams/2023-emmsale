@@ -24,7 +24,6 @@ jobs:
 
     - name: 경로 점검
       run: pwd
-      run: pwd
       
     - name: Change wrapper permissions
       run: chmod +x gradle
