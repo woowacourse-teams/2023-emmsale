@@ -1,4 +1,4 @@
-name: Kerdy Backend Build Test
+name: [ Kerdy ] Backend Build Test
 
 on:
   pull_request:
@@ -33,5 +33,11 @@ jobs:
         with:
           java-version: 11
 
+      - name: cd backend directory
+        run: cd backend/emm-sale
+
+      - name: Give permission for Gradle
+        run: chmod +x gradlew
+
       - name: Build with Gradle
-        run: ./backend/emm-sale/gradlew clean build
+        run: gradlew clean build
