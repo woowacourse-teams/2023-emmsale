@@ -1,15 +1,18 @@
 package com.emmsale.career.domain;
 
-public enum Activity {
+import lombok.Getter;
+
+@Getter
+public enum ActivityType {
 
   CLUB("동아리"),
   CONFERENCE("컨퍼런스"),
   EDUCATION("교육"),
-  JOB("분야");
+  JOB("직무");
 
   private final String value;
 
-  Activity(final String value) {
+  ActivityType(final String value) {
     this.value = value;
   }
 }
