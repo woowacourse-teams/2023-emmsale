@@ -1,5 +1,6 @@
 package com.emmsale.config;
 
+import com.emmsale.login.utils.JwtTokenProvider;
 import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.resolver.MemberArgumentResolver;
 import java.util.List;
@@ -12,10 +13,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class ArgumentResolverConfig implements WebMvcConfigurer {
 
+  private final JwtTokenProvider jwtTokenProvider;
   private final MemberQueryService memberQueryService;
 
   @Override
   public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
-    resolvers.add(new MemberArgumentResolver(memberQueryService));
+    resolvers.add(new MemberArgumentResolver(jwtTokenProvider, memberQueryService));
   }
 }
