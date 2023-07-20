@@ -1,4 +1,4 @@
-package com.emmsale.login.application;
+package com.emmsale.login.utils;
 
 import com.emmsale.login.exception.LoginException;
 import com.emmsale.login.exception.LoginExceptionType;
@@ -28,5 +28,16 @@ public class JwtTokenProvider {
         .setExpiration(expirationTime)
         .signWith(SignatureAlgorithm.HS256, secretKey)
         .compact();
+  }
+
+  public String extractSubject(final String token) {
+    try {
+      return Jwts.parser().setSigningKey(secretKey)
+          .parseClaimsJws(token)
+          .getBody()
+          .getSubject();
+    } catch (final Exception exception) {
+      throw new LoginException(LoginExceptionType.INVALID_ACCESS_TOKEN);
+    }
   }
 }
