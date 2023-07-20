@@ -28,6 +28,9 @@ class OnboardingViewModel(
             is CareersUiState.Error -> null
         }
     }
+
+    private val selectedCareerIds: MutableList<Int> = mutableListOf()
+
     private val _selectedEducationTags: DistinctListLiveData<CareerContentUiState> =
         DistinctListLiveData()
     val selectedEducationTags: LiveData<List<CareerContentUiState>> =
@@ -81,38 +84,46 @@ class OnboardingViewModel(
     }
 
     fun addEducationTag(position: Int) {
-        educations.value?.careerContentsWithCategory?.get(position)
-            ?.let(_selectedEducationTags::add)
+        val selectedCareer = educations.value?.careerContentsWithCategory?.get(position) ?: return
+        _selectedEducationTags.add(selectedCareer)
+        selectedCareerIds.add(selectedCareer.id)
     }
 
     fun removeEducationTag(educationTag: CareerContentUiState) {
         _selectedEducationTags.remove(educationTag)
+        selectedCareerIds.remove(educationTag.id)
     }
 
     fun addConferenceTag(position: Int) {
-        conferences.value?.careerContentsWithCategory?.get(position)
-            ?.let(_selectedConferenceTags::add)
+        val selectedCareer = conferences.value?.careerContentsWithCategory?.get(position) ?: return
+        _selectedConferenceTags.add(selectedCareer)
+        selectedCareerIds.add(selectedCareer.id)
     }
 
     fun removeConferenceTag(conferenceTag: CareerContentUiState) {
         _selectedConferenceTags.remove(conferenceTag)
+        selectedCareerIds.remove(conferenceTag.id)
     }
 
     fun addClubTag(position: Int) {
-        clubs.value?.careerContentsWithCategory?.get(position)
-            ?.let(_selectedClubTags::add)
+        val selectedCareer = clubs.value?.careerContentsWithCategory?.get(position) ?: return
+        _selectedClubTags.add(selectedCareer)
+        selectedCareerIds.add(selectedCareer.id)
     }
 
     fun removeClubTag(clubTag: CareerContentUiState) {
         _selectedClubTags.remove(clubTag)
+        selectedCareerIds.remove(clubTag.id)
     }
 
     fun addJobTag(position: Int) {
-        jobs.value?.careerContentsWithCategory?.get(position)
-            ?.let(_selectedJobTags::add)
+        val selectedCareer = jobs.value?.careerContentsWithCategory?.get(position) ?: return
+        _selectedJobTags.add(selectedCareer)
+        selectedCareerIds.add(selectedCareer.id)
     }
 
     fun removeJobTag(jobTag: CareerContentUiState) {
         _selectedJobTags.remove(jobTag)
+        selectedCareerIds.remove(jobTag.id)
     }
 }
