@@ -9,8 +9,7 @@ class OnboardingFragmentStateAdapter(fragmentActivity: FragmentActivity) :
     private val fragments: List<Fragment> = listOf(
         OnboardingNameFragment(),
         OnboardingEducationResumeFragment(),
-        OnboardingNameFragment(),
-        OnboardingNameFragment(),
+        OnboardingConferenceResumeFragment(),
     )
 
     override fun getItemCount(): Int = fragments.size

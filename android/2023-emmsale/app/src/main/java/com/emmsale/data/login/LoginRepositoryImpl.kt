@@ -5,7 +5,6 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
-import com.emmsale.data.token.Token
 
 class LoginRepositoryImpl(private val loginService: LoginService) : LoginRepository {
     override suspend fun login(): ApiResult<Login> {
