@@ -2,6 +2,8 @@ package com.emmsale.login.ui;
 
 import com.emmsale.login.application.LoginService;
 import com.emmsale.login.application.dto.TokenResponse;
+import com.emmsale.login.exception.LoginException;
+import com.emmsale.login.exception.LoginExceptionType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,7 @@ public class LoginController {
   @GetMapping("/github/callback")
   public ResponseEntity<TokenResponse> login(@RequestParam final String code) {
     if (code == null) {
-      return ResponseEntity.badRequest().build();
+      throw new LoginException(LoginExceptionType.NOT_FOUND_GITHUB_CODE);
     }
     return ResponseEntity.ok().body(loginService.createToken(code));
   }
