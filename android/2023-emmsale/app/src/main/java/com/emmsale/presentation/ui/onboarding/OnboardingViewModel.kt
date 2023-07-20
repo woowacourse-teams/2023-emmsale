@@ -24,7 +24,7 @@ class OnboardingViewModel(
 
     val educations: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
-            is CareersUiState.Success -> careers.careers.find { it.category == "교육" }
+            is CareersUiState.Success -> careers.findCareer(CareerCategory.EDUCATION)
             is CareersUiState.Error -> null
         }
     }
@@ -35,7 +35,7 @@ class OnboardingViewModel(
 
     val conferences: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
-            is CareersUiState.Success -> careers.careers.find { it.category == "컨퍼런스" }
+            is CareersUiState.Success -> careers.findCareer(CareerCategory.CONFERENCE)
             is CareersUiState.Error -> null
         }
     }
@@ -46,7 +46,7 @@ class OnboardingViewModel(
 
     val clubs: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
-            is CareersUiState.Success -> careers.careers.find { it.category == "동아리" }
+            is CareersUiState.Success -> careers.findCareer(CareerCategory.CLUB)
             is CareersUiState.Error -> null
         }
     }
@@ -57,7 +57,7 @@ class OnboardingViewModel(
 
     val jobs: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
-            is CareersUiState.Success -> careers.careers.find { it.category == "직무" }
+            is CareersUiState.Success -> careers.findCareer(CareerCategory.JOB)
             is CareersUiState.Error -> null
         }
     }
