@@ -6,19 +6,18 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.activityViewModels
 import com.emmsale.R
-import com.emmsale.databinding.FragmentOnboardingConferenceHistoryBinding
+import com.emmsale.databinding.FragmentOnboardingConferenceCareerBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
-import com.emmsale.presentation.ui.onboarding.uistate.ResumeTagUiState
-import com.emmsale.presentation.ui.onboarding.uistate.ResumeTagsUiState
+import com.emmsale.presentation.ui.onboarding.uistate.CareerContentUiState
 import com.emmsale.presentation.utils.views.chipOf
 import com.google.android.material.snackbar.Snackbar
 
-class OnboardingConferenceResumeFragment :
-    BaseFragment<FragmentOnboardingConferenceHistoryBinding>() {
+class OnboardingConferenceCareerFragment :
+    BaseFragment<FragmentOnboardingConferenceCareerBinding>() {
     override val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModelFactory() }
-    override val layoutResId: Int = R.layout.fragment_onboarding_conference_history
+    override val layoutResId: Int = R.layout.fragment_onboarding_conference_career
 
-    private lateinit var conferenceResumeAdapter: ResumeTagSpinnerAdapter
+    private lateinit var conferenceResumeAdapter: CareerTagSpinnerAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,18 +28,15 @@ class OnboardingConferenceResumeFragment :
     }
 
     private fun setupConferenceSpinner() {
-        conferenceResumeAdapter = ResumeTagSpinnerAdapter(mutableListOf())
+        conferenceResumeAdapter = CareerTagSpinnerAdapter(mutableListOf())
         binding.spinnerConferenceHistory.adapter = conferenceResumeAdapter
         binding.spinnerConferenceHistory.onItemSelectedListener =
             ConferenceSpinnerSelectedListener()
     }
 
     private fun setupConferences() {
-        viewModel.conferenceTags.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is ResumeTagsUiState.Success -> updateConferenceSpinner(state.tags)
-                is ResumeTagsUiState.Error -> showLoginFailedMessage()
-            }
+        viewModel.conferences.observe(viewLifecycleOwner) { conference ->
+            conference?.run { updateConferenceSpinner(this.careerContentsWithCategory) }
         }
     }
 
@@ -51,7 +47,7 @@ class OnboardingConferenceResumeFragment :
         }
     }
 
-    private fun addConferenceChip(conferenceTag: ResumeTagUiState) {
+    private fun addConferenceChip(conferenceTag: CareerContentUiState) {
         binding.chipgroupConferenceTags.addView(
             chipOf(requireContext()) {
                 text = conferenceTag.name
@@ -60,7 +56,7 @@ class OnboardingConferenceResumeFragment :
         )
     }
 
-    private fun updateConferenceSpinner(conferenceTags: List<ResumeTagUiState>) {
+    private fun updateConferenceSpinner(conferenceTags: List<CareerContentUiState>) {
         conferenceResumeAdapter.updateItems(conferenceTags)
     }
 

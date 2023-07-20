@@ -6,19 +6,18 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.activityViewModels
 import com.emmsale.R
-import com.emmsale.databinding.FragmentOnboardingEducationHistoryBinding
+import com.emmsale.databinding.FragmentOnboardingEducationCareerBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
-import com.emmsale.presentation.ui.onboarding.uistate.ResumeTagUiState
-import com.emmsale.presentation.ui.onboarding.uistate.ResumeTagsUiState
+import com.emmsale.presentation.ui.onboarding.uistate.CareerContentUiState
 import com.emmsale.presentation.utils.views.chipOf
 import com.google.android.material.snackbar.Snackbar
 
-class OnboardingEducationResumeFragment :
-    BaseFragment<FragmentOnboardingEducationHistoryBinding>() {
+class OnboardingEducationCareerFragment :
+    BaseFragment<FragmentOnboardingEducationCareerBinding>() {
     override val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModelFactory() }
-    override val layoutResId: Int = R.layout.fragment_onboarding_education_history
+    override val layoutResId: Int = R.layout.fragment_onboarding_education_career
 
-    private lateinit var educationResumeAdapter: ResumeTagSpinnerAdapter
+    private lateinit var educationResumeAdapter: CareerTagSpinnerAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,17 +28,14 @@ class OnboardingEducationResumeFragment :
     }
 
     private fun setupEducationSpinner() {
-        educationResumeAdapter = ResumeTagSpinnerAdapter(mutableListOf())
+        educationResumeAdapter = CareerTagSpinnerAdapter(mutableListOf())
         binding.spinnerEduHistory.adapter = educationResumeAdapter
         binding.spinnerEduHistory.onItemSelectedListener = EducationSpinnerSelectedListener()
     }
 
     private fun setupEducations() {
-        viewModel.educationTags.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is ResumeTagsUiState.Success -> updateEducationSpinner(state.tags)
-                is ResumeTagsUiState.Error -> showLoginFailedMessage()
-            }
+        viewModel.educations.observe(viewLifecycleOwner) { educations ->
+            educations?.run { updateEducationSpinner(this.careerContentsWithCategory) }
         }
     }
 
@@ -50,7 +46,7 @@ class OnboardingEducationResumeFragment :
         }
     }
 
-    private fun addEducationChip(educationTag: ResumeTagUiState) {
+    private fun addEducationChip(educationTag: CareerContentUiState) {
         binding.chipgroupEduTags.addView(
             chipOf(requireContext()) {
                 text = educationTag.name
@@ -59,7 +55,7 @@ class OnboardingEducationResumeFragment :
         )
     }
 
-    private fun updateEducationSpinner(educationTags: List<ResumeTagUiState>) {
+    private fun updateEducationSpinner(educationTags: List<CareerContentUiState>) {
         educationResumeAdapter.updateItems(educationTags)
     }
 

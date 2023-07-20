@@ -2,94 +2,77 @@ package com.emmsale.presentation.ui.onboarding
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import com.emmsale.data.career.CareerRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.resumeTag.ResumeTagRepository
 import com.emmsale.presentation.base.viewmodel.BaseViewModel
 import com.emmsale.presentation.base.viewmodel.DispatcherProvider
-import com.emmsale.presentation.ui.onboarding.uistate.ResumeTagUiState
-import com.emmsale.presentation.ui.onboarding.uistate.ResumeTagsUiState
+import com.emmsale.presentation.ui.onboarding.uistate.CareerContentUiState
+import com.emmsale.presentation.ui.onboarding.uistate.CareerUiState
+import com.emmsale.presentation.ui.onboarding.uistate.CareersUiState
 import com.emmsale.presentation.utils.livedata.DistinctListLiveData
 
 class OnboardingViewModel(
     dispatcherProvider: DispatcherProvider,
-    private val resumeTagRepository: ResumeTagRepository,
+    private val careerRepository: CareerRepository,
 ) : BaseViewModel(dispatcherProvider) {
     val nameUiState: MutableLiveData<String> = MutableLiveData()
 
-    private val _educationTags: MutableLiveData<ResumeTagsUiState> = MutableLiveData()
-    val educationTags: LiveData<ResumeTagsUiState> = _educationTags
-    private val loadedEducationTags = mutableListOf<ResumeTagUiState>()
+    private val _careers: MutableLiveData<CareersUiState> = MutableLiveData()
 
-    private val _selectedEducationTags: DistinctListLiveData<ResumeTagUiState> =
+    val educations: LiveData<CareerUiState?> = _careers.map { careers ->
+        when (careers) {
+            is CareersUiState.Success -> careers.careers.find { it.category == "교육" }
+            is CareersUiState.Error -> null
+        }
+    }
+    private val _selectedEducationTags: DistinctListLiveData<CareerContentUiState> =
         DistinctListLiveData()
-    val selectedEducationTags: LiveData<List<ResumeTagUiState>> =
+    val selectedEducationTags: LiveData<List<CareerContentUiState>> =
         _selectedEducationTags.asLiveData()
 
-    private val _conferenceTags: MutableLiveData<ResumeTagsUiState> = MutableLiveData()
-    val conferenceTags: LiveData<ResumeTagsUiState> = _conferenceTags
-    private val loadedConferenceTags = mutableListOf<ResumeTagUiState>()
-
-    private val _selectedConferenceTags: DistinctListLiveData<ResumeTagUiState> =
+    val conferences: LiveData<CareerUiState?> = _careers.map { careers ->
+        when (careers) {
+            is CareersUiState.Success -> careers.careers.find { it.category == "컨퍼런스" }
+            is CareersUiState.Error -> null
+        }
+    }
+    private val _selectedConferenceTags: DistinctListLiveData<CareerContentUiState> =
         DistinctListLiveData()
-    val selectedConferenceTags: LiveData<List<ResumeTagUiState>> =
+    val selectedConferenceTags: LiveData<List<CareerContentUiState>> =
         _selectedConferenceTags.asLiveData()
 
     init {
-        fetchResumeTags()
+        fetchCareers()
     }
 
-    private fun fetchResumeTags() {
-        fetchEducationTags()
-        fetchConferenceTags()
-    }
-
-    private fun fetchEducationTags() {
+    private fun fetchCareers() {
         onIo {
-            when (val educationTagsResult = resumeTagRepository.getEducationTags()) {
-                is ApiSuccess -> {
-                    val educationTagsUiState = ResumeTagsUiState.from(educationTagsResult)
-                    _educationTags.postValue(educationTagsUiState.insertFront(ResumeTagUiState.empty()))
-                    loadedEducationTags.clear()
-                    loadedEducationTags.addAll(ResumeTagUiState.empty() + educationTagsUiState.tags)
-                }
-
-                is ApiError -> _educationTags.postValue(ResumeTagsUiState.Error)
-                is ApiException -> _educationTags.postValue(ResumeTagsUiState.Error)
-            }
-        }
-    }
-
-    private fun fetchConferenceTags() {
-        onIo {
-            when (val conferenceTagsResult = resumeTagRepository.getConferenceTags()) {
-                is ApiSuccess -> {
-                    val conferenceTagsUiState = ResumeTagsUiState.from(conferenceTagsResult)
-                    _conferenceTags.postValue(conferenceTagsUiState.insertFront(ResumeTagUiState.empty()))
-                    loadedConferenceTags.clear()
-                    loadedConferenceTags.addAll(ResumeTagUiState.empty() + conferenceTagsUiState.tags)
-                }
-
-                is ApiError -> _conferenceTags.postValue(ResumeTagsUiState.Error)
-                is ApiException -> _conferenceTags.postValue(ResumeTagsUiState.Error)
+            when (val careersApiModel = careerRepository.getCareers()) {
+                is ApiSuccess -> _careers.postValue(CareersUiState.from(careersApiModel.data))
+                is ApiError -> _careers.postValue(CareersUiState.Error)
+                is ApiException -> _careers.postValue(CareersUiState.Error)
             }
         }
     }
 
     fun addEducationTag(position: Int) {
-        _selectedEducationTags.add(loadedEducationTags[position])
+        educations.value?.careerContentsWithCategory?.get(position)
+            ?.let(_selectedEducationTags::add)
     }
 
-    fun removeEducationTag(educationTag: ResumeTagUiState) {
+    fun removeEducationTag(educationTag: CareerContentUiState) {
         _selectedEducationTags.remove(educationTag)
     }
 
     fun addConferenceTag(position: Int) {
-        _selectedConferenceTags.add(loadedConferenceTags[position])
+        conferences.value?.careerContentsWithCategory?.get(position)
+            ?.let(_selectedConferenceTags::add)
     }
 
-    fun removeConferenceTag(conferenceTag: ResumeTagUiState) {
+    fun removeConferenceTag(conferenceTag: CareerContentUiState) {
         _selectedConferenceTags.remove(conferenceTag)
     }
 }

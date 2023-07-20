@@ -2,6 +2,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.android.application") version "8.0.2"
     id("com.google.gms.google-services")
+    kotlin("plugin.serialization") version "1.8.21"
 }
 
 android {
