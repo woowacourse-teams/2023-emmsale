@@ -18,7 +18,7 @@ class OnboardingEducationCareerFragment :
     override val viewModel: OnboardingViewModel by activityViewModels { viewModelFactory }
     override val layoutResId: Int = R.layout.fragment_onboarding_education_career
 
-    private lateinit var educationResumeAdapter: CareerTagSpinnerAdapter
+    private lateinit var educationCareerAdapter: CareerSpinnerAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,9 +29,9 @@ class OnboardingEducationCareerFragment :
     }
 
     private fun setupEducationSpinner() {
-        educationResumeAdapter = CareerTagSpinnerAdapter(mutableListOf())
-        binding.spinnerEduHistory.adapter = educationResumeAdapter
-        binding.spinnerEduHistory.onItemSelectedListener = EducationSpinnerSelectedListener()
+        educationCareerAdapter = CareerSpinnerAdapter(mutableListOf())
+        binding.spinnerEduCareers.adapter = educationCareerAdapter
+        binding.spinnerEduCareers.onItemSelectedListener = EducationSpinnerSelectedListener()
     }
 
     private fun setupEducations() {
@@ -57,7 +57,7 @@ class OnboardingEducationCareerFragment :
     }
 
     private fun updateEducationSpinner(educationTags: List<CareerContentUiState>) {
-        educationResumeAdapter.updateItems(educationTags)
+        educationCareerAdapter.updateItems(educationTags)
     }
 
     private fun showLoginFailedMessage() {

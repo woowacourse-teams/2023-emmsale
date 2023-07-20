@@ -9,10 +9,10 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.presentation.base.viewmodel.BaseViewModel
 import com.emmsale.presentation.base.viewmodel.DispatcherProvider
+import com.emmsale.presentation.common.livedata.DistinctListLiveData
 import com.emmsale.presentation.ui.onboarding.uistate.CareerContentUiState
 import com.emmsale.presentation.ui.onboarding.uistate.CareerUiState
 import com.emmsale.presentation.ui.onboarding.uistate.CareersUiState
-import com.emmsale.presentation.common.livedata.DistinctListLiveData
 
 class OnboardingViewModel(
     dispatcherProvider: DispatcherProvider,
@@ -44,6 +44,17 @@ class OnboardingViewModel(
     val selectedConferenceTags: LiveData<List<CareerContentUiState>> =
         _selectedConferenceTags.asLiveData()
 
+    val clubs: LiveData<CareerUiState?> = _careers.map { careers ->
+        when (careers) {
+            is CareersUiState.Success -> careers.careers.find { it.category == "동아리" }
+            is CareersUiState.Error -> null
+        }
+    }
+    private val _selectedClubTags: DistinctListLiveData<CareerContentUiState> =
+        DistinctListLiveData()
+    val selectedClubTags: LiveData<List<CareerContentUiState>> =
+        _selectedClubTags.asLiveData()
+
     init {
         fetchCareers()
     }
@@ -74,5 +85,14 @@ class OnboardingViewModel(
 
     fun removeConferenceTag(conferenceTag: CareerContentUiState) {
         _selectedConferenceTags.remove(conferenceTag)
+    }
+
+    fun addClubTag(position: Int) {
+        clubs.value?.careerContentsWithCategory?.get(position)
+            ?.let(_selectedClubTags::add)
+    }
+
+    fun removeClubTag(clubTag: CareerContentUiState) {
+        _selectedClubTags.remove(clubTag)
     }
 }

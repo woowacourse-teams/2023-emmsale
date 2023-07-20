@@ -18,7 +18,7 @@ class OnboardingConferenceCareerFragment :
     override val viewModel: OnboardingViewModel by activityViewModels { viewModelFactory }
     override val layoutResId: Int = R.layout.fragment_onboarding_conference_career
 
-    private lateinit var conferenceResumeAdapter: CareerTagSpinnerAdapter
+    private lateinit var conferenceCareerAdapter: CareerSpinnerAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,9 +29,9 @@ class OnboardingConferenceCareerFragment :
     }
 
     private fun setupConferenceSpinner() {
-        conferenceResumeAdapter = CareerTagSpinnerAdapter(mutableListOf())
-        binding.spinnerConferenceHistory.adapter = conferenceResumeAdapter
-        binding.spinnerConferenceHistory.onItemSelectedListener =
+        conferenceCareerAdapter = CareerSpinnerAdapter(mutableListOf())
+        binding.spinnerConferenceCareers.adapter = conferenceCareerAdapter
+        binding.spinnerConferenceCareers.onItemSelectedListener =
             ConferenceSpinnerSelectedListener()
     }
 
@@ -58,7 +58,7 @@ class OnboardingConferenceCareerFragment :
     }
 
     private fun updateConferenceSpinner(conferenceTags: List<CareerContentUiState>) {
-        conferenceResumeAdapter.updateItems(conferenceTags)
+        conferenceCareerAdapter.updateItems(conferenceTags)
     }
 
     private fun showLoginFailedMessage() {

@@ -10,6 +10,7 @@ class OnboardingFragmentStateAdapter(fragmentActivity: FragmentActivity) :
         OnboardingNameFragment(),
         OnboardingEducationCareerFragment(),
         OnboardingConferenceCareerFragment(),
+        OnboardingClubCareerFragment(),
     )
 
     override fun getItemCount(): Int = fragments.size

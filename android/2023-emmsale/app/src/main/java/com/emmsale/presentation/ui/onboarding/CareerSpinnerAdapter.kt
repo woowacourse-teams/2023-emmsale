@@ -6,7 +6,7 @@ import android.widget.BaseAdapter
 import com.emmsale.R
 import com.emmsale.presentation.ui.onboarding.uistate.CareerContentUiState
 
-class CareerTagSpinnerAdapter(
+class CareerSpinnerAdapter(
     private val careerContents: MutableList<CareerContentUiState>
 ) : BaseAdapter() {
 
