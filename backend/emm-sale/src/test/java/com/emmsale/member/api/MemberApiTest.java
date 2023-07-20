@@ -53,12 +53,17 @@ class MemberApiTest extends MockMvcTestHelper {
 
     final MemberCareerInitialRequest request = new MemberCareerInitialRequest(name, careerIds);
 
+    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+        fieldWithPath("careerIds").description("활동 id들"),
+        fieldWithPath("name").description("사용자 이름"));
+
     //when & then
     mockMvc.perform(post("/members")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
-        .andDo(print());
+        .andDo(print())
+        .andDo(document("initial-register-member", REQUEST_FIELDS));
   }
 
   @Test

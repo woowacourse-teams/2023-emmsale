@@ -130,3 +130,16 @@ include::{snippets}/findAll-career/http-response.adoc[]
 
 .HTTP response 설명
 include::{snippets}/findAll-career/response-fields.adoc[]
+
+== Member
+
+=== `POST`: 초기 사용자 등록
+
+.HTTP request 설명
+include::{snippets}/initial-register-member/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/initial-register-member/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/initial-register-member/http-response.adoc[]
