@@ -1,6 +1,7 @@
 package com.emmsale.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,6 +14,8 @@ import com.emmsale.member.application.dto.MemberCareerInitialRequest;
 import com.emmsale.member.application.dto.MemberCareerResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.member.exception.MemberExceptionType;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -85,6 +88,20 @@ class MemberCareerServiceTest extends ServiceIntegrationTestHelper {
         .usingRecursiveComparison()
         .ignoringCollectionOrder()
         .isEqualTo(actual);
+  }
+
+  @Test
+  @DisplayName("addCareer() : 유효하지 않은 careerId들이 있으면 invalid_career_ids Exception이 발생합니다.")
+  void test_addCareer_invalid_career_ids_Exception() throws Exception {
+    //given
+    final Member savedMember = memberRepository.findById(1L).get();
+    final List<Long> careerIds = List.of(1L, 2L, 7L);
+    final MemberCareerAddRequest request = new MemberCareerAddRequest(careerIds);
+
+    //when & then
+    assertThatThrownBy(() -> memberCareerService.addCareer(savedMember, request))
+        .isInstanceOf(MemberException.class)
+        .hasMessage(MemberExceptionType.INVALID_CAREER_IDS.errorMessage());
   }
 
   @Test

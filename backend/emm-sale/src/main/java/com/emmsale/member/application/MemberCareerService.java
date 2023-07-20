@@ -10,6 +10,8 @@ import com.emmsale.member.application.dto.MemberCareerResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberCareer;
 import com.emmsale.member.domain.MemberCareerRepository;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.member.exception.MemberExceptionType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,7 +40,19 @@ public class MemberCareerService {
         .stream()
         .map(it -> new MemberCareer(it, member))
         .collect(toList());
+
+    validateAllCareerIdsExist(careerIds, memberCareers);
+
     memberCareerRepository.saveAll(memberCareers);
+  }
+
+  private void validateAllCareerIdsExist(
+      final List<Long> careerIds,
+      final List<MemberCareer> memberCareers
+  ) {
+    if (memberCareers.size() != careerIds.size()) {
+      throw new MemberException(MemberExceptionType.INVALID_CAREER_IDS);
+    }
   }
 
   public List<MemberCareerResponse> addCareer(
