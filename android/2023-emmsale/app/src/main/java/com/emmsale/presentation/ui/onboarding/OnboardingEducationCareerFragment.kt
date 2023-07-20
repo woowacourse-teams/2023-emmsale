@@ -8,13 +8,14 @@ import androidx.fragment.app.activityViewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentOnboardingEducationCareerBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
+import com.emmsale.presentation.common.viewModelFactory
+import com.emmsale.presentation.common.views.chipOf
 import com.emmsale.presentation.ui.onboarding.uistate.CareerContentUiState
-import com.emmsale.presentation.utils.views.chipOf
 import com.google.android.material.snackbar.Snackbar
 
 class OnboardingEducationCareerFragment :
     BaseFragment<FragmentOnboardingEducationCareerBinding>() {
-    override val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModelFactory() }
+    override val viewModel: OnboardingViewModel by activityViewModels { viewModelFactory }
     override val layoutResId: Int = R.layout.fragment_onboarding_education_career
 
     private lateinit var educationResumeAdapter: CareerTagSpinnerAdapter

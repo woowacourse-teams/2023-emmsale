@@ -1,4 +1,4 @@
-package com.emmsale.presentation.utils.views
+package com.emmsale.presentation.common.views
 
 import android.content.Context
 import android.util.AttributeSet

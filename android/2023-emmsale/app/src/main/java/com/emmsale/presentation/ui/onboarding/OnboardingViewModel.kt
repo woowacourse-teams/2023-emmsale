@@ -12,7 +12,7 @@ import com.emmsale.presentation.base.viewmodel.DispatcherProvider
 import com.emmsale.presentation.ui.onboarding.uistate.CareerContentUiState
 import com.emmsale.presentation.ui.onboarding.uistate.CareerUiState
 import com.emmsale.presentation.ui.onboarding.uistate.CareersUiState
-import com.emmsale.presentation.utils.livedata.DistinctListLiveData
+import com.emmsale.presentation.common.livedata.DistinctListLiveData
 
 class OnboardingViewModel(
     dispatcherProvider: DispatcherProvider,

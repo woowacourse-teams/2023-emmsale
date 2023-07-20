@@ -2,18 +2,17 @@ package com.emmsale.presentation.ui.login
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.emmsale.databinding.ActivityLoginBinding
+import com.emmsale.presentation.common.viewModelFactory
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.emmsale.presentation.utils.extensions.setContentView
 import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : AppCompatActivity() {
-    private val viewModel: LoginViewModel by lazy {
-        ViewModelProvider(this, LoginViewModelFactory(this))[LoginViewModel::class.java]
-    }
+    private val viewModel: LoginViewModel by viewModels { viewModelFactory }
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
