@@ -55,6 +55,17 @@ class OnboardingViewModel(
     val selectedClubTags: LiveData<List<CareerContentUiState>> =
         _selectedClubTags.asLiveData()
 
+    val jobs: LiveData<CareerUiState?> = _careers.map { careers ->
+        when (careers) {
+            is CareersUiState.Success -> careers.careers.find { it.category == "직무" }
+            is CareersUiState.Error -> null
+        }
+    }
+    private val _selectedJobTags: DistinctListLiveData<CareerContentUiState> =
+        DistinctListLiveData()
+    val selectedJobTags: LiveData<List<CareerContentUiState>> =
+        _selectedJobTags.asLiveData()
+
     init {
         fetchCareers()
     }
@@ -94,5 +105,14 @@ class OnboardingViewModel(
 
     fun removeClubTag(clubTag: CareerContentUiState) {
         _selectedClubTags.remove(clubTag)
+    }
+
+    fun addJobTag(position: Int) {
+        jobs.value?.careerContentsWithCategory?.get(position)
+            ?.let(_selectedJobTags::add)
+    }
+
+    fun removeJobTag(jobTag: CareerContentUiState) {
+        _selectedJobTags.remove(jobTag)
     }
 }
