@@ -131,6 +131,17 @@ include::{snippets}/findAll-career/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/findAll-career/response-fields.adoc[]
 
+=== `GET`: 사용자의 커리어 조회
+
+.HTTP request
+include::{snippets}/find-career/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-career/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-career/response-fields.adoc[]
+
 == Member
 
 === `POST`: 초기 사용자 등록
