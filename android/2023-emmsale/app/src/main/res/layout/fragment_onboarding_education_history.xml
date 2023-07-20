@@ -16,7 +16,7 @@
         tools:context=".presentation.ui.onboarding.OnboardingNameFragment">
 
         <TextView
-            android:id="@+id/tv_name_title"
+            android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -33,10 +33,10 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipgroup_edu_history"
+            android:id="@+id/chipgroup_edu_tags"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"

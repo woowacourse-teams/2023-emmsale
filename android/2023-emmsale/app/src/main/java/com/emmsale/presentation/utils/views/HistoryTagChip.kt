@@ -1,10 +1,10 @@
-package com.emmsale.presentation.ui.onboarding.uistate
+package com.emmsale.presentation.utils.views
 
 import android.content.Context
 import android.util.AttributeSet
 import com.google.android.material.chip.Chip
 
-class EducationChip : Chip {
+class TagChip : Chip {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -13,7 +13,7 @@ class EducationChip : Chip {
     }
 }
 
-fun educationChipOf(
+fun chipOf(
     context: Context,
-    block: EducationChip.() -> Unit
-): EducationChip = EducationChip(context).apply(block)
+    block: TagChip.() -> Unit
+): TagChip = TagChip(context).apply(block)

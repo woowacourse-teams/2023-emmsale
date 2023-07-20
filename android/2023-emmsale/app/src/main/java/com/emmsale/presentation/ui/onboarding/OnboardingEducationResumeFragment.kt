@@ -8,17 +8,17 @@ import androidx.fragment.app.activityViewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentOnboardingEducationHistoryBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
-import com.emmsale.presentation.ui.onboarding.model.EducationUiState
-import com.emmsale.presentation.ui.onboarding.uistate.EducationsUiState
-import com.emmsale.presentation.ui.onboarding.uistate.educationChipOf
+import com.emmsale.presentation.ui.onboarding.uistate.ResumeTagUiState
+import com.emmsale.presentation.ui.onboarding.uistate.ResumeTagsUiState
+import com.emmsale.presentation.utils.views.chipOf
 import com.google.android.material.snackbar.Snackbar
 
-class OnboardingEducationHistoryFragment :
+class OnboardingEducationResumeFragment :
     BaseFragment<FragmentOnboardingEducationHistoryBinding>() {
     override val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModelFactory() }
     override val layoutResId: Int = R.layout.fragment_onboarding_education_history
 
-    private lateinit var eduHistoryAdapter: EducationAdapter
+    private lateinit var educationResumeAdapter: ResumeTagSpinnerAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,38 +29,38 @@ class OnboardingEducationHistoryFragment :
     }
 
     private fun setupEducationSpinner() {
-        eduHistoryAdapter = EducationAdapter(mutableListOf())
-        binding.spinnerEduHistory.adapter = eduHistoryAdapter
+        educationResumeAdapter = ResumeTagSpinnerAdapter(mutableListOf())
+        binding.spinnerEduHistory.adapter = educationResumeAdapter
         binding.spinnerEduHistory.onItemSelectedListener = EducationSpinnerSelectedListener()
     }
 
     private fun setupEducations() {
-        viewModel.educations.observe(viewLifecycleOwner) { state ->
+        viewModel.educationTags.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is EducationsUiState.Success -> updateEducationSpinner(state.educations)
-                is EducationsUiState.Error -> showLoginFailedMessage()
+                is ResumeTagsUiState.Success -> updateEducationSpinner(state.tags)
+                is ResumeTagsUiState.Error -> showLoginFailedMessage()
             }
         }
     }
 
     private fun setupSelectedEducations() {
-        viewModel.selectedEducations.observe(viewLifecycleOwner) { educations ->
-            binding.chipgroupEduHistory.removeAllViews()
+        viewModel.selectedEducationTags.observe(viewLifecycleOwner) { educations ->
+            binding.chipgroupEduTags.removeAllViews()
             educations.forEach(::addEducationChip)
         }
     }
 
-    private fun addEducationChip(education: EducationUiState) {
-        binding.chipgroupEduHistory.addView(
-            educationChipOf(requireContext()) {
-                text = education.name
-                setOnCloseIconClickListener { viewModel.removeEduHistory(education) }
+    private fun addEducationChip(educationTag: ResumeTagUiState) {
+        binding.chipgroupEduTags.addView(
+            chipOf(requireContext()) {
+                text = educationTag.name
+                setOnCloseIconClickListener { viewModel.removeEducationTag(educationTag) }
             }
         )
     }
 
-    private fun updateEducationSpinner(educations: List<EducationUiState>) {
-        eduHistoryAdapter.updateItems(educations)
+    private fun updateEducationSpinner(educationTags: List<ResumeTagUiState>) {
+        educationResumeAdapter.updateItems(educationTags)
     }
 
     private fun showLoginFailedMessage() {
@@ -77,7 +77,7 @@ class OnboardingEducationHistoryFragment :
             id: Long
         ) {
             if (position == 0) return
-            viewModel.addEduHistory(position)
+            viewModel.addEducationTag(position)
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {}
