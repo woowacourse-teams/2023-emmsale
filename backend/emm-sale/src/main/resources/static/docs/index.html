@@ -459,6 +459,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_post_커리어_등록_api"><code>POST</code>: 커리어 등록 API</a></li>
 <li><a href="#_delete_커리어_삭제_api"><code>DELETE</code>: 커리어 삭제 API</a></li>
+<li><a href="#_get_존재하는_커리어_전체_조회"><code>GET</code>: 존재하는 커리어 전체 조회</a></li>
 </ul>
 </li>
 </ul>
@@ -1313,13 +1314,95 @@ Content-Length: 116
 </tbody>
 </table>
 </div>
+<div class="sect2">
+<h3 id="_get_존재하는_커리어_전체_조회"><a class="link" href="#_get_존재하는_커리어_전체_조회"><code>GET</code>: 존재하는 커리어 전체 조회</a></h3>
+<div class="listingblock">
+<div class="title">HTTP request</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /careers HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">HTTP response</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 528
+
+[ {
+  "activityName" : "동아리",
+  "activityResponses" : [ {
+    "id" : 1,
+    "name" : "YAPP"
+  }, {
+    "id" : 2,
+    "name" : "DND"
+  }, {
+    "id" : 3,
+    "name" : "nexters"
+  } ]
+}, {
+  "activityName" : "컨퍼런스",
+  "activityResponses" : [ {
+    "id" : 4,
+    "name" : "인프콘"
+  } ]
+}, {
+  "activityName" : "교육",
+  "activityResponses" : [ {
+    "id" : 5,
+    "name" : "우아한테크코스"
+  } ]
+}, {
+  "activityName" : "직무",
+  "activityResponses" : [ {
+    "id" : 6,
+    "name" : "Backend"
+  } ]
+} ]</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 19. HTTP response 설명</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].activityName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">career 분류</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].activityResponses[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">career id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].activityResponses[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">career 이름</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-07-20 13:47:25 +0900
+Last updated 2023-07-20 14:09:41 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

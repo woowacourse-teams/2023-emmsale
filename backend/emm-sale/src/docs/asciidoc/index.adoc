@@ -119,3 +119,14 @@ include::{snippets}/delete-career/http-response.adoc[]
 
 .HTTP response 설명
 include::{snippets}/delete-career/response-fields.adoc[]
+
+=== `GET`: 존재하는 커리어 전체 조회
+
+.HTTP request
+include::{snippets}/findAll-career/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/findAll-career/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/findAll-career/response-fields.adoc[]
