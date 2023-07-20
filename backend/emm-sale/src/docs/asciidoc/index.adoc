@@ -1,7 +1,9 @@
 = EMM-SALE API Docs
 :doctype: book
+:icons: font
 :source-highlighter: highlightjs
 :toc: left
+:toclevels: 2
 :sectlinks:
 
 == Product
@@ -87,3 +89,33 @@ include::{snippets}/wish-with-no-authentication-products/request-headers.adoc[]
 
 .HTTP response
 include::{snippets}/wish-with-no-authentication-products/http-response.adoc[]
+
+== Career
+=== `POST`: 커리어 등록 API
+
+.HTTP request 설명
+include::{snippets}/add-career/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/add-career/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/add-career/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-career/response-fields.adoc[]
+
+
+=== `DELETE`: 커리어 삭제 API
+
+.HTTP request 설명
+include::{snippets}/delete-career/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/delete-career/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/delete-career/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/delete-career/response-fields.adoc[]
