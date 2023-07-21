@@ -36,17 +36,6 @@ class OnboardingViewModel(
     val selectedEducationTags: LiveData<List<CareerContentUiState>> =
         _selectedEducationTags.asLiveData()
 
-    val conferences: LiveData<CareerUiState?> = _careers.map { careers ->
-        when (careers) {
-            is CareersUiState.Success -> careers.findCareer(CareerCategory.CONFERENCE)
-            is CareersUiState.Error -> null
-        }
-    }
-    private val _selectedConferenceTags: DistinctListLiveData<CareerContentUiState> =
-        DistinctListLiveData()
-    val selectedConferenceTags: LiveData<List<CareerContentUiState>> =
-        _selectedConferenceTags.asLiveData()
-
     val clubs: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
             is CareersUiState.Success -> careers.findCareer(CareerCategory.CLUB)
@@ -92,17 +81,6 @@ class OnboardingViewModel(
     fun removeEducationTag(educationTag: CareerContentUiState) {
         _selectedEducationTags.remove(educationTag)
         selectedCareerIds.remove(educationTag.id)
-    }
-
-    fun addConferenceTag(position: Int) {
-        val selectedCareer = conferences.value?.careerContentsWithCategory?.get(position) ?: return
-        _selectedConferenceTags.add(selectedCareer)
-        selectedCareerIds.add(selectedCareer.id)
-    }
-
-    fun removeConferenceTag(conferenceTag: CareerContentUiState) {
-        _selectedConferenceTags.remove(conferenceTag)
-        selectedCareerIds.remove(conferenceTag.id)
     }
 
     fun addClubTag(position: Int) {
