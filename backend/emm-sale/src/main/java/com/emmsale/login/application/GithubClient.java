@@ -29,12 +29,45 @@ public class GithubClient {
   private String profileUrl;
 
   public String getAccessTokenFromGithub(final String code) {
-    final GithubAccessTokenRequest githubAccessTokenRequest = new GithubAccessTokenRequest(
+    final GithubAccessTokenRequest githubAccessTokenRequest = buildGithubAccessTokenRequest(code);
+
+    try {
+      final String accessToken = getAccessTokenResponse(githubAccessTokenRequest);
+      throwIfNotFoundAccessToken(accessToken);
+      return accessToken;
+    } catch (final HttpClientErrorException httpClientErrorException) {
+      throw new LoginException(LoginExceptionType.INVALID_GITHUB_CODE);
+    }
+  }
+
+  public GithubProfileResponse getGithubProfileFromGithub(final String accessToken) {
+    try {
+      return getGithubProfileResponse(accessToken);
+    } catch (final HttpClientErrorException httpClientErrorException) {
+      throw new LoginException(LoginExceptionType.INVALID_GITHUB_ACCESS_TOKEN);
+    }
+  }
+
+  private GithubProfileResponse getGithubProfileResponse(final String accessToken) {
+    final HttpHeaders headers = new HttpHeaders();
+    headers.add(HttpHeaders.AUTHORIZATION, "token " + accessToken);
+
+    final HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+
+    return REST_TEMPLATE
+        .exchange(profileUrl, HttpMethod.GET, httpEntity, GithubProfileResponse.class)
+        .getBody();
+  }
+
+  private GithubAccessTokenRequest buildGithubAccessTokenRequest(final String code) {
+    return new GithubAccessTokenRequest(
         code,
         clientId,
         clientSecret
     );
+  }
 
+  private String getAccessTokenResponse(final GithubAccessTokenRequest githubAccessTokenRequest) {
     final HttpHeaders headers = new HttpHeaders();
     headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
 
@@ -43,29 +76,15 @@ public class GithubClient {
         headers
     );
 
-    final String accessToken = REST_TEMPLATE
+    return REST_TEMPLATE
         .exchange(accessTokenUrl, HttpMethod.POST, httpEntity, GithubAccessTokenResponse.class)
         .getBody()
         .getAccessToken();
-
-    if (accessToken == null) {
-      throw new LoginException(LoginExceptionType.NOT_FOUND_GITHUB_ACCESS_TOKEN);
-    }
-    return accessToken;
   }
 
-  public GithubProfileResponse getGithubProfileFromGithub(final String accessToken) {
-    final HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.AUTHORIZATION, "token " + accessToken);
-
-    final HttpEntity<String> httpEntity = new HttpEntity<>(headers);
-
-    try {
-      return REST_TEMPLATE
-          .exchange(profileUrl, HttpMethod.GET, httpEntity, GithubProfileResponse.class)
-          .getBody();
-    } catch (final HttpClientErrorException e) {
-      throw new LoginException(LoginExceptionType.INVALID_GITHUB_ACCESS_TOKEN);
+  private void throwIfNotFoundAccessToken(final String accessToken) {
+    if (accessToken == null || accessToken.isBlank()) {
+      throw new LoginException(LoginExceptionType.NOT_FOUND_GITHUB_ACCESS_TOKEN);
     }
   }
 }
