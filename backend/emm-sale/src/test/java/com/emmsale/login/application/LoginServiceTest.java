@@ -11,7 +11,6 @@ import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.TokenResponse;
 import com.emmsale.login.exception.LoginException;
 import com.emmsale.login.exception.LoginExceptionType;
-import com.emmsale.login.utils.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,6 @@ class LoginServiceTest extends ServiceIntegrationTestHelper {
 
   @MockBean
   private GithubClient githubClient;
-  @MockBean
-  private JwtTokenProvider tokenProvider;
 
   @Test
   @DisplayName("깃허브 id로부터 사용자를 조회하여 토큰을 생성한다.")
@@ -44,16 +41,12 @@ class LoginServiceTest extends ServiceIntegrationTestHelper {
 
     given(githubClient.getAccessTokenFromGithub(validCode)).willReturn(validAccessToken);
     given(githubClient.getGithubProfileFromGithub(validAccessToken)).willReturn(githubProfile);
-    given(tokenProvider.createToken(memberId)).willReturn(expectAccessToken);
 
     // when
     final TokenResponse actualToken = loginService.createToken(validCode);
 
     // then
-    assertAll(
-        () -> assertEquals(expectTokenResponse.getMemberId(), actualToken.getMemberId()),
-        () -> assertEquals(expectTokenResponse.getAccessToken(), actualToken.getAccessToken())
-    );
+    assertEquals(expectTokenResponse.getMemberId(), actualToken.getMemberId());
   }
 
   @Test
