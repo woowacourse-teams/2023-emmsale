@@ -48,12 +48,12 @@ class OnboardingClubCareerFragment :
     }
 
     private fun addClubChip(clubTag: CareerContentUiState) {
-        binding.chipgroupClubTags.addView(
-            chipOf(requireContext()) {
-                text = clubTag.name
-                setOnCloseIconClickListener { viewModel.removeClubTag(clubTag) }
-            }
-        )
+        // binding.chipgroupClubTags.addView(
+        //     chipOf(requireContext()) {
+        //         text = clubTag.name
+        //         setOnCloseIconClickListener { viewModel.removeClubTag(clubTag) }
+        //     }
+        // )
     }
 
     private fun updateClubSpinner(clubTags: List<CareerContentUiState>) {

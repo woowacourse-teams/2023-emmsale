@@ -25,7 +25,7 @@ class OnboardingViewModel(
     val educations: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
             is CareersUiState.Success -> careers.findCareer(CareerCategory.EDUCATION)
-            is CareersUiState.Error -> null
+            is CareersUiState.Error -> null // TODO("Error Handling on OnboardingActivity")
         }
     }
 
@@ -33,8 +33,6 @@ class OnboardingViewModel(
 
     private val _selectedEducationTags: DistinctListLiveData<CareerContentUiState> =
         DistinctListLiveData()
-    val selectedEducationTags: LiveData<List<CareerContentUiState>> =
-        _selectedEducationTags.asLiveData()
 
     val clubs: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
@@ -72,15 +70,24 @@ class OnboardingViewModel(
         }
     }
 
-    fun addEducationTag(position: Int) {
-        val selectedCareer = educations.value?.careerContentsWithCategory?.get(position) ?: return
-        _selectedEducationTags.add(selectedCareer)
-        selectedCareerIds.add(selectedCareer.id)
+    fun toggleEducationTag(educationTag: CareerContentUiState) {
+        if (_selectedEducationTags.value?.contains(educationTag) == true) {
+            removeEducationTag(educationTag)
+        } else {
+            addEducationTag(educationTag)
+        }
     }
 
-    fun removeEducationTag(educationTag: CareerContentUiState) {
+    private fun addEducationTag(educationTag: CareerContentUiState) {
+        _selectedEducationTags.add(educationTag)
+        selectedCareerIds.add(educationTag.id)
+        educationTag.isSelected = true
+    }
+
+    private fun removeEducationTag(educationTag: CareerContentUiState) {
         _selectedEducationTags.remove(educationTag)
         selectedCareerIds.remove(educationTag.id)
+        educationTag.isSelected = false
     }
 
     fun addClubTag(position: Int) {

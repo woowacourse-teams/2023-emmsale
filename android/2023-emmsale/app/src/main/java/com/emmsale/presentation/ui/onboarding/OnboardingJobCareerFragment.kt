@@ -48,12 +48,12 @@ class OnboardingJobCareerFragment :
     }
 
     private fun addJobChip(jobTag: CareerContentUiState) {
-        binding.chipgroupJobTags.addView(
-            chipOf(requireContext()) {
-                text = jobTag.name
-                setOnCloseIconClickListener { viewModel.removeJobTag(jobTag) }
-            }
-        )
+        // binding.chipgroupJobTags.addView(
+        //     chipOf(requireContext()) {
+        //         text = jobTag.name
+        //         setOnCloseIconClickListener { viewModel.removeJobTag(jobTag) }
+        //     }
+        // )
     }
 
     private fun updateJobSpinner(jobTags: List<CareerContentUiState>) {

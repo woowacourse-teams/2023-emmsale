@@ -19,7 +19,7 @@ data class CareerUiState(
 
         private fun from(career: Career): CareerUiState = CareerUiState(
             category = career.category,
-            careerContents = CareerContentUiState.from(career.careerContents)
+            careerContents = CareerContentUiState.from(career.careerContents),
         )
     }
 }
@@ -27,7 +27,8 @@ data class CareerUiState(
 data class CareerContentUiState(
     val id: Int,
     val name: String,
-) {
+    var isSelected: Boolean = false,
+    ) {
     fun toList(): List<CareerContentUiState> = listOf(this)
 
     companion object {
