@@ -29,7 +29,6 @@ class OnboardingViewModel(
             is CareersUiState.Error -> null // TODO("Error Handling on OnboardingActivity")
         }
     }
-
     private val _selectedEducationTags: DistinctListLiveData<CareerContentUiState> =
         DistinctListLiveData()
 
@@ -50,8 +49,6 @@ class OnboardingViewModel(
     }
     private val _selectedJobTags: DistinctListLiveData<CareerContentUiState> =
         DistinctListLiveData()
-    val selectedJobTags: LiveData<List<CareerContentUiState>> =
-        _selectedJobTags.asLiveData()
 
     init {
         fetchCareers()
@@ -107,14 +104,23 @@ class OnboardingViewModel(
         clubTag.isSelected = false
     }
 
-    fun addJobTag(position: Int) {
-        val selectedCareer = jobs.value?.careerContentsWithCategory?.get(position) ?: return
-        _selectedJobTags.add(selectedCareer)
-        selectedCareerIds.add(selectedCareer.id)
+    fun toggleJobTag(jobTag: CareerContentUiState) {
+        if (_selectedJobTags.value?.contains(jobTag) == true) {
+            removeJobTag(jobTag)
+        } else {
+            addJobTag(jobTag)
+        }
     }
 
-    fun removeJobTag(jobTag: CareerContentUiState) {
+    private fun addJobTag(jobTag: CareerContentUiState) {
+        _selectedJobTags.add(jobTag)
+        selectedCareerIds.add(jobTag.id)
+        jobTag.isSelected = true
+    }
+
+    private fun removeJobTag(jobTag: CareerContentUiState) {
         _selectedJobTags.remove(jobTag)
         selectedCareerIds.remove(jobTag.id)
+        jobTag.isSelected = false
     }
 }

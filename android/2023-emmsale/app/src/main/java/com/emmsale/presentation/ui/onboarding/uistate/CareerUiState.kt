@@ -28,7 +28,7 @@ data class CareerContentUiState(
     val id: Int,
     val name: String,
     var isSelected: Boolean = false,
-    ) {
+) {
     fun toList(): List<CareerContentUiState> = listOf(this)
 
     companion object {
