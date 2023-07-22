@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
-public class LoginController {
+public class LoginApi {
 
   private final LoginService loginService;
 
-  public LoginController(final LoginService loginService) {
+  public LoginApi(final LoginService loginService) {
     this.loginService = loginService;
   }
 

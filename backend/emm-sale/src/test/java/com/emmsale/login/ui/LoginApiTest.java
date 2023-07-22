@@ -14,8 +14,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
-@WebMvcTest(LoginController.class)
-class LoginControllerTest extends MockMvcTestHelper {
+@WebMvcTest(LoginApi.class)
+class LoginApiTest extends MockMvcTestHelper {
 
   @MockBean
   private LoginService loginService;
