@@ -14,6 +14,7 @@ create table kerdy.member
     id         bigint auto_increment primary key,
     created_at datetime(6) not null,
     updated_at datetime(6) not null,
+    github_id  bigint       not null unique,
     name       varchar(255) not null
 );
 

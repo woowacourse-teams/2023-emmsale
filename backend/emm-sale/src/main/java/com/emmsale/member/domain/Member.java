@@ -19,6 +19,9 @@ public class Member extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(unique = true, nullable = false)
+  private Long githubId;
+
   @Column(nullable = false)
   private String name;
 
