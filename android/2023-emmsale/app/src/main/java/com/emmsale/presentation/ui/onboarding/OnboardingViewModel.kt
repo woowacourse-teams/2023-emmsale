@@ -9,7 +9,6 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.presentation.base.viewmodel.BaseViewModel
 import com.emmsale.presentation.base.viewmodel.DispatcherProvider
-import com.emmsale.presentation.common.livedata.DistinctListLiveData
 import com.emmsale.presentation.ui.onboarding.uistate.CareerContentUiState
 import com.emmsale.presentation.ui.onboarding.uistate.CareerUiState
 import com.emmsale.presentation.ui.onboarding.uistate.CareersUiState
@@ -20,17 +19,16 @@ class OnboardingViewModel(
 ) : BaseViewModel(dispatcherProvider) {
     val nameUiState: MutableLiveData<String> = MutableLiveData()
 
+    // TODO("Error Handling on OnboardingActivity")
     private val _careers: MutableLiveData<CareersUiState> = MutableLiveData()
     private val selectedCareerIds: MutableList<Int> = mutableListOf()
 
     val educations: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
             is CareersUiState.Success -> careers.findCareer(CareerCategory.EDUCATION)
-            is CareersUiState.Error -> null // TODO("Error Handling on OnboardingActivity")
+            is CareersUiState.Error -> null
         }
     }
-    private val _selectedEducationTags: DistinctListLiveData<CareerContentUiState> =
-        DistinctListLiveData()
 
     val clubs: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
@@ -38,8 +36,6 @@ class OnboardingViewModel(
             is CareersUiState.Error -> null
         }
     }
-    private val _selectedClubTags: DistinctListLiveData<CareerContentUiState> =
-        DistinctListLiveData()
 
     val jobs: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
@@ -47,8 +43,6 @@ class OnboardingViewModel(
             is CareersUiState.Error -> null
         }
     }
-    private val _selectedJobTags: DistinctListLiveData<CareerContentUiState> =
-        DistinctListLiveData()
 
     init {
         fetchCareers()
@@ -64,63 +58,11 @@ class OnboardingViewModel(
         }
     }
 
-    fun toggleEducationTag(educationTag: CareerContentUiState) {
-        if (_selectedEducationTags.value?.contains(educationTag) == true) {
-            removeEducationTag(educationTag)
-        } else {
-            addEducationTag(educationTag)
+    fun toggleTagSelection(tag: CareerContentUiState) {
+        tag.isSelected = !tag.isSelected
+        when {
+            tag.isSelected -> selectedCareerIds.add(tag.id)
+            else -> selectedCareerIds.remove(tag.id)
         }
-    }
-
-    private fun addEducationTag(educationTag: CareerContentUiState) {
-        _selectedEducationTags.add(educationTag)
-        selectedCareerIds.add(educationTag.id)
-        educationTag.isSelected = true
-    }
-
-    private fun removeEducationTag(educationTag: CareerContentUiState) {
-        _selectedEducationTags.remove(educationTag)
-        selectedCareerIds.remove(educationTag.id)
-        educationTag.isSelected = false
-    }
-
-    fun toggleClubTag(clubTag: CareerContentUiState) {
-        if (_selectedClubTags.value?.contains(clubTag) == true) {
-            removeClubTag(clubTag)
-        } else {
-            addClubTag(clubTag)
-        }
-    }
-
-    private fun addClubTag(clubTag: CareerContentUiState) {
-        _selectedClubTags.add(clubTag)
-        selectedCareerIds.add(clubTag.id)
-        clubTag.isSelected = true
-    }
-
-    private fun removeClubTag(clubTag: CareerContentUiState) {
-        _selectedClubTags.remove(clubTag)
-        selectedCareerIds.remove(clubTag.id)
-        clubTag.isSelected = false
-    }
-
-    fun toggleJobTag(jobTag: CareerContentUiState) {
-        if (_selectedJobTags.value?.contains(jobTag) == true) {
-            removeJobTag(jobTag)
-        } else {
-            addJobTag(jobTag)
-        }
-    }
-
-    private fun addJobTag(jobTag: CareerContentUiState) {
-        _selectedJobTags.add(jobTag)
-        selectedCareerIds.add(jobTag.id)
-        jobTag.isSelected = true
-    }
-
-    private fun removeJobTag(jobTag: CareerContentUiState) {
-        _selectedJobTags.remove(jobTag)
-        selectedCareerIds.remove(jobTag.id)
-        jobTag.isSelected = false
     }
 }

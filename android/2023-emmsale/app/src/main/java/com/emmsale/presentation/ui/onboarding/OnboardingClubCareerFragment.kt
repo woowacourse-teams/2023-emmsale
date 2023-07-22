@@ -34,6 +34,6 @@ class OnboardingClubCareerFragment :
     private fun createChip(clubTag: CareerContentUiState) = chipOf {
         text = clubTag.name
         isChecked = clubTag.isSelected
-        setOnCheckedChangeListener { _, _ -> viewModel.toggleClubTag(clubTag) }
+        setOnCheckedChangeListener { _, _ -> viewModel.toggleTagSelection(clubTag) }
     }
 }

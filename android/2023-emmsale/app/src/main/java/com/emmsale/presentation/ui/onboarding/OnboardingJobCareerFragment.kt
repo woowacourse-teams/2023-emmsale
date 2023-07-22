@@ -34,6 +34,6 @@ class OnboardingJobCareerFragment :
     private fun createChip(jobTag: CareerContentUiState) = chipOf {
         text = jobTag.name
         isChecked = jobTag.isSelected
-        setOnCheckedChangeListener { _, _ -> viewModel.toggleJobTag(jobTag) }
+        setOnCheckedChangeListener { _, _ -> viewModel.toggleTagSelection(jobTag) }
     }
 }

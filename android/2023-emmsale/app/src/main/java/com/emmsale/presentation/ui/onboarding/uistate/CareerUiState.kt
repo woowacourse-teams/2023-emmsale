@@ -7,15 +7,8 @@ data class CareerUiState(
     val category: String,
     val careerContents: List<CareerContentUiState>,
 ) {
-    val careerContentsWithCategory: List<CareerContentUiState>
-        get() = careerCategory().toList() + careerContents
-
-    private fun careerCategory(): CareerContentUiState =
-        CareerContentUiState(id = -1, name = category)
-
     companion object {
-        fun from(tags: List<Career>): List<CareerUiState> =
-            tags.map { from(it) }
+        fun from(tags: List<Career>): List<CareerUiState> = tags.map(::from)
 
         private fun from(career: Career): CareerUiState = CareerUiState(
             category = career.category,
@@ -29,11 +22,9 @@ data class CareerContentUiState(
     val name: String,
     var isSelected: Boolean = false,
 ) {
-    fun toList(): List<CareerContentUiState> = listOf(this)
-
     companion object {
         fun from(careerContents: List<CareerContent>): List<CareerContentUiState> =
-            careerContents.map { from(it) }
+            careerContents.map(::from)
 
         private fun from(careerContent: CareerContent): CareerContentUiState =
             CareerContentUiState(

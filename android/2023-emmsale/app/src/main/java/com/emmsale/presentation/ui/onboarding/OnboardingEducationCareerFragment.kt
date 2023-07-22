@@ -34,6 +34,6 @@ class OnboardingEducationCareerFragment :
     private fun createChip(educationTag: CareerContentUiState) = chipOf {
         text = educationTag.name
         isChecked = educationTag.isSelected
-        setOnCheckedChangeListener { _, _ -> viewModel.toggleEducationTag(educationTag) }
+        setOnCheckedChangeListener { _, _ -> viewModel.toggleTagSelection(educationTag) }
     }
 }
