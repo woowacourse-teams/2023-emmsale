@@ -17,6 +17,8 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class GithubClient {
 
+  private static final RestTemplate REST_TEMPLATE = new RestTemplate();
+
   @Value("${github.client.id}")
   private String clientId;
   @Value("${github.client.secret}")
@@ -34,12 +36,14 @@ public class GithubClient {
     );
 
     final HttpHeaders headers = new HttpHeaders();
-    headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+    headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
 
-    final HttpEntity httpEntity = new HttpEntity(githubAccessTokenRequest, headers);
-    final RestTemplate restTemplate = new RestTemplate();
+    final HttpEntity<GithubAccessTokenRequest> httpEntity = new HttpEntity<>(
+        githubAccessTokenRequest,
+        headers
+    );
 
-    final String accessToken = restTemplate
+    final String accessToken = REST_TEMPLATE
         .exchange(accessTokenUrl, HttpMethod.POST, httpEntity, GithubAccessTokenResponse.class)
         .getBody()
         .getAccessToken();
@@ -52,13 +56,12 @@ public class GithubClient {
 
   public GithubProfileResponse getGithubProfileFromGithub(final String accessToken) {
     final HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", "token " + accessToken);
+    headers.add(HttpHeaders.AUTHORIZATION, "token " + accessToken);
 
-    final HttpEntity httpEntity = new HttpEntity(headers);
-    final RestTemplate restTemplate = new RestTemplate();
+    final HttpEntity<String> httpEntity = new HttpEntity<>(headers);
 
     try {
-      return restTemplate
+      return REST_TEMPLATE
           .exchange(profileUrl, HttpMethod.GET, httpEntity, GithubProfileResponse.class)
           .getBody();
     } catch (final HttpClientErrorException e) {
