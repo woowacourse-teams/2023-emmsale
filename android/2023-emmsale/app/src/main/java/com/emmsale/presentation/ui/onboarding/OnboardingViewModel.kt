@@ -21,6 +21,7 @@ class OnboardingViewModel(
     val nameUiState: MutableLiveData<String> = MutableLiveData()
 
     private val _careers: MutableLiveData<CareersUiState> = MutableLiveData()
+    private val selectedCareerIds: MutableList<Int> = mutableListOf()
 
     val educations: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
@@ -28,8 +29,6 @@ class OnboardingViewModel(
             is CareersUiState.Error -> null // TODO("Error Handling on OnboardingActivity")
         }
     }
-
-    private val selectedCareerIds: MutableList<Int> = mutableListOf()
 
     private val _selectedEducationTags: DistinctListLiveData<CareerContentUiState> =
         DistinctListLiveData()
@@ -42,8 +41,6 @@ class OnboardingViewModel(
     }
     private val _selectedClubTags: DistinctListLiveData<CareerContentUiState> =
         DistinctListLiveData()
-    val selectedClubTags: LiveData<List<CareerContentUiState>> =
-        _selectedClubTags.asLiveData()
 
     val jobs: LiveData<CareerUiState?> = _careers.map { careers ->
         when (careers) {
@@ -90,15 +87,24 @@ class OnboardingViewModel(
         educationTag.isSelected = false
     }
 
-    fun addClubTag(position: Int) {
-        val selectedCareer = clubs.value?.careerContentsWithCategory?.get(position) ?: return
-        _selectedClubTags.add(selectedCareer)
-        selectedCareerIds.add(selectedCareer.id)
+    fun toggleClubTag(clubTag: CareerContentUiState) {
+        if (_selectedClubTags.value?.contains(clubTag) == true) {
+            removeClubTag(clubTag)
+        } else {
+            addClubTag(clubTag)
+        }
     }
 
-    fun removeClubTag(clubTag: CareerContentUiState) {
+    private fun addClubTag(clubTag: CareerContentUiState) {
+        _selectedClubTags.add(clubTag)
+        selectedCareerIds.add(clubTag.id)
+        clubTag.isSelected = true
+    }
+
+    private fun removeClubTag(clubTag: CareerContentUiState) {
         _selectedClubTags.remove(clubTag)
         selectedCareerIds.remove(clubTag.id)
+        clubTag.isSelected = false
     }
 
     fun addJobTag(position: Int) {
