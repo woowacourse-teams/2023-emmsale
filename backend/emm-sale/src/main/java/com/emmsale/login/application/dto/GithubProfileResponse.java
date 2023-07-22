@@ -1,5 +1,6 @@
 package com.emmsale.login.application.dto;
 
+import com.emmsale.member.domain.Member;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,5 +23,12 @@ public class GithubProfileResponse {
 
   public Long getGithubId() {
     return Long.valueOf(githubId);
+  }
+
+  public Member toMember() {
+    return new Member(
+        getGithubId(),
+        getUsername()
+    );
   }
 }

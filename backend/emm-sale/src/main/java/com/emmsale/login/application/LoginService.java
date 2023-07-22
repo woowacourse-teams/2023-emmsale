@@ -4,6 +4,7 @@ import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.MemberQueryResponse;
 import com.emmsale.login.application.dto.TokenResponse;
 import com.emmsale.login.utils.JwtTokenProvider;
+import com.emmsale.member.application.MemberQueryService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,10 +12,16 @@ public class LoginService {
 
   private final GithubClient githubClient;
   private final JwtTokenProvider tokenProvider;
+  private final MemberQueryService memberQueryService;
 
-  public LoginService(final GithubClient githubClient, final JwtTokenProvider tokenProvider) {
+  public LoginService(
+      final GithubClient githubClient,
+      final JwtTokenProvider tokenProvider,
+      final MemberQueryService memberQueryService
+  ) {
     this.githubClient = githubClient;
     this.tokenProvider = tokenProvider;
+    this.memberQueryService = memberQueryService;
   }
 
   public TokenResponse createToken(final String code) {
@@ -22,9 +29,9 @@ public class LoginService {
     final GithubProfileResponse githubProfileFromGithub = githubClient.getGithubProfileFromGithub(
         githubAccessToken);
 
-    final Long githubId = githubProfileFromGithub.getGithubId();
-    //TODO: githubId를 통해 memberId 조회 (처음 가입한 사용자인 경우 회원가입 후 memberId 반환)
-    final MemberQueryResponse memberQueryResponse = new MemberQueryResponse(1L, false);
+    final MemberQueryResponse memberQueryResponse = memberQueryService.findOrCreateMember(
+        githubProfileFromGithub
+    );
     final String accessToken = tokenProvider.createToken(
         String.valueOf(memberQueryResponse.getMemberId())
     );
