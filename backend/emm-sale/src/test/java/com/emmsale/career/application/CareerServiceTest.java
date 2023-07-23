@@ -53,6 +53,4 @@ class CareerServiceTest extends ServiceIntegrationTestHelper {
             .containsExactlyInAnyOrderElementsOf(actualCareerNames)
     );
   }
-
-
 }

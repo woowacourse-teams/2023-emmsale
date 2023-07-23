@@ -1,7 +1,9 @@
 = EMM-SALE API Docs
 :doctype: book
+:icons: font
 :source-highlighter: highlightjs
 :toc: left
+:toclevels: 2
 :sectlinks:
 
 == Product
@@ -87,3 +89,57 @@ include::{snippets}/wish-with-no-authentication-products/request-headers.adoc[]
 
 .HTTP response
 include::{snippets}/wish-with-no-authentication-products/http-response.adoc[]
+
+== Career
+=== `POST`: 커리어 등록 API
+
+.HTTP request 설명
+include::{snippets}/add-career/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/add-career/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/add-career/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-career/response-fields.adoc[]
+
+
+=== `DELETE`: 커리어 삭제 API
+
+.HTTP request 설명
+include::{snippets}/delete-career/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/delete-career/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/delete-career/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/delete-career/response-fields.adoc[]
+
+=== `GET`: 존재하는 커리어 전체 조회
+
+.HTTP request
+include::{snippets}/findAll-career/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/findAll-career/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/findAll-career/response-fields.adoc[]
+
+== Member
+
+=== `POST`: 초기 사용자 등록
+
+.HTTP request 설명
+include::{snippets}/initial-register-member/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/initial-register-member/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/initial-register-member/http-response.adoc[]
