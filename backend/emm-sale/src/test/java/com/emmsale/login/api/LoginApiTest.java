@@ -1,4 +1,4 @@
-package com.emmsale.login.ui;
+package com.emmsale.login.api;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

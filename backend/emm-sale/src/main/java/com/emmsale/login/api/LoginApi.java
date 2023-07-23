@@ -1,4 +1,4 @@
-package com.emmsale.login.ui;
+package com.emmsale.login.api;
 
 import com.emmsale.login.application.LoginService;
 import com.emmsale.login.application.dto.TokenResponse;
