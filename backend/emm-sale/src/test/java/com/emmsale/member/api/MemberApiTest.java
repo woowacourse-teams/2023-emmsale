@@ -161,7 +161,7 @@ class MemberApiTest extends MockMvcTestHelper {
     );
 
     //when
-    when(memberCareerService.findCareer(any()))
+    when(memberCareerService.findCareers(any()))
         .thenReturn(memberCareerResponses);
 
     //then

@@ -83,7 +83,7 @@ public class MemberCareerService {
   }
 
   @Transactional(readOnly = true)
-  public List<MemberCareerResponse> findCareer(final Member member) {
+  public List<MemberCareerResponse> findCareers(final Member member) {
     return MemberCareerResponse.from(memberCareerRepository.findAllByMember(member));
   }
 }

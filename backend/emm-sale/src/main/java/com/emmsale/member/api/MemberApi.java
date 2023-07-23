@@ -50,6 +50,6 @@ public class MemberApi {
 
   @GetMapping("/members/careers")
   public ResponseEntity<List<MemberCareerResponse>> findCareer(final Member member) {
-    return ResponseEntity.ok(memberCareerService.findCareer(member));
+    return ResponseEntity.ok(memberCareerService.findCareers(member));
   }
 }
