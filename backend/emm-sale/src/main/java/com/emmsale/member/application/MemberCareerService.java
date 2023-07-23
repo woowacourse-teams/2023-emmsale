@@ -81,5 +81,10 @@ public class MemberCareerService {
 
     return MemberCareerResponse.from(memberCareerRepository.findAllByMember(member));
   }
+
+  @Transactional(readOnly = true)
+  public List<MemberCareerResponse> findCareers(final Member member) {
+    return MemberCareerResponse.from(memberCareerRepository.findAllByMember(member));
+  }
 }
 

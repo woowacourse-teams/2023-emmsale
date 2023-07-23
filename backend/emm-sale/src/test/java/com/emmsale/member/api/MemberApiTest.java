@@ -7,6 +7,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,8 +38,10 @@ class MemberApiTest extends MockMvcTestHelper {
   private static final ResponseFieldsSnippet RESPONSE_FIELDS = responseFields(
 
       fieldWithPath("[].activityName").type(JsonFieldType.STRING).description("career 분류"),
-      fieldWithPath("[].memberActivityResponses[].id").type(JsonFieldType.NUMBER).description("career id"),
-      fieldWithPath("[].memberActivityResponses[].name").type(JsonFieldType.STRING).description("career 이름")
+      fieldWithPath("[].memberActivityResponses[].id").type(JsonFieldType.NUMBER)
+          .description("career id"),
+      fieldWithPath("[].memberActivityResponses[].name").type(JsonFieldType.STRING)
+          .description("career 이름")
   );
 
   private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
@@ -130,5 +133,42 @@ class MemberApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("delete-career", REQUEST_FIELDS, RESPONSE_FIELDS));
+  }
+
+  @Test
+  @DisplayName("내 활동들을 조회할 수 있다.")
+  void test_findCareer() throws Exception {
+    //given
+    final List<MemberCareerResponse> memberCareerResponses = List.of(
+        new MemberCareerResponse("동아리",
+            List.of(
+                new MemberActivityResponse(1L, "YAPP"),
+                new MemberActivityResponse(2L, "DND"),
+                new MemberActivityResponse(3L, "nexters")
+            )),
+        new MemberCareerResponse("컨퍼런스",
+            List.of(
+                new MemberActivityResponse(4L, "인프콘")
+            )),
+        new MemberCareerResponse("교육",
+            List.of(
+                new MemberActivityResponse(5L, "우아한테크코스")
+            )),
+        new MemberCareerResponse("직무",
+            List.of(
+                new MemberActivityResponse(6L, "Backend")
+            ))
+    );
+
+    //when
+    when(memberCareerService.findCareers(any()))
+        .thenReturn(memberCareerResponses);
+
+    //then
+    mockMvc.perform(get("/members/careers")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("find-career", RESPONSE_FIELDS));
   }
 }
