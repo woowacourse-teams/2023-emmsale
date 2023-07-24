@@ -11,8 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
 
   @Id
@@ -30,4 +33,40 @@ public class Comment extends BaseEntity {
   @Column(nullable = false)
   private String content;
   private boolean isDeleted;
+
+  public Comment(
+      final Event event,
+      final Comment parent,
+      final Member member,
+      final String content
+  ) {
+    this.event = event;
+    this.parent = parent;
+    this.member = member;
+    this.content = content;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public Event getEvent() {
+    return event;
+  }
+
+  public Comment getParent() {
+    return parent;
+  }
+
+  public Member getMember() {
+    return member;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public boolean isDeleted() {
+    return isDeleted;
+  }
 }
