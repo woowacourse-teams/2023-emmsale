@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class MemberCareerInitialRequest {
+public class MemberActivityInitialRequest {
 
   private final String name;
-  private final List<Long> careerIds;
+  private final List<Long> activityIds;
 }

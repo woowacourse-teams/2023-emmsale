@@ -5,15 +5,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface MemberCareerRepository extends JpaRepository<MemberCareer, Long> {
+public interface MemberActivityRepository extends JpaRepository<MemberActivity, Long> {
 
-  @Query("select mc from MemberCareer mc where mc.member = :member")
-  List<MemberCareer> findAllByMember(@Param("member") final Member member);
+  @Query("select mc from MemberActivity mc where mc.member = :member")
+  List<MemberActivity> findAllByMember(@Param("member") final Member member);
 
-  @Query("select mc from MemberCareer mc "
+  @Query("select mc from MemberActivity mc "
       + "where mc.member = :member "
-      + "and mc.career.id in :deleteCareerIds")
-  List<MemberCareer> findAllByMemberAndCareerIds(
+      + "and mc.activity.id in :deleteCareerIds")
+  List<MemberActivity> findAllByMemberAndCareerIds(
       @Param("member") final Member member,
       @Param("deleteCareerIds") final List<Long> deleteCareerIds
   );

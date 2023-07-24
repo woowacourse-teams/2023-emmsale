@@ -1,7 +1,7 @@
 package com.emmsale.member.domain;
 
+import com.emmsale.activity.domain.Activity;
 import com.emmsale.base.BaseEntity;
-import com.emmsale.career.domain.Career;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberCareer extends BaseEntity {
+public class MemberActivity extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +24,14 @@ public class MemberCareer extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
-  private Career career;
+  private Activity activity;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private Member member;
 
-  public MemberCareer(final Career career, final Member member) {
-    this.career = career;
+  public MemberActivity(final Activity activity, final Member member) {
+    this.activity = activity;
     this.member = member;
   }
 }

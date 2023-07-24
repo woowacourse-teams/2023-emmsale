@@ -1,4 +1,4 @@
-package com.emmsale.career.domain;
+package com.emmsale.activity.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,14 +14,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Career {
+public class Activity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "activity", nullable = false)
+  @Column(name = "type", nullable = false)
   private ActivityType activityType;
 
   @Column(nullable = false)

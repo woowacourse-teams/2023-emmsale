@@ -1,10 +1,10 @@
 package com.emmsale.member.api;
 
-import com.emmsale.member.application.MemberCareerService;
-import com.emmsale.member.application.dto.MemberCareerDeleteRequest;
-import com.emmsale.member.application.dto.MemberCareerInitialRequest;
-import com.emmsale.member.application.dto.MemberCareerAddRequest;
-import com.emmsale.member.application.dto.MemberCareerResponse;
+import com.emmsale.member.application.MemberActivityService;
+import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
+import com.emmsale.member.application.dto.MemberActivityInitialRequest;
+import com.emmsale.member.application.dto.MemberActivityAddRequest;
+import com.emmsale.member.application.dto.MemberActivityResponses;
 import com.emmsale.member.domain.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,36 +20,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberApi {
 
-  private final MemberCareerService memberCareerService;
+  private final MemberActivityService memberActivityService;
 
   @PostMapping("/members")
   public ResponseEntity<Void> register(
       final Member member,
-      @RequestBody final MemberCareerInitialRequest memberCareerInitialRequest
+      @RequestBody final MemberActivityInitialRequest memberActivityInitialRequest
   ) {
-    memberCareerService.registerCareer(member, memberCareerInitialRequest);
+    memberActivityService.registerCareer(member, memberActivityInitialRequest);
     return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/members/careers")
-  public ResponseEntity<List<MemberCareerResponse>> addCareer(
+  public ResponseEntity<List<MemberActivityResponses>> addCareer(
       final Member member,
-      @RequestBody final MemberCareerAddRequest memberCareerAddRequest
+      @RequestBody final MemberActivityAddRequest memberActivityAddRequest
   ) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(memberCareerService.addCareer(member, memberCareerAddRequest));
+        .body(memberActivityService.addCareer(member, memberActivityAddRequest));
   }
 
   @DeleteMapping("/members/careers")
-  public ResponseEntity<List<MemberCareerResponse>> deleteCareer(
+  public ResponseEntity<List<MemberActivityResponses>> deleteCareer(
       final Member member,
-      @RequestBody final MemberCareerDeleteRequest memberCareerDeleteRequest
+      @RequestBody final MemberActivityDeleteRequest memberActivityDeleteRequest
   ) {
-    return ResponseEntity.ok(memberCareerService.deleteCareer(member, memberCareerDeleteRequest));
+    return ResponseEntity.ok(memberActivityService.deleteCareer(member, memberActivityDeleteRequest));
   }
 
   @GetMapping("/members/careers")
-  public ResponseEntity<List<MemberCareerResponse>> findCareer(final Member member) {
-    return ResponseEntity.ok(memberCareerService.findCareers(member));
+  public ResponseEntity<List<MemberActivityResponses>> findCareer(final Member member) {
+    return ResponseEntity.ok(memberActivityService.findCareers(member));
   }
 }

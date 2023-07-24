@@ -13,10 +13,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-class MemberCareerRepositoryTest {
+class MemberActivityRepositoryTest {
 
   @Autowired
-  private MemberCareerRepository memberCareerRepository;
+  private MemberActivityRepository memberActivityRepository;
 
   @Autowired
   private MemberRepository memberRepository;
@@ -29,11 +29,11 @@ class MemberCareerRepositoryTest {
     final Member member = memberRepository.findById(memberId).get();
 
     //when
-    final List<MemberCareer> memberCareers = memberCareerRepository.findAllByMember(member);
+    final List<MemberActivity> memberActivities = memberActivityRepository.findAllByMember(member);
 
     //then
-    final List<Long> memberCareerIds = memberCareers.stream()
-        .map(MemberCareer::getId)
+    final List<Long> memberCareerIds = memberActivities.stream()
+        .map(MemberActivity::getId)
         .collect(toUnmodifiableList());
 
     assertThat(memberCareerIds).containsExactlyInAnyOrder(1L, 2L, 3L);
@@ -49,12 +49,12 @@ class MemberCareerRepositoryTest {
     final Member member = memberRepository.findById(memberId).get();
 
     //when
-    final List<MemberCareer> memberCareers =
-        memberCareerRepository.findAllByMemberAndCareerIds(member, careerIds);
+    final List<MemberActivity> memberActivities =
+        memberActivityRepository.findAllByMemberAndCareerIds(member, careerIds);
 
     //then
-    final List<Long> memberCareerIds = memberCareers.stream()
-        .map(MemberCareer::getId)
+    final List<Long> memberCareerIds = memberActivities.stream()
+        .map(MemberActivity::getId)
         .collect(toUnmodifiableList());
 
     assertThat(memberCareerIds).containsExactlyInAnyOrder(1L, 2L);
