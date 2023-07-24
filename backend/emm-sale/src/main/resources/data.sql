@@ -1,39 +1,46 @@
-truncate table kerdy.career;
-truncate table kerdy.member;
-truncate table kerdy.member_career;
+truncate table activity;
+truncate table event;
+truncate table member;
+truncate table comment;
+truncate table member_activity;
+truncate table tag;
+truncate table event_tag;
+truncate table member_tag;
 
-insert into career(id, activity, name)
+insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');
 
-insert into career(id, activity, name)
+insert into activity(id, type, name)
 values (2, 'CLUB', 'DND');
 
-insert into career(id, activity, name)
+insert into activity(id, type, name)
 values (3, 'CLUB', 'nexters');
 
-insert into career(id, activity, name)
+insert into activity(id, type, name)
 values (4, 'CONFERENCE', '인프콘');
 
-insert into career(id, activity, name)
+insert into activity(id, type, name)
 values (5, 'EDUCATION', '우아한테크코스');
 
-insert into career(id, activity, name)
+insert into activity(id, type, name)
 values (6, 'JOB', 'Backend');
 
-insert into member(id, name, github_id, created_at, updated_at)
-values (1, 'member1', 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into member(id, name, image_url, open_profile_url, github_id, created_at, updated_at)
+values (1, 'member1', 'https://imageurl.com', 'https://openprofileurl.com', 1, CURRENT_TIMESTAMP(),
+        CURRENT_TIMESTAMP());
 
-insert into member(id, name, github_id, created_at, updated_at)
-values (2, 'member2', 2, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into member(id, name, image_url, open_profile_url, github_id, created_at, updated_at)
+values (2, 'member2', 'https://imageurl.com', 'https://openprofileurl.com', 2, CURRENT_TIMESTAMP(),
+        CURRENT_TIMESTAMP());
 
-insert into member_career(id, career_id, member_id, created_at, updated_at)
+insert into member_activity(id, activity_id, member_id, created_at, updated_at)
 values (1, 1, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into member_career(id, career_id, member_id, created_at, updated_at)
+insert into member_activity(id, activity_id, member_id, created_at, updated_at)
 values (2, 2, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into member_career(id, career_id, member_id, created_at, updated_at)
+insert into member_activity(id, activity_id, member_id, created_at, updated_at)
 values (3, 3, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into member_career(id, career_id, member_id, created_at, updated_at)
+insert into member_activity(id, activity_id, member_id, created_at, updated_at)
 values (4, 1, 2, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());

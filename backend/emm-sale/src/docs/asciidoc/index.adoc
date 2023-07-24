@@ -94,53 +94,53 @@ include::{snippets}/wish-with-no-authentication-products/http-response.adoc[]
 === `POST`: 커리어 등록 API
 
 .HTTP request 설명
-include::{snippets}/add-career/request-fields.adoc[]
+include::{snippets}/add-activity/request-fields.adoc[]
 
 .HTTP request
-include::{snippets}/add-career/http-request.adoc[]
+include::{snippets}/add-activity/http-request.adoc[]
 
 .HTTP response
-include::{snippets}/add-career/http-response.adoc[]
+include::{snippets}/add-activity/http-response.adoc[]
 
 .HTTP response 설명
-include::{snippets}/add-career/response-fields.adoc[]
+include::{snippets}/add-activity/response-fields.adoc[]
 
 
 === `DELETE`: 커리어 삭제 API
 
 .HTTP request 설명
-include::{snippets}/delete-career/request-fields.adoc[]
+include::{snippets}/delete-activity/request-fields.adoc[]
 
 .HTTP request
-include::{snippets}/delete-career/http-request.adoc[]
+include::{snippets}/delete-activity/http-request.adoc[]
 
 .HTTP response
-include::{snippets}/delete-career/http-response.adoc[]
+include::{snippets}/delete-activity/http-response.adoc[]
 
 .HTTP response 설명
-include::{snippets}/delete-career/response-fields.adoc[]
+include::{snippets}/delete-activity/response-fields.adoc[]
 
 === `GET`: 존재하는 커리어 전체 조회
 
 .HTTP request
-include::{snippets}/findAll-career/http-request.adoc[]
+include::{snippets}/findAll-activity/http-request.adoc[]
 
 .HTTP response
-include::{snippets}/findAll-career/http-response.adoc[]
+include::{snippets}/findAll-activity/http-response.adoc[]
 
 .HTTP response 설명
-include::{snippets}/findAll-career/response-fields.adoc[]
+include::{snippets}/findAll-activity/response-fields.adoc[]
 
 === `GET`: 사용자의 커리어 조회
 
 .HTTP request
-include::{snippets}/find-career/http-request.adoc[]
+include::{snippets}/find-activity/http-request.adoc[]
 
 .HTTP response
-include::{snippets}/find-career/http-response.adoc[]
+include::{snippets}/find-activity/http-response.adoc[]
 
 .HTTP response 설명
-include::{snippets}/find-career/response-fields.adoc[]
+include::{snippets}/find-activity/response-fields.adoc[]
 
 == Member
 
