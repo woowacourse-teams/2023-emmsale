@@ -18,4 +18,12 @@ public abstract class BaseEntity {
   @Column(nullable = false)
   @LastModifiedDate
   private LocalDateTime updatedAt;
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
 }

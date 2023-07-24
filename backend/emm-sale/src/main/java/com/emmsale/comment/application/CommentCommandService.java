@@ -53,13 +53,7 @@ public class CommentCommandService {
         new Comment(savedEvent, savedParentComment, member, commentAddRequest.getContent())
     );
 
-    return new CommentResponse(
-        savedComment.getContent(),
-        savedComment.getId(),
-        savedComment.getParent().getId(),
-        savedComment.getEvent().getId(),
-        savedComment.isDeleted()
-    );
+    return CommentResponse.from(savedComment);
   }
 
   private CommentResponse createRootComment(
@@ -71,12 +65,6 @@ public class CommentCommandService {
         new Comment(savedEvent, null, member, commentAddRequest.getContent())
     );
 
-    return new CommentResponse(
-        savedComment.getContent(),
-        savedComment.getId(),
-        null,
-        savedComment.getEvent().getId(),
-        savedComment.isDeleted()
-    );
+    return CommentResponse.from(savedComment);
   }
 }
