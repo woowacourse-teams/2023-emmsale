@@ -31,7 +31,7 @@ public class MemberApi {
     return ResponseEntity.noContent().build();
   }
 
-  @PostMapping("/members/careers")
+  @PostMapping("/members/activities")
   public ResponseEntity<List<MemberActivityResponses>> addCareer(
       final Member member,
       @RequestBody final MemberActivityAddRequest memberActivityAddRequest
@@ -40,7 +40,7 @@ public class MemberApi {
         .body(memberActivityService.addCareer(member, memberActivityAddRequest));
   }
 
-  @DeleteMapping("/members/careers")
+  @DeleteMapping("/members/activities")
   public ResponseEntity<List<MemberActivityResponses>> deleteCareer(
       final Member member,
       @RequestBody final MemberActivityDeleteRequest memberActivityDeleteRequest
@@ -48,7 +48,7 @@ public class MemberApi {
     return ResponseEntity.ok(memberActivityService.deleteCareer(member, memberActivityDeleteRequest));
   }
 
-  @GetMapping("/members/careers")
+  @GetMapping("/members/activities")
   public ResponseEntity<List<MemberActivityResponses>> findCareer(final Member member) {
     return ResponseEntity.ok(memberActivityService.findCareers(member));
   }

@@ -101,12 +101,12 @@ class MemberApiTest extends MockMvcTestHelper {
         .thenReturn(memberActivityResponses);
 
     //when & then
-    mockMvc.perform(post("/members/careers")
+    mockMvc.perform(post("/members/activities")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
-        .andDo(document("add-career", REQUEST_FIELDS, RESPONSE_FIELDS));
+        .andDo(document("add-activity", REQUEST_FIELDS, RESPONSE_FIELDS));
   }
 
   @Test
@@ -127,12 +127,12 @@ class MemberApiTest extends MockMvcTestHelper {
         .thenReturn(memberActivityResponses);
 
     //when & then
-    mockMvc.perform(delete("/members/careers")
+    mockMvc.perform(delete("/members/activities")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("delete-career", REQUEST_FIELDS, RESPONSE_FIELDS));
+        .andDo(document("delete-activity", REQUEST_FIELDS, RESPONSE_FIELDS));
   }
 
   @Test
@@ -165,10 +165,10 @@ class MemberApiTest extends MockMvcTestHelper {
         .thenReturn(memberCareerRespons);
 
     //then
-    mockMvc.perform(get("/members/careers")
+    mockMvc.perform(get("/members/activities")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("find-career", RESPONSE_FIELDS));
+        .andDo(document("find-activity", RESPONSE_FIELDS));
   }
 }
