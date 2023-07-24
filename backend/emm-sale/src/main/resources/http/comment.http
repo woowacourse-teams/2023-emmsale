@@ -1,0 +1,23 @@
+### 부모 댓글을 생성할 경우
+
+POST http://localhost:8080/comments
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
+
+{
+  "content": "댓글 내용",
+  "eventId": "1",
+  "parentId" : null
+}
+
+### 대댓글일 경우
+
+POST http://localhost:8080/comments
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
+
+{
+  "content": "대댓글 내용",
+  "eventId": "1",
+  "parentId": "1"
+}
