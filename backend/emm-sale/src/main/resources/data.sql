@@ -1,6 +1,11 @@
-truncate table kerdy.member_activity;
-truncate table kerdy.activity;
-truncate table kerdy.member;
+truncate table activity;
+truncate table event;
+truncate table member;
+truncate table comment;
+truncate table member_activity;
+truncate table tag;
+truncate table event_tag;
+truncate table member_tag;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');
