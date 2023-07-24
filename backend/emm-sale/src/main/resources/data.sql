@@ -20,11 +20,11 @@ values (5, 'EDUCATION', '우아한테크코스');
 insert into career(id, activity, name)
 values (6, 'JOB', 'Backend');
 
-insert into member(id, name, created_at, updated_at)
-values (1, 'member1', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into member(id, name, github_id, created_at, updated_at)
+values (1, 'member1', 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into member(id, name, created_at, updated_at)
-values (2, 'member2', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into member(id, name, github_id, created_at, updated_at)
+values (2, 'member2', 2, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into member_career(id, career_id, member_id, created_at, updated_at)
 values (1, 1, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());

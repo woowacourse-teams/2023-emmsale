@@ -3,7 +3,7 @@ package com.emmsale.helper;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
-import com.emmsale.member.application.MemberQueryService;
+import com.emmsale.resolver.MemberArgumentResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ public class MockMvcTestHelper {
   protected ObjectMapper objectMapper;
 
   @MockBean
-  private MemberQueryService memberQueryService;
+  private MemberArgumentResolver memberArgumentResolver;
 
   @BeforeEach
   void setUp(final WebApplicationContext applicationContext,
