@@ -22,12 +22,12 @@ public class Member extends BaseEntity {
   private Long githubId;
   @Column(nullable = false)
   private String name;
-//  @Column
-//  private String description;
-//  @Column
-//  private String openProfileUrl;
-//  @Column(nullable = false)
-//  private String imageUrl;
+  @Column
+  private String description;
+  @Column
+  private String openProfileUrl;
+  @Column(nullable = false)
+  private String imageUrl;
 
   public Member(final Long githubId, final String name) {
     this.githubId = githubId;
