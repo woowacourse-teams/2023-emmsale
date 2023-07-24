@@ -123,13 +123,13 @@ include::{snippets}/delete-activity/response-fields.adoc[]
 === `GET`: 존재하는 커리어 전체 조회
 
 .HTTP request
-include::{snippets}/findAll-activity/http-request.adoc[]
+include::{snippets}/find-all-activities/http-request.adoc[]
 
 .HTTP response
-include::{snippets}/findAll-activity/http-response.adoc[]
+include::{snippets}/find-all-activities/http-response.adoc[]
 
 .HTTP response 설명
-include::{snippets}/findAll-activity/response-fields.adoc[]
+include::{snippets}/find-all-activities/response-fields.adoc[]
 
 === `GET`: 사용자의 커리어 조회
 
