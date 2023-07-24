@@ -1,0 +1,21 @@
+name: Kerdy Backend Dev Server CI/CD
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: deploy
+      run: ~/deploy.sh
+    - name: send slack message
+      uses: 8398a7/action-slack@v3
+      with:
+        mention: 'here'
+        if_mention: failure
+        status: ${{ job.status }}
+        fields: workflow,job,commit,message,ref,author,took
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()
