@@ -7,11 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
@@ -29,8 +31,9 @@ public class Member extends BaseEntity {
   @Column(nullable = false)
   private String imageUrl;
 
-  public Member(final Long githubId, final String name) {
+  public Member(final Long githubId, final String imageUrl, final String name) {
     this.githubId = githubId;
+    this.imageUrl = imageUrl;
     this.name = name;
   }
 
