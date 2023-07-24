@@ -1,11 +1,11 @@
-package com.emmsale.career.application;
+package com.emmsale.activity.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.emmsale.career.application.dto.ActivityResponse;
-import com.emmsale.career.application.dto.CareerResponse;
-import com.emmsale.career.domain.ActivityType;
+import com.emmsale.activity.application.dto.ActivityResponse;
+import com.emmsale.activity.application.dto.ActivityResponses;
+import com.emmsale.activity.domain.ActivityType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,10 +13,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class CareerServiceTest extends ServiceIntegrationTestHelper {
+class ActivityServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
-  private CareerService careerService;
+  private ActivityService activityService;
 
   @Test
   @DisplayName("존재하고 있는 커리어를 전체 조회할 수 있다.")
@@ -29,28 +29,28 @@ class CareerServiceTest extends ServiceIntegrationTestHelper {
         ActivityType.EDUCATION.getValue()
     );
 
-    final List<String> expectedCareerNames = List.of(
+    final List<String> expectedActivityNames = List.of(
         "YAPP", "DND",
         "nexters", "인프콘",
         "우아한테크코스", "Backend"
     );
 
     //when
-    List<CareerResponse> careerResponses = careerService.findAll();
+    List<ActivityResponses> activityResponses = activityService.findAll();
 
     //then
-    final List<String> actualCareerNames = careerResponses.stream()
+    final List<String> actualActivityNames = activityResponses.stream()
         .flatMap(it -> it.getActivityResponses().stream())
         .map(ActivityResponse::getName)
         .collect(Collectors.toList());
 
     assertAll(
-        () -> assertThat(careerResponses).hasSize(4),
-        () -> assertThat(careerResponses)
-            .extracting("activityName")
+        () -> assertThat(activityResponses).hasSize(4),
+        () -> assertThat(activityResponses)
+            .extracting("activityType")
             .containsExactlyInAnyOrderElementsOf(expectedActivities),
-        () -> assertThat(expectedCareerNames)
-            .containsExactlyInAnyOrderElementsOf(actualCareerNames)
+        () -> assertThat(expectedActivityNames)
+            .containsExactlyInAnyOrderElementsOf(actualActivityNames)
     );
   }
 }

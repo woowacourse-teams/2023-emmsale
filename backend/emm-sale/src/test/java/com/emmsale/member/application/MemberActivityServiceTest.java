@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.MemberActivityResponse;
-import com.emmsale.member.application.dto.MemberCareerAddRequest;
-import com.emmsale.member.application.dto.MemberCareerDeleteRequest;
-import com.emmsale.member.application.dto.MemberCareerInitialRequest;
-import com.emmsale.member.application.dto.MemberCareerResponse;
+import com.emmsale.member.application.dto.MemberActivityAddRequest;
+import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
+import com.emmsale.member.application.dto.MemberActivityInitialRequest;
+import com.emmsale.member.application.dto.MemberActivityResponses;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
@@ -21,10 +21,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class MemberCareerServiceTest extends ServiceIntegrationTestHelper {
+class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
-  private MemberCareerService memberCareerService;
+  private MemberActivityService memberActivityService;
 
   @Autowired
   private MemberRepository memberRepository;
@@ -39,12 +39,12 @@ class MemberCareerServiceTest extends ServiceIntegrationTestHelper {
     final Member member = memberRepository.findById(savedMemberId).get();
     final String updateName = "우르";
 
-    final MemberCareerInitialRequest request = new MemberCareerInitialRequest(updateName,
+    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(updateName,
         careerIds);
 
     //when & then
     assertAll(
-        () -> assertDoesNotThrow(() -> memberCareerService.registerCareer(member, request)),
+        () -> assertDoesNotThrow(() -> memberActivityService.registerCareer(member, request)),
         () -> assertEquals(updateName, member.getName())
     );
   }
@@ -57,31 +57,31 @@ class MemberCareerServiceTest extends ServiceIntegrationTestHelper {
     final long savedMemberId = 1L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
-    final MemberCareerAddRequest request = new MemberCareerAddRequest(careerIds);
+    final MemberActivityAddRequest request = new MemberActivityAddRequest(careerIds);
 
-    final List<MemberCareerResponse> expected = List.of(
-        new MemberCareerResponse("동아리",
+    final List<MemberActivityResponses> expected = List.of(
+        new MemberActivityResponses("동아리",
             List.of(
                 new MemberActivityResponse(1L, "YAPP"),
                 new MemberActivityResponse(2L, "DND"),
                 new MemberActivityResponse(3L, "nexters")
             )),
-        new MemberCareerResponse("컨퍼런스",
+        new MemberActivityResponses("컨퍼런스",
             List.of(
                 new MemberActivityResponse(4L, "인프콘")
             )),
-        new MemberCareerResponse("교육",
+        new MemberActivityResponses("교육",
             List.of(
                 new MemberActivityResponse(5L, "우아한테크코스")
             )),
-        new MemberCareerResponse("직무",
+        new MemberActivityResponses("직무",
             List.of(
                 new MemberActivityResponse(6L, "Backend")
             ))
     );
 
     //when
-    final List<MemberCareerResponse> actual = memberCareerService.addCareer(member, request);
+    final List<MemberActivityResponses> actual = memberActivityService.addCareer(member, request);
 
     //then
     assertThat(expected)
@@ -96,10 +96,10 @@ class MemberCareerServiceTest extends ServiceIntegrationTestHelper {
     //given
     final Member savedMember = memberRepository.findById(1L).get();
     final List<Long> careerIds = List.of(1L, 2L, 7L);
-    final MemberCareerAddRequest request = new MemberCareerAddRequest(careerIds);
+    final MemberActivityAddRequest request = new MemberActivityAddRequest(careerIds);
 
     //when & then
-    assertThatThrownBy(() -> memberCareerService.addCareer(savedMember, request))
+    assertThatThrownBy(() -> memberActivityService.addCareer(savedMember, request))
         .isInstanceOf(MemberException.class)
         .hasMessage(MemberExceptionType.INVALID_CAREER_IDS.errorMessage());
   }
@@ -112,17 +112,17 @@ class MemberCareerServiceTest extends ServiceIntegrationTestHelper {
     final long savedMemberId = 1L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
-    final MemberCareerDeleteRequest request = new MemberCareerDeleteRequest(deleteCareerIds);
+    final MemberActivityDeleteRequest request = new MemberActivityDeleteRequest(deleteCareerIds);
 
-    final List<MemberCareerResponse> expected = List.of(
-        new MemberCareerResponse("동아리",
+    final List<MemberActivityResponses> expected = List.of(
+        new MemberActivityResponses("동아리",
             List.of(
                 new MemberActivityResponse(3L, "nexters")
             ))
     );
 
     //when
-    final List<MemberCareerResponse> actual = memberCareerService.deleteCareer(member, request);
+    final List<MemberActivityResponses> actual = memberActivityService.deleteCareer(member, request);
 
     //then
     assertThat(expected)

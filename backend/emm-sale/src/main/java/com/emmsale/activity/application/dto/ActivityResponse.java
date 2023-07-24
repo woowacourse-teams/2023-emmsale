@@ -1,4 +1,4 @@
-package com.emmsale.career.application.dto;
+package com.emmsale.activity.application.dto;
 
 import lombok.Getter;
 

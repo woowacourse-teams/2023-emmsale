@@ -1,4 +1,4 @@
-package com.emmsale.career.domain;
+package com.emmsale.activity.domain;
 
 import lombok.Getter;
 
