@@ -4,18 +4,19 @@ import com.emmsale.login.exception.LoginException;
 import com.emmsale.login.exception.LoginExceptionType;
 import com.emmsale.login.utils.AuthorizationExtractor;
 import com.emmsale.login.utils.JwtTokenProvider;
-import com.emmsale.login.utils.MemberOnly;
 import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.domain.Member;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 @RequiredArgsConstructor
+@Component
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
   private final JwtTokenProvider jwtTokenProvider;
@@ -23,8 +24,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override
   public boolean supportsParameter(final MethodParameter parameter) {
-    return parameter.getParameterType().equals(Member.class) &&
-        parameter.hasParameterAnnotation(MemberOnly.class);
+    return parameter.getParameterType().equals(Member.class);
   }
 
   @Override
