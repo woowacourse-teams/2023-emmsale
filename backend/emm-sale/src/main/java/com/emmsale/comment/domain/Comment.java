@@ -3,6 +3,7 @@ package com.emmsale.comment.domain;
 import com.emmsale.base.BaseEntity;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.Member;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,6 +47,20 @@ public class Comment extends BaseEntity {
     this.content = content;
   }
 
+  public boolean isRootComment() {
+    if (parent == null) {
+      return true;
+    }
+    return false;
+  }
+
+  public Comment getParentOrDefaultSelf() {
+    if (parent == null) {
+      return this;
+    }
+    return parent;
+  }
+
   public Long getId() {
     return id;
   }
@@ -68,5 +83,22 @@ public class Comment extends BaseEntity {
 
   public boolean isDeleted() {
     return isDeleted;
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final Comment comment = (Comment) o;
+    return Objects.equals(id, comment.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
