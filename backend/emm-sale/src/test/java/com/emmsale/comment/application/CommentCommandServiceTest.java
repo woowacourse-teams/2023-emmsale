@@ -4,15 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.emmsale.comment.application.dto.CommentAddRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
+import com.emmsale.comment.domain.Comment;
+import com.emmsale.comment.domain.CommentRepository;
+import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import java.time.LocalDateTime;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +31,8 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   private EventRepository eventRepository;
   @Autowired
   private MemberRepository memberRepository;
+  @Autowired
+  private CommentRepository commentRepository;
 
   private Event event;
 
@@ -79,6 +86,39 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
         () -> assertEquals(자식_댓글_응답.getContent(), content),
         () -> assertNotNull(자식_댓글_응답.getCommentId()),
         () -> assertEquals(부모_댓글_응답.getCommentId(), 자식_댓글_응답.getParentId())
+    );
+  }
+
+  @Test
+  @DisplayName("delete() : 댓글을 삭제할 때, 로그인 한 본인의 댓글이 아니면 CAN_NOT_DELETE_COMMENT 가 발생합니다.")
+  void test_delete_canNotDeleteComment() throws Exception {
+    //given
+    final Member 댓글_작성자 = memberRepository.findById(1L).get();
+    final Member 다른_사용자 = memberRepository.findById(2L).get();
+    final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
+
+    //when & then
+    Assertions.assertThatThrownBy(
+        () -> commentCommandService.delete(comment.getId(), 다른_사용자)
+    ).hasMessage(CommentExceptionType.CAN_NOT_DELETE_COMMENT.errorMessage());
+  }
+
+  @Test
+  @DisplayName("delete() : 본인이 작성한 댓글을 삭제할 경우, 삭제 표시가 false -> true로 변경될 수 있다.")
+  void test_delete() throws Exception {
+    //given
+    final Member 댓글_작성자 = memberRepository.findById(1L).get();
+    final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
+
+    //when
+    commentCommandService.delete(comment.getId(), 댓글_작성자);
+
+    //then
+    final Comment updatedComment = commentRepository.findById(comment.getId()).get();
+
+    assertAll(
+        () -> assertTrue(updatedComment.isDeleted()),
+        () -> assertEquals(updatedComment.getContent(), "삭제된 댓글입니다.")
     );
   }
 }

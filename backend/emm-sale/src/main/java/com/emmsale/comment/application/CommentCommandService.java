@@ -1,11 +1,13 @@
 package com.emmsale.comment.application;
 
+import static com.emmsale.comment.exception.CommentExceptionType.CAN_NOT_DELETE_COMMENT;
+import static com.emmsale.comment.exception.CommentExceptionType.NOT_FOUND_COMMENT;
+
 import com.emmsale.comment.application.dto.CommentAddRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.comment.exception.CommentException;
-import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.member.domain.Member;
@@ -47,7 +49,7 @@ public class CommentCommandService {
       final Event savedEvent
   ) {
     final Comment savedParentComment = commentRepository.findById(commentAddRequest.getParentId())
-        .orElseThrow(() -> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT));
+        .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
 
     final Comment savedComment = commentRepository.save(
         new Comment(savedEvent, savedParentComment, member, commentAddRequest.getContent())
@@ -66,5 +68,17 @@ public class CommentCommandService {
     );
 
     return CommentResponse.from(savedComment);
+  }
+
+  public void delete(final Long commentId, final Member loginMember) {
+
+    final Comment comment = commentRepository.findById(commentId)
+        .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
+
+    if (loginMember.isNotMe(comment.getMember())) {
+      throw new CommentException(CAN_NOT_DELETE_COMMENT);
+    }
+
+    comment.delete();
   }
 }

@@ -19,6 +19,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
 
+  private static final String DELETED_COMMENT_MESSAGE = "삭제된 댓글입니다.";
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -59,6 +61,11 @@ public class Comment extends BaseEntity {
       return this;
     }
     return parent;
+  }
+
+  public void delete() {
+    isDeleted = true;
+    content = DELETED_COMMENT_MESSAGE;
   }
 
   public Long getId() {

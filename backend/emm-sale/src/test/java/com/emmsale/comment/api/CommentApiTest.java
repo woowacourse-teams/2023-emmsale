@@ -4,11 +4,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,6 +33,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
 @WebMvcTest(CommentApi.class)
@@ -130,5 +133,20 @@ class CommentApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("get-comment", requestParam, responseFieldsSnippet));
+  }
+
+  @Test
+  @DisplayName("delete() : 댓글이 정상적으로 삭제되면 204 No Content를 반환할 수 있다.")
+  void test_delete() throws Exception {
+    //given
+    final PathParametersSnippet pathParams = pathParameters(
+        parameterWithName("comment-id").description("삭제할 댓글의 ID")
+    );
+
+    //when & then
+    mockMvc.perform(delete("/comments/{comment-id}", 1L))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("delete-comment", pathParams));
   }
 }
