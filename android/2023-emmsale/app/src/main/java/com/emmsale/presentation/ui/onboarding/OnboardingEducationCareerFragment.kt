@@ -6,13 +6,12 @@ import androidx.fragment.app.activityViewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentOnboardingEducationCareerBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
-import com.emmsale.presentation.common.viewModelFactory
 import com.emmsale.presentation.common.views.chipOf
 import com.emmsale.presentation.ui.onboarding.uistate.CareerContentUiState
 
 class OnboardingEducationCareerFragment :
     BaseFragment<FragmentOnboardingEducationCareerBinding>() {
-    override val viewModel: OnboardingViewModel by activityViewModels { viewModelFactory }
+    val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }
     override val layoutResId: Int = R.layout.fragment_onboarding_education_career
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

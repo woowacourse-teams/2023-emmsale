@@ -5,19 +5,18 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityLoginBinding
-import com.emmsale.presentation.common.viewModelFactory
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
-import com.emmsale.presentation.utils.extensions.setContentView
 import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : AppCompatActivity() {
-    private val viewModel: LoginViewModel by viewModels { viewModelFactory }
+    private val viewModel: LoginViewModel by viewModels { LoginViewModel.factory }
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater).setContentView(this)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         binding.viewModel = viewModel
 
         viewModel.loginState.observe(this) { loginState ->
