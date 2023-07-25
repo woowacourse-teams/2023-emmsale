@@ -192,3 +192,20 @@ include::{snippets}/delete-comment/path-parameters.adoc[]
 
 .HTTP response
 include::{snippets}/delete-comment/http-response.adoc[]
+
+=== `PATCH` : 댓글 수정
+
+.HTTP request
+include::{snippets}/modify-comment/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/modify-comment/request-fields.adoc[]
+
+.PathVariable 설명
+include::{snippets}/modify-comment/path-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/modify-comment/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/modify-comment/response-fields.adoc[]
