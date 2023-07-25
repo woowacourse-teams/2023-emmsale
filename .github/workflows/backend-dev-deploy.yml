@@ -61,7 +61,7 @@ jobs:
           cp keystore.p12 src/main/resources/ssl
 
       - name: gradle 빌드
-        run: ./gradlew build
+        run: ./gradlew clean build
 
       - name: 디버깅용 디렉터리 구조 출력
         id: print-pwd
