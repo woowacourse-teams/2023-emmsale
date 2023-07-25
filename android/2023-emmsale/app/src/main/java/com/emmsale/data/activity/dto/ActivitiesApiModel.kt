@@ -1,18 +1,18 @@
-package com.emmsale.data.career.dto
+package com.emmsale.data.activity.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CareerApiModel(
+data class ActivitiesApiModel(
     @SerialName("activityName")
-    val careerTitle: String = "-",
+    val category: String = "-",
     @SerialName("activityResponses")
-    val careerContents: List<CareerContentApiModel> = emptyList()
+    val activities: List<ActivityApiModel> = emptyList()
 )
 
 @Serializable
-data class CareerContentApiModel(
+data class ActivityApiModel(
     @SerialName("id")
     val id: Int,
     @SerialName("name")

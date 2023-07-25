@@ -1,8 +1,8 @@
 package com.emmsale.presentation.di
 
 import android.content.Context
-import com.emmsale.data.career.CareerRepository
-import com.emmsale.data.career.CareerRepositoryImpl
+import com.emmsale.data.activity.ActivityRepository
+import com.emmsale.data.activity.ActivityRepositoryImpl
 import com.emmsale.data.login.LoginRepository
 import com.emmsale.data.login.LoginRepositoryImpl
 import com.emmsale.data.token.TokenRepository
@@ -21,7 +21,7 @@ class RepositoryContainer(
             preference = context.getSharedPreferences(KERDY_PREF_KEY, Context.MODE_PRIVATE)
         )
     }
-    val careerRepository: CareerRepository by lazy {
-        CareerRepositoryImpl(careerService = serviceContainer.careerService)
+    val activityRepository: ActivityRepository by lazy {
+        ActivityRepositoryImpl(activityService = serviceContainer.activityService)
     }
 }

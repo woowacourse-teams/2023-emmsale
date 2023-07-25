@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.emmsale.R
-import com.emmsale.databinding.FragmentOnboardingEducationCareerBinding
+import com.emmsale.databinding.FragmentOnboardingEducationBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.views.chipOf
-import com.emmsale.presentation.ui.onboarding.uistate.CareerContentUiState
+import com.emmsale.presentation.ui.onboarding.uistate.ActivityUiState
 
-class OnboardingEducationCareerFragment :
-    BaseFragment<FragmentOnboardingEducationCareerBinding>() {
+class OnboardingEducationFragment : BaseFragment<FragmentOnboardingEducationBinding>() {
     val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }
-    override val layoutResId: Int = R.layout.fragment_onboarding_education_career
+    override val layoutResId: Int = R.layout.fragment_onboarding_education
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -22,15 +21,15 @@ class OnboardingEducationCareerFragment :
 
     private fun setupEducations() {
         viewModel.educations.observe(viewLifecycleOwner) { educations ->
-            educations?.careerContents?.forEach(::addEducationChip)
+            educations?.activities?.forEach(::addEducationChip)
         }
     }
 
-    private fun addEducationChip(educationTag: CareerContentUiState) {
+    private fun addEducationChip(educationTag: ActivityUiState) {
         binding.chipgroupEduTags.addView(createChip(educationTag))
     }
 
-    private fun createChip(educationTag: CareerContentUiState) = chipOf {
+    private fun createChip(educationTag: ActivityUiState) = chipOf {
         text = educationTag.name
         isChecked = educationTag.isSelected
         setOnCheckedChangeListener { _, _ -> viewModel.toggleTagSelection(educationTag) }
