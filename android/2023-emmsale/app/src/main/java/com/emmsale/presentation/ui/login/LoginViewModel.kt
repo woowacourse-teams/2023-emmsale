@@ -35,7 +35,7 @@ class LoginViewModel(
         }
     }
 
-    private suspend fun handleLoginResult(loginResult: Login) {
+    private fun handleLoginResult(loginResult: Login) {
         tokenRepository.saveToken(Token.from(loginResult))
         when (loginResult.isRegistered) {
             true -> changeLoginState(LoginUiState.Register)

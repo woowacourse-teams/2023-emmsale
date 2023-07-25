@@ -17,6 +17,7 @@ class ServiceFactory {
     private val jsonConverterFactory = json.asConverterFactory(jsonMediaType)
 
     private val okhttpClient = OkHttpClient.Builder()
+        .addInterceptor(AuthInterceptor())
         .connectTimeout(120, TimeUnit.SECONDS)
         .readTimeout(120, TimeUnit.SECONDS)
         .writeTimeout(120, TimeUnit.SECONDS)

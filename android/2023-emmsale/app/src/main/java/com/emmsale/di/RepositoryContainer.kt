@@ -9,7 +9,6 @@ import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.member.MemberRepositoryImpl
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.data.token.TokenRepositoryImpl
-import com.emmsale.presentation.common.keys.KERDY_PREF_KEY
 
 class RepositoryContainer(
     context: Context,
@@ -19,9 +18,7 @@ class RepositoryContainer(
         LoginRepositoryImpl(loginService = serviceContainer.loginService)
     }
     val tokenRepository: TokenRepository by lazy {
-        TokenRepositoryImpl(
-            preference = context.getSharedPreferences(KERDY_PREF_KEY, Context.MODE_PRIVATE)
-        )
+         TokenRepositoryImpl(context)
     }
     val activityRepository: ActivityRepository by lazy {
         ActivityRepositoryImpl(activityService = serviceContainer.activityService)
