@@ -9,15 +9,19 @@ import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.views.chipOf
 import com.emmsale.presentation.ui.onboarding.uistate.ActivityUiState
 
-class OnboardingClubFragment :
-    BaseFragment<FragmentOnboardingClubBinding>() {
+class OnboardingClubFragment : BaseFragment<FragmentOnboardingClubBinding>(), View.OnClickListener {
     val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }
     override val layoutResId: Int = R.layout.fragment_onboarding_club
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+        initClickListener()
         setupClubs()
+    }
+
+    private fun initClickListener() {
+        binding.btnNext.setOnClickListener(this)
     }
 
     private fun setupClubs() {
@@ -34,5 +38,11 @@ class OnboardingClubFragment :
         text = clubTag.name
         isChecked = clubTag.isSelected
         setOnCheckedChangeListener { _, _ -> viewModel.toggleTagSelection(clubTag) }
+    }
+
+    override fun onClick(view: View) {
+        when (view.id) {
+            R.id.btn_next -> (requireActivity() as OnboardingActivity).navigateToNextPage()
+        }
     }
 }

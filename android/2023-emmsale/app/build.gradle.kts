@@ -3,6 +3,7 @@ plugins {
     id("com.android.application") version "8.0.2"
     id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "1.8.21"
+    id("kotlin-kapt")
 }
 
 android {
@@ -29,11 +30,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     dataBinding {
         enable = true

@@ -56,6 +56,22 @@ class OnboardingActivity : AppCompatActivity() {
         Toast.makeText(this, "회원정보 업데이트 실패", Toast.LENGTH_SHORT).show()
     }
 
+    fun navigateToNextPage() {
+        val currentPage = binding.vpOnboarding.currentItem
+        val lastPage = fragmentStateAdapter.itemCount - 1
+        when {
+            currentPage < lastPage -> binding.vpOnboarding.currentItem += 1
+            currentPage == lastPage -> viewModel.updateMember()
+        }
+    }
+
+    private fun navigateToPrevPage() {
+        when {
+            binding.vpOnboarding.currentItem == 0 -> finish()
+            binding.vpOnboarding.currentItem > 0 -> binding.vpOnboarding.currentItem -= 1
+        }
+    }
+
     companion object {
         fun startActivity(context: Context) {
             val intent = Intent(context, OnboardingActivity::class.java)
@@ -65,10 +81,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     inner class OnboardingOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            when {
-                binding.vpOnboarding.currentItem == 0 -> finish()
-                binding.vpOnboarding.currentItem > 0 -> binding.vpOnboarding.currentItem -= 1
-            }
+            navigateToPrevPage()
         }
     }
 }
