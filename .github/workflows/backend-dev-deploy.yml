@@ -62,6 +62,11 @@ jobs:
       - name: gradle 빌드
         run: ./gradlew clean build
 
+      - name: 디버깅용 경로 출력
+        id: cp-keystore
+        run: |
+          pwd
+
       - name: jar artifact에 업로드
         uses: actions/upload-artifact@v3
         with:
