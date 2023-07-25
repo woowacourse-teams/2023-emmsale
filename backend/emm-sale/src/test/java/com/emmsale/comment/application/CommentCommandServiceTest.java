@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.emmsale.comment.application.dto.CommentAddRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
 import com.emmsale.event.domain.Event;
-import com.emmsale.event.domain.EventRepository;
+import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;

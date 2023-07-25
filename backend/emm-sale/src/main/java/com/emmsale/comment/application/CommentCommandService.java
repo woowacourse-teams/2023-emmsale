@@ -7,7 +7,7 @@ import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.comment.exception.CommentException;
 import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
-import com.emmsale.event.domain.EventRepository;
+import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.member.domain.Member;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
