@@ -1,4 +1,4 @@
-package com.emmsale.presentation.utils.extensions
+package com.emmsale.presentation.utils.binding
 
 import android.app.Activity
 import androidx.databinding.ViewDataBinding
