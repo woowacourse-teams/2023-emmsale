@@ -9,7 +9,9 @@ permissions:
 jobs:
   build-and-upload:
     runs-on: ubuntu-22.04
-    working-directory: backend/emm-sale
+    default:
+      run:
+        working-directory: backend/emm-sale
     services:
       mysql:
         image: mysql:8.0.28
