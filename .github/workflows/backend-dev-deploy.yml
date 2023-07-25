@@ -48,25 +48,17 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
       - name: keystore 생성
         id: generate-keystore
         run: |
           echo "$KEY_STORE" > keystore.b64
           base64 -d -i keystore.b64 > keystore.p12
-
       - name: keystore 이동
         id: cp-keystore
         run: |
           cp keystore.p12 src/main/resources/ssl
-
       - name: gradle 빌드
         run: ./gradlew build
-
-      - name: 디버깅용 경로 출력
-        id: cp-keystore
-        run: |
-          pwd
 
       - name: jar artifact에 업로드
         uses: actions/upload-artifact@v3
