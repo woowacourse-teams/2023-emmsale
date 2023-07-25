@@ -63,10 +63,10 @@ jobs:
       - name: gradle 빌드
         run: ./gradlew build
 
-      - name: 디버깅용 경로 출력
+      - name: 디버깅용 디렉터리 구조 출력
         id: print-pwd
         run: |
-          pwd
+          ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'
 
       - name: jar artifact에 업로드
         uses: actions/upload-artifact@v3
