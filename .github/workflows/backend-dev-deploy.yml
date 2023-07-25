@@ -68,7 +68,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: BackendApplicationJar
-          path: build/libs/*.jar
+          path: backend/emm-sale/build/libs/*.jar
 
   deploy:
     runs-on: self-hosted
