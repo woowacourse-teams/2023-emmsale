@@ -29,8 +29,9 @@ public class Member extends BaseEntity {
   @Column(nullable = false)
   private String imageUrl;
 
-  public Member(final Long githubId, final String name) {
+  public Member(final Long githubId, final String imageUrl, final String name) {
     this.githubId = githubId;
+    this.imageUrl = imageUrl;
     this.name = name;
   }
 
