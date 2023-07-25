@@ -81,11 +81,11 @@ jobs:
           name: BackendApplicationJar
           path: /home/ubuntu/backend/build/
 
-      - name: 배포하기
-        run: /home/ubuntu/backend/build/deploy.sh
-
       - name: 권한부여
         run: chmod +x /home/ubuntu/backend/build/emm-sale-*.jar
+        
+      - name: 배포하기
+        run: /home/ubuntu/backend/build/deploy.sh
 
       - name: 슬랙 메시지 보내기
         uses: 8398a7/action-slack@v3
