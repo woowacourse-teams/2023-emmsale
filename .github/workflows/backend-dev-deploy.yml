@@ -74,8 +74,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: 구버전 jar 삭제
-        working-directory: ~/backend/build/
-        run: rm -f kerdy-*.jar
+        run: rm -f ~/backend/build/kerdy-*.jar
 
       - name: artifact에서 jar파일 다운 받기
         uses: actions/download-artifact@v3
@@ -84,7 +83,6 @@ jobs:
           path: ~/backend/build/
 
       - name: 배포하기
-        working-directory: ~/backend/build/
         run: |
           ~/backend/build/deploy.sh
 
