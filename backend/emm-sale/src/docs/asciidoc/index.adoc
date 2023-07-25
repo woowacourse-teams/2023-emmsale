@@ -182,3 +182,13 @@ include::{snippets}/add-comment/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/add-comment/response-fields.adoc[]
 
+=== `DELETE` : 댓글 삭제
+
+.HTTP request
+include::{snippets}/delete-comment/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/delete-comment/path-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/delete-comment/http-response.adoc[]

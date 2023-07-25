@@ -472,6 +472,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_get_댓글_모두_조회"><code>GET</code> : 댓글 모두 조회</a></li>
 <li><a href="#_post_댓글_및_대댓글_생성"><code>POST</code> : 댓글 및 대댓글 생성</a></li>
+<li><a href="#_delete_댓글_삭제"><code>DELETE</code> : 댓글 삭제</a></li>
 </ul>
 </li>
 </ul>
@@ -1592,8 +1593,8 @@ Content-Length: 969
     "commentId" : 4,
     "parentId" : null,
     "eventId" : 1,
-    "createdAt" : "2023:07:25:17:58:47",
-    "updatedAt" : "2023:07:25:17:58:47",
+    "createdAt" : "2023:07:25:21:34:16",
+    "updatedAt" : "2023:07:25:21:34:16",
     "deleted" : false
   },
   "childComments" : [ ]
@@ -1603,8 +1604,8 @@ Content-Length: 969
     "commentId" : 5,
     "parentId" : null,
     "eventId" : 1,
-    "createdAt" : "2023:07:25:17:58:47",
-    "updatedAt" : "2023:07:25:17:58:47",
+    "createdAt" : "2023:07:25:21:34:16",
+    "updatedAt" : "2023:07:25:21:34:16",
     "deleted" : false
   },
   "childComments" : [ {
@@ -1612,16 +1613,16 @@ Content-Length: 969
     "commentId" : 2,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:07:25:17:58:47",
-    "updatedAt" : "2023:07:25:17:58:47",
+    "createdAt" : "2023:07:25:21:34:16",
+    "updatedAt" : "2023:07:25:21:34:16",
     "deleted" : false
   }, {
     "content" : "부모댓글1에 대한 자식댓글2",
     "commentId" : 3,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:07:25:17:58:47",
-    "updatedAt" : "2023:07:25:17:58:47",
+    "createdAt" : "2023:07:25:21:34:16",
+    "updatedAt" : "2023:07:25:21:34:16",
     "deleted" : false
   } ]
 } ]</code></pre>
@@ -1749,8 +1750,8 @@ Content-Length: 179
   "commentId" : 2,
   "parentId" : 1,
   "eventId" : 1,
-  "createdAt" : "2023:07:25:17:58:47",
-  "updatedAt" : "2023:07:25:17:58:47",
+  "createdAt" : "2023:07:25:21:34:16",
+  "updatedAt" : "2023:07:25:21:34:16",
   "deleted" : false
 }</code></pre>
 </div>
@@ -1808,13 +1809,48 @@ Content-Length: 179
 </tbody>
 </table>
 </div>
+<div class="sect2">
+<h3 id="_delete_댓글_삭제"><a class="link" href="#_delete_댓글_삭제"><code>DELETE</code> : 댓글 삭제</a></h3>
+<div class="listingblock">
+<div class="title">HTTP request</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /comments/1 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 25. /comments/{comment-id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>comment-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제할 댓글의 ID</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">HTTP response</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-07-25 16:53:49 +0900
+Last updated 2023-07-25 20:48:26 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
