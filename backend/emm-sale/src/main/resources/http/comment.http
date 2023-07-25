@@ -21,3 +21,8 @@ Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5L
   "eventId": "1",
   "parentId": "1"
 }
+
+### 행사에 포함되어 있는 댓글 조회
+
+GET http://localhost:8080/comments?eventId=1
+Content-Type: application/json
