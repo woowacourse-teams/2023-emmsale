@@ -30,7 +30,6 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
     //then
     assertThat(expectResponse)
         .usingRecursiveComparison()
-        .ignoringCollectionOrder()
         .isEqualTo(actualResponse);
   }
 
@@ -50,7 +49,6 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
     //then
     assertThat(expectResponse)
         .usingRecursiveComparison()
-        .ignoringCollectionOrder()
         .isEqualTo(actualResponse);
   }
 }
