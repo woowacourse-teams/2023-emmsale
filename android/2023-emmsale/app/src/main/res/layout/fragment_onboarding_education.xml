@@ -32,7 +32,7 @@
             android:id="@+id/tv_category_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="관심 분야"
+            android:text="교육 활동"
             app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_page"
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="14sp"
