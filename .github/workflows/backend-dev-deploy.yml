@@ -63,11 +63,16 @@ jobs:
       - name: gradle 빌드
         run: ./gradlew build
 
+      - name: 디버깅용 경로 출력
+        id: cp-keystore
+        run: |
+          pwd
+
       - name: jar artifact에 업로드
         uses: actions/upload-artifact@v3
         with:
           name: BackendApplicationJar
-          path: build/libs/*.jar
+          path: ./build/libs/*.jar
 
   deploy:
     runs-on: self-hosted
