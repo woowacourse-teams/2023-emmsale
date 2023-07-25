@@ -63,7 +63,6 @@ jobs:
       - name: gradle 빌드
         run: ./gradlew clean build
 
-
       - name: jar artifact에 업로드
         uses: actions/upload-artifact@v3
         with:
@@ -72,6 +71,7 @@ jobs:
 
   deploy:
     runs-on: self-hosted
+    needs: build-and-upload
     steps:
       #      - name: 구버전 jar 삭제
       #        run: rm -rf ~/backend/build/emm-sale-*.jar
