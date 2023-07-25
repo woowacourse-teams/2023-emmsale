@@ -3,16 +3,13 @@ name: Kerdy Backend Dev Server CI/CD
 on:
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: backend/emm-sale
-
 permissions:
   contents: read
 
 jobs:
   build-and-upload:
     runs-on: ubuntu-22.04
+    working-directory: backend/emm-sale
     services:
       mysql:
         image: mysql:8.0.28
