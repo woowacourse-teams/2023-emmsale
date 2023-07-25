@@ -73,18 +73,17 @@ jobs:
     runs-on: self-hosted
     needs: build-and-upload
     steps:
-      #      - name: 구버전 jar 삭제
-      #        run: rm -rf ~/backend/build/emm-sale-*.jar
+      - name: 구버전 jar 삭제
+        run: rm -rf /home/ubuntu/backend/build/emm-sale-*.jar
 
       - name: artifact에서 jar파일 다운 받기
         uses: actions/download-artifact@v3
         with:
           name: BackendApplicationJar
-          path: ~/backend/build/
+          path: /home/ubuntu/backend/build/
 
       - name: 배포하기
-        run: |
-          ~/backend/build/deploy.sh
+        run: /home/ubuntu/backend/build/deploy.sh
 
       - name: 슬랙 메시지 보내기
         uses: 8398a7/action-slack@v3
