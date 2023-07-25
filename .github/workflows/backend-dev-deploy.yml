@@ -73,8 +73,8 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: 구버전 jar 삭제
-        run: rm -rf ~/backend/build/emm-sale-*.jar
+      #      - name: 구버전 jar 삭제
+      #        run: rm -rf ~/backend/build/emm-sale-*.jar
 
       - name: artifact에서 jar파일 다운 받기
         uses: actions/download-artifact@v3
