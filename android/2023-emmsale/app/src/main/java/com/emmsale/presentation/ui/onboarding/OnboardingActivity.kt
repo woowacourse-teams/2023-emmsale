@@ -3,12 +3,17 @@ package com.emmsale.presentation.ui.onboarding
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityOnboardingBinding
+import com.emmsale.presentation.ui.onboarding.uistate.MemberUiState
 
 class OnboardingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOnboardingBinding
+    private val viewModel: OnboardingViewModel by viewModels { OnboardingViewModel.factory }
     private val fragmentStateAdapter: OnboardingFragmentStateAdapter by lazy {
         OnboardingFragmentStateAdapter(this)
     }
@@ -19,6 +24,17 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(binding.root)
         initFragmentStateAdapter()
         initBackPressedDispatcher()
+        setupMemberUiState()
+    }
+
+    private fun setupMemberUiState() {
+        viewModel.memberUiState.observe(this) { memberState ->
+            when (memberState) {
+                is MemberUiState.Success -> navigateToMain()
+                is MemberUiState.Failed -> showMemberUpdateFailed()
+                is MemberUiState.Loading -> binding.progressbarLoading.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun initFragmentStateAdapter() {
@@ -27,6 +43,17 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initBackPressedDispatcher() {
         onBackPressedDispatcher.addCallback(this, OnboardingOnBackPressedCallback())
+    }
+
+    private fun navigateToMain() {
+        binding.progressbarLoading.visibility = View.GONE
+        // MainActivity.startActivity(this)
+        // finish()
+    }
+
+    private fun showMemberUpdateFailed() {
+        binding.progressbarLoading.visibility = View.GONE
+        Toast.makeText(this, "회원정보 업데이트 실패", Toast.LENGTH_SHORT).show()
     }
 
     companion object {

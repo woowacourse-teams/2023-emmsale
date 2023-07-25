@@ -5,6 +5,12 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <import type="com.emmsale.presentation.ui.onboarding.uistate.MemberUiState.Loading" />
+
+        <import type="com.emmsale.presentation.ui.onboarding.uistate.MemberUiState" />
+
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.onboarding.OnboardingViewModel" />
@@ -23,6 +29,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressbar_loading"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintDimensionRatio="0.15"
+            android:layout_height="0dp"
+            android:indeterminate="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

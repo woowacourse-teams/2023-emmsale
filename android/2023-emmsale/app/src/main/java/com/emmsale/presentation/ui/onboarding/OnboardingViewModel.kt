@@ -9,16 +9,20 @@ import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.member.Member
+import com.emmsale.data.member.MemberRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.ui.onboarding.uistate.ActivitiesUiState
 import com.emmsale.presentation.ui.onboarding.uistate.ActivityTypeContentUiState
 import com.emmsale.presentation.ui.onboarding.uistate.ActivityUiState
+import com.emmsale.presentation.ui.onboarding.uistate.MemberUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
     private val activityRepository: ActivityRepository,
+    private val memberRepository: MemberRepository,
 ) : ViewModel() {
     val nameUiState: MutableLiveData<String> = MutableLiveData()
 
@@ -53,6 +57,9 @@ class OnboardingViewModel(
         }
     }
 
+    private val _memberUiState = MutableLiveData<MemberUiState>()
+    val memberUiState: LiveData<MemberUiState> = _memberUiState
+
     init {
         fetchActivities()
     }
@@ -75,6 +82,21 @@ class OnboardingViewModel(
         }
     }
 
+    fun updateMember() {
+        val memberName = nameUiState.value ?: return
+
+        viewModelScope.launch {
+            _memberUiState.value = MemberUiState.Loading
+            val member = Member(memberName, selectedActivityIds)
+
+            when (memberRepository.updateMember(member)) {
+                is ApiSuccess -> _memberUiState.value = MemberUiState.Success
+                is ApiError -> _memberUiState.value = MemberUiState.Failed
+                is ApiException -> _memberUiState.value = MemberUiState.Failed
+            }
+        }
+    }
+
     private fun findActivity(
         activityTypeContent: ActivityTypeContentUiState.Success,
         category: ActivityCategory
@@ -82,7 +104,10 @@ class OnboardingViewModel(
 
     companion object {
         val factory = ViewModelFactory {
-            OnboardingViewModel(KerdyApplication.repositoryContainer.activityRepository)
+            OnboardingViewModel(
+                activityRepository = KerdyApplication.repositoryContainer.activityRepository,
+                memberRepository = KerdyApplication.repositoryContainer.memberRepository
+            )
         }
     }
 }
