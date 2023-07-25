@@ -52,9 +52,10 @@ jobs:
       - name: keystore 생성
         id: generate keystore
         run: |
-          echo "$KEY_STORE" > keystore.p12
+          echo "$KEY_STORE" > keystore.b64
+          base64 -d -i keystore.b64 > keystore.p12
 
-      - name: keystore 생성
+      - name: keystore 이동
         id: cp keystore
         run: |
           cp keystore.p12 src/main/resources/ssl
@@ -66,16 +67,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: BackendApplicationJar
-          path: backend/build/libs/*.jar
+          path: build/libs/*.jar
 
   deploy:
     runs-on: self-hosted
-    env:
-      DEV_PROPERTY: ${{ secrets.DEV_PROPERTY }}
-      DEV_DEPLOY_SCRIPT: ${{ secrets.DEV_DEPLOY_SCRIPT }}
     steps:
       - name: 구버전 jar 삭제
-        working-directory: ./backend/dev/
+        working-directory: ./backend/build/
         run: rm -f kerdy-*.jar
 
       - name: artifact에서 jar파일 다운 받기
@@ -84,10 +82,10 @@ jobs:
           name: BackendApplicationJar
           path: backend/build/
 
-      - name: application.yml 만들기
-        working-directory: ./backend/build
+      - name: 배포하기
+        working-directory: ./backend/build/
         run: |
-          echo "$DEV_PROPERTY" > application-dev.yml
+          ./deploy.sh
 
       - name: 슬랙 메시지 보내기
         uses: 8398a7/action-slack@v3
