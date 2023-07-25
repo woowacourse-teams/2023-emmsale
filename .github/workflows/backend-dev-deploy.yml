@@ -9,7 +9,7 @@ permissions:
 jobs:
   build-and-upload:
     runs-on: ubuntu-22.04
-    default:
+    defaults:
       run:
         working-directory: backend/emm-sale
     services:
