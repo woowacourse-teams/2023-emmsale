@@ -154,3 +154,31 @@ include::{snippets}/initial-register-member/http-request.adoc[]
 
 .HTTP response
 include::{snippets}/initial-register-member/http-response.adoc[]
+
+== Comment
+
+=== `GET` : 댓글 모두 조회
+
+.HTTP request 설명
+include::{snippets}/get-comment/request-parameters.adoc[]
+
+.HTTP request
+include::{snippets}/get-comment/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/get-comment/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/get-comment/response-fields.adoc[]
+
+=== `POST` : 댓글 및 대댓글 생성
+
+.HTTP request
+include::{snippets}/add-comment/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/add-comment/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-comment/response-fields.adoc[]
+
