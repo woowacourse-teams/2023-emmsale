@@ -26,23 +26,29 @@ class OnboardingViewModel(
     private val _activities: MutableLiveData<ActivityTypeContentUiState> = MutableLiveData()
     private val selectedActivityIds: MutableList<Int> = mutableListOf()
 
-    val educations: LiveData<ActivitiesUiState?> = _activities.map { activities ->
-        when (activities) {
-            is ActivityTypeContentUiState.Success -> activities.findActivity(ActivityCategory.EDUCATION)
+    val educations: LiveData<ActivitiesUiState?> = _activities.map { activityTypeContent ->
+        when (activityTypeContent) {
+            is ActivityTypeContentUiState.Success ->
+                findActivity(activityTypeContent, ActivityCategory.EDUCATION)
+
             is ActivityTypeContentUiState.Error -> null
         }
     }
 
-    val clubs: LiveData<ActivitiesUiState?> = _activities.map { activities ->
-        when (activities) {
-            is ActivityTypeContentUiState.Success -> activities.findActivity(ActivityCategory.CLUB)
+    val clubs: LiveData<ActivitiesUiState?> = _activities.map { activityTypeContent ->
+        when (activityTypeContent) {
+            is ActivityTypeContentUiState.Success ->
+                findActivity(activityTypeContent, ActivityCategory.CLUB)
+
             is ActivityTypeContentUiState.Error -> null
         }
     }
 
-    val jobs: LiveData<ActivitiesUiState?> = _activities.map { activities ->
-        when (activities) {
-            is ActivityTypeContentUiState.Success -> activities.findActivity(ActivityCategory.JOB)
+    val jobs: LiveData<ActivitiesUiState?> = _activities.map { activityTypeContent ->
+        when (activityTypeContent) {
+            is ActivityTypeContentUiState.Success ->
+                findActivity(activityTypeContent, ActivityCategory.JOB)
+
             is ActivityTypeContentUiState.Error -> null
         }
     }
@@ -68,6 +74,11 @@ class OnboardingViewModel(
             false -> selectedActivityIds.remove(tag.id)
         }
     }
+
+    private fun findActivity(
+        activityTypeContent: ActivityTypeContentUiState.Success,
+        category: ActivityCategory
+    ): ActivitiesUiState? = activityTypeContent.activities.find { it.category == category.title }
 
     companion object {
         val factory = ViewModelFactory {

@@ -1,14 +1,9 @@
 package com.emmsale.presentation.ui.onboarding.uistate
 
 import com.emmsale.data.activity.Activities
-import com.emmsale.presentation.ui.onboarding.ActivityCategory
 
 sealed class ActivityTypeContentUiState {
-    data class Success(val activities: List<ActivitiesUiState>) : ActivityTypeContentUiState() {
-        fun findActivity(category: ActivityCategory): ActivitiesUiState? =
-            activities.find { it.category == category.title }
-    }
-
+    data class Success(val activities: List<ActivitiesUiState>) : ActivityTypeContentUiState()
     object Error : ActivityTypeContentUiState()
 
     companion object {

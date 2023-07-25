@@ -1,6 +1,5 @@
 package com.emmsale.data.activity
 
-import android.util.Log
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiResult
@@ -19,10 +18,7 @@ class ActivityRepositoryImpl(
         when (val activitiesApiResult = handleApi { activityService.getActivities() }) {
             is ApiSuccess -> ApiSuccess(Activities.from(activitiesApiResult.data))
             is ApiError -> ApiError(activitiesApiResult.code, activitiesApiResult.message)
-            is ApiException -> {
-                Log.d("buna", activitiesApiResult.e.toString())
-                ApiException(activitiesApiResult.e)
-            }
+            is ApiException -> ApiException(activitiesApiResult.e)
         }
     }
 }
