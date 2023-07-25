@@ -2,8 +2,8 @@ package com.emmsale.presentation
 
 import android.app.Application
 import com.emmsale.data.common.ServiceFactory
-import com.emmsale.presentation.di.RepositoryContainer
-import com.emmsale.presentation.di.ServiceContainer
+import com.emmsale.di.RepositoryContainer
+import com.emmsale.di.ServiceContainer
 
 class KerdyApplication : Application() {
 

@@ -1,4 +1,4 @@
-package com.emmsale.presentation.di
+package com.emmsale.di
 
 import android.content.Context
 import com.emmsale.data.activity.ActivityRepository

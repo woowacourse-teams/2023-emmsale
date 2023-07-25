@@ -1,4 +1,4 @@
-package com.emmsale.presentation.di
+package com.emmsale.di
 
 import com.emmsale.data.activity.ActivityService
 import com.emmsale.data.common.ServiceFactory
