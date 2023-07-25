@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -20,6 +21,7 @@ import com.emmsale.comment.application.CommentCommandService;
 import com.emmsale.comment.application.CommentQueryService;
 import com.emmsale.comment.application.dto.CommentAddRequest;
 import com.emmsale.comment.application.dto.CommentHierarchyResponse;
+import com.emmsale.comment.application.dto.CommentModifyRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
 import com.emmsale.helper.MockMvcTestHelper;
 import java.time.LocalDateTime;
@@ -148,5 +150,35 @@ class CommentApiTest extends MockMvcTestHelper {
         .andExpect(status().isNoContent())
         .andDo(print())
         .andDo(document("delete-comment", pathParams));
+  }
+
+  @Test
+  @DisplayName("modify() : 댓글이 정상적으로 수정되면 200 OK 를 반환할 수 있다.")
+  void test_modify() throws Exception {
+    //given
+    final String modifiedContent = "변경된 내용";
+    final CommentModifyRequest request = new CommentModifyRequest(modifiedContent);
+
+    final CommentResponse response = new CommentResponse("댓", 5L, null, 1L, false,
+        LocalDateTime.now(), LocalDateTime.now());
+
+    when(commentCommandService.modify(anyLong(), any(), any()))
+        .thenReturn(response);
+
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("content").type(JsonFieldType.STRING).description("변경할 댓글 내용")
+        );
+
+    final PathParametersSnippet pathParams = pathParameters(
+        parameterWithName("comment-id").description("수정할 댓글의 ID")
+    );
+
+    //when & then
+    mockMvc.perform(patch("/comments/{comment-id}", 1L)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("modify-comment", requestFields, pathParams, RESPONSE_FIELDS));
   }
 }

@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.emmsale.comment.application.dto.CommentAddRequest;
+import com.emmsale.comment.application.dto.CommentModifyRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
+import com.emmsale.comment.exception.CommentException;
 import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
@@ -120,5 +122,62 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
         () -> assertTrue(updatedComment.isDeleted()),
         () -> assertEquals(updatedComment.getContent(), "삭제된 댓글입니다.")
     );
+  }
+
+  @Test
+  @DisplayName("modify() : 댓글을 수정할 때, 로그인 한 본인의 댓글이 아니면 CAN_NOT_UPDATE_COMMENT 가 발생합니다.")
+  void test_modify_canNotModifyComment() throws Exception {
+    //given
+    final Member 댓글_작성자 = memberRepository.findById(1L).get();
+    final Member 다른_사용자 = memberRepository.findById(2L).get();
+    final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
+
+    final CommentModifyRequest request = new CommentModifyRequest("변경된 내용");
+
+    //when & then
+    Assertions.assertThatThrownBy(
+        () -> commentCommandService.modify(comment.getId(), 다른_사용자, request)
+    ).hasMessage(CommentExceptionType.CAN_NOT_MODIFY_COMMENT.errorMessage());
+  }
+
+  @Test
+  @DisplayName("modify() : 본인이 작성한 댓글을 수정할 수 있다.")
+  void test_modify() throws Exception {
+    //given
+    final Member 댓글_작성자 = memberRepository.findById(1L).get();
+    final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
+
+    final String modifiedContent = "변경된 내용";
+    final CommentModifyRequest request = new CommentModifyRequest(modifiedContent);
+
+    //when
+    final CommentResponse response = commentCommandService.modify(comment.getId(), 댓글_작성자, request);
+
+    //then
+    assertAll(
+        () -> assertEquals(comment.getId(), response.getCommentId()),
+        () -> assertEquals(modifiedContent, response.getContent())
+    );
+  }
+
+  @Test
+  @DisplayName("modify() : 이미 삭제된 댓글은 삭제할 수 없습니다.")
+  void test_modify_canNotModifyDeletedComment() throws Exception {
+    //given
+    final Member 댓글_작성자 = memberRepository.findById(1L).get();
+    final Comment comment = commentRepository.save(
+        new Comment(event, null, 댓글_작성자, "내용")
+    );
+
+    final CommentModifyRequest request = new CommentModifyRequest("변경된 내용");
+    comment.delete();
+
+    final Comment deletedComment = commentRepository.save(comment);
+
+    //when & then
+    Assertions.assertThatThrownBy(
+            () -> commentCommandService.modify(deletedComment.getId(), 댓글_작성자, request))
+        .isInstanceOf(CommentException.class)
+        .hasMessage(CommentExceptionType.CAN_NOT_MODIFY_DELETED_COMMENT.errorMessage());
   }
 }

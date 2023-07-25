@@ -68,6 +68,10 @@ public class Comment extends BaseEntity {
     content = DELETED_COMMENT_MESSAGE;
   }
 
+  public void modify(final String content) {
+    this.content = content;
+  }
+
   public Long getId() {
     return id;
   }

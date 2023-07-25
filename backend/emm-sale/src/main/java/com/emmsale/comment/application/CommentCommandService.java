@@ -1,13 +1,17 @@
 package com.emmsale.comment.application;
 
 import static com.emmsale.comment.exception.CommentExceptionType.CAN_NOT_DELETE_COMMENT;
+import static com.emmsale.comment.exception.CommentExceptionType.CAN_NOT_MODIFY_COMMENT;
+import static com.emmsale.comment.exception.CommentExceptionType.CAN_NOT_MODIFY_DELETED_COMMENT;
 import static com.emmsale.comment.exception.CommentExceptionType.NOT_FOUND_COMMENT;
 
 import com.emmsale.comment.application.dto.CommentAddRequest;
+import com.emmsale.comment.application.dto.CommentModifyRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.comment.exception.CommentException;
+import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.member.domain.Member;
@@ -75,10 +79,41 @@ public class CommentCommandService {
     final Comment comment = commentRepository.findById(commentId)
         .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
 
-    if (loginMember.isNotMe(comment.getMember())) {
-      throw new CommentException(CAN_NOT_DELETE_COMMENT);
-    }
+    validateSameWriter(loginMember, comment, CAN_NOT_DELETE_COMMENT);
 
     comment.delete();
+  }
+
+  private void validateSameWriter(
+      final Member loginMember,
+      final Comment comment,
+      final CommentExceptionType commentExceptionType
+  ) {
+    if (loginMember.isNotMe(comment.getMember())) {
+      throw new CommentException(commentExceptionType);
+    }
+  }
+
+  public CommentResponse modify(
+      final Long commentId,
+      final Member loginMember,
+      final CommentModifyRequest commentModifyRequest
+  ) {
+
+    final Comment comment = commentRepository.findById(commentId)
+        .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
+
+    validateAlreadyDeleted(comment);
+    validateSameWriter(loginMember, comment, CAN_NOT_MODIFY_COMMENT);
+
+    comment.modify(commentModifyRequest.getContent());
+
+    return CommentResponse.from(comment);
+  }
+
+  private void validateAlreadyDeleted(final Comment comment) {
+    if (comment.isDeleted()) {
+      throw new CommentException(CAN_NOT_MODIFY_DELETED_COMMENT);
+    }
   }
 }
