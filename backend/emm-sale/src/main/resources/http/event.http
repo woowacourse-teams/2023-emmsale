@@ -1,0 +1,2 @@
+GET http://localhost:8080/events?year=2023&month=7&tags=aa,bbb,ccc
+Content-Type: application/json
