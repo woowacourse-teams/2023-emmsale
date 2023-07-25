@@ -50,13 +50,13 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: keystore 생성
-        id: generate keystore
+        id: generate-keystore
         run: |
           echo "$KEY_STORE" > keystore.b64
           base64 -d -i keystore.b64 > keystore.p12
 
       - name: keystore 이동
-        id: cp keystore
+        id: cp-keystore
         run: |
           cp keystore.p12 src/main/resources/ssl
 
