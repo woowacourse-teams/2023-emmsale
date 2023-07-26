@@ -1,11 +1,15 @@
 package com.emmsale.event.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.exception.EventException;
+import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import java.time.LocalDate;
 import java.util.List;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,8 +21,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private EventService eventService;
 
   @Nested
-  @DisplayName("연도&월 별 필터링 및 정렬 기능 테스트")
-  class dateFilterAndSort {
+  @DisplayName("findEvents() : 행사 목록 조회")
+  class findEvents {
 
     @Test
     @DisplayName("2023년 7월 21일에 2023년 7월 행사를 조회하면, 해당 연도&월에 걸쳐있는 모든 행사 목록을 조회할 수 있다.")
@@ -75,6 +79,40 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
+    }
+
+    @Test
+    @DisplayName("'진행 중' 상태의 행사 목록을 조회할 수 있다.")
+    void findEvents_status_filter() {
+      // given
+      final List<EventResponse> expectedEvents = List.of(
+          new EventResponse(null, "인프콘 2023", null, null, List.of(), "진행 중"),
+          new EventResponse(null, "웹 컨퍼런스", null, null, List.of(), "진행 중")
+      );
+
+      // when
+      final List<EventResponse> actualEvents = eventService.findEvents(LocalDate.of(2023, 7, 21),
+          2023, 7, null, "진행 중");
+
+      // then
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status")
+          .isEqualTo(expectedEvents);
+    }
+
+    @Test
+    @DisplayName("잘못된 양식의 status가 입력으로 들어오면 예외를 반환한다.")
+    void findEvents_status_filter_fail() {
+      // given, when
+      final ThrowingCallable actual = () -> eventService.findEvents(LocalDate.of(2023, 7, 21),
+          2023, 7, null, "존재하지 않는 상태");
+
+      // then
+      assertThatThrownBy(actual)
+          .isInstanceOf(EventException.class)
+          .hasMessage(EventExceptionType.INVALID_STATUS.errorMessage());
+      ;
     }
   }
 }

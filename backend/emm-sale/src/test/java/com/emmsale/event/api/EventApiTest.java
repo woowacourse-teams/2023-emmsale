@@ -40,8 +40,8 @@ class EventApiTest extends MockMvcTestHelper {
     final RequestParametersSnippet requestParameters = requestParameters(
         parameterWithName("year").description("조회하고자 하는 연도"),
         parameterWithName("month").description("조회하고자 하는 월"),
-        parameterWithName("tags").description("필터링하려는 태그 목록").optional(),
-        parameterWithName("status").description("필터링하려는 상태").optional()
+        parameterWithName("tag").optional().description("필터링하려는 태그"),
+        parameterWithName("status").optional().description("필터링하려는 상태")
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(

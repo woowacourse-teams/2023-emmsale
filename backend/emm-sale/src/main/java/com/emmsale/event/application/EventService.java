@@ -1,5 +1,6 @@
 package com.emmsale.event.application;
 
+import static com.emmsale.event.exception.EventExceptionType.INVALID_STATUS;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -8,11 +9,12 @@ import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventRepository;
 import com.emmsale.event.domain.EventStatus;
+import com.emmsale.event.exception.EventException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Map.Entry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,15 +26,34 @@ public class EventService {
 
   private final EventRepository eventRepository;
 
+
+  private static List<EventResponse> makeEventResponsesByStatus(EventStatus status,
+      List<Event> events) {
+    return events.stream()
+        .map(event -> EventResponse.from(status, event))
+        .collect(toList());
+  }
+
   public List<EventResponse> findEvents(final LocalDate nowDate, final int year, final int month,
-      final List<String> tags, final String status) {
+      final String tag, final String status) {
 
     List<Event> events = eventRepository.findAll();
 
     final EnumMap<EventStatus, List<Event>> sortAndGroupByEventStatus
         = groupByEventStatus(nowDate, events, year, month);
 
-    return makeEventResponses(sortAndGroupByEventStatus);
+    if (status != null) {
+      EventStatus eventStatus = findEventStatusByValue(status);
+      return makeEventResponsesByStatus(eventStatus, sortAndGroupByEventStatus.get(eventStatus));
+    }
+    return mergeEventResponses(sortAndGroupByEventStatus);
+  }
+
+  private EventStatus findEventStatusByValue(final String value) {
+    return Arrays.stream(EventStatus.values())
+        .filter(status -> status.isSameValue(value))
+        .findFirst()
+        .orElseThrow(() -> new EventException(INVALID_STATUS));
   }
 
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
@@ -72,17 +93,13 @@ public class EventService {
     return EventStatus.IN_PROGRESS;
   }
 
-  private List<EventResponse> makeEventResponses(
+  private List<EventResponse> mergeEventResponses(
       final EnumMap<EventStatus, List<Event>> groupByEventStatus) {
-    List<EventResponse> responses = new ArrayList<>();
-
-    for (final Entry<EventStatus, List<Event>> entry : groupByEventStatus.entrySet()) {
-      final List<EventResponse> statusResponses = entry.getValue()
-          .stream()
-          .map(event -> EventResponse.from(entry.getKey(), event))
-          .collect(toList());
-      responses.addAll(statusResponses);
-    }
-    return responses;
+    return groupByEventStatus.entrySet().stream()
+        .map(entry -> makeEventResponsesByStatus(entry.getKey(), entry.getValue()))
+        .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
+          combinedEvents.addAll(eventsToAdd);
+          return combinedEvents;
+        });
   }
 }

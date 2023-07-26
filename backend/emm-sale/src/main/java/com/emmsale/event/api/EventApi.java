@@ -20,10 +20,10 @@ public class EventApi {
 
   @GetMapping
   public ResponseEntity<List<EventResponse>> findEvents(@RequestParam final int year,
-      @RequestParam final int month, @RequestParam(required = false) final List<String> tags,
+      @RequestParam final int month, @RequestParam(required = false) final String tag,
       @RequestParam(required = false) final String status) {
-    
-    return ResponseEntity.ok(eventService.findEvents(LocalDate.now(), year, month, tags, status));
+
+    return ResponseEntity.ok(eventService.findEvents(LocalDate.now(), year, month, tag, status));
   }
 
 }
