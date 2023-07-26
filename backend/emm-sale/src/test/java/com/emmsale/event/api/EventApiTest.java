@@ -8,8 +8,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.event.application.EventService;
-import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.helper.MockMvcTestHelper;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,13 +29,14 @@ class EventApiTest extends MockMvcTestHelper {
   void findEvent() throws Exception {
     //given
     final Long eventId = 1L;
-    final EventResponse eventResponse = new EventResponse(
+    final EventDetailResponse eventDetailResponse = new EventDetailResponse(
         eventId,
         "인프콘 2023",
         "http://infcon.com",
-        "2023-08-15",
-        "2023-08-15",
-        "코엑스"
+        LocalDateTime.of(2023, 8, 15, 12, 0),
+        LocalDateTime.of(2023, 8, 15, 12, 0),
+        "코엑스",
+        "예정"
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -43,10 +45,11 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("informationUrl").type(JsonFieldType.STRING).description("상세정보 url"),
         fieldWithPath("startDate").type(JsonFieldType.STRING).description("시작일자"),
         fieldWithPath("endDate").type(JsonFieldType.STRING).description("종료일자"),
-        fieldWithPath("location").type(JsonFieldType.STRING).description("장소")
+        fieldWithPath("location").type(JsonFieldType.STRING).description("장소"),
+        fieldWithPath("status").type(JsonFieldType.STRING).description("진행상태")
     );
 
-    when(eventService.findEvent(eventId)).thenReturn(eventResponse);
+    when(eventService.findEvent(eventId)).thenReturn(eventDetailResponse);
 
     //when
     mockMvc.perform(get("/events/" + eventId))
