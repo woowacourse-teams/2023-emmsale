@@ -28,6 +28,10 @@ public enum LoginExceptionType implements BaseExceptionType {
   INVALID_GITHUB_CODE(
       HttpStatus.BAD_REQUEST,
       "깃허브 코드가 유효하지 않습니다."
+  ),
+  INVALID_ACCESS_TOKEN_TYPE(
+      HttpStatus.BAD_REQUEST,
+      "Access Token Type이 올바르지 않습니다."
   );
 
   private final HttpStatus httpStatus;
