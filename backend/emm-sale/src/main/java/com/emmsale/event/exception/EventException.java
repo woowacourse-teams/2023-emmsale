@@ -5,7 +5,7 @@ import com.emmsale.base.BaseExceptionType;
 
 public class EventException extends BaseException {
 
-  private EventExceptionType eventExceptionType;
+  private final EventExceptionType eventExceptionType;
 
   public EventException(final EventExceptionType eventExceptionType) {
     super(eventExceptionType.errorMessage());
@@ -14,6 +14,6 @@ public class EventException extends BaseException {
 
   @Override
   public BaseExceptionType exceptionType() {
-    return null;
+    return eventExceptionType;
   }
 }
