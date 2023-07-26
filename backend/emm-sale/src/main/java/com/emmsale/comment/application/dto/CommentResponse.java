@@ -1,6 +1,7 @@
 package com.emmsale.comment.application.dto;
 
 import com.emmsale.comment.domain.Comment;
+import com.emmsale.member.domain.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -24,13 +25,18 @@ public class CommentResponse {
   private LocalDateTime createdAt;
   @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
   private LocalDateTime updatedAt;
+  private Long memberId;
+  private String memberImageUrl;
+  private String memberName;
 
   public static CommentResponse from(final Comment comment) {
+    final Member member = comment.getMember();
     return new CommentResponse(
         comment.getContent(), comment.getId(),
         getParentId(comment), comment.getEvent().getId(),
         comment.isDeleted(), comment.getCreatedAt(),
-        comment.getUpdatedAt()
+        comment.getUpdatedAt(), member.getId(),
+        member.getImageUrl(), member.getName()
     );
   }
 

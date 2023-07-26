@@ -60,7 +60,10 @@ class CommentApiTest extends MockMvcTestHelper {
       fieldWithPath("eventId").description("행사 id"),
       fieldWithPath("createdAt").description("댓글 생성 시간"),
       fieldWithPath("updatedAt").description("댓글 최근 수정 시간"),
-      fieldWithPath("deleted").description("댓글 삭제 여부")
+      fieldWithPath("deleted").description("댓글 삭제 여부"),
+      fieldWithPath("memberId").description("댓글 작성자 ID"),
+      fieldWithPath("memberImageUrl").description("댓글 작성자 이미지 Url"),
+      fieldWithPath("memberName").description("댓글 작성자 이름")
   );
 
   @Test
@@ -71,7 +74,7 @@ class CommentApiTest extends MockMvcTestHelper {
     final CommentAddRequest request = new CommentAddRequest(content, 1L, null);
 
     final CommentResponse commentResponse = new CommentResponse(content, 2L, 1L, 1L, false,
-        LocalDateTime.now(), LocalDateTime.now());
+        LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1");
 
     when(commentCommandService.create(any(), any()))
         .thenReturn(commentResponse);
@@ -100,6 +103,9 @@ class CommentApiTest extends MockMvcTestHelper {
         fieldWithPath("[].parentComment.deleted").description("댓글 삭제 여부"),
         fieldWithPath("[].parentComment.createdAt").description("댓글 생성 날짜"),
         fieldWithPath("[].parentComment.updatedAt").description("댓글 수정 날짜"),
+        fieldWithPath("[].parentComment.memberId").description("댓글 작성자 ID"),
+        fieldWithPath("[].parentComment.memberImageUrl").description("댓글 작성자 이미지 Url"),
+        fieldWithPath("[].parentComment.memberName").description("댓글 작성자 이름"),
         fieldWithPath("[].childComments[]").description("자식 댓글 목록"),
         fieldWithPath("[].childComments[].content").description("댓글 내용"),
         fieldWithPath("[].childComments[].commentId").description("댓글 ID"),
@@ -107,23 +113,26 @@ class CommentApiTest extends MockMvcTestHelper {
         fieldWithPath("[].childComments[].eventId").description("이벤트 ID"),
         fieldWithPath("[].childComments[].deleted").description("댓글 삭제 여부"),
         fieldWithPath("[].childComments[].createdAt").description("댓글 생성 날짜"),
-        fieldWithPath("[].childComments[].updatedAt").description("댓글 수정 날짜")
+        fieldWithPath("[].childComments[].updatedAt").description("댓글 수정 날짜"),
+        fieldWithPath("[].childComments[].memberId").description("댓글 작성자 ID"),
+        fieldWithPath("[].childComments[].memberImageUrl").description("댓글 작성자 이미지 Url"),
+        fieldWithPath("[].childComments[].memberName").description("댓글 작성자 이름")
     );
 
     final List<CommentHierarchyResponse> result = List.of(
         new CommentHierarchyResponse(
             new CommentResponse("부모댓글2", 4L, null, 1L, false,
-                LocalDateTime.now(), LocalDateTime.now()),
+                LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
             Collections.EMPTY_LIST
         ),
         new CommentHierarchyResponse(
             new CommentResponse("부모댓글1", 5L, null, 1L, false,
-                LocalDateTime.now(), LocalDateTime.now()),
+                LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
             List.of(
                 new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, false,
-                    LocalDateTime.now(), LocalDateTime.now()),
+                    LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
                 new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, false,
-                    LocalDateTime.now(), LocalDateTime.now()
+                    LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"
                 ))
         ));
 
@@ -160,7 +169,7 @@ class CommentApiTest extends MockMvcTestHelper {
     final CommentModifyRequest request = new CommentModifyRequest(modifiedContent);
 
     final CommentResponse response = new CommentResponse("댓", 5L, null, 1L, false,
-        LocalDateTime.now(), LocalDateTime.now());
+        LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1");
 
     when(commentCommandService.modify(anyLong(), any(), any()))
         .thenReturn(response);

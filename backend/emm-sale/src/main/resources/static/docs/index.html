@@ -1586,7 +1586,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 969
+Content-Length: 1313
 
 [ {
   "parentComment" : {
@@ -1594,8 +1594,11 @@ Content-Length: 969
     "commentId" : 4,
     "parentId" : null,
     "eventId" : 1,
-    "createdAt" : "2023:07:25:22:01:05",
-    "updatedAt" : "2023:07:25:22:01:05",
+    "createdAt" : "2023:07:26:14:24:19",
+    "updatedAt" : "2023:07:26:14:24:19",
+    "memberId" : 1,
+    "memberImageUrl" : "이미지",
+    "memberName" : "이름1",
     "deleted" : false
   },
   "childComments" : [ ]
@@ -1605,8 +1608,11 @@ Content-Length: 969
     "commentId" : 5,
     "parentId" : null,
     "eventId" : 1,
-    "createdAt" : "2023:07:25:22:01:05",
-    "updatedAt" : "2023:07:25:22:01:05",
+    "createdAt" : "2023:07:26:14:24:19",
+    "updatedAt" : "2023:07:26:14:24:19",
+    "memberId" : 1,
+    "memberImageUrl" : "이미지",
+    "memberName" : "이름1",
     "deleted" : false
   },
   "childComments" : [ {
@@ -1614,16 +1620,22 @@ Content-Length: 969
     "commentId" : 2,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:07:25:22:01:05",
-    "updatedAt" : "2023:07:25:22:01:05",
+    "createdAt" : "2023:07:26:14:24:19",
+    "updatedAt" : "2023:07:26:14:24:19",
+    "memberId" : 1,
+    "memberImageUrl" : "이미지",
+    "memberName" : "이름1",
     "deleted" : false
   }, {
     "content" : "부모댓글1에 대한 자식댓글2",
     "commentId" : 3,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:07:25:22:01:05",
-    "updatedAt" : "2023:07:25:22:01:05",
+    "createdAt" : "2023:07:26:14:24:19",
+    "updatedAt" : "2023:07:26:14:24:19",
+    "memberId" : 1,
+    "memberImageUrl" : "이미지",
+    "memberName" : "이름1",
     "deleted" : false
   } ]
 } ]</code></pre>
@@ -1680,6 +1692,21 @@ Content-Length: 969
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 수정 날짜</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].parentComment.memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].parentComment.memberImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 이미지 Url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].parentComment.memberName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 이름</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].childComments[]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">자식 댓글 목록</p></td>
@@ -1719,6 +1746,21 @@ Content-Length: 969
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 수정 날짜</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].childComments[].memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].childComments[].memberImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 이미지 Url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].childComments[].memberName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 이름</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1744,15 +1786,18 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 179
+Content-Length: 259
 
 {
   "content" : "내용",
   "commentId" : 2,
   "parentId" : 1,
   "eventId" : 1,
-  "createdAt" : "2023:07:25:22:01:05",
-  "updatedAt" : "2023:07:25:22:01:05",
+  "createdAt" : "2023:07:26:14:24:19",
+  "updatedAt" : "2023:07:26:14:24:19",
+  "memberId" : 1,
+  "memberImageUrl" : "이미지",
+  "memberName" : "이름1",
   "deleted" : false
 }</code></pre>
 </div>
@@ -1806,6 +1851,21 @@ Content-Length: 179
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>deleted</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 삭제 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 이미지 Url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 이름</p></td>
 </tr>
 </tbody>
 </table>
@@ -1906,15 +1966,18 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 179
+Content-Length: 259
 
 {
   "content" : "댓",
   "commentId" : 5,
   "parentId" : null,
   "eventId" : 1,
-  "createdAt" : "2023:07:25:22:01:05",
-  "updatedAt" : "2023:07:25:22:01:05",
+  "createdAt" : "2023:07:26:14:24:19",
+  "updatedAt" : "2023:07:26:14:24:19",
+  "memberId" : 1,
+  "memberImageUrl" : "이미지",
+  "memberName" : "이름1",
   "deleted" : false
 }</code></pre>
 </div>
@@ -1969,6 +2032,21 @@ Content-Length: 179
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 삭제 여부</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 이미지 Url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 작성자 이름</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1978,7 +2056,7 @@ Content-Length: 179
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-07-25 22:00:37 +0900
+Last updated 2023-07-26 14:12:51 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
