@@ -28,11 +28,11 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 @WebMvcTest(EventApi.class)
 class EventApiTest extends MockMvcTestHelper {
 
+  private static final int QUERY_YEAR = 2023;
+  private static final int QUERY_MONTH = 7;
   @MockBean
   private EventService eventService;
 
-  // TODO: 2023-07-24 월+태그별 컨퍼런스 필터링
-  // TODO: 2023-07-24 월+상태별 필터링
   @Test
   @DisplayName("특정 연도&월의 행사 목록을 조회할 수 있으면 200 OK를 반환한다.")
   void findEvents() throws Exception {
@@ -40,8 +40,8 @@ class EventApiTest extends MockMvcTestHelper {
     final RequestParametersSnippet requestParameters = requestParameters(
         parameterWithName("year").description("조회하고자 하는 연도"),
         parameterWithName("month").description("조회하고자 하는 월"),
-        parameterWithName("tag").optional().description("필터링하려는 태그"),
-        parameterWithName("status").optional().description("필터링하려는 상태")
+        parameterWithName("tag").description("필터링하려는 태그").optional(),
+        parameterWithName("status").description("필터링하려는 상태").optional()
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -67,10 +67,7 @@ class EventApiTest extends MockMvcTestHelper {
 
     );
 
-    int year = 2023;
-    int month = 7;
-
-    when(eventService.findEvents(any(LocalDate.class), eq(year), eq(month), eq(null),
+    when(eventService.findEvents(any(LocalDate.class), eq(QUERY_YEAR), eq(QUERY_MONTH), eq(null),
         eq(null))).thenReturn(eventResponses);
 
     // when & then

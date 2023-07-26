@@ -1,6 +1,8 @@
 package com.emmsale.event.application;
 
+import static com.emmsale.event.exception.EventExceptionType.INVALID_MONTH;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_STATUS;
+import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR;
 import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
@@ -30,13 +32,17 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class EventService {
 
+  private static final int MIN_MONTH = 1;
+  private static final int MAX_MONTH = 12;
+  private static final int MIN_YEAR = 2015;
+
   private final EventRepository eventRepository;
   private final EventTagRepository eventTagRepository;
   private final TagRepository tagRepository;
 
   public List<EventResponse> findEvents(final LocalDate nowDate, final int year, final int month,
       final String tagName, final String statusName) {
-
+    validateYearAndMonth(year, month);
     List<Event> events = filterEventsByTag(tagName);
 
     final EnumMap<EventStatus, List<Event>> sortAndGroupByStatus
@@ -45,8 +51,17 @@ public class EventService {
     return filterEventResponsesByStatus(statusName, sortAndGroupByStatus);
   }
 
+  private void validateYearAndMonth(final int year, final int month) {
+    if (year < MIN_YEAR) {
+      throw new EventException(INVALID_YEAR);
+    }
+    if (month < MIN_MONTH || month > MAX_MONTH) {
+      throw new EventException(INVALID_MONTH);
+    }
+  }
+
   private List<Event> filterEventsByTag(final String tagName) {
-    if (tagName != null) {
+    if (isExistTagName(tagName)) {
       Tag tag = tagRepository.findByName(tagName)
           .orElseThrow(() -> new TagException(NOT_FOUND_TAG));
 
@@ -56,6 +71,10 @@ public class EventService {
           .collect(toList());
     }
     return eventRepository.findAll();
+  }
+
+  private boolean isExistTagName(final String tagName) {
+    return tagName != null;
   }
 
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
@@ -97,11 +116,15 @@ public class EventService {
 
   private List<EventResponse> filterEventResponsesByStatus(final String statusName,
       final EnumMap<EventStatus, List<Event>> sortAndGroupByEventStatus) {
-    if (statusName != null) {
+    if (isaBoolean(statusName)) {
       EventStatus status = findEventStatusByValue(statusName);
       return makeEventResponsesByStatus(status, sortAndGroupByEventStatus.get(status));
     }
     return mergeEventResponses(sortAndGroupByEventStatus);
+  }
+
+  private boolean isaBoolean(final String statusName) {
+    return statusName != null;
   }
 
   private EventStatus findEventStatusByValue(final String value) {
