@@ -1,6 +1,8 @@
 package com.emmsale.event.application.dto;
 
 import com.emmsale.event.domain.Event;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +16,10 @@ public class EventDetailResponse {
   private final Long id;
   private final String name;
   private final String informationUrl;
-  private final String startDate;
-  private final String endDate;
+  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  private final LocalDateTime startDate;
+  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  private final LocalDateTime endDate;
   private final String location;
 
   public static EventDetailResponse from(final Event event) {
@@ -23,8 +27,8 @@ public class EventDetailResponse {
         event.getId(),
         event.getName(),
         event.getInformationUrl(),
-        event.getStartDate().format(DATE_TIME_FORMATTER),
-        event.getEndDate().format(DATE_TIME_FORMATTER),
+        event.getStartDate(),
+        event.getEndDate(),
         event.getLocation()
     );
   }
