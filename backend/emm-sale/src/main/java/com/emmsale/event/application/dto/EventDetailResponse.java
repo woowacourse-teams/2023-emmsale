@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class EventResponse {
+public class EventDetailResponse {
 
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
       "yyyy-MM-dd hh:mm");
@@ -18,8 +18,8 @@ public class EventResponse {
   private final String endDate;
   private final String location;
 
-  public static EventResponse from(final Event event) {
-    return new EventResponse(
+  public static EventDetailResponse from(final Event event) {
+    return new EventDetailResponse(
         event.getId(),
         event.getName(),
         event.getInformationUrl(),

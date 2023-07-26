@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.event.application.EventService;
-import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.helper.MockMvcTestHelper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class EventApiTest extends MockMvcTestHelper {
   void findEvent() throws Exception {
     //given
     final Long eventId = 1L;
-    final EventResponse eventResponse = new EventResponse(
+    final EventDetailResponse eventDetailResponse = new EventDetailResponse(
         eventId,
         "인프콘 2023",
         "http://infcon.com",
@@ -46,7 +46,7 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("location").type(JsonFieldType.STRING).description("장소")
     );
 
-    when(eventService.findEvent(eventId)).thenReturn(eventResponse);
+    when(eventService.findEvent(eventId)).thenReturn(eventDetailResponse);
 
     //when
     mockMvc.perform(get("/events/" + eventId))

@@ -4,10 +4,11 @@ import static com.emmsale.event.EventFixture.eventFixture;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
+import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -34,10 +35,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       //given
       final Event event = eventFixture();
       eventRepository.save(event);
-      final EventResponse expected = EventResponse.from(event);
+      final EventDetailResponse expected = EventDetailResponse.from(event);
 
       //when
-      final EventResponse actual = eventService.findEvent(event.getId());
+      final EventDetailResponse actual = eventService.findEvent(event.getId());
 
       //then
       assertThat(actual)
@@ -53,7 +54,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       //when, then
       assertThatThrownBy(() -> eventService.findEvent(notFoundEventId))
-          .isInstanceOf(EventException.class);
+          .isInstanceOf(EventException.class)
+          .hasMessage(EventExceptionType.EVENT_NOT_FOUND_EXCEPTION.errorMessage());
     }
   }
 }
