@@ -2,6 +2,7 @@ package com.emmsale.event.application.dto;
 
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +15,9 @@ public class EventResponse {
 
   private final Long id;
   private final String name;
+  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
   private final LocalDateTime startDate;
+  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
   private final LocalDateTime endDate;
   private final List<String> tags;
   private final String status;
