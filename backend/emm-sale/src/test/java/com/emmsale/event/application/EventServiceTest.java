@@ -7,6 +7,8 @@ import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.tag.exception.TagException;
+import com.emmsale.tag.exception.TagExceptionType;
 import java.time.LocalDate;
 import java.util.List;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -79,6 +81,39 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
+    }
+
+    @Test
+    @DisplayName("'안드로이드' 태그를 포함하는 행사 목록을 조회할 수 있다.")
+    void findEvents_tag_filter() {
+      // given
+      final List<EventResponse> expectedEvents = List.of(
+          new EventResponse(null, "인프콘 2023", null, null, List.of(), "진행 중"),
+          new EventResponse(null, "안드로이드 컨퍼런스", null, null, List.of(), "종료된 행사")
+      );
+
+      // when
+      final List<EventResponse> actualEvents = eventService.findEvents(LocalDate.of(2023, 7, 21),
+          2023, 7, "안드로이드", null);
+
+      // then
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status")
+          .isEqualTo(expectedEvents);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 태그가 입력으로 들어오면 예외를 반환한다.")
+    void findEvents_tag_filter_fail() {
+      // given, when
+      final ThrowingCallable actual = () -> eventService.findEvents(LocalDate.of(2023, 7, 21),
+          2023, 7, "개발", null);
+
+      // then
+      assertThatThrownBy(actual)
+          .isInstanceOf(TagException.class)
+          .hasMessage(TagExceptionType.NOT_FOUND_TAG.errorMessage());
     }
 
     @Test

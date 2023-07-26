@@ -1,3 +1,5 @@
+## 행사 목록 조회
+
 ### 필터링 없이 특정 연도 & 월의 행사 목록 조회
 
 GET http://localhost:8080/events?year=2023&month=7
