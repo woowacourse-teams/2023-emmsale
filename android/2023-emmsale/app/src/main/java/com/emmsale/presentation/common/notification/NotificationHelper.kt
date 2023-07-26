@@ -32,6 +32,9 @@ class NotificationHelper(private val context: Context) {
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setGroup(channelId)
+            .setGroupSummary(true)
+            .setAutoCancel(true)
             .build()
 
     private fun createNotificationChannel(
