@@ -38,4 +38,8 @@ public class Member extends BaseEntity {
   public void updateName(final String name) {
     this.name = name;
   }
+
+  public void updateOpenProfileUrl(final String openProfileUrl) {
+    this.openProfileUrl = openProfileUrl;
+  }
 }
