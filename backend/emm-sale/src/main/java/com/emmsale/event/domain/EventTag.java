@@ -26,4 +26,9 @@ public class EventTag {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "tag_id", nullable = false)
   private Tag tag;
+
+  public EventTag(Event event, Tag tag) {
+    this.event = event;
+    this.tag = tag;
+  }
 }

@@ -40,5 +40,16 @@ public class Event extends BaseEntity {
   //@OneToMany
   //private List<Member> participants;
 
-
+  public Event(
+      final String name, final String location,
+      final LocalDateTime startDate, final LocalDateTime endDate,
+      final String informationUrl, final List<EventTag> tags
+  ) {
+    this.name = name;
+    this.location = location;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.informationUrl = informationUrl;
+    this.tags = tags;
+  }
 }

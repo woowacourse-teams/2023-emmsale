@@ -1,17 +1,34 @@
 package com.emmsale.event.application;
 
+import static com.emmsale.event.EventFixture.AI_컨퍼런스;
+import static com.emmsale.event.EventFixture.모바일_컨퍼런스;
+import static com.emmsale.event.EventFixture.안드로이드_컨퍼런스;
+import static com.emmsale.event.EventFixture.웹_컨퍼런스;
+import static com.emmsale.event.EventFixture.인프콘_2023;
+import static com.emmsale.tag.TagFixture.AI;
+import static com.emmsale.tag.TagFixture.IOS;
+import static com.emmsale.tag.TagFixture.백엔드;
+import static com.emmsale.tag.TagFixture.안드로이드;
+import static com.emmsale.tag.TagFixture.프론트엔드;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventRepository;
+import com.emmsale.event.domain.EventTag;
+import com.emmsale.event.domain.EventTagRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.tag.domain.Tag;
+import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
 import com.emmsale.tag.exception.TagExceptionType;
 import java.time.LocalDate;
 import java.util.List;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,20 +38,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
-  public static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
+  private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
       List.of(), "진행 중");
-  public static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
+  private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
       List.of(),
       "진행 중");
-  public static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스", null, null,
+  private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스", null, null,
       List.of(), "종료된 행사");
-  public static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null,
+  private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null,
       List.of(), "진행 예정");
-  public static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
+  private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
       List.of(), "진행 예정");
   private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
   @Autowired
+  private EventRepository eventRepository;
+  @Autowired
+  private EventTagRepository eventTagRepository;
+  @Autowired
+  private TagRepository tagRepository;
+  @Autowired
   private EventService eventService;
+
+  @BeforeEach
+  void init() {
+    Tag 백엔드 = tagRepository.save(백엔드());
+    Tag 프론트엔드 = tagRepository.save(프론트엔드());
+    Tag 안드로이드 = tagRepository.save(안드로이드());
+    Tag IOS = tagRepository.save(IOS());
+    Tag AI = tagRepository.save(AI());
+
+    Event 인프콘_2023 = eventRepository.save(인프콘_2023());
+    Event AI_컨퍼런스 = eventRepository.save(AI_컨퍼런스());
+    Event 모바일_컨퍼런스 = eventRepository.save(모바일_컨퍼런스());
+    Event 안드로이드_컨퍼런스 = eventRepository.save(안드로이드_컨퍼런스());
+    Event 웹_컨퍼런스 = eventRepository.save(웹_컨퍼런스());
+
+    eventTagRepository.saveAll(List.of(
+        new EventTag(인프콘_2023, 백엔드), new EventTag(인프콘_2023, 프론트엔드), new EventTag(인프콘_2023, 안드로이드),
+        new EventTag(인프콘_2023, IOS), new EventTag(인프콘_2023, AI), new EventTag(AI_컨퍼런스, AI),
+        new EventTag(모바일_컨퍼런스, 안드로이드), new EventTag(모바일_컨퍼런스, IOS), new EventTag(안드로이드_컨퍼런스, 안드로이드),
+        new EventTag(웹_컨퍼런스, 백엔드), new EventTag(웹_컨퍼런스, 프론트엔드))
+    );
+  }
 
   @Nested
   @DisplayName("findEvents() : 행사 목록 조회")
