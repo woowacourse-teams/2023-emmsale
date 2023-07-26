@@ -89,5 +89,19 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           .isInstanceOf(EventException.class)
           .hasMessage(EventExceptionType.PARTICIPATE_NOT_ALLOW_FORBIDDEN.errorMessage());
     }
+
+    @Test
+    @DisplayName("이미 참가한 멤버면 Exception이 발생한다.")
+    void fail_alreadyParticipate() {
+      final Long memberId = 1L;
+      final Member member = memberRepository.findById(memberId).get();
+      final Event 인프콘 = eventRepository.save(eventFixture());
+      eventService.participate(인프콘.getId(), memberId, member);
+
+      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), memberId, member))
+          .isInstanceOf(EventException.class)
+          .hasMessage(EventExceptionType.ALREADY_PARTICIPATE.errorMessage());
+    }
+
   }
 }

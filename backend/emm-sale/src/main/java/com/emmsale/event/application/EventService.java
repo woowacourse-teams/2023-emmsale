@@ -30,15 +30,16 @@ public class EventService {
   }
 
   public Long participate(final Long eventId, final Long memberId, final Member member) {
-    validateMemberNotAllowd(memberId, member);
+    validateMemberNotAllowed(memberId, member);
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(EVENT_NOT_FOUND_EXCEPTION));
-    final Participant participant = new Participant(member, event);
+
+    final Participant participant = event.addParticipant(member);
     participantRepository.save(participant);
     return participant.getId();
   }
 
-  private static void validateMemberNotAllowd(final Long memberId, final Member member) {
+  private static void validateMemberNotAllowed(final Long memberId, final Member member) {
     if (!memberId.equals(member.getId())) {
       throw new EventException(EventExceptionType.PARTICIPATE_NOT_ALLOW_FORBIDDEN);
     }
