@@ -35,7 +35,8 @@ class EventApiTest extends MockMvcTestHelper {
         "http://infcon.com",
         LocalDateTime.of(2023, 8, 15, 12, 0),
         LocalDateTime.of(2023, 8, 15, 12, 0),
-        "코엑스"
+        "코엑스",
+        "예정"
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -44,7 +45,8 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("informationUrl").type(JsonFieldType.STRING).description("상세정보 url"),
         fieldWithPath("startDate").type(JsonFieldType.STRING).description("시작일자"),
         fieldWithPath("endDate").type(JsonFieldType.STRING).description("종료일자"),
-        fieldWithPath("location").type(JsonFieldType.STRING).description("장소")
+        fieldWithPath("location").type(JsonFieldType.STRING).description("장소"),
+        fieldWithPath("status").type(JsonFieldType.STRING).description("진행상태")
     );
 
     when(eventService.findEvent(eventId)).thenReturn(eventDetailResponse);

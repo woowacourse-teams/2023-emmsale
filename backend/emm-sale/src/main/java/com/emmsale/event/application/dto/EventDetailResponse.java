@@ -3,7 +3,6 @@ package com.emmsale.event.application.dto;
 import com.emmsale.event.domain.Event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -11,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class EventDetailResponse {
 
-  private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
-      "yyyy-MM-dd hh:mm");
+  private static final String EXPECTED = "예정";
+  private static final String IN_PROGRESS = "진행 중";
+  private static final String END = "종료";
+
   private final Long id;
   private final String name;
   private final String informationUrl;
@@ -21,6 +22,7 @@ public class EventDetailResponse {
   @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
   private final LocalDateTime endDate;
   private final String location;
+  private final String status;
 
   public static EventDetailResponse from(final Event event) {
     return new EventDetailResponse(
@@ -29,7 +31,21 @@ public class EventDetailResponse {
         event.getInformationUrl(),
         event.getStartDate(),
         event.getEndDate(),
-        event.getLocation()
+        event.getLocation(),
+        calculateStatus(event.getStartDate(), event.getEndDate())
     );
+  }
+
+  private static String calculateStatus(
+      final LocalDateTime startDate,
+      final LocalDateTime endDate
+  ) {
+    final LocalDateTime now = LocalDateTime.now();
+    if (startDate.isBefore(now)) {
+      return EXPECTED;
+    } else if (endDate.isBefore(now)) {
+      return IN_PROGRESS;
+    }
+    return END;
   }
 }
