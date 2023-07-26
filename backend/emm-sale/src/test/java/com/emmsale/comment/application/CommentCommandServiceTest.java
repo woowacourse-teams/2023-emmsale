@@ -97,7 +97,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   void test_delete_canNotDeleteComment() throws Exception {
     //given
     final Member 다른_사용자 = memberRepository.findById(2L).get();
-    final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
+    final Comment comment = commentRepository.save(Comment.createRoot(event, 댓글_작성자, "내용"));
 
     //when & then
     Assertions.assertThatThrownBy(
@@ -109,7 +109,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("delete() : 본인이 작성한 댓글을 삭제할 경우, 삭제 표시가 false -> true로 변경될 수 있다.")
   void test_delete() throws Exception {
     //given
-    final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
+    final Comment comment = commentRepository.save(Comment.createRoot(event, 댓글_작성자, "내용"));
 
     //when
     commentCommandService.delete(comment.getId(), 댓글_작성자);
@@ -128,7 +128,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   void test_modify_canNotModifyComment() throws Exception {
     //given
     final Member 다른_사용자 = memberRepository.findById(2L).get();
-    final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
+    final Comment comment = commentRepository.save(Comment.createRoot(event, 댓글_작성자, "내용"));
 
     final CommentModifyRequest request = new CommentModifyRequest("변경된 내용");
 
@@ -142,7 +142,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("modify() : 본인이 작성한 댓글을 수정할 수 있다.")
   void test_modify() throws Exception {
     //given
-    final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
+    final Comment comment = commentRepository.save(Comment.createRoot(event, 댓글_작성자, "내용"));
 
     final String modifiedContent = "변경된 내용";
     final CommentModifyRequest request = new CommentModifyRequest(modifiedContent);
@@ -162,7 +162,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   void test_modify_canNotModifyDeletedComment() throws Exception {
     //given
     final Comment comment = commentRepository.save(
-        new Comment(event, null, 댓글_작성자, "내용")
+        Comment.createRoot(event, 댓글_작성자, "내용")
     );
 
     final CommentModifyRequest request = new CommentModifyRequest("변경된 내용");

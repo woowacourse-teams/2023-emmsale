@@ -49,15 +49,15 @@ class CommentRepositoryTest {
     final Member member = memberRepository.findById(1L).get();
 
     commentRepository.save(
-        new Comment(event1, null, member, "부모댓글2")
+        Comment.createRoot(event1, member, "부모댓글2")
     );
 
     commentRepository.save(
-        new Comment(event1, null, member, "부모댓글1")
+        Comment.createRoot(event1, member, "부모댓글1")
     );
 
     final Comment savedComment = commentRepository.save(
-        new Comment(event2, null, member, "부모댓글1")
+        Comment.createRoot(event2, member, "부모댓글1")
     );
 
     //when

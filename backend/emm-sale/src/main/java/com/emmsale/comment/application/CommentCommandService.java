@@ -14,8 +14,9 @@ import com.emmsale.comment.exception.CommentException;
 import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
+import com.emmsale.event.exception.EventException;
+import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
-import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,52 +33,30 @@ public class CommentCommandService {
       final CommentAddRequest commentAddRequest,
       final Member member
   ) {
-    // TODO : Event 조회 Custom Exception 만들면 수정
     final Event savedEvent = eventRepository.findById(commentAddRequest.getEventId())
-        .orElseThrow(EntityNotFoundException::new);
+        .orElseThrow(() -> new EventException(EventExceptionType.EVENT_NOT_FOUND_EXCEPTION));
+    final String content = commentAddRequest.getContent();
 
-    if (isRootComment(commentAddRequest)) {
-      return createRootComment(commentAddRequest, member, savedEvent);
-    }
+    final Comment comment = commentAddRequest.optionalParentId()
+        .map(commentId -> Comment.createChild(
+            savedEvent,
+            findSavedComment(commentId),
+            member,
+            content)
+        )
+        .orElseGet(() -> Comment.createRoot(savedEvent, member, content));
 
-    return createChildComment(commentAddRequest, member, savedEvent);
+    return CommentResponse.from(commentRepository.save(comment));
   }
 
-  private boolean isRootComment(final CommentAddRequest commentAddRequest) {
-    return commentAddRequest.getParentId() == null;
-  }
-
-  private CommentResponse createChildComment(
-      final CommentAddRequest commentAddRequest,
-      final Member member,
-      final Event savedEvent
-  ) {
-    final Comment savedParentComment = commentRepository.findById(commentAddRequest.getParentId())
+  private Comment findSavedComment(final Long commentId) {
+    return commentRepository.findById(commentId)
         .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
-
-    final Comment savedComment = commentRepository.save(
-        new Comment(savedEvent, savedParentComment, member, commentAddRequest.getContent())
-    );
-
-    return CommentResponse.from(savedComment);
-  }
-
-  private CommentResponse createRootComment(
-      final CommentAddRequest commentAddRequest,
-      final Member member,
-      final Event savedEvent
-  ) {
-    final Comment savedComment = commentRepository.save(
-        new Comment(savedEvent, null, member, commentAddRequest.getContent())
-    );
-
-    return CommentResponse.from(savedComment);
   }
 
   public void delete(final Long commentId, final Member loginMember) {
 
-    final Comment comment = commentRepository.findById(commentId)
-        .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
+    final Comment comment = findSavedComment(commentId);
 
     validateSameWriter(loginMember, comment, FORBIDDEN_DELETE_COMMENT);
 
@@ -100,8 +79,7 @@ public class CommentCommandService {
       final CommentModifyRequest commentModifyRequest
   ) {
 
-    final Comment comment = commentRepository.findById(commentId)
-        .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
+    final Comment comment = findSavedComment(commentId);
 
     validateAlreadyDeleted(comment);
     validateSameWriter(loginMember, comment, FORBIDDEN_MODIFY_COMMENT);

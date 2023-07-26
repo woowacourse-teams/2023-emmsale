@@ -43,11 +43,11 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
     member = memberRepository.findById(1L).get();
 
     부모_댓글2 = commentRepository.save(
-        new Comment(event, null, member, "부모댓글2")
+        Comment.createRoot(event, member, "부모댓글2")
     );
 
     부모_댓글1 = commentRepository.save(
-        new Comment(event, null, member, "부모댓글1")
+        Comment.createRoot(event, member, "부모댓글1")
     );
   }
 
@@ -55,8 +55,8 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("findByEventId() : 행사에 존재하는 댓글들을 모두 조회할 수 있다.")
   void test_findByEventId() throws Exception {
     //given
-    final Comment comment1 = new Comment(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글1");
-    final Comment comment2 = new Comment(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글2");
+    final Comment comment1 = Comment.createChild(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글1");
+    final Comment comment2 = Comment.createChild(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글2");
     commentRepository.save(comment2);
     commentRepository.save(comment1);
 
@@ -75,7 +75,8 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    final List<CommentHierarchyResponse> actual = commentQueryService.findAllCommentsByEventId(event.getId());
+    final List<CommentHierarchyResponse> actual = commentQueryService.findAllCommentsByEventId(
+        event.getId());
 
     //then
     Assertions.assertThat(expected)

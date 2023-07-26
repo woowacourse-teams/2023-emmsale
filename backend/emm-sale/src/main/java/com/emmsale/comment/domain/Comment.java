@@ -37,7 +37,7 @@ public class Comment extends BaseEntity {
   private String content;
   private boolean isDeleted;
 
-  public Comment(
+  private Comment(
       final Event event,
       final Comment parent,
       final Member member,
@@ -49,12 +49,21 @@ public class Comment extends BaseEntity {
     this.content = content;
   }
 
-  public Comment(
+  public static Comment createRoot(
       final Event event,
       final Member member,
       final String content
   ) {
-    this(event, null, member, content);
+    return new Comment(event, null, member, content);
+  }
+
+  public static Comment createChild(
+      final Event event,
+      final Comment parent,
+      final Member member,
+      final String content
+  ) {
+    return new Comment(event, parent, member, content);
   }
 
   public boolean isRootComment() {
