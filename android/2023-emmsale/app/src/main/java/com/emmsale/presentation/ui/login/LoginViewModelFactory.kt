@@ -16,7 +16,7 @@ class LoginViewModelFactory(private val context: Context) : ViewModelProvider.Fa
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
                 DispatcherProviderImpl(),
-                LoginRepositoryImpl(RetrofitProvider.loginService),
+                LoginRepositoryImpl(loginService = RetrofitProvider.loginService),
                 TokenRepositoryImpl(preference = kerdyPreference)
             ) as T
         }

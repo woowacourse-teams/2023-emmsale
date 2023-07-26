@@ -9,7 +9,14 @@ import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
 object RetrofitProvider {
-    private const val BASE_URL = "http://13.125.212.56/"
+    private const val BASE_URL = "https://kerdy.kro.kr/"
+    private val jsonMediaType = "application/json".toMediaType()
+    private val json = Json {
+        coerceInputValues = true
+        encodeDefaults = true
+        isLenient = true
+    }
+    private val jsonConverterFactory = json.asConverterFactory(jsonMediaType)
 
     private val okhttpClient = OkHttpClient.Builder()
         .connectTimeout(120, TimeUnit.SECONDS)
@@ -17,10 +24,9 @@ object RetrofitProvider {
         .writeTimeout(120, TimeUnit.SECONDS)
         .build()
 
-
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(jsonConverterFactory)
         .client(okhttpClient)
         .build()
 

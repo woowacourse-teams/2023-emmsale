@@ -5,15 +5,13 @@ import com.emmsale.data.login.dto.LoginApiModel
 data class Login(
     val uid: Long,
     val accessToken: String,
-    val refreshToken: String,
-    val isRegistered: Boolean,
+    val isNewMember: Boolean,
 ) {
     companion object {
         fun from(apiModel: LoginApiModel): Login = Login(
             accessToken = apiModel.accessToken,
-            refreshToken = apiModel.refreshToken,
             uid = apiModel.uid,
-            isRegistered = apiModel.isRegistered,
+            isNewMember = apiModel.isNewMember,
         )
     }
 }

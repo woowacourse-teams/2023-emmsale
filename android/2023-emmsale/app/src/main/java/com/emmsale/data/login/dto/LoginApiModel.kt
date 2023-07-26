@@ -1,8 +1,14 @@
 package com.emmsale.data.login.dto
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class LoginApiModel(
-    val accessToken: String,
-    val refreshToken: String,
+    @SerialName("memberId")
     val uid: Long,
-    val isRegistered: Boolean,
+    @SerialName("accessToken")
+    val accessToken: String,
+    @SerialName("newMember")
+    val isNewMember: Boolean,
 )

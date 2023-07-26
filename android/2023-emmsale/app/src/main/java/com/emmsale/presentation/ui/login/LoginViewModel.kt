@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
@@ -12,6 +13,7 @@ import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.base.viewmodel.BaseViewModel
 import com.emmsale.presentation.base.viewmodel.DispatcherProvider
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
+import kotlinx.coroutines.launch
 
 class LoginViewModel(
     dispatcherProvider: DispatcherProvider,
@@ -21,11 +23,10 @@ class LoginViewModel(
     private val _loginState: MutableLiveData<LoginUiState> = MutableLiveData()
     val loginState: LiveData<LoginUiState> = _loginState
 
-    fun login() {
+    fun saveGithubCode(code: String) {
         changeLoginState(LoginUiState.Loading)
-
-        onIo {
-            when (val loginResult = loginRepository.login()) {
+        viewModelScope.launch {
+            when (val loginResult = loginRepository.saveGithubCode(code)) {
                 is ApiSuccess -> handleLoginResult(loginResult.data)
                 is ApiError -> changeLoginState(LoginUiState.Error)
                 is ApiException -> changeLoginState(LoginUiState.Error)
@@ -35,9 +36,9 @@ class LoginViewModel(
 
     private suspend fun handleLoginResult(loginResult: Login) {
         tokenRepository.saveToken(Token.from(loginResult))
-        when (loginResult.isRegistered) {
-            true -> changeLoginState(LoginUiState.Register)
-            false -> changeLoginState(LoginUiState.Login)
+        when (loginResult.isNewMember) {
+            true -> changeLoginState(LoginUiState.Login)
+            false -> changeLoginState(LoginUiState.Register)
         }
     }
 
