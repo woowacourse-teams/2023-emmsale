@@ -91,6 +91,7 @@ include::{snippets}/wish-with-no-authentication-products/request-headers.adoc[]
 include::{snippets}/wish-with-no-authentication-products/http-response.adoc[]
 
 == Career
+
 === `POST`: 커리어 등록 API
 
 .HTTP request 설명
@@ -104,7 +105,6 @@ include::{snippets}/add-activity/http-response.adoc[]
 
 .HTTP response 설명
 include::{snippets}/add-activity/response-fields.adoc[]
-
 
 === `DELETE`: 커리어 삭제 API
 
@@ -154,3 +154,16 @@ include::{snippets}/initial-register-member/http-request.adoc[]
 
 .HTTP response
 include::{snippets}/initial-register-member/http-response.adoc[]
+
+== Event
+
+=== `GET` : 행사 상세정보 조회
+
+.HTTP request
+include::{snippets}/find-event/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-event/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-event/response-fields.adoc[]
