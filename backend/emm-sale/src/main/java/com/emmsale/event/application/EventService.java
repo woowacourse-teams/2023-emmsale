@@ -1,5 +1,6 @@
 package com.emmsale.event.application;
 
+import static com.emmsale.event.exception.EventExceptionType.EVENT_NOT_FOUND_EXCEPTION;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_MONTH;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_STATUS;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR;
@@ -8,12 +9,13 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
+import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
-import com.emmsale.event.domain.EventRepository;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.event.domain.EventTagRepository;
+import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
@@ -40,6 +42,14 @@ public class EventService {
   private final EventTagRepository eventTagRepository;
   private final TagRepository tagRepository;
 
+  @Transactional(readOnly = true)
+  public EventDetailResponse findEvent(final Long id) {
+    final Event event = eventRepository.findById(id)
+        .orElseThrow(() -> new EventException(EVENT_NOT_FOUND_EXCEPTION));
+    return EventDetailResponse.from(event);
+  }
+
+  @Transactional(readOnly = true)
   public List<EventResponse> findEvents(final LocalDate nowDate, final int year, final int month,
       final String tagName, final String statusName) {
     validateYearAndMonth(year, month);

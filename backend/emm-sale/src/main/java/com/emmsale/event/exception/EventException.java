@@ -5,15 +5,15 @@ import com.emmsale.base.BaseExceptionType;
 
 public class EventException extends BaseException {
 
-  private final EventExceptionType exceptionType;
+  private final EventExceptionType eventExceptionType;
 
-  public EventException(final EventExceptionType exceptionType) {
-    super(exceptionType.errorMessage());
-    this.exceptionType = exceptionType;
+  public EventException(final EventExceptionType eventExceptionType) {
+    super(eventExceptionType.errorMessage());
+    this.eventExceptionType = eventExceptionType;
   }
 
   @Override
   public BaseExceptionType exceptionType() {
-    return exceptionType;
+    return eventExceptionType;
   }
 }

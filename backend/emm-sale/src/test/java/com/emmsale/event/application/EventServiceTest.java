@@ -1,6 +1,7 @@
 package com.emmsale.event.application;
 
 import static com.emmsale.event.EventFixture.AI_컨퍼런스;
+import static com.emmsale.event.EventFixture.eventFixture;
 import static com.emmsale.event.EventFixture.모바일_컨퍼런스;
 import static com.emmsale.event.EventFixture.안드로이드_컨퍼런스;
 import static com.emmsale.event.EventFixture.웹_컨퍼런스;
@@ -13,11 +14,12 @@ import static com.emmsale.tag.TagFixture.프론트엔드;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
-import com.emmsale.event.domain.EventRepository;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.event.domain.EventTagRepository;
+import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
@@ -50,14 +52,15 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
       List.of(), "진행 예정");
   private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
+
+  @Autowired
+  private EventService eventService;
   @Autowired
   private EventRepository eventRepository;
   @Autowired
   private EventTagRepository eventTagRepository;
   @Autowired
   private TagRepository tagRepository;
-  @Autowired
-  private EventService eventService;
 
   @BeforeEach
   void init() {
@@ -79,6 +82,40 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
         new EventTag(모바일_컨퍼런스, 안드로이드), new EventTag(모바일_컨퍼런스, IOS), new EventTag(안드로이드_컨퍼런스, 안드로이드),
         new EventTag(웹_컨퍼런스, 백엔드), new EventTag(웹_컨퍼런스, 프론트엔드))
     );
+  }
+
+  @Nested
+  @DisplayName("id로 이벤트를 조회할 수 있다.")
+  class findEventTest {
+
+    @Test
+    @DisplayName("event의 id로 해당하는 event를 조회할 수 있다.")
+    void success() {
+      //given
+      final Event event = eventFixture();
+      eventRepository.save(event);
+      final EventDetailResponse expected = EventDetailResponse.from(event);
+
+      //when
+      final EventDetailResponse actual = eventService.findEvent(event.getId());
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("요청한 id에 해당하는 event가 존재하지 않으면 Exception을 던진다.")
+    void fail_EventNotFoundException() {
+      //given
+      final Long notFoundEventId = Long.MAX_VALUE;
+
+      //when, then
+      assertThatThrownBy(() -> eventService.findEvent(notFoundEventId))
+          .isInstanceOf(EventException.class)
+          .hasMessage(EventExceptionType.EVENT_NOT_FOUND_EXCEPTION.errorMessage());
+    }
   }
 
   @Nested

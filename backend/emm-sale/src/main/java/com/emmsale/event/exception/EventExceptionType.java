@@ -1,10 +1,13 @@
 package com.emmsale.event.exception;
 
 import com.emmsale.base.BaseExceptionType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+@RequiredArgsConstructor
 public enum EventExceptionType implements BaseExceptionType {
 
+  EVENT_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "해당하는 행사를 찾을 수 없습니다."),
   INVALID_STATUS(
       HttpStatus.BAD_REQUEST,
       "요청하신 상태는 유효하지 않는 값입니다."
@@ -20,11 +23,6 @@ public enum EventExceptionType implements BaseExceptionType {
 
   private final HttpStatus httpStatus;
   private final String errorMessage;
-
-  EventExceptionType(final HttpStatus httpStatus, final String errorMessage) {
-    this.httpStatus = httpStatus;
-    this.errorMessage = errorMessage;
-  }
 
   @Override
   public HttpStatus httpStatus() {

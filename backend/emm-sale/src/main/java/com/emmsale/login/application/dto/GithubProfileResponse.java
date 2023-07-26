@@ -28,6 +28,7 @@ public class GithubProfileResponse {
   public Member toMember() {
     return new Member(
         getGithubId(),
+        getImageUrl(),
         getUsername()
     );
   }

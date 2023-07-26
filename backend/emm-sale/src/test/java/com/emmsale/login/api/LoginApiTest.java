@@ -1,7 +1,7 @@
 package com.emmsale.login.api;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,7 +31,7 @@ class LoginApiTest extends MockMvcTestHelper {
 
     // when
     final ResultActions result = mockMvc.perform(
-        get("/login/github/callback").param("code", code)
+        post("/login/github/callback").param("code", code)
     );
 
     // then
@@ -43,7 +43,7 @@ class LoginApiTest extends MockMvcTestHelper {
   @DisplayName("code가 존재하지 않을 경우 400 BadRequest를 반환한다.")
   void illegalLoginTest() throws Exception {
     // when
-    final ResultActions result = mockMvc.perform(get("/login/github/callback"));
+    final ResultActions result = mockMvc.perform(post("/login/github/callback"));
 
     // then
     result.andExpect(status().isBadRequest())
