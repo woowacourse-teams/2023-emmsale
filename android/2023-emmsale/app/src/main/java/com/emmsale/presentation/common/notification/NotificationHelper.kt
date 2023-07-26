@@ -1,15 +1,12 @@
 package com.emmsale.presentation.common.notification
 
-import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.emmsale.R
+import com.emmsale.presentation.common.extension.checkPostNotificationPermission
 
 class NotificationHelper(private val context: Context) {
     private val notificationManager = NotificationManagerCompat.from(context)
@@ -24,17 +21,9 @@ class NotificationHelper(private val context: Context) {
     ) {
         createNotificationChannel(channelId, channelName, channelDescription)
         val notification = createNotification(title, message, channelId)
-        if (checkPostNotificationPermission()) {
+        if (context.checkPostNotificationPermission()) {
             notificationManager.notify(notificationId, notification)
         }
-    }
-
-    private fun checkPostNotificationPermission(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true
-        return ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.POST_NOTIFICATIONS
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun createNotification(title: String, message: String, channelId: String) =

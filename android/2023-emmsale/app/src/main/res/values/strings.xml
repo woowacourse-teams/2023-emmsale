@@ -4,4 +4,8 @@
     <string name="follow_notification_message_format">$s님께서 같이 가기를 요청하였어요!</string>
     <string name="follow_notification_channel_name">같이 가기 알림 채널</string>
     <string name="follow_notification_channel_description">같이 가기 요청을 받기 위한 알림 채널입니다.</string>
+    <string name="post_notification_permission_granted_message">푸시 알림 권한을 허용하였습니다.</string>
+    <string name="cancel">취소</string>
+    <string name="okay">확인</string>
+    <string name="post_notification_permission_needed_message">알림 권한이 필요해요!</string>
 </resources>
