@@ -38,4 +38,8 @@ public class Member extends BaseEntity {
   public void updateName(final String name) {
     this.name = name;
   }
+
+  public boolean isMe(final Member member) {
+    return this.id == member.id;
+  }
 }

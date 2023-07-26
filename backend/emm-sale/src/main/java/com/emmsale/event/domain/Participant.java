@@ -31,7 +31,12 @@ public class Participant {
   private Event event;
 
   public Participant(final Member member, final Event event) {
+    event.validateAlreadyParticipate(member);
     this.member = member;
     this.event = event;
+  }
+
+  public boolean isSameMember(final Member member) {
+    return this.member.isMe(member);
   }
 }
