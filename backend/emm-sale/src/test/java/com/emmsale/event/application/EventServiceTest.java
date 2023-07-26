@@ -87,7 +87,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       assertThatThrownBy(() -> eventService.participate(인프콘.getId(), 2L, member))
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.PARTICIPATE_NOT_ALLOW_FORBIDDEN.errorMessage());
+          .hasMessage(EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT.errorMessage());
     }
 
     @Test

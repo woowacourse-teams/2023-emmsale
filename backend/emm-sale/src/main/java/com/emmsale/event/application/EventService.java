@@ -41,7 +41,7 @@ public class EventService {
 
   private static void validateMemberNotAllowed(final Long memberId, final Member member) {
     if (!memberId.equals(member.getId())) {
-      throw new EventException(EventExceptionType.PARTICIPATE_NOT_ALLOW_FORBIDDEN);
+      throw new EventException(EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT);
     }
   }
 }
