@@ -38,8 +38,8 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
     event = eventRepository.save(new Event(
         "event", "location",
         LocalDateTime.now(), LocalDateTime.now(),
-        "url", null
-    ));
+        "url")
+    );
     member = memberRepository.findById(1L).get();
 
     부모_댓글2 = commentRepository.save(

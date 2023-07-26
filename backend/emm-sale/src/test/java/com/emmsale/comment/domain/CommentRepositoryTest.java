@@ -37,13 +37,13 @@ class CommentRepositoryTest {
     final Event event1 = eventRepository.save(new Event(
         "event", "location",
         LocalDateTime.now(), LocalDateTime.now(),
-        "url", null
+        "url"
     ));
 
     final Event event2 = eventRepository.save(new Event(
         "event", "location",
         LocalDateTime.now(), LocalDateTime.now(),
-        "url", null
+        "url"
     ));
 
     final Member member = memberRepository.findById(1L).get();

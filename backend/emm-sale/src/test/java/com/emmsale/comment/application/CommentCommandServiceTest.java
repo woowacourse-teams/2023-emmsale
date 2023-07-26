@@ -43,7 +43,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     event = eventRepository.save(new Event(
         "event", "location",
         LocalDateTime.now(), LocalDateTime.now(),
-        "url", null
+        "url"
     ));
   }
 
