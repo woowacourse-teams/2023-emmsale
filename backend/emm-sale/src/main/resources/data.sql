@@ -6,6 +6,7 @@ truncate table member_activity;
 truncate table tag;
 truncate table event_tag;
 truncate table member_tag;
+truncate table event_member;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');
