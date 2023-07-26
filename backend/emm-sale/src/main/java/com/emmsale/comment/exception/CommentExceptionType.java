@@ -10,17 +10,17 @@ public enum CommentExceptionType implements BaseExceptionType {
       "해당 댓글은 존재하지 않습니다."
   ),
 
-  CAN_NOT_DELETE_COMMENT(
+  FORBIDDEN_DELETE_COMMENT(
       HttpStatus.FORBIDDEN,
-      "댓글 작성자 외에는 삭제할 수 없습니다."
+      "댓글 작성자 외에는 삭제하면 안됩니다."
   ),
 
-  CAN_NOT_MODIFY_COMMENT(
+  FORBIDDEN_MODIFY_COMMENT(
       HttpStatus.FORBIDDEN,
       "댓글 작성자 외에는 수정할 수 없습니다."
   ),
 
-  CAN_NOT_MODIFY_DELETED_COMMENT(
+  FORBIDDEN_MODIFY_DELETED_COMMENT(
       HttpStatus.FORBIDDEN,
       "삭제된 댓글은 수정할 수 없습니다."
   )

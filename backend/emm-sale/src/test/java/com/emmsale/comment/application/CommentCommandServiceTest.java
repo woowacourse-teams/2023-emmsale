@@ -102,7 +102,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     //when & then
     Assertions.assertThatThrownBy(
         () -> commentCommandService.delete(comment.getId(), 다른_사용자)
-    ).hasMessage(CommentExceptionType.CAN_NOT_DELETE_COMMENT.errorMessage());
+    ).hasMessage(CommentExceptionType.FORBIDDEN_DELETE_COMMENT.errorMessage());
   }
 
   @Test
@@ -135,7 +135,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     //when & then
     Assertions.assertThatThrownBy(
         () -> commentCommandService.modify(comment.getId(), 다른_사용자, request)
-    ).hasMessage(CommentExceptionType.CAN_NOT_MODIFY_COMMENT.errorMessage());
+    ).hasMessage(CommentExceptionType.FORBIDDEN_MODIFY_COMMENT.errorMessage());
   }
 
   @Test
@@ -174,6 +174,6 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     Assertions.assertThatThrownBy(
             () -> commentCommandService.modify(deletedComment.getId(), 댓글_작성자, request))
         .isInstanceOf(CommentException.class)
-        .hasMessage(CommentExceptionType.CAN_NOT_MODIFY_DELETED_COMMENT.errorMessage());
+        .hasMessage(CommentExceptionType.FORBIDDEN_MODIFY_DELETED_COMMENT.errorMessage());
   }
 }

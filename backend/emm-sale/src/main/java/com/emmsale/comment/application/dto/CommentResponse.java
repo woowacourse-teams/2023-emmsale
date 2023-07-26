@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CommentResponse {
 
-  private static final String DELETE_COMMENT_CONTENT = "삭제된 댓글입니다.";
-
   private String content;
   private Long commentId;
   private Long parentId;

@@ -1,8 +1,8 @@
 package com.emmsale.comment.application;
 
-import static com.emmsale.comment.exception.CommentExceptionType.CAN_NOT_DELETE_COMMENT;
-import static com.emmsale.comment.exception.CommentExceptionType.CAN_NOT_MODIFY_COMMENT;
-import static com.emmsale.comment.exception.CommentExceptionType.CAN_NOT_MODIFY_DELETED_COMMENT;
+import static com.emmsale.comment.exception.CommentExceptionType.FORBIDDEN_DELETE_COMMENT;
+import static com.emmsale.comment.exception.CommentExceptionType.FORBIDDEN_MODIFY_COMMENT;
+import static com.emmsale.comment.exception.CommentExceptionType.FORBIDDEN_MODIFY_DELETED_COMMENT;
 import static com.emmsale.comment.exception.CommentExceptionType.NOT_FOUND_COMMENT;
 
 import com.emmsale.comment.application.dto.CommentAddRequest;
@@ -79,7 +79,7 @@ public class CommentCommandService {
     final Comment comment = commentRepository.findById(commentId)
         .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
 
-    validateSameWriter(loginMember, comment, CAN_NOT_DELETE_COMMENT);
+    validateSameWriter(loginMember, comment, FORBIDDEN_DELETE_COMMENT);
 
     comment.delete();
   }
@@ -104,7 +104,7 @@ public class CommentCommandService {
         .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
 
     validateAlreadyDeleted(comment);
-    validateSameWriter(loginMember, comment, CAN_NOT_MODIFY_COMMENT);
+    validateSameWriter(loginMember, comment, FORBIDDEN_MODIFY_COMMENT);
 
     comment.modify(commentModifyRequest.getContent());
 
@@ -113,7 +113,7 @@ public class CommentCommandService {
 
   private void validateAlreadyDeleted(final Comment comment) {
     if (comment.isDeleted()) {
-      throw new CommentException(CAN_NOT_MODIFY_DELETED_COMMENT);
+      throw new CommentException(FORBIDDEN_MODIFY_DELETED_COMMENT);
     }
   }
 }

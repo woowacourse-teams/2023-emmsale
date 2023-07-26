@@ -49,6 +49,14 @@ public class Comment extends BaseEntity {
     this.content = content;
   }
 
+  public Comment(
+      final Event event,
+      final Member member,
+      final String content
+  ) {
+    this(event, null, member, content);
+  }
+
   public boolean isRootComment() {
     if (parent == null) {
       return true;
