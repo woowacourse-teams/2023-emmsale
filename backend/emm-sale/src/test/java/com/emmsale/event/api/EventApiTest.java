@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.emmsale.event.application.EventService;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.helper.MockMvcTestHelper;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,8 +33,8 @@ class EventApiTest extends MockMvcTestHelper {
         eventId,
         "인프콘 2023",
         "http://infcon.com",
-        "2023-08-15",
-        "2023-08-15",
+        LocalDateTime.of(2023, 8, 15, 12, 0),
+        LocalDateTime.of(2023, 8, 15, 12, 0),
         "코엑스"
     );
 
