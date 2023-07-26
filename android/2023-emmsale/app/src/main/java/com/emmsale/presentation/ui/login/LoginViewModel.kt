@@ -40,8 +40,8 @@ class LoginViewModel(
     }
 
     private suspend fun saveTokens(login: Login, fcmToken: String) {
-        saveFcmToken(login.uid, fcmToken)
         saveUserToken(login)
+        saveFcmToken(login.uid, fcmToken)
         when (login.isRegistered) {
             true -> changeLoginState(LoginUiState.Register)
             false -> changeLoginState(LoginUiState.Login)
