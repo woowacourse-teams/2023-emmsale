@@ -82,10 +82,11 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("memberId와 Member가 다르면 Exception이 발생한다.")
     void fail_forbidden() {
       final Long memberId = 1L;
+      final Long otherMemberId = 2L;
       final Member member = memberRepository.findById(memberId).get();
       final Event 인프콘 = eventRepository.save(eventFixture());
 
-      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), 2L, member))
+      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), otherMemberId, member))
           .isInstanceOf(EventException.class)
           .hasMessage(EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT.errorMessage());
     }
