@@ -30,5 +30,8 @@ public class AuthorizationExtractor {
     if (authorizationHeader == null || authorizationHeader.isBlank()) {
       throw new LoginException(LoginExceptionType.NOT_FOUND_AUTHORIZATION_TOKEN);
     }
+    if (!authorizationHeader.toLowerCase().startsWith(BEARER_TYPE.toLowerCase())) {
+      throw new LoginException(LoginExceptionType.INVALID_ACCESS_TOKEN_TYPE);
+    }
   }
 }
