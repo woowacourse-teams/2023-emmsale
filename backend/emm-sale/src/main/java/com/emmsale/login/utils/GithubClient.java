@@ -1,4 +1,4 @@
-package com.emmsale.login.application;
+package com.emmsale.login.utils;
 
 import com.emmsale.login.application.dto.GithubAccessTokenRequest;
 import com.emmsale.login.application.dto.GithubAccessTokenResponse;

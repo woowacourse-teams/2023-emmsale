@@ -1,5 +1,7 @@
 package com.emmsale.event.domain;
 
+import static lombok.AccessLevel.PROTECTED;
+
 import com.emmsale.base.BaseEntity;
 import com.emmsale.comment.domain.Comment;
 import java.time.LocalDateTime;
@@ -10,11 +12,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@NoArgsConstructor(access = PROTECTED)
 public class Event extends BaseEntity {
 
   @Id
@@ -35,23 +38,17 @@ public class Event extends BaseEntity {
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
 
-  //@OneToMany
-  //private List<Member> participants;
-
   public Event(
-      final String name, final String location,
-      final LocalDateTime startDate, final LocalDateTime endDate,
-      final String informationUrl, final List<EventTag> tags
+      final String name,
+      final String location,
+      final LocalDateTime startDate,
+      final LocalDateTime endDate,
+      final String informationUrl
   ) {
     this.name = name;
     this.location = location;
     this.startDate = startDate;
     this.endDate = endDate;
     this.informationUrl = informationUrl;
-    this.tags = tags;
-  }
-
-  public Long getId() {
-    return id;
   }
 }

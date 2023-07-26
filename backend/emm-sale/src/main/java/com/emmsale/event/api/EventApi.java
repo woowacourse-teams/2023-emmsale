@@ -1,7 +1,7 @@
 package com.emmsale.event.api;
 
 import com.emmsale.event.application.EventService;
-import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.EventDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ public class EventApi {
   private final EventService eventService;
 
   @GetMapping("/events/{id}")
-  public ResponseEntity<EventResponse> findEventById(@PathVariable final String id) {
+  public ResponseEntity<EventDetailResponse> findEventById(@PathVariable final String id) {
     return ResponseEntity.ok(eventService.findEvent(Long.parseLong(id)));
   }
 }

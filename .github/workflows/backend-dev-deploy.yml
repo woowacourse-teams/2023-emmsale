@@ -3,16 +3,15 @@ name: Kerdy Backend Dev Server CI/CD
 on:
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: backend/emm-sale
-
 permissions:
   contents: read
 
 jobs:
   build-and-upload:
     runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: backend/emm-sale
     services:
       mysql:
         image: mysql:8.0.28
@@ -28,8 +27,6 @@ jobs:
     steps:
       - name: 백엔드 메인으로 checkout
         uses: actions/checkout@v3
-        with:
-          ref: backend-main
 
       - name: JDK 11로 설정
         uses: actions/setup-java@v3
@@ -49,48 +46,33 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: keystore 생성
-        id: generate-keystore
-        run: |
-          echo "$KEY_STORE" > keystore.b64
-          base64 -d -i keystore.b64 > keystore.p12
-
-      - name: keystore 이동
-        id: cp-keystore
-        run: |
-          cp keystore.p12 src/main/resources/ssl
-
       - name: gradle 빌드
-        run: ./gradlew build
-
-      - name: 디버깅용 경로 출력
-        id: cp-keystore
-        run: |
-          pwd
+        run: ./gradlew build && ./gradlew build
 
       - name: jar artifact에 업로드
         uses: actions/upload-artifact@v3
         with:
           name: BackendApplicationJar
-          path: ./build/libs/*.jar
+          path: backend/emm-sale/build/libs/*.jar
 
   deploy:
     runs-on: self-hosted
+    needs: build-and-upload
     steps:
       - name: 구버전 jar 삭제
-        working-directory: ./backend/build/
-        run: rm -f kerdy-*.jar
+        run: rm -rf /home/ubuntu/backend/build/emm-sale-*.jar
 
       - name: artifact에서 jar파일 다운 받기
         uses: actions/download-artifact@v3
         with:
           name: BackendApplicationJar
-          path: backend/build/
+          path: /home/ubuntu/backend/build/
 
+      - name: 권한부여
+        run: chmod +x /home/ubuntu/backend/build/emm-sale-*.jar
+        
       - name: 배포하기
-        working-directory: ./backend/build/
-        run: |
-          ./deploy.sh
+        run: /home/ubuntu/backend/build/deploy.sh
 
       - name: 슬랙 메시지 보내기
         uses: 8398a7/action-slack@v3
