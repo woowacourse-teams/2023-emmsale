@@ -78,7 +78,7 @@
             android:id="@+id/btn_next"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:text="다음"
+            android:text="완료"
             app:layout_constraintTop_toBottomOf="@+id/chipgroup_club_tags"
             android:clickable="true"
             android:gravity="center"
