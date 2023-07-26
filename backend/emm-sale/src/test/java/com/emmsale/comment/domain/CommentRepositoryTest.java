@@ -60,10 +60,8 @@ class CommentRepositoryTest {
         new Comment(event2, null, member, "부모댓글1")
     );
 
-    final long eventId = 2L;
-
     //when
-    final List<Comment> savedComments = commentRepository.findByEventId(eventId);
+    final List<Comment> savedComments = commentRepository.findByEventId(event2.getId());
 
     //then
     assertAll(
