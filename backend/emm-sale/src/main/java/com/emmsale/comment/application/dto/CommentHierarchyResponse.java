@@ -45,7 +45,7 @@ public class CommentHierarchyResponse {
     return comments.stream()
         .sorted(Comparator.comparing(BaseEntity::getCreatedAt))
         .collect(Collectors.groupingBy(
-            Comment::getParentOrDefaultSelf,
+            it -> it.getParent().orElse(it),
             LinkedHashMap::new, Collectors.toList())
         );
   }
@@ -61,7 +61,7 @@ public class CommentHierarchyResponse {
         .collect(Collectors.toList());
   }
 
-  private static boolean isNotSameKeyAndValue(final Comment parentComment, final Comment it) {
-    return !it.equals(parentComment);
+  private static boolean isNotSameKeyAndValue(final Comment parentComment, final Comment target) {
+    return !target.equals(parentComment);
   }
 }

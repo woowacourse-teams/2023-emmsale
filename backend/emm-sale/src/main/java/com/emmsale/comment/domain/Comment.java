@@ -4,6 +4,7 @@ import com.emmsale.base.BaseEntity;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.Member;
 import java.util.Objects;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,9 +14,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
 
@@ -66,20 +69,6 @@ public class Comment extends BaseEntity {
     return new Comment(event, parent, member, content);
   }
 
-  public boolean isRootComment() {
-    if (parent == null) {
-      return true;
-    }
-    return false;
-  }
-
-  public Comment getParentOrDefaultSelf() {
-    if (parent == null) {
-      return this;
-    }
-    return parent;
-  }
-
   public void delete() {
     isDeleted = true;
     content = DELETED_COMMENT_MESSAGE;
@@ -89,28 +78,8 @@ public class Comment extends BaseEntity {
     this.content = content;
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public Event getEvent() {
-    return event;
-  }
-
-  public Comment getParent() {
-    return parent;
-  }
-
-  public Member getMember() {
-    return member;
-  }
-
-  public String getContent() {
-    return content;
-  }
-
-  public boolean isDeleted() {
-    return isDeleted;
+  public Optional<Comment> getParent() {
+    return Optional.ofNullable(parent);
   }
 
   @Override

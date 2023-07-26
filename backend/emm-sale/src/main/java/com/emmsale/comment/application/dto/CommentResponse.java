@@ -39,9 +39,8 @@ public class CommentResponse {
   }
 
   private static Long getParentId(final Comment comment) {
-    if (comment.isRootComment()) {
-      return null;
-    }
-    return comment.getParent().getId();
+    return comment.getParent()
+        .map(Comment::getId)
+        .orElse(null);
   }
 }
