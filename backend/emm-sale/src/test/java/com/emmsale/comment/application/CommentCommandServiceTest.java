@@ -37,6 +37,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   private CommentRepository commentRepository;
 
   private Event event;
+  private Member 댓글_작성자;
 
   @BeforeEach
   void init() {
@@ -45,19 +46,20 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
         LocalDateTime.now(), LocalDateTime.now(),
         "url"
     ));
+
+    댓글_작성자 = memberRepository.findById(1L).get();
   }
 
   @Test
   @DisplayName("create() : 댓글 부모 id가 없으면 Root(최상단) 댓글을 생성할 수 있다.")
   void test_create() throws Exception {
     //given
-    final Member member = memberRepository.findById(1L).get();
     final String content = "내용";
 
     final CommentAddRequest 부모_댓글_요청 = new CommentAddRequest(content, event.getId(), null);
 
     //when
-    final CommentResponse 부모_댓글_응답 = commentCommandService.create(부모_댓글_요청, member);
+    final CommentResponse 부모_댓글_응답 = commentCommandService.create(부모_댓글_요청, 댓글_작성자);
 
     //then
     assertAll(
@@ -71,17 +73,16 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("create() : 댓글 부모 id가 있으면 그 자식 댓글(대댓글)을 생성할 수 있다.")
   void test_create_child() throws Exception {
     //given
-    final Member member = memberRepository.findById(1L).get();
     final String content = "내용";
     final Long eventId = event.getId();
 
     final CommentAddRequest 부모_댓글_요청 = new CommentAddRequest(content, eventId, null);
     final CommentResponse 부모_댓글_응답 =
-        commentCommandService.create(부모_댓글_요청, member);
+        commentCommandService.create(부모_댓글_요청, 댓글_작성자);
     final CommentAddRequest 자식_댓글_요청 = new CommentAddRequest(content, eventId, 1L);
 
     //when
-    final CommentResponse 자식_댓글_응답 = commentCommandService.create(자식_댓글_요청, member);
+    final CommentResponse 자식_댓글_응답 = commentCommandService.create(자식_댓글_요청, 댓글_작성자);
 
     //then
     assertAll(
@@ -95,7 +96,6 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("delete() : 댓글을 삭제할 때, 로그인 한 본인의 댓글이 아니면 CAN_NOT_DELETE_COMMENT 가 발생합니다.")
   void test_delete_canNotDeleteComment() throws Exception {
     //given
-    final Member 댓글_작성자 = memberRepository.findById(1L).get();
     final Member 다른_사용자 = memberRepository.findById(2L).get();
     final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
 
@@ -109,7 +109,6 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("delete() : 본인이 작성한 댓글을 삭제할 경우, 삭제 표시가 false -> true로 변경될 수 있다.")
   void test_delete() throws Exception {
     //given
-    final Member 댓글_작성자 = memberRepository.findById(1L).get();
     final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
 
     //when
@@ -128,7 +127,6 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("modify() : 댓글을 수정할 때, 로그인 한 본인의 댓글이 아니면 CAN_NOT_UPDATE_COMMENT 가 발생합니다.")
   void test_modify_canNotModifyComment() throws Exception {
     //given
-    final Member 댓글_작성자 = memberRepository.findById(1L).get();
     final Member 다른_사용자 = memberRepository.findById(2L).get();
     final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
 
@@ -144,7 +142,6 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("modify() : 본인이 작성한 댓글을 수정할 수 있다.")
   void test_modify() throws Exception {
     //given
-    final Member 댓글_작성자 = memberRepository.findById(1L).get();
     final Comment comment = commentRepository.save(new Comment(event, null, 댓글_작성자, "내용"));
 
     final String modifiedContent = "변경된 내용";
@@ -164,7 +161,6 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("modify() : 이미 삭제된 댓글은 삭제할 수 없습니다.")
   void test_modify_canNotModifyDeletedComment() throws Exception {
     //given
-    final Member 댓글_작성자 = memberRepository.findById(1L).get();
     final Comment comment = commentRepository.save(
         new Comment(event, null, 댓글_작성자, "내용")
     );
