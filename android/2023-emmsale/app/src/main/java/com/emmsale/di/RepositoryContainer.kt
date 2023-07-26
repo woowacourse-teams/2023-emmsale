@@ -3,6 +3,8 @@ package com.emmsale.di
 import android.content.Context
 import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.activity.ActivityRepositoryImpl
+import com.emmsale.data.event.EventRepository
+import com.emmsale.data.event.EventRepositoryImpl
 import com.emmsale.data.login.LoginRepository
 import com.emmsale.data.login.LoginRepositoryImpl
 import com.emmsale.data.member.MemberRepository
@@ -18,12 +20,15 @@ class RepositoryContainer(
         LoginRepositoryImpl(loginService = serviceContainer.loginService)
     }
     val tokenRepository: TokenRepository by lazy {
-         TokenRepositoryImpl(context)
+        TokenRepositoryImpl(context)
     }
     val activityRepository: ActivityRepository by lazy {
         ActivityRepositoryImpl(activityService = serviceContainer.activityService)
     }
     val memberRepository: MemberRepository by lazy {
         MemberRepositoryImpl(memberService = serviceContainer.memberService)
+    }
+    val eventRepository: EventRepository by lazy {
+        EventRepositoryImpl(eventService = serviceContainer.eventService)
     }
 }
