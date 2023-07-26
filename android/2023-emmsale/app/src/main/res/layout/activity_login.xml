@@ -37,7 +37,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:contentDescription="login button"
-            android:onClick="@{() -> viewModel.login()}"
             android:scaleType="fitCenter"
             android:src="@drawable/img_login_github"
             app:layout_constraintBottom_toBottomOf="parent"

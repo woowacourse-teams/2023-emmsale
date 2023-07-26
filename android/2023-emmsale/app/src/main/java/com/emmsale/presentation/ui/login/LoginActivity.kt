@@ -8,6 +8,7 @@ import com.emmsale.databinding.ActivityLoginBinding
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel: LoginViewModel by viewModels { LoginViewModel.factory }
@@ -26,6 +27,10 @@ class LoginActivity : AppCompatActivity() {
                 is LoginUiState.Loading -> changeLoadingVisibility(true)
                 is LoginUiState.Error -> showLoginFailedMessage()
             }
+        }
+
+        binding.btnLogin.setOnClickListener {
+            FirebaseMessaging.getInstance().token.addOnSuccessListener(viewModel::login)
         }
     }
 

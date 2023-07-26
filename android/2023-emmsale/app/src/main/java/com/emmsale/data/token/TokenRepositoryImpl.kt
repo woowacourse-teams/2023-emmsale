@@ -7,13 +7,13 @@ class TokenRepositoryImpl(context: Context) : TokenRepository {
     private val preference: SharedPreferences =
         context.getSharedPreferences("kerdy", Context.MODE_PRIVATE)
 
-    override fun saveToken(token: Token) {
+    override suspend fun saveToken(token: Token) {
         preference.edit().putLong(UID_KEY, token.uid).apply()
         preference.edit().putString(ACCESS_TOKEN_KEY, token.accessToken).apply()
         preference.edit().putString(REFRESH_TOKEN_KEY, token.accessToken).apply()
     }
 
-    override fun getToken(): Token? {
+    override suspend fun getToken(): Token? {
         val uid = preference.getLong(UID_KEY, DEFAULT_UID_VALUE)
         val accessToken = preference.getString(ACCESS_TOKEN_KEY, DEFAULT_TOKEN_VALUE)
         val refreshToken = preference.getString(REFRESH_TOKEN_KEY, DEFAULT_TOKEN_VALUE)

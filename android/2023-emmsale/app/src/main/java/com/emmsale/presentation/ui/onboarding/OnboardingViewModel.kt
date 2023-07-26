@@ -106,7 +106,7 @@ class OnboardingViewModel(
         val factory = ViewModelFactory {
             OnboardingViewModel(
                 activityRepository = KerdyApplication.repositoryContainer.activityRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository
+                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
             )
         }
     }
