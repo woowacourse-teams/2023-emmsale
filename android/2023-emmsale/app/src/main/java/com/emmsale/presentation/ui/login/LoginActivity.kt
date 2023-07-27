@@ -87,8 +87,11 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        intent?.data?.getQueryParameter(GITHUB_CODE_PARAMETER)?.let(viewModel::saveGithubCode)
+        intent?.parseGithubCode()?.let(viewModel::saveGithubCode)
     }
+
+    private fun Intent.parseGithubCode(): String? =
+        data?.getQueryParameter(GITHUB_CODE_PARAMETER)
 
     companion object {
         private const val GITHUB_CODE_PARAMETER = "code"
