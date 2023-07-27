@@ -2,10 +2,13 @@ package com.emmsale.notification.api;
 
 import com.emmsale.notification.application.NotificationCommandService;
 import com.emmsale.notification.application.dto.FcmTokenRequest;
+import com.emmsale.notification.application.dto.NotificationModifyRequest;
 import com.emmsale.notification.application.dto.NotificationRequest;
 import com.emmsale.notification.application.dto.NotificationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -26,5 +29,14 @@ public class NotificationApi {
   @PostMapping("/notification/token")
   public void createFcmToken(@RequestBody final FcmTokenRequest fcmTokenRequest) {
     notificationCommandService.createToken(fcmTokenRequest);
+  }
+
+  @PatchMapping("/notifications/{notification-id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void modify(
+      @RequestBody final NotificationModifyRequest notificationModifyRequest,
+      @PathVariable("notification-id") final Long notificationId
+  ) {
+    notificationCommandService.modify(notificationModifyRequest, notificationId);
   }
 }

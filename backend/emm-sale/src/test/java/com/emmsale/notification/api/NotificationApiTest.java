@@ -1,21 +1,26 @@
 package com.emmsale.notification.api;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.notification.application.NotificationCommandService;
 import com.emmsale.notification.application.dto.FcmTokenRequest;
+import com.emmsale.notification.application.dto.NotificationModifyRequest;
 import com.emmsale.notification.application.dto.NotificationRequest;
 import com.emmsale.notification.application.dto.NotificationResponse;
-import com.emmsale.notification.domain.Notification;
+import com.emmsale.notification.domain.NotificationStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,6 +28,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 
 @WebMvcTest(NotificationApi.class)
 class NotificationApiTest extends MockMvcTestHelper {
@@ -103,5 +109,31 @@ class NotificationApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("create-fcmToken", requestFields));
+  }
+
+  @Test
+  @DisplayName("modify() : 알림 상태를 성공적으로 변경되면 204 No Content를 반환할 수 있다.")
+  void test_modify() throws Exception {
+    //given
+    final NotificationModifyRequest request =
+        new NotificationModifyRequest(NotificationStatus.IN_PROGRESS);
+
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("updatedStatus").description("변화시킬 상태(ACCEPTED 또는 REJECTED)")
+    );
+
+    final PathParametersSnippet pathParameters = pathParameters(
+        parameterWithName("notification-id").description("상태변화 시킬 알림 ID")
+    );
+
+    doNothing().when(notificationCommandService).modify(request, 3L);
+
+    //when & then
+    mockMvc.perform(patch("/notifications/{notification-id}", 1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("create-fcmToken", requestFields, pathParameters));
   }
 }

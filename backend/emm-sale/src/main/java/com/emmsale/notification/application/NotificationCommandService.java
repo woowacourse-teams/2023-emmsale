@@ -1,12 +1,14 @@
 package com.emmsale.notification.application;
 
 import com.emmsale.notification.application.dto.FcmTokenRequest;
+import com.emmsale.notification.application.dto.NotificationModifyRequest;
 import com.emmsale.notification.application.dto.NotificationRequest;
 import com.emmsale.notification.application.dto.NotificationResponse;
 import com.emmsale.notification.domain.FcmToken;
 import com.emmsale.notification.domain.FcmTokenRepository;
 import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.NotificationRepository;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +43,16 @@ public class NotificationCommandService {
             it -> it.update(token),
             () -> fcmTokenRepository.save(new FcmToken(token, memberId))
         );
+  }
+
+  public void modify(
+      final NotificationModifyRequest notificationModifyRequest,
+      final Long notificationId
+  ) {
+    //TODO : Notification Exception 이 정해지면 수정
+    final Notification savedNotification = notificationRepository.findById(notificationId)
+        .orElseThrow(EntityNotFoundException::new);
+
+    savedNotification.modifyStatus(notificationModifyRequest.getUpdatedStatus());
   }
 }

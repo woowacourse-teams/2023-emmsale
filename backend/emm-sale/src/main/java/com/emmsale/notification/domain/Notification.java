@@ -3,6 +3,8 @@ package com.emmsale.notification.domain;
 import com.emmsale.base.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +28,8 @@ public class Notification extends BaseEntity {
   private Long eventId;
   @Column(nullable = false)
   private String message;
+  @Enumerated(EnumType.STRING)
+  private NotificationStatus status;
 
   public Notification(
       final Long senderId,
@@ -37,5 +41,10 @@ public class Notification extends BaseEntity {
     this.receiverId = receiverId;
     this.eventId = eventId;
     this.message = message;
+    this.status = NotificationStatus.IN_PROGRESS;
+  }
+
+  public void modifyStatus(final NotificationStatus status) {
+    this.status = status;
   }
 }
