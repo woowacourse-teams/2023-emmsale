@@ -38,4 +38,11 @@ public class Member extends BaseEntity {
   public void updateName(final String name) {
     this.name = name;
   }
+
+  public boolean isNotMe(final Member member) {
+    if (member.getId().equals(id)) {
+      return false;
+    }
+    return true;
+  }
 }
