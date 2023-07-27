@@ -1,6 +1,0 @@
-[*]
-ktlint = false
-
-# ktlint를 비활성화할 파일들 지정 (이곳에 제외하려는 파일들의 경로를 명시)
-[exclude]
-/android/2023-emmsale/app/build.gradle.kts
