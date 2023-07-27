@@ -57,17 +57,17 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       //when, then
       assertThatThrownBy(() -> eventService.findEvent(notFoundEventId))
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.EVENT_NOT_FOUND_EXCEPTION.errorMessage());
+          .hasMessage(EventExceptionType.NOT_FOUND_EVENT.errorMessage());
     }
   }
 
   @Nested
   @DisplayName("event 참가자 목록에 멤버를 추가할 수 있다.")
-  class participate {
+  class Participate {
 
     @Test
     @DisplayName("정상적으로 멤버를 추가한다.")
-    void Success() {
+    void success() {
       final Long memberId = 1L;
       final Member member = memberRepository.findById(memberId).get();
       final Event 인프콘 = eventRepository.save(eventFixture());
@@ -101,8 +101,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       assertThatThrownBy(() -> eventService.participate(인프콘.getId(), memberId, member))
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.ALREADY_PARTICIPATE.errorMessage());
+          .hasMessage(EventExceptionType.ALREADY_PARTICIPATED.errorMessage());
     }
-
   }
 }

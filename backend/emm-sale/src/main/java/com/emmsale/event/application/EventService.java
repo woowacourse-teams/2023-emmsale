@@ -1,6 +1,6 @@
 package com.emmsale.event.application;
 
-import static com.emmsale.event.exception.EventExceptionType.EVENT_NOT_FOUND_EXCEPTION;
+import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.domain.Event;
@@ -25,14 +25,14 @@ public class EventService {
   @Transactional(readOnly = true)
   public EventDetailResponse findEvent(final Long id) {
     final Event event = eventRepository.findById(id)
-        .orElseThrow(() -> new EventException(EVENT_NOT_FOUND_EXCEPTION));
+        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
     return EventDetailResponse.from(event);
   }
 
   public Long participate(final Long eventId, final Long memberId, final Member member) {
     validateMemberNotAllowed(memberId, member);
     final Event event = eventRepository.findById(eventId)
-        .orElseThrow(() -> new EventException(EVENT_NOT_FOUND_EXCEPTION));
+        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
     final Participant participant = event.addParticipant(member);
     participantRepository.save(participant);
@@ -40,7 +40,7 @@ public class EventService {
   }
 
   private static void validateMemberNotAllowed(final Long memberId, final Member member) {
-    if (!memberId.equals(member.getId())) {
+    if (member.isNotMe(memberId)) {
       throw new EventException(EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT);
     }
   }

@@ -1,6 +1,5 @@
 package com.emmsale.event.api;
 
-import static java.lang.Long.parseLong;
 import static java.lang.String.format;
 import static java.net.URI.create;
 
@@ -23,18 +22,18 @@ public class EventApi {
   private final EventService eventService;
 
   @GetMapping("/events/{id}")
-  public ResponseEntity<EventDetailResponse> findEventById(@PathVariable final String id) {
-    return ResponseEntity.ok(eventService.findEvent(parseLong(id)));
+  public ResponseEntity<EventDetailResponse> findEventById(@PathVariable final Long id) {
+    return ResponseEntity.ok(eventService.findEvent(id));
   }
 
   @PostMapping("/events/{eventId}/participants")
   public ResponseEntity<String> participateEvent(
-      @PathVariable final String eventId,
+      @PathVariable final Long eventId,
       @RequestBody final EventParticipateRequest request,
       final Member member
   ) {
     final Long participantId = eventService.participate(
-        parseLong(eventId),
+        eventId,
         request.getMemberId(),
         member
     );

@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
 @WebMvcTest(EventApi.class)
@@ -73,6 +75,10 @@ class EventApiTest extends MockMvcTestHelper {
     final EventParticipateRequest request = new EventParticipateRequest(memberId);
     final String fakeAccessToken = "Bearer accessToken";
 
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자")
+    );
+
     when(eventService.participate(any(), any(), any()))
         .thenReturn(participantId);
 
@@ -86,6 +92,6 @@ class EventApiTest extends MockMvcTestHelper {
             header().string("Location",
                 format("/events/%s/participants/%s", eventId, participantId))
         )
-        .andDo(document("participate-event"));
+        .andDo(document("participate-event", requestFields));
   }
 }

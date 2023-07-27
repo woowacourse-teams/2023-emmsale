@@ -67,7 +67,7 @@ public class Event extends BaseEntity {
 
   public void validateAlreadyParticipate(final Member member) {
     if (isAlreadyParticipate(member)) {
-      throw new EventException(EventExceptionType.ALREADY_PARTICIPATE);
+      throw new EventException(EventExceptionType.ALREADY_PARTICIPATED);
     }
   }
 
