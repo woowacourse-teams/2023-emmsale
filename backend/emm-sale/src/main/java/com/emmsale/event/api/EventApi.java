@@ -6,8 +6,9 @@ import static java.net.URI.create;
 import com.emmsale.event.application.EventService;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
-import com.emmsale.member.domain.Member;
 import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.member.domain.Member;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -49,11 +50,16 @@ public class EventApi {
         .build();
   }
 
+  @GetMapping("/{id}/participants")
+  public ResponseEntity<List<ParticipantResponse>> findParticipants(@PathVariable final Long id) {
+    final List<ParticipantResponse> responses = eventService.findParticipants(id);
+    return ResponseEntity.ok(responses);
+  }
+
   @GetMapping
   public ResponseEntity<List<EventResponse>> findEvents(@RequestParam final int year,
       @RequestParam final int month, @RequestParam(required = false) final String tag,
       @RequestParam(required = false) final String status) {
     return ResponseEntity.ok(eventService.findEvents(LocalDate.now(), year, month, tag, status));
   }
-
 }
