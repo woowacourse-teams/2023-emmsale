@@ -29,3 +29,12 @@ Content-Type: application/json
   "token" : "수정된 토큰이다",
   "memberId" : 1
 }
+
+### 알림 상태를 변경하는 API
+
+PATCH http://localhost:8080/notifications/2
+Content-Type: application/json
+
+{
+  "updatedStatus" : "ACCEPTED"
+}
