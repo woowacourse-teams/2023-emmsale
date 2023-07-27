@@ -7,6 +7,7 @@ import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
@@ -82,7 +83,12 @@ public class EventService {
 
   @Transactional(readOnly = true)
   public List<ParticipantResponse> findParticipants(final Long eventId) {
-    return null;
+    final Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
+    return event.getParticipants().stream()
+        .sorted(comparing(Participant::getId))
+        .map(ParticipantResponse::from)
+        .collect(toUnmodifiableList());
   }
 
   private void validateYearAndMonth(final int year, final int month) {
