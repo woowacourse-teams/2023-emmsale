@@ -7,6 +7,7 @@ import com.emmsale.member.MemberFixture;
 import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +20,21 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
   private MemberRepository memberRepository;
 
   @Test
+  @Transactional
   @DisplayName("오픈 프로필 URL을 업데이트한다.")
   void updateOpenProfileUrlTest() {
-    // then
-    final Member member = MemberFixture.memberFixture();
-    memberRepository.save(member);
+    // given
+    final Member member = memberRepository.save(MemberFixture.memberFixture());
 
-    final String newOpenProfileUrl = "https://open.kakao.com/new/profile/url";
-    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(newOpenProfileUrl);
+    final String expectOpenProfileUrl = "https://open.kakao.com/new/profile/url";
+    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(expectOpenProfileUrl);
 
     // when
     memberUpdateService.updateOpenProfileUrl(member, request);
 
+    final Member actualMember = memberRepository.findById(member.getId()).get();
+
     // then
-    assertThat(member.getOpenProfileUrl()).isEqualTo(newOpenProfileUrl);
+    assertThat(actualMember.getOpenProfileUrl()).isEqualTo(expectOpenProfileUrl);
   }
 }
