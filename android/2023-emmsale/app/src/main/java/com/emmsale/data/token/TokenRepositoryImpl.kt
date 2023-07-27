@@ -1,6 +1,5 @@
 package com.emmsale.data.token
 
-import android.content.Context
 import android.content.SharedPreferences
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -8,10 +7,8 @@ import kotlinx.coroutines.withContext
 
 class TokenRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    context: Context,
+    private val preference: SharedPreferences,
 ) : TokenRepository {
-    private val preference: SharedPreferences =
-        context.getSharedPreferences(KERDY_PREF_KEY, Context.MODE_PRIVATE)
 
     override suspend fun saveToken(token: Token) = withContext(dispatcher) {
         preference.edit().putLong(UID_KEY, token.uid).apply()
@@ -32,8 +29,6 @@ class TokenRepositoryImpl(
     }
 
     companion object {
-        internal const val KERDY_PREF_KEY = "kerdy"
-
         private const val UID_KEY = "uid_key"
         private const val ACCESS_TOKEN_KEY = "access_token_key"
         // private const val REFRESH_TOKEN_KEY = "refresh_token_key"

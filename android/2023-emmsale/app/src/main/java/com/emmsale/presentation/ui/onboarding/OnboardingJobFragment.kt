@@ -9,7 +9,7 @@ import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.views.chipOf
 import com.emmsale.presentation.ui.onboarding.uistate.ActivityUiState
 
-class OnboardingJobFragment : BaseFragment<FragmentOnboardingJobBinding>(), View.OnClickListener {
+class OnboardingJobFragment : BaseFragment<FragmentOnboardingJobBinding>() {
     val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }
     override val layoutResId: Int = R.layout.fragment_onboarding_job
 
@@ -21,7 +21,9 @@ class OnboardingJobFragment : BaseFragment<FragmentOnboardingJobBinding>(), View
     }
 
     private fun initClickListener() {
-        binding.btnNext.setOnClickListener(this)
+        binding.btnNext.setOnClickListener {
+            (requireActivity() as OnboardingActivity).navigateToNextPage()
+        }
     }
 
     private fun setupJobs() {
@@ -38,11 +40,5 @@ class OnboardingJobFragment : BaseFragment<FragmentOnboardingJobBinding>(), View
         text = jobTag.name
         isChecked = jobTag.isSelected
         setOnCheckedChangeListener { _, _ -> viewModel.toggleTagSelection(jobTag) }
-    }
-
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.btn_next -> (requireActivity() as OnboardingActivity).navigateToNextPage()
-        }
     }
 }
