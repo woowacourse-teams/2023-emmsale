@@ -134,6 +134,6 @@ class NotificationApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
         .andDo(print())
-        .andDo(document("create-fcmToken", requestFields, pathParameters));
+        .andDo(document("modify-notification", requestFields, pathParameters));
   }
 }
