@@ -7,6 +7,7 @@ import com.emmsale.comment.domain.Comment;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,5 +77,15 @@ public class Event extends BaseEntity {
         .map(participant -> participant.isSameMember(member))
         .findAny()
         .isPresent();
+  }
+
+  public EventStatus calculateEventStatus(LocalDate now) {
+    if (now.isBefore(startDate.toLocalDate())) {
+      return EventStatus.UPCOMING;
+    }
+    if (now.isAfter(endDate.toLocalDate())) {
+      return EventStatus.ENDED;
+    }
+    return EventStatus.IN_PROGRESS;
   }
 }

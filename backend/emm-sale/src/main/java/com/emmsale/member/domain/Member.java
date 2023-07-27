@@ -46,6 +46,13 @@ public class Member extends BaseEntity {
     this.name = name;
   }
 
+  public boolean isNotMe(final Member member) {
+    if (member.getId().equals(id)) {
+      return false;
+    }
+    return true;
+  }
+
   public boolean isMe(final Member member) {
     return this.id.equals(member.id);
   }

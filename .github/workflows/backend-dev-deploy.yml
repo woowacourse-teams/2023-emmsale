@@ -27,8 +27,6 @@ jobs:
     steps:
       - name: 백엔드 메인으로 checkout
         uses: actions/checkout@v3
-        with:
-          ref: backend-main
 
       - name: JDK 11로 설정
         uses: actions/setup-java@v3
@@ -48,19 +46,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: keystore 생성
-        id: generate-keystore
-        run: |
-          echo "$KEY_STORE" > keystore.b64
-          base64 -d -i keystore.b64 > keystore.p12
-
-      - name: keystore 이동
-        id: cp-keystore
-        run: |
-          cp keystore.p12 src/main/resources/ssl
-
       - name: gradle 빌드
-        run: ./gradlew clean build
+        run: ./gradlew build && ./gradlew build
 
       - name: jar artifact에 업로드
         uses: actions/upload-artifact@v3
