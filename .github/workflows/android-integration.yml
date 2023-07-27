@@ -22,7 +22,14 @@ jobs:
 
     - name: Change wrapper permissions
       run: chmod +x ./android/2023-emmsale/gradlew
-      
+    
+    - name: Access GITHUB_CLIENT_ID
+      run: |
+        echo GH_CLIENT_ID=\"$API_KEY\" > local.properties
+      shell: bash
+      env:
+        API_KEY: ${{ secrets.GH_CLIENT_ID }}
+        
     - name: Run ktlintChecking
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale ktlintCheck
       
