@@ -10,6 +10,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
@@ -79,6 +80,11 @@ public class EventService {
     return filterEventResponsesByStatus(statusName, sortAndGroupByStatus);
   }
 
+  @Transactional(readOnly = true)
+  public List<ParticipantResponse> findParticipants(final Long eventId) {
+    return null;
+  }
+
   private void validateYearAndMonth(final int year, final int month) {
     if (year < MIN_YEAR) {
       throw new EventException(INVALID_YEAR);
@@ -145,4 +151,6 @@ public class EventService {
   private boolean isExistStatusName(final String statusName) {
     return statusName != null;
   }
+
+
 }
