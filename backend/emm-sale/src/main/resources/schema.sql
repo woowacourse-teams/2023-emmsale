@@ -6,6 +6,7 @@ drop table if exists kerdy.member_activity;
 drop table if exists kerdy.tag;
 drop table if exists kerdy.event_tag;
 drop table if exists kerdy.member_tag;
+drop table if exists kerdy.notification;
 
 create table activity
 (
@@ -79,6 +80,17 @@ create table member_tag
     updated_at datetime(6) not null,
     member_id  bigint not null,
     tag_id     bigint not null
+);
+
+create table notification
+(
+    id bigint auto_increment primary key,
+    created_at datetime(6),
+    updated_at datetime(6),
+    event_id bigint not null,
+    message varchar(255) not null,
+    receiver_id bigint not null,
+    sender_id bigint not null
 );
 
 
