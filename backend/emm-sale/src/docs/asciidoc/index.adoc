@@ -168,6 +168,20 @@ include::{snippets}/find-event/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-event/response-fields.adoc[]
 
+=== `GET`: 행사 목록 조회
+
+.HTTP request
+include::{snippets}/find-events/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/find-events/request-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/find-events/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-events/response-fields.adoc[]
+
 == Comment
 
 === `GET` : 댓글 모두 조회

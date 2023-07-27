@@ -14,10 +14,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.member.application.MemberActivityService;
-import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
+import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityResponses;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -32,9 +32,6 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 @WebMvcTest(MemberApi.class)
 class MemberApiTest extends MockMvcTestHelper {
 
-  @MockBean
-  private MemberActivityService memberActivityService;
-
   private static final ResponseFieldsSnippet RESPONSE_FIELDS = responseFields(
 
       fieldWithPath("[].activityType").type(JsonFieldType.STRING).description("activity 분류"),
@@ -43,9 +40,10 @@ class MemberApiTest extends MockMvcTestHelper {
       fieldWithPath("[].memberActivityResponses[].name").type(JsonFieldType.STRING)
           .description("activity 이름")
   );
-
   private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
+  @MockBean
+  private MemberActivityService memberActivityService;
 
   @Test
   @DisplayName("사용자 정보를 잘 저장하면, 204 no Content를 반환해줄 수 있다.")
@@ -54,8 +52,8 @@ class MemberApiTest extends MockMvcTestHelper {
     final List<Long> activityIds = List.of(1L, 2L);
     final String name = "우르";
 
-    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(name, activityIds);
-
+    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(name,
+        activityIds);
     final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
         fieldWithPath("activityIds").description("활동 id들"),
         fieldWithPath("name").description("사용자 이름"));
