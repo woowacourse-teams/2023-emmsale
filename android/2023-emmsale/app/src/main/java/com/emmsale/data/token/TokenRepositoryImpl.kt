@@ -37,4 +37,3 @@ class TokenRepositoryImpl(
         private const val DEFAULT_TOKEN_VALUE = "default"
     }
 }
-

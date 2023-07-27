@@ -13,8 +13,10 @@ class EventRepositoryImpl(
     private val eventService: EventService,
 ) : EventRepository {
     override suspend fun getEvents(
-        year: Int, month: Int,
-        status: String, tags: List<String>
+        year: Int,
+        month: Int,
+        status: String,
+        tags: List<String>,
     ): ApiResult<List<Event>> = withContext(dispatcher) {
         handleApi(eventService.getEvents(year, month, status, tags), List<EventApiModel>::toData)
     }
