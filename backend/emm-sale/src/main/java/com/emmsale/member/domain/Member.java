@@ -29,6 +29,13 @@ public class Member extends BaseEntity {
   @Column(nullable = false)
   private String imageUrl;
 
+  public Member(final Long id, final Long githubId, final String imageUrl, final String name) {
+    this.id = id;
+    this.githubId = githubId;
+    this.imageUrl = imageUrl;
+    this.name = name;
+  }
+
   public Member(final Long githubId, final String imageUrl, final String name) {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
@@ -41,5 +48,20 @@ public class Member extends BaseEntity {
 
   public void updateOpenProfileUrl(final String openProfileUrl) {
     this.openProfileUrl = openProfileUrl;
+  }
+
+  public boolean isNotMe(final Member member) {
+    if (member.getId().equals(id)) {
+      return false;
+    }
+    return true;
+  }
+
+  public boolean isMe(final Member member) {
+    return this.id.equals(member.id);
+  }
+
+  public boolean isNotMe(final Long id) {
+    return !this.id.equals(id);
   }
 }
