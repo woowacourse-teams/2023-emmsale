@@ -91,7 +91,8 @@ create table notification
     event_id    bigint       not null,
     message     varchar(255) not null,
     receiver_id bigint       not null,
-    sender_id   bigint       not null
+    sender_id   bigint       not null,
+    status      varchar(255) not null
 );
 
 create table fcm_token
