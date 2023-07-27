@@ -65,6 +65,6 @@ public class MemberApi {
       @RequestBody @Valid final OpenProfileUrlRequest openProfileUrlRequest
   ) {
     memberUpdateService.updateOpenProfileUrl(member, openProfileUrlRequest);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.noContent().build();
   }
 }

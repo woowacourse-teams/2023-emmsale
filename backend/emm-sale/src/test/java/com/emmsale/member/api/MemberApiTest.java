@@ -194,7 +194,7 @@ class MemberApiTest extends MockMvcTestHelper {
         .content(objectMapper.writeValueAsString(request)));
 
     // then
-    result.andExpect(status().isOk())
+    result.andExpect(status().isNoContent())
         .andDo(print())
         .andDo(document("update-open-profile-url", REQUEST_FIELDS));
   }
