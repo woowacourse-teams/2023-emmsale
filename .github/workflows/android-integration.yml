@@ -25,7 +25,7 @@ jobs:
     
     - name: Access GITHUB_CLIENT_ID
       run: |
-        echo GH_CLIENT_ID=\"$GH_CLIENT_ID\"
+        echo "GH_CLIENT_ID=${{ secrets.GH_CLIENT_ID }}"
       shell: bash
       env:
         GH_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
