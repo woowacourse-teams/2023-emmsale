@@ -53,9 +53,16 @@ class NotificationApiTest extends MockMvcTestHelper {
     final long receiverId = 2L;
     final long eventId = 3L;
     final String message = "알림 메시지야";
+    final long notificationId = 1L;
 
-    final Notification notification = new Notification(senderId, receiverId, eventId, message);
-    final NotificationResponse response = NotificationResponse.from(notification);
+    final NotificationResponse response = new NotificationResponse(
+        notificationId,
+        senderId,
+        receiverId,
+        message,
+        eventId
+    );
+
     final NotificationRequest request = new NotificationRequest(
         senderId,
         receiverId,

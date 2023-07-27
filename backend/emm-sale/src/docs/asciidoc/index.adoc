@@ -154,3 +154,19 @@ include::{snippets}/initial-register-member/http-request.adoc[]
 
 .HTTP response
 include::{snippets}/initial-register-member/http-response.adoc[]
+
+== Notification
+
+=== `POST` : 알림 저장
+
+.HTTP request 설명
+include::{snippets}/create-notification/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/create-notification/http-request.adoc[]
+
+.HTTP response 설명
+include::{snippets}/create-notification/response-fields.adoc[]
+
+.HTTP response
+include::{snippets}/create-notification/http-response.adoc[]
