@@ -23,11 +23,11 @@ class LoginViewModel(
     private val _loginState: MutableLiveData<LoginUiState> = MutableLiveData()
     val loginState: LiveData<LoginUiState> = _loginState
 
-    fun login() {
+    fun saveGithubCode(code: String) {
         changeLoginState(LoginUiState.Loading)
 
         viewModelScope.launch {
-            when (val loginResult = loginRepository.login()) {
+            when (val loginResult = loginRepository.saveGithubCode(code)) {
                 is ApiSuccess -> handleLoginResult(loginResult.data)
                 is ApiError -> changeLoginState(LoginUiState.Error)
                 is ApiException -> changeLoginState(LoginUiState.Error)
@@ -35,11 +35,11 @@ class LoginViewModel(
         }
     }
 
-    private fun handleLoginResult(loginResult: Login) {
+    private suspend fun handleLoginResult(loginResult: Login) {
         tokenRepository.saveToken(Token.from(loginResult))
-        when (loginResult.isRegistered) {
-            true -> changeLoginState(LoginUiState.Register)
-            false -> changeLoginState(LoginUiState.Login)
+        when (loginResult.isNewMember) {
+            true -> changeLoginState(LoginUiState.Login)
+            false -> changeLoginState(LoginUiState.Register)
         }
     }
 

@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".presentation.ui.login.LoginActivity">
 
         <ImageView
@@ -21,32 +22,46 @@
             android:layout_height="0dp"
             android:contentDescription="login logo"
             android:src="@drawable/img_login_logo"
-            app:layout_constraintBottom_toTopOf="@+id/btn_login"
             app:layout_constraintDimensionRatio="1"
+            app:layout_constraintBottom_toTopOf="@+id/btn_github_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight="188dp"
             app:layout_constraintHeight_max="188dp"
-            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth="188dp"
             app:layout_constraintWidth_max="188dp" />
 
-        <ImageView
-            android:id="@+id/btn_login"
+        <LinearLayout
+            android:id="@+id/btn_github_login"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:contentDescription="login button"
-            android:onClick="@{() -> viewModel.login()}"
-            android:scaleType="fitCenter"
-            android:src="@drawable/img_login_github"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="h,3:1"
+            app:layout_constraintDimensionRatio="280:63"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_max="80dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_login_logo"
-            app:layout_constraintWidth_max="270dp" />
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginBottom="58dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_login_github"
+            android:gravity="center">
+
+            <ImageView
+                android:scaleType="fitCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="login github"
+                android:src="@drawable/ic_login_github" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="Github으로 로그인" />
+        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/pb_login"

@@ -18,7 +18,7 @@ class RepositoryContainer(
         LoginRepositoryImpl(loginService = serviceContainer.loginService)
     }
     val tokenRepository: TokenRepository by lazy {
-         TokenRepositoryImpl(context)
+        TokenRepositoryImpl(context = context)
     }
     val activityRepository: ActivityRepository by lazy {
         ActivityRepositoryImpl(activityService = serviceContainer.activityService)

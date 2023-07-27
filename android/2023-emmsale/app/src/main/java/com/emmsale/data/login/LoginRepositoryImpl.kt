@@ -18,9 +18,9 @@ class LoginRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val loginService: LoginService,
 ) : LoginRepository {
-    override suspend fun login(): ApiResult<Login> =
+    override suspend fun saveGithubCode(code: String): ApiResult<Login> =
         withContext(externalScope.coroutineContext + dispatcher) {
-            when (val loginResponse = handleApi { loginService.login() }) {
+            when (val loginResponse = handleApi { loginService.saveGithubCode(code) }) {
                 is ApiSuccess -> ApiSuccess(Login.from(loginResponse.data))
                 is ApiError -> ApiError(loginResponse.code, loginResponse.message)
                 is ApiException -> ApiException(loginResponse.e)

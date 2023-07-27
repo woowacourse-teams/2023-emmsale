@@ -1,6 +1,6 @@
 package com.emmsale.data.token
 
 interface TokenRepository {
-    fun saveToken(token: Token)
-    fun getToken(): Token?
+    suspend fun saveToken(token: Token)
+    suspend fun getToken(): Token?
 }
