@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ActivitiesApiModel(
-    @SerialName("activityName")
+    @SerialName("activityType")
     val category: String = "-",
     @SerialName("activityResponses")
     val activities: List<ActivityApiModel> = emptyList()

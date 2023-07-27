@@ -5,6 +5,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface ActivityService {
-    @GET("/careers")
+    @GET("/activities")
     suspend fun getActivities(): Response<List<ActivitiesApiModel>>
 }

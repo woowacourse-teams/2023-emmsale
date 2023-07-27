@@ -1,9 +1,6 @@
 package com.emmsale.data.activity
 
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -15,10 +12,6 @@ class ActivityRepositoryImpl(
 ) : ActivityRepository {
 
     override suspend fun getActivities(): ApiResult<List<Activities>> = withContext(dispatcher) {
-        when (val activitiesApiResult = handleApi { activityService.getActivities() }) {
-            is ApiSuccess -> ApiSuccess(Activities.from(activitiesApiResult.data))
-            is ApiError -> ApiError(activitiesApiResult.code, activitiesApiResult.message)
-            is ApiException -> ApiException(activitiesApiResult.e)
-        }
+        handleApi(activityService.getActivities(), Activities::from)
     }
 }
