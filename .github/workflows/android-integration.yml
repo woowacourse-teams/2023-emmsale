@@ -25,10 +25,10 @@ jobs:
     
     - name: Access GITHUB_CLIENT_ID
       run: |
-        echo GH_CLIENT_ID=\"$API_KEY\" > local.properties
+        echo GH_CLIENT_ID=\"$GH_CLIENT_ID\" > local.properties
       shell: bash
       env:
-        API_KEY: ${{ secrets.GH_CLIENT_ID }}
+        GH_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
         
     - name: Run ktlintChecking
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale ktlintCheck
