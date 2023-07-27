@@ -73,17 +73,19 @@ class EventApiTest extends MockMvcTestHelper {
   void findEvents() throws Exception {
     // given
     final RequestParametersSnippet requestParameters = requestParameters(
-        parameterWithName("year").description("조회하고자 하는 연도"),
-        parameterWithName("month").description("조회하고자 하는 월"),
-        parameterWithName("tag").description("필터링하려는 태그").optional(),
-        parameterWithName("status").description("필터링하려는 상태").optional()
+        parameterWithName("year").description("조회하고자 하는 연도(2015 이상의 값)"),
+        parameterWithName("month").description("조회하고자 하는 월(1~12)"),
+        parameterWithName("tag").description("필터링하려는 태그(option)").optional(),
+        parameterWithName("status").description("필터링하려는 상태(option)").optional()
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
         fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
-        fieldWithPath("[].startDate").type(JsonFieldType.STRING).description("행사 시작일"),
-        fieldWithPath("[].endDate").type(JsonFieldType.STRING).description("행사 종료일"),
+        fieldWithPath("[].startDate").type(JsonFieldType.STRING)
+            .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
+        fieldWithPath("[].endDate").type(JsonFieldType.STRING)
+            .description("행사 종료일(yyyy:MM:dd:HH:mm:ss)"),
         fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
             .description("행사 태그 목록"),
         fieldWithPath("[].status").type(JsonFieldType.STRING).description("행사 진행 상황")
