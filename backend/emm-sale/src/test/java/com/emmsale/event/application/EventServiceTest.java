@@ -23,6 +23,8 @@ import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.member.domain.Member;
+import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
@@ -40,6 +42,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
+  @Autowired
+  private MemberRepository memberRepository;
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
       List.of(), "진행 중");
   private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
@@ -92,8 +96,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("event의 id로 해당하는 event를 조회할 수 있다.")
     void success() {
       //given
-      final Event event = eventFixture();
-      eventRepository.save(event);
+      final Event event = eventRepository.save(eventFixture());
       final EventDetailResponse expected = EventDetailResponse.from(event);
 
       //when
@@ -114,7 +117,51 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       //when, then
       assertThatThrownBy(() -> eventService.findEvent(notFoundEventId))
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.EVENT_NOT_FOUND_EXCEPTION.errorMessage());
+          .hasMessage(EventExceptionType.NOT_FOUND_EVENT.errorMessage());
+    }
+  }
+
+  @Nested
+  @DisplayName("event 참가자 목록에 멤버를 추가할 수 있다.")
+  class Participate {
+
+    @Test
+    @DisplayName("정상적으로 멤버를 추가한다.")
+    void success() {
+      final Long memberId = 1L;
+      final Member member = memberRepository.findById(memberId).get();
+      final Event 인프콘 = eventRepository.save(eventFixture());
+
+      final Long participantId = eventService.participate(인프콘.getId(), memberId, member);
+
+      assertThat(participantId)
+          .isNotNull();
+    }
+
+    @Test
+    @DisplayName("memberId와 Member가 다르면 Exception이 발생한다.")
+    void fail_forbidden() {
+      final Long memberId = 1L;
+      final Long otherMemberId = 2L;
+      final Member member = memberRepository.findById(memberId).get();
+      final Event 인프콘 = eventRepository.save(eventFixture());
+
+      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), otherMemberId, member))
+          .isInstanceOf(EventException.class)
+          .hasMessage(EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT.errorMessage());
+    }
+
+    @Test
+    @DisplayName("이미 참가한 멤버면 Exception이 발생한다.")
+    void fail_alreadyParticipate() {
+      final Long memberId = 1L;
+      final Member member = memberRepository.findById(memberId).get();
+      final Event 인프콘 = eventRepository.save(eventFixture());
+      eventService.participate(인프콘.getId(), memberId, member);
+
+      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), memberId, member))
+          .isInstanceOf(EventException.class)
+          .hasMessage(EventExceptionType.ALREADY_PARTICIPATED.errorMessage());
     }
   }
 

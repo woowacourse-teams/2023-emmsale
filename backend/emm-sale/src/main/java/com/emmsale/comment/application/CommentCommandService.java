@@ -34,7 +34,7 @@ public class CommentCommandService {
       final Member member
   ) {
     final Event savedEvent = eventRepository.findById(commentAddRequest.getEventId())
-        .orElseThrow(() -> new EventException(EventExceptionType.EVENT_NOT_FOUND_EXCEPTION));
+        .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_EVENT));
     final String content = commentAddRequest.getContent();
 
     final Comment comment = commentAddRequest.optionalParentId()
