@@ -40,7 +40,7 @@ public class Event extends BaseEntity {
   @Column(nullable = false)
   private String informationUrl;
   @OneToMany(mappedBy = "event")
-  private List<EventTag> tags;
+  private List<EventTag> tags = new ArrayList<>();
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
   @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
