@@ -1,42 +1,46 @@
 package com.emmsale.event.api;
 
-import static java.lang.Long.parseLong;
 import static java.lang.String.format;
 import static java.net.URI.create;
 
 import com.emmsale.event.application.EventService;
 import com.emmsale.event.application.dto.EventDetailResponse;
-import com.emmsale.event.application.dto.ParticipantResponse;
-import java.util.List;
 import com.emmsale.event.application.dto.EventParticipateRequest;
+import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.member.domain.Member;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/events")
 @RequiredArgsConstructor
 public class EventApi {
 
   private final EventService eventService;
 
-  @GetMapping("/events/{id}")
-  public ResponseEntity<EventDetailResponse> findEventById(@PathVariable final String id) {
-    return ResponseEntity.ok(eventService.findEvent(parseLong(id)));
+  @GetMapping("/{id}")
+  public ResponseEntity<EventDetailResponse> findEventById(@PathVariable final Long id) {
+    return ResponseEntity.ok(eventService.findEvent(id));
   }
 
-  @PostMapping("/events/{eventId}/participants")
+  @PostMapping("/{eventId}/participants")
   public ResponseEntity<String> participateEvent(
-      @PathVariable final String eventId,
+      @PathVariable final Long eventId,
       @RequestBody final EventParticipateRequest request,
       final Member member
   ) {
     final Long participantId = eventService.participate(
-        parseLong(eventId),
+        eventId,
         request.getMemberId(),
         member
     );
@@ -46,9 +50,17 @@ public class EventApi {
         .build();
   }
 
-  @GetMapping("/events/{id}/participants")
+  @GetMapping("/{id}/participants")
   public ResponseEntity<List<ParticipantResponse>> findParticipants(@PathVariable final Long id) {
     final List<ParticipantResponse> responses = eventService.findParticipants(id);
     return ResponseEntity.ok(responses);
   }
+
+  @GetMapping
+  public ResponseEntity<List<EventResponse>> findEvents(@RequestParam final int year,
+      @RequestParam final int month, @RequestParam(required = false) final String tag,
+      @RequestParam(required = false) final String status) {
+    return ResponseEntity.ok(eventService.findEvents(LocalDate.now(), year, month, tag, status));
+  }
+
 }

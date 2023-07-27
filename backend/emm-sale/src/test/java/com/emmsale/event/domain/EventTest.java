@@ -42,13 +42,13 @@ class EventTest {
     void fail_alreadyContains() {
       //given
       final Event 인프콘 = EventFixture.eventFixture();
-      final Member 멤버 = new Member(1L, "이미지URL", "멤버");
+      final Member 멤버 = new Member(1L, 1L, "이미지URL", "멤버");
       인프콘.addParticipant(멤버);
 
       //when && then
       assertThatThrownBy(() -> 인프콘.addParticipant(멤버))
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.ALREADY_PARTICIPATE.errorMessage());
+          .hasMessage(EventExceptionType.ALREADY_PARTICIPATED.errorMessage());
     }
   }
 }

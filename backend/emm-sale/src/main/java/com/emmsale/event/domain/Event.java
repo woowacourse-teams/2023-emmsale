@@ -7,6 +7,7 @@ import com.emmsale.comment.domain.Comment;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class Event extends BaseEntity {
   @Column(nullable = false)
   private String informationUrl;
   @OneToMany(mappedBy = "event")
-  private List<EventTag> tags;
+  private List<EventTag> tags = new ArrayList<>();
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
@@ -67,12 +68,22 @@ public class Event extends BaseEntity {
 
   public void validateAlreadyParticipate(final Member member) {
     if (isAlreadyParticipate(member)) {
-      throw new EventException(EventExceptionType.ALREADY_PARTICIPATE);
+      throw new EventException(EventExceptionType.ALREADY_PARTICIPATED);
     }
   }
 
   private boolean isAlreadyParticipate(final Member member) {
     return participants.stream()
         .anyMatch(participant -> participant.isSameMember(member));
+  }
+
+  public EventStatus calculateEventStatus(LocalDate now) {
+    if (now.isBefore(startDate.toLocalDate())) {
+      return EventStatus.UPCOMING;
+    }
+    if (now.isAfter(endDate.toLocalDate())) {
+      return EventStatus.ENDED;
+    }
+    return EventStatus.IN_PROGRESS;
   }
 }

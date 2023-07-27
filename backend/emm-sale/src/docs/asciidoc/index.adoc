@@ -155,6 +155,17 @@ include::{snippets}/initial-register-member/http-request.adoc[]
 .HTTP response
 include::{snippets}/initial-register-member/http-response.adoc[]
 
+=== `PUT`: 사용자의 Open Profile URL 업데이트
+
+.HTTP request 설명
+include::{snippets}/update-open-profile-url/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/update-open-profile-url/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/update-open-profile-url/http-response.adoc[]
+
 == Event
 
 === `GET` : 행사 상세정보 조회
@@ -179,10 +190,79 @@ include::{snippets}/find-participants/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-participants/response-fields.adoc[]
 
-=== `POST` : 컨퍼런스에 함께가기 요청(컨퍼런스에 함께 까는 멤버에 등록)
+=== `POST` : 컨퍼런스에 함께가기 요청(컨퍼런스에 함께 가는 멤버에 등록)
 
 .HTTP request
 include::{snippets}/participate-event/http-request.adoc[]
 
 .HTTP response
 include::{snippets}/participate-event/http-response.adoc[]
+
+=== `GET`: 행사 목록 조회
+
+.HTTP request
+include::{snippets}/find-events/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/find-events/request-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/find-events/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-events/response-fields.adoc[]
+
+== Comment
+
+=== `GET` : 댓글 모두 조회
+
+.HTTP request 설명
+include::{snippets}/get-comment/request-parameters.adoc[]
+
+.HTTP request
+include::{snippets}/get-comment/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/get-comment/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/get-comment/response-fields.adoc[]
+
+=== `POST` : 댓글 및 대댓글 생성
+
+.HTTP request
+include::{snippets}/add-comment/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/add-comment/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-comment/response-fields.adoc[]
+
+=== `DELETE` : 댓글 삭제
+
+.HTTP request
+include::{snippets}/delete-comment/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/delete-comment/path-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/delete-comment/http-response.adoc[]
+
+=== `PATCH` : 댓글 수정
+
+.HTTP request
+include::{snippets}/modify-comment/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/modify-comment/request-fields.adoc[]
+
+.PathVariable 설명
+include::{snippets}/modify-comment/path-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/modify-comment/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/modify-comment/response-fields.adoc[]

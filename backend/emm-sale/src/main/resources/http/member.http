@@ -5,7 +5,10 @@ Content-Type: application/json
 
 {
   "name": "우르",
-  "careerIds": [1, 2]
+  "careerIds": [
+    1,
+    2
+  ]
 }
 
 ### 사용자 커리어 추가
@@ -13,7 +16,11 @@ POST http://localhost:8080/members/careers
 Content-Type: application/json
 
 {
-  "careerIds": [4, 5, 6]
+  "careerIds": [
+    4,
+    5,
+    6
+  ]
 }
 
 ### 사용자 커리어 제거
@@ -21,5 +28,16 @@ DELETE http://localhost:8080/members/careers
 Content-Type: application/json
 
 {
-  "careerIds": [1, 2]
+  "careerIds": [
+    1,
+    2
+  ]
+}
+
+### 사용자의 오픈 프로필 URL 업데이트
+PUT http://localhost:8080/members/open-profile-url
+Content-Type: application/json
+
+{
+  "openProfileUrl": "https://open.kakao.com/profile"
 }
