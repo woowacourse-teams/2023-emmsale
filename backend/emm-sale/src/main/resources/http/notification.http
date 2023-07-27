@@ -38,3 +38,7 @@ Content-Type: application/json
 {
   "updatedStatus" : "ACCEPTED"
 }
+
+### id로 알림 조회하는 API
+
+GET http://localhost:8080/notifications/1

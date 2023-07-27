@@ -203,3 +203,16 @@ include::{snippets}/create-notification/response-fields.adoc[]
 .HTTP response
 include::{snippets}/create-notification/http-response.adoc[]
 
+=== `GET` : notification id로 알림 조회
+
+.HTTP request
+include::{snippets}/find-notification/http-request.adoc[]
+
+include::{snippets}/find-notification/path-parameters.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-notification/response-fields.adoc[]
+
+.HTTP response
+include::{snippets}/find-notification/http-response.adoc[]
+

@@ -1,9 +1,11 @@
 package com.emmsale.notification.api;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -16,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.notification.application.NotificationCommandService;
+import com.emmsale.notification.application.NotificationQueryService;
 import com.emmsale.notification.application.dto.FcmTokenRequest;
 import com.emmsale.notification.application.dto.NotificationModifyRequest;
 import com.emmsale.notification.application.dto.NotificationRequest;
@@ -35,6 +38,8 @@ class NotificationApiTest extends MockMvcTestHelper {
 
   @MockBean
   private NotificationCommandService notificationCommandService;
+  @MockBean
+  private NotificationQueryService notificationQueryService;
 
   @Test
   @DisplayName("create() : 알림을 성공적으로 생성한다면 201 Created를 반환할 수 있다.")
@@ -126,14 +131,57 @@ class NotificationApiTest extends MockMvcTestHelper {
         parameterWithName("notification-id").description("상태변화 시킬 알림 ID")
     );
 
+    final long notificationId = 1L;
+
     doNothing().when(notificationCommandService).modify(request, 3L);
 
     //when & then
-    mockMvc.perform(patch("/notifications/{notification-id}", 1)
+    mockMvc.perform(patch("/notifications/{notification-id}", notificationId)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
         .andDo(print())
         .andDo(document("modify-notification", requestFields, pathParameters));
+  }
+
+  @Test
+  @DisplayName("find() : 알림 id를 통해 성공적으로 조회할 수 있다면 200 OK 를 반환할 수 있다.")
+  void test_find() throws Exception {
+    //given
+    final PathParametersSnippet pathParameters = pathParameters(
+        parameterWithName("notification-id").description("상태변화 시킬 알림 ID")
+    );
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("notificationId").description("저장된 알림 ID"),
+        fieldWithPath("senderId").description("보내는 사람 ID"),
+        fieldWithPath("receiverId").description("받는 사람 ID"),
+        fieldWithPath("message").description("알림 보낼 때 메시지"),
+        fieldWithPath("eventId").description("행사 ID")
+    );
+
+    final long senderId = 1L;
+    final long receiverId = 2L;
+    final long eventId = 3L;
+    final String message = "알림 메시지야";
+    final long notificationId = 1L;
+
+    final NotificationResponse response = new NotificationResponse(
+        notificationId,
+        senderId,
+        receiverId,
+        message,
+        eventId
+    );
+
+    //when
+    when(notificationQueryService.findNotificationBy(anyLong()))
+        .thenReturn(response);
+
+    //then
+    mockMvc.perform(get("/notifications/{notification-id}", notificationId))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("find-notification", responseFields, pathParameters));
   }
 }
