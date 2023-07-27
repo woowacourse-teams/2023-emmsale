@@ -7,11 +7,9 @@ data class ActivitiesUiState(
     val activities: List<ActivityUiState>,
 ) {
     companion object {
-        fun from(tags: List<Activities>): List<ActivitiesUiState> = tags.map(::from)
-
-        private fun from(activities: Activities): ActivitiesUiState = ActivitiesUiState(
+        fun from(activities: Activities): ActivitiesUiState = ActivitiesUiState(
             category = activities.category,
-            activities = ActivityUiState.from(activities.activities),
+            activities = activities.activities.map(ActivityUiState::from),
         )
     }
 }

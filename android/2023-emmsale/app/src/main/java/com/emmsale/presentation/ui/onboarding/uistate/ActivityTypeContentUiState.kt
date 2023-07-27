@@ -8,6 +8,6 @@ sealed class ActivityTypeContentUiState {
 
     companion object {
         fun from(activitiesResult: List<Activities>): Success =
-            Success(activities = ActivitiesUiState.from(activitiesResult))
+            Success(activities = activitiesResult.map(ActivitiesUiState::from))
     }
 }
