@@ -1,21 +1,18 @@
 package com.emmsale.data.fcmToken
 
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.fcmToken.dto.FcmTokenApiModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class FcmTokenRepositoryImpl(
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val fcmTokenService: FcmTokenService,
 ) : FcmTokenRepository {
-    override suspend fun saveFcmToken(fcmToken: FcmToken): ApiResult<Unit> {
-        return when (val tokenSavedResult =
-            handleApi { fcmTokenService.saveFcmToken(FcmTokenApiModel.from(fcmToken)) }) {
-            is ApiSuccess -> ApiSuccess(tokenSavedResult.data)
-            is ApiException -> ApiException(tokenSavedResult.e)
-            is ApiError -> ApiError(tokenSavedResult.code, tokenSavedResult.message)
+    override suspend fun saveFcmToken(fcmToken: FcmToken): ApiResult<Unit> =
+        withContext(dispatcher) {
+            handleApi(fcmTokenService.saveFcmToken(FcmTokenApiModel.from(fcmToken))) { }
         }
-    }
 }

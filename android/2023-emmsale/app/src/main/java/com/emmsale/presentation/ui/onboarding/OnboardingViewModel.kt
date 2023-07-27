@@ -24,7 +24,7 @@ class OnboardingViewModel(
     private val activityRepository: ActivityRepository,
     private val memberRepository: MemberRepository,
 ) : ViewModel() {
-    val nameUiState: MutableLiveData<String> = MutableLiveData()
+    val name: MutableLiveData<String> = MutableLiveData()
 
     // TODO("Error Handling on OnboardingActivity")
     private val _activities: MutableLiveData<ActivityTypeContentUiState> = MutableLiveData()
@@ -65,9 +65,9 @@ class OnboardingViewModel(
     }
 
     private fun fetchActivities(): Job = viewModelScope.launch {
-        when (val activitiesApiModel = activityRepository.getActivities()) {
+        when (val activitiesResult = activityRepository.getActivities()) {
             is ApiSuccess ->
-                _activities.postValue(ActivityTypeContentUiState.from(activitiesApiModel.data))
+                _activities.postValue(ActivityTypeContentUiState.from(activitiesResult.data))
 
             is ApiError -> _activities.postValue(ActivityTypeContentUiState.Error)
             is ApiException -> _activities.postValue(ActivityTypeContentUiState.Error)
@@ -83,7 +83,7 @@ class OnboardingViewModel(
     }
 
     fun updateMember() {
-        val memberName = nameUiState.value ?: return
+        val memberName = name.value ?: return
 
         viewModelScope.launch {
             _memberUiState.value = MemberUiState.Loading

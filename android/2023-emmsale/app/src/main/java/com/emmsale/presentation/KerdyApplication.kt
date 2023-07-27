@@ -4,14 +4,15 @@ import android.app.Application
 import com.emmsale.data.common.ServiceFactory
 import com.emmsale.di.RepositoryContainer
 import com.emmsale.di.ServiceContainer
+import com.emmsale.di.SharedPreferenceContainer
 
 class KerdyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
         repositoryContainer = RepositoryContainer(
-            context = this,
-            serviceContainer = ServiceContainer(ServiceFactory())
+            serviceContainer = ServiceContainer(ServiceFactory()),
+            preferenceContainer = SharedPreferenceContainer(this)
         )
     }
 

@@ -1,4 +1,4 @@
-package com.emmsale.presentation.common.bindingadapter
+package com.emmsale.presentation.utils.bindingadapter
 
 import androidx.databinding.BindingAdapter
 import androidx.viewpager2.widget.ViewPager2

@@ -27,11 +27,11 @@ class LoginViewModel(
     private val _loginState: MutableLiveData<LoginUiState> = MutableLiveData()
     val loginState: LiveData<LoginUiState> = _loginState
 
-    fun login(fcmToken: String) {
+    fun login(fcmToken: String, code: String) {
         changeLoginState(LoginUiState.Loading)
 
         viewModelScope.launch {
-            when (val loginResult = loginRepository.login()) {
+            when (val loginResult = loginRepository.saveGithubCode(code)) {
                 is ApiSuccess -> saveTokens(loginResult.data, fcmToken)
                 is ApiError -> changeLoginState(LoginUiState.Error)
                 is ApiException -> changeLoginState(LoginUiState.Error)
@@ -42,7 +42,7 @@ class LoginViewModel(
     private suspend fun saveTokens(login: Login, fcmToken: String) {
         saveUserToken(login)
         saveFcmToken(login.uid, fcmToken)
-        when (login.isRegistered) {
+        when (login.isNewMember) {
             true -> changeLoginState(LoginUiState.Register)
             false -> changeLoginState(LoginUiState.Login)
         }

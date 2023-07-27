@@ -32,6 +32,6 @@ class ServiceFactory {
     fun <T> create(service: Class<T>): T = retrofit.create(service)
 
     companion object {
-        private const val BASE_URL = "http://13.125.212.56/"
+        private const val BASE_URL = "https://kerdy.kro.kr/"
     }
 }

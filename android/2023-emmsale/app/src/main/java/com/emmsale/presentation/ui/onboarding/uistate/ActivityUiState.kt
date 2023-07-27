@@ -8,13 +8,9 @@ data class ActivityUiState(
     var isSelected: Boolean = false,
 ) {
     companion object {
-        fun from(activities: List<Activity>): List<ActivityUiState> =
-            activities.map(::from)
-
-        private fun from(activity: Activity): ActivityUiState =
-            ActivityUiState(
-                id = activity.id,
-                name = activity.name
-            )
+        fun from(activity: Activity): ActivityUiState = ActivityUiState(
+            id = activity.id,
+            name = activity.name
+        )
     }
 }

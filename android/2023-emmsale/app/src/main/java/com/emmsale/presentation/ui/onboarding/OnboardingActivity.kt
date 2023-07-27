@@ -12,7 +12,9 @@ import com.emmsale.databinding.ActivityOnboardingBinding
 import com.emmsale.presentation.ui.onboarding.uistate.MemberUiState
 
 class OnboardingActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityOnboardingBinding
+    private val binding: ActivityOnboardingBinding by lazy {
+        ActivityOnboardingBinding.inflate(layoutInflater)
+    }
     private val viewModel: OnboardingViewModel by viewModels { OnboardingViewModel.factory }
     private val fragmentStateAdapter: OnboardingFragmentStateAdapter by lazy {
         OnboardingFragmentStateAdapter(this)
@@ -20,7 +22,6 @@ class OnboardingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initFragmentStateAdapter()
         initBackPressedDispatcher()
