@@ -58,7 +58,8 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("startDate").type(JsonFieldType.STRING).description("시작일자"),
         fieldWithPath("endDate").type(JsonFieldType.STRING).description("종료일자"),
         fieldWithPath("location").type(JsonFieldType.STRING).description("장소"),
-        fieldWithPath("status").type(JsonFieldType.STRING).description("진행상태")
+        fieldWithPath("status").type(JsonFieldType.STRING).description("진행상태"),
+        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("태그들")
     );
 
     when(eventService.findEvent(eventId)).thenReturn(eventDetailResponse);
