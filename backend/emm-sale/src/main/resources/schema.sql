@@ -7,6 +7,7 @@ drop table if exists kerdy.tag;
 drop table if exists kerdy.event_tag;
 drop table if exists kerdy.member_tag;
 drop table if exists kerdy.notification;
+drop table if exists kerdy.fcm_token;
 
 create table activity
 (
@@ -84,13 +85,19 @@ create table member_tag
 
 create table notification
 (
-    id bigint auto_increment primary key,
-    created_at datetime(6),
-    updated_at datetime(6),
-    event_id bigint not null,
-    message varchar(255) not null,
-    receiver_id bigint not null,
-    sender_id bigint not null
+    id          bigint auto_increment primary key,
+    created_at  datetime(6),
+    updated_at  datetime(6),
+    event_id    bigint       not null,
+    message     varchar(255) not null,
+    receiver_id bigint       not null,
+    sender_id   bigint       not null
 );
 
+create table fcm_token
+(
+    id        bigint auto_increment primary key,
+    token     varchar(255) not null,
+    member_id bigint       not null unique
+);
 

@@ -1,12 +1,14 @@
 package com.emmsale.notification.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.notification.application.dto.FcmTokenRequest;
 import com.emmsale.notification.application.dto.NotificationRequest;
 import com.emmsale.notification.application.dto.NotificationResponse;
-import com.emmsale.notification.domain.Notification;
-import org.assertj.core.api.Assertions;
+import com.emmsale.notification.domain.FcmToken;
+import com.emmsale.notification.domain.FcmTokenRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
   private NotificationCommandService notificationCommandService;
+  @Autowired
+  private FcmTokenRepository fcmTokenRepository;
 
   @Test
   @DisplayName("create() : 알림을 새로 생성할 수 있다.")
@@ -45,5 +49,25 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
         .usingRecursiveComparison()
         .ignoringCollectionOrder()
         .isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("createToken() : 이미 FCM 토큰이 존재한다면 해당 멤버의 FCM 토큰을 변경할 수 있다.")
+  void test_createToken_alreadyHasToken() throws Exception {
+    //given
+    final long memberId = 1L;
+    final String token = "token";
+    final String updateToken = "updateToken";
+    fcmTokenRepository.save(new FcmToken(token, memberId));
+
+    final FcmTokenRequest request = new FcmTokenRequest(updateToken, memberId);
+
+    //when
+    notificationCommandService.createToken(request);
+
+    //then
+    final FcmToken updatedFcmToken = fcmTokenRepository.findByMemberId(memberId).get();
+
+    assertEquals(updateToken, updatedFcmToken.getToken());
   }
 }

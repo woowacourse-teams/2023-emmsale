@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.notification.application.NotificationCommandService;
+import com.emmsale.notification.application.dto.FcmTokenRequest;
 import com.emmsale.notification.application.dto.NotificationRequest;
 import com.emmsale.notification.application.dto.NotificationResponse;
 import com.emmsale.notification.domain.Notification;
@@ -69,8 +70,31 @@ class NotificationApiTest extends MockMvcTestHelper {
     mockMvc.perform(post("/notification")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isOk())
+        .andExpect(status().isCreated())
         .andDo(print())
         .andDo(document("create-notification", requestFields, responseFields));
+  }
+
+  @Test
+  @DisplayName("createFcmToken() : FcmToken이 새로 생성되거나 잘 수정되면 200 OK를 반환할 수 있다.")
+  void test_createFcmToken() throws Exception {
+    //given
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("token").description("FcmToken 주세요"),
+        fieldWithPath("memberId").description("FcmToken 주인의 ID")
+    );
+
+    final long memberId = 1L;
+    final String token = "FCM 토큰";
+
+    final FcmTokenRequest request = new FcmTokenRequest(token, memberId);
+
+    //when & then
+    mockMvc.perform(post("/notification/token")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("create-fcmToken", requestFields));
   }
 }
