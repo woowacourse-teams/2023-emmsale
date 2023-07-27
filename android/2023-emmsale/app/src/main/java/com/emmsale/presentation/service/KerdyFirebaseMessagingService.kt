@@ -20,7 +20,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             title = getString(R.string.follow_notification_title_format),
             message = getString(R.string.follow_notification_message_format).format(senderName),
             channelId = FOLLOW_CHANNEL_ID,
-            notificationId = senderId.toIntOrNull() ?: 0,
             channelName = getString(R.string.follow_notification_channel_name),
             channelDescription = getString(R.string.follow_notification_channel_description),
         )

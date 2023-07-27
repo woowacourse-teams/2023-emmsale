@@ -14,28 +14,17 @@ class NotificationHelper(private val context: Context) {
     fun showNotification(
         title: String,
         message: String,
-        notificationId: Int = 0,
+        notificationId: Int = System.currentTimeMillis().toInt(),
         channelId: String,
         channelName: String,
         channelDescription: String,
     ) {
-        createNotificationChannel(channelId, channelName, channelDescription)
-        val notification = createNotification(title, message, channelId)
         if (context.checkPostNotificationPermission()) {
+            createNotificationChannel(channelId, channelName, channelDescription)
+            val notification = createNotification(channelId, title, message)
             notificationManager.notify(notificationId, notification)
         }
     }
-
-    private fun createNotification(title: String, message: String, channelId: String) =
-        NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setGroup(channelId)
-            .setGroupSummary(true)
-            .setAutoCancel(true)
-            .build()
 
     private fun createNotificationChannel(
         channelId: String,
@@ -48,4 +37,16 @@ class NotificationHelper(private val context: Context) {
         }
         notificationManager.createNotificationChannel(channel)
     }
+
+    private fun createNotification(
+        channelId: String,
+        title: String,
+        message: String
+    ) = NotificationCompat.Builder(context, channelId)
+        .setSmallIcon(R.drawable.ic_launcher_foreground)
+        .setContentTitle(title)
+        .setContentText(message)
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setAutoCancel(true)
+        .build()
 }
