@@ -46,6 +46,10 @@ public class Member extends BaseEntity {
     this.name = name;
   }
 
+  public void updateOpenProfileUrl(final String openProfileUrl) {
+    this.openProfileUrl = openProfileUrl;
+  }
+
   public boolean isNotMe(final Member member) {
     if (member.getId().equals(id)) {
       return false;

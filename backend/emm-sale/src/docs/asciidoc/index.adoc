@@ -155,6 +155,17 @@ include::{snippets}/initial-register-member/http-request.adoc[]
 .HTTP response
 include::{snippets}/initial-register-member/http-response.adoc[]
 
+=== `PUT`: 사용자의 Open Profile URL 업데이트
+
+.HTTP request 설명
+include::{snippets}/update-open-profile-url/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/update-open-profile-url/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/update-open-profile-url/http-response.adoc[]
+
 == Event
 
 === `GET` : 행사 상세정보 조회
