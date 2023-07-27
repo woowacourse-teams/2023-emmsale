@@ -4,6 +4,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 import com.emmsale.base.BaseEntity;
 import com.emmsale.comment.domain.Comment;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Column;
@@ -50,5 +51,15 @@ public class Event extends BaseEntity {
     this.startDate = startDate;
     this.endDate = endDate;
     this.informationUrl = informationUrl;
+  }
+
+  public EventStatus calculateEventStatus(LocalDate now) {
+    if (now.isBefore(startDate.toLocalDate())) {
+      return EventStatus.UPCOMING;
+    }
+    if (now.isAfter(endDate.toLocalDate())) {
+      return EventStatus.ENDED;
+    }
+    return EventStatus.IN_PROGRESS;
   }
 }

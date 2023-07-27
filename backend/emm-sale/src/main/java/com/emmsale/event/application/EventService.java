@@ -2,7 +2,6 @@ package com.emmsale.event.application;
 
 import static com.emmsale.event.exception.EventExceptionType.EVENT_NOT_FOUND_EXCEPTION;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_MONTH;
-import static com.emmsale.event.exception.EventExceptionType.INVALID_STATUS;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR;
 import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
@@ -21,8 +20,6 @@ import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -95,8 +92,8 @@ public class EventService {
         )
         .sorted(comparing(Event::getStartDate))
         .collect(
-            groupingBy(event -> extractEventStatus(nowDate, event.getStartDate().toLocalDate(),
-                event.getEndDate().toLocalDate()), () -> new EnumMap<>(EventStatus.class), toList())
+            groupingBy(event -> event.calculateEventStatus(nowDate),
+                () -> new EnumMap<>(EventStatus.class), toList())
         );
   }
 
@@ -114,50 +111,17 @@ public class EventService {
     return criteria.isBefore(comparison) || criteria.isEqual(comparison);
   }
 
-  private EventStatus extractEventStatus(LocalDate now, LocalDate startDate, LocalDate endDate) {
-    if (now.isBefore(startDate)) {
-      return EventStatus.UPCOMING;
-    }
-    if (now.isAfter(endDate)) {
-      return EventStatus.ENDED;
-    }
-    return EventStatus.IN_PROGRESS;
-  }
-
   private List<EventResponse> filterEventResponsesByStatus(final String statusName,
       final EnumMap<EventStatus, List<Event>> sortAndGroupByEventStatus) {
-    if (isaBoolean(statusName)) {
-      EventStatus status = findEventStatusByValue(statusName);
-      return makeEventResponsesByStatus(status, sortAndGroupByEventStatus.get(status));
+    if (isExistStatusName(statusName)) {
+      EventStatus status = EventStatus.from(statusName);
+      return EventResponse.makeEventResponsesByStatus(status,
+          sortAndGroupByEventStatus.get(status));
     }
-    return mergeEventResponses(sortAndGroupByEventStatus);
+    return EventResponse.mergeEventResponses(sortAndGroupByEventStatus);
   }
 
-  private boolean isaBoolean(final String statusName) {
+  private boolean isExistStatusName(final String statusName) {
     return statusName != null;
-  }
-
-  private EventStatus findEventStatusByValue(final String value) {
-    return Arrays.stream(EventStatus.values())
-        .filter(status -> status.isSameValue(value))
-        .findFirst()
-        .orElseThrow(() -> new EventException(INVALID_STATUS));
-  }
-
-  private List<EventResponse> makeEventResponsesByStatus(EventStatus status,
-      List<Event> events) {
-    return events.stream()
-        .map(event -> EventResponse.from(status, event))
-        .collect(toList());
-  }
-
-  private List<EventResponse> mergeEventResponses(
-      final EnumMap<EventStatus, List<Event>> groupByEventStatus) {
-    return groupByEventStatus.entrySet().stream()
-        .map(entry -> makeEventResponsesByStatus(entry.getKey(), entry.getValue()))
-        .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
-          combinedEvents.addAll(eventsToAdd);
-          return combinedEvents;
-        });
   }
 }
