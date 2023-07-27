@@ -1,3 +1,4 @@
+// ktlint-disable filename
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
@@ -24,14 +25,12 @@ android {
         buildConfigField(
             "String",
             "GITHUB_CLIENT_ID",
-            gradleLocalProperties(rootDir).getProperty("GITHUB_CLIENT_ID")
+            getApiKey("GITHUB_CLIENT_ID")
         )
     }
-
     buildFeatures {
         buildConfig = true
     }
-
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -51,6 +50,10 @@ android {
     dataBinding {
         enable = true
     }
+}
+
+fun getApiKey(propertyKey: String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
 dependencies {
