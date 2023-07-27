@@ -24,7 +24,7 @@ android {
         buildConfigField(
             "String",
             "GITHUB_CLIENT_ID",
-            getApiKey("GITHUB_CLIENT_ID")
+            gradleLocalProperties(rootDir).getProperty("GITHUB_CLIENT_ID")
         )
     }
 
@@ -51,10 +51,6 @@ android {
     dataBinding {
         enable = true
     }
-}
-
-fun getApiKey(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
 dependencies {
