@@ -9,7 +9,10 @@ import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
+@DynamicInsert
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,7 +25,8 @@ public class Member extends BaseEntity {
   private Long githubId;
   @Column(nullable = false)
   private String name;
-  @Column
+  @Column(nullable = false)
+  @ColumnDefault("")
   private String description;
   @Column
   private String openProfileUrl;
@@ -34,12 +38,14 @@ public class Member extends BaseEntity {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
     this.name = name;
+    this.description = "";
   }
 
   public Member(final Long githubId, final String imageUrl, final String name) {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
     this.name = name;
+    this.description = "";
   }
 
   public void updateName(final String name) {
@@ -48,6 +54,10 @@ public class Member extends BaseEntity {
 
   public void updateOpenProfileUrl(final String openProfileUrl) {
     this.openProfileUrl = openProfileUrl;
+  }
+
+  public void updateDescription(final String description) {
+    this.description = description;
   }
 
   public boolean isNotMe(final Member member) {

@@ -10,6 +10,11 @@ public enum MemberExceptionType implements BaseExceptionType {
       "해당 멤버는 존재하지 않습니다."
   ),
 
+  OVER_LENGTH_DESCRIPTION(
+      HttpStatus.BAD_REQUEST,
+      "한줄 자기소개에 입력 가능한 글자 수를 초과했습니다."
+  ),
+
   INVALID_CAREER_IDS(
       HttpStatus.BAD_REQUEST,
       "요청한 career id들 중에 유효하지 않은 값이 존재합니다"

@@ -41,3 +41,19 @@ Content-Type: application/json
 {
   "openProfileUrl": "https://open.kakao.com/profile"
 }
+
+### 사용자의 한줄 자기소개 업데이트
+PUT http://localhost:8080/members/description
+Content-Type: application/json
+
+{
+  "description": "안녕하세요 김개발입니다."
+}
+
+### 사용자의 한줄 자기소개 100자 초과 업데이트
+PUT http://localhost:8080/members/description
+Content-Type: application/json
+
+{
+  "description": "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요!"
+}
