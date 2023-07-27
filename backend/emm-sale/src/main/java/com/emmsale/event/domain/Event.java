@@ -4,8 +4,13 @@ import static lombok.AccessLevel.PROTECTED;
 
 import com.emmsale.base.BaseEntity;
 import com.emmsale.comment.domain.Comment;
+import com.emmsale.event.exception.EventException;
+import com.emmsale.event.exception.EventExceptionType;
+import com.emmsale.member.domain.Member;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,6 +42,8 @@ public class Event extends BaseEntity {
   private List<EventTag> tags;
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
+  @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
+  private List<Participant> participants = new ArrayList<>();
 
   public Event(
       final String name,
@@ -50,5 +57,24 @@ public class Event extends BaseEntity {
     this.startDate = startDate;
     this.endDate = endDate;
     this.informationUrl = informationUrl;
+  }
+
+  public Participant addParticipant(final Member member) {
+    final Participant participant = new Participant(member, this);
+    participants.add(participant);
+    return participant;
+  }
+
+  public void validateAlreadyParticipate(final Member member) {
+    if (isAlreadyParticipate(member)) {
+      throw new EventException(EventExceptionType.ALREADY_PARTICIPATE);
+    }
+  }
+
+  private boolean isAlreadyParticipate(final Member member) {
+    return participants.stream()
+        .map(participant -> participant.isSameMember(member))
+        .findAny()
+        .isPresent();
   }
 }

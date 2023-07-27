@@ -168,7 +168,7 @@ include::{snippets}/find-event/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-event/response-fields.adoc[]
 
-=== 참여자 목록 조회
+=== `GET` : 참여자 목록 조회
 
 .HTTP request
 include::{snippets}/find-participants/http-request.adoc[]
@@ -178,3 +178,11 @@ include::{snippets}/find-participants/http-response.adoc[]
 
 .HTTP response 설명
 include::{snippets}/find-participants/response-fields.adoc[]
+
+=== `POST` : 컨퍼런스에 함께가기 요청(컨퍼런스에 함께 까는 멤버에 등록)
+
+.HTTP request
+include::{snippets}/participate-event/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/participate-event/http-response.adoc[]

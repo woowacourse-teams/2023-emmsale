@@ -6,6 +6,7 @@ truncate table member_activity;
 truncate table tag;
 truncate table event_tag;
 truncate table member_tag;
+truncate table event_member;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');
@@ -44,3 +45,8 @@ values (3, 3, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into member_activity(id, activity_id, member_id, created_at, updated_at)
 values (4, 1, 2, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+
+insert into event (id, created_at, updated_at, end_date, information_url, location, name,
+                   start_date)
+values (1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'https://www.naver.com',
+        '코엑스', '인프콘', CURRENT_TIMESTAMP());

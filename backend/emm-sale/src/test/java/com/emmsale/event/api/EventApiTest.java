@@ -1,16 +1,21 @@
 package com.emmsale.event.api;
 
 import static java.lang.String.format;
+import static java.lang.String.format;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.event.application.EventService;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.helper.MockMvcTestHelper;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +23,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
@@ -86,5 +92,30 @@ class EventApiTest extends MockMvcTestHelper {
     mockMvc.perform(get(format("/events/%s/participants", eventId)))
         .andExpect(status().isOk())
         .andDo(document("find-participants", responseFields));
+  }
+  @Test
+  @DisplayName("Event에 사용자를 참여자로 추가할 수 있다.")
+  void participateEvent() throws Exception {
+    //given
+    final Long eventId = 1L;
+    final Long memberId = 2L;
+    final Long participantId = 3L;
+    final EventParticipateRequest request = new EventParticipateRequest(memberId);
+    final String fakeAccessToken = "Bearer accessToken";
+
+    when(eventService.participate(any(), any(), any()))
+        .thenReturn(participantId);
+
+    //when
+    mockMvc.perform(post("/events/{eventId}/participants", eventId)
+            .header("Authorization", fakeAccessToken)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isCreated())
+        .andExpect(
+            header().string("Location",
+                format("/events/%s/participants/%s", eventId, participantId))
+        )
+        .andDo(document("participate-event"));
   }
 }
