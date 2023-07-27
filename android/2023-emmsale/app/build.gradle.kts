@@ -1,4 +1,4 @@
-// ktlint-disable filename
+/* ktlint-disable */
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
