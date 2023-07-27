@@ -6,6 +6,7 @@ import com.emmsale.base.BaseEntity;
 import com.emmsale.comment.domain.Comment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +36,7 @@ public class Event extends BaseEntity {
   @Column(nullable = false)
   private String informationUrl;
   @OneToMany(mappedBy = "event")
-  private List<EventTag> tags;
+  private List<EventTag> tags = new ArrayList<>();
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
 
