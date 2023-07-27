@@ -4,25 +4,25 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.lifecycle.ViewModelProvider
 import com.emmsale.BuildConfig
 import com.emmsale.databinding.ActivityLoginBinding
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
-import com.emmsale.presentation.utils.binding.setContentView
+import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.emmsale.presentation.utils.builder.uri
 import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : AppCompatActivity() {
-    private val viewModel: LoginViewModel by lazy {
-        ViewModelProvider(this, LoginViewModelFactory(this))[LoginViewModel::class.java]
+    private val viewModel: LoginViewModel by viewModels { LoginViewModel.factory }
+    private val binding: ActivityLoginBinding by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        ActivityLoginBinding.inflate(layoutInflater)
     }
-    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater).setContentView(this)
+        setContentView(binding.root)
         binding.viewModel = viewModel
         setupClickListener()
         setupLoginState()
@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToOnboarding() {
-        // startActivity(OnboardingActivity.getIntent(this))
+        OnboardingActivity.startActivity(this)
         finish()
     }
 
@@ -87,8 +87,11 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        intent?.data?.getQueryParameter(GITHUB_CODE_PARAMETER)?.let(viewModel::saveGithubCode)
+        intent?.parseGithubCode()?.let(viewModel::saveGithubCode)
     }
+
+    private fun Intent.parseGithubCode(): String? =
+        data?.getQueryParameter(GITHUB_CODE_PARAMETER)
 
     companion object {
         private const val GITHUB_CODE_PARAMETER = "code"

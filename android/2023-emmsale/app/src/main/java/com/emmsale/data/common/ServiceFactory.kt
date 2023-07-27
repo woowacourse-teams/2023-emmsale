@@ -1,6 +1,5 @@
 package com.emmsale.data.common
 
-import com.emmsale.data.login.LoginService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -8,8 +7,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
-object RetrofitProvider {
-    private const val BASE_URL = "https://kerdy.kro.kr/"
+class ServiceFactory {
     private val jsonMediaType = "application/json".toMediaType()
     private val json = Json {
         coerceInputValues = true
@@ -19,6 +17,7 @@ object RetrofitProvider {
     private val jsonConverterFactory = json.asConverterFactory(jsonMediaType)
 
     private val okhttpClient = OkHttpClient.Builder()
+        .addInterceptor(AuthInterceptor())
         .connectTimeout(120, TimeUnit.SECONDS)
         .readTimeout(120, TimeUnit.SECONDS)
         .writeTimeout(120, TimeUnit.SECONDS)
@@ -30,5 +29,9 @@ object RetrofitProvider {
         .client(okhttpClient)
         .build()
 
-    val loginService: LoginService = retrofit.create(LoginService::class.java)
+    fun <T> create(service: Class<T>): T = retrofit.create(service)
+
+    companion object {
+        private const val BASE_URL = "https://kerdy.kro.kr/"
+    }
 }

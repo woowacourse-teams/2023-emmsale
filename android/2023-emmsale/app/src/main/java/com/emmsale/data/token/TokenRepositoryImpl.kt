@@ -9,6 +9,7 @@ class TokenRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val preference: SharedPreferences,
 ) : TokenRepository {
+
     override suspend fun saveToken(token: Token) = withContext(dispatcher) {
         preference.edit().putLong(UID_KEY, token.uid).apply()
         preference.edit().putString(ACCESS_TOKEN_KEY, token.accessToken).apply()
