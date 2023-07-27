@@ -1,17 +1,19 @@
 package com.emmsale.event.application;
 
 import static com.emmsale.event.exception.EventExceptionType.EVENT_NOT_FOUND_EXCEPTION;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.Participant;
-import com.emmsale.event.domain.repository.EventRepository;
-import com.emmsale.event.domain.repository.ParticipantRepository;
 import com.emmsale.event.exception.EventException;
-import java.util.List;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
+import com.emmsale.tag.domain.repository.EventRepository;
+import com.emmsale.tag.domain.repository.ParticipantRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,12 @@ public class EventService {
   }
 
   public List<ParticipantResponse> findParticipants(final Long eventId) {
-    return null;
+    final Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new EventException(EVENT_NOT_FOUND_EXCEPTION));
+    return event.getParticipants().stream()
+        .sorted(comparing(Participant::getId))
+        .map(ParticipantResponse::from)
+        .collect(toUnmodifiableList());
   }
 
   public Long participate(final Long eventId, final Long memberId, final Member member) {

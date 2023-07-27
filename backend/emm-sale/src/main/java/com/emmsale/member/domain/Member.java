@@ -33,6 +33,7 @@ public class Member extends BaseEntity {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
     this.name = name;
+    this.description = "";
   }
 
   public void updateName(final String name) {
@@ -40,6 +41,6 @@ public class Member extends BaseEntity {
   }
 
   public boolean isMe(final Member member) {
-    return this.id == member.id;
+    return this.id.equals(member.id);
   }
 }

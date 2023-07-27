@@ -42,7 +42,7 @@ public class Event extends BaseEntity {
   private List<EventTag> tags;
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
-  @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
   private List<Participant> participants = new ArrayList<>();
 
   public Event(
@@ -73,8 +73,6 @@ public class Event extends BaseEntity {
 
   private boolean isAlreadyParticipate(final Member member) {
     return participants.stream()
-        .map(participant -> participant.isSameMember(member))
-        .findAny()
-        .isPresent();
+        .anyMatch(participant -> participant.isSameMember(member));
   }
 }

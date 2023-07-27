@@ -1,4 +1,4 @@
-package com.emmsale.event.domain.repository;
+package com.emmsale.tag.domain.repository;
 
 import com.emmsale.event.domain.Participant;
 import org.springframework.data.jpa.repository.JpaRepository;
