@@ -47,7 +47,8 @@ class EventApiTest extends MockMvcTestHelper {
         LocalDateTime.of(2023, 8, 15, 12, 0),
         LocalDateTime.of(2023, 8, 15, 12, 0),
         "코엑스",
-        "예정"
+        "예정",
+        List.of("코틀린", "백엔드", "안드로이드")
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
