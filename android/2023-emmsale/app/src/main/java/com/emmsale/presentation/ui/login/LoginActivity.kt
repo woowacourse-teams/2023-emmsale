@@ -8,14 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.ViewModelProvider
 import com.emmsale.BuildConfig
-import com.emmsale.R
 import com.emmsale.databinding.ActivityLoginBinding
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
 import com.emmsale.presentation.utils.binding.setContentView
 import com.emmsale.presentation.utils.builder.uri
 import com.google.android.material.snackbar.Snackbar
 
-class LoginActivity : AppCompatActivity(), View.OnClickListener {
+class LoginActivity : AppCompatActivity() {
     private val viewModel: LoginViewModel by lazy {
         ViewModelProvider(this, LoginViewModelFactory(this))[LoginViewModel::class.java]
     }
@@ -25,8 +24,21 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater).setContentView(this)
         binding.viewModel = viewModel
-        binding.btnLogin.setOnClickListener(this)
+        setupClickListener()
+        setupLoginState()
+    }
 
+    private fun setupClickListener() {
+        setupGithubLoginClickListener()
+    }
+
+    private fun setupGithubLoginClickListener() {
+        binding.btnGithubLogin.setOnClickListener {
+            navigateToGithubLogin()
+        }
+    }
+
+    private fun setupLoginState() {
         viewModel.loginState.observe(this) { loginState ->
             when (loginState) {
                 is LoginUiState.Login -> navigateToMain()
@@ -70,12 +82,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         when (isShow) {
             true -> binding.pbLogin.visibility = View.VISIBLE
             false -> binding.pbLogin.visibility = View.GONE
-        }
-    }
-
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.btn_login -> navigateToGithubLogin()
         }
     }
 
