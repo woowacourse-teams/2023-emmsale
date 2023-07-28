@@ -1,4 +1,3 @@
-/* ktlint-disable */
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
@@ -25,7 +24,7 @@ android {
         buildConfigField(
             "String",
             "GITHUB_CLIENT_ID",
-            getApiKey("GITHUB_CLIENT_ID")
+            getApiKey("GH_CLIENT_ID")
         )
     }
     buildFeatures {
