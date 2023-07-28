@@ -38,7 +38,7 @@ jobs:
         file: android/2023-emmsale/app/build/outputs/apk/debug/app-debug.apk
         
     - name: 슬랙에 apk 업로드 브로드캐스트
-      uses: 8398a7/action-slack@v3
+      uses: MeilCli/slack-upload-file@v1
       with:
         mention: 'here'
         status: ${{ job.status }}
