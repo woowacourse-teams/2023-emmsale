@@ -1,6 +1,7 @@
 package com.emmsale.notification.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,8 +16,12 @@ import com.emmsale.notification.domain.FcmTokenRepository;
 import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.NotificationRepository;
 import com.emmsale.notification.domain.NotificationStatus;
+import com.emmsale.notification.exception.NotificationException;
+import com.emmsale.notification.exception.NotificationExceptionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
@@ -71,7 +76,7 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
     final FcmTokenRequest request = new FcmTokenRequest(updateToken, memberId);
 
     //when
-    notificationCommandService.createToken(request);
+    notificationCommandService.registerFcmToken(request);
 
     //then
     final FcmToken updatedFcmToken = fcmTokenRepository.findByMemberId(memberId).get();
@@ -89,7 +94,7 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
     final FcmTokenRequest request = new FcmTokenRequest(token, memberId);
 
     //when
-    notificationCommandService.createToken(request);
+    notificationCommandService.registerFcmToken(request);
 
     //then
     final FcmToken createdFcmToken = fcmTokenRepository.findByMemberId(memberId).get();
@@ -99,6 +104,34 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
         () -> assertEquals(memberId, createdFcmToken.getMemberId()),
         () -> assertNotNull(createdFcmToken.getId())
     );
+  }
+
+  @ParameterizedTest
+  @DisplayName("createToken() : sender나 receiver가 한명이라도 존재하지 않는다면 BAD_REQUEST_MEMBER_ID 를 반환할 수 있다.")
+  @CsvSource({
+      "1,3",
+      "3,1",
+      "4,5"
+  })
+  void test_createToken_badRequestMemberId(final Long senderId, final Long receiverId)
+      throws Exception {
+    //given
+    final long eventId = 3L;
+    final String message = "알림 메시지야";
+
+    final NotificationRequest request = new NotificationRequest(
+        senderId,
+        receiverId,
+        message,
+        eventId
+    );
+
+    //when
+    assertThatThrownBy(() -> notificationCommandService.create(request))
+        .isInstanceOf(NotificationException.class)
+        .hasMessage(NotificationExceptionType.BAD_REQUEST_MEMBER_ID.errorMessage());
+
+    //then
   }
 
   @Test

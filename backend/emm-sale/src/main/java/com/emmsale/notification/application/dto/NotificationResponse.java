@@ -1,7 +1,6 @@
 package com.emmsale.notification.application.dto;
 
 import com.emmsale.notification.domain.Notification;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

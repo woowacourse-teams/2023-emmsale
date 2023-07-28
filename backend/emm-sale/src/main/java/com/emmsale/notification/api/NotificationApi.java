@@ -31,7 +31,7 @@ public class NotificationApi {
 
   @PostMapping("/notifications/token")
   public void createFcmToken(@RequestBody final FcmTokenRequest fcmTokenRequest) {
-    notificationCommandService.createToken(fcmTokenRequest);
+    notificationCommandService.registerFcmToken(fcmTokenRequest);
   }
 
   @PatchMapping("/notifications/{notification-id}")

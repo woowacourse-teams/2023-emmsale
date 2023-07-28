@@ -12,4 +12,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
   @Query("select count(*) from Member m where m.id in :ids")
   Long countMembersById(@Param("ids") final List<Long> ids);
+
+  boolean existsById(final Long id);
 }
