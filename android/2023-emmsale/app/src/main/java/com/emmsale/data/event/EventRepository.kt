@@ -4,7 +4,9 @@ import com.emmsale.data.common.ApiResult
 
 interface EventRepository {
     suspend fun getEvents(
-        year: Int, month: Int,
-        status: String, tags: List<String>
+        year: Int,
+        month: Int,
+        status: String? = null,
+        tag: String? = null,
     ): ApiResult<List<Event>>
 }

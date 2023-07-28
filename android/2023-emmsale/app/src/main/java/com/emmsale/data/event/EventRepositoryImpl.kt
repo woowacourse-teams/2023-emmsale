@@ -15,9 +15,9 @@ class EventRepositoryImpl(
     override suspend fun getEvents(
         year: Int,
         month: Int,
-        status: String,
-        tags: List<String>,
+        status: String?,
+        tag: String?,
     ): ApiResult<List<Event>> = withContext(dispatcher) {
-        handleApi(eventService.getEvents(year, month, status, tags), List<EventApiModel>::toData)
+        handleApi(eventService.getEvents(year, month, status, tag), List<EventApiModel>::toData)
     }
 }

@@ -7,10 +7,10 @@ import retrofit2.http.Query
 
 interface EventService {
     @GET("/events")
-    fun getEvents(
+    suspend fun getEvents(
         @Query("year") year: Int,
         @Query("month") month: Int,
-        @Query("status") status: String,
-        @Query("tags") tags: List<String>
+        @Query("status") status: String? = null,
+        @Query("tag") tag: String? = null,
     ): Response<List<EventApiModel>>
 }

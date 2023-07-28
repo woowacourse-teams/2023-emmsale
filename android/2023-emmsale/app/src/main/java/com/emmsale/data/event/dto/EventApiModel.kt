@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class EventApiModel(
+data class EventApiModel(
     @SerialName("id")
     val id: Int,
     @SerialName("name")
