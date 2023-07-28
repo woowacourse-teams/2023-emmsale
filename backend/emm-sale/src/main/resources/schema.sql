@@ -20,8 +20,8 @@ create table activity
 create table event
 (
     id              bigint auto_increment primary key,
-    created_at      datetime(6) not null,
-    updated_at      datetime(6) not null,
+    created_at      datetime(6),
+    updated_at      datetime(6),
     end_date        datetime(6) not null,
     information_url varchar(255) not null,
     location        varchar(255) not null,
@@ -32,8 +32,8 @@ create table event
 create table member
 (
     id               bigint auto_increment primary key,
-    created_at       datetime(6) not null,
-    updated_at       datetime(6) not null,
+    created_at       datetime(6),
+    updated_at       datetime(6),
     description      varchar(255) null,
     github_id        bigint       not null unique,
     image_url        varchar(255) not null,
@@ -44,8 +44,8 @@ create table member
 create table comment
 (
     id         bigint auto_increment primary key,
-    created_at datetime(6) not null,
-    updated_at datetime(6) not null,
+    created_at datetime(6),
+    updated_at datetime(6),
     content    varchar(255) not null,
     is_deleted bit          not null,
     event_id   bigint       not null,
@@ -56,8 +56,8 @@ create table comment
 create table member_activity
 (
     id          bigint auto_increment primary key,
-    created_at  datetime(6) not null,
-    updated_at  datetime(6) not null,
+    created_at  datetime(6),
+    updated_at  datetime(6),
     activity_id bigint not null,
     member_id   bigint not null
 );
@@ -78,8 +78,8 @@ create table event_tag
 create table member_tag
 (
     id         bigint auto_increment primary key,
-    created_at datetime(6) not null,
-    updated_at datetime(6) not null,
+    created_at datetime(6),
+    updated_at datetime(6),
     member_id  bigint not null,
     tag_id     bigint not null
 );
