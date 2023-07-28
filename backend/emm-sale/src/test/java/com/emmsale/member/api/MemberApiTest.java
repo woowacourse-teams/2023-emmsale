@@ -15,12 +15,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.member.application.MemberActivityService;
+import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -36,13 +38,21 @@ import org.springframework.test.web.servlet.ResultActions;
 @WebMvcTest(MemberApi.class)
 class MemberApiTest extends MockMvcTestHelper {
 
-  private static final ResponseFieldsSnippet RESPONSE_FIELDS = responseFields(
+  private static final ResponseFieldsSnippet MEMBER_ACTIVITY_RESPONSE_FIELDS = responseFields(
       fieldWithPath("[].activityType").type(JsonFieldType.STRING).description("activity 분류"),
       fieldWithPath("[].memberActivityResponses[].id").type(JsonFieldType.NUMBER)
           .description("activity id"),
       fieldWithPath("[].memberActivityResponses[].name").type(JsonFieldType.STRING)
           .description("activity 이름")
   );
+
+  private static final ResponseFieldsSnippet MEMBER_PROFILE_RESPONSE_FIELDS = responseFields(
+      fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
+      fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
+      fieldWithPath("description").type(JsonFieldType.STRING).description("사용자 한 줄 자기소개"),
+      fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url")
+  );
+
   private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
 
@@ -50,6 +60,8 @@ class MemberApiTest extends MockMvcTestHelper {
   private MemberActivityService memberActivityService;
   @MockBean
   private MemberUpdateService memberUpdateService;
+  @MockBean
+  private MemberQueryService memberQueryService;
 
   @Test
   @DisplayName("사용자 정보를 잘 저장하면, 204 no Content를 반환해줄 수 있다.")
@@ -111,7 +123,7 @@ class MemberApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
-        .andDo(document("add-activity", REQUEST_FIELDS, RESPONSE_FIELDS));
+        .andDo(document("add-activity", REQUEST_FIELDS, MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
@@ -137,7 +149,7 @@ class MemberApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("delete-activity", REQUEST_FIELDS, RESPONSE_FIELDS));
+        .andDo(document("delete-activity", REQUEST_FIELDS, MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
@@ -174,7 +186,7 @@ class MemberApiTest extends MockMvcTestHelper {
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("find-activity", RESPONSE_FIELDS));
+        .andDo(document("find-activity", MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
@@ -219,5 +231,24 @@ class MemberApiTest extends MockMvcTestHelper {
     result.andExpect(status().isBadRequest())
         .andDo(print())
         .andDo(document("update-open-profile-url", REQUEST_FIELDS));
+  }
+
+  @Test
+  @DisplayName("특정 사용자의 프로필 정보를 조회할 수 있다.")
+  void test_findProfile() throws Exception {
+    //given
+    final MemberProfileResponse memberProfileResponse = new MemberProfileResponse(1L, "김길동",
+        "안녕하세요, 김길동입니다.", "https://image");
+
+    //when
+    when(memberQueryService.findProfile(any()))
+        .thenReturn(memberProfileResponse);
+
+    //then
+    mockMvc.perform(get("/members/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("find-profile", MEMBER_PROFILE_RESPONSE_FIELDS));
   }
 }

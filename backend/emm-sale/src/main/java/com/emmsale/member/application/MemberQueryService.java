@@ -2,6 +2,7 @@ package com.emmsale.member.application;
 
 import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.MemberQueryResponse;
+import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import java.util.Optional;
@@ -33,5 +34,10 @@ public class MemberQueryService {
     }
     final Member member = memberRepository.save(githubProfileFromGithub.toMember());
     return new MemberQueryResponse(member.getId(), true);
+  }
+
+  public MemberProfileResponse findProfile(Long memberId) {
+    return new MemberProfileResponse(1L, "김길동",
+        "안녕하세요, 김길동입니다.", "https://image");
   }
 }
