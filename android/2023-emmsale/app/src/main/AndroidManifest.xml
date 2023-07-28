@@ -18,19 +18,20 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".presentation.ui.main.MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.onboarding.OnboardingActivity"
             android:exported="true" />
-
         <activity
             android:name=".presentation.ui.login.LoginActivity"
-            android:launchMode="singleTask"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

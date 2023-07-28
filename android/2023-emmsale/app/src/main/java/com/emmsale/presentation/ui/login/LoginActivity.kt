@@ -16,6 +16,7 @@ import com.emmsale.databinding.ActivityLoginBinding
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
+import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.emmsale.presentation.utils.builder.uri
 import com.google.android.material.snackbar.Snackbar
@@ -64,8 +65,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        // startActivity(MainActivity.getIntent(this))
-        finish()
+        MainActivity.startActivity(this)
     }
 
     private fun navigateToOnboarding() {
