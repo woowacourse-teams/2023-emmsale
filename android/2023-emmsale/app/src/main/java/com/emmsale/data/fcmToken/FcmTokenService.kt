@@ -6,6 +6,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface FcmTokenService {
-    @POST("/notification/token")
+    @POST("/notifications/token")
     suspend fun saveFcmToken(@Body fcmToken: FcmTokenApiModel): Response<Unit>
 }
