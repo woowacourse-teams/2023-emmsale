@@ -24,7 +24,7 @@ class MemberActivityRepositoryTest {
   private MemberRepository memberRepository;
 
   @Test
-  @DisplayName("사용자를 통해 사용자의 커리어들을 모두 조회할 수 있다.")
+  @DisplayName("사용자를 통해 사용자의 Activity들을 모두 조회할 수 있다.")
   void findAllByMemberId() throws Exception {
     //given
     final Long memberId = 1L;
@@ -44,7 +44,7 @@ class MemberActivityRepositoryTest {
   }
 
   @Test
-  @DisplayName("사용자와 activity의 id를 통해서 사용자의 커리어들을 모두 조회할 수 있다.")
+  @DisplayName("사용자와 activity의 id를 통해서 사용자의 Activity들을 모두 조회할 수 있다.")
   void test_findAllByMemberAndActivityIds() throws Exception {
     //given
     final Long memberId = 1L;

@@ -30,7 +30,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
   private MemberRepository memberRepository;
 
   @Test
-  @DisplayName("커리어의 id를 통해서, 사용자의 커리어를 등록하고 사용자의 이름을 수정할 수 있다.")
+  @DisplayName("Activity의 id를 통해서, 사용자의 Activity를 등록하고 사용자의 이름을 수정할 수 있다.")
   void registerActivities() throws Exception {
     //given
     final List<Long> activityIds = List.of(1L, 2L, 3L, 4L);
@@ -50,7 +50,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
   }
 
   @Test
-  @DisplayName("커리어의 id를 통해서, 사용자의 커리어에 추가할 수 있다.")
+  @DisplayName("Activity의 id를 통해서, 사용자의 Activity에 추가할 수 있다.")
   void addActivity() throws Exception {
     //given
     final List<Long> activityIds = List.of(4L, 5L, 6L);
@@ -105,7 +105,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
   }
 
   @Test
-  @DisplayName("deleteActivity() : member Id와 삭제할 activity Id를 통해서 사용자의 커리어를 삭제할 수 있다.")
+  @DisplayName("deleteActivity() : member Id와 삭제할 activity Id를 통해서 사용자의 Activity를 삭제할 수 있다.")
   void test_deleteActivity() throws Exception {
     //given
     final List<Long> deleteActivityIds = List.of(1L, 2L);
