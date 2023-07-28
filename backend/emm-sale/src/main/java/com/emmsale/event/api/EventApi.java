@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static java.net.URI.create;
 
 import com.emmsale.event.application.EventService;
+import com.emmsale.event.application.dto.EventCreateRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
@@ -11,7 +12,9 @@ import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.member.domain.Member;
 import java.time.LocalDate;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -61,5 +65,12 @@ public class EventApi {
       @RequestParam final int month, @RequestParam(required = false) final String tag,
       @RequestParam(required = false) final String status) {
     return ResponseEntity.ok(eventService.findEvents(LocalDate.now(), year, month, tag, status));
+  }
+
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public EventDetailResponse addEvent(
+      @RequestBody @Valid final EventCreateRequest request) {
+    return eventService.addEvent(request);
   }
 }

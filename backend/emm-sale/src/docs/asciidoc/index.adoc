@@ -93,7 +93,6 @@ include::{snippets}/find-profile/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-profile/response-fields.adoc[]
 
-
 == Event
 
 === `GET` : 행사 상세정보 조회
@@ -133,6 +132,20 @@ include::{snippets}/find-events/response-fields.adoc[]
 
 .HTTP request
 include::{snippets}/find-participants/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-participants/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-participants/response-fields.adoc[]
+
+=== `POST` : 이벤트 생성
+
+.HTTP request
+include::{snippets}/find-participants/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/find-participants/request-fields.adoc[]
 
 .HTTP response
 include::{snippets}/find-participants/http-response.adoc[]
