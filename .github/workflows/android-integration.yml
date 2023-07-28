@@ -20,15 +20,13 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Change wrapper permissions
+    - name: Change wrapper permissions 
       run: chmod +x ./android/2023-emmsale/gradlew
     
-    - name: Access GITHUB_CLIENT_ID
-      run: |
-        echo "GH_CLIENT_ID=${{ secrets.GH_CLIENT_ID }}"
-      shell: bash
-      env:
-        GH_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
+    - name: Access GH_CLIENT_ID
+      env:    
+        GH_CLIENT_ID: $
+      run: echo GH_CLIENT_ID=\"$GH_CLIENT_ID\" > 2023-emmsale/android/2023-emmsale/local.properties 
         
     - name: Run ktlintChecking
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale ktlintCheck
