@@ -85,7 +85,7 @@ class NotificationApiTest extends MockMvcTestHelper {
         .thenReturn(response);
 
     //when & then
-    mockMvc.perform(post("/notification")
+    mockMvc.perform(post("/notifications")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
@@ -108,7 +108,7 @@ class NotificationApiTest extends MockMvcTestHelper {
     final FcmTokenRequest request = new FcmTokenRequest(token, memberId);
 
     //when & then
-    mockMvc.perform(post("/notification/token")
+    mockMvc.perform(post("/notifications/token")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())

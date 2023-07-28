@@ -23,13 +23,13 @@ public class NotificationApi {
   private final NotificationCommandService notificationCommandService;
   private final NotificationQueryService notificationQueryService;
 
-  @PostMapping("/notification")
+  @PostMapping("/notifications")
   @ResponseStatus(HttpStatus.CREATED)
   public NotificationResponse create(@RequestBody final NotificationRequest notificationRequest) {
     return notificationCommandService.create(notificationRequest);
   }
 
-  @PostMapping("/notification/token")
+  @PostMapping("/notifications/token")
   public void createFcmToken(@RequestBody final FcmTokenRequest fcmTokenRequest) {
     notificationCommandService.createToken(fcmTokenRequest);
   }

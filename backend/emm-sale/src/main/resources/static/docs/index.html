@@ -474,7 +474,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_patch_알림_상태_변경"><code>PATCH</code> : 알림 상태 변경</a></li>
 <li><a href="#_post_fcmtoken_생성"><code>POST</code> : FcmToken 생성</a></li>
 <li><a href="#_post_알림_저장_2"><code>POST</code> : 알림 저장</a></li>
-<li><a href="#_get_notificcation_id로_알림_조회"><code>GET</code> : notificcation id로 알림 조회</a></li>
+<li><a href="#_get_notification_id로_알림_조회"><code>GET</code> : notification id로 알림 조회</a></li>
 </ul>
 </li>
 </ul>
@@ -1596,7 +1596,7 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /notification HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /notifications HTTP/1.1
 Content-Type: application/json
 Content-Length: 94
 Host: localhost:8080
@@ -1757,7 +1757,7 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /notification/token HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /notifications/token HTTP/1.1
 Content-Type: application/json
 Content-Length: 46
 Host: localhost:8080
@@ -1811,7 +1811,7 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /notification HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /notifications HTTP/1.1
 Content-Type: application/json
 Content-Length: 94
 Host: localhost:8080
@@ -1884,7 +1884,7 @@ Content-Length: 118
 </div>
 </div>
 <div class="sect2">
-<h3 id="_get_notificcation_id로_알림_조회"><a class="link" href="#_get_notificcation_id로_알림_조회"><code>GET</code> : notificcation id로 알림 조회</a></h3>
+<h3 id="_get_notification_id로_알림_조회"><a class="link" href="#_get_notification_id로_알림_조회"><code>GET</code> : notification id로 알림 조회</a></h3>
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
@@ -1976,7 +1976,7 @@ Content-Length: 118
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-07-27 22:43:04 +0900
+Last updated 2023-07-27 23:03:42 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
