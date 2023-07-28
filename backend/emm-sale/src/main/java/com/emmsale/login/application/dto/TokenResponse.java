@@ -8,6 +8,6 @@ import lombok.Getter;
 public class TokenResponse {
 
   private long memberId;
-  private boolean isNewMember;
+  private boolean isOnboarded;
   private String accessToken;
 }
