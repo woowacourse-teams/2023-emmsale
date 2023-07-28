@@ -303,8 +303,13 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   void findParticipants() {
     // given
     final Event 인프콘 = eventRepository.save(eventFixture());
-    final Member 멤버1 = memberRepository.save(new Member(123L, "image1.com", "멤버1"));
-    final Member 멤버2 = memberRepository.save(new Member(124L, "image2.com", "멤버2"));
+
+    final Member 저장전_멤버1 = new Member(123L, "image1.com");
+    final Member 저장전_멤버2 = new Member(124L, "image2.com");
+    저장전_멤버1.updateName("멈버1");
+    저장전_멤버2.updateName("멈버2");
+    final Member 멤버1 = memberRepository.save(저장전_멤버1);
+    final Member 멤버2 = memberRepository.save(저장전_멤버2);
 
     final Long 멤버1_참가자_ID = eventService.participate(인프콘.getId(), 멤버1.getId(), 멤버1);
     final Long 멤버2_참가자_ID = eventService.participate(인프콘.getId(), 멤버2.getId(), 멤버2);

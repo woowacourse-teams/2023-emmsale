@@ -35,7 +35,7 @@ create table member
     description      varchar(255) null,
     github_id        bigint       not null unique,
     image_url        varchar(255) not null,
-    name             varchar(255) not null,
+    name             varchar(255) ,
     open_profile_url varchar(255) null
 );
 
