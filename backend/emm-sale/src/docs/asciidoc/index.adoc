@@ -194,3 +194,16 @@ include::{snippets}/modify-comment/http-response.adoc[]
 
 .HTTP response 설명
 include::{snippets}/modify-comment/response-fields.adoc[]
+
+== Login
+
+=== `POST` : 로그인 및 가입
+
+.HTTP request
+include::{snippets}/login-snippet/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/login-snippet/http-response.adoc[]
+
+.HTTP response
+include::{snippets}/login-snippet/response-fields.adoc[]
