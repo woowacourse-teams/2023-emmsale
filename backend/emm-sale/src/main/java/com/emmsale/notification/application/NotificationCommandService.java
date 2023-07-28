@@ -35,9 +35,11 @@ public class NotificationCommandService {
 
     final List<Long> memberIds = List.of(senderId, receiverId);
 
-    if (isNotExistedSenderAndReceiver(memberIds)) {
+    if (isNotExistedSenderOrReceiver(memberIds)) {
       throw new NotificationException(BAD_REQUEST_MEMBER_ID);
     }
+
+    validateExistedSenderOrReceiver(memberIds);
 
     final Notification savedNotification = notificationRepository.save(
         new Notification(
@@ -51,7 +53,13 @@ public class NotificationCommandService {
     return NotificationResponse.from(savedNotification);
   }
 
-  private boolean isNotExistedSenderAndReceiver(final List<Long> memberIds) {
+  private void validateExistedSenderOrReceiver(final List<Long> memberIds) {
+    if (isNotExistedSenderOrReceiver(memberIds)) {
+      throw new NotificationException(BAD_REQUEST_MEMBER_ID);
+    }
+  }
+
+  private boolean isNotExistedSenderOrReceiver(final List<Long> memberIds) {
     return memberIds.size() != memberRepository.countMembersById(memberIds);
   }
 
@@ -59,15 +67,19 @@ public class NotificationCommandService {
     final Long memberId = fcmTokenRequest.getMemberId();
     final String token = fcmTokenRequest.getToken();
 
-    if (isNotExisted(memberId)) {
-      throw new MemberException(NOT_FOUND_MEMBER);
-    }
+    validateExistedMember(memberId);
 
     fcmTokenRepository.findByMemberId(memberId)
         .ifPresentOrElse(
             it -> it.update(token),
             () -> fcmTokenRepository.save(new FcmToken(token, memberId))
         );
+  }
+
+  private void validateExistedMember(final Long memberId) {
+    if (isNotExisted(memberId)) {
+      throw new MemberException(NOT_FOUND_MEMBER);
+    }
   }
 
   private boolean isNotExisted(final Long memberId) {
