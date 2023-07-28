@@ -65,8 +65,8 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
   }
 
   @Test
-  @DisplayName("createToken() : 이미 FCM 토큰이 존재한다면 해당 멤버의 FCM 토큰을 변경할 수 있다.")
-  void test_createToken_alreadyHasToken() throws Exception {
+  @DisplayName("registerFcmToken() : 이미 FCM 토큰이 존재한다면 해당 멤버의 FCM 토큰을 변경할 수 있다.")
+  void test_registerFcmToken_alreadyHasToken() throws Exception {
     //given
     final long memberId = 1L;
     final String token = "token";
@@ -85,8 +85,8 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
   }
 
   @Test
-  @DisplayName("createToken() : 해당 사용자의 FCM 토큰이 존재하지 않는다면 FCM 토큰을 저장한다.")
-  void test_createToken_noToken() throws Exception {
+  @DisplayName("registerFcmToken() : 해당 사용자의 FCM 토큰이 존재하지 않는다면 FCM 토큰을 저장한다.")
+  void test_registerFcmToken_noToken() throws Exception {
     //given
     final long memberId = 1L;
     final String token = "token";
@@ -151,7 +151,10 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
     //when
     notificationCommandService.modify(request, savedNotification.getId());
 
+    final Notification updatedNotification =
+        notificationRepository.findById(savedNotification.getId()).get();
+
     //then
-    assertEquals(request.getUpdatedStatus(), savedNotification.getStatus());
+    assertEquals(request.getUpdatedStatus(), updatedNotification.getStatus());
   }
 }

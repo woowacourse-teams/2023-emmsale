@@ -35,7 +35,7 @@ public class NotificationCommandService {
 
     final List<Long> memberIds = List.of(senderId, receiverId);
 
-    if (isExistedSenderAndReceiver(memberIds)) {
+    if (isNotExistedSenderAndReceiver(memberIds)) {
       throw new NotificationException(BAD_REQUEST_MEMBER_ID);
     }
 
@@ -51,7 +51,7 @@ public class NotificationCommandService {
     return NotificationResponse.from(savedNotification);
   }
 
-  private boolean isExistedSenderAndReceiver(final List<Long> memberIds) {
+  private boolean isNotExistedSenderAndReceiver(final List<Long> memberIds) {
     return memberIds.size() != memberRepository.countMembersById(memberIds);
   }
 
@@ -59,7 +59,7 @@ public class NotificationCommandService {
     final Long memberId = fcmTokenRequest.getMemberId();
     final String token = fcmTokenRequest.getToken();
 
-    if (memberRepository.existsById(memberId)) {
+    if (isNotExisted(memberId)) {
       throw new MemberException(NOT_FOUND_MEMBER);
     }
 
@@ -68,6 +68,10 @@ public class NotificationCommandService {
             it -> it.update(token),
             () -> fcmTokenRepository.save(new FcmToken(token, memberId))
         );
+  }
+
+  private boolean isNotExisted(final Long memberId) {
+    return !memberRepository.existsById(memberId);
   }
 
   public void modify(
