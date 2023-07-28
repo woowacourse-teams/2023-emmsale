@@ -26,8 +26,8 @@ jobs:
     - name: Access GH_CLIENT_ID
       env:    
         GH_CLIENT_ID: $
-      run: echo GH_CLIENT_ID=\"$GH_CLIENT_ID\" > 2023-emmsale/android/2023-emmsale/local.properties 
-        
+      run: echo "GH_CLIENT_ID=\"$GH_CLIENT_ID\"" > 2023-emmsale/android/2023-emmsale/local.properties
+      
     - name: Run ktlintChecking
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale ktlintCheck
       
