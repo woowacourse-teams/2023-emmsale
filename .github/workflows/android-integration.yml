@@ -39,12 +39,6 @@ jobs:
     - name: Run unit tests
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale testDebugUnitTest
 
-    - name: Build assemble release apk
-      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale assembleRelease
-
     - name: Create android test report
       uses: asadmansr/android-test-report-action@v1.2.0
       if: ${{ always() }}
-
-    - name: Build assemble release apk
-      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale assembleRelease
