@@ -10,9 +10,9 @@ public enum MemberExceptionType implements BaseExceptionType {
       "해당 멤버는 존재하지 않습니다."
   ),
 
-  INVALID_CAREER_IDS(
+  INVALID_ACTIVITY_IDS(
       HttpStatus.BAD_REQUEST,
-      "요청한 career id들 중에 유효하지 않은 값이 존재합니다"
+      "요청한 activity id들 중에 유효하지 않은 값이 존재합니다"
   );
 
   private final HttpStatus httpStatus;

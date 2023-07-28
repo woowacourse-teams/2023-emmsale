@@ -25,65 +25,65 @@ public class MemberActivityService {
   private final MemberActivityRepository memberActivityRepository;
   private final ActivityRepository activityRepository;
 
-  public void registerCareer(
+  public void registerActivities(
       final Member member,
       final MemberActivityInitialRequest memberActivityInitialRequest
   ) {
-    final List<Long> careerIds = memberActivityInitialRequest.getActivityIds();
-    saveMemberCareers(member, careerIds);
+    final List<Long> activityIds = memberActivityInitialRequest.getActivityIds();
+    saveMemberActivities(member, activityIds);
 
     member.updateName(memberActivityInitialRequest.getName());
   }
 
-  private void saveMemberCareers(final Member member, final List<Long> careerIds) {
-    final List<MemberActivity> memberActivities = activityRepository.findAllById(careerIds)
+  private void saveMemberActivities(final Member member, final List<Long> activityIds) {
+    final List<MemberActivity> memberActivities = activityRepository.findAllById(activityIds)
         .stream()
         .map(it -> new MemberActivity(it, member))
         .collect(toList());
 
-    validateAllCareerIdsExist(careerIds, memberActivities);
+    validateAllActivityIdsExist(activityIds, memberActivities);
 
     memberActivityRepository.saveAll(memberActivities);
   }
 
-  private void validateAllCareerIdsExist(
-      final List<Long> careerIds,
+  private void validateAllActivityIdsExist(
+      final List<Long> activityIds,
       final List<MemberActivity> memberActivities
   ) {
-    if (memberActivities.size() != careerIds.size()) {
-      throw new MemberException(MemberExceptionType.INVALID_CAREER_IDS);
+    if (memberActivities.size() != activityIds.size()) {
+      throw new MemberException(MemberExceptionType.INVALID_ACTIVITY_IDS);
     }
   }
 
-  public List<MemberActivityResponses> addCareer(
+  public List<MemberActivityResponses> addActivity(
       final Member member,
       final MemberActivityAddRequest memberActivityAddRequest
   ) {
-    final List<Long> careerIds = memberActivityAddRequest.getActivityIds();
-    saveMemberCareers(member, careerIds);
+    final List<Long> activityIds = memberActivityAddRequest.getActivityIds();
+    saveMemberActivities(member, activityIds);
 
     return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
   }
 
-  public List<MemberActivityResponses> deleteCareer(
+  public List<MemberActivityResponses> deleteActivity(
       final Member member,
       final MemberActivityDeleteRequest memberActivityDeleteRequest
   ) {
-    final List<Long> deleteCareerIds = memberActivityDeleteRequest.getActivityIds();
+    final List<Long> deleteActivityIds = memberActivityDeleteRequest.getActivityIds();
 
-    final List<Long> savedMemberCareerIds =
-        memberActivityRepository.findAllByMemberAndCareerIds(member, deleteCareerIds)
+    final List<Long> savedMemberActivityIds =
+        memberActivityRepository.findAllByMemberAndActivityIds(member, deleteActivityIds)
             .stream()
             .map(MemberActivity::getId)
             .collect(toList());
 
-    memberActivityRepository.deleteAllByIdInBatch(savedMemberCareerIds);
+    memberActivityRepository.deleteAllByIdInBatch(savedMemberActivityIds);
 
     return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
   }
 
   @Transactional(readOnly = true)
-  public List<MemberActivityResponses> findCareers(final Member member) {
+  public List<MemberActivityResponses> findActivities(final Member member) {
     return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
   }
 }

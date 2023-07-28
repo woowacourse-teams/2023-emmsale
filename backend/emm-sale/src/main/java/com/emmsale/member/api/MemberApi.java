@@ -32,31 +32,31 @@ public class MemberApi {
       final Member member,
       @RequestBody final MemberActivityInitialRequest memberActivityInitialRequest
   ) {
-    memberActivityService.registerCareer(member, memberActivityInitialRequest);
+    memberActivityService.registerActivities(member, memberActivityInitialRequest);
     return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> addCareer(
+  public ResponseEntity<List<MemberActivityResponses>> addActivity(
       final Member member,
       @RequestBody final MemberActivityAddRequest memberActivityAddRequest
   ) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(memberActivityService.addCareer(member, memberActivityAddRequest));
+        .body(memberActivityService.addActivity(member, memberActivityAddRequest));
   }
 
   @DeleteMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> deleteCareer(
+  public ResponseEntity<List<MemberActivityResponses>> deleteActivity(
       final Member member,
       @RequestBody final MemberActivityDeleteRequest memberActivityDeleteRequest
   ) {
     return ResponseEntity.ok(
-        memberActivityService.deleteCareer(member, memberActivityDeleteRequest));
+        memberActivityService.deleteActivity(member, memberActivityDeleteRequest));
   }
 
   @GetMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> findCareer(final Member member) {
-    return ResponseEntity.ok(memberActivityService.findCareers(member));
+  public ResponseEntity<List<MemberActivityResponses>> findActivity(final Member member) {
+    return ResponseEntity.ok(memberActivityService.findActivities(member));
   }
 
   @PutMapping("/members/open-profile-url")

@@ -63,7 +63,8 @@ class MemberApiTest extends MockMvcTestHelper {
 
     final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
         fieldWithPath("activityIds").description("활동 id들"),
-        fieldWithPath("name").description("사용자 이름"));
+        fieldWithPath("name").description("사용자 이름")
+    );
 
     //when & then
     mockMvc.perform(post("/members")
@@ -102,7 +103,7 @@ class MemberApiTest extends MockMvcTestHelper {
             ))
     );
 
-    when(memberActivityService.addCareer(any(), any()))
+    when(memberActivityService.addActivity(any(), any()))
         .thenReturn(memberActivityResponses);
 
     //when & then
@@ -128,7 +129,7 @@ class MemberApiTest extends MockMvcTestHelper {
             ))
     );
 
-    when(memberActivityService.deleteCareer(any(), any()))
+    when(memberActivityService.deleteActivity(any(), any()))
         .thenReturn(memberActivityResponses);
 
     //when & then
@@ -142,9 +143,9 @@ class MemberApiTest extends MockMvcTestHelper {
 
   @Test
   @DisplayName("내 활동들을 조회할 수 있다.")
-  void test_findCareer() throws Exception {
+  void test_findActivity() throws Exception {
     //given
-    final List<MemberActivityResponses> memberCareerRespons = List.of(
+    final List<MemberActivityResponses> memberActivityResponse = List.of(
         new MemberActivityResponses("동아리",
             List.of(
                 new MemberActivityResponse(1L, "YAPP"),
@@ -166,8 +167,8 @@ class MemberApiTest extends MockMvcTestHelper {
     );
 
     //when
-    when(memberActivityService.findCareers(any()))
-        .thenReturn(memberCareerRespons);
+    when(memberActivityService.findActivities(any()))
+        .thenReturn(memberActivityResponse);
 
     //then
     mockMvc.perform(get("/members/activities")
