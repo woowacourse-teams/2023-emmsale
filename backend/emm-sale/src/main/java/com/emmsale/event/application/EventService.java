@@ -77,7 +77,6 @@ public class EventService {
 
     final EnumMap<EventStatus, List<Event>> sortAndGroupByStatus
         = groupByEventStatus(nowDate, events, year, month);
-
     return filterEventResponsesByStatus(statusName, sortAndGroupByStatus);
   }
 
@@ -148,10 +147,17 @@ public class EventService {
       final EnumMap<EventStatus, List<Event>> sortAndGroupByEventStatus) {
     if (isExistStatusName(statusName)) {
       EventStatus status = EventStatus.from(statusName);
-      return EventResponse.makeEventResponsesByStatus(status,
-          sortAndGroupByEventStatus.get(status));
+      List<Event> filteredEvents = sortAndGroupByEventStatus.get(status);
+      if (cannotFoundKeyStatus(filteredEvents)) {
+        return List.of();
+      }
+      return EventResponse.makeEventResponsesByStatus(status, filteredEvents);
     }
     return EventResponse.mergeEventResponses(sortAndGroupByEventStatus);
+  }
+
+  private boolean cannotFoundKeyStatus(final List<Event> filteredEvents) {
+    return filteredEvents == null;
   }
 
   private boolean isExistStatusName(final String statusName) {
