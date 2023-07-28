@@ -8,4 +8,6 @@
     <string name="cancel">취소</string>
     <string name="okay">확인</string>
     <string name="post_notification_permission_needed_message">알림 권한이 필요해요!</string>
+    <string name="event_start_duration_format">기간 : %s</string>
+    <string name="event_start_end_duration_format">기간 : %s - %s</string>
 </resources>

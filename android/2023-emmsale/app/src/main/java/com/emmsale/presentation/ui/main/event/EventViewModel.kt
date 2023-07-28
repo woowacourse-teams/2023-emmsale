@@ -27,8 +27,8 @@ class EventViewModel(
         viewModelScope.launch {
             _events.value = EventsUiSTate.Loading
             when (val eventsResult = eventRepository.getEvents(year, month)) {
-                is ApiSuccess ->
-                    _events.value = EventsUiSTate.Success(eventsResult.data.map(EventUiState::from))
+                is ApiSuccess -> _events.value =
+                    EventsUiSTate.Success(eventsResult.data.map(EventUiState::from))
 
                 is ApiError -> _events.value = EventsUiSTate.Error
                 is ApiException -> _events.value = EventsUiSTate.Error
