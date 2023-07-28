@@ -23,7 +23,7 @@ public class MemberActivityResponses {
 
   public static List<MemberActivityResponses> from(final List<MemberActivity> memberActivities) {
     final EnumMap<ActivityType, List<Activity>> groupByActivityType =
-        groupingByActivityTypeAndSortedByCareerName(memberActivities);
+        groupingByActivityTypeAndSortedByActivityName(memberActivities);
 
     final List<MemberActivityResponses> responses = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class MemberActivityResponses {
         .collect(toList());
   }
 
-  private static EnumMap<ActivityType, List<Activity>> groupingByActivityTypeAndSortedByCareerName(
+  private static EnumMap<ActivityType, List<Activity>> groupingByActivityTypeAndSortedByActivityName(
       final List<MemberActivity> memberActivities
   ) {
     return memberActivities

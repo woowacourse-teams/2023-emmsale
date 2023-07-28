@@ -1,34 +1,34 @@
-### 사용자 초기 커리어 및 이름 저장
+### 사용자 초기 Activity 및 이름 저장
 
 POST http://localhost:8080/members
 Content-Type: application/json
 
 {
   "name": "우르",
-  "careerIds": [
+  "activitieIds": [
     1,
     2
   ]
 }
 
-### 사용자 커리어 추가
-POST http://localhost:8080/members/careers
+### 사용자 Activity 추가
+POST http://localhost:8080/members/activities
 Content-Type: application/json
 
 {
-  "careerIds": [
+  "activitieIds": [
     4,
     5,
     6
   ]
 }
 
-### 사용자 커리어 제거
-DELETE http://localhost:8080/members/careers
+### 사용자 Activity 제거
+DELETE http://localhost:8080/members/activities
 Content-Type: application/json
 
 {
-  "careerIds": [
+  "activitieIds": [
     1,
     2
   ]
@@ -41,3 +41,7 @@ Content-Type: application/json
 {
   "openProfileUrl": "https://open.kakao.com/profile"
 }
+
+### 사용자의 프로필 정보 조회
+GET http://localhost:8080/members/1
+Content-Type: application/json
