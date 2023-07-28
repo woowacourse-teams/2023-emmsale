@@ -15,36 +15,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberUpdateService {
 
-  public static final int MAX_DESCRIPTION_LENGTH = 100;
-  public static final String DEFAULT_DESCRIPTION = "";
   private final MemberRepository memberRepository;
 
   public void updateOpenProfileUrl(
       final Member member,
       final OpenProfileUrlRequest openProfileUrlRequest
   ) {
-    final Member persistMember = memberRepository.findById(member.getId()).get();
+    final Member persistMember = memberRepository.findById(member.getId())
+        .orElseThrow(() -> new MemberException((MemberExceptionType.NOT_FOUND_MEMBER)));
     final String openProfileUrl = openProfileUrlRequest.getOpenProfileUrl();
 
     persistMember.updateOpenProfileUrl(openProfileUrl);
   }
 
   public void updateDescription(final Member member, final DescriptionRequest descriptionRequest) {
-    String description = descriptionRequest.getDescription();
-    validateDescription(description);
+    final String description = descriptionRequest.getDescription();
 
-    final Member persistMember = memberRepository.findById(member.getId()).get();
-
-    if (description.isBlank()) {
-      persistMember.updateDescription(DEFAULT_DESCRIPTION);
-      return;
-    }
+    final Member persistMember = memberRepository.findById(member.getId())
+        .orElseThrow(() -> new MemberException((MemberExceptionType.NOT_FOUND_MEMBER)));
     persistMember.updateDescription(description);
-  }
-
-  private void validateDescription(final String description) {
-    if (description.length() > MAX_DESCRIPTION_LENGTH) {
-      throw new MemberException(MemberExceptionType.OVER_LENGTH_DESCRIPTION);
-    }
   }
 }

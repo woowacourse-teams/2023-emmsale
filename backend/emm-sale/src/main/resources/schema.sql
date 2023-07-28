@@ -32,7 +32,7 @@ create table member
     id               bigint auto_increment primary key,
     created_at       datetime(6) not null,
     updated_at       datetime(6) not null,
-    description      varchar(255) null,
+    description      varchar(255) not null default '',
     github_id        bigint       not null unique,
     image_url        varchar(255) not null,
     name             varchar(255) not null,

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,7 +52,7 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
     @ParameterizedTest
     @ValueSource(strings = {"안녕하세요 김개발입니다.", "   <   짜잔   >  "})
     @DisplayName("정상적으로 업데이트된다.")
-    void updateDescription_success(String inputDescription) {
+    void updateDescription_success(final String inputDescription) {
       // given
       final Member member = memberRepository.save(MemberFixture.memberFixture());
 
@@ -86,7 +87,8 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", " ", "        "})
+    @EmptySource
+    @ValueSource(strings = {" ", "        ", "\n", "\t"})
     @DisplayName("한줄 자기소개에 공백만 들어오면 빈 문자열로 업데이트한다.")
     void updateDescription_trim(final String inputDescription) {
       // given

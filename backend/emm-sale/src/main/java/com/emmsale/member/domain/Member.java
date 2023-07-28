@@ -1,6 +1,8 @@
 package com.emmsale.member.domain;
 
 import com.emmsale.base.BaseEntity;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.member.exception.MemberExceptionType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,14 +11,14 @@ import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 
-@DynamicInsert
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
+
+  private static final int MAX_DESCRIPTION_LENGTH = 100;
+  private static final String DEFAULT_DESCRIPTION = "";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +28,6 @@ public class Member extends BaseEntity {
   @Column(nullable = false)
   private String name;
   @Column(nullable = false)
-  @ColumnDefault("")
   private String description;
   @Column
   private String openProfileUrl;
@@ -38,14 +39,14 @@ public class Member extends BaseEntity {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
     this.name = name;
-    this.description = "";
+    this.description = DEFAULT_DESCRIPTION;
   }
 
   public Member(final Long githubId, final String imageUrl, final String name) {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
     this.name = name;
-    this.description = "";
+    this.description = DEFAULT_DESCRIPTION;
   }
 
   public void updateName(final String name) {
@@ -57,7 +58,25 @@ public class Member extends BaseEntity {
   }
 
   public void updateDescription(final String description) {
+    validateDescriptionNull(description);
+    validateDescriptionLength(description);
+    if (description.isBlank()) {
+      this.description = DEFAULT_DESCRIPTION;
+      return;
+    }
     this.description = description;
+  }
+
+  private void validateDescriptionNull(final String description) {
+    if (description == null) {
+      throw new MemberException(MemberExceptionType.NULL_DESCRIPTION);
+    }
+  }
+
+  private void validateDescriptionLength(final String description) {
+    if (description.length() > MAX_DESCRIPTION_LENGTH) {
+      throw new MemberException(MemberExceptionType.OVER_LENGTH_DESCRIPTION);
+    }
   }
 
   public boolean isNotMe(final Member member) {
