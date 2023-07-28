@@ -7,6 +7,8 @@ truncate table tag;
 truncate table event_tag;
 truncate table member_tag;
 truncate table event_member;
+truncate table notification;
+truncate table fcm_token;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');
@@ -36,10 +38,6 @@ insert into member(id, name, image_url, open_profile_url, description, github_id
                    updated_at)
 values (2, 'member2', 'https://imageurl.com', 'https://openprofileurl.com', '반갑습니다.', 2,
         CURRENT_TIMESTAMP(),
-        CURRENT_TIMESTAMP());
-
-insert into member(id, name, image_url, open_profile_url, github_id, created_at, updated_at)
-values (3, 'member3', 'https://imageurl.com', 'https://openprofileurl.com', 3, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP());
 
 insert into member_activity(id, activity_id, member_id, created_at, updated_at)

@@ -24,6 +24,8 @@ include::{snippets}/add-activity/response-fields.adoc[]
 
 === `DELETE`: Activity 삭제 API
 
+=== `DELETE`: 커리어 삭제 API
+
 .HTTP request 설명
 include::{snippets}/delete-activity/request-fields.adoc[]
 
@@ -207,3 +209,51 @@ include::{snippets}/login-snippet/http-response.adoc[]
 
 .HTTP response
 include::{snippets}/login-snippet/response-fields.adoc[]
+
+== Notification(FCM)
+
+=== `POST` : 알림 저장
+
+.HTTP request 설명
+include::{snippets}/create-notification/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/create-notification/http-request.adoc[]
+
+.HTTP response 설명
+include::{snippets}/create-notification/response-fields.adoc[]
+
+.HTTP response
+include::{snippets}/create-notification/http-response.adoc[]
+
+=== `PATCH` : 알림 상태 변경
+
+.HTTP request 설명
+include::{snippets}/modify-notification/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/modify-notification/http-request.adoc[]
+
+include::{snippets}/modify-notification/path-parameters.adoc[]
+
+=== `POST` : FcmToken 생성
+
+.HTTP request 설명
+include::{snippets}/create-fcmToken/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/create-fcmToken/http-request.adoc[]
+
+=== `GET` : notification id로 알림 조회
+
+.HTTP request
+include::{snippets}/find-notification/http-request.adoc[]
+
+include::{snippets}/find-notification/path-parameters.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-notification/response-fields.adoc[]
+
+.HTTP response
+include::{snippets}/find-notification/http-response.adoc[]
+
