@@ -15,6 +15,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 17
+    - name: Access GH_CLIENT_ID
+      env:    
+        GH_CLIENT_ID: $
+      run: echo "GH_CLIENT_ID=\"$GH_CLIENT_ID\"" > android/2023-emmsale/local.properties
     - name: build release 
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale assembleDebug
     - name: upload artifact to Firebase App Distribution
