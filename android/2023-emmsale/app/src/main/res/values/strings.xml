@@ -8,4 +8,7 @@
     <string name="cancel">취소</string>
     <string name="okay">확인</string>
     <string name="post_notification_permission_needed_message">알림 권한이 필요해요!</string>
+    <string name="main_menuitemnameofprofile">프로필</string>
+    <string name="main_menuitemnameofhome">홈</string>
+    <string name="main_menuitemnameofsetting">설정</string>
 </resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.BottomNavigationView"
+        parent="Widget.Design.BottomNavigationView">
+        <item name="labelVisibilityMode">unlabeled</item>
+        <item name="itemIconSize">34dp</item>
+    </style>
+</resources>
