@@ -16,7 +16,7 @@ jobs:
       with:
         java-version: 17
     - name: build release 
-      run: ./gradlew assembleDebug
+      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale assembleDebug
     - name: upload artifact to Firebase App Distribution
       uses: wzieba/Firebase-Distribution-Github-Action@v1
       with:
