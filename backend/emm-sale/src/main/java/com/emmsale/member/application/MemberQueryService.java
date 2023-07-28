@@ -5,6 +5,8 @@ import com.emmsale.login.application.dto.MemberQueryResponse;
 import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.member.exception.MemberExceptionType;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +39,9 @@ public class MemberQueryService {
   }
 
   public MemberProfileResponse findProfile(Long memberId) {
-    return new MemberProfileResponse(1L, "김길동",
-        "안녕하세요, 김길동입니다.", "https://image");
+    Member member = memberRepository.findById(memberId)
+        .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
+
+    return MemberProfileResponse.from(member);
   }
 }
