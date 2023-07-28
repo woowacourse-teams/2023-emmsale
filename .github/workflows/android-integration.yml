@@ -28,6 +28,11 @@ jobs:
         GH_CLIENT_ID: $
       run: echo "GH_CLIENT_ID=\"$GH_CLIENT_ID\"" > android/2023-emmsale/local.properties
       
+    - name: Access GOOGLE_SERVICE
+      env:    
+         GOOGLE_SERVICE: ${{ secrets.GOOGLE_SERVICE }}
+      run: echo '${{ secrets.GOOGLE_SERVICE }}' > android/2023-emmsale/app/google-services.json
+      
     - name: Run ktlintChecking
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale ktlintCheck
 
