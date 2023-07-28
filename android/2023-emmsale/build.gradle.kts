@@ -3,6 +3,7 @@ plugins {
     val agpVersion = "8.0.2"
     id("com.android.application") version "8.0.2" apply false
     id("com.android.library") version agpVersion apply false
+    id("com.google.gms.google-services") version "4.3.15" apply false
 
     val kotlinVersion = "1.8.20"
     kotlin("android") version kotlinVersion apply false
