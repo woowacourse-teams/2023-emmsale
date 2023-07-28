@@ -9,7 +9,8 @@ import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.views.chipOf
 import com.emmsale.presentation.ui.onboarding.uistate.ActivityUiState
 
-class OnboardingEducationFragment : BaseFragment<FragmentOnboardingEducationBinding>(),
+class OnboardingEducationFragment :
+    BaseFragment<FragmentOnboardingEducationBinding>(),
     View.OnClickListener {
     val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }
     override val layoutResId: Int = R.layout.fragment_onboarding_education
