@@ -82,6 +82,18 @@ include::{snippets}/update-open-profile-url/http-request.adoc[]
 .HTTP response
 include::{snippets}/update-open-profile-url/http-response.adoc[]
 
+=== `GET`: 특정 사용자의 프로필 정보 조회
+
+.HTTP request
+include::{snippets}/find-profile/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-profile/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-profile/response-fields.adoc[]
+
+
 == Event
 
 === `GET` : 행사 상세정보 조회

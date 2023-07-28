@@ -41,3 +41,7 @@ Content-Type: application/json
 {
   "openProfileUrl": "https://open.kakao.com/profile"
 }
+
+### 사용자의 프로필 정보 조회
+GET http://localhost:8080/members/1
+Content-Type: application/json
