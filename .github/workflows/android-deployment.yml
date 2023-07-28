@@ -1,0 +1,26 @@
+name: Build & upload to Firebase App Distribution 
+
+on:
+  pull_request:
+    branches: [ android-main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: set up JDK 17
+      uses: actions/setup-java@v1
+      with:
+        java-version: 17
+    - name: build release 
+      run: ./gradlew assembleDebug
+    - name: upload artifact to Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
+      with:
+        appId: ${{secrets.FIREBASE_APP_ID}}
+        serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+        groups: testers
+        file: app/build/outputs/apk/debug/app-debug.apk
