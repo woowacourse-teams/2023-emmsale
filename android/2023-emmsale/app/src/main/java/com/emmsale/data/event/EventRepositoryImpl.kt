@@ -1,6 +1,5 @@
 package com.emmsale.data.event
 
-import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.event.dto.EventApiModel
 import com.emmsale.data.event.dto.toData
@@ -17,7 +16,7 @@ class EventRepositoryImpl(
         month: Int,
         status: String,
         tags: List<String>,
-    ): ApiResult<List<Event>> = withContext(dispatcher) {
+    ): Unit = withContext(dispatcher) {
         handleApi(eventService.getEvents(year, month, status, tags), List<EventApiModel>::toData)
     }
 }
