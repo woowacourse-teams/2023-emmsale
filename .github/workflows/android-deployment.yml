@@ -34,5 +34,5 @@ jobs:
       with:
         appId: ${{secrets.FIREBASE_APP_ID}}
         serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-        groups: testers
-        file: app/build/outputs/apk/debug/app-debug.apk
+        groups: Kerdy Team
+        file: android/2023-emmsale/app/build/outputs/apk/debug/app-debug.apk
