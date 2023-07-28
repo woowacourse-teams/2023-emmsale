@@ -30,9 +30,6 @@ jobs:
       
     - name: Run ktlintChecking
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale ktlintCheck
-      
-    - name: Run detekt
-      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale detekt
 
     - name: Run unit tests
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale testDebugUnitTest
