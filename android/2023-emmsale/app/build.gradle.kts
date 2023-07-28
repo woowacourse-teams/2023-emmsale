@@ -24,14 +24,12 @@ android {
         buildConfigField(
             "String",
             "GITHUB_CLIENT_ID",
-            getApiKey("GITHUB_CLIENT_ID")
+            getApiKey("GH_CLIENT_ID")
         )
     }
-
     buildFeatures {
         buildConfig = true
     }
-
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -66,6 +64,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.browser:browser:1.5.0")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.2.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -77,4 +77,5 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-messaging:23.2.0")
 }
