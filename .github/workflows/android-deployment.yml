@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-
+    name: Firebase CD
     runs-on: ubuntu-latest
 
     steps:
