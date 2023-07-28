@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
 import com.emmsale.presentation.ui.main.events.EventsFragment
-import com.emmsale.presentation.ui.main.profile.ProfileFragment
+import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         bnvMain.setOnItemSelectedListener {
             when(it.itemId) {
-                R.id.mi_main_profile -> changeFragment(ProfileFragment())
+                R.id.mi_main_profile -> changeFragment(MyProfileFragment())
                 R.id.mi_main_home -> changeFragment(EventsFragment())
             }
             return@setOnItemSelectedListener true

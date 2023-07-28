@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main_color">#7CF0B1</color>
+    <color name="sub_color">#FFEA9F</color>
     <color name="warning_color">#545454</color>
     <color name="disable_color">#DCDCDC</color>
     <color name="ripple_color">#0D000000</color>

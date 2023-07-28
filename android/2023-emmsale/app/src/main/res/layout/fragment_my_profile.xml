@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_myprofile_hello"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="22dp"
+                android:text="@string/myprofile_greeting"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_myprofile_membername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_myprofile_hello"
+                app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_hello"
+                tools:text="홍길동" />
+
+            <TextView
+                android:id="@+id/tv_myprofile_onelineintroduce"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="19dp"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_memberimage"
+                app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
+                app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_membername"
+                tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하" />
+
+            <ImageView
+                android:id="@+id/iv_myprofile_memberimage"
+                android:layout_width="125dp"
+                android:layout_height="115dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="17dp"
+                android:contentDescription="@string/myprofile_memberimagedescription"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_myprofile_categoriesofinterest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="29dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_memberimage"
+                app:layout_constraintStart_toStartOf="@+id/tv_myprofile_hello"
+                app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_onelineintroduce"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_myprofile_categories" />
+
+            <View
+                android:id="@+id/view_myprofile_divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/edittext_underline"
+                android:backgroundTint="@color/edittext_underline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_myprofile_categoriesofinterest" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

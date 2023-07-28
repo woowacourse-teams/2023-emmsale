@@ -11,4 +11,6 @@
     <string name="main_menuitemnameofprofile">프로필</string>
     <string name="main_menuitemnameofhome">홈</string>
     <string name="main_menuitemnameofsetting">설정</string>
+    <string name="myprofile_memberimagedescription">회원의 사진</string>
+    <string name="myprofile_greeting">Hello,</string>
 </resources>
