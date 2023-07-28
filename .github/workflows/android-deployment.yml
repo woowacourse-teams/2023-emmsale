@@ -36,3 +36,16 @@ jobs:
         serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
         groups: kerdy-team
         file: android/2023-emmsale/app/build/outputs/apk/debug/app-debug.apk
+        
+    - name: 슬랙에 apk 업로드 브로드캐스트
+      uses: 8398a7/action-slack@v3
+      with:
+        mention: 'here'
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        file_path: 'android/2023-emmsale/app/build/outputs/apk/debug/app-debug.apk'
+        file_type: 'apk'
+        initial_comment: '테스트 어플리케이션이 출시되었어요! QA 진행을 부탁드립니다 : )'
+      env:
+         SLACK_WEBHOOK_URL: ${{ secrets.DEPLOY_SLACK_WEBHOOK_URL }}
+      if: always()
