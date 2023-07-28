@@ -6,6 +6,7 @@ drop table if exists kerdy.member_activity;
 drop table if exists kerdy.tag;
 drop table if exists kerdy.event_tag;
 drop table if exists kerdy.member_tag;
+drop table if exists kerdy.event_member;
 drop table if exists kerdy.notification;
 drop table if exists kerdy.fcm_token;
 
@@ -83,6 +84,12 @@ create table member_tag
     tag_id     bigint not null
 );
 
+create table event_member
+(
+    id        bigint auto_increment primary key,
+    member_id bigint not null,
+    event_id  bigint not null
+);
 create table notification
 (
     id          bigint auto_increment primary key,

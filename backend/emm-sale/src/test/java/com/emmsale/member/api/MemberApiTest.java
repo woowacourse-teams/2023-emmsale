@@ -9,16 +9,19 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.member.application.MemberActivityService;
-import com.emmsale.member.application.dto.MemberActivityResponse;
+import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
+import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,24 +31,25 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(MemberApi.class)
 class MemberApiTest extends MockMvcTestHelper {
 
-  @MockBean
-  private MemberActivityService memberActivityService;
-
   private static final ResponseFieldsSnippet RESPONSE_FIELDS = responseFields(
-
       fieldWithPath("[].activityType").type(JsonFieldType.STRING).description("activity 분류"),
       fieldWithPath("[].memberActivityResponses[].id").type(JsonFieldType.NUMBER)
           .description("activity id"),
       fieldWithPath("[].memberActivityResponses[].name").type(JsonFieldType.STRING)
           .description("activity 이름")
   );
-
   private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
+
+  @MockBean
+  private MemberActivityService memberActivityService;
+  @MockBean
+  private MemberUpdateService memberUpdateService;
 
   @Test
   @DisplayName("사용자 정보를 잘 저장하면, 204 no Content를 반환해줄 수 있다.")
@@ -54,7 +58,8 @@ class MemberApiTest extends MockMvcTestHelper {
     final List<Long> activityIds = List.of(1L, 2L);
     final String name = "우르";
 
-    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(name, activityIds);
+    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(name,
+        activityIds);
 
     final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
         fieldWithPath("activityIds").description("활동 id들"),
@@ -170,5 +175,49 @@ class MemberApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-activity", RESPONSE_FIELDS));
+  }
+
+  @Test
+  @DisplayName("사용자의 openProfileUrl을 성공적으로 업데이트하면, 200 OK가 반환된다.")
+  void test_updateOpenProfileUrl() throws Exception {
+    // given
+    final String openProfileUrl = "https://open.kakao.com/o/openprofileurl";
+    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(openProfileUrl);
+
+    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+        fieldWithPath("openProfileUrl").description("오픈 채팅 url")
+    );
+
+    // when
+    final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(request)));
+
+    // then
+    result.andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("update-open-profile-url", REQUEST_FIELDS));
+  }
+
+  @Test
+  @DisplayName("사용자의 openProfileUrl이 유효하지 않으면, 400 BAD_REQUEST를 반환한다.")
+  void test_updateOpenProfileUrlWithInvalidUrl() throws Exception {
+    // given
+    final String openProfileUrl = "https://invalid.kakao.com/profile";
+    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(openProfileUrl);
+
+    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+        fieldWithPath("openProfileUrl").description("오픈 채팅 url")
+    );
+
+    // when
+    final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(request)));
+
+    // then
+    result.andExpect(status().isBadRequest())
+        .andDo(print())
+        .andDo(document("update-open-profile-url", REQUEST_FIELDS));
   }
 }
