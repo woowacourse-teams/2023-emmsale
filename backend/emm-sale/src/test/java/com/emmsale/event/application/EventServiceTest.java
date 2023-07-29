@@ -353,13 +353,16 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
         //when
         final EventDetailResponse response = eventService.addEvent(request);
+        final Event savedEvent = eventRepository.findById(response.getId()).get();
 
         //then
         assertAll(
-            () -> assertEquals(eventName, response.getName()),
-            () -> assertEquals(eventLocation, response.getLocation()),
-            () -> assertEquals(eventInformationUrl, response.getInformationUrl()),
-            () -> assertEquals(tagRequests.size(), response.getTags().size())
+            () -> assertEquals(eventName, savedEvent.getName()),
+            () -> assertEquals(eventLocation, savedEvent.getLocation()),
+            () -> assertEquals(eventInformationUrl, savedEvent.getInformationUrl()),
+            () -> assertEquals(startDateTime, savedEvent.getStartDate()),
+            () -> assertEquals(endDateTime, savedEvent.getEndDate()),
+            () -> assertEquals(tagRequests.size(), savedEvent.getTags().size())
         );
       }
 
