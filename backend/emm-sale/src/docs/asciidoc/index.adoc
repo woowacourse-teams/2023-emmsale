@@ -153,6 +153,20 @@ include::{snippets}/add-event/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/add-event/response-fields.adoc[]
 
+=== `PUT` : 이벤트 업데이트
+
+.HTTP request
+include::{snippets}/update-event/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/update-event/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/update-event/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/update-event/response-fields.adoc[]
+
 == Comment
 
 === `GET` : 댓글 모두 조회
