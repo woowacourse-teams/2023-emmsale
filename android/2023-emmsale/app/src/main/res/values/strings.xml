@@ -13,4 +13,7 @@
     <string name="main_menuitemnameofsetting">설정</string>
     <string name="myprofile_memberimagedescription">회원의 사진</string>
     <string name="myprofile_greeting">Hello,</string>
+    <string name="myprofile_educationslabel">교육 활동</string>
+    <string name="myprofile_clubslabel">동아리 활동</string>
+    <string name="myprofile_eventslabel">참여 행사</string>
 </resources>

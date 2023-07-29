@@ -1,11 +1,12 @@
-package com.emmsale.presentation.ui.main.myProfile
+package com.emmsale.presentation.ui.main.myProfile.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.databinding.ItemMyprofileCategoriesBinding
+import com.emmsale.databinding.ItemMyprofileJobsBinding
 import com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState
 
 class JobsAdapter : ListAdapter<ActivityUiState, JobsViewHolder>(diffUtil) {
@@ -16,10 +17,6 @@ class JobsAdapter : ListAdapter<ActivityUiState, JobsViewHolder>(diffUtil) {
 
     override fun onBindViewHolder(holder: JobsViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-
-    fun replaceItems(items: List<ActivityUiState>) {
-        submitList(items)
     }
 
     companion object {
@@ -38,7 +35,7 @@ class JobsAdapter : ListAdapter<ActivityUiState, JobsViewHolder>(diffUtil) {
 }
 
 class JobsViewHolder(
-    private val binding: ItemMyprofileCategoriesBinding
+    private val binding: ItemMyprofileJobsBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(job: ActivityUiState) {
@@ -47,7 +44,7 @@ class JobsViewHolder(
 
     companion object {
         fun create(parent: ViewGroup): JobsViewHolder {
-            val binding = ItemMyprofileCategoriesBinding.inflate(
+            val binding = ItemMyprofileJobsBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -56,4 +53,9 @@ class JobsViewHolder(
             return JobsViewHolder(binding)
         }
     }
+}
+
+@BindingAdapter("jobs")
+fun setJobs(recyclerView: RecyclerView, jobs: List<ActivityUiState>) {
+    (recyclerView.adapter as JobsAdapter).submitList(jobs)
 }

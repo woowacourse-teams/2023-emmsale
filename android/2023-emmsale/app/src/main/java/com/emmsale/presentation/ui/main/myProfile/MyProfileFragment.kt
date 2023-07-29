@@ -2,14 +2,14 @@ package com.emmsale.presentation.ui.main.myProfile
 
 import android.os.Bundle
 import android.view.View
-import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState
+import com.emmsale.presentation.ui.main.myProfile.adapter.ActivitiesAdapter
+import com.emmsale.presentation.ui.main.myProfile.adapter.JobsAdapter
+import com.emmsale.presentation.ui.main.myProfile.itemDecoration.ActivitiesAdapterDecoration
 
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     override val layoutResId: Int = R.layout.fragment_my_profile
@@ -41,11 +41,40 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     private fun initRecyclerViews() {
-        binding.rvMyprofileJobs.adapter = JobsAdapter()
+        initJobsRecyclerView()
+        initEducationsRecyclerView()
+        initClubsRecyclerView()
+        initEventsRecyclerView()
     }
-}
 
-@BindingAdapter("jobs")
-fun setJobs(recyclerView: RecyclerView, jobs: List<ActivityUiState>) {
-    (recyclerView.adapter as JobsAdapter).replaceItems(jobs)
+    private fun initJobsRecyclerView() {
+        binding.rvMyprofileJobs.apply {
+            adapter = JobsAdapter()
+            itemAnimator = null
+        }
+    }
+
+    private fun initEducationsRecyclerView() {
+        binding.rvMyprofileEducations.apply {
+            adapter = ActivitiesAdapter()
+            itemAnimator = null
+            addItemDecoration(ActivitiesAdapterDecoration.getInstance())
+        }
+    }
+
+    private fun initClubsRecyclerView() {
+        binding.rvMyprofileClubs.apply {
+            adapter = ActivitiesAdapter()
+            itemAnimator = null
+            addItemDecoration(ActivitiesAdapterDecoration.getInstance())
+        }
+    }
+
+    private fun initEventsRecyclerView() {
+        binding.rvMyprofileEvents.apply {
+            adapter = ActivitiesAdapter()
+            itemAnimator = null
+            addItemDecoration(ActivitiesAdapterDecoration.getInstance())
+        }
+    }
 }
