@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="activity"
             type="com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState" />
@@ -17,19 +18,19 @@
             android:id="@+id/iv_myprofile_activitynamedecorator"
             android:layout_width="5dp"
             android:layout_height="5dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_myprofile_activitynamedecorator"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:importantForAccessibility="no" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_activities_activityname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="9dp"
-            android:textSize="13sp"
             android:text="@{activity.name}"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_myprofile_activitynamedecorator"
             app:layout_constraintStart_toEndOf="@+id/iv_myprofile_activitynamedecorator"
             app:layout_constraintTop_toTopOf="@+id/iv_myprofile_activitynamedecorator"
