@@ -414,5 +414,101 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
             EventExceptionType.NOT_FOUND_TAG);
       }
     }
+
+    @Nested
+    class UpdateEvent {
+
+      private final LocalDateTime beforeDateTime = LocalDateTime.now();
+      private final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+
+      @Test
+      @DisplayName("이벤트를 성공적으로 업데이트한다.")
+      void updateEventTest() {
+        //given
+        final String newName = "새로운 이름";
+        final String newLocation = "새로운 장소";
+        final LocalDateTime newStartDateTime = beforeDateTime;
+        final LocalDateTime newEndDateTime = afterDateTime;
+        final String newInformationUrl = "https://새로운-상세-URL.com";
+        final List<TagRequest> newTagRequests = List.of(
+            new TagRequest(IOS().getName()),
+            new TagRequest(AI().getName())
+        );
+
+        final EventDetailRequest updateRequest = new EventDetailRequest(newName, newLocation,
+            newInformationUrl, newStartDateTime, newEndDateTime, newTagRequests);
+
+        final Event event = eventRepository.save(인프콘_2023());
+        final Long eventId = event.getId();
+
+        //when
+        eventService.updateEvent(eventId, updateRequest);
+        final Event updatedEvent = eventRepository.findById(eventId).get();
+
+        //then
+        assertAll(
+            () -> assertEquals(newName, updatedEvent.getName()),
+            () -> assertEquals(newLocation, updatedEvent.getLocation()),
+            () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
+            () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
+            () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
+            () -> assertEquals(newTagRequests.size(), updatedEvent.getTags().size())
+        );
+      }
+
+      @Test
+      @DisplayName("행사 시작 일시가 행사 종료 일시 이후일 경우 EventException이 발생한다.")
+      void updateEventWithStartDateTimeAfterBeforeDateTimeTest() {
+        //given
+        final String newName = "새로운 이름";
+        final String newLocation = "새로운 장소";
+        final LocalDateTime newStartDateTime = afterDateTime;
+        final LocalDateTime newEndDateTime = beforeDateTime;
+        final String newInformationUrl = "https://새로운-상세-URL.com";
+        final List<TagRequest> newTagRequests = List.of(
+            new TagRequest(IOS().getName()),
+            new TagRequest(AI().getName())
+        );
+
+        final EventDetailRequest updateRequest = new EventDetailRequest(newName, newLocation,
+            newInformationUrl, newStartDateTime, newEndDateTime, newTagRequests);
+
+        final Event event = eventRepository.save(인프콘_2023());
+        final Long eventId = event.getId();
+
+        //when & then
+        final EventException exception = assertThrowsExactly(EventException.class,
+            () -> eventService.updateEvent(eventId, updateRequest));
+
+        assertEquals(exception.exceptionType(),
+            EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME);
+      }
+
+      @Test
+      @DisplayName("Tag가 존재하지 않을 경우 EventException이 발생한다.")
+      void updateEventWithNotExistTagTest() {
+        //given
+        final String newName = "새로운 이름";
+        final String newLocation = "새로운 장소";
+        final LocalDateTime newStartDateTime = beforeDateTime;
+        final LocalDateTime newEndDateTime = afterDateTime;
+        final String newInformationUrl = "https://새로운-상세-URL.com";
+        final List<TagRequest> newTagRequests = List.of(
+            new TagRequest("존재하지 않는 태그")
+        );
+
+        final EventDetailRequest updateRequest = new EventDetailRequest(newName, newLocation,
+            newInformationUrl, newStartDateTime, newEndDateTime, newTagRequests);
+
+        final Event event = eventRepository.save(인프콘_2023());
+        final Long eventId = event.getId();
+
+        //when & then
+        final EventException exception = assertThrowsExactly(EventException.class,
+            () -> eventService.updateEvent(eventId, updateRequest));
+
+        assertEquals(exception.exceptionType(), EventExceptionType.NOT_FOUND_TAG);
+      }
+    }
   }
 }

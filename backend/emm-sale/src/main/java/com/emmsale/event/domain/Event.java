@@ -15,6 +15,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,7 +41,7 @@ public class Event extends BaseEntity {
   private LocalDateTime endDate;
   @Column(nullable = false)
   private String informationUrl;
-  @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
+  @OneToMany(mappedBy = "event", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
@@ -92,5 +93,27 @@ public class Event extends BaseEntity {
       return EventStatus.ENDED;
     }
     return EventStatus.IN_PROGRESS;
+  }
+
+  public Event updateEventContent(
+      final String name,
+      final String location,
+      final LocalDateTime startDate,
+      final LocalDateTime endDate,
+      final String informationUrl,
+      final List<Tag> tags
+  ) {
+    this.name = name;
+    this.location = location;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.informationUrl = informationUrl;
+    this.tags = new ArrayList<>();
+
+    for (final Tag tag : tags) {
+      addEventTag(tag);
+    }
+
+    return this;
   }
 }

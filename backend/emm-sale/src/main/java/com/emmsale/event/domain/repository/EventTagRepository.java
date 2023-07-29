@@ -9,4 +9,5 @@ public interface EventTagRepository extends JpaRepository<EventTag, Long> {
 
   List<EventTag> findEventTagsByTag(Tag tag);
 
+  void deleteAllByEventId(Long eventId);
 }

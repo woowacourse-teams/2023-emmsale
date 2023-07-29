@@ -74,4 +74,11 @@ public class EventApi {
       @RequestBody @Valid final EventDetailRequest request) {
     return eventService.addEvent(request);
   }
+
+  @PutMapping("/{event-id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public EventDetailResponse updateEvent(@PathVariable(name = "event-id") final Long eventId,
+      @RequestBody @Valid final EventDetailRequest request) {
+    return eventService.updateEvent(eventId, request);
+  }
 }

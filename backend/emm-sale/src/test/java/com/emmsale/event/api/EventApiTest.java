@@ -12,6 +12,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -196,6 +197,66 @@ class EventApiTest extends MockMvcTestHelper {
     mockMvc.perform(get(format("/events/%s/participants", eventId)))
         .andExpect(status().isOk())
         .andDo(document("find-participants", responseFields));
+  }
+
+  @Test
+  @DisplayName("이벤트를 성공적으로 업데이트하면 204, NO_CONTENT를 반환한다.")
+  void updateEventTest() throws Exception {
+    //given
+    final long eventId = 1L;
+    final Event event = EventFixture.인프콘_2023();
+
+    final List<TagRequest> tags = List.of(TagFixture.백엔드(), TagFixture.안드로이드()).stream()
+        .map(tag -> new TagRequest(tag.getName()))
+        .collect(Collectors.toList());
+
+    final EventDetailRequest request = new EventDetailRequest(
+        event.getName(),
+        event.getLocation(),
+        event.getInformationUrl(),
+        event.getStartDate(),
+        event.getEndDate(),
+        tags
+    );
+
+    final EventDetailResponse response = new EventDetailResponse(eventId, request.getName(),
+        request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
+        request.getLocation(), EventStatus.IN_PROGRESS.getValue(),
+        tags.stream().map(TagRequest::getName).collect(Collectors.toList()));
+
+    when(eventService.updateEvent(any(), any())).thenReturn(response);
+
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("name").type(JsonFieldType.STRING).description("행사(Event) 이름"),
+        fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
+        fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
+        fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
+        fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+            .description("행사(Event) 상세 정보 URL"),
+        fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("연관 태그명")
+    );
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("id").type(JsonFieldType.NUMBER).description("행사(Event) id"),
+        fieldWithPath("name").type(JsonFieldType.STRING).description("행사(Event) 이름"),
+        fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+            .description("행사(Event) 상세 정보 URL"),
+        fieldWithPath("startDate").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
+        fieldWithPath("endDate").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
+        fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
+        fieldWithPath("status").type(JsonFieldType.STRING).description("행사(Event) 진행 상태"),
+        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("행사(Event) 연관 태그 목록")
+    );
+
+    //when
+    final ResultActions result = mockMvc.perform(put("/events/" + eventId)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(objectMapper.writeValueAsString(request)));
+
+    //then
+    result.andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("update-event", requestFields, responseFields));
   }
 
   @Nested

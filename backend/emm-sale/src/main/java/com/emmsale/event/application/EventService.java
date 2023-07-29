@@ -183,6 +183,22 @@ public class EventService {
     }
   }
 
+  public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request) {
+    validateStartBeforeOrEqualEndDateTime(request.getStartDateTime(), request.getEndDateTime());
+
+    final Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
+
+    final List<Tag> tags = getPersistTags(request.getTags());
+
+    eventTagRepository.deleteAllByEventId(eventId);
+
+    final Event updatedEvent = event.updateEventContent(request.getName(), request.getLocation(),
+        request.getStartDateTime(), request.getEndDateTime(), request.getInformationUrl(), tags);
+
+    return EventDetailResponse.from(updatedEvent);
+  }
+
   private List<Tag> getPersistTags(final List<TagRequest> tags) {
     if (tags == null || tags.isEmpty()) {
       return new ArrayList<>();

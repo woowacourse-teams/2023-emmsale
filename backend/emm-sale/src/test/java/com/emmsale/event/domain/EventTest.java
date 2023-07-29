@@ -2,11 +2,16 @@ package com.emmsale.event.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
+import com.emmsale.tag.TagFixture;
+import com.emmsale.tag.domain.Tag;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
@@ -49,6 +54,40 @@ class EventTest {
       assertThatThrownBy(() -> 인프콘.addParticipant(멤버))
           .isInstanceOf(EventException.class)
           .hasMessage(EventExceptionType.ALREADY_PARTICIPATED.errorMessage());
+    }
+
+    @Test
+    @DisplayName("Event의 name, location, startDate, endDate, informationUrl, tags를 업데이트할 수 있다.")
+    void updateEventContentTest() {
+      //given
+      final String newName = "새로운 이름";
+      final String newLocation = "새로운 장소";
+      final LocalDateTime newStartDateTime = LocalDateTime.now();
+      final LocalDateTime newEndDateTime = newStartDateTime.plusDays(1);
+      final String newInformationUrl = "https://새로운-상세-URL.com";
+      final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+
+      final Event event = EventFixture.인프콘_2023();
+
+      //when
+      final Event updatedEvent = event.updateEventContent(
+          newName,
+          newLocation,
+          newStartDateTime,
+          newEndDateTime,
+          newInformationUrl,
+          newTags
+      );
+
+      //then
+      assertAll(
+          () -> assertEquals(newName, updatedEvent.getName()),
+          () -> assertEquals(newLocation, updatedEvent.getLocation()),
+          () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
+          () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
+          () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
+          () -> assertEquals(newTags.size(), event.getTags().size())
+      );
     }
   }
 }
