@@ -9,7 +9,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
-import com.emmsale.event.application.dto.EventCreateRequest;
+import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
@@ -161,7 +161,7 @@ public class EventService {
     return statusName != null;
   }
 
-  public EventDetailResponse addEvent(final EventCreateRequest request) {
+  public EventDetailResponse addEvent(final EventDetailRequest request) {
     validateStartBeforeOrEqualEndDateTime(request.getStartDateTime(), request.getEndDateTime());
 
     final Event event = getPersistentEvent(request);
@@ -182,7 +182,7 @@ public class EventService {
     }
   }
 
-  private List<Tag> getPersistTags(final EventCreateRequest request) {
+  private List<Tag> getPersistTags(final EventDetailRequest request) {
     if (request.getTags() == null || request.getTags().isEmpty()) {
       return new ArrayList<>();
     }
@@ -193,7 +193,7 @@ public class EventService {
         .collect(toList());
   }
 
-  private Event getPersistentEvent(final EventCreateRequest request) {
+  private Event getPersistentEvent(final EventDetailRequest request) {
     final Event event = new Event(request.getName(), request.getLocation(),
         request.getStartDateTime(), request.getEndDateTime(), request.getInformationUrl());
 

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
-import com.emmsale.event.application.dto.EventCreateRequest;
+import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
@@ -348,7 +348,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
             new TagRequest(안드로이드().getName())
         );
 
-        final EventCreateRequest request = new EventCreateRequest(eventName, eventLocation,
+        final EventDetailRequest request = new EventDetailRequest(eventName, eventLocation,
             eventInformationUrl, startDateTime, endDateTime, tagRequests);
 
         //when
@@ -377,7 +377,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
             new TagRequest(안드로이드().getName())
         );
 
-        final EventCreateRequest request = new EventCreateRequest(eventName, eventLocation,
+        final EventDetailRequest request = new EventDetailRequest(eventName, eventLocation,
             eventInformationUrl, startDateTime, endDatetime, tagRequests);
 
         //when & then
@@ -403,7 +403,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
             new TagRequest("존재하지 않는 태그")
         );
 
-        final EventCreateRequest request = new EventCreateRequest(eventName, eventLocation,
+        final EventDetailRequest request = new EventDetailRequest(eventName, eventLocation,
             eventInformationUrl, startDateTime, endDatetime, tagRequests);
 
         //when & then

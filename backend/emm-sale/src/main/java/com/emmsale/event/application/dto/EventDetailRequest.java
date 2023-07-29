@@ -12,7 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @RequiredArgsConstructor
 @Getter
-public class EventCreateRequest {
+public class EventDetailRequest {
 
   private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 

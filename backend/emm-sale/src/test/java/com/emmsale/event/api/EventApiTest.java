@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.application.EventService;
-import com.emmsale.event.application.dto.EventCreateRequest;
+import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
@@ -211,7 +211,7 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName()))
           .collect(Collectors.toList());
 
-      final EventCreateRequest request = new EventCreateRequest(
+      final EventDetailRequest request = new EventDetailRequest(
           event.getName(),
           event.getLocation(),
           event.getInformationUrl(),
@@ -273,7 +273,7 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName()))
           .collect(Collectors.toList());
 
-      final EventCreateRequest request = new EventCreateRequest(
+      final EventDetailRequest request = new EventDetailRequest(
           eventName,
           event.getLocation(),
           event.getInformationUrl(),
@@ -303,7 +303,7 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName()))
           .collect(Collectors.toList());
 
-      final EventCreateRequest request = new EventCreateRequest(
+      final EventDetailRequest request = new EventDetailRequest(
           event.getName(),
           eventLocation,
           event.getInformationUrl(),
@@ -334,7 +334,7 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName()))
           .collect(Collectors.toList());
 
-      final EventCreateRequest request = new EventCreateRequest(
+      final EventDetailRequest request = new EventDetailRequest(
           event.getName(),
           event.getLocation(),
           informationUrl,
