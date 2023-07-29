@@ -28,7 +28,6 @@ import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -163,8 +162,6 @@ public class EventService {
   }
 
   public EventDetailResponse addEvent(final EventDetailRequest request) {
-    validateStartBeforeOrEqualEndDateTime(request.getStartDateTime(), request.getEndDateTime());
-
     final Event event = getPersistentEvent(request);
 
     final List<Tag> tags = getPersistTags(request.getTags());
@@ -176,16 +173,7 @@ public class EventService {
     return EventDetailResponse.from(event);
   }
 
-  private void validateStartBeforeOrEqualEndDateTime(final LocalDateTime startDateTime,
-      final LocalDateTime endDateTime) {
-    if (startDateTime.isAfter(endDateTime)) {
-      throw new EventException(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME);
-    }
-  }
-
   public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request) {
-    validateStartBeforeOrEqualEndDateTime(request.getStartDateTime(), request.getEndDateTime());
-
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 

@@ -55,6 +55,8 @@ public class Event extends BaseEntity {
       final LocalDateTime endDate,
       final String informationUrl
   ) {
+    validateStartBeforeOrEqualEndDateTime(startDate, endDate);
+
     this.name = name;
     this.location = location;
     this.startDate = startDate;
@@ -103,6 +105,8 @@ public class Event extends BaseEntity {
       final String informationUrl,
       final List<Tag> tags
   ) {
+    validateStartBeforeOrEqualEndDateTime(startDate, endDate);
+
     this.name = name;
     this.location = location;
     this.startDate = startDate;
@@ -115,5 +119,12 @@ public class Event extends BaseEntity {
     }
 
     return this;
+  }
+
+  private void validateStartBeforeOrEqualEndDateTime(final LocalDateTime startDateTime,
+      final LocalDateTime endDateTime) {
+    if (startDateTime.isAfter(endDateTime)) {
+      throw new EventException(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME);
+    }
   }
 }
