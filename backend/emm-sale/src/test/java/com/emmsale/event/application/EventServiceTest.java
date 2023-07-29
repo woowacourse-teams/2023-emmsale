@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
@@ -513,5 +514,37 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
         assertEquals(exception.exceptionType(), EventExceptionType.NOT_FOUND_TAG);
       }
     }
+
+    @Nested
+    class DeleteEvent {
+
+      @Test
+      @DisplayName("이벤트를 성공적으로 삭제한다.")
+      void deleteEventTest() {
+        //given
+        final Event event = eventRepository.save(인프콘_2023());
+        final Long eventId = event.getId();
+
+        //when
+        eventService.deleteEvent(eventId);
+
+        //then
+        assertFalse(eventRepository.findById(eventId).isPresent());
+      }
+
+      @Test
+      @DisplayName("삭제할 이벤트가 존재하지 않을 경우 EventException이 발생한다.")
+      void deleteEventWithNotExistsEventTest() {
+        //given
+        final long notExistsEventId = 0L;
+
+        //when & then
+        final EventException exception = assertThrowsExactly(EventException.class,
+            () -> eventService.deleteEvent(notExistsEventId));
+
+        assertEquals(exception.exceptionType(), EventExceptionType.NOT_FOUND_EVENT);
+      }
+    }
+
   }
 }

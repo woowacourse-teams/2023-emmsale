@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,5 +81,11 @@ public class EventApi {
   public EventDetailResponse updateEvent(@PathVariable(name = "event-id") final Long eventId,
       @RequestBody @Valid final EventDetailRequest request) {
     return eventService.updateEvent(eventId, request);
+  }
+
+  @DeleteMapping("/{event-id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public EventDetailResponse deleteEvent(@PathVariable(name = "event-id") final Long eventId) {
+    return eventService.deleteEvent(eventId);
   }
 }

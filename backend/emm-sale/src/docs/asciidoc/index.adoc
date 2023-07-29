@@ -167,6 +167,17 @@ include::{snippets}/update-event/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/update-event/response-fields.adoc[]
 
+=== `PUT` : 이벤트 삭제
+
+.HTTP request
+include::{snippets}/delete-event/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/delete-event/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/delete-event/response-fields.adoc[]
+
 == Comment
 
 === `GET` : 댓글 모두 조회

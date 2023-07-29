@@ -187,6 +187,15 @@ public class EventService {
     return EventDetailResponse.from(updatedEvent);
   }
 
+  public EventDetailResponse deleteEvent(final Long eventId) {
+    final Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
+
+    eventRepository.deleteById(eventId);
+
+    return EventDetailResponse.from(event);
+  }
+
   private List<Tag> findAllPersistTagsOrElseThrow(final List<TagRequest> tags) {
     if (tags == null || tags.isEmpty()) {
       return new ArrayList<>();

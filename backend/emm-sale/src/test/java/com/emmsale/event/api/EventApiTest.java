@@ -10,6 +10,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -29,10 +30,12 @@ import com.emmsale.event.domain.EventStatus;
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.application.dto.TagRequest;
+import com.emmsale.tag.domain.Tag;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -257,6 +260,43 @@ class EventApiTest extends MockMvcTestHelper {
     result.andExpect(status().isNoContent())
         .andDo(print())
         .andDo(document("update-event", requestFields, responseFields));
+  }
+
+  @Test
+  @DisplayName("이벤트를 성공적으로 삭제하면 204, NO_CONTENT를 반환한다.")
+  void deleteEventTest() throws Exception {
+    //given
+    final long eventId = 1L;
+    final Event event = EventFixture.인프콘_2023();
+
+    final List<String> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
+        .map(Tag::getName).collect(Collectors.toList());
+
+    final EventDetailResponse response = new EventDetailResponse(eventId, event.getName(),
+        event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
+        event.getLocation(), EventStatus.IN_PROGRESS.getValue(), tags);
+
+    when(eventService.deleteEvent(eventId)).thenReturn(response);
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("id").type(JsonFieldType.NUMBER).description("행사(Event) id"),
+        fieldWithPath("name").type(JsonFieldType.STRING).description("행사(Event) 이름"),
+        fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+            .description("행사(Event) 상세 정보 URL"),
+        fieldWithPath("startDate").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
+        fieldWithPath("endDate").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
+        fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
+        fieldWithPath("status").type(JsonFieldType.STRING).description("행사(Event) 진행 상태"),
+        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("행사(Event) 연관 태그 목록")
+    );
+
+    //when
+    final ResultActions result = mockMvc.perform(delete("/events/" + eventId));
+
+    //then
+    result.andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("delete-event", responseFields));
   }
 
   @Nested
