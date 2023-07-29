@@ -2,7 +2,7 @@ package com.emmsale.data.member
 
 import com.emmsale.data.member.dto.MemberActivitiesBindActivityTypeApiModel
 import com.emmsale.data.member.dto.MemberActivityApiModel
-import com.emmsale.data.member.dto.MemberApiModel1
+import com.emmsale.data.member.dto.MemberWithoutActivitiesApiModel
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -66,7 +66,7 @@ internal class MemberServiceTest {
         val response = sut.fetchMember(4L)
 
         assertThat(response.body()).isEqualTo(
-            MemberApiModel1(
+            MemberWithoutActivitiesApiModel(
                 id = 4L,
                 name = "THOMAS",
                 description = "",

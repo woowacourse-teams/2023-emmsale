@@ -3,7 +3,7 @@ package com.emmsale.data.member.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MemberApiModel1(
+data class MemberWithoutActivitiesApiModel(
     val id: Long,
     val name: String,
     val description: String = "",

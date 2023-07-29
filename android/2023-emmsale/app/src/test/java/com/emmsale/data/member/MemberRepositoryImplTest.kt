@@ -5,15 +5,15 @@ import com.emmsale.data.activity.ActivityType
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.member.dto.MemberActivitiesBindActivityTypeApiModel
 import com.emmsale.data.member.dto.MemberActivityApiModel
-import com.emmsale.data.member.dto.MemberApiModel1
+import com.emmsale.data.member.dto.MemberWithoutActivitiesApiModel
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import retrofit2.Response
 
 internal class MemberRepositoryImplTest {
@@ -21,7 +21,7 @@ internal class MemberRepositoryImplTest {
     private lateinit var memberService: MemberService
     private lateinit var sut: MemberRepositoryImpl
 
-    private val memberApiModelFixture = MemberApiModel1(
+    private val memberApiModelFixture = MemberWithoutActivitiesApiModel(
         id = 1L,
         name = "토마스",
         description = "",
