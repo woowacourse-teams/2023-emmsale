@@ -1,8 +1,13 @@
 package com.emmsale.event.application.dto;
 
+import static java.util.stream.Collectors.toUnmodifiableList;
+
 import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventTag;
+import com.emmsale.tag.domain.Tag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -23,8 +28,14 @@ public class EventDetailResponse {
   private final LocalDateTime endDate;
   private final String location;
   private final String status;
+  private final List<String> tags;
 
   public static EventDetailResponse from(final Event event) {
+    final List<String> tagNames = event.getTags().stream()
+        .map(EventTag::getTag)
+        .map(Tag::getName)
+        .collect(toUnmodifiableList());
+
     return new EventDetailResponse(
         event.getId(),
         event.getName(),
@@ -32,7 +43,8 @@ public class EventDetailResponse {
         event.getStartDate(),
         event.getEndDate(),
         event.getLocation(),
-        calculateStatus(event.getStartDate(), event.getEndDate())
+        calculateStatus(event.getStartDate(), event.getEndDate()),
+        tagNames
     );
   }
 

@@ -7,9 +7,11 @@ import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
@@ -79,6 +81,16 @@ public class EventService {
     return filterEventResponsesByStatus(statusName, sortAndGroupByStatus);
   }
 
+  @Transactional(readOnly = true)
+  public List<ParticipantResponse> findParticipants(final Long eventId) {
+    final Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
+    return event.getParticipants().stream()
+        .sorted(comparing(Participant::getId))
+        .map(ParticipantResponse::from)
+        .collect(toUnmodifiableList());
+  }
+
   private void validateYearAndMonth(final int year, final int month) {
     if (year < MIN_YEAR) {
       throw new EventException(INVALID_YEAR);
@@ -145,4 +157,6 @@ public class EventService {
   private boolean isExistStatusName(final String statusName) {
     return statusName != null;
   }
+
+
 }

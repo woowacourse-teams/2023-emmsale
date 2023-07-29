@@ -7,6 +7,8 @@ truncate table tag;
 truncate table event_tag;
 truncate table member_tag;
 truncate table event_member;
+truncate table notification;
+truncate table fcm_token;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');
@@ -26,16 +28,16 @@ values (5, 'EDUCATION', '우아한테크코스');
 insert into activity(id, type, name)
 values (6, 'JOB', 'Backend');
 
-insert into member(id, name, image_url, open_profile_url, github_id, created_at, updated_at)
-values (1, 'member1', 'https://imageurl.com', 'https://openprofileurl.com', 1, CURRENT_TIMESTAMP(),
+insert into member(id, name, image_url, open_profile_url, description, github_id, created_at,
+                   updated_at)
+values (1, 'member1', 'https://imageurl.com', 'https://openprofileurl.com', '안녕하세요.', 1,
+        CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP());
 
-insert into member(id, name, image_url, open_profile_url, github_id, created_at, updated_at)
-values (2, 'member2', 'https://imageurl.com', 'https://openprofileurl.com', 2, CURRENT_TIMESTAMP(),
-        CURRENT_TIMESTAMP());
-
-insert into member(id, name, image_url, open_profile_url, github_id, created_at, updated_at)
-values (3, 'member3', 'https://imageurl.com', 'https://openprofileurl.com', 3, CURRENT_TIMESTAMP(),
+insert into member(id, name, image_url, open_profile_url, description, github_id, created_at,
+                   updated_at)
+values (2, 'member2', 'https://imageurl.com', 'https://openprofileurl.com', '반갑습니다.', 2,
+        CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP());
 
 insert into member_activity(id, activity_id, member_id, created_at, updated_at)
@@ -62,22 +64,24 @@ insert into tag(id, name)
 values (5, 'AI');
 
 insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
-values (1, '인프콘 2023', '2023-06-01T12:00:00', '2023-09-01T12:00:00', '코엑스', 'https://~~~',
+values (1, '인프콘 2023', '2023-06-01T12:00:00', '2023-09-01T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
-values (2, 'AI 컨퍼런스', '2023-07-22T12:00:00', '2023-07-30T12:00:00', '코엑스', 'https://~~~',
+values (2, 'AI 컨퍼런스', '2023-07-22T12:00:00', '2023-07-30T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
-values (3, '모바일 컨퍼런스', '2023-08-03T12:00:00', '2023-09-03T12:00:00', '코엑스', 'https://~~~',
+values (3, '모바일 컨퍼런스', '2023-08-03T12:00:00', '2023-09-03T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
-values (4, '안드로이드 컨퍼런스', '2023-06-29T12:00:00', '2023-07-16T12:00:00', '코엑스', 'https://~~~',
+values (4, '안드로이드 컨퍼런스', '2023-06-29T12:00:00', '2023-07-16T12:00:00', '코엑스',
+        'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
-values (5, '웹 컨퍼런스', '2023-07-03T12:00:00', '2023-08-03T12:00:00', '코엑스', 'https://~~~',
+values (5, '웹 컨퍼런스', '2023-07-03T12:00:00', '2023-08-03T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
-values (6, '옛날 웹 컨퍼런스', '2022-07-03T12:00:00', '2022-08-03T12:00:00', '코엑스', 'https://~~~',
+values (6, '옛날 웹 컨퍼런스', '2022-07-03T12:00:00', '2022-08-03T12:00:00', '코엑스',
+        'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into event_tag(id, event_id, tag_id)

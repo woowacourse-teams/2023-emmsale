@@ -19,6 +19,7 @@ import com.emmsale.event.application.EventService;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.helper.MockMvcTestHelper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,7 +55,8 @@ class EventApiTest extends MockMvcTestHelper {
         LocalDateTime.of(2023, 8, 15, 12, 0),
         LocalDateTime.of(2023, 8, 15, 12, 0),
         "코엑스",
-        "예정"
+        "예정",
+        List.of("코틀린", "백엔드", "안드로이드")
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -64,7 +66,8 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("startDate").type(JsonFieldType.STRING).description("시작일자"),
         fieldWithPath("endDate").type(JsonFieldType.STRING).description("종료일자"),
         fieldWithPath("location").type(JsonFieldType.STRING).description("장소"),
-        fieldWithPath("status").type(JsonFieldType.STRING).description("진행상태")
+        fieldWithPath("status").type(JsonFieldType.STRING).description("진행상태"),
+        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("태그들")
     );
 
     when(eventService.findEvent(eventId)).thenReturn(eventDetailResponse);
@@ -153,4 +156,31 @@ class EventApiTest extends MockMvcTestHelper {
         .andDo(document("find-events", requestParameters, responseFields));
   }
 
+  @Test
+  @DisplayName("행사의 참여자를 전체 조회할 수 있다.")
+  void findParticipants() throws Exception {
+    //given
+    final Long eventId = 1L;
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("참여자 식별자"),
+        fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
+        fieldWithPath("[].name").type(JsonFieldType.STRING).description("member 이름"),
+        fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
+        fieldWithPath("[].description").type(JsonFieldType.STRING).description("한줄 자기 소개")
+    );
+    final List<ParticipantResponse> responses = List.of(
+        new ParticipantResponse(1L, 1L, "스캇", "imageUrl",
+            "토마토 던지는 사람"),
+        new ParticipantResponse(2L, 2L, "홍실", "imageUrl",
+            "토마토 맞는 사람")
+    );
+
+    when(eventService.findParticipants(eventId))
+        .thenReturn(responses);
+
+    //when && then
+    mockMvc.perform(get(format("/events/%s/participants", eventId)))
+        .andExpect(status().isOk())
+        .andDo(document("find-participants", responseFields));
+  }
 }

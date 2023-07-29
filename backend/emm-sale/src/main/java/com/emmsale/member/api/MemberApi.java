@@ -1,12 +1,14 @@
 package com.emmsale.member.api;
 
 import com.emmsale.member.application.MemberActivityService;
+import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
 import java.util.List;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,37 +30,38 @@ public class MemberApi {
 
   private final MemberActivityService memberActivityService;
   private final MemberUpdateService memberUpdateService;
+  private final MemberQueryService memberQueryService;
 
   @PostMapping("/members")
   public ResponseEntity<Void> register(
       final Member member,
       @RequestBody final MemberActivityInitialRequest memberActivityInitialRequest
   ) {
-    memberActivityService.registerCareer(member, memberActivityInitialRequest);
+    memberActivityService.registerActivities(member, memberActivityInitialRequest);
     return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> addCareer(
+  public ResponseEntity<List<MemberActivityResponses>> addActivity(
       final Member member,
       @RequestBody final MemberActivityAddRequest memberActivityAddRequest
   ) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(memberActivityService.addCareer(member, memberActivityAddRequest));
+        .body(memberActivityService.addActivity(member, memberActivityAddRequest));
   }
 
   @DeleteMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> deleteCareer(
+  public ResponseEntity<List<MemberActivityResponses>> deleteActivity(
       final Member member,
       @RequestBody final MemberActivityDeleteRequest memberActivityDeleteRequest
   ) {
     return ResponseEntity.ok(
-        memberActivityService.deleteCareer(member, memberActivityDeleteRequest));
+        memberActivityService.deleteActivity(member, memberActivityDeleteRequest));
   }
 
   @GetMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> findCareer(final Member member) {
-    return ResponseEntity.ok(memberActivityService.findCareers(member));
+  public ResponseEntity<List<MemberActivityResponses>> findActivity(final Member member) {
+    return ResponseEntity.ok(memberActivityService.findActivities(member));
   }
 
   @PutMapping("/members/open-profile-url")
@@ -76,5 +80,11 @@ public class MemberApi {
   ) {
     memberUpdateService.updateDescription(member, descriptionRequest);
     return ResponseEntity.noContent().build();
+  }
+
+  @GetMapping("/members/{member-id}")
+  public ResponseEntity<MemberProfileResponse> findProfile(
+      @PathVariable("member-id") final Long memberId) {
+    return ResponseEntity.ok(memberQueryService.findProfile(memberId));
   }
 }

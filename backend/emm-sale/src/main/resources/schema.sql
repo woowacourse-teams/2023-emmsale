@@ -7,6 +7,8 @@ drop table if exists kerdy.tag;
 drop table if exists kerdy.event_tag;
 drop table if exists kerdy.member_tag;
 drop table if exists kerdy.event_member;
+drop table if exists kerdy.notification;
+drop table if exists kerdy.fcm_token;
 
 create table activity
 (
@@ -18,8 +20,8 @@ create table activity
 create table event
 (
     id              bigint auto_increment primary key,
-    created_at      datetime(6) not null,
-    updated_at      datetime(6) not null,
+    created_at      datetime(6),
+    updated_at      datetime(6),
     end_date        datetime(6) not null,
     information_url varchar(255) not null,
     location        varchar(255) not null,
@@ -30,8 +32,8 @@ create table event
 create table member
 (
     id               bigint auto_increment primary key,
-    created_at       datetime(6) not null,
-    updated_at       datetime(6) not null,
+    created_at       datetime(6),
+    updated_at       datetime(6),
     description      varchar(255) not null default '',
     github_id        bigint       not null unique,
     image_url        varchar(255) not null,
@@ -42,8 +44,8 @@ create table member
 create table comment
 (
     id         bigint auto_increment primary key,
-    created_at datetime(6) not null,
-    updated_at datetime(6) not null,
+    created_at datetime(6),
+    updated_at datetime(6),
     content    varchar(255) not null,
     is_deleted bit          not null,
     event_id   bigint       not null,
@@ -54,8 +56,8 @@ create table comment
 create table member_activity
 (
     id          bigint auto_increment primary key,
-    created_at  datetime(6) not null,
-    updated_at  datetime(6) not null,
+    created_at  datetime(6),
+    updated_at  datetime(6),
     activity_id bigint not null,
     member_id   bigint not null
 );
@@ -76,8 +78,8 @@ create table event_tag
 create table member_tag
 (
     id         bigint auto_increment primary key,
-    created_at datetime(6) not null,
-    updated_at datetime(6) not null,
+    created_at datetime(6),
+    updated_at datetime(6),
     member_id  bigint not null,
     tag_id     bigint not null
 );
@@ -88,3 +90,22 @@ create table event_member
     member_id bigint not null,
     event_id  bigint not null
 );
+create table notification
+(
+    id          bigint auto_increment primary key,
+    created_at  datetime(6),
+    updated_at  datetime(6),
+    event_id    bigint       not null,
+    message     varchar(255) not null,
+    receiver_id bigint       not null,
+    sender_id   bigint       not null,
+    status      varchar(255) not null
+);
+
+create table fcm_token
+(
+    id        bigint auto_increment primary key,
+    token     varchar(255) not null,
+    member_id bigint       not null unique
+);
+
