@@ -20,6 +20,40 @@ import org.junit.jupiter.api.Test;
 
 class EventTest {
 
+  @Test
+  @DisplayName("Event의 name, location, startDate, endDate, informationUrl, tags를 업데이트할 수 있다.")
+  void updateEventContentTest() {
+    //given
+    final String newName = "새로운 이름";
+    final String newLocation = "새로운 장소";
+    final LocalDateTime newStartDateTime = LocalDateTime.now();
+    final LocalDateTime newEndDateTime = newStartDateTime.plusDays(1);
+    final String newInformationUrl = "https://새로운-상세-URL.com";
+    final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+
+    final Event event = EventFixture.인프콘_2023();
+
+    //when
+    final Event updatedEvent = event.updateEventContent(
+        newName,
+        newLocation,
+        newStartDateTime,
+        newEndDateTime,
+        newInformationUrl,
+        newTags
+    );
+
+    //then
+    assertAll(
+        () -> assertEquals(newName, updatedEvent.getName()),
+        () -> assertEquals(newLocation, updatedEvent.getLocation()),
+        () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
+        () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
+        () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
+        () -> assertEquals(newTags.size(), event.getTags().size())
+    );
+  }
+
   @Nested
   class addParticipant {
 
@@ -54,40 +88,6 @@ class EventTest {
       assertThatThrownBy(() -> 인프콘.addParticipant(멤버))
           .isInstanceOf(EventException.class)
           .hasMessage(EventExceptionType.ALREADY_PARTICIPATED.errorMessage());
-    }
-
-    @Test
-    @DisplayName("Event의 name, location, startDate, endDate, informationUrl, tags를 업데이트할 수 있다.")
-    void updateEventContentTest() {
-      //given
-      final String newName = "새로운 이름";
-      final String newLocation = "새로운 장소";
-      final LocalDateTime newStartDateTime = LocalDateTime.now();
-      final LocalDateTime newEndDateTime = newStartDateTime.plusDays(1);
-      final String newInformationUrl = "https://새로운-상세-URL.com";
-      final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
-
-      final Event event = EventFixture.인프콘_2023();
-
-      //when
-      final Event updatedEvent = event.updateEventContent(
-          newName,
-          newLocation,
-          newStartDateTime,
-          newEndDateTime,
-          newInformationUrl,
-          newTags
-      );
-
-      //then
-      assertAll(
-          () -> assertEquals(newName, updatedEvent.getName()),
-          () -> assertEquals(newLocation, updatedEvent.getLocation()),
-          () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
-          () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
-          () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
-          () -> assertEquals(newTags.size(), event.getTags().size())
-      );
     }
   }
 }

@@ -209,7 +209,7 @@ class EventApiTest extends MockMvcTestHelper {
     final long eventId = 1L;
     final Event event = EventFixture.인프콘_2023();
 
-    final List<TagRequest> tags = List.of(TagFixture.백엔드(), TagFixture.안드로이드()).stream()
+    final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
         .map(tag -> new TagRequest(tag.getName()))
         .collect(Collectors.toList());
 
@@ -308,7 +308,7 @@ class EventApiTest extends MockMvcTestHelper {
       //given
       final Event event = EventFixture.인프콘_2023();
 
-      final List<TagRequest> tags = List.of(TagFixture.백엔드(), TagFixture.안드로이드()).stream()
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName()))
           .collect(Collectors.toList());
 
@@ -370,7 +370,7 @@ class EventApiTest extends MockMvcTestHelper {
       //given
       final Event event = EventFixture.인프콘_2023();
 
-      final List<TagRequest> tags = List.of(TagFixture.백엔드(), TagFixture.안드로이드()).stream()
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName()))
           .collect(Collectors.toList());
 
@@ -400,7 +400,7 @@ class EventApiTest extends MockMvcTestHelper {
       //given
       final Event event = EventFixture.인프콘_2023();
 
-      final List<TagRequest> tags = List.of(TagFixture.백엔드(), TagFixture.안드로이드()).stream()
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName()))
           .collect(Collectors.toList());
 
@@ -431,7 +431,7 @@ class EventApiTest extends MockMvcTestHelper {
       //given
       final Event event = EventFixture.인프콘_2023();
 
-      final List<TagRequest> tags = List.of(TagFixture.백엔드(), TagFixture.안드로이드()).stream()
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName()))
           .collect(Collectors.toList());
 
@@ -462,7 +462,7 @@ class EventApiTest extends MockMvcTestHelper {
       //given
       final Event event = EventFixture.인프콘_2023();
 
-      final List<TagRequest> tags = List.of(TagFixture.백엔드(), TagFixture.안드로이드()).stream()
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName()))
           .collect(Collectors.toList());
 
@@ -493,7 +493,7 @@ class EventApiTest extends MockMvcTestHelper {
       //given
       final Event event = EventFixture.인프콘_2023();
 
-      final List<TagRequest> tags = List.of(TagFixture.백엔드(), TagFixture.안드로이드()).stream()
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName()))
           .collect(Collectors.toList());
 
