@@ -258,7 +258,7 @@ class EventApiTest extends MockMvcTestHelper {
       //then
       result.andExpect(status().isCreated())
           .andDo(print())
-          .andDo(document("find-participants", requestFields, responseFields));
+          .andDo(document("add-event", requestFields, responseFields));
     }
 
     @ParameterizedTest

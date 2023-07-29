@@ -142,16 +142,16 @@ include::{snippets}/find-participants/response-fields.adoc[]
 === `POST` : 이벤트 생성
 
 .HTTP request
-include::{snippets}/find-participants/http-request.adoc[]
+include::{snippets}/add-event/http-request.adoc[]
 
 .HTTP request 설명
-include::{snippets}/find-participants/request-fields.adoc[]
+include::{snippets}/add-event/request-fields.adoc[]
 
 .HTTP response
-include::{snippets}/find-participants/http-response.adoc[]
+include::{snippets}/add-event/http-response.adoc[]
 
 .HTTP response 설명
-include::{snippets}/find-participants/response-fields.adoc[]
+include::{snippets}/add-event/response-fields.adoc[]
 
 == Comment
 
