@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -57,7 +58,7 @@
                 <TextView
                     android:id="@+id/tv_myprofile_onelineintroduce"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
                     android:layout_marginEnd="19dp"
                     android:text="@{viewModel.uiState.description}"
@@ -65,7 +66,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_memberimage"
                     app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
                     app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_membername"
-                    tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하" />
+                    tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차" />
 
                 <ImageView
                     android:id="@+id/iv_myprofile_memberimage"
@@ -86,13 +87,13 @@
                     myprofile_jobs="@{viewModel.uiState.jobs}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="29dp"
+                    android:layout_marginTop="26dp"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_memberimage"
                     app:layout_constraintStart_toStartOf="@+id/tv_myprofile_hello"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_onelineintroduce"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_memberimage"
                     tools:itemCount="2"
                     tools:listitem="@layout/item_myprofile_jobs" />
 
