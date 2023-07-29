@@ -162,9 +162,9 @@ public class EventService {
   }
 
   public EventDetailResponse addEvent(final EventDetailRequest request) {
-    final Event event = getPersistentEvent(request);
+    final Event event = saveNewEvent(request);
 
-    final List<Tag> tags = getPersistTags(request.getTags());
+    final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
 
     for (final Tag tag : tags) {
       event.addEventTag(tag);
@@ -177,7 +177,7 @@ public class EventService {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
-    final List<Tag> tags = getPersistTags(request.getTags());
+    final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
 
     eventTagRepository.deleteAllByEventId(eventId);
 
@@ -187,7 +187,7 @@ public class EventService {
     return EventDetailResponse.from(updatedEvent);
   }
 
-  private List<Tag> getPersistTags(final List<TagRequest> tags) {
+  private List<Tag> findAllPersistTagsOrElseThrow(final List<TagRequest> tags) {
     if (tags == null || tags.isEmpty()) {
       return new ArrayList<>();
     }
@@ -198,7 +198,7 @@ public class EventService {
         .collect(toList());
   }
 
-  private Event getPersistentEvent(final EventDetailRequest request) {
+  private Event saveNewEvent(final EventDetailRequest request) {
     final Event event = new Event(request.getName(), request.getLocation(),
         request.getStartDateTime(), request.getEndDateTime(), request.getInformationUrl());
 
