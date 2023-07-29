@@ -3,6 +3,7 @@ package com.emmsale.presentation.ui.main.myProfile
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
@@ -42,9 +43,9 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     private fun initRecyclerViews() {
         initJobsRecyclerView()
-        initEducationsRecyclerView()
-        initClubsRecyclerView()
-        initEventsRecyclerView()
+        initActivitiesRecyclerView(binding.rvMyprofileEducations)
+        initActivitiesRecyclerView(binding.rvMyprofileClubs)
+        initActivitiesRecyclerView(binding.rvMyprofileEvents)
     }
 
     private fun initJobsRecyclerView() {
@@ -54,24 +55,8 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         }
     }
 
-    private fun initEducationsRecyclerView() {
-        binding.rvMyprofileEducations.apply {
-            adapter = ActivitiesAdapter()
-            itemAnimator = null
-            addItemDecoration(ActivitiesAdapterDecoration.getInstance())
-        }
-    }
-
-    private fun initClubsRecyclerView() {
-        binding.rvMyprofileClubs.apply {
-            adapter = ActivitiesAdapter()
-            itemAnimator = null
-            addItemDecoration(ActivitiesAdapterDecoration.getInstance())
-        }
-    }
-
-    private fun initEventsRecyclerView() {
-        binding.rvMyprofileEvents.apply {
+    private fun initActivitiesRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.apply {
             adapter = ActivitiesAdapter()
             itemAnimator = null
             addItemDecoration(ActivitiesAdapterDecoration.getInstance())
