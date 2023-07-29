@@ -55,7 +55,7 @@ class JobsViewHolder(
     }
 }
 
-@BindingAdapter("jobs")
+@BindingAdapter("myprofile_jobs")
 fun setJobs(recyclerView: RecyclerView, jobs: List<ActivityUiState>) {
     (recyclerView.adapter as JobsAdapter).submitList(jobs)
 }

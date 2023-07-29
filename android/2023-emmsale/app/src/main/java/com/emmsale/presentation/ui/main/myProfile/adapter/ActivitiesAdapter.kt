@@ -55,7 +55,7 @@ class ActivityViewHolder(
     }
 }
 
-@BindingAdapter("activities")
+@BindingAdapter("myprofile_activities")
 fun setActivities(recyclerView: RecyclerView, activities: List<ActivityUiState>) {
     (recyclerView.adapter as ActivitiesAdapter).submitList(activities)
 }

@@ -83,7 +83,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_myprofile_jobs"
-                    jobs="@{viewModel.uiState.jobs}"
+                    myprofile_jobs="@{viewModel.uiState.jobs}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="29dp"
@@ -144,7 +144,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_myprofile_educations"
-                    activities="@{viewModel.uiState.educations}"
+                    myprofile_activities="@{viewModel.uiState.educations}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -182,7 +182,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_myprofile_clubs"
-                    activities="@{viewModel.uiState.clubs}"
+                    myprofile_activities="@{viewModel.uiState.clubs}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -231,7 +231,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_myprofile_events"
-                    activities="@{viewModel.uiState.events}"
+                    myprofile_activities="@{viewModel.uiState.events}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
