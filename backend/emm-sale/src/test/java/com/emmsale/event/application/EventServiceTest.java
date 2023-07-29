@@ -461,6 +461,32 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       }
 
       @Test
+      @DisplayName("업데이트할 이벤트가 존재하지 않을 경우 EventException이 발생한다.")
+      void updateEventWithNotExistsEventTest() {
+        //given
+        final long notExistsEventId = 0L;
+
+        final String newName = "새로운 이름";
+        final String newLocation = "새로운 장소";
+        final LocalDateTime newStartDateTime = beforeDateTime;
+        final LocalDateTime newEndDateTime = afterDateTime;
+        final String newInformationUrl = "https://새로운-상세-URL.com";
+        final List<TagRequest> newTagRequests = List.of(
+            new TagRequest(IOS().getName()),
+            new TagRequest(AI().getName())
+        );
+
+        final EventDetailRequest updateRequest = new EventDetailRequest(newName, newLocation,
+            newInformationUrl, newStartDateTime, newEndDateTime, newTagRequests);
+
+        //when & then
+        final EventException exception = assertThrowsExactly(EventException.class,
+            () -> eventService.updateEvent(notExistsEventId, updateRequest));
+
+        assertEquals(exception.exceptionType(), EventExceptionType.NOT_FOUND_EVENT);
+      }
+
+      @Test
       @DisplayName("행사 시작 일시가 행사 종료 일시 이후일 경우 EventException이 발생한다.")
       void updateEventWithStartDateTimeAfterBeforeDateTimeTest() {
         //given
