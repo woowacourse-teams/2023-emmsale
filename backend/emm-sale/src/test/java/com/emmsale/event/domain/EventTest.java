@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.exception.EventException;
@@ -19,6 +20,23 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class EventTest {
+
+  @Test
+  @DisplayName("Event 생성시 startDate가 endDate 이후일 경우 EventException이 발생한다.")
+  void newEventWithStartDateAfterEndDateTest() {
+    //given
+    final String name = "이름";
+    final String location = "장소";
+    final String url = "https://information-url.com";
+    final LocalDateTime beforeDateTime = LocalDateTime.now();
+    final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+
+    //when & then
+    final EventException exception = assertThrowsExactly(EventException.class,
+        () -> new Event(name, location, afterDateTime, beforeDateTime, url));
+
+    assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
+  }
 
   @Test
   @DisplayName("Event의 name, location, startDate, endDate, informationUrl, tags를 업데이트할 수 있다.")
@@ -52,6 +70,27 @@ class EventTest {
         () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
         () -> assertEquals(newTags.size(), event.getTags().size())
     );
+  }
+
+  @Test
+  @DisplayName("eventContent 업데이트시 startDate가 endDate 이후일 경우 EventException이 발생한다.")
+  void updateEventContentWithStartDateAfterEndDateTest() {
+    //given
+    final String newName = "새로운 이름";
+    final String newLocation = "새로운 장소";
+    final LocalDateTime beforeDateTime = LocalDateTime.now();
+    final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    final String newInformationUrl = "https://새로운-상세-URL.com";
+    final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+
+    final Event event = EventFixture.인프콘_2023();
+
+    //when & then
+    final EventException exception = assertThrowsExactly(EventException.class,
+        () -> event.updateEventContent(newName, newLocation, afterDateTime, beforeDateTime,
+            newInformationUrl, newTags));
+
+    assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
   }
 
   @Nested
