@@ -23,6 +23,7 @@ import com.emmsale.event.domain.repository.ParticipantRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
+import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
@@ -166,7 +167,7 @@ public class EventService {
 
     final Event event = getPersistentEvent(request);
 
-    final List<Tag> tags = getPersistTags(request);
+    final List<Tag> tags = getPersistTags(request.getTags());
 
     for (final Tag tag : tags) {
       event.addEventTag(tag);
@@ -182,13 +183,13 @@ public class EventService {
     }
   }
 
-  private List<Tag> getPersistTags(final EventDetailRequest request) {
-    if (request.getTags() == null || request.getTags().isEmpty()) {
+  private List<Tag> getPersistTags(final List<TagRequest> tags) {
+    if (tags == null || tags.isEmpty()) {
       return new ArrayList<>();
     }
 
-    return request.getTags().stream()
-        .map(tagRequest -> tagRepository.findByName(tagRequest.getName())
+    return tags.stream()
+        .map(tag -> tagRepository.findByName(tag.getName())
             .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_TAG)))
         .collect(toList());
   }
