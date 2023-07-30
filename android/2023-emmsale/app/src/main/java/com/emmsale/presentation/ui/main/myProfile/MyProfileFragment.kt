@@ -3,7 +3,6 @@ package com.emmsale.presentation.ui.main.myProfile
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
@@ -43,9 +42,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     private fun initRecyclerViews() {
         initJobsRecyclerView()
-        initActivitiesRecyclerView(binding.rvMyprofileEducations)
-        initActivitiesRecyclerView(binding.rvMyprofileClubs)
-        initActivitiesRecyclerView(binding.rvMyprofileEvents)
+        initActivitiesRecyclerView()
     }
 
     private fun initJobsRecyclerView() {
@@ -55,11 +52,17 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         }
     }
 
-    private fun initActivitiesRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.apply {
-            adapter = ActivitiesAdapter()
-            itemAnimator = null
-            addItemDecoration(ActivitiesAdapterDecoration.getInstance())
+    private fun initActivitiesRecyclerView() {
+        listOf(
+            binding.rvMyprofileEducations,
+            binding.rvMyprofileClubs,
+            binding.rvMyprofileEvents
+        ).forEach {
+            it.apply {
+                adapter = ActivitiesAdapter()
+                itemAnimator = null
+                addItemDecoration(ActivitiesAdapterDecoration.getInstance())
+            }
         }
     }
 }
