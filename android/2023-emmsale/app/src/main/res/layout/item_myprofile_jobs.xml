@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
-            android:background="@drawable/bg_myprofile_category"
+            android:background="@drawable/bg_myprofile_job"
             android:textSize="13sp"
             android:text="@{job.name}"
             app:layout_constraintBottom_toBottomOf="parent"
