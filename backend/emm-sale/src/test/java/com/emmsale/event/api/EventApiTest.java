@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -106,6 +107,31 @@ class EventApiTest extends MockMvcTestHelper {
                 format("/events/%s/participants/%s", eventId, participantId))
         )
         .andDo(document("participate-event", requestFields));
+  }
+
+  @Test
+  @DisplayName("Event에 사용자를 참여자 목록에서 제거할 수 있다.")
+  void cancelParticipateEvent() throws Exception {
+    //given
+    final Long eventId = 1L;
+    final Long memberId = 2L;
+    final EventParticipateRequest request = new EventParticipateRequest(memberId);
+    final String fakeAccessToken = "Bearer accessToken";
+
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자")
+    );
+
+//    when(eventService.participate(any(), any(), any()))
+    //      .thenReturn();
+
+    //when
+    mockMvc.perform(delete("/events/{eventId}/participants", eventId)
+            .header("Authorization", fakeAccessToken)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isNoContent())
+        .andDo(document("participate-event-cancel", requestFields));
   }
 
   @Test

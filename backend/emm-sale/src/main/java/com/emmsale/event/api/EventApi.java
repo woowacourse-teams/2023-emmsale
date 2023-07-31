@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +48,21 @@ public class EventApi {
 
     return ResponseEntity
         .created(create(format("/events/%s/participants/%s", eventId, participantId)))
+        .build();
+  }
+
+  @DeleteMapping("/{eventId}/participants")
+  public ResponseEntity<String> cancelParticipateEvent(
+      @PathVariable final Long eventId,
+      final Member member
+  ) {
+    //final Long participantId = eventService.cancelParticipate(
+    //    eventId,
+    //    member
+    //);
+
+    return ResponseEntity
+        .noContent()
         .build();
   }
 
