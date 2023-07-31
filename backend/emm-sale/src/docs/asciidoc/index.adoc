@@ -106,6 +106,13 @@ include::{snippets}/find-profile/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-profile/response-fields.adoc[]
 
+=== `DELETE`: 특정 사용자 삭제
+
+.HTTP request
+include::{snippets}/delete-member/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/delete-member/http-response.adoc[]
 
 == Event
 

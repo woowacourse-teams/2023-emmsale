@@ -1,6 +1,8 @@
 package com.emmsale.member.api;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -263,16 +265,30 @@ class MemberApiTest extends MockMvcTestHelper {
     //given
     final MemberProfileResponse memberProfileResponse = new MemberProfileResponse(1L, "김길동",
         "안녕하세요, 김길동입니다.", "https://image");
-
-    //when
     when(memberQueryService.findProfile(any()))
         .thenReturn(memberProfileResponse);
 
-    //then
+    //when && then
     mockMvc.perform(get("/members/1")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-profile", MEMBER_PROFILE_RESPONSE_FIELDS));
+  }
+
+  @Test
+  @DisplayName("회원탈퇴를 할 수 있다.")
+  void deleteMemberTest() throws Exception {
+    //given
+    final long memberId = 1L;
+    doNothing().when(memberUpdateService).deleteMember(any(), anyLong());
+    final String accessToken = "access_token";
+
+    //when
+    mockMvc.perform(delete("/members/" + memberId)
+            .header("Authorization", accessToken))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("delete-member"));
   }
 }
