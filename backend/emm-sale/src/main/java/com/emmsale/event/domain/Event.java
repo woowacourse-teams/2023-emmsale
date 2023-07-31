@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -70,10 +71,14 @@ public class Event extends BaseEntity {
     return participant;
   }
 
-  public EventTag addEventTag(final Tag tag) {
-    final EventTag eventTag = new EventTag(this, tag);
-    tags.add(eventTag);
-    return eventTag;
+  public List<EventTag> addAllEventTags(final List<Tag> tags) {
+    final List<EventTag> eventTags = tags.stream()
+        .map(tag -> new EventTag(this, tag))
+        .collect(Collectors.toList());
+
+    this.tags.addAll(eventTags);
+
+    return eventTags;
   }
 
   public void validateAlreadyParticipate(final Member member) {
@@ -114,9 +119,7 @@ public class Event extends BaseEntity {
     this.informationUrl = informationUrl;
     this.tags = new ArrayList<>();
 
-    for (final Tag tag : tags) {
-      addEventTag(tag);
-    }
+    addAllEventTags(tags);
 
     return this;
   }

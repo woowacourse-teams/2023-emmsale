@@ -166,9 +166,7 @@ public class EventService {
 
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
 
-    for (final Tag tag : tags) {
-      event.addEventTag(tag);
-    }
+    event.addAllEventTags(tags);
 
     return EventDetailResponse.from(event);
   }
