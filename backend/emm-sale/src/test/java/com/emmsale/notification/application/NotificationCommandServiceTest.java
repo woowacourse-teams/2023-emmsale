@@ -72,14 +72,14 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
         eventId
     );
 
-    final NotificationResponse actual = new NotificationResponse(
+    final NotificationResponse expected = new NotificationResponse(
         notificationId, senderId, receiverId, message, eventId
     );
 
     doNothing().when(firebaseCloudMessageClient).sendMessageTo(anyLong(), any());
 
     //when
-    final NotificationResponse expected = mockingNotificationCommandService.create(request);
+    final NotificationResponse actual = mockingNotificationCommandService.create(request);
 
     //then
     assertThat(actual)
