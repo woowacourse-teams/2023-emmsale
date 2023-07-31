@@ -12,10 +12,10 @@ import retrofit2.http.Path
 interface MemberService {
 
     @GET("members/{memberId}")
-    suspend fun fetchMember(@Path("memberId") memberId: Long): Response<MemberWithoutActivitiesApiModel>
+    suspend fun getMember(@Path("memberId") memberId: Long): Response<MemberWithoutActivitiesApiModel>
 
     @GET("members/activities")
-    suspend fun fetchActivities(): Response<List<MemberActivitiesBindActivityTypeApiModel>>
+    suspend fun getActivities(): Response<List<MemberActivitiesBindActivityTypeApiModel>>
 
     @POST("/members")
     suspend fun updateMember(@Body member: MemberApiModel): Response<Unit>

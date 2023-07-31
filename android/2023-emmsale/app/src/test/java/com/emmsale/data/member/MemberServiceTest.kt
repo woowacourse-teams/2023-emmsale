@@ -63,7 +63,7 @@ internal class MemberServiceTest {
             )
         mockWebServer.enqueue(mockResponse)
 
-        val response = sut.fetchMember(4L)
+        val response = sut.getMember(4L)
 
         assertThat(response.body()).isEqualTo(
             MemberWithoutActivitiesApiModel(
@@ -117,7 +117,7 @@ internal class MemberServiceTest {
             )
         mockWebServer.enqueue(mockResponse)
 
-        val response = sut.fetchActivities()
+        val response = sut.getActivities()
 
         assertThat(response.body()).isEqualTo(
             listOf(

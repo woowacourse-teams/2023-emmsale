@@ -39,8 +39,8 @@ internal class MemberRepositoryImplTest {
     fun test1() = runTest {
         val memberId = 1L
         val apiModel = memberApiModelFixture.copy(memberId)
-        coEvery { memberService.fetchMember(memberId) } returns Response.success(apiModel)
-        coEvery { memberService.fetchActivities() } returns Response.success(
+        coEvery { memberService.getMember(memberId) } returns Response.success(apiModel)
+        coEvery { memberService.getActivities() } returns Response.success(
             listOf(
                 MemberActivitiesBindActivityTypeApiModel(
                     "동아리",
@@ -71,7 +71,7 @@ internal class MemberRepositoryImplTest {
             )
         )
 
-        val result = sut.fetchMember(memberId)
+        val result = sut.getMember(memberId)
 
         assertAll(
             { assertThat(result).isInstanceOf(ApiSuccess::class.java) },
