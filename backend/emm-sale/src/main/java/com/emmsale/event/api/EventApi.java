@@ -40,11 +40,7 @@ public class EventApi {
       @RequestBody final EventParticipateRequest request,
       final Member member
   ) {
-    final Long participantId = eventService.participate(
-        eventId,
-        request.getMemberId(),
-        member
-    );
+    final Long participantId = eventService.participate(eventId, request.getMemberId(), member);
 
     return ResponseEntity
         .created(create(format("/events/%s/participants/%s", eventId, participantId)))
@@ -54,16 +50,12 @@ public class EventApi {
   @DeleteMapping("/{eventId}/participants")
   public ResponseEntity<String> cancelParticipateEvent(
       @PathVariable final Long eventId,
+      @RequestBody final EventParticipateRequest request,
       final Member member
   ) {
-    //final Long participantId = eventService.cancelParticipate(
-    //    eventId,
-    //    member
-    //);
+    eventService.cancelParticipate(eventId, request.getMemberId(), member);
 
-    return ResponseEntity
-        .noContent()
-        .build();
+    return ResponseEntity.noContent().build();
   }
 
   @GetMapping("/{id}/participants")
