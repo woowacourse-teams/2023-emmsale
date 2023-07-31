@@ -5,6 +5,7 @@ import com.emmsale.login.application.dto.GithubAccessTokenResponse;
 import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.exception.LoginException;
 import com.emmsale.login.exception.LoginExceptionType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,9 +16,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
+@RequiredArgsConstructor
 public class GithubClient {
-
-  private static final RestTemplate REST_TEMPLATE = new RestTemplate();
 
   @Value("${github.client.id}")
   private String clientId;
@@ -27,6 +27,8 @@ public class GithubClient {
   private String accessTokenUrl;
   @Value("${github.url.profile}")
   private String profileUrl;
+
+  private final RestTemplate restTemplate;
 
   public String getAccessTokenFromGithub(final String code) {
     final GithubAccessTokenRequest githubAccessTokenRequest = buildGithubAccessTokenRequest(code);
@@ -54,7 +56,7 @@ public class GithubClient {
 
     final HttpEntity<String> httpEntity = new HttpEntity<>(headers);
 
-    return REST_TEMPLATE
+    return restTemplate
         .exchange(profileUrl, HttpMethod.GET, httpEntity, GithubProfileResponse.class)
         .getBody();
   }
@@ -76,7 +78,7 @@ public class GithubClient {
         headers
     );
 
-    return REST_TEMPLATE
+    return restTemplate
         .exchange(accessTokenUrl, HttpMethod.POST, httpEntity, GithubAccessTokenResponse.class)
         .getBody()
         .getAccessToken();

@@ -78,10 +78,9 @@ public class EventService {
     validateYearAndMonth(year, month);
     final List<Event> events = filterEventsByTag(tagName);
 
-    final EnumMap<EventStatus, List<Event>> sortAndGroupByStatus
+    final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events, year, month);
-
-    return filterEventResponsesByStatus(statusName, sortAndGroupByStatus);
+    return filterEventResponsesByStatus(statusName, eventsForEventStatus);
   }
 
   @Transactional(readOnly = true)
@@ -148,13 +147,20 @@ public class EventService {
   }
 
   private List<EventResponse> filterEventResponsesByStatus(final String statusName,
-      final EnumMap<EventStatus, List<Event>> sortAndGroupByEventStatus) {
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
     if (isExistStatusName(statusName)) {
-      final EventStatus status = EventStatus.from(statusName);
-      return EventResponse.makeEventResponsesByStatus(status,
-          sortAndGroupByEventStatus.get(status));
+      EventStatus status = EventStatus.from(statusName);
+      List<Event> filteredEvents = eventsForEventStatus.get(status);
+      if (cannotFoundKeyStatus(filteredEvents)) {
+        return List.of();
+      }
+      return EventResponse.makeEventResponsesByStatus(status, filteredEvents);
     }
-    return EventResponse.mergeEventResponses(sortAndGroupByEventStatus);
+    return EventResponse.mergeEventResponses(eventsForEventStatus);
+  }
+
+  private boolean cannotFoundKeyStatus(final List<Event> filteredEvents) {
+    return filteredEvents == null;
   }
 
   private boolean isExistStatusName(final String statusName) {
