@@ -23,15 +23,12 @@ class EventTag : AppCompatCheckBox {
         buttonDrawable = null
         textSize = 13F
         gravity = Gravity.CENTER
+        minimumHeight = 0
         background = ContextCompat.getDrawable(context, R.drawable.bg_event_tag)
         setTextColor(ContextCompat.getColor(context, R.color.black))
-        updatePadding(12.px, 0, 12.px, 0)
+        updatePadding(12.px, 6.px, 12.px, 6.px)
     }
 }
-
-fun Fragment.eventChipOf(
-    block: EventTag.() -> Unit
-): EventTag = requireContext().eventChipOf(block)
 
 fun Context.eventChipOf(
     block: EventTag.() -> Unit
