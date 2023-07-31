@@ -39,6 +39,7 @@ import com.emmsale.tag.exception.TagExceptionType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -363,7 +364,13 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
             () -> assertEquals(eventInformationUrl, savedEvent.getInformationUrl()),
             () -> assertEquals(startDateTime, savedEvent.getStartDate()),
             () -> assertEquals(endDateTime, savedEvent.getEndDate()),
-            () -> assertEquals(tagRequests.size(), savedEvent.getTags().size())
+            () -> assertThat(savedEvent.getTags()).extracting("tag", Tag.class)
+                .extracting("name", String.class)
+                .containsAll(
+                    tagRequests.stream()
+                        .map(TagRequest::getName)
+                        .collect(Collectors.toList())
+                )
         );
       }
 
@@ -456,7 +463,13 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
             () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
             () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
             () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
-            () -> assertEquals(newTagRequests.size(), updatedEvent.getTags().size())
+            () -> assertThat(updatedEvent.getTags()).extracting("tag", Tag.class)
+                .extracting("name", String.class)
+                .containsAll(
+                    newTagRequests.stream()
+                        .map(TagRequest::getName)
+                        .collect(Collectors.toList())
+                )
         );
       }
 
