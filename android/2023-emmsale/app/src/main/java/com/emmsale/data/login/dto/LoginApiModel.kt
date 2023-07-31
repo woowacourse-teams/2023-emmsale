@@ -10,12 +10,12 @@ data class LoginApiModel(
     val uid: Long,
     @SerialName("accessToken")
     val accessToken: String,
-    @SerialName("newMember")
-    val isNewMember: Boolean,
+    @SerialName("onboarded")
+    val onboarded: Boolean,
 ) {
     fun toData(): Login = Login(
         accessToken = accessToken,
         uid = uid,
-        isNewMember = isNewMember,
+        isNewMember = !onboarded,
     )
 }
