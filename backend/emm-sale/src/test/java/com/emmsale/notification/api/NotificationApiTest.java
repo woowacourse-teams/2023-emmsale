@@ -24,6 +24,7 @@ import com.emmsale.notification.application.dto.NotificationModifyRequest;
 import com.emmsale.notification.application.dto.NotificationRequest;
 import com.emmsale.notification.application.dto.NotificationResponse;
 import com.emmsale.notification.domain.NotificationStatus;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -183,5 +184,36 @@ class NotificationApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-notification", responseFields, pathParameters));
+  }
+
+  @Test
+  @DisplayName("사용자가 받은 알림의 목록을 성공적으로 반환하면 200 OK를 반환한다.")
+  void test_findAll() throws Exception {
+    //given
+    final String accessToken = "Bearer access_token";
+
+    final long memberId = 1L;
+
+    final List<NotificationResponse> expectResponses = List.of(
+        new NotificationResponse(931L, 3342L, memberId, "같이 가요~", 312L),
+        new NotificationResponse(932L, 1345L, memberId, "소통해요~", 123L)
+    );
+
+    when(notificationCommandService.findAllNotifications(any())).thenReturn(expectResponses);
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("[].notificationId").description("저장된 알림 ID"),
+        fieldWithPath("[].senderId").description("보내는 사람 ID"),
+        fieldWithPath("[].receiverId").description("받는 사람 ID"),
+        fieldWithPath("[].message").description("알림 보낼 때 메시지"),
+        fieldWithPath("[].eventId").description("행사 ID")
+    );
+
+    //when & then
+    mockMvc.perform(get("/notifications")
+            .header("Authorization", accessToken))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("find-all-notifications", responseFields));
   }
 }

@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.member.domain.Member;
+import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.notification.application.dto.FcmTokenRequest;
 import com.emmsale.notification.application.dto.NotificationModifyRequest;
 import com.emmsale.notification.application.dto.NotificationRequest;
@@ -18,12 +20,15 @@ import com.emmsale.notification.domain.NotificationRepository;
 import com.emmsale.notification.domain.NotificationStatus;
 import com.emmsale.notification.exception.NotificationException;
 import com.emmsale.notification.exception.NotificationExceptionType;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 
+@Sql("/data-test.sql")
 class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
@@ -32,6 +37,8 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
   private FcmTokenRepository fcmTokenRepository;
   @Autowired
   private NotificationRepository notificationRepository;
+  @Autowired
+  private MemberRepository memberRepository;
 
   @Test
   @DisplayName("create() : 알림을 새로 생성할 수 있다.")
@@ -156,5 +163,31 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
 
     //then
     assertEquals(request.getUpdatedStatus(), updatedNotification.getStatus());
+  }
+
+  @Test
+  @DisplayName("Member가 받은 모든 알림 목록을 조회한다.")
+  void test_findAllNotifications() {
+    //given
+    final Member sender = memberRepository.findById(1L).get();
+    final Member receiver = memberRepository.findById(2L).get();
+
+    final String message1 = "message123";
+    final String message2 = "message321";
+
+    notificationRepository.save(
+        new Notification(sender.getId(), receiver.getId(), 123L, message1)
+    );
+    notificationRepository.save(
+        new Notification(sender.getId(), receiver.getId(), 321L, message2)
+    );
+
+    //when
+    final List<NotificationResponse> notifications = notificationCommandService.findAllNotifications(
+        receiver);
+
+    //then
+    assertThat(notifications).extracting("message", String.class)
+        .containsExactly(message1, message2);
   }
 }

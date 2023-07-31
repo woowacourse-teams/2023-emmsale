@@ -95,7 +95,6 @@ include::{snippets}/find-profile/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-profile/response-fields.adoc[]
 
-
 == Event
 
 === `GET` : 행사 상세정보 조회
@@ -257,3 +256,13 @@ include::{snippets}/find-notification/response-fields.adoc[]
 .HTTP response
 include::{snippets}/find-notification/http-response.adoc[]
 
+=== `GET` : 사용자가 받은 모든 알림 목록 조회
+
+.HTTP request
+include::{snippets}/find-all-notifications/http-request.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-all-notifications/response-fields.adoc[]
+
+.HTTP response
+include::{snippets}/find-all-notifications/http-response.adoc[]
