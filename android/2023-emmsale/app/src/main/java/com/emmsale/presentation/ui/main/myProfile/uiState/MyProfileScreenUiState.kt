@@ -14,7 +14,7 @@ data class MyProfileScreenUiState(
     val jobs: List<ActivityUiState>,
     val educations: List<ActivityUiState>,
     val clubs: List<ActivityUiState>,
-    val events: List<ActivityUiState>
+    val events: List<ActivityUiState>,
 ) {
     companion object {
         val Loading = MyProfileScreenUiState(
