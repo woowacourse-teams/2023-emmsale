@@ -30,7 +30,7 @@ jobs:
 
       - name: firebase key 생성
         run: |
-          echo "$FIREBASE_KEY" > firebase-kerdy.json
+          echo "${{ secrets.FIREBASE_KEY }}" > firebase-kerdy.json
 
       - name: firebase key 이동
         run: |
@@ -78,7 +78,7 @@ jobs:
 
       - name: 권한부여
         run: chmod +x /home/ubuntu/backend/build/emm-sale-*.jar
-        
+
       - name: 배포하기
         run: /home/ubuntu/backend/build/deploy.sh
 
