@@ -23,9 +23,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initBottomNavigationView() {
-        val bnvMain = binding.bnvMain
+        val mainBottomNavigationView = binding.bnvMain
 
-        bnvMain.setOnItemSelectedListener {
+        mainBottomNavigationView.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.mi_main_profile -> changeFragment(MyProfileFragment())
                 R.id.mi_main_home -> changeFragment(EventsFragment())
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             return@setOnItemSelectedListener true
         }
 
-        bnvMain.selectedItemId = R.id.mi_main_home
+        mainBottomNavigationView.selectedItemId = R.id.mi_main_home
     }
 
     private fun changeFragment(fragment: Fragment) {
