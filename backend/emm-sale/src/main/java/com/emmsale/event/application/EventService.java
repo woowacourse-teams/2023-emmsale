@@ -63,7 +63,7 @@ public class EventService {
     return participant.getId();
   }
 
-  private static void validateMemberNotAllowed(final Long memberId, final Member member) {
+  private void validateMemberNotAllowed(final Long memberId, final Member member) {
     if (member.isNotMe(memberId)) {
       throw new EventException(EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT);
     }
@@ -75,10 +75,9 @@ public class EventService {
     validateYearAndMonth(year, month);
     List<Event> events = filterEventsByTag(tagName);
 
-    final EnumMap<EventStatus, List<Event>> sortAndGroupByStatus
+    final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events, year, month);
-
-    return filterEventResponsesByStatus(statusName, sortAndGroupByStatus);
+    return filterEventResponsesByStatus(statusName, eventsForEventStatus);
   }
 
   @Transactional(readOnly = true)
@@ -145,13 +144,20 @@ public class EventService {
   }
 
   private List<EventResponse> filterEventResponsesByStatus(final String statusName,
-      final EnumMap<EventStatus, List<Event>> sortAndGroupByEventStatus) {
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
     if (isExistStatusName(statusName)) {
       EventStatus status = EventStatus.from(statusName);
-      return EventResponse.makeEventResponsesByStatus(status,
-          sortAndGroupByEventStatus.get(status));
+      List<Event> filteredEvents = eventsForEventStatus.get(status);
+      if (cannotFoundKeyStatus(filteredEvents)) {
+        return List.of();
+      }
+      return EventResponse.makeEventResponsesByStatus(status, filteredEvents);
     }
-    return EventResponse.mergeEventResponses(sortAndGroupByEventStatus);
+    return EventResponse.mergeEventResponses(eventsForEventStatus);
+  }
+
+  private boolean cannotFoundKeyStatus(final List<Event> filteredEvents) {
+    return filteredEvents == null;
   }
 
   private boolean isExistStatusName(final String statusName) {

@@ -25,7 +25,6 @@ public class Member extends BaseEntity {
   private Long id;
   @Column(unique = true, nullable = false)
   private Long githubId;
-  @Column(nullable = false)
   private String name;
   @Column(nullable = false)
   private String description;
@@ -42,10 +41,9 @@ public class Member extends BaseEntity {
     this.description = DEFAULT_DESCRIPTION;
   }
 
-  public Member(final Long githubId, final String imageUrl, final String name) {
+  public Member(final Long githubId, final String imageUrl) {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
-    this.name = name;
     this.description = DEFAULT_DESCRIPTION;
   }
 
@@ -89,5 +87,9 @@ public class Member extends BaseEntity {
 
   public boolean isNotMe(final Long id) {
     return !this.id.equals(id);
+  }
+
+  public boolean isOnboarded() {
+    return name != null;
   }
 }

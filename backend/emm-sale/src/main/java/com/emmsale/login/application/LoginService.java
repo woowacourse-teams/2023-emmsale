@@ -39,7 +39,7 @@ public class LoginService {
 
     return new TokenResponse(
         memberQueryResponse.getMemberId(),
-        memberQueryResponse.isNewMember(),
+        memberQueryResponse.isOnboarded(),
         accessToken
     );
   }

@@ -26,7 +26,7 @@ public enum EventStatus {
         .orElseThrow(() -> new EventException(INVALID_STATUS));
   }
 
-  public boolean isSameValue(String value) {
+  private boolean isSameValue(String value) {
     return this.value.equals(value);
   }
 }
