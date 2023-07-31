@@ -28,9 +28,10 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_myprofile_profilescreen"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             onRefresh="@{() -> viewModel.fetchMember()}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -246,8 +247,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="15dp"
+                        android:layout_marginBottom="39dp"
                         android:overScrollMode="never"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iv_myprofile_eventicon"
                         app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_eventicon"
                         tools:itemCount="4"
