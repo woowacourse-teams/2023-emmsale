@@ -66,6 +66,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun navigateToMain() {
         MainActivity.startActivity(this)
+        finish()
     }
 
     private fun navigateToOnboarding() {
