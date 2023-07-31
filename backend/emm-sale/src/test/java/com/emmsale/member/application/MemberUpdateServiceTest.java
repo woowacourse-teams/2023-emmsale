@@ -106,4 +106,37 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
       assertThat(actualMember.getDescription()).isEqualTo(expectDescription);
     }
   }
+
+  @Nested
+  @DisplayName("member와 memberId로 member를 삭제할 수 있다.")
+  class DeleteMember {
+
+    @Test
+    @DisplayName("정상적으로 삭제하는 경우")
+    void success() {
+      //given
+      final long memberId = 1L;
+      final Member member = memberRepository.findById(memberId).get();
+
+      //when
+      memberUpdateService.deleteMember(member, memberId);
+
+      //then
+      assertThat(memberRepository.findById(memberId))
+          .isEmpty();
+    }
+
+    @Test
+    @DisplayName("member의 id와 memberId가 일치하지 않는 경우")
+    void forbbidenDeleteMemberException() {
+      final long memberId = 1L;
+      final long otherMemberId = 2L;
+      final Member member = memberRepository.findById(memberId).get();
+
+      //when && then
+      assertThatThrownBy(() -> memberUpdateService.deleteMember(member, otherMemberId))
+          .isInstanceOf(MemberException.class)
+          .hasMessage(MemberExceptionType.FORBIDDEN_DELETE_MEMBER.errorMessage());
+    }
+  }
 }
