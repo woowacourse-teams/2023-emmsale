@@ -33,10 +33,22 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     private fun initUiLogic() {
+        initErrorHandleLogic()
+        initRefreshLogic()
+    }
+
+    private fun initErrorHandleLogic() {
         viewModel.uiState.observe(viewLifecycleOwner) {
             if (it.isError) {
                 context?.showToast(it.errorMessage)
             }
+        }
+    }
+
+    private fun initRefreshLogic() {
+        binding.srlMyprofileProfilescreen.setOnRefreshListener {
+            viewModel.fetchMember()
+            binding.srlMyprofileProfilescreen.isRefreshing = false
         }
     }
 
