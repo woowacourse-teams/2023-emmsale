@@ -11,6 +11,10 @@ Content-Type: application/json
   ]
 }
 
+### 사용자 Activity 조회
+GET http://localhost:8080/members/1/activities
+
+
 ### 사용자 Activity 추가
 POST http://localhost:8080/members/activities
 Content-Type: application/json
