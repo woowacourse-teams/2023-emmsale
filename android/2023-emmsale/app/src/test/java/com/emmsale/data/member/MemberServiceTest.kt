@@ -1,7 +1,7 @@
 package com.emmsale.data.member
 
-import com.emmsale.data.member.dto.MemberActivitiesBindActivityTypeApiModel
-import com.emmsale.data.member.dto.MemberActivityApiModel
+import com.emmsale.data.member.dto.ActivitiesAssociatedByActivityTypeApiModel
+import com.emmsale.data.member.dto.ActivityApiModel
 import com.emmsale.data.member.dto.MemberWithoutActivitiesApiModel
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.test.runTest
@@ -121,45 +121,45 @@ internal class MemberServiceTest {
 
         assertThat(response.body()).isEqualTo(
             listOf(
-                MemberActivitiesBindActivityTypeApiModel(
+                ActivitiesAssociatedByActivityTypeApiModel(
                     activityType = "동아리",
                     memberActivityResponses = listOf(
-                        MemberActivityApiModel(
+                        ActivityApiModel(
                             id = 1,
                             name = "YAPP"
                         ),
-                        MemberActivityApiModel(
+                        ActivityApiModel(
                             id = 2,
                             name = "DND",
                         ),
-                        MemberActivityApiModel(
+                        ActivityApiModel(
                             id = 3,
                             name = "nexters"
                         )
                     )
                 ),
-                MemberActivitiesBindActivityTypeApiModel(
+                ActivitiesAssociatedByActivityTypeApiModel(
                     activityType = "컨퍼런스",
                     memberActivityResponses = listOf(
-                        MemberActivityApiModel(
+                        ActivityApiModel(
                             id = 4,
                             name = "인프콘"
                         )
                     )
                 ),
-                MemberActivitiesBindActivityTypeApiModel(
+                ActivitiesAssociatedByActivityTypeApiModel(
                     activityType = "교육",
                     memberActivityResponses = listOf(
-                        MemberActivityApiModel(
+                        ActivityApiModel(
                             id = 5,
                             name = "우아한테크코스"
                         )
                     )
                 ),
-                MemberActivitiesBindActivityTypeApiModel(
+                ActivitiesAssociatedByActivityTypeApiModel(
                     activityType = "직무",
                     memberActivityResponses = listOf(
-                        MemberActivityApiModel(
+                        ActivityApiModel(
                             id = 6,
                             name = "Backend"
                         )

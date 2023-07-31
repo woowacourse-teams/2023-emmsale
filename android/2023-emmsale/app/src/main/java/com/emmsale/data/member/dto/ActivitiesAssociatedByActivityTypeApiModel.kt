@@ -5,9 +5,9 @@ import com.emmsale.data.activity.ActivityType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MemberActivitiesBindActivityTypeApiModel(
+data class ActivitiesAssociatedByActivityTypeApiModel(
     val activityType: String,
-    val memberActivityResponses: List<MemberActivityApiModel>,
+    val memberActivityResponses: List<ActivityApiModel>,
 ) {
     fun toData(): List<Activity1> {
         return memberActivityResponses.map {
@@ -30,7 +30,7 @@ data class MemberActivitiesBindActivityTypeApiModel(
 }
 
 @Serializable
-data class MemberActivityApiModel(
+data class ActivityApiModel(
     val id: Long,
     val name: String,
 )

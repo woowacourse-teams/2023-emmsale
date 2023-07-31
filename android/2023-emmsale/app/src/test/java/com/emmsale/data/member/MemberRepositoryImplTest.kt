@@ -3,8 +3,8 @@ package com.emmsale.data.member
 import com.emmsale.data.activity.Activity1
 import com.emmsale.data.activity.ActivityType
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.member.dto.MemberActivitiesBindActivityTypeApiModel
-import com.emmsale.data.member.dto.MemberActivityApiModel
+import com.emmsale.data.member.dto.ActivitiesAssociatedByActivityTypeApiModel
+import com.emmsale.data.member.dto.ActivityApiModel
 import com.emmsale.data.member.dto.MemberWithoutActivitiesApiModel
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -42,27 +42,27 @@ internal class MemberRepositoryImplTest {
         coEvery { memberService.getMember(memberId) } returns Response.success(apiModel)
         coEvery { memberService.getActivities() } returns Response.success(
             listOf(
-                MemberActivitiesBindActivityTypeApiModel(
+                ActivitiesAssociatedByActivityTypeApiModel(
                     "동아리",
                     listOf(
-                        MemberActivityApiModel(
+                        ActivityApiModel(
                             id = 1L,
                             name = "DDD 5기"
                         ),
-                        MemberActivityApiModel(
+                        ActivityApiModel(
                             id = 2L,
                             name = "SOPT 13기"
                         )
                     )
                 ),
-                MemberActivitiesBindActivityTypeApiModel(
+                ActivitiesAssociatedByActivityTypeApiModel(
                     "직무",
                     listOf(
-                        MemberActivityApiModel(
+                        ActivityApiModel(
                             id = 3L,
                             name = "Backend"
                         ),
-                        MemberActivityApiModel(
+                        ActivityApiModel(
                             id = 4L,
                             name = "Frontend"
                         )

@@ -1,6 +1,6 @@
 package com.emmsale.data.member
 
-import com.emmsale.data.member.dto.MemberActivitiesBindActivityTypeApiModel
+import com.emmsale.data.member.dto.ActivitiesAssociatedByActivityTypeApiModel
 import com.emmsale.data.member.dto.MemberApiModel
 import com.emmsale.data.member.dto.MemberWithoutActivitiesApiModel
 import retrofit2.Response
@@ -15,7 +15,7 @@ interface MemberService {
     suspend fun getMember(@Path("memberId") memberId: Long): Response<MemberWithoutActivitiesApiModel>
 
     @GET("members/activities")
-    suspend fun getActivities(): Response<List<MemberActivitiesBindActivityTypeApiModel>>
+    suspend fun getActivities(): Response<List<ActivitiesAssociatedByActivityTypeApiModel>>
 
     @POST("/members")
     suspend fun updateMember(@Body member: MemberApiModel): Response<Unit>
