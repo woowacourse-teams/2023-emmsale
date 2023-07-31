@@ -26,7 +26,7 @@ class ActivityApiTest extends MockMvcTestHelper {
   private ActivityService activityService;
 
   @Test
-  @DisplayName("커리어를 전제 조회할 수 있으면 200 OK를 반환한다.")
+  @DisplayName("Activity를 전제 조회할 수 있으면 200 OK를 반환한다.")
   void findAll() throws Exception {
     // given
     final ResponseFieldsSnippet responseFields = responseFields(

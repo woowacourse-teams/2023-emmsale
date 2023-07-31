@@ -2,8 +2,11 @@ package com.emmsale.member.application;
 
 import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.MemberQueryResponse;
+import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.member.exception.MemberExceptionType;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +36,12 @@ public class MemberQueryService {
     }
     final Member member = memberRepository.save(githubProfileFromGithub.toMember());
     return new MemberQueryResponse(member.getId(), true);
+  }
+
+  public MemberProfileResponse findProfile(Long memberId) {
+    Member member = memberRepository.findById(memberId)
+        .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
+
+    return MemberProfileResponse.from(member);
   }
 }

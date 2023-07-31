@@ -1,11 +1,12 @@
 package com.emmsale.notification.application;
 
-import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
+import static com.emmsale.notification.exception.NotificationExceptionType.*;
 
 import com.emmsale.notification.application.dto.NotificationResponse;
 import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.NotificationRepository;
 import com.emmsale.notification.exception.NotificationException;
+import com.emmsale.notification.exception.NotificationExceptionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
