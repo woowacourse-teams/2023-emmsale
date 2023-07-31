@@ -89,32 +89,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     );
   }
 
-  @Test
-  @DisplayName("event의 id로 참여자 목록을 조회할 수 있다.")
-  void findParticipants() {
-    // given
-    final Event 인프콘 = eventRepository.save(eventFixture());
-    final Member 멤버1 = memberRepository.save(new Member(123L, "image1.com", "멤버1"));
-    final Member 멤버2 = memberRepository.save(new Member(124L, "image2.com", "멤버2"));
-
-    final Long 멤버1_참가자_ID = eventService.participate(인프콘.getId(), 멤버1.getId(), 멤버1);
-    final Long 멤버2_참가자_ID = eventService.participate(인프콘.getId(), 멤버2.getId(), 멤버2);
-
-    //when
-    final List<ParticipantResponse> actual = eventService.findParticipants(인프콘.getId());
-
-    final List<ParticipantResponse> expected = List.of(
-        new ParticipantResponse(멤버1_참가자_ID, 멤버1.getId(), 멤버1.getName(), 멤버1.getImageUrl(),
-            멤버1.getDescription()),
-        new ParticipantResponse(멤버2_참가자_ID, 멤버2.getId(), 멤버2.getName(), 멤버2.getImageUrl(),
-            멤버2.getDescription())
-    );
-    //then
-    assertThat(actual)
-        .usingRecursiveFieldByFieldElementComparator()
-        .containsExactlyInAnyOrderElementsOf(expected);
-  }
-
   @Nested
   @DisplayName("id로 이벤트를 조회할 수 있다.")
   class findEventTest {
@@ -371,5 +345,36 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           .isInstanceOf(EventException.class)
           .hasMessage(EventExceptionType.INVALID_STATUS.errorMessage());
     }
+  }
+
+  @Test
+  @DisplayName("event의 id로 참여자 목록을 조회할 수 있다.")
+  void findParticipants() {
+    // given
+    final Event 인프콘 = eventRepository.save(eventFixture());
+
+    final Member 저장전_멤버1 = new Member(123L, "image1.com");
+    final Member 저장전_멤버2 = new Member(124L, "image2.com");
+    저장전_멤버1.updateName("멈버1");
+    저장전_멤버2.updateName("멈버2");
+    final Member 멤버1 = memberRepository.save(저장전_멤버1);
+    final Member 멤버2 = memberRepository.save(저장전_멤버2);
+
+    final Long 멤버1_참가자_ID = eventService.participate(인프콘.getId(), 멤버1.getId(), 멤버1);
+    final Long 멤버2_참가자_ID = eventService.participate(인프콘.getId(), 멤버2.getId(), 멤버2);
+
+    //when
+    final List<ParticipantResponse> actual = eventService.findParticipants(인프콘.getId());
+
+    final List<ParticipantResponse> expected = List.of(
+        new ParticipantResponse(멤버1_참가자_ID, 멤버1.getId(), 멤버1.getName(), 멤버1.getImageUrl(),
+            멤버1.getDescription()),
+        new ParticipantResponse(멤버2_참가자_ID, 멤버2.getId(), 멤버2.getName(), 멤버2.getImageUrl(),
+            멤버2.getDescription())
+    );
+    //then
+    assertThat(actual)
+        .usingRecursiveFieldByFieldElementComparator()
+        .containsExactlyInAnyOrderElementsOf(expected);
   }
 }

@@ -20,7 +20,6 @@ public class Member extends BaseEntity {
   private Long id;
   @Column(unique = true, nullable = false)
   private Long githubId;
-  @Column(nullable = false)
   private String name;
   @Column
   private String description;
@@ -36,10 +35,9 @@ public class Member extends BaseEntity {
     this.name = name;
   }
 
-  public Member(final Long githubId, final String imageUrl, final String name) {
+  public Member(final Long githubId, final String imageUrl) {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
-    this.name = name;
   }
 
   public void updateName(final String name) {
@@ -51,10 +49,7 @@ public class Member extends BaseEntity {
   }
 
   public boolean isNotMe(final Member member) {
-    if (member.getId().equals(id)) {
-      return false;
-    }
-    return true;
+    return !member.getId().equals(id);
   }
 
   public boolean isMe(final Member member) {
@@ -63,5 +58,9 @@ public class Member extends BaseEntity {
 
   public boolean isNotMe(final Long id) {
     return !this.id.equals(id);
+  }
+
+  public boolean isOnboarded() {
+    return name != null;
   }
 }
