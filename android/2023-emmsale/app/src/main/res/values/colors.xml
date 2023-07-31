@@ -13,4 +13,5 @@
     <color name="event_tag_background_color">#FFEA9F</color>
     <color name="event_dday_text_color">#70DEA2</color>
     <color name="event_total_event_count_text_color">#70DEA2</color>
+    <color name="event_recycler_view_divider">#D9D9D9</color>
 </resources>

@@ -25,8 +25,17 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
     }
 
     private fun initView() {
+        initViewModel()
+        initEventRecyclerView()
+    }
+
+    private fun initViewModel() {
         binding.viewModel = viewModel
+    }
+
+    private fun initEventRecyclerView() {
         binding.rvEvents.adapter = eventAdapter
+        binding.rvEvents.addItemDecoration(EventRecyclerViewDivider(requireContext()))
     }
 
     private fun setupEventsObserver() {
