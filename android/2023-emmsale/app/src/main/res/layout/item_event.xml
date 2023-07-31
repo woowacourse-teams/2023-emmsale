@@ -21,36 +21,61 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="17dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="14dp"
         android:onClick="@{() -> onClickEvent.invoke(event)}">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_event_tags"
+            android:layout_width="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="wrap_content">
+
+            <com.emmsale.presentation.common.views.EventTag
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="안드로이드" />
+
+        </com.google.android.material.chip.ChipGroup>
 
         <TextView
             android:id="@+id/tv_event_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"
             tools:text="2023 인프콘"
             android:text="@{event.name}"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cg_event_tags"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/tv_event_status"
-            android:layout_width="wrap_content"
-            app:layout_constraintTop_toTopOf="@+id/tv_event_name"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_event_name"
-            android:layout_height="wrap_content"
-            android:text="@{event.status}"
-            app:layout_constraintStart_toEndOf="@+id/tv_event_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="진행 중" />
-
-        <TextView
+            android:id="@+id/tv_event_dday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:startEventDateTime="@{event.startDate}"
-            app:endEventDateTime="@{event.endDate}"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textStyle="bold"
+            app:layout_goneMarginTop="9dp"
+            android:textColor="@color/event_dday_text_color"
+            android:textSize="11sp"
+            android:layout_marginTop="12dp"
+            tools:text="D-21"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
-            tools:text="기간 : 2023.01.01 ~ 2023.01.02" />
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:roundedImageRadius="@{15}"
+            app:layout_constraintDimensionRatio="W,100:126"
+            tools:src="@color/event_thumbnail_default_color"
+            android:contentDescription="@string/event_poster_description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

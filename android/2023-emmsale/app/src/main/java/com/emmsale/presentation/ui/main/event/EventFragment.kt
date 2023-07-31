@@ -10,7 +10,7 @@ import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.main.event.recyclerview.EventRecyclerViewAdapter
 import com.emmsale.presentation.ui.main.event.uistate.EventUiState
-import com.emmsale.presentation.ui.main.event.uistate.EventsUiSTate
+import com.emmsale.presentation.ui.main.event.uistate.EventsUiState
 
 class EventFragment : BaseFragment<FragmentEventBinding>() {
     override val layoutResId: Int = R.layout.fragment_event
@@ -32,13 +32,15 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
     private fun setupEventsObserver() {
         viewModel.events.observe(viewLifecycleOwner) { eventsResult ->
             when (eventsResult) {
-                is EventsUiSTate.Success -> {
+                is EventsUiState.Success -> {
                     binding.progressbarLoading.visibility = View.GONE
                     eventAdapter.submitList(eventsResult.events)
+                    binding.tvEventsCount.text =
+                        getString(R.string.event_count_format, eventsResult.eventSize)
                 }
 
-                is EventsUiSTate.Loading -> binding.progressbarLoading.visibility = View.VISIBLE
-                is EventsUiSTate.Error -> {
+                is EventsUiState.Loading -> binding.progressbarLoading.visibility = View.VISIBLE
+                is EventsUiState.Error -> {
                     binding.progressbarLoading.visibility = View.GONE
                     requireContext().showToast("행사 목록을 불러올 수 없어요 \uD83D\uDE22")
                 }

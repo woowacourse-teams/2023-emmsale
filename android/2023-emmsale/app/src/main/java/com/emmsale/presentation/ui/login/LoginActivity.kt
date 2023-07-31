@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginState.observe(this) { loginState ->
             when (loginState) {
                 is LoginUiState.Login -> navigateToMain()
-                is LoginUiState.Register -> navigateToOnboarding()
+                is LoginUiState.Onboarded -> navigateToOnboarding()
                 is LoginUiState.Loading -> changeLoadingVisibility(true)
                 is LoginUiState.Error -> showLoginFailedMessage()
             }

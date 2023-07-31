@@ -3,10 +3,13 @@ package com.emmsale.presentation.ui.main.event.uistate
 import com.emmsale.data.event.Event
 import java.time.LocalDateTime
 
-sealed class EventsUiSTate {
-    data class Success(val events: List<EventUiState>) : EventsUiSTate()
-    object Loading : EventsUiSTate()
-    object Error : EventsUiSTate()
+sealed class EventsUiState {
+    data class Success(val events: List<EventUiState>) : EventsUiState() {
+        val eventSize: Int = events.size
+    }
+
+    object Loading : EventsUiState()
+    object Error : EventsUiState()
 }
 
 data class EventUiState(

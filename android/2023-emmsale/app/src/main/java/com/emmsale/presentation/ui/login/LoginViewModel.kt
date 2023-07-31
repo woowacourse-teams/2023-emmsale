@@ -42,9 +42,9 @@ class LoginViewModel(
     private suspend fun saveTokens(login: Login, fcmToken: String) {
         saveUserToken(login)
         saveFcmToken(login.uid, fcmToken)
-        when (login.isNewMember) {
-            true -> changeLoginState(LoginUiState.Register)
-            false -> changeLoginState(LoginUiState.Login)
+        when (login.isOnboarded) {
+            true -> changeLoginState(LoginUiState.Login)
+            false -> changeLoginState(LoginUiState.Onboarded)
         }
     }
 

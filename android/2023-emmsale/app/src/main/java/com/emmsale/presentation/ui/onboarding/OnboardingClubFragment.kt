@@ -6,7 +6,7 @@ import androidx.fragment.app.activityViewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentOnboardingClubBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
-import com.emmsale.presentation.common.views.chipOf
+import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.onboarding.uistate.ActivityUiState
 
 class OnboardingClubFragment : BaseFragment<FragmentOnboardingClubBinding>(), View.OnClickListener {
@@ -34,7 +34,7 @@ class OnboardingClubFragment : BaseFragment<FragmentOnboardingClubBinding>(), Vi
         binding.chipgroupClubTags.addView(createChip(clubTag))
     }
 
-    private fun createChip(clubTag: ActivityUiState) = chipOf {
+    private fun createChip(clubTag: ActivityUiState) = activityChipOf {
         text = clubTag.name
         isChecked = clubTag.isSelected
         setOnCheckedChangeListener { _, _ -> viewModel.toggleTagSelection(clubTag) }
