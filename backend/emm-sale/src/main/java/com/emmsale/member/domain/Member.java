@@ -80,10 +80,7 @@ public class Member extends BaseEntity {
   }
 
   public boolean isNotMe(final Member member) {
-    if (member.getId().equals(id)) {
-      return false;
-    }
-    return true;
+    return isNotMe(member.getId());
   }
 
   public boolean isMe(final Member member) {
