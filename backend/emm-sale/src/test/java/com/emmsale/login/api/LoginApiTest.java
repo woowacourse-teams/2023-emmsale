@@ -43,7 +43,7 @@ class LoginApiTest extends MockMvcTestHelper {
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 id"),
-        fieldWithPath("isOnboarded").type(JsonFieldType.BOOLEAN).description("온보딩 수행 여부"),
+        fieldWithPath("onboarded").type(JsonFieldType.BOOLEAN).description("온보딩 수행 여부"),
         fieldWithPath("accessToken").type(JsonFieldType.STRING).description("Access Token 값")
     );
 

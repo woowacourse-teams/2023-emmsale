@@ -1,13 +1,13 @@
 package com.emmsale.login.application.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 public class TokenResponse {
 
-  private long memberId;
-  private boolean isOnboarded;
-  private String accessToken;
+  private final long memberId;
+  private final boolean onboarded;
+  private final String accessToken;
 }
