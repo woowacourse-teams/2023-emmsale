@@ -84,6 +84,17 @@ include::{snippets}/update-open-profile-url/http-request.adoc[]
 .HTTP response
 include::{snippets}/update-open-profile-url/http-response.adoc[]
 
+=== `PUT`: 사용자의 한줄 자기소개 업데이트
+
+.HTTP request 설명
+include::{snippets}/update-description/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/update-description/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/update-description/http-response.adoc[]
+
 === `GET`: 특정 사용자의 프로필 정보 조회
 
 .HTTP request

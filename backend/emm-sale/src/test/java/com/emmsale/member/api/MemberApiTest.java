@@ -17,6 +17,7 @@ import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.member.application.MemberActivityService;
 import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.MemberUpdateService;
+import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
@@ -232,6 +233,28 @@ class MemberApiTest extends MockMvcTestHelper {
     result.andExpect(status().isBadRequest())
         .andDo(print())
         .andDo(document("update-open-profile-url", REQUEST_FIELDS));
+  }
+
+  @Test
+  @DisplayName("사용자의 description을 성공적으로 업데이트하면, 200 OK가 반환된다.")
+  void test_updateDescription() throws Exception {
+    // given
+    final String description = "안녕하세요 김개발입니다.";
+    final DescriptionRequest request = new DescriptionRequest(description);
+
+    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+        fieldWithPath("description").description("한줄 자기소개(100자 이하여야 함)")
+    );
+
+    // when
+    final ResultActions result = mockMvc.perform(put("/members/description")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(request)));
+
+    // then
+    result.andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("update-description", REQUEST_FIELDS));
   }
 
   @Test

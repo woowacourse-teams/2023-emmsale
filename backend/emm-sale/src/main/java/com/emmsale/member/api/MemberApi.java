@@ -3,6 +3,7 @@ package com.emmsale.member.api;
 import com.emmsale.member.application.MemberActivityService;
 import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.MemberUpdateService;
+import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
@@ -69,6 +70,15 @@ public class MemberApi {
       @RequestBody @Valid final OpenProfileUrlRequest openProfileUrlRequest
   ) {
     memberUpdateService.updateOpenProfileUrl(member, openProfileUrlRequest);
+    return ResponseEntity.noContent().build();
+  }
+
+  @PutMapping("/members/description")
+  public ResponseEntity<Void> updateDescription(
+      final Member member,
+      @RequestBody final DescriptionRequest descriptionRequest
+  ) {
+    memberUpdateService.updateDescription(member, descriptionRequest);
     return ResponseEntity.noContent().build();
   }
 
