@@ -5,8 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.notification.application.dto.FcmTokenRequest;
 import com.emmsale.notification.application.dto.NotificationModifyRequest;
 import com.emmsale.notification.application.dto.NotificationRequest;
@@ -18,6 +23,7 @@ import com.emmsale.notification.domain.NotificationRepository;
 import com.emmsale.notification.domain.NotificationStatus;
 import com.emmsale.notification.exception.NotificationException;
 import com.emmsale.notification.exception.NotificationExceptionType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,6 +38,22 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
   private FcmTokenRepository fcmTokenRepository;
   @Autowired
   private NotificationRepository notificationRepository;
+  @Autowired
+  private MemberRepository memberRepository;
+  private NotificationCommandService mockingNotificationCommandService;
+  private FirebaseCloudMessageClient firebaseCloudMessageClient;
+
+  @BeforeEach
+  void setUp() {
+    firebaseCloudMessageClient = mock(FirebaseCloudMessageClient.class);
+
+    mockingNotificationCommandService = new NotificationCommandService(
+        notificationRepository,
+        fcmTokenRepository,
+        memberRepository,
+        firebaseCloudMessageClient
+    );
+  }
 
   @Test
   @DisplayName("create() : 알림을 새로 생성할 수 있다.")
@@ -50,12 +72,14 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
         eventId
     );
 
-    final NotificationResponse actual = new NotificationResponse(
+    final NotificationResponse expected = new NotificationResponse(
         notificationId, senderId, receiverId, message, eventId
     );
 
+    doNothing().when(firebaseCloudMessageClient).sendMessageTo(anyLong(), any());
+
     //when
-    final NotificationResponse expected = notificationCommandService.create(request);
+    final NotificationResponse actual = mockingNotificationCommandService.create(request);
 
     //then
     assertThat(actual)

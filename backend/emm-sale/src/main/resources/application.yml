@@ -38,3 +38,7 @@ security:
     token:
       secret-key: secret_key
       expire-length: 3_600_000_000
+
+firebase:
+  project:
+    id: kerdy
