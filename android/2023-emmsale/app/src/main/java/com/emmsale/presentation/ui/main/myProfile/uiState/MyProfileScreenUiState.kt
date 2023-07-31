@@ -40,10 +40,10 @@ data class MyProfileScreenUiState(
                 memberName = member.name,
                 description = member.description,
                 memberImageUrl = member.imageUrl,
-                jobs = member[ActivityType.JOB].map(ActivityUiState::from),
-                educations = member[ActivityType.EDUCATION].map(ActivityUiState::from),
-                clubs = member[ActivityType.CLUB].map(ActivityUiState::from),
-                events = member[ActivityType.EVENT].map(ActivityUiState::from)
+                jobs = member.getActivities(ActivityType.JOB).map(ActivityUiState::from),
+                educations = member.getActivities(ActivityType.EDUCATION).map(ActivityUiState::from),
+                clubs = member.getActivities(ActivityType.CLUB).map(ActivityUiState::from),
+                events = member.getActivities(ActivityType.EVENT).map(ActivityUiState::from)
             )
         }
     }

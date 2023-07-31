@@ -10,6 +10,6 @@ data class Member1(
     val imageUrl: String,
     val activities: Map<ActivityType, List<Activity1>>,
 ) {
-    operator fun get(activityType: ActivityType): List<Activity1> =
+    fun getActivities(activityType: ActivityType): List<Activity1> =
         activities[activityType] ?: listOf()
 }
