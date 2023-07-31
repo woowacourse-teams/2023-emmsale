@@ -38,13 +38,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
-  @Autowired
-  private MemberRepository memberRepository;
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
       List.of(), "진행 중");
   private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
@@ -57,7 +56,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
       List.of(), "진행 예정");
   private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
-
+  @Autowired
+  private MemberRepository memberRepository;
   @Autowired
   private EventService eventService;
   @Autowired
@@ -210,6 +210,55 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = "진행 중")
+    @DisplayName("등록된 행사가 없을 경우, status 옵션이 있든 없든 빈 목록을 반환한다.")
+    void findEvents_empty(String statusName) {
+      // given
+      eventRepository.deleteAll();
+
+      // when
+      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 12, null,
+          statusName);
+
+      // then
+      assertThat(actualEvents).isEmpty();
+    }
+
+    @Test
+    @DisplayName("아무 행사도 없는 2023년 12월 행사를 조회하면, 빈 목록을 반환한다.")
+    void findEvents_2023_12() {
+      // given, when
+      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 12, null, null);
+
+      // then
+      assertThat(actualEvents).isEmpty();
+    }
+
+
+    @Test
+    @DisplayName("아무 행사도 없는 2023년 12월의 행사를 tag로 필터링하면, 빈 목록을 반환한다.")
+    void findEvents_empty_tag_filter() {
+      // given, when
+      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 12, "안드로이드",
+          null);
+
+      // then
+      assertThat(actualEvents).isEmpty();
+    }
+
+    @Test
+    @DisplayName("아무 행사도 없는 2023년 12월의 행사를 status로 필터링하면, 빈 목록을 반환한다.")
+    void findEvents_empty_status_filter() {
+      // given, when
+      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 12, null,
+          "진행 중");
+
+      // then
+      assertThat(actualEvents).isEmpty();
     }
 
     @ParameterizedTest
