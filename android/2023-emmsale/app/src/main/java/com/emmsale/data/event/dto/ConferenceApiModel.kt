@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Serializable
-data class EventApiModel(
+data class ConferenceApiModel(
     @SerialName("id")
     val id: Long,
     @SerialName("name")
@@ -19,7 +19,11 @@ data class EventApiModel(
     @SerialName("status")
     val status: String,
     @SerialName("tags")
-    val tags: List<String>
+    val tags: List<String>,
+    @SerialName("imageUrl")
+    val posterUrl: String,
+    @SerialName("remainingDays")
+    val dDay: Int,
 ) {
     fun toData(): Event = Event(
         id = id,
@@ -27,7 +31,9 @@ data class EventApiModel(
         startDate = parseDate(startDate),
         endDate = parseDate(endDate),
         status = status,
-        tags = tags
+        tags = tags,
+        posterUrl = posterUrl,
+        dDay = dDay,
     )
 
     private fun parseDate(date: String): LocalDateTime {
@@ -40,4 +46,4 @@ data class EventApiModel(
     }
 }
 
-fun List<EventApiModel>.toData(): List<Event> = map { it.toData() }
+fun List<ConferenceApiModel>.toData(): List<Event> = map { it.toData() }

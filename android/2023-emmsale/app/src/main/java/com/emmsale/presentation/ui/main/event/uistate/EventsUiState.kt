@@ -19,6 +19,8 @@ data class EventUiState(
     val endDate: LocalDateTime,
     val tags: List<String>,
     val status: String,
+    val posterUrl: String = "",
+    val dDay: Int = 0,
 ) {
     companion object {
         fun from(event: Event): EventUiState = EventUiState(
@@ -28,6 +30,8 @@ data class EventUiState(
             endDate = event.endDate,
             tags = event.tags,
             status = event.status,
+            posterUrl = event.posterUrl,
+            dDay = event.dDay,
         )
     }
 }

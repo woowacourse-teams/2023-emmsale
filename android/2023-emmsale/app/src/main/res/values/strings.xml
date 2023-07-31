@@ -16,4 +16,5 @@
     <string name="test_image_url">https://ebook.pusan.ac.kr/images/bookimg/L_1386988.jpg</string>
     <string name="event_count_prefix">총</string>
     <string name="event_count_suffix">개</string>
+    <string name="d_day_format">D-%d</string>
 </resources>

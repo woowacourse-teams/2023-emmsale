@@ -8,5 +8,7 @@ data class Event(
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
     val status: String,
-    val tags: List<String>
+    val tags: List<String>,
+    val posterUrl: String,
+    val dDay: Int,
 )

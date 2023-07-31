@@ -56,6 +56,7 @@
             android:textSize="11sp"
             android:layout_marginTop="12dp"
             tools:text="D-21"
+            android:text="@{@string/d_day_format(event.DDay)}"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -66,6 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:roundedImageRadius="@{15}"
+            app:imageUrl="@{event.posterUrl}"
             app:layout_constraintDimensionRatio="W,100:126"
             tools:src="@color/event_thumbnail_default_color"
             android:contentDescription="@string/event_poster_description" />
