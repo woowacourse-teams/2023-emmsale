@@ -25,4 +25,8 @@
     <string name="event_count_prefix">총</string>
     <string name="event_count_suffix">개</string>
     <string name="d_day_format">D-%d</string>
+    <string name="event_view_notification_description">알림 목록 화면 조회</string>
+    <string name="event_search_conference_description">컨퍼런스 검색 화면</string>
+    <string name="event_competition">대회</string>
+    <string name="event_conference">컨퍼런스</string>
 </resources>

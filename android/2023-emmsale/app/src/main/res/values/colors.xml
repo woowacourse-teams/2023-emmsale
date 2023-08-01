@@ -21,4 +21,7 @@
     <color name="event_status_inactive_text_color">#B1B1B1</color>
     <color name="event_total_event_count_text_color">#70DEA2</color>
     <color name="event_recycler_view_divider">#D9D9D9</color>
+    <color name="event_search_stroke_color">#D9D9D9</color>
+    <color name="event_selected_search_indicator_color">@color/main_color</color>
+    <color name="event_unselected_search_indicator_color">#4DD9D9D9</color>
 </resources>
