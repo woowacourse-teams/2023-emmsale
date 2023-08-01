@@ -1,5 +1,4 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 
 plugins {
     id("org.jetbrains.kotlin.android")
@@ -7,7 +6,6 @@ plugins {
     id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "1.8.21"
     id("kotlin-kapt")
-    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -63,6 +61,12 @@ android {
     dataBinding {
         enable = true
     }
+    tasks.withType(Test::class) {
+        useJUnitPlatform()
+        testLogging {
+            events.addAll(arrayOf(org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED, org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED))
+        }
+    }
     flavorDimensions += "environment"
     productFlavors {
         create("staging") {
@@ -95,19 +99,26 @@ dependencies {
     implementation("androidx.browser:browser:1.5.0")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("com.google.firebase:firebase-messaging-ktx:23.2.0")
-    testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("androidx.fragment:fragment-ktx:1.6.0")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.squareup.okhttp3:mockwebserver:4.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-messaging:23.2.0")
 
-    implementation("com.github.bumptech.glide:glide:4.15.1")
+    testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.2")
+    testImplementation("org.assertj", "assertj-core", "3.22.0")
+    testImplementation("io.mockk:mockk-android:1.13.5")
+    testImplementation("io.mockk:mockk-agent:1.13.5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
 }

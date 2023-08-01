@@ -7,7 +7,7 @@ import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import com.emmsale.R
-import com.emmsale.presentation.utils.extension.px
+import com.emmsale.presentation.utils.extension.dp
 
 class EventTag : AppCompatCheckBox {
     constructor(context: Context) : super(context)
@@ -25,7 +25,7 @@ class EventTag : AppCompatCheckBox {
         minimumHeight = 0
         background = ContextCompat.getDrawable(context, R.drawable.bg_event_tag)
         setTextColor(ContextCompat.getColor(context, R.color.black))
-        updatePadding(12.px, 6.px, 12.px, 6.px)
+        updatePadding(12.dp, 6.dp, 12.dp, 6.dp)
     }
 }
 

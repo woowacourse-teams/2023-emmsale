@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityOnboardingBinding
+import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.onboarding.uistate.MemberUiState
 
 class OnboardingActivity : AppCompatActivity() {
@@ -48,8 +49,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun navigateToMain() {
         binding.progressbarLoading.visibility = View.GONE
-        // MainActivity.startActivity(this)
-        // finish()
+        MainActivity.startActivity(this)
     }
 
     private fun showMemberUpdateFailed() {
