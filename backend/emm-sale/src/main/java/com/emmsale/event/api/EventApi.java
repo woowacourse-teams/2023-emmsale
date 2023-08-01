@@ -9,6 +9,7 @@ import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.event.domain.EventType;
 import com.emmsale.member.domain.Member;
 import java.time.LocalDate;
 import java.util.List;
@@ -63,10 +64,14 @@ public class EventApi {
   }
 
   @GetMapping
-  public ResponseEntity<List<EventResponse>> findEvents(@RequestParam final int year,
-      @RequestParam final int month, @RequestParam(required = false) final String tag,
+  public ResponseEntity<List<EventResponse>> findEvents(
+      @RequestParam final EventType category,
+      @RequestParam(required = false) final Integer year,
+      @RequestParam(required = false) final Integer month,
+      @RequestParam(required = false) final String tag,
       @RequestParam(required = false) final String status) {
-    return ResponseEntity.ok(eventService.findEvents(LocalDate.now(), year, month, tag, status));
+    return ResponseEntity.ok(
+        eventService.findEvents(category, LocalDate.now(), year, month, tag, status));
   }
 
   @PostMapping

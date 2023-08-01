@@ -118,14 +118,16 @@ class EventApiTest extends MockMvcTestHelper {
   }
 
   @Test
-  @DisplayName("특정 연도&월의 행사 목록을 조회할 수 있으면 200 OK를 반환한다.")
+  @DisplayName("특정 카테고리의 행사 목록을 조회할 수 있으면 200 OK를 반환한다.")
   void findEvents() throws Exception {
     // given
     final RequestParametersSnippet requestParameters = requestParameters(
-        parameterWithName("year").description("조회하고자 하는 연도(2015 이상의 값)"),
-        parameterWithName("month").description("조회하고자 하는 월(1~12)"),
+        parameterWithName("category").description("행사 카테고리(CONFERENCE, COMPETITION)"),
+        parameterWithName("year").description("조회하고자 하는 연도(2015 이상의 값)(option)").optional(),
+        parameterWithName("month").description("조회하고자 하는 월(1~12)(option)").optional(),
         parameterWithName("tag").description("필터링하려는 태그(option)").optional(),
-        parameterWithName("status").description("필터링하려는 상태(option)").optional());
+        parameterWithName("status").description("필터링하려는 상태(option)").optional()
+    );
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
@@ -134,27 +136,43 @@ class EventApiTest extends MockMvcTestHelper {
             .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
         fieldWithPath("[].endDate").type(JsonFieldType.STRING)
             .description("행사 종료일(yyyy:MM:dd:HH:mm:ss)"),
-        fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY).description("행사 태그 목록"),
-        fieldWithPath("[].status").type(JsonFieldType.STRING).description("행사 진행 상황"));
+        fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
+            .description("행사 태그 목록"),
+        fieldWithPath("[].status").type(JsonFieldType.STRING).description("행사 진행 상황"),
+        fieldWithPath("[].remainingDays").type(JsonFieldType.NUMBER).description("행사 시작일까지 남은 일 수"),
+        fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("행사 이미지 URL")
+    );
 
     final List<EventResponse> eventResponses = List.of(
         new EventResponse(1L, "인프콘 2023", LocalDateTime.parse("2023-06-03T12:00:00"),
             LocalDateTime.parse("2023-09-03T12:00:00"),
-            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"), "진행 중"),
+            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"), "진행 중",
+            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
+            3),
         new EventResponse(5L, "웹 컨퍼런스", LocalDateTime.parse("2023-07-03T12:00:00"),
-            LocalDateTime.parse("2023-08-03T12:00:00"), List.of("백엔드", "프론트엔드"), "진행 중"),
+            LocalDateTime.parse("2023-08-03T12:00:00"), List.of("백엔드", "프론트엔드"), "진행 중",
+            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
+            3),
         new EventResponse(2L, "AI 컨퍼런스", LocalDateTime.parse("2023-07-22T12:00:00"),
-            LocalDateTime.parse("2023-07-30T12:00:00"), List.of("AI"), "진행 예정"),
+            LocalDateTime.parse("2023-07-30T12:00:00"), List.of("AI"), "진행 예정",
+            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
+            3),
         new EventResponse(4L, "안드로이드 컨퍼런스", LocalDateTime.parse("2023-06-29T12:00:00"),
-            LocalDateTime.parse("2023-07-16T12:00:00"), List.of("백엔드", "프론트엔드"), "종료된 행사")
+            LocalDateTime.parse("2023-07-16T12:00:00"), List.of("백엔드", "프론트엔드"), "종료된 행사",
+            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
+            3)
 
     );
 
-    when(eventService.findEvents(any(LocalDate.class), eq(QUERY_YEAR), eq(QUERY_MONTH), eq(null),
-        eq(null))).thenReturn(eventResponses);
+    when(eventService.findEvents(any(), any(LocalDate.class), eq(QUERY_YEAR), eq(QUERY_MONTH),
+        eq(null), eq(null))).thenReturn(eventResponses);
 
     // when & then
-    mockMvc.perform(get("/events").param("year", "2023").param("month", "7"))
+    mockMvc.perform(get("/events")
+            .param("category", "CONFERENCE")
+            .param("year", "2023")
+            .param("month", "7")
+        )
         .andExpect(status().isOk())
         .andDo(document("find-events", requestParameters, responseFields));
   }

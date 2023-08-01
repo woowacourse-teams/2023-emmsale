@@ -14,6 +14,10 @@ public enum EventExceptionType implements BaseExceptionType {
       HttpStatus.BAD_REQUEST,
       "요청하신 상태는 유효하지 않는 값입니다."
   ),
+  INVALID_YEAR_AND_MONTH(
+      HttpStatus.BAD_REQUEST,
+      "날짜 정보는 연도와 달을 모두 입력해야 합니다."
+  ),
   INVALID_YEAR(
       HttpStatus.BAD_REQUEST,
       "연도 값은 2015 이상이어야 합니다."

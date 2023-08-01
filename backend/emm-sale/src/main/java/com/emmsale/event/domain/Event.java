@@ -52,7 +52,7 @@ public class Event extends BaseEntity {
   @OneToMany(mappedBy = "event", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
   @OneToMany(mappedBy = "event")
-  private List<Comment> comments = new ArrayList<>();
+  private List<Comment> comments;
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
   private List<Participant> participants = new ArrayList<>();
 
