@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.onboarding.OnboardingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="20dp"
+        tools:context=".presentation.ui.onboarding.OnboardingActivity">
+
+        <TextView
+            android:id="@+id/tv_onboarding_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3/4"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textStyle="bold"
+            android:layout_marginTop="72dp"
+            android:textColor="@color/main_color" />
+
+        <TextView
+            android:id="@+id/tv_category_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="교육 활동"
+            app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_page"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_category_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="교육 이력이 있나요?"
+            app:layout_constraintWidth_percent="0.5"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="38dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_category_setting"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_category_setting_warning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="교육받은 활동이 있다면 추가해 주세요."
+            android:textColor="@color/warning_color"
+            android:textSize="13sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_category_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipgroup_edu_tags"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_next"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="34dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_category_setting_warning" />
+
+        <TextView
+            android:id="@+id/btn_next"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:text="다음"
+            app:layout_constraintTop_toBottomOf="@+id/chipgroup_edu_tags"
+            android:clickable="true"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="17dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/bg_all_next" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
