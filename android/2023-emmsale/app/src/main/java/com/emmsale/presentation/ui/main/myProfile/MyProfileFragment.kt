@@ -38,6 +38,8 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         viewModel.uiState.observe(viewLifecycleOwner) {
             handleError(it)
             handleNotLogin(it)
+            handleJobs(it)
+            handleActivities(it)
         }
     }
 
@@ -52,6 +54,18 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             LoginActivity.startActivity(requireContext())
             activity?.finish()
         }
+    }
+
+    private fun handleJobs(myProfileScreenUiState: MyProfileScreenUiState) {
+        (binding.rvMyprofileJobs.adapter as JobsAdapter).submitList(myProfileScreenUiState.jobs)
+    }
+
+    private fun handleActivities(myProfileScreenUiState: MyProfileScreenUiState) {
+        (binding.rvMyprofileEducations.adapter as ActivitiesAdapter).submitList(
+            myProfileScreenUiState.educations
+        )
+        (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfileScreenUiState.clubs)
+        (binding.rvMyprofileEvents.adapter as ActivitiesAdapter).submitList(myProfileScreenUiState.events)
     }
 
     private fun initRecyclerViews() {

@@ -1,10 +1,8 @@
 package com.emmsale.presentation.ui.main.myProfile.adapter
 
 import android.view.ViewGroup
-import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState
 
 class ActivitiesAdapter : ListAdapter<ActivityUiState, ActivityViewHolder>(diffUtil) {
@@ -30,9 +28,4 @@ class ActivitiesAdapter : ListAdapter<ActivityUiState, ActivityViewHolder>(diffU
             ): Boolean = oldItem == newItem
         }
     }
-}
-
-@BindingAdapter("myprofile_activities")
-fun setActivities(recyclerView: RecyclerView, activities: List<ActivityUiState>) {
-    (recyclerView.adapter as ActivitiesAdapter).submitList(activities)
 }
