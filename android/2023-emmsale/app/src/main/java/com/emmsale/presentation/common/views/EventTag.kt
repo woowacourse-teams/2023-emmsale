@@ -30,5 +30,5 @@ class EventTag : AppCompatCheckBox {
 }
 
 fun Context.eventChipOf(
-    block: EventTag.() -> Unit
+    block: EventTag.() -> Unit,
 ): EventTag = EventTag(this).apply(block)

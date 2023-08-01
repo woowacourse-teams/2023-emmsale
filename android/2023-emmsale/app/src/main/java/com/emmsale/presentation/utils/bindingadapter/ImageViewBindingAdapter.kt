@@ -19,7 +19,7 @@ fun ImageView.setImage(imageUrl: String) {
 }
 
 @BindingAdapter("app:imageUrl", "app:roundedImageRadius")
-fun ImageView.setRoundedImageUrl(imageUrl: String, radius: Int, ) {
+fun ImageView.setRoundedImageUrl(imageUrl: String, radius: Int) {
     Glide.with(this)
         .load(imageUrl)
         .error(R.color.event_thumbnail_default_color)

@@ -12,5 +12,5 @@ data class MemberWithoutActivitiesApiModel(
     @SerialName("description")
     val description: String = "",
     @SerialName("imageUrl")
-    val imageUrl: String
+    val imageUrl: String,
 )

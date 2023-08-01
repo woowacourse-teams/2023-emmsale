@@ -7,7 +7,7 @@ import com.emmsale.databinding.ItemMyprofileJobsBinding
 import com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState
 
 class JobsViewHolder(
-    private val binding: ItemMyprofileJobsBinding
+    private val binding: ItemMyprofileJobsBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(job: ActivityUiState) {

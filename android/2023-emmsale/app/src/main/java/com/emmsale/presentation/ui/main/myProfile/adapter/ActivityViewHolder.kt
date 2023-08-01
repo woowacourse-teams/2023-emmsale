@@ -7,7 +7,7 @@ import com.emmsale.databinding.ItemMyprofileActivitiesBinding
 import com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState
 
 class ActivityViewHolder(
-    private val binding: ItemMyprofileActivitiesBinding
+    private val binding: ItemMyprofileActivitiesBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(activity: ActivityUiState) {

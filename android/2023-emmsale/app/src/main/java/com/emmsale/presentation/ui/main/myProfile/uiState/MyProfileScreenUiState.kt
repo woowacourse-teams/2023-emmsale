@@ -15,7 +15,7 @@ data class MyProfileScreenUiState(
     val educations: List<ActivityUiState>,
     val clubs: List<ActivityUiState>,
     val events: List<ActivityUiState>,
-    val isNotLogin: Boolean = false
+    val isNotLogin: Boolean = false,
 ) {
     companion object {
         val Loading = MyProfileScreenUiState(
@@ -42,7 +42,8 @@ data class MyProfileScreenUiState(
                 description = member.description,
                 memberImageUrl = member.imageUrl,
                 jobs = member.getActivities(ActivityType.JOB).map(ActivityUiState::from),
-                educations = member.getActivities(ActivityType.EDUCATION).map(ActivityUiState::from),
+                educations = member.getActivities(ActivityType.EDUCATION)
+                    .map(ActivityUiState::from),
                 clubs = member.getActivities(ActivityType.CLUB).map(ActivityUiState::from),
                 events = member.getActivities(ActivityType.EVENT).map(ActivityUiState::from)
             )
