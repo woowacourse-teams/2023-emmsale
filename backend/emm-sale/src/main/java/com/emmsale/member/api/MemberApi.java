@@ -89,7 +89,7 @@ public class MemberApi {
   }
 
   @DeleteMapping("/members/{memberId}")
-  public ResponseEntity<MemberProfileResponse> deleteMember(
+  public ResponseEntity<Void> deleteMember(
       @PathVariable final Long memberId,
       final Member member
   ) {
