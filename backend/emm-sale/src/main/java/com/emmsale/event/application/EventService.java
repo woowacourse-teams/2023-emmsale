@@ -84,7 +84,9 @@ public class EventService {
         .findByMemberIdAndEventId(memberId, eventId)
         .ifPresentOrElse(
             participant -> participantRepository.deleteById(participant.getId()),
-            () -> new EventException(EventExceptionType.NOT_FOUND_PARTICIPANT));
+            () -> {
+              throw new EventException(EventExceptionType.NOT_FOUND_PARTICIPANT);
+            });
   }
 
   @Transactional(readOnly = true)
