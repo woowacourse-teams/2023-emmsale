@@ -10,7 +10,7 @@ class ApiException<T : Any>(val e: Throwable) : ApiResult<T>
 
 suspend inline fun <T : Any, reified V : Any> handleApi(
     response: Response<T>,
-    mapToDomain: suspend (T) -> V
+    mapToDomain: suspend (T) -> V,
 ): ApiResult<V> {
     return try {
         val body = response.body()

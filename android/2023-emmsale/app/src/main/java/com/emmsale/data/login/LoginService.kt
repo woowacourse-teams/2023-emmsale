@@ -8,6 +8,6 @@ import retrofit2.http.Query
 interface LoginService {
     @POST("/login/github/callback")
     suspend fun saveGithubCode(
-        @Query("code") code: String
+        @Query("code") code: String,
     ): Response<LoginApiModel>
 }

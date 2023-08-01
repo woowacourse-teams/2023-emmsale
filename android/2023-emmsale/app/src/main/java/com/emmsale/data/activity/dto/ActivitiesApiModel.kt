@@ -10,7 +10,7 @@ data class ActivitiesApiModel(
     @SerialName("activityType")
     val category: String = "-",
     @SerialName("activityResponses")
-    val activities: List<ActivityApiModel> = emptyList()
+    val activities: List<ActivityApiModel> = emptyList(),
 ) {
     fun toData(): Activities = Activities(
         category = category,

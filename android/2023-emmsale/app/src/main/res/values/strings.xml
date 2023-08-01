@@ -8,4 +8,13 @@
     <string name="cancel">취소</string>
     <string name="okay">확인</string>
     <string name="post_notification_permission_needed_message">알림 권한이 필요해요!</string>
+    <string name="event_start_duration_format">기간 : %s</string>
+    <string name="event_start_end_duration_format">기간 : %s - %s</string>
+    <string name="event_poster_description">event poster</string>
+    <string name="event_filter">필터 설정</string>
+    <string name="event_count_format">%,d</string>
+    <string name="test_image_url">https://ebook.pusan.ac.kr/images/bookimg/L_1386988.jpg</string>
+    <string name="event_count_prefix">총</string>
+    <string name="event_count_suffix">개</string>
+    <string name="d_day_format">D-%d</string>
 </resources>

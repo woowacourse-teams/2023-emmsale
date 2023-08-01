@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.emmsale.R
 import com.emmsale.presentation.utils.extension.px
 
-class ActivityTag : AppCompatCheckBox {
+class EventTag : AppCompatCheckBox {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -19,20 +19,17 @@ class ActivityTag : AppCompatCheckBox {
     }
 
     private fun initView() {
-        isClickable = true
+        isClickable = false
         buttonDrawable = null
         textSize = 13F
         gravity = Gravity.CENTER
-        background = ContextCompat.getDrawable(context, R.drawable.bg_activity_tag)
+        minimumHeight = 0
+        background = ContextCompat.getDrawable(context, R.drawable.bg_event_tag)
         setTextColor(ContextCompat.getColor(context, R.color.black))
-        updatePadding(12.px, 0, 12.px, 0)
+        updatePadding(12.px, 6.px, 12.px, 6.px)
     }
 }
 
-fun Fragment.activityChipOf(
-    block: ActivityTag.() -> Unit
-): ActivityTag = requireContext().activityChipOf(block)
-
-fun Context.activityChipOf(
-    block: ActivityTag.() -> Unit
-): ActivityTag = ActivityTag(this).apply(block)
+fun Context.eventChipOf(
+    block: EventTag.() -> Unit
+): EventTag = EventTag(this).apply(block)
