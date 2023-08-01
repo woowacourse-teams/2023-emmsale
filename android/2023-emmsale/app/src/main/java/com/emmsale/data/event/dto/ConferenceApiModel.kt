@@ -1,6 +1,7 @@
 package com.emmsale.data.event.dto
 
 import com.emmsale.data.event.Event
+import com.emmsale.data.event.EventStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
@@ -30,7 +31,7 @@ data class ConferenceApiModel(
         name = name,
         startDate = parseDate(startDate),
         endDate = parseDate(endDate),
-        status = status,
+        status = EventStatus.from(status),
         tags = tags,
         posterUrl = posterUrl,
         dDay = dDay,

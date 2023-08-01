@@ -50,16 +50,17 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/tv_event_dday"
+            android:id="@+id/tv_event_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             app:layout_goneMarginTop="9dp"
-            android:textColor="@color/event_dday_text_color"
+            android:textColor="@{event.status == `마감` ? @color/event_status_inactive_text_color : @color/event_status_active_text_color}"
             android:textSize="11sp"
             android:layout_marginTop="12dp"
+            tools:textColor="@color/event_status_active_text_color"
             tools:text="D-21"
-            android:text="@{@string/d_day_format(event.DDay)}"
+            android:text="@{event.status}"
             app:layout_constraintBottom_toBottomOf="@+id/iv_event_poster"
             app:layout_constraintStart_toStartOf="parent" />
 

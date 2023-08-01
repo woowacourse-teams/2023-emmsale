@@ -16,11 +16,11 @@ class EventRepositoryImpl(
         category: EventCategory,
         year: Int?,
         month: Int?,
-        status: String?,
+        status: EventStatus?,
         tag: String?,
     ): ApiResult<List<Event>> = withContext(dispatcher) {
         handleApi(
-            eventService.getEvents(category.text, year, month, status, tag),
+            eventService.getEvents(category.text, year, month, status?.text, tag),
             List<ConferenceApiModel>::toData
         )
     }

@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.main.event.uistate
 
 import com.emmsale.data.event.Event
-import java.time.LocalDateTime
+import com.emmsale.data.event.EventStatus
 
 sealed class EventsUiState {
     data class Success(val events: List<EventUiState>) : EventsUiState() {
@@ -15,23 +15,25 @@ sealed class EventsUiState {
 data class EventUiState(
     val id: Long,
     val name: String,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime,
     val tags: List<String>,
     val status: String,
     val posterUrl: String?,
-    val dDay: Int = 0,
 ) {
     companion object {
-        fun from(event: Event): EventUiState = EventUiState(
-            id = event.id,
-            name = event.name,
-            startDate = event.startDate,
-            endDate = event.endDate,
-            tags = event.tags,
-            status = event.status,
-            posterUrl = event.posterUrl,
-            dDay = event.dDay,
-        )
+        fun from(event: Event): EventUiState {
+            return EventUiState(
+                id = event.id,
+                name = event.name,
+                tags = event.tags,
+                status = getStatus(event),
+                posterUrl = event.posterUrl,
+            )
+        }
+
+        private fun getStatus(event: Event): String = when (event.status) {
+            EventStatus.IN_PROGRESS -> "진행중"
+            EventStatus.SCHEDULED -> "D-${event.dDay}"
+            EventStatus.ENDED -> "마감"
+        }
     }
 }

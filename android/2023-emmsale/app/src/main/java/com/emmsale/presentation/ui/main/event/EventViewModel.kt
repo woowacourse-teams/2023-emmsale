@@ -14,12 +14,9 @@ import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.ui.main.event.uistate.EventUiState
 import com.emmsale.presentation.ui.main.event.uistate.EventsUiState
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class EventViewModel(
     private val eventRepository: EventRepository,
-    private val year: Int = LocalDate.now().year, // TODO(지금은 기기 시간대를 사용하고 있지만, 서버로부터 시간대를 받아와야 함)
-    private val month: Int = LocalDate.now().monthValue, // TODO(위와 동일)
 ) : ViewModel() {
     private val _events = MutableLiveData<EventsUiState>()
     val events: LiveData<EventsUiState> = _events
@@ -27,8 +24,9 @@ class EventViewModel(
     fun fetchEvents() {
         viewModelScope.launch {
             _events.value = EventsUiState.Loading
-            when (val eventsResult =
-                eventRepository.getConferences(EventCategory.CONFERENCE, year, month, "진행 중")) {
+            when (val eventsResult = eventRepository.getConferences(
+                category = EventCategory.CONFERENCE
+            )) {
                 is ApiSuccess -> _events.value =
                     EventsUiState.Success(eventsResult.data.map(EventUiState::from))
 

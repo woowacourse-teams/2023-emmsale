@@ -7,7 +7,7 @@ interface EventRepository {
         category: EventCategory,
         year: Int? = null,
         month: Int? = null,
-        status: String? = null,
+        status: EventStatus? = null,
         tag: String? = null,
     ): ApiResult<List<Event>>
 }
