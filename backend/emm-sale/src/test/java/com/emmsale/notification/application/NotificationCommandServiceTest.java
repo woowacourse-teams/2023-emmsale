@@ -26,9 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.jdbc.Sql;
 
-@Sql("/data-test.sql")
 class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
