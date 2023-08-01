@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".presentation.ui.main.event.EventFragment">
 
         <TextView
@@ -94,6 +95,7 @@
             app:layout_constraintTop_toBottomOf="@+id/layout_events_filter"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:itemCount="5"
+            android:background="@drawable/bg_event_recyclerview"
             android:layout_marginTop="12dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_event"
