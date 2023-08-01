@@ -11,6 +11,10 @@ Content-Type: application/json
   ]
 }
 
+### 사용자 Activity 조회
+GET http://localhost:8080/members/1/activities
+
+
 ### 사용자 Activity 추가
 POST http://localhost:8080/members/activities
 Content-Type: application/json
@@ -60,4 +64,9 @@ Content-Type: application/json
 
 ### 사용자의 프로필 정보 조회
 GET http://localhost:8080/members/1
+Content-Type: application/json
+
+### 특정 사용자를 삭제
+POST http://localhost:8080/members/1
+Authorization: Bearer validToken
 Content-Type: application/json

@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -27,31 +28,34 @@ public class EventResponse {
   private final LocalDateTime endDate;
   private final List<String> tags;
   private final String status;
+  private final String imageUrl;
+  private final int remainingDays;
 
-  public static List<EventResponse> makeEventResponsesByStatus(EventStatus status,
+  public static List<EventResponse> makeEventResponsesByStatus(LocalDate today, EventStatus status,
       List<Event> events) {
     return events.stream()
-        .map(event -> EventResponse.from(status, event))
+        .map(event -> EventResponse.from(today, status, event))
         .collect(toList());
   }
 
-  public static List<EventResponse> mergeEventResponses(
+  public static List<EventResponse> mergeEventResponses(LocalDate today,
       final EnumMap<EventStatus, List<Event>> groupByEventStatus) {
     return groupByEventStatus.entrySet().stream()
-        .map(entry -> makeEventResponsesByStatus(entry.getKey(), entry.getValue()))
+        .map(entry -> makeEventResponsesByStatus(today, entry.getKey(), entry.getValue()))
         .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
           combinedEvents.addAll(eventsToAdd);
           return combinedEvents;
         });
   }
 
-  private static EventResponse from(EventStatus status, Event event) {
+  private static EventResponse from(LocalDate today, EventStatus status, Event event) {
     return
         new EventResponse(event.getId(), event.getName(), event.getStartDate(), event.getEndDate(),
             event.getTags()
                 .stream()
                 .map(tag -> tag.getTag().getName())
-                .collect(Collectors.toList()), status.getValue());
+                .collect(Collectors.toList()), status.getValue(), event.getImageUrl(),
+            event.calculateRemainingDays(today));
   }
 
 }

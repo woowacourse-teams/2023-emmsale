@@ -59,9 +59,10 @@ public class MemberApi {
         memberActivityService.deleteActivity(member, memberActivityDeleteRequest));
   }
 
-  @GetMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> findActivity(final Member member) {
-    return ResponseEntity.ok(memberActivityService.findActivities(member));
+  @GetMapping("/members/{member-id}/activities")
+  public ResponseEntity<List<MemberActivityResponses>> findActivity(
+      @PathVariable("member-id") final Long memberId) {
+    return ResponseEntity.ok(memberActivityService.findActivities(memberId));
   }
 
   @PutMapping("/members/open-profile-url")
@@ -86,5 +87,14 @@ public class MemberApi {
   public ResponseEntity<MemberProfileResponse> findProfile(
       @PathVariable("member-id") final Long memberId) {
     return ResponseEntity.ok(memberQueryService.findProfile(memberId));
+  }
+
+  @DeleteMapping("/members/{memberId}")
+  public ResponseEntity<Void> deleteMember(
+      @PathVariable final Long memberId,
+      final Member member
+  ) {
+    memberUpdateService.deleteMember(member, memberId);
+    return ResponseEntity.noContent().build();
   }
 }

@@ -9,6 +9,7 @@ import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.event.domain.EventType;
 import com.emmsale.member.domain.Member;
 import java.time.LocalDate;
 import java.util.List;
@@ -36,7 +37,7 @@ public class EventApi {
 
   @GetMapping("/{id}")
   public ResponseEntity<EventDetailResponse> findEventById(@PathVariable final Long id) {
-    return ResponseEntity.ok(eventService.findEvent(id));
+    return ResponseEntity.ok(eventService.findEvent(id, LocalDate.now()));
   }
 
   @PostMapping("/{eventId}/participants")
@@ -70,29 +71,33 @@ public class EventApi {
   }
 
   @GetMapping
-  public ResponseEntity<List<EventResponse>> findEvents(@RequestParam final int year,
-      @RequestParam final int month, @RequestParam(required = false) final String tag,
+  public ResponseEntity<List<EventResponse>> findEvents(
+      @RequestParam final EventType category,
+      @RequestParam(required = false) final Integer year,
+      @RequestParam(required = false) final Integer month,
+      @RequestParam(required = false) final String tag,
       @RequestParam(required = false) final String status) {
-    return ResponseEntity.ok(eventService.findEvents(LocalDate.now(), year, month, tag, status));
+    return ResponseEntity.ok(
+        eventService.findEvents(category, LocalDate.now(), year, month, tag, status));
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public EventDetailResponse addEvent(
       @RequestBody @Valid final EventDetailRequest request) {
-    return eventService.addEvent(request);
+    return eventService.addEvent(request, LocalDate.now());
   }
 
   @PutMapping("/{event-id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ResponseStatus(HttpStatus.OK)
   public EventDetailResponse updateEvent(@PathVariable(name = "event-id") final Long eventId,
       @RequestBody @Valid final EventDetailRequest request) {
-    return eventService.updateEvent(eventId, request);
+    return eventService.updateEvent(eventId, request, LocalDate.now());
   }
 
   @DeleteMapping("/{event-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public EventDetailResponse deleteEvent(@PathVariable(name = "event-id") final Long eventId) {
-    return eventService.deleteEvent(eventId);
+  public void deleteEvent(@PathVariable(name = "event-id") final Long eventId) {
+    eventService.deleteEvent(eventId);
   }
 }

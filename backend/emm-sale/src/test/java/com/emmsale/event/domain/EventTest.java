@@ -1,5 +1,6 @@
 package com.emmsale.event.domain;
 
+import static com.emmsale.event.EventFixture.eventFixture;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -12,8 +13,8 @@ import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
 import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.domain.Tag;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +35,6 @@ class EventTest {
 
     // then
     assertThat(actual).isEqualTo(expected);
-
   }
 
   @Test
@@ -46,10 +46,12 @@ class EventTest {
     final String url = "https://information-url.com";
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    final String imageUrl = "https://image.com";
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
-        () -> new Event(name, location, afterDateTime, beforeDateTime, url));
+        () -> new Event(name, location, afterDateTime, beforeDateTime, url, EventType.CONFERENCE,
+            imageUrl));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
   }
@@ -116,7 +118,7 @@ class EventTest {
     @DisplayName("Event에 Member를 추가할 수 있다.")
     void success() {
       //given
-      final Event 인프콘 = EventFixture.eventFixture();
+      final Event 인프콘 = eventFixture();
       final Member 멤버 = new Member(1L, 1L, "imageUrl", "멤버");
 
       //when
@@ -135,7 +137,7 @@ class EventTest {
     @DisplayName("Event에 Member가 이미 포함되어 있으면 Exception 발생")
     void fail_alreadyContains() {
       //given
-      final Event 인프콘 = EventFixture.eventFixture();
+      final Event 인프콘 = eventFixture();
       final Member 멤버 = new Member(1L, 1L, "이미지URL", "멤버");
       인프콘.addParticipant(멤버);
 
@@ -144,5 +146,20 @@ class EventTest {
           .isInstanceOf(EventException.class)
           .hasMessage(EventExceptionType.ALREADY_PARTICIPATED.errorMessage());
     }
+  }
+
+  @Test
+  @DisplayName("현재날짜로부터 남은 날짜를 계산할 수 있다.")
+  void calculateRemainingDay() {
+    //given
+    final Event 인프콘 = eventFixture();
+    final LocalDate today = LocalDate.of(2023, 8, 10);
+
+    //when
+    final int actual = 인프콘.calculateRemainingDays(today);
+
+    //then
+    assertThat(actual)
+        .isEqualTo(5);
   }
 }
