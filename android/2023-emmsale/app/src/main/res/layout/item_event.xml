@@ -21,15 +21,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="26dp"
+        android:paddingTop="16dp"
         android:paddingHorizontal="18dp"
-        android:minHeight="158dp"
+        android:minHeight="180dp"
         android:paddingBottom="16dp"
         android:onClick="@{() -> onClickEvent.invoke(event)}">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cg_event_tags"
             android:layout_width="0dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginEnd="32dp"
