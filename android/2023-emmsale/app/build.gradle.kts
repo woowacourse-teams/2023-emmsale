@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 
 plugins {
     id("org.jetbrains.kotlin.android")
@@ -6,6 +7,7 @@ plugins {
     id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "1.8.21"
     id("kotlin-kapt")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -31,12 +33,24 @@ android {
         buildConfig = true
     }
     buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = true
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = false
+            }
+        }
+
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            configure<CrashlyticsExtension> {
+                nativeSymbolUploadEnabled = true
+                strippedNativeLibsDir = "$buildDir/ndklibs/obj"
+                unstrippedNativeLibsDir = "$buildDir/ndklibs/libs"
+            }
         }
     }
     compileOptions {
@@ -48,6 +62,21 @@ android {
     }
     dataBinding {
         enable = true
+    }
+    flavorDimensions += "environment"
+    productFlavors {
+        create("staging") {
+            dimension = "environment"
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = false
+            }
+        }
+        create("prod") {
+            dimension = "environment"
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = true
+            }
+        }
     }
 }
 
@@ -78,6 +107,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
 
     implementation("com.github.bumptech.glide:glide:4.15.1")
 }
