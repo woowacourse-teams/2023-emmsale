@@ -22,7 +22,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         initDataBinding()
-        initUiLogic()
+        setupUiLogic()
         initRecyclerViews()
 
         viewModel.fetchMember()
@@ -32,7 +32,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         binding.viewModel = viewModel
     }
 
-    private fun initUiLogic() {
+    private fun setupUiLogic() {
         viewModel.uiState.observe(viewLifecycleOwner) {
             if (it.isError) {
                 context?.showToast(it.errorMessage)
