@@ -5,6 +5,7 @@ import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.member.dto.MemberApiModel
+import com.emmsale.data.member.mapper.toData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -25,20 +26,12 @@ class MemberRepositoryImpl(
             memberResponse.code(),
             memberResponse.errorBody().toString()
         )
-        val activitiesApiModel = activitiesResponse.body() ?: return@withContext ApiError(
+        val activitiesApiModels = activitiesResponse.body() ?: return@withContext ApiError(
             activitiesResponse.code(),
             activitiesResponse.errorBody().toString()
         )
 
-        ApiSuccess(
-            Member1(
-                id = memberApiModel.id,
-                name = memberApiModel.name,
-                description = memberApiModel.description,
-                imageUrl = memberApiModel.imageUrl,
-                activities = activitiesApiModel.associate { it.getActivityType() to it.toData() }
-            )
-        )
+        ApiSuccess(memberApiModel.toData(activitiesApiModels))
     }
 
     override suspend fun updateMember(member: Member): ApiResult<Unit> = withContext(dispatcher) {

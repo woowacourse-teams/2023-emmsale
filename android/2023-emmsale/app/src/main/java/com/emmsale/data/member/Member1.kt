@@ -8,8 +8,8 @@ data class Member1(
     val name: String,
     val description: String,
     val imageUrl: String,
-    val activities: Map<ActivityType, List<Activity1>>,
+    val activities: List<Activity1>,
 ) {
     fun getActivities(activityType: ActivityType): List<Activity1> =
-        activities[activityType] ?: listOf()
+        activities.filter { it.activityType == activityType }
 }
