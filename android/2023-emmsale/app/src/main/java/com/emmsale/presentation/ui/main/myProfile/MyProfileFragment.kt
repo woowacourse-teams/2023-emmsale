@@ -86,10 +86,11 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             binding.rvMyprofileClubs,
             binding.rvMyprofileEvents
         ).forEach {
+            val decoration = ActivitiesAdapterDecoration()
             it.apply {
                 adapter = ActivitiesAdapter()
                 itemAnimator = null
-                addItemDecoration(ActivitiesAdapterDecoration.getInstance())
+                addItemDecoration(decoration)
             }
         }
     }

@@ -21,10 +21,4 @@ class ActivitiesAdapterDecoration : RecyclerView.ItemDecoration() {
             outRect.top = offset
         }
     }
-
-    companion object {
-        private val instance = ActivitiesAdapterDecoration()
-
-        fun getInstance() = instance
-    }
 }
