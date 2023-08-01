@@ -30,9 +30,9 @@ class ActivityTag : AppCompatCheckBox {
 }
 
 fun Fragment.activityChipOf(
-    block: ActivityTag.() -> Unit
+    block: ActivityTag.() -> Unit,
 ): ActivityTag = requireContext().activityChipOf(block)
 
 fun Context.activityChipOf(
-    block: ActivityTag.() -> Unit
+    block: ActivityTag.() -> Unit,
 ): ActivityTag = ActivityTag(this).apply(block)

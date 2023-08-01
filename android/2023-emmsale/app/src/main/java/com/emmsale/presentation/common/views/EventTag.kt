@@ -6,7 +6,6 @@ import android.view.Gravity
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
-import androidx.fragment.app.Fragment
 import com.emmsale.R
 import com.emmsale.presentation.utils.extension.px
 
@@ -31,5 +30,5 @@ class EventTag : AppCompatCheckBox {
 }
 
 fun Context.eventChipOf(
-    block: EventTag.() -> Unit
+    block: EventTag.() -> Unit,
 ): EventTag = EventTag(this).apply(block)
