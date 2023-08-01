@@ -7,9 +7,9 @@
     </item>
 
     <item
-        android:start="-0.5dp"
+        android:bottom="-0.5dp"
         android:end="-0.5dp"
-        android:bottom="-0.5dp">
+        android:start="-0.5dp">
         <shape android:shape="rectangle">
             <stroke
                 android:width="0.5dp"

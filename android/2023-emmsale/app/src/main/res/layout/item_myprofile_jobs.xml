@@ -5,7 +5,7 @@
 
     <data>
 
-    <variable
+        <variable
             name="job"
             type="com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState" />
     </data>
@@ -20,8 +20,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:background="@drawable/bg_myprofile_job"
-            android:textSize="13sp"
             android:text="@{job.name}"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

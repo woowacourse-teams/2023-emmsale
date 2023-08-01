@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/mi_main_profile"
-        android:title="@string/main_menuitemnameofprofile"
-        android:icon="@drawable/ic_main_menuitemprofile" />
+        android:icon="@drawable/ic_main_menuitemprofile"
+        android:title="@string/main_menuitemnameofprofile" />
     <item
         android:id="@+id/mi_main_home"
-        android:title="@string/main_menuitemnameofhome"
-        android:icon="@drawable/ic_main_menuitemhome" />
+        android:icon="@drawable/ic_main_menuitemhome"
+        android:title="@string/main_menuitemnameofhome" />
     <item
         android:id="@+id/mi_main_setting"
-        android:title="@string/main_menuitemnameofsetting"
-        android:icon="@drawable/ic_main_menuitemsetting" />
+        android:icon="@drawable/ic_main_menuitemsetting"
+        android:title="@string/main_menuitemnameofsetting" />
 </menu>

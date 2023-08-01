@@ -3,8 +3,8 @@
     android:shape="oval">
     <solid android:color="@color/main_color" />
     <padding
-        android:right="9dp"
+        android:bottom="9dp"
         android:left="9dp"
-        android:top="9dp"
-        android:bottom="9dp" />
+        android:right="9dp"
+        android:top="9dp" />
 </shape>
