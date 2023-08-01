@@ -4,6 +4,7 @@ import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
 
+import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.notification.application.dto.FcmTokenRequest;
@@ -16,6 +17,7 @@ import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.NotificationRepository;
 import com.emmsale.notification.exception.NotificationException;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,5 +98,14 @@ public class NotificationCommandService {
         .orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
 
     savedNotification.modifyStatus(notificationModifyRequest.getUpdatedStatus());
+  }
+
+  public List<NotificationResponse> findAllNotifications(final Member member) {
+    final List<Notification> notifications = notificationRepository.findAllByReceiverId(
+        member.getId());
+
+    return notifications.stream()
+        .map(NotificationResponse::from)
+        .collect(Collectors.toList());
   }
 }

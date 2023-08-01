@@ -1,11 +1,13 @@
 package com.emmsale.notification.api;
 
+import com.emmsale.member.domain.Member;
 import com.emmsale.notification.application.NotificationCommandService;
 import com.emmsale.notification.application.NotificationQueryService;
 import com.emmsale.notification.application.dto.FcmTokenRequest;
 import com.emmsale.notification.application.dto.NotificationModifyRequest;
 import com.emmsale.notification.application.dto.NotificationRequest;
 import com.emmsale.notification.application.dto.NotificationResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,5 +50,11 @@ public class NotificationApi {
       @PathVariable("notification-id") final Long notificationId
   ) {
     return notificationQueryService.findNotificationBy(notificationId);
+  }
+
+  @GetMapping("/notifications")
+  @ResponseStatus(HttpStatus.OK)
+  public List<NotificationResponse> findAll(final Member member) {
+    return notificationCommandService.findAllNotifications(member);
   }
 }
