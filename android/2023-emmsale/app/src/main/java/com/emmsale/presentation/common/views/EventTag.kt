@@ -5,10 +5,7 @@ import android.util.AttributeSet
 import android.view.Gravity
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
-import androidx.core.view.updatePadding
-import androidx.fragment.app.Fragment
 import com.emmsale.R
-import com.emmsale.presentation.utils.extension.px
 
 class EventTag : AppCompatCheckBox {
     constructor(context: Context) : super(context)
@@ -26,10 +23,9 @@ class EventTag : AppCompatCheckBox {
         minimumHeight = 0
         background = ContextCompat.getDrawable(context, R.drawable.bg_event_tag)
         setTextColor(ContextCompat.getColor(context, R.color.black))
-        updatePadding(12.px, 6.px, 12.px, 6.px)
     }
 }
 
 fun Context.eventChipOf(
-    block: EventTag.() -> Unit
+    block: EventTag.() -> Unit,
 ): EventTag = EventTag(this).apply(block)
