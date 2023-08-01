@@ -26,7 +26,9 @@ create table event
     information_url varchar(255) not null,
     location        varchar(255) not null,
     name            varchar(255) not null,
-    start_date      datetime(6) not null
+    start_date      datetime(6) not null,
+    image_url       varchar(255),
+    type            varchar(20)  not null
 );
 
 create table member
@@ -37,7 +39,7 @@ create table member
     description      varchar(255) not null default '',
     github_id        bigint       not null unique,
     image_url        varchar(255) not null,
-    name             varchar(255) ,
+    name             varchar(255),
     open_profile_url varchar(255) null
 );
 

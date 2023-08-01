@@ -1,21 +1,26 @@
-### 필터링 없이 특정 연도 & 월의 행사 목록 조회
+### 필터링 없이 특정 카테고리의 행사 목록 조회
 
-GET http://localhost:8080/events?year=2023&month=7
+GET http://localhost:8080/events?category=CONFERENCE
+Content-Type: application/json
+
+### 날짜 필터링이 적용된 경우
+
+GET http://localhost:8080/events?category=CONFERENCE&year=2023&month=7
 Content-Type: application/json
 
 ### 상태 필터링이 적용된 경우
 
-GET http://localhost:8080/events?year=2023&month=7&status=진행 중
+GET http://localhost:8080/events?category=CONFERENCE&status=진행 중
 Content-Type: application/json
 
 ### 태그 필터링이 적용된 경우
 
-GET http://localhost:8080/events?year=2023&month=7&tag=안드로이드
+GET http://localhost:8080/events?category=CONFERENCE&tag=안드로이드
 Content-Type: application/json
 
 ### 태그 필터링과 상태 필터링이 모두 적용된 경우
 
-GET http://localhost:8080/events?year=2023&month=7&tag=백엔드&status=진행 중
+GET http://localhost:8080/events?category=CONFERENCE&year=2023&month=7&tag=백엔드&status=진행 중
 Content-Type: application/json
 
 ### Event 상세조회
