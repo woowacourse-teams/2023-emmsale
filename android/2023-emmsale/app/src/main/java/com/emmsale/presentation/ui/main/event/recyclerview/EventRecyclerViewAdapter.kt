@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.emmsale.presentation.ui.main.event.uistate.EventUiState
 
 class EventRecyclerViewAdapter(
-    private val onClickEvent: (EventUiState) -> Unit
+    private val onClickEvent: (EventUiState) -> Unit,
 ) : ListAdapter<EventUiState, EventViewHolder>(EventDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder =
         EventViewHolder(parent, onClickEvent)
