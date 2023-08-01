@@ -22,6 +22,14 @@ public enum EventExceptionType implements BaseExceptionType {
   INVALID_MONTH(
       HttpStatus.BAD_REQUEST,
       "월은 1에서 12 사이여야 합니다."
+  ),
+  NOT_FOUND_TAG(
+      HttpStatus.NOT_FOUND,
+      "해당하는 태그를 찾을 수 없습니다."
+  ),
+  START_DATE_TIME_AFTER_END_DATE_TIME(
+      HttpStatus.BAD_REQUEST,
+      "행사의 시작 일시가 종료 일시 이후일 수 없습니다."
   );
 
   private final HttpStatus httpStatus;

@@ -23,11 +23,11 @@ public class EventTag {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "event_id", nullable = false)
   private Event event;
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "tag_id", nullable = false)
   private Tag tag;
 
-  public EventTag(Event event, Tag tag) {
+  public EventTag(final Event event, final Tag tag) {
     this.event = event;
     this.tag = tag;
   }

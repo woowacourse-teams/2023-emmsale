@@ -24,8 +24,6 @@ include::{snippets}/add-activity/response-fields.adoc[]
 
 === `DELETE`: Activity 삭제 API
 
-=== `DELETE`: 커리어 삭제 API
-
 .HTTP request 설명
 include::{snippets}/delete-activity/request-fields.adoc[]
 
@@ -160,6 +158,45 @@ include::{snippets}/find-participants/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-participants/response-fields.adoc[]
 
+=== `POST` : 이벤트 생성
+
+.HTTP request
+include::{snippets}/add-event/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/add-event/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/add-event/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-event/response-fields.adoc[]
+
+=== `PUT` : 이벤트 업데이트
+
+.HTTP request
+include::{snippets}/update-event/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/update-event/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/update-event/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/update-event/response-fields.adoc[]
+
+=== `PUT` : 이벤트 삭제
+
+.HTTP request
+include::{snippets}/delete-event/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/delete-event/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/delete-event/response-fields.adoc[]
+
 == Comment
 
 === `GET` : 댓글 모두 조회
@@ -275,3 +312,13 @@ include::{snippets}/find-notification/response-fields.adoc[]
 .HTTP response
 include::{snippets}/find-notification/http-response.adoc[]
 
+=== `GET` : 사용자가 받은 모든 알림 목록 조회
+
+.HTTP request
+include::{snippets}/find-all-notifications/http-request.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-all-notifications/response-fields.adoc[]
+
+.HTTP response
+include::{snippets}/find-all-notifications/http-response.adoc[]

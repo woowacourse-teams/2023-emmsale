@@ -5,28 +5,44 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.event.EventFixture;
 import com.emmsale.event.application.EventService;
+import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventStatus;
 import com.emmsale.helper.MockMvcTestHelper;
+import com.emmsale.tag.TagFixture;
+import com.emmsale.tag.application.dto.TagRequest;
+import com.emmsale.tag.domain.Tag;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -34,6 +50,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
+import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(EventApi.class)
 class EventApiTest extends MockMvcTestHelper {
@@ -126,7 +143,7 @@ class EventApiTest extends MockMvcTestHelper {
     //      .thenReturn();
 
     //when
-    mockMvc.perform(delete("/events/{eventId}/participants", eventId)
+    mockMvc.perform(delete("/events/%s/participants", eventId)
             .header("Authorization", fakeAccessToken)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
@@ -208,5 +225,319 @@ class EventApiTest extends MockMvcTestHelper {
     mockMvc.perform(get(format("/events/%s/participants", eventId)))
         .andExpect(status().isOk())
         .andDo(document("find-participants", responseFields));
+  }
+
+  @Test
+  @DisplayName("이벤트를 성공적으로 업데이트하면 204, NO_CONTENT를 반환한다.")
+  void updateEventTest() throws Exception {
+    //given
+    final long eventId = 1L;
+    final Event event = EventFixture.인프콘_2023();
+
+    final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
+        .map(tag -> new TagRequest(tag.getName()))
+        .collect(Collectors.toList());
+
+    final EventDetailRequest request = new EventDetailRequest(
+        event.getName(),
+        event.getLocation(),
+        event.getInformationUrl(),
+        event.getStartDate(),
+        event.getEndDate(),
+        tags
+    );
+
+    final EventDetailResponse response = new EventDetailResponse(eventId, request.getName(),
+        request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
+        request.getLocation(), EventStatus.IN_PROGRESS.getValue(),
+        tags.stream().map(TagRequest::getName).collect(Collectors.toList()));
+
+    when(eventService.updateEvent(any(), any())).thenReturn(response);
+
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("name").type(JsonFieldType.STRING).description("행사(Event) 이름"),
+        fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
+        fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
+        fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
+        fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+            .description("행사(Event) 상세 정보 URL"),
+        fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("연관 태그명")
+    );
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("id").type(JsonFieldType.NUMBER).description("행사(Event) id"),
+        fieldWithPath("name").type(JsonFieldType.STRING).description("행사(Event) 이름"),
+        fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+            .description("행사(Event) 상세 정보 URL"),
+        fieldWithPath("startDate").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
+        fieldWithPath("endDate").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
+        fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
+        fieldWithPath("status").type(JsonFieldType.STRING).description("행사(Event) 진행 상태"),
+        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("행사(Event) 연관 태그 목록")
+    );
+
+    //when
+    final ResultActions result = mockMvc.perform(put("/events/" + eventId)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(objectMapper.writeValueAsString(request)));
+
+    //then
+    result.andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("update-event", requestFields, responseFields));
+  }
+
+  @Test
+  @DisplayName("이벤트를 성공적으로 삭제하면 204, NO_CONTENT를 반환한다.")
+  void deleteEventTest() throws Exception {
+    //given
+    final long eventId = 1L;
+    final Event event = EventFixture.인프콘_2023();
+
+    final List<String> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
+        .map(Tag::getName).collect(Collectors.toList());
+
+    final EventDetailResponse response = new EventDetailResponse(eventId, event.getName(),
+        event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
+        event.getLocation(), EventStatus.IN_PROGRESS.getValue(), tags);
+
+    when(eventService.deleteEvent(eventId)).thenReturn(response);
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("id").type(JsonFieldType.NUMBER).description("행사(Event) id"),
+        fieldWithPath("name").type(JsonFieldType.STRING).description("행사(Event) 이름"),
+        fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+            .description("행사(Event) 상세 정보 URL"),
+        fieldWithPath("startDate").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
+        fieldWithPath("endDate").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
+        fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
+        fieldWithPath("status").type(JsonFieldType.STRING).description("행사(Event) 진행 상태"),
+        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("행사(Event) 연관 태그 목록")
+    );
+
+    //when
+    final ResultActions result = mockMvc.perform(delete("/events/" + eventId));
+
+    //then
+    result.andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("delete-event", responseFields));
+  }
+
+  @Nested
+  class AddEvent {
+
+    @Test
+    @DisplayName("이벤트를 성공적으로 추가하면 201, CREATED 를 반환한다.")
+    void addEventTest() throws Exception {
+      //given
+      final Event event = EventFixture.인프콘_2023();
+
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
+          .map(tag -> new TagRequest(tag.getName()))
+          .collect(Collectors.toList());
+
+      final EventDetailRequest request = new EventDetailRequest(
+          event.getName(),
+          event.getLocation(),
+          event.getInformationUrl(),
+          event.getStartDate(),
+          event.getEndDate(),
+          tags
+      );
+
+      final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
+          request.getInformationUrl(),
+          request.getStartDateTime(), request.getEndDateTime(), request.getLocation(),
+          EventStatus.IN_PROGRESS.getValue(),
+          tags.stream().map(TagRequest::getName).collect(Collectors.toList()));
+
+      when(eventService.addEvent(any())).thenReturn(response);
+
+      final RequestFieldsSnippet requestFields = requestFields(
+          fieldWithPath("name").type(JsonFieldType.STRING).description("행사(Event) 이름"),
+          fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
+          fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
+          fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
+          fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+              .description("행사(Event) 상세 정보 URL"),
+          fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("연관 태그명")
+      );
+
+      final ResponseFieldsSnippet responseFields = responseFields(
+          fieldWithPath("id").type(JsonFieldType.NUMBER).description("행사(Event) id"),
+          fieldWithPath("name").type(JsonFieldType.STRING).description("행사(Event) 이름"),
+          fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+              .description("행사(Event) 상세 정보 URL"),
+          fieldWithPath("startDate").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
+          fieldWithPath("endDate").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
+          fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
+          fieldWithPath("status").type(JsonFieldType.STRING).description("행사(Event) 진행 상태"),
+          fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("행사(Event) 연관 태그 목록")
+      );
+
+      //when
+      final ResultActions result = mockMvc.perform(post("/events")
+          .contentType(MediaType.APPLICATION_JSON_VALUE)
+          .content(objectMapper.writeValueAsString(request)));
+
+      //then
+      result.andExpect(status().isCreated())
+          .andDo(print())
+          .andDo(document("add-event", requestFields, responseFields));
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @EmptySource
+    @DisplayName("이름에 빈 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
+    void addEventWithEmptyNameTest(final String eventName) throws Exception {
+      //given
+      final Event event = EventFixture.인프콘_2023();
+
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
+          .map(tag -> new TagRequest(tag.getName()))
+          .collect(Collectors.toList());
+
+      final EventDetailRequest request = new EventDetailRequest(
+          eventName,
+          event.getLocation(),
+          event.getInformationUrl(),
+          event.getStartDate(),
+          event.getEndDate(),
+          tags
+      );
+
+      //when
+      final ResultActions result = mockMvc.perform(post("/events")
+          .contentType(MediaType.APPLICATION_JSON_VALUE)
+          .content(objectMapper.writeValueAsString(request)));
+
+      //then
+      result.andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @EmptySource
+    @DisplayName("장소에 빈 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
+    void addEventWithEmptyLocationTest(final String eventLocation) throws Exception {
+      //given
+      final Event event = EventFixture.인프콘_2023();
+
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
+          .map(tag -> new TagRequest(tag.getName()))
+          .collect(Collectors.toList());
+
+      final EventDetailRequest request = new EventDetailRequest(
+          event.getName(),
+          eventLocation,
+          event.getInformationUrl(),
+          event.getStartDate(),
+          event.getEndDate(),
+          tags
+      );
+
+      //when
+      final ResultActions result = mockMvc.perform(post("/events")
+          .contentType(MediaType.APPLICATION_JSON_VALUE)
+          .content(objectMapper.writeValueAsString(request)));
+
+      //then
+      result.andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"httpexample.com", "http:example.com", "http:/example.com",
+        "httpsexample.com", "https:example.com", "https:/example.com"})
+    @NullSource
+    @DisplayName("상세 URL에 http:// 혹은 https://로 시작하지 않는 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
+    void addEventWithInvalidInformationUrlTest(final String informationUrl) throws Exception {
+      //given
+      final Event event = EventFixture.인프콘_2023();
+
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
+          .map(tag -> new TagRequest(tag.getName()))
+          .collect(Collectors.toList());
+
+      final EventDetailRequest request = new EventDetailRequest(
+          event.getName(),
+          event.getLocation(),
+          informationUrl,
+          event.getStartDate(),
+          event.getEndDate(),
+          tags
+      );
+
+      //when
+      final ResultActions result = mockMvc.perform(post("/events")
+          .contentType(MediaType.APPLICATION_JSON_VALUE)
+          .content(objectMapper.writeValueAsString(request)));
+
+      //then
+      result.andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"23-01-01T12:00:00", "2023-1-01T12:00:00", "2023-01-1T12:00:00",
+        "2023-01-01T2:00:00", "2023-01-01T12:0:00", "2023-01-01T12:00:0"})
+    @NullSource
+    @DisplayName("시작 일시에 null 혹은 다른 형식의 일시 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
+    void addEventWithUnformattedStartDateTimeTest(final String startDateTime) throws Exception {
+      //given
+      final Event event = EventFixture.인프콘_2023();
+
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
+          .map(tag -> new TagRequest(tag.getName()))
+          .collect(Collectors.toList());
+
+      final String request = "{"
+          + "\"name\":\"인프콘 2023\","
+          + "\"location\":\"코엑스\","
+          + "\"informationUrl\":\"https://~~~\","
+          + "\"startDateTime\":" + startDateTime + ","
+          + "\"endDateTime\":\"2023-01-02T12:00:00\""
+          + ",\"tags\":[{\"name\":\"백엔드\"},{\"name\":\"안드로이드\"}]"
+          + "}";
+
+      //when
+      final ResultActions result = mockMvc.perform(post("/events")
+          .contentType(MediaType.APPLICATION_JSON_VALUE)
+          .content(request));
+
+      //then
+      result.andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"23-01-02T12:00:00", "2023-1-02T12:00:00", "2023-01-2T12:00:00",
+        "2023-01-02T2:00:00", "2023-01-02T12:0:00", "2023-01-02T12:00:0"})
+    @NullSource
+    @DisplayName("종료 일시에 null 혹은 다른 형식의 일시 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
+    void addEventWithUnformattedEndDateTimeTest(final String endDateTime) throws Exception {
+      //given
+      final Event event = EventFixture.인프콘_2023();
+
+      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
+          .map(tag -> new TagRequest(tag.getName()))
+          .collect(Collectors.toList());
+
+      final String request = "{"
+          + "\"name\":\"인프콘 2023\","
+          + "\"location\":\"코엑스\","
+          + "\"informationUrl\":\"https://~~~\","
+          + "\"startDateTime\":\"2023-01-01T12:00:00\""
+          + "\"endDateTime\":" + endDateTime + ","
+          + ",\"tags\":[{\"name\":\"백엔드\"},{\"name\":\"안드로이드\"}]"
+          + "}";
+
+      //when
+      final ResultActions result = mockMvc.perform(post("/events")
+          .contentType(MediaType.APPLICATION_JSON_VALUE)
+          .content(request));
+
+      //then
+      result.andExpect(status().isBadRequest());
+    }
   }
 }
