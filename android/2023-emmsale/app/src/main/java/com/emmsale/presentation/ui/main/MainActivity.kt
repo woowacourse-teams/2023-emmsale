@@ -8,7 +8,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
-import com.emmsale.presentation.ui.main.events.EventsFragment
+import com.emmsale.presentation.ui.main.event.EventFragment
 import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
 
 class MainActivity : AppCompatActivity() {
@@ -20,30 +20,26 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        if (savedInstanceState == null) addAllFragments()
         initBottomNavigationView()
     }
 
     private fun initBottomNavigationView() {
-        val mainBottomNavigationView = binding.bnvMain
-
-        addAllFragments()
-
-        mainBottomNavigationView.setOnItemSelectedListener {
+        binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
-                R.id.mi_main_home -> showFragment(EventsFragment.TAG)
+                R.id.mi_main_home -> showFragment(EventFragment.TAG)
             }
             return@setOnItemSelectedListener true
         }
 
-        mainBottomNavigationView.selectedItemId = R.id.mi_main_home
+        binding.bnvMain.selectedItemId = R.id.mi_main_home
     }
 
     private fun addAllFragments() {
         supportFragmentManager.commitNow {
             add(R.id.fcv_main, MyProfileFragment(), MyProfileFragment.TAG)
-            add(R.id.fcv_main, EventsFragment(), EventsFragment.TAG)
+            add(R.id.fcv_main, EventFragment(), EventFragment.TAG)
         }
     }
 
@@ -51,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.commit {
             val fragment = supportFragmentManager.findFragmentByTag(tag)
                 ?: throw IllegalStateException("태그 ${tag}로 프래그먼트를 찾을 수 없습니다. 프래그먼트 초기화 로직을 다시 살펴보세요.")
-            supportFragmentManager.fragments.forEach { hide(it) }
+            supportFragmentManager.fragments.forEach(::hide)
             show(fragment)
         }
     }

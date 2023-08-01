@@ -61,4 +61,8 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
         Log.d("buna", event.toString())
         // EventDetail.startActivity(event)
     }
+
+    companion object {
+        const val TAG = "Event"
+    }
 }
