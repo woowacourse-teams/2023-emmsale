@@ -184,7 +184,7 @@ class MemberApiTest extends MockMvcTestHelper {
         .thenReturn(memberActivityResponse);
 
     //then
-    mockMvc.perform(get("/members/activities")
+    mockMvc.perform(get("/members/1/activities")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())

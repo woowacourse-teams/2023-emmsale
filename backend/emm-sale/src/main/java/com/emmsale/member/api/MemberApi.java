@@ -59,9 +59,10 @@ public class MemberApi {
         memberActivityService.deleteActivity(member, memberActivityDeleteRequest));
   }
 
-  @GetMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> findActivity(final Member member) {
-    return ResponseEntity.ok(memberActivityService.findActivities(member));
+  @GetMapping("/members/{member-id}/activities")
+  public ResponseEntity<List<MemberActivityResponses>> findActivity(
+      @PathVariable("member-id") final Long memberId) {
+    return ResponseEntity.ok(memberActivityService.findActivities(memberId));
   }
 
   @PutMapping("/members/open-profile-url")

@@ -10,6 +10,7 @@ import com.emmsale.member.application.dto.MemberActivityResponses;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberActivity;
 import com.emmsale.member.domain.MemberActivityRepository;
+import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import java.util.List;
@@ -24,6 +25,7 @@ public class MemberActivityService {
 
   private final MemberActivityRepository memberActivityRepository;
   private final ActivityRepository activityRepository;
+  private final MemberRepository memberRepository;
 
   public void registerActivities(
       final Member member,
@@ -83,7 +85,9 @@ public class MemberActivityService {
   }
 
   @Transactional(readOnly = true)
-  public List<MemberActivityResponses> findActivities(final Member member) {
+  public List<MemberActivityResponses> findActivities(final Long memberId) {
+    final Member member = memberRepository.findById(memberId)
+        .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
     return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
   }
 }
