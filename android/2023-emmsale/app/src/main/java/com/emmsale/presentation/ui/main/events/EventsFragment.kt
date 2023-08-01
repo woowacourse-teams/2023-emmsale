@@ -16,4 +16,8 @@ class EventsFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_events, container, false)
     }
+
+    companion object {
+        const val TAG = "Events"
+    }
 }

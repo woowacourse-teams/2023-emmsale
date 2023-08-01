@@ -65,4 +65,8 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             }
         }
     }
+
+    companion object {
+        const val TAG = "MyProfile"
+    }
 }
