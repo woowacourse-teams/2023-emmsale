@@ -2,11 +2,14 @@ package com.emmsale.data.member.dto
 
 import com.emmsale.data.activity.Activity1
 import com.emmsale.data.activity.ActivityType
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ActivitiesAssociatedByActivityTypeApiModel(
+    @SerialName("activityType")
     val activityType: String,
+    @SerialName("memberActivityResponses")
     val memberActivityResponses: List<ActivityApiModel>,
 ) {
     fun toData(): List<Activity1> {
