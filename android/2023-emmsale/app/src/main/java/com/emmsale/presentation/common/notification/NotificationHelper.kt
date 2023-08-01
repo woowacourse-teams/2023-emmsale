@@ -29,7 +29,7 @@ class NotificationHelper(private val context: Context) {
     private fun createNotificationChannel(
         channelId: String,
         channelName: String,
-        channelDescription: String
+        channelDescription: String,
     ) {
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel(channelId, channelName, importance).apply {
@@ -41,7 +41,7 @@ class NotificationHelper(private val context: Context) {
     private fun createNotification(
         channelId: String,
         title: String,
-        message: String
+        message: String,
     ) = NotificationCompat.Builder(context, channelId)
         .setSmallIcon(R.drawable.ic_launcher_foreground)
         .setContentTitle(title)

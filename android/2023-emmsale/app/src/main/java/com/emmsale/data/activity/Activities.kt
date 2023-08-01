@@ -2,7 +2,7 @@ package com.emmsale.data.activity
 
 data class Activities(
     val category: String,
-    val activities: List<Activity>
+    val activities: List<Activity>,
 )
 
 data class Activity(

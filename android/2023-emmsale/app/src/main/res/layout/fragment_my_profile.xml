@@ -92,15 +92,16 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/bg_myprofile_imagedecoration" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
+                    <ImageView
                         android:id="@+id/iv_myprofile_memberimage"
-                        imageUrl="@{viewModel.uiState.memberImageUrl}"
                         android:layout_width="82dp"
                         android:layout_height="82dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="7dp"
                         android:contentDescription="@string/myprofile_memberimagedescription"
                         android:scaleType="centerCrop"
+                        app:imageUrl="@{viewModel.uiState.memberImageUrl}"
+                        app:isCircle="@{true}"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_myprofile_imagedecoration"
                         app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_imagedecoration"
                         tools:src="@tools:sample/avatars" />

@@ -99,7 +99,7 @@ class OnboardingViewModel(
 
     private fun findActivity(
         activityTypeContent: ActivityTypeContentUiState.Success,
-        category: ActivityCategory
+        category: ActivityCategory,
     ): ActivitiesUiState? = activityTypeContent.activities.find { it.category == category.title }
 
     companion object {

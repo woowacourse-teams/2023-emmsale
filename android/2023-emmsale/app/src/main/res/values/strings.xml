@@ -16,4 +16,13 @@
     <string name="myprofile_educationslabel">교육 활동</string>
     <string name="myprofile_clubslabel">동아리 활동</string>
     <string name="myprofile_eventslabel">참여 행사</string>
+    <string name="event_start_duration_format">기간 : %s</string>
+    <string name="event_start_end_duration_format">기간 : %s - %s</string>
+    <string name="event_poster_description">event poster</string>
+    <string name="event_filter">필터 설정</string>
+    <string name="event_count_format">%,d</string>
+    <string name="test_image_url">https://ebook.pusan.ac.kr/images/bookimg/L_1386988.jpg</string>
+    <string name="event_count_prefix">총</string>
+    <string name="event_count_suffix">개</string>
+    <string name="d_day_format">D-%d</string>
 </resources>
