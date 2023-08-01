@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.event.EventCategory
 import com.emmsale.data.event.EventRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
@@ -27,7 +28,7 @@ class EventViewModel(
         viewModelScope.launch {
             _events.value = EventsUiState.Loading
             when (val eventsResult =
-                eventRepository.getConferences(year, month, status = "종료된 행사")) {
+                eventRepository.getConferences(EventCategory.CONFERENCE, year, month, "진행 중")) {
                 is ApiSuccess -> _events.value =
                     EventsUiState.Success(eventsResult.data.map(EventUiState::from))
 

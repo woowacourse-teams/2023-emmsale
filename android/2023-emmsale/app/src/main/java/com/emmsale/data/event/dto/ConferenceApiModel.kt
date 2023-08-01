@@ -21,7 +21,7 @@ data class ConferenceApiModel(
     @SerialName("tags")
     val tags: List<String>,
     @SerialName("imageUrl")
-    val posterUrl: String,
+    val posterUrl: String? = null,
     @SerialName("remainingDays")
     val dDay: Int,
 ) {

@@ -19,7 +19,7 @@ data class EventUiState(
     val endDate: LocalDateTime,
     val tags: List<String>,
     val status: String,
-    val posterUrl: String = "",
+    val posterUrl: String?,
     val dDay: Int = 0,
 ) {
     companion object {

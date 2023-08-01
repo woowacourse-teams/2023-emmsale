@@ -9,6 +9,6 @@ data class Event(
     val endDate: LocalDateTime,
     val status: String,
     val tags: List<String>,
-    val posterUrl: String,
+    val posterUrl: String?,
     val dDay: Int,
 )

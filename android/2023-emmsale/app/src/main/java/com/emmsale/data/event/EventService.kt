@@ -6,8 +6,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface EventService {
-    @GET("/events/conferences")
+    @GET("/events")
     suspend fun getEvents(
+        @Query("category") category: String,
         @Query("year") year: Int? = null,
         @Query("month") month: Int? = null,
         @Query("status") status: String? = null,
