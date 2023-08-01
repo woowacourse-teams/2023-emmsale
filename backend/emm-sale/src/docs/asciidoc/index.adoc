@@ -24,8 +24,6 @@ include::{snippets}/add-activity/response-fields.adoc[]
 
 === `DELETE`: Activity 삭제 API
 
-=== `DELETE`: 커리어 삭제 API
-
 .HTTP request 설명
 include::{snippets}/delete-activity/request-fields.adoc[]
 
