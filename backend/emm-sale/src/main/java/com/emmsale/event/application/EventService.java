@@ -74,17 +74,15 @@ public class EventService {
 
   public void cancelParticipate(final Long eventId, final Long memberId, final Member member) {
     validateMemberNotAllowed(memberId, member);
-    eventRepository.findById(eventId)
-        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
-
-    final List<Participant> participants = participantRepository
-        .findByMemberIdAndEventId(memberId, eventId);
-
-    if (participants.isEmpty()) {
-      throw new EventException(EventExceptionType.NOT_FOUND_PARTICIPANT);
+    if (!eventRepository.existsById(eventId)) {
+      throw new EventException(NOT_FOUND_EVENT);
     }
 
-    participantRepository.deleteById(participants.get(0).getId());
+    participantRepository
+        .findByMemberIdAndEventId(memberId, eventId)
+        .ifPresentOrElse(
+            participant -> participantRepository.deleteById(participant.getId()),
+            () -> new EventException(EventExceptionType.NOT_FOUND_PARTICIPANT));
   }
 
   @Transactional(readOnly = true)
