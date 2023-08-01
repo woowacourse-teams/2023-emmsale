@@ -2,10 +2,19 @@ package com.emmsale.event.application;
 
 import static com.emmsale.event.EventFixture.AI_컨퍼런스;
 import static com.emmsale.event.EventFixture.eventFixture;
+import static com.emmsale.event.EventFixture.날짜_8월_10일;
 import static com.emmsale.event.EventFixture.모바일_컨퍼런스;
 import static com.emmsale.event.EventFixture.안드로이드_컨퍼런스;
 import static com.emmsale.event.EventFixture.웹_컨퍼런스;
 import static com.emmsale.event.EventFixture.인프콘_2023;
+import static com.emmsale.event.exception.EventExceptionType.ALREADY_PARTICIPATED;
+import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT;
+import static com.emmsale.event.exception.EventExceptionType.INVALID_MONTH;
+import static com.emmsale.event.exception.EventExceptionType.INVALID_STATUS;
+import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR;
+import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
+import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_TAG;
+import static com.emmsale.event.exception.EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME;
 import static com.emmsale.tag.TagFixture.AI;
 import static com.emmsale.tag.TagFixture.IOS;
 import static com.emmsale.tag.TagFixture.백엔드;
@@ -24,10 +33,10 @@ import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventTag;
+import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
-import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -53,16 +62,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
-      List.of(), "진행 중");
+      List.of(), "진행 중", null, 0);
   private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
       List.of(),
-      "진행 중");
+      "진행 중", null, 0);
   private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스", null, null,
-      List.of(), "종료된 행사");
+      List.of(), "종료된 행사", null, 0);
   private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null,
-      List.of(), "진행 예정");
+      List.of(), "진행 예정", null, 0);
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
-      List.of(), "진행 예정");
+      List.of(), "진행 예정", null, 0);
   private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
   @Autowired
   private MemberRepository memberRepository;
@@ -132,10 +141,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     void success() {
       //given
       final Event event = eventRepository.save(eventFixture());
-      final EventDetailResponse expected = EventDetailResponse.from(event);
+      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일());
 
       //when
-      final EventDetailResponse actual = eventService.findEvent(event.getId());
+      final EventDetailResponse actual = eventService.findEvent(event.getId(), 날짜_8월_10일());
 
       //then
       assertThat(actual)
@@ -150,9 +159,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Long notFoundEventId = Long.MAX_VALUE;
 
       //when, then
-      assertThatThrownBy(() -> eventService.findEvent(notFoundEventId))
+      assertThatThrownBy(() -> eventService.findEvent(notFoundEventId, 날짜_8월_10일()))
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.NOT_FOUND_EVENT.errorMessage());
+          .hasMessage(NOT_FOUND_EVENT.errorMessage());
     }
   }
 
@@ -183,7 +192,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       assertThatThrownBy(() -> eventService.participate(인프콘.getId(), otherMemberId, member))
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT.errorMessage());
+          .hasMessage(FORBIDDEN_PARTICIPATE_EVENT.errorMessage());
     }
 
     @Test
@@ -196,7 +205,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       assertThatThrownBy(() -> eventService.participate(인프콘.getId(), memberId, member))
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.ALREADY_PARTICIPATED.errorMessage());
+          .hasMessage(ALREADY_PARTICIPATED.errorMessage());
     }
   }
 
@@ -211,7 +220,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 안드로이드_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 7, null, null);
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 7, null, null);
 
       // then
       assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
@@ -225,7 +235,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 모바일_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 8, null, null);
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 8, null, null);
 
       // then
       assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
@@ -239,7 +250,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 안드로이드_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 6, null, null);
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 6, null, null);
 
       // then
       assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
@@ -255,7 +267,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       eventRepository.deleteAll();
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 12, null,
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 12, null,
           statusName);
 
       // then
@@ -266,7 +279,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("아무 행사도 없는 2023년 12월 행사를 조회하면, 빈 목록을 반환한다.")
     void findEvents_2023_12() {
       // given, when
-      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 12, null, null);
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 12, null, null);
 
       // then
       assertThat(actualEvents).isEmpty();
@@ -277,7 +291,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("아무 행사도 없는 2023년 12월의 행사를 tag로 필터링하면, 빈 목록을 반환한다.")
     void findEvents_empty_tag_filter() {
       // given, when
-      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 12, "안드로이드",
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 12, "안드로이드",
           null);
 
       // then
@@ -288,7 +303,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("아무 행사도 없는 2023년 12월의 행사를 status로 필터링하면, 빈 목록을 반환한다.")
     void findEvents_empty_status_filter() {
       // given, when
-      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 12, null,
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 12, null,
           "진행 중");
 
       // then
@@ -300,12 +316,13 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("유효하지 않은 값이 연도 값으로 들어오면 예외를 반환한다.")
     void findEvents_year_fail(final int year) {
       // given, when
-      final ThrowingCallable actual = () -> eventService.findEvents(TODAY, year, 7, null, null);
+      final ThrowingCallable actual = () -> eventService.findEvents(EventType.CONFERENCE, TODAY,
+          year, 7, null, null);
 
       // then
       assertThatThrownBy(actual)
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.INVALID_YEAR.errorMessage());
+          .hasMessage(INVALID_YEAR.errorMessage());
     }
 
     @ParameterizedTest
@@ -313,12 +330,13 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("유효하지 않은 값이 월 값으로 들어오면 예외를 반환한다.")
     void findEvents_month_fail(final int month) {
       // given, when
-      final ThrowingCallable actual = () -> eventService.findEvents(TODAY, 2023, month, null, null);
+      final ThrowingCallable actual = () -> eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, month, null, null);
 
       // then
       assertThatThrownBy(actual)
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.INVALID_MONTH.errorMessage());
+          .hasMessage(INVALID_MONTH.errorMessage());
     }
 
     @Test
@@ -328,7 +346,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 안드로이드_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 7, "안드로이드",
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 7, "안드로이드",
           null);
 
       // then
@@ -342,7 +361,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("존재하지 않는 태그가 입력으로 들어오면 예외를 반환한다.")
     void findEvents_tag_filter_fail() {
       // given, when
-      final ThrowingCallable actual = () -> eventService.findEvents(TODAY, 2023, 7, "개발", null);
+      final ThrowingCallable actual = () -> eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 7, "개발", null);
 
       // then
       assertThatThrownBy(actual)
@@ -357,7 +377,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(TODAY, 2023, 7, null,
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 7, null,
           "진행 중");
 
       // then
@@ -371,40 +392,49 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("잘못된 양식의 status 가 입력으로 들어오면 예외를 반환한다.")
     void findEvents_status_filter_fail() {
       // given, when
-      final ThrowingCallable actual = () -> eventService.findEvents(TODAY, 2023, 7, null,
+      final ThrowingCallable actual = () -> eventService.findEvents(EventType.CONFERENCE, TODAY,
+          2023, 7, null,
           "존재하지 않는 상태");
 
       // then
       assertThatThrownBy(actual)
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.INVALID_STATUS.errorMessage());
+          .hasMessage(INVALID_STATUS.errorMessage());
     }
 
     @Nested
     class AddEvent {
 
+      final List<TagRequest> tagRequests = List.of(
+          new TagRequest(IOS().getName()),
+          new TagRequest(AI().getName())
+      );
       private final LocalDateTime beforeDateTime = LocalDateTime.now();
       private final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+      private final String eventName = "새로운 이름";
+      private final String eventLocation = "새로운 장소";
+      private final String eventInformationUrl = "https://새로운-상세-URL.com";
+      private final String imageUrl = "https://image.com";
+      private final EventType type = EventType.CONFERENCE;
+      private final LocalDate now = LocalDate.now();
 
       @Test
       @DisplayName("이벤트를 성공적으로 저장한다.")
       void addEventTest() {
         //given
-        final String eventName = "이름";
-        final String eventLocation = "장소";
-        final String eventInformationUrl = "https://naver.com";
-        final LocalDateTime startDateTime = beforeDateTime;
-        final LocalDateTime endDateTime = afterDateTime;
-        final List<TagRequest> tagRequests = List.of(
-            new TagRequest(백엔드().getName()),
-            new TagRequest(안드로이드().getName())
+        final EventDetailRequest request = new EventDetailRequest(
+            eventName,
+            eventLocation,
+            eventInformationUrl,
+            beforeDateTime,
+            afterDateTime,
+            tagRequests,
+            imageUrl,
+            type
         );
 
-        final EventDetailRequest request = new EventDetailRequest(eventName, eventLocation,
-            eventInformationUrl, startDateTime, endDateTime, tagRequests);
-
         //when
-        final EventDetailResponse response = eventService.addEvent(request);
+        final EventDetailResponse response = eventService.addEvent(request, now);
         final Event savedEvent = eventRepository.findById(response.getId()).get();
 
         //then
@@ -412,8 +442,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
             () -> assertEquals(eventName, savedEvent.getName()),
             () -> assertEquals(eventLocation, savedEvent.getLocation()),
             () -> assertEquals(eventInformationUrl, savedEvent.getInformationUrl()),
-            () -> assertEquals(startDateTime, savedEvent.getStartDate()),
-            () -> assertEquals(endDateTime, savedEvent.getEndDate()),
+            () -> assertEquals(beforeDateTime, savedEvent.getStartDate()),
+            () -> assertEquals(afterDateTime, savedEvent.getEndDate()),
             () -> assertThat(savedEvent.getTags()).extracting("tag", Tag.class)
                 .extracting("name", String.class)
                 .containsAll(
@@ -428,82 +458,96 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       @DisplayName("행사 시작 일시가 행사 종료 일시 이후일 경우 EventException이 발생한다.")
       void addEventWithStartDateTimeAfterBeforeDateTimeTest() {
         //given
-        final String eventName = "이름";
-        final String eventLocation = "장소";
-        final String eventInformationUrl = "https://naver.com";
         final LocalDateTime startDateTime = afterDateTime;
         final LocalDateTime endDatetime = beforeDateTime;
-        final List<TagRequest> tagRequests = List.of(
-            new TagRequest(백엔드().getName()),
-            new TagRequest(안드로이드().getName())
-        );
 
-        final EventDetailRequest request = new EventDetailRequest(eventName, eventLocation,
-            eventInformationUrl, startDateTime, endDatetime, tagRequests);
+        final EventDetailRequest request = new EventDetailRequest(
+            eventName,
+            eventLocation,
+            eventInformationUrl,
+            startDateTime,
+            endDatetime,
+            tagRequests,
+            imageUrl,
+            type
+        );
 
         //when & then
         final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.addEvent(request));
+            () -> eventService.addEvent(request, now));
 
         assertEquals(exception.exceptionType(),
-            EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME);
+            START_DATE_TIME_AFTER_END_DATE_TIME);
       }
 
       @Test
       @DisplayName("Tag가 존재하지 않을 경우 EventException이 발생한다.")
       void addEventWithNotExistTagTest() {
         //given
-        final String eventName = "이름";
-        final String eventLocation = "장소";
-        final String eventInformationUrl = "https://naver.com";
-        final LocalDateTime startDateTime = beforeDateTime;
-        final LocalDateTime endDatetime = afterDateTime;
         final List<TagRequest> tagRequests = List.of(
             new TagRequest(백엔드().getName()),
             new TagRequest(안드로이드().getName()),
             new TagRequest("존재하지 않는 태그")
         );
 
-        final EventDetailRequest request = new EventDetailRequest(eventName, eventLocation,
-            eventInformationUrl, startDateTime, endDatetime, tagRequests);
+        final EventDetailRequest request = new EventDetailRequest(
+            eventName,
+            eventLocation,
+            eventInformationUrl,
+            beforeDateTime,
+            afterDateTime,
+            tagRequests,
+            imageUrl,
+            type
+        );
 
         //when & then
         final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.addEvent(request));
+            () -> eventService.addEvent(request, now));
 
         assertEquals(exception.exceptionType(),
-            EventExceptionType.NOT_FOUND_TAG);
+            NOT_FOUND_TAG);
       }
     }
 
     @Nested
     class UpdateEvent {
 
+      final List<TagRequest> newTagRequests = List.of(
+          new TagRequest(IOS().getName()),
+          new TagRequest(AI().getName())
+      );
       private final LocalDateTime beforeDateTime = LocalDateTime.now();
       private final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+      private final String newName = "새로운 이름";
+      private final String newLocation = "새로운 장소";
+      private final String newInformationUrl = "https://새로운-상세-URL.com";
+      private final String imageUrl = "https://image.com";
+      private final LocalDate now = LocalDate.now();
 
       @Test
       @DisplayName("이벤트를 성공적으로 업데이트한다.")
       void updateEventTest() {
         //given
-        final String newName = "새로운 이름";
-        final String newLocation = "새로운 장소";
         final LocalDateTime newStartDateTime = beforeDateTime;
         final LocalDateTime newEndDateTime = afterDateTime;
-        final String newInformationUrl = "https://새로운-상세-URL.com";
-        final List<TagRequest> newTagRequests = List.of(
-            new TagRequest(IOS().getName()),
-            new TagRequest(AI().getName())
-        );
 
-        final EventDetailRequest updateRequest = new EventDetailRequest(newName, newLocation,
-            newInformationUrl, newStartDateTime, newEndDateTime, newTagRequests);
+        final EventDetailRequest updateRequest = new EventDetailRequest(
+            newName,
+            newLocation,
+            newInformationUrl,
+            beforeDateTime,
+            afterDateTime,
+            newTagRequests,
+            imageUrl,
+            EventType.CONFERENCE
+        );
 
         final Event event = eventRepository.save(인프콘_2023());
         final Long eventId = event.getId();
 
         //when
-        eventService.updateEvent(eventId, updateRequest);
+        eventService.updateEvent(eventId, updateRequest, now);
         final Event updatedEvent = eventRepository.findById(eventId).get();
 
         //then
@@ -513,7 +557,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
             () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
             () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
             () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
-            () -> assertThat(updatedEvent.getTags()).extracting("tag", Tag.class)
+            () -> assertThat(updatedEvent.getTags())
+                .extracting("tag", Tag.class)
                 .extracting("name", String.class)
                 .containsAll(
                     newTagRequests.stream()
@@ -529,78 +574,79 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
         //given
         final long notExistsEventId = 0L;
 
-        final String newName = "새로운 이름";
-        final String newLocation = "새로운 장소";
-        final LocalDateTime newStartDateTime = beforeDateTime;
-        final LocalDateTime newEndDateTime = afterDateTime;
-        final String newInformationUrl = "https://새로운-상세-URL.com";
-        final List<TagRequest> newTagRequests = List.of(
-            new TagRequest(IOS().getName()),
-            new TagRequest(AI().getName())
+        final EventDetailRequest updateRequest = new EventDetailRequest(
+            newName,
+            newLocation,
+            newInformationUrl,
+            beforeDateTime,
+            afterDateTime,
+            newTagRequests,
+            imageUrl,
+            EventType.CONFERENCE
         );
-
-        final EventDetailRequest updateRequest = new EventDetailRequest(newName, newLocation,
-            newInformationUrl, newStartDateTime, newEndDateTime, newTagRequests);
 
         //when & then
         final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.updateEvent(notExistsEventId, updateRequest));
+            () -> eventService.updateEvent(notExistsEventId, updateRequest, now));
 
-        assertEquals(exception.exceptionType(), EventExceptionType.NOT_FOUND_EVENT);
+        assertEquals(exception.exceptionType(), NOT_FOUND_EVENT);
       }
 
       @Test
       @DisplayName("행사 시작 일시가 행사 종료 일시 이후일 경우 EventException이 발생한다.")
       void updateEventWithStartDateTimeAfterBeforeDateTimeTest() {
         //given
-        final String newName = "새로운 이름";
-        final String newLocation = "새로운 장소";
         final LocalDateTime newStartDateTime = afterDateTime;
         final LocalDateTime newEndDateTime = beforeDateTime;
-        final String newInformationUrl = "https://새로운-상세-URL.com";
-        final List<TagRequest> newTagRequests = List.of(
-            new TagRequest(IOS().getName()),
-            new TagRequest(AI().getName())
-        );
 
-        final EventDetailRequest updateRequest = new EventDetailRequest(newName, newLocation,
-            newInformationUrl, newStartDateTime, newEndDateTime, newTagRequests);
+        final EventDetailRequest updateRequest = new EventDetailRequest(
+            newName,
+            newLocation,
+            newInformationUrl,
+            newStartDateTime,
+            newEndDateTime,
+            newTagRequests,
+            imageUrl,
+            EventType.CONFERENCE
+        );
 
         final Event event = eventRepository.save(인프콘_2023());
         final Long eventId = event.getId();
 
         //when & then
         final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.updateEvent(eventId, updateRequest));
+            () -> eventService.updateEvent(eventId, updateRequest, now));
 
-        assertEquals(exception.exceptionType(),
-            EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME);
+        assertEquals(exception.exceptionType(), START_DATE_TIME_AFTER_END_DATE_TIME);
       }
 
       @Test
       @DisplayName("Tag가 존재하지 않을 경우 EventException이 발생한다.")
       void updateEventWithNotExistTagTest() {
         //given
-        final String newName = "새로운 이름";
-        final String newLocation = "새로운 장소";
-        final LocalDateTime newStartDateTime = beforeDateTime;
-        final LocalDateTime newEndDateTime = afterDateTime;
-        final String newInformationUrl = "https://새로운-상세-URL.com";
         final List<TagRequest> newTagRequests = List.of(
             new TagRequest("존재하지 않는 태그")
         );
 
-        final EventDetailRequest updateRequest = new EventDetailRequest(newName, newLocation,
-            newInformationUrl, newStartDateTime, newEndDateTime, newTagRequests);
+        final EventDetailRequest updateRequest = new EventDetailRequest(
+            newName,
+            newLocation,
+            newInformationUrl,
+            beforeDateTime,
+            afterDateTime,
+            newTagRequests,
+            imageUrl,
+            EventType.CONFERENCE
+        );
 
         final Event event = eventRepository.save(인프콘_2023());
         final Long eventId = event.getId();
 
         //when & then
         final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.updateEvent(eventId, updateRequest));
+            () -> eventService.updateEvent(eventId, updateRequest, now));
 
-        assertEquals(exception.exceptionType(), EventExceptionType.NOT_FOUND_TAG);
+        assertEquals(exception.exceptionType(), NOT_FOUND_TAG);
       }
     }
 
@@ -631,7 +677,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
         final EventException exception = assertThrowsExactly(EventException.class,
             () -> eventService.deleteEvent(notExistsEventId));
 
-        assertEquals(exception.exceptionType(), EventExceptionType.NOT_FOUND_EVENT);
+        assertEquals(exception.exceptionType(), NOT_FOUND_EVENT);
       }
     }
 

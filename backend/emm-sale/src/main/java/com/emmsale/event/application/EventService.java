@@ -58,10 +58,10 @@ public class EventService {
   }
 
   @Transactional(readOnly = true)
-  public EventDetailResponse findEvent(final Long id) {
+  public EventDetailResponse findEvent(final Long id, final LocalDate today) {
     final Event event = eventRepository.findById(id)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
-    return EventDetailResponse.from(event);
+    return EventDetailResponse.from(event, today);
   }
 
   public Long participate(final Long eventId, final Long memberId, final Member member) {
@@ -189,17 +189,18 @@ public class EventService {
     return statusName != null;
   }
 
-  public EventDetailResponse addEvent(final EventDetailRequest request) {
-    final Event event = saveNewEvent(request);
+  public EventDetailResponse addEvent(final EventDetailRequest request, final LocalDate today) {
+    final Event event = eventRepository.save(request.toEvent());
 
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
 
     event.addAllEventTags(tags);
 
-    return EventDetailResponse.from(event);
+    return EventDetailResponse.from(event, today);
   }
 
-  public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request) {
+  public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request,
+      final LocalDate today) {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
@@ -207,19 +208,23 @@ public class EventService {
 
     eventTagRepository.deleteAllByEventId(eventId);
 
-    final Event updatedEvent = event.updateEventContent(request.getName(), request.getLocation(),
-        request.getStartDateTime(), request.getEndDateTime(), request.getInformationUrl(), tags);
+    final Event updatedEvent = event.updateEventContent(
+        request.getName(),
+        request.getLocation(),
+        request.getStartDateTime(),
+        request.getEndDateTime(),
+        request.getInformationUrl(),
+        tags
+    );
 
-    return EventDetailResponse.from(updatedEvent);
+    return EventDetailResponse.from(updatedEvent, today);
   }
 
-  public EventDetailResponse deleteEvent(final Long eventId) {
+  public void deleteEvent(final Long eventId) {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
     eventRepository.deleteById(eventId);
-
-    return EventDetailResponse.from(event);
   }
 
   private List<Tag> findAllPersistTagsOrElseThrow(final List<TagRequest> tags) {
@@ -231,12 +236,5 @@ public class EventService {
         .map(tag -> tagRepository.findByName(tag.getName())
             .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_TAG)))
         .collect(toList());
-  }
-
-  private Event saveNewEvent(final EventDetailRequest request) {
-    final Event event = new Event(request.getName(), request.getLocation(),
-        request.getStartDateTime(), request.getEndDateTime(), request.getInformationUrl());
-
-    return eventRepository.save(event);
   }
 }

@@ -52,7 +52,7 @@ create table comment
     is_deleted bit          not null,
     event_id   bigint       not null,
     member_id  bigint       not null,
-    parent_id  bigint null
+    parent_id  bigint       null
 );
 
 create table member_activity
@@ -110,4 +110,3 @@ create table fcm_token
     token     varchar(255) not null,
     member_id bigint       not null unique
 );
-

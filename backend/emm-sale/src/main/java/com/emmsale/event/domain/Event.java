@@ -48,12 +48,11 @@ public class Event extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private EventType type;
-  @Column
   private String imageUrl;
   @OneToMany(mappedBy = "event", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
   @OneToMany(mappedBy = "event")
-  private List<Comment> comments = new ArrayList<>();
+  private List<Comment> comments;
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
   private List<Participant> participants = new ArrayList<>();
 
@@ -62,7 +61,9 @@ public class Event extends BaseEntity {
       final String location,
       final LocalDateTime startDate,
       final LocalDateTime endDate,
-      final String informationUrl
+      final String informationUrl,
+      final EventType eventType,
+      final String imageUrl
   ) {
     validateStartBeforeOrEqualEndDateTime(startDate, endDate);
 
@@ -71,7 +72,8 @@ public class Event extends BaseEntity {
     this.startDate = startDate;
     this.endDate = endDate;
     this.informationUrl = informationUrl;
-    this.imageUrl = "";
+    this.type = eventType;
+    this.imageUrl = imageUrl;
   }
 
   public Participant addParticipant(final Member member) {
