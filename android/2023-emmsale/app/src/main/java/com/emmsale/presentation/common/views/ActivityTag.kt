@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.emmsale.R
-import com.emmsale.presentation.utils.extension.px
+import com.emmsale.presentation.utils.extension.dp
 
 class ActivityTag : AppCompatCheckBox {
     constructor(context: Context) : super(context)
@@ -25,7 +25,7 @@ class ActivityTag : AppCompatCheckBox {
         gravity = Gravity.CENTER
         background = ContextCompat.getDrawable(context, R.drawable.bg_activity_tag)
         setTextColor(ContextCompat.getColor(context, R.color.black))
-        updatePadding(12.px, 0, 12.px, 0)
+        updatePadding(12.dp, 0, 12.dp, 0)
     }
 }
 

@@ -7,7 +7,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.emmsale.R
-import com.emmsale.presentation.utils.extension.px
+import com.emmsale.presentation.utils.extension.dp
 
 @BindingAdapter("app:imageUrl")
 fun ImageView.setImage(imageUrl: String) {
@@ -24,7 +24,7 @@ fun ImageView.setRoundedImageUrl(imageUrl: String, radius: Int) {
         .load(imageUrl)
         .error(R.color.event_thumbnail_default_color)
         .fallback(drawable)
-        .transform(CenterCrop(), RoundedCorners(radius.px))
+        .transform(CenterCrop(), RoundedCorners(radius.dp))
         .into(this)
 }
 
