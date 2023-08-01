@@ -1,18 +1,18 @@
 ### 알림 저장
 
-POST http://localhost:8080/notification
+POST http://localhost:8080/notifications
 Content-Type: application/json
 
 {
   "senderId" : 1,
-  "receiverId" : 2,
-  "message" : "알람이다",
+  "receiverId" : 3,
+  "message" : "테스트 알람이다",
   "eventId" : 1
 }
 
 ### FCM 토큰 저장 API (새롭게 저장)
 
-POST http://localhost:8080/notification/token
+POST http://localhost:8080/notifications/token
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 
 ### FCM 토큰 저장 API (기존에 있던 것 수정)
 
-POST http://localhost:8080/notification/token
+POST http://localhost:8080/notifications/token
 Content-Type: application/json
 
 {

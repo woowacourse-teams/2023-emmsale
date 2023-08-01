@@ -1,6 +1,8 @@
 package com.emmsale.member.domain;
 
 import com.emmsale.base.BaseEntity;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.member.exception.MemberExceptionType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,14 +17,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
+  private static final int MAX_DESCRIPTION_LENGTH = 100;
+  private static final String DEFAULT_DESCRIPTION = "";
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Column(unique = true, nullable = false)
   private Long githubId;
-  @Column(nullable = false)
   private String name;
-  @Column
+  @Column(nullable = false)
   private String description;
   @Column
   private String openProfileUrl;
@@ -34,12 +38,13 @@ public class Member extends BaseEntity {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
     this.name = name;
+    this.description = DEFAULT_DESCRIPTION;
   }
 
-  public Member(final Long githubId, final String imageUrl, final String name) {
+  public Member(final Long githubId, final String imageUrl) {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
-    this.name = name;
+    this.description = DEFAULT_DESCRIPTION;
   }
 
   public void updateName(final String name) {
@@ -50,11 +55,30 @@ public class Member extends BaseEntity {
     this.openProfileUrl = openProfileUrl;
   }
 
-  public boolean isNotMe(final Member member) {
-    if (member.getId().equals(id)) {
-      return false;
+  public void updateDescription(final String description) {
+    validateDescriptionNull(description);
+    validateDescriptionLength(description);
+    if (description.isBlank()) {
+      this.description = DEFAULT_DESCRIPTION;
+      return;
     }
-    return true;
+    this.description = description;
+  }
+
+  private void validateDescriptionNull(final String description) {
+    if (description == null) {
+      throw new MemberException(MemberExceptionType.NULL_DESCRIPTION);
+    }
+  }
+
+  private void validateDescriptionLength(final String description) {
+    if (description.length() > MAX_DESCRIPTION_LENGTH) {
+      throw new MemberException(MemberExceptionType.OVER_LENGTH_DESCRIPTION);
+    }
+  }
+
+  public boolean isNotMe(final Member member) {
+    return isNotMe(member.getId());
   }
 
   public boolean isMe(final Member member) {
@@ -63,5 +87,9 @@ public class Member extends BaseEntity {
 
   public boolean isNotMe(final Long id) {
     return !this.id.equals(id);
+  }
+
+  public boolean isOnboarded() {
+    return name != null;
   }
 }

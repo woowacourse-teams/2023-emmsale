@@ -9,6 +9,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
+import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
@@ -22,10 +23,12 @@ import com.emmsale.event.domain.repository.ParticipantRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
+import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +49,12 @@ public class EventService {
   private final EventTagRepository eventTagRepository;
   private final TagRepository tagRepository;
 
+  private static void validateMemberNotAllowed(final Long memberId, final Member member) {
+    if (member.isNotMe(memberId)) {
+      throw new EventException(EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT);
+    }
+  }
+
   @Transactional(readOnly = true)
   public EventDetailResponse findEvent(final Long id) {
     final Event event = eventRepository.findById(id)
@@ -63,22 +72,15 @@ public class EventService {
     return participant.getId();
   }
 
-  private static void validateMemberNotAllowed(final Long memberId, final Member member) {
-    if (member.isNotMe(memberId)) {
-      throw new EventException(EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT);
-    }
-  }
-
   @Transactional(readOnly = true)
   public List<EventResponse> findEvents(final LocalDate nowDate, final int year, final int month,
       final String tagName, final String statusName) {
     validateYearAndMonth(year, month);
-    List<Event> events = filterEventsByTag(tagName);
+    final List<Event> events = filterEventsByTag(tagName);
 
-    final EnumMap<EventStatus, List<Event>> sortAndGroupByStatus
+    final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events, year, month);
-
-    return filterEventResponsesByStatus(statusName, sortAndGroupByStatus);
+    return filterEventResponsesByStatus(statusName, eventsForEventStatus);
   }
 
   @Transactional(readOnly = true)
@@ -102,7 +104,7 @@ public class EventService {
 
   private List<Event> filterEventsByTag(final String tagName) {
     if (isExistTagName(tagName)) {
-      Tag tag = tagRepository.findByName(tagName)
+      final Tag tag = tagRepository.findByName(tagName)
           .orElseThrow(() -> new TagException(NOT_FOUND_TAG));
 
       return eventTagRepository.findEventTagsByTag(tag)
@@ -132,31 +134,87 @@ public class EventService {
 
   private boolean isOverlapToMonth(final int year, final int month,
       final LocalDate eventStart, final LocalDate eventEnd) {
-    LocalDate monthStart = LocalDate.of(year, month, 1);
-    LocalDate monthEnd = LocalDate.of(year, month, monthStart.lengthOfMonth());
+    final LocalDate monthStart = LocalDate.of(year, month, 1);
+    final LocalDate monthEnd = LocalDate.of(year, month, monthStart.lengthOfMonth());
 
     return (isBeforeOrEquals(eventStart, monthEnd) && isBeforeOrEquals(monthStart, eventEnd))
         || (isBeforeOrEquals(monthStart, eventStart) && isBeforeOrEquals(eventStart, monthEnd))
         || (isBeforeOrEquals(monthStart, eventEnd) && isBeforeOrEquals(eventEnd, monthEnd));
   }
 
-  private boolean isBeforeOrEquals(LocalDate criteria, LocalDate comparison) {
+  private boolean isBeforeOrEquals(final LocalDate criteria, final LocalDate comparison) {
     return criteria.isBefore(comparison) || criteria.isEqual(comparison);
   }
 
   private List<EventResponse> filterEventResponsesByStatus(final String statusName,
-      final EnumMap<EventStatus, List<Event>> sortAndGroupByEventStatus) {
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
     if (isExistStatusName(statusName)) {
       EventStatus status = EventStatus.from(statusName);
-      return EventResponse.makeEventResponsesByStatus(status,
-          sortAndGroupByEventStatus.get(status));
+      List<Event> filteredEvents = eventsForEventStatus.get(status);
+      if (cannotFoundKeyStatus(filteredEvents)) {
+        return List.of();
+      }
+      return EventResponse.makeEventResponsesByStatus(status, filteredEvents);
     }
-    return EventResponse.mergeEventResponses(sortAndGroupByEventStatus);
+    return EventResponse.mergeEventResponses(eventsForEventStatus);
+  }
+
+  private boolean cannotFoundKeyStatus(final List<Event> filteredEvents) {
+    return filteredEvents == null;
   }
 
   private boolean isExistStatusName(final String statusName) {
     return statusName != null;
   }
 
+  public EventDetailResponse addEvent(final EventDetailRequest request) {
+    final Event event = saveNewEvent(request);
 
+    final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
+
+    event.addAllEventTags(tags);
+
+    return EventDetailResponse.from(event);
+  }
+
+  public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request) {
+    final Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
+
+    final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
+
+    eventTagRepository.deleteAllByEventId(eventId);
+
+    final Event updatedEvent = event.updateEventContent(request.getName(), request.getLocation(),
+        request.getStartDateTime(), request.getEndDateTime(), request.getInformationUrl(), tags);
+
+    return EventDetailResponse.from(updatedEvent);
+  }
+
+  public EventDetailResponse deleteEvent(final Long eventId) {
+    final Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
+
+    eventRepository.deleteById(eventId);
+
+    return EventDetailResponse.from(event);
+  }
+
+  private List<Tag> findAllPersistTagsOrElseThrow(final List<TagRequest> tags) {
+    if (tags == null || tags.isEmpty()) {
+      return new ArrayList<>();
+    }
+
+    return tags.stream()
+        .map(tag -> tagRepository.findByName(tag.getName())
+            .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_TAG)))
+        .collect(toList());
+  }
+
+  private Event saveNewEvent(final EventDetailRequest request) {
+    final Event event = new Event(request.getName(), request.getLocation(),
+        request.getStartDateTime(), request.getEndDateTime(), request.getInformationUrl());
+
+    return eventRepository.save(event);
+  }
 }

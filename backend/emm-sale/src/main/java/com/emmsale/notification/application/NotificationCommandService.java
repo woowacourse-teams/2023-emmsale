@@ -30,6 +30,7 @@ public class NotificationCommandService {
   private final NotificationRepository notificationRepository;
   private final FcmTokenRepository fcmTokenRepository;
   private final MemberRepository memberRepository;
+  private final FirebaseCloudMessageClient firebaseCloudMessageClient;
 
   public NotificationResponse create(final NotificationRequest notificationRequest) {
     final Long senderId = notificationRequest.getSenderId();
@@ -51,7 +52,8 @@ public class NotificationCommandService {
             notificationRequest.getMessage()
         ));
 
-    //FCM에 notification 보내기
+    firebaseCloudMessageClient.sendMessageTo(receiverId, savedNotification);
+
     return NotificationResponse.from(savedNotification);
   }
 

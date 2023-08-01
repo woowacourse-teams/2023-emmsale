@@ -34,10 +34,10 @@ create table member
     id               bigint auto_increment primary key,
     created_at       datetime(6),
     updated_at       datetime(6),
-    description      varchar(255) null,
+    description      varchar(255) not null default '',
     github_id        bigint       not null unique,
     image_url        varchar(255) not null,
-    name             varchar(255) not null,
+    name             varchar(255) ,
     open_profile_url varchar(255) null
 );
 

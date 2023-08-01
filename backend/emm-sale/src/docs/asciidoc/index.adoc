@@ -82,6 +82,17 @@ include::{snippets}/update-open-profile-url/http-request.adoc[]
 .HTTP response
 include::{snippets}/update-open-profile-url/http-response.adoc[]
 
+=== `PUT`: 사용자의 한줄 자기소개 업데이트
+
+.HTTP request 설명
+include::{snippets}/update-description/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/update-description/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/update-description/http-response.adoc[]
+
 === `GET`: 특정 사용자의 프로필 정보 조회
 
 .HTTP request
@@ -138,6 +149,45 @@ include::{snippets}/find-participants/http-response.adoc[]
 
 .HTTP response 설명
 include::{snippets}/find-participants/response-fields.adoc[]
+
+=== `POST` : 이벤트 생성
+
+.HTTP request
+include::{snippets}/add-event/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/add-event/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/add-event/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-event/response-fields.adoc[]
+
+=== `PUT` : 이벤트 업데이트
+
+.HTTP request
+include::{snippets}/update-event/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/update-event/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/update-event/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/update-event/response-fields.adoc[]
+
+=== `PUT` : 이벤트 삭제
+
+.HTTP request
+include::{snippets}/delete-event/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/delete-event/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/delete-event/response-fields.adoc[]
 
 == Comment
 
