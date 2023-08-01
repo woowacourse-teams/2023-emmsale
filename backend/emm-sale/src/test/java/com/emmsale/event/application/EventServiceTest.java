@@ -1,7 +1,9 @@
 package com.emmsale.event.application;
 
+import static com.emmsale.event.EventFixture.AI_아이디어_공모전;
 import static com.emmsale.event.EventFixture.AI_컨퍼런스;
 import static com.emmsale.event.EventFixture.eventFixture;
+import static com.emmsale.event.EventFixture.구름톤;
 import static com.emmsale.event.EventFixture.날짜_8월_10일;
 import static com.emmsale.event.EventFixture.모바일_컨퍼런스;
 import static com.emmsale.event.EventFixture.안드로이드_컨퍼런스;
@@ -12,6 +14,7 @@ import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_PARTICIPA
 import static com.emmsale.event.exception.EventExceptionType.INVALID_MONTH;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_STATUS;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR;
+import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR_AND_MONTH;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_TAG;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME;
@@ -55,6 +58,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,14 +68,20 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
       List.of(), "진행 중", null, 0);
   private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
-      List.of(),
-      "진행 중", null, 0);
+      List.of(), "진행 중", null, 0);
   private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스", null, null,
       List.of(), "종료된 행사", null, 0);
   private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null,
       List.of(), "진행 예정", null, 0);
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
       List.of(), "진행 예정", null, 0);
+  private static final EventResponse AI_아이디어_공모전 = new EventResponse(null, "AI 아이디어 공모전", null,
+      null,
+      List.of(), "종료된 행사", null, 0);
+  private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null, null,
+      List.of(), "진행 중", null, 0);
+
+
   private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
   @Autowired
   private MemberRepository memberRepository;
@@ -97,6 +107,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     final Event 모바일_컨퍼런스 = eventRepository.save(모바일_컨퍼런스());
     final Event 안드로이드_컨퍼런스 = eventRepository.save(안드로이드_컨퍼런스());
     final Event 웹_컨퍼런스 = eventRepository.save(웹_컨퍼런스());
+    final Event AI_아이디어_공모전 = eventRepository.save(AI_아이디어_공모전());
+    final Event 구름톤 = eventRepository.save(구름톤());
 
     eventTagRepository.saveAll(List.of(
         new EventTag(인프콘_2023, 백엔드), new EventTag(인프콘_2023, 프론트엔드), new EventTag(인프콘_2023, 안드로이드),
@@ -214,6 +226,37 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   class findEvents {
 
     @Test
+    @DisplayName("2023년 7월 21일에 컨퍼런스 행사를 조회하면, 해당 카테고리에 해당하는 모든 행사 목록을 조회할 수 있다.")
+    void findEvents_CONFERENCE() {
+      // given
+      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스,
+          안드로이드_컨퍼런스);
+
+      // when
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          null, null, null, null);
+
+      // then
+      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+          .isEqualTo(expectedEvents);
+    }
+
+    @Test
+    @DisplayName("2023년 7월 21일에 대회 행사를 조회하면, 해당 카테고리에 해당하는 모든 행사 목록을 조회할 수 있다.")
+    void findEvents_COMPETITION() {
+      // given
+      final List<EventResponse> expectedEvents = List.of(구름톤, AI_아이디어_공모전);
+
+      // when
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.COMPETITION, TODAY,
+          null, null, null, null);
+
+      // then
+      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+          .isEqualTo(expectedEvents);
+    }
+
+    @Test
     @DisplayName("2023년 7월 21일에 2023년 7월 행사를 조회하면, 해당 연도&월에 걸쳐있는 모든 행사 목록을 조회할 수 있다.")
     void findEvents_2023_7() {
       // given
@@ -309,6 +352,20 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       // then
       assertThat(actualEvents).isEmpty();
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {":3", "2023:"}, delimiter = ':')
+    @DisplayName("연도와 월 중 하나의 값만 유효하게 들어오면 예외를 반환한다.")
+    void findEvents_month_year_fail(final Integer year, final Integer month) {
+      // given, when
+      final ThrowingCallable actual = () -> eventService.findEvents(EventType.CONFERENCE, TODAY,
+          year, month, null, null);
+
+      // then
+      assertThatThrownBy(actual)
+          .isInstanceOf(EventException.class)
+          .hasMessage(INVALID_YEAR_AND_MONTH.errorMessage());
     }
 
     @ParameterizedTest

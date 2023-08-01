@@ -78,8 +78,6 @@ public class EventService {
   public List<EventResponse> findEvents(final EventType categoryName, final LocalDate nowDate,
       final Integer year, final Integer month,
       final String tagName, final String statusName) {
-    //todo 잘못된 카테고리 입력에 대한 검증 테스트
-
     List<Event> events = eventRepository.findEventsByType(categoryName);
 
     if (isExistTagName(tagName)) {
@@ -117,7 +115,6 @@ public class EventService {
         .collect(toList());
   }
 
-  // todo year과 month 중 하나만 넣었을 때, year, month 값이 유효하지 않을 때
   private boolean isExistBothYearAndMonth(final Integer year, final Integer month) {
     if ((year == null && month != null) || (year != null && month == null)) {
       throw new EventException(INVALID_YEAR_AND_MONTH);

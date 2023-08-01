@@ -54,6 +54,21 @@ public class EventFixture {
     );
   }
 
+  public static Event AI_아이디어_공모전() {
+    return new Event("AI 아이디어 공모전", "코엑스", LocalDateTime.parse("2023-06-29T12:00:00"),
+        LocalDateTime.parse("2023-07-16T12:00:00"), "https://~~~", EventType.COMPETITION,
+        "https://image.url"
+    );
+  }
+
+  public static Event 구름톤() {
+    return new Event("구름톤", "코엑스", LocalDateTime.parse("2023-07-03T12:00:00"),
+        LocalDateTime.parse("2023-08-03T12:00:00"), "https://~~~", EventType.COMPETITION,
+        "https://image.url"
+    );
+  }
+
+
   public static LocalDate 날짜_8월_10일() {
     return LocalDate.of(2023, 8, 10);
   }
