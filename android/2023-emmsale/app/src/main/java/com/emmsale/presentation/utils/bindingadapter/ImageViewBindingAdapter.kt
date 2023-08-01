@@ -19,8 +19,9 @@ fun ImageView.setRoundedImageUrl(
 ) {
     Glide.with(this)
         .load(imageUrl)
-        .error(R.color.event_thumbnail_default_color)
-        .fallback(R.color.event_thumbnail_default_color)
+        .placeholder(R.drawable.img_all_error)
+        .error(R.drawable.img_all_error)
+        .fallback(R.drawable.img_all_error)
         .transform(CenterCrop(), RoundedCorners(radius.px))
         .into(this)
 }

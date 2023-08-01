@@ -78,7 +78,7 @@
             app:roundedImageRadius="@{15}"
             app:imageUrl="@{event.posterUrl}"
             app:layout_constraintDimensionRatio="W,100:126"
-            tools:src="@color/event_thumbnail_default_color"
+            tools:src="@drawable/img_all_error"
             android:contentDescription="@string/event_poster_description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
