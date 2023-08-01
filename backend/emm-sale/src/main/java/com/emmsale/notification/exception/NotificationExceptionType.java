@@ -13,7 +13,23 @@ public enum NotificationExceptionType implements BaseExceptionType {
   NOT_FOUND_NOTIFICATION(
       HttpStatus.NOT_FOUND,
       "알림이 존재하지 않습니다."
+  ),
+
+  NOT_FOUND_FCM_TOKEN(
+      HttpStatus.NOT_FOUND,
+      "해당 사용자의 기기를 구별할 수 있는 FCM 토큰이 존재하지 않습니다."
+  ),
+
+  CONVERTING_JSON_ERROR(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      "알림 메시지를 보낼 때 JSON으로 변환하는 과정에서 발생한 에러입니다."
+  ),
+
+  GOOGLE_REQUEST_TOKEN_ERROR(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      "구글에 토큰 요청할 때 발생한 에러"
   )
+
   ;
 
   private final HttpStatus httpStatus;
