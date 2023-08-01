@@ -31,12 +31,24 @@ android {
         buildConfig = true
     }
     buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = true
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = false
+            }
+        }
+
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            configure<CrashlyticsExtension> {
+                nativeSymbolUploadEnabled = true
+                strippedNativeLibsDir = "$buildDir/ndklibs/obj"
+                unstrippedNativeLibsDir = "$buildDir/ndklibs/libs"
+            }
         }
     }
     compileOptions {
@@ -53,6 +65,21 @@ android {
         useJUnitPlatform()
         testLogging {
             events.addAll(arrayOf(org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED, org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED))
+        }
+    }
+    flavorDimensions += "environment"
+    productFlavors {
+        create("staging") {
+            dimension = "environment"
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = false
+            }
+        }
+        create("prod") {
+            dimension = "environment"
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = true
+            }
         }
     }
 }
@@ -74,18 +101,19 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx:23.2.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("androidx.fragment:fragment-ktx:1.6.0")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.squareup.okhttp3:mockwebserver:4.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
-    implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-messaging:23.2.0")
 
     testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.2")
