@@ -22,6 +22,7 @@ class EventViewHolder(
 
     fun bind(event: EventUiState) {
         binding.event = event
+        binding.cgEventTags.removeAllViews()
         event.tags.forEach(::addEventChip)
     }
 
