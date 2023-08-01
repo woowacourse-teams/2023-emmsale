@@ -70,11 +70,13 @@
 
                     <TextView
                         android:id="@+id/tv_myprofile_onelineintroduce"
-                        android:layout_width="182dp"
+                        android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="9dp"
+                        android:layout_marginEnd="19dp"
                         android:text="@{viewModel.uiState.description}"
                         android:textSize="13sp"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_memberimage"
                         app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
                         app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_membername"
                         tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차" />
