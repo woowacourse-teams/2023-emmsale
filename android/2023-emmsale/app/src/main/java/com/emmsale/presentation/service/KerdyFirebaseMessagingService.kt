@@ -33,5 +33,3 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         private const val FOLLOW_CHANNEL_ID = "follow_channel_id"
     }
 }
-
-

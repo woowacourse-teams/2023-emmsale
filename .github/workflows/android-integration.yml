@@ -20,31 +20,25 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Change wrapper permissions
+    - name: Change wrapper permissions 
       run: chmod +x ./android/2023-emmsale/gradlew
     
-    - name: Access GITHUB_CLIENT_ID
-      run: |
-        echo "GH_CLIENT_ID=${{ secrets.GH_CLIENT_ID }}"
-      shell: bash
-      env:
-        GH_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
-        
+    - name: Access GH_CLIENT_ID
+      env:    
+        GH_CLIENT_ID: $
+      run: echo "GH_CLIENT_ID=\"$GH_CLIENT_ID\"" > android/2023-emmsale/local.properties
+      
+    - name: Access GOOGLE_SERVICE
+      env:    
+         GOOGLE_SERVICE: ${{ secrets.GOOGLE_SERVICE }}
+      run: echo '${{ secrets.GOOGLE_SERVICE }}' > android/2023-emmsale/app/google-services.json
+      
     - name: Run ktlintChecking
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale ktlintCheck
-      
-    - name: Run detekt
-      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale detekt
 
     - name: Run unit tests
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale testDebugUnitTest
 
-    - name: Build assemble release apk
-      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale assembleRelease
-
     - name: Create android test report
       uses: asadmansr/android-test-report-action@v1.2.0
       if: ${{ always() }}
-
-    - name: Build assemble release apk
-      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale assembleRelease

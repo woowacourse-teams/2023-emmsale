@@ -15,4 +15,3 @@ class MemberRepositoryImpl(
         handleApi(memberService.updateMember(MemberApiModel.from(member))) { }
     }
 }
-
