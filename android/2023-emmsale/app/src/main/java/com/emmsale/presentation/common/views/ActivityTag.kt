@@ -5,10 +5,8 @@ import android.util.AttributeSet
 import android.view.Gravity
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.emmsale.R
-import com.emmsale.presentation.utils.extension.dp
 
 class ActivityTag : AppCompatCheckBox {
     constructor(context: Context) : super(context)

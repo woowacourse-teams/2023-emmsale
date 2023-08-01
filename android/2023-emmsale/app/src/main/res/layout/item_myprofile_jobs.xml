@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
+
+    <variable
             name="job"
             type="com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState" />
     </data>
