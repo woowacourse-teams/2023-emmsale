@@ -11,16 +11,16 @@ import com.emmsale.presentation.utils.extension.px
 @BindingAdapter(
     "app:imageUrl",
     "app:roundedImageRadius",
-    requireAll = false,
+    requireAll = true,
 )
 fun ImageView.setRoundedImageUrl(
-    imageUrl: String? = null,
-    radius: Int = 0,
+    imageUrl: String?,
+    radius: Int,
 ) {
     Glide.with(this)
         .load(imageUrl)
         .error(R.color.event_thumbnail_default_color)
-        .fallback(drawable)
+        .fallback(R.color.event_thumbnail_default_color)
         .transform(CenterCrop(), RoundedCorners(radius.px))
         .into(this)
 }

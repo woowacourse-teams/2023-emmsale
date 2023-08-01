@@ -21,16 +21,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="17dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="14dp"
+        android:paddingTop="26dp"
+        android:paddingHorizontal="18dp"
+        android:minHeight="158dp"
+        android:paddingBottom="16dp"
         android:onClick="@{() -> onClickEvent.invoke(event)}">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cg_event_tags"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/iv_event_poster"
             android:layout_height="wrap_content" />
 
         <TextView
@@ -57,10 +60,11 @@
             android:layout_marginTop="12dp"
             tools:text="D-21"
             android:text="@{@string/d_day_format(event.DDay)}"
-            app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_event_poster"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
+            android:id="@+id/iv_event_poster"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
