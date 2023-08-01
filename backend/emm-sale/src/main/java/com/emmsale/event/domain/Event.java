@@ -10,12 +10,15 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.tag.domain.Tag;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,10 +45,15 @@ public class Event extends BaseEntity {
   private LocalDateTime endDate;
   @Column(nullable = false)
   private String informationUrl;
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private EventType type;
+  @Column(nullable = false)
+  private String imageUrl;
   @OneToMany(mappedBy = "event", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
   @OneToMany(mappedBy = "event")
-  private List<Comment> comments;
+  private List<Comment> comments = new ArrayList<>();
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
   private List<Participant> participants = new ArrayList<>();
 
@@ -129,5 +137,9 @@ public class Event extends BaseEntity {
     if (startDateTime.isAfter(endDateTime)) {
       throw new EventException(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME);
     }
+  }
+
+  public int calculateRemainingDay(final LocalDateTime today) {
+    return (int) ChronoUnit.DAYS.between(today, startDate);
   }
 }
