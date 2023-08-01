@@ -8,7 +8,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 
 object Kerdy {
-    private val firebaseAnalytics: FirebaseAnalytics by lazy { Firebase.analytics }
+    private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
 
     fun initFirebaseAnalytics(token: Token) {
         firebaseAnalytics.setUserId(token.uid.toString())
