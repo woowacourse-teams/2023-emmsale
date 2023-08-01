@@ -88,4 +88,13 @@ public class MemberApi {
       @PathVariable("member-id") final Long memberId) {
     return ResponseEntity.ok(memberQueryService.findProfile(memberId));
   }
+
+  @DeleteMapping("/members/{memberId}")
+  public ResponseEntity<Void> deleteMember(
+      @PathVariable final Long memberId,
+      final Member member
+  ) {
+    memberUpdateService.deleteMember(member, memberId);
+    return ResponseEntity.noContent().build();
+  }
 }

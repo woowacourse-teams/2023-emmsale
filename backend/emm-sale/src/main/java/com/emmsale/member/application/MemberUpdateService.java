@@ -35,4 +35,12 @@ public class MemberUpdateService {
         .orElseThrow(() -> new MemberException((MemberExceptionType.NOT_FOUND_MEMBER)));
     persistMember.updateDescription(description);
   }
+
+  public void deleteMember(final Member member, final Long memberId) {
+    if (member.isNotMe(memberId)) {
+      throw new MemberException(MemberExceptionType.FORBIDDEN_DELETE_MEMBER);
+    }
+
+    memberRepository.deleteById(memberId);
+  }
 }
