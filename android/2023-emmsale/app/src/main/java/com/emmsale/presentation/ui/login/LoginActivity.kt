@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.login
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.emmsale.databinding.ActivityLoginBinding
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
+import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.emmsale.presentation.utils.builder.uri
 import com.google.android.material.snackbar.Snackbar
@@ -64,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        // startActivity(MainActivity.getIntent(this))
+        MainActivity.startActivity(this)
         finish()
     }
 
@@ -118,6 +120,11 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         private const val GITHUB_CODE_PARAMETER = "code"
+
+        fun startActivity(context: Context) {
+            val intent = Intent(context, LoginActivity::class.java)
+            context.startActivity(intent)
+        }
     }
 
     @SuppressLint("InlinedApi")

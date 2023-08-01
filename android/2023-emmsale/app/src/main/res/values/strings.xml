@@ -8,6 +8,14 @@
     <string name="cancel">취소</string>
     <string name="okay">확인</string>
     <string name="post_notification_permission_needed_message">알림 권한이 필요해요!</string>
+    <string name="main_menuitemnameofprofile">프로필</string>
+    <string name="main_menuitemnameofhome">홈</string>
+    <string name="main_menuitemnameofsetting">설정</string>
+    <string name="myprofile_memberimagedescription">회원의 사진</string>
+    <string name="myprofile_greeting">Hello,</string>
+    <string name="myprofile_educationslabel">교육 활동</string>
+    <string name="myprofile_clubslabel">동아리 활동</string>
+    <string name="myprofile_eventslabel">참여 행사</string>
     <string name="event_start_duration_format">기간 : %s</string>
     <string name="event_start_end_duration_format">기간 : %s - %s</string>
     <string name="event_poster_description">event poster</string>
