@@ -33,13 +33,6 @@ android {
         buildConfig = true
     }
     buildTypes {
-        getByName("debug") {
-            isMinifyEnabled = true
-            configure<CrashlyticsExtension> {
-                mappingFileUploadEnabled = false
-            }
-        }
-
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
@@ -62,21 +55,6 @@ android {
     }
     dataBinding {
         enable = true
-    }
-    flavorDimensions += "environment"
-    productFlavors {
-        create("staging") {
-            dimension = "environment"
-            configure<CrashlyticsExtension> {
-                mappingFileUploadEnabled = false
-            }
-        }
-        create("prod") {
-            dimension = "environment"
-            configure<CrashlyticsExtension> {
-                mappingFileUploadEnabled = true
-            }
-        }
     }
 }
 
