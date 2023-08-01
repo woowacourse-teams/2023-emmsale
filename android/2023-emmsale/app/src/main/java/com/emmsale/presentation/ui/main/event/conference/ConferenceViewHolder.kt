@@ -1,26 +1,27 @@
-package com.emmsale.presentation.ui.main.event.recyclerview
+package com.emmsale.presentation.ui.main.event.conference
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
-import com.emmsale.databinding.ItemEventBinding
+import com.emmsale.databinding.ItemConferenceBinding
 import com.emmsale.presentation.common.views.EventTag
 import com.emmsale.presentation.common.views.eventChipOf
-import com.emmsale.presentation.ui.main.event.uistate.EventUiState
 
-class EventViewHolder(
+class ConferenceViewHolder(
     parent: ViewGroup,
-    onClickEvent: (EventUiState) -> Unit,
-) : ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_event, parent, false)) {
-    private val binding: ItemEventBinding = ItemEventBinding.bind(itemView)
+    onClickConference: (ConferencesUiState) -> Unit,
+) : ViewHolder(
+    LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false)
+) {
+    private val binding: ItemConferenceBinding = ItemConferenceBinding.bind(itemView)
 
     init {
-        binding.onClickEvent = onClickEvent
+        binding.onClickConference = onClickConference
     }
 
-    fun bind(event: EventUiState) {
+    fun bind(event: ConferencesUiState) {
         binding.event = event
         binding.cgEventTags.removeAllViews()
         event.tags.forEach(::addEventChip)

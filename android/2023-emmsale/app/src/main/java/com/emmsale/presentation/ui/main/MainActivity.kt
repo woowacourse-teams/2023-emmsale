@@ -28,12 +28,12 @@ class MainActivity : AppCompatActivity() {
         binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
-                R.id.mi_main_home -> showFragment(EventFragment.TAG)
+                R.id.mi_main_event -> showFragment(EventFragment.TAG)
             }
             return@setOnItemSelectedListener true
         }
 
-        binding.bnvMain.selectedItemId = R.id.mi_main_home
+        binding.bnvMain.selectedItemId = R.id.mi_main_event
     }
 
     private fun addAllFragments() {

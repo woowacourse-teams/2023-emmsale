@@ -1,11 +1,11 @@
-package com.emmsale.data.event
+package com.emmsale.data.conference
 
-import com.emmsale.data.event.dto.ConferenceApiModel
+import com.emmsale.data.conference.dto.ConferenceApiModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface EventService {
+interface ConferenceService {
     @GET("/events")
     suspend fun getEvents(
         @Query("category") category: String,

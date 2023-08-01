@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_main_menuitemprofile"
         android:title="@string/main_menuitemnameofprofile" />
     <item
-        android:id="@+id/mi_main_home"
+        android:id="@+id/mi_main_event"
         android:icon="@drawable/ic_main_menuitemhome"
         android:title="@string/main_menuitemnameofhome" />
     <item

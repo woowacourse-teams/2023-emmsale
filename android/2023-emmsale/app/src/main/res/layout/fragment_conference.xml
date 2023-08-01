@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.main.event.conference.ConferenceViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".presentation.ui.main.event.conference.ConferenceFragment">
+
+        <TextView
+            android:id="@+id/tv_events_prefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/event_count_prefix"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_events_count"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="6dp"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/event_total_event_count_text_color"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_events_prefix"
+            app:layout_constraintStart_toEndOf="@+id/tv_events_prefix"
+            app:layout_constraintTop_toTopOf="@+id/tv_events_prefix"
+            tools:text="58" />
+
+        <TextView
+            android:id="@+id/tv_events_suffix"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="1dp"
+            android:text="@string/event_count_suffix"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_events_prefix"
+            app:layout_constraintStart_toEndOf="@+id/tv_events_count"
+            app:layout_constraintTop_toTopOf="@+id/tv_events_prefix" />
+
+        <LinearLayout
+            android:id="@+id/layout_events_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="17dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_events_prefix"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_events_prefix">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/ic_event_filter" />
+
+            <TextView
+                android:id="@+id/tv_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_filter"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_events"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_event_recyclerview"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_events_filter"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_conference" />
+
+        <ProgressBar
+            android:id="@+id/progressbar_loading"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="0.15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

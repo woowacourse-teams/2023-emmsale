@@ -5,24 +5,24 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.ui.main.event.uistate.EventUiState" />
+        <import type="com.emmsale.presentation.ui.main.event.conference.ConferencesUiState" />
 
         <import type="kotlin.Unit" />
 
         <variable
             name="event"
-            type="EventUiState" />
+            type="com.emmsale.presentation.ui.main.event.conference.ConferencesUiState" />
 
         <variable
-            name="onClickEvent"
-            type="kotlin.jvm.functions.Function1&lt;EventUiState, Unit>" />
+            name="onClickConference"
+            type="kotlin.jvm.functions.Function1&lt;ConferencesUiState, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="180dp"
-        android:onClick="@{() -> onClickEvent.invoke(event)}"
+        android:onClick="@{() -> onClickConference.invoke(event)}"
         android:paddingHorizontal="18dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp">
