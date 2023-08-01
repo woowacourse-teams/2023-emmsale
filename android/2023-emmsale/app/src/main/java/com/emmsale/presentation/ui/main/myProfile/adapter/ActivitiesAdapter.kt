@@ -24,12 +24,12 @@ class ActivitiesAdapter : ListAdapter<ActivityUiState, ActivityViewHolder>(diffU
             override fun areItemsTheSame(
                 oldItem: ActivityUiState,
                 newItem: ActivityUiState,
-            ): Boolean = oldItem == newItem
+            ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: ActivityUiState,
                 newItem: ActivityUiState,
-            ): Boolean = oldItem.id == newItem.id
+            ): Boolean = oldItem == newItem
         }
     }
 }
