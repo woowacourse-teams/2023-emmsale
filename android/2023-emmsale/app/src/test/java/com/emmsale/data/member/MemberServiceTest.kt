@@ -78,6 +78,7 @@ internal class MemberServiceTest {
     @Test
     @DisplayName("특정 회원이 했던 활동 정보를 요청했을 때 성공적으로 응답을 받았다면 MemberActivitiesBindActivityTypeApiModel로 파싱된 데이터를 반환한다")
     fun test2() = runTest {
+        val memberId = 1L
         val mockResponse = MockResponse()
             .setResponseCode(200)
             .setBody(
@@ -117,7 +118,7 @@ internal class MemberServiceTest {
             )
         mockWebServer.enqueue(mockResponse)
 
-        val response = sut.getActivities()
+        val response = sut.getActivities(memberId)
 
         assertThat(response.body()).isEqualTo(
             listOf(

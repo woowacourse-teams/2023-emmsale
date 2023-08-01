@@ -8,14 +8,15 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MemberService {
 
     @GET("members/{memberId}")
     suspend fun getMember(@Path("memberId") memberId: Long): Response<MemberWithoutActivitiesApiModel>
 
-    @GET("members/activities")
-    suspend fun getActivities(): Response<List<ActivitiesAssociatedByActivityTypeApiModel>>
+    @GET("members/{memberId}/activities")
+    suspend fun getActivities(@Query("memberId") memberId: Long): Response<List<ActivitiesAssociatedByActivityTypeApiModel>>
 
     @POST("/members")
     suspend fun updateMember(@Body member: MemberApiModel): Response<Unit>

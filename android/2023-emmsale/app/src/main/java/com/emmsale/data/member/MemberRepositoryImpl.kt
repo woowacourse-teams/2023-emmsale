@@ -17,7 +17,7 @@ class MemberRepositoryImpl(
 
     override suspend fun getMember(memberId: Long): ApiResult<Member1> = withContext(dispatcher) {
         val memberResponseDeferred = async { memberService.getMember(memberId) }
-        val activitiesResponseDeferred = async { memberService.getActivities() }
+        val activitiesResponseDeferred = async { memberService.getActivities(memberId) }
         val memberResponse = memberResponseDeferred.await()
         val activitiesResponse = activitiesResponseDeferred.await()
 

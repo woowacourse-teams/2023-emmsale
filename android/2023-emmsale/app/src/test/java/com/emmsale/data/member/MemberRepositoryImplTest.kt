@@ -40,7 +40,7 @@ internal class MemberRepositoryImplTest {
         val memberId = 1L
         val apiModel = memberApiModelFixture.copy(memberId)
         coEvery { memberService.getMember(memberId) } returns Response.success(apiModel)
-        coEvery { memberService.getActivities() } returns Response.success(
+        coEvery { memberService.getActivities(memberId) } returns Response.success(
             listOf(
                 ActivitiesAssociatedByActivityTypeApiModel(
                     "동아리",
