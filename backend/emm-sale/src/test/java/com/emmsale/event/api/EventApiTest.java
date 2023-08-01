@@ -118,6 +118,28 @@ class EventApiTest extends MockMvcTestHelper {
   }
 
   @Test
+  @DisplayName("Event에 사용자를 참여자 목록에서 제거할 수 있다.")
+  void cancelParticipateEvent() throws Exception {
+    //given
+    final Long eventId = 1L;
+    final Long memberId = 2L;
+    final EventParticipateRequest request = new EventParticipateRequest(memberId);
+    final String fakeAccessToken = "Bearer accessToken";
+
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자")
+    );
+
+    //when
+    mockMvc.perform(delete(format("/events/%s/participants", eventId))
+            .header("Authorization", fakeAccessToken)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isNoContent())
+        .andDo(document("participate-event-cancel", requestFields));
+  }
+
+  @Test
   @DisplayName("특정 카테고리의 행사 목록을 조회할 수 있으면 200 OK를 반환한다.")
   void findEvents() throws Exception {
     // given

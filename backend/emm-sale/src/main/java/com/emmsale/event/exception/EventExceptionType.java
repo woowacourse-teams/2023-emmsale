@@ -9,6 +9,7 @@ public enum EventExceptionType implements BaseExceptionType {
 
   NOT_FOUND_EVENT(HttpStatus.NOT_FOUND, "해당하는 행사를 찾을 수 없습니다."),
   FORBIDDEN_PARTICIPATE_EVENT(HttpStatus.FORBIDDEN, "참가하려는 사용자와 로그인된 사용자가 다릅니다."),
+  NOT_FOUND_PARTICIPANT(HttpStatus.NOT_FOUND, "해당 행사에 등록되지 않은 사용자입니다."),
   ALREADY_PARTICIPATED(HttpStatus.BAD_REQUEST, "이미 참가신청한 멤버입니다."),
   INVALID_STATUS(
       HttpStatus.BAD_REQUEST,

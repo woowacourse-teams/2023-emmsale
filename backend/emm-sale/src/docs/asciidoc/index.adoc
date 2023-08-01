@@ -133,6 +133,14 @@ include::{snippets}/participate-event/http-request.adoc[]
 .HTTP response
 include::{snippets}/participate-event/http-response.adoc[]
 
+=== `DELETE` : 컨퍼런스에 함께가기 요청 취소(컨퍼런스에 함께 가는 멤버에서 삭제)
+
+.HTTP request
+include::{snippets}/participate-event-cancel/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/participate-event-cancel/http-response.adoc[]
+
 === `GET`: 행사 목록 조회
 
 .HTTP request

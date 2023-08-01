@@ -16,6 +16,7 @@ import static com.emmsale.event.exception.EventExceptionType.INVALID_STATUS;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR_AND_MONTH;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
+import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_TAG;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME;
 import static com.emmsale.tag.TagFixture.AI;
@@ -37,8 +38,10 @@ import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.event.domain.EventType;
+import com.emmsale.event.domain.Participant;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
+import com.emmsale.event.domain.repository.ParticipantRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
@@ -51,6 +54,7 @@ import com.emmsale.tag.exception.TagExceptionType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
@@ -91,6 +95,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private EventRepository eventRepository;
   @Autowired
   private EventTagRepository eventTagRepository;
+  @Autowired
+  private ParticipantRepository participantRepository;
   @Autowired
   private TagRepository tagRepository;
 
@@ -218,6 +224,65 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       assertThatThrownBy(() -> eventService.participate(인프콘.getId(), memberId, member))
           .isInstanceOf(EventException.class)
           .hasMessage(ALREADY_PARTICIPATED.errorMessage());
+    }
+  }
+
+  @Nested
+  @DisplayName("event 참가자 목록에서 멤버를 삭제할 수 있다.")
+  class CancelParticipate {
+
+    @Test
+    @DisplayName("정상적으로 멤버를 삭제한다.")
+    void cancelParticipate_success() {
+      //given
+      final Long memberId = 1L;
+      final Member member = memberRepository.findById(memberId).get();
+      final Event 인프콘 = eventRepository.save(eventFixture());
+
+      final Long participantId = eventService.participate(인프콘.getId(), memberId, member);
+
+      // when
+      eventService.cancelParticipate(인프콘.getId(), memberId, member);
+      final Optional<Participant> actual = participantRepository.findById(participantId);
+
+      // then
+      assertThat(actual).isEmpty();
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 행사면 예외가 발생한다.")
+    void cancelParticipate_not_found_event() {
+      // given
+      final Long memberId = 1L;
+      final Member member = memberRepository.findById(memberId).get();
+
+      final Long invalidEventId = 999L;
+
+      // when
+      final ThrowingCallable actual = () -> eventService.cancelParticipate(invalidEventId, memberId,
+          member);
+
+      // then
+      assertThatThrownBy(actual).isInstanceOf(EventException.class)
+          .hasMessage(NOT_FOUND_EVENT.errorMessage());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 참여자면 예외가 발생한다.")
+    void cancelParticipate_not_found_participant() {
+      // given
+      final Long memberId = 1L;
+      final Member member = memberRepository.findById(memberId).get();
+
+      final Long eventId = eventRepository.save(eventFixture()).getId();
+
+      // when
+      final ThrowingCallable actual = () -> eventService.cancelParticipate(eventId, memberId,
+          member);
+
+      // then
+      assertThatThrownBy(actual).isInstanceOf(EventException.class)
+          .hasMessage(NOT_FOUND_PARTICIPANT.errorMessage());
     }
   }
 
@@ -458,285 +523,286 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           .isInstanceOf(EventException.class)
           .hasMessage(INVALID_STATUS.errorMessage());
     }
-
-    @Nested
-    class AddEvent {
-
-      final List<TagRequest> tagRequests = List.of(
-          new TagRequest(IOS().getName()),
-          new TagRequest(AI().getName())
-      );
-      private final LocalDateTime beforeDateTime = LocalDateTime.now();
-      private final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
-      private final String eventName = "새로운 이름";
-      private final String eventLocation = "새로운 장소";
-      private final String eventInformationUrl = "https://새로운-상세-URL.com";
-      private final String imageUrl = "https://image.com";
-      private final EventType type = EventType.CONFERENCE;
-      private final LocalDate now = LocalDate.now();
-
-      @Test
-      @DisplayName("이벤트를 성공적으로 저장한다.")
-      void addEventTest() {
-        //given
-        final EventDetailRequest request = new EventDetailRequest(
-            eventName,
-            eventLocation,
-            eventInformationUrl,
-            beforeDateTime,
-            afterDateTime,
-            tagRequests,
-            imageUrl,
-            type
-        );
-
-        //when
-        final EventDetailResponse response = eventService.addEvent(request, now);
-        final Event savedEvent = eventRepository.findById(response.getId()).get();
-
-        //then
-        assertAll(
-            () -> assertEquals(eventName, savedEvent.getName()),
-            () -> assertEquals(eventLocation, savedEvent.getLocation()),
-            () -> assertEquals(eventInformationUrl, savedEvent.getInformationUrl()),
-            () -> assertEquals(beforeDateTime, savedEvent.getStartDate()),
-            () -> assertEquals(afterDateTime, savedEvent.getEndDate()),
-            () -> assertThat(savedEvent.getTags()).extracting("tag", Tag.class)
-                .extracting("name", String.class)
-                .containsAll(
-                    tagRequests.stream()
-                        .map(TagRequest::getName)
-                        .collect(Collectors.toList())
-                )
-        );
-      }
-
-      @Test
-      @DisplayName("행사 시작 일시가 행사 종료 일시 이후일 경우 EventException이 발생한다.")
-      void addEventWithStartDateTimeAfterBeforeDateTimeTest() {
-        //given
-        final LocalDateTime startDateTime = afterDateTime;
-        final LocalDateTime endDatetime = beforeDateTime;
-
-        final EventDetailRequest request = new EventDetailRequest(
-            eventName,
-            eventLocation,
-            eventInformationUrl,
-            startDateTime,
-            endDatetime,
-            tagRequests,
-            imageUrl,
-            type
-        );
-
-        //when & then
-        final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.addEvent(request, now));
-
-        assertEquals(exception.exceptionType(),
-            START_DATE_TIME_AFTER_END_DATE_TIME);
-      }
-
-      @Test
-      @DisplayName("Tag가 존재하지 않을 경우 EventException이 발생한다.")
-      void addEventWithNotExistTagTest() {
-        //given
-        final List<TagRequest> tagRequests = List.of(
-            new TagRequest(백엔드().getName()),
-            new TagRequest(안드로이드().getName()),
-            new TagRequest("존재하지 않는 태그")
-        );
-
-        final EventDetailRequest request = new EventDetailRequest(
-            eventName,
-            eventLocation,
-            eventInformationUrl,
-            beforeDateTime,
-            afterDateTime,
-            tagRequests,
-            imageUrl,
-            type
-        );
-
-        //when & then
-        final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.addEvent(request, now));
-
-        assertEquals(exception.exceptionType(),
-            NOT_FOUND_TAG);
-      }
-    }
-
-    @Nested
-    class UpdateEvent {
-
-      final List<TagRequest> newTagRequests = List.of(
-          new TagRequest(IOS().getName()),
-          new TagRequest(AI().getName())
-      );
-      private final LocalDateTime beforeDateTime = LocalDateTime.now();
-      private final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
-      private final String newName = "새로운 이름";
-      private final String newLocation = "새로운 장소";
-      private final String newInformationUrl = "https://새로운-상세-URL.com";
-      private final String imageUrl = "https://image.com";
-      private final LocalDate now = LocalDate.now();
-
-      @Test
-      @DisplayName("이벤트를 성공적으로 업데이트한다.")
-      void updateEventTest() {
-        //given
-        final LocalDateTime newStartDateTime = beforeDateTime;
-        final LocalDateTime newEndDateTime = afterDateTime;
-
-        final EventDetailRequest updateRequest = new EventDetailRequest(
-            newName,
-            newLocation,
-            newInformationUrl,
-            beforeDateTime,
-            afterDateTime,
-            newTagRequests,
-            imageUrl,
-            EventType.CONFERENCE
-        );
-
-        final Event event = eventRepository.save(인프콘_2023());
-        final Long eventId = event.getId();
-
-        //when
-        eventService.updateEvent(eventId, updateRequest, now);
-        final Event updatedEvent = eventRepository.findById(eventId).get();
-
-        //then
-        assertAll(
-            () -> assertEquals(newName, updatedEvent.getName()),
-            () -> assertEquals(newLocation, updatedEvent.getLocation()),
-            () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
-            () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
-            () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
-            () -> assertThat(updatedEvent.getTags())
-                .extracting("tag", Tag.class)
-                .extracting("name", String.class)
-                .containsAll(
-                    newTagRequests.stream()
-                        .map(TagRequest::getName)
-                        .collect(Collectors.toList())
-                )
-        );
-      }
-
-      @Test
-      @DisplayName("업데이트할 이벤트가 존재하지 않을 경우 EventException이 발생한다.")
-      void updateEventWithNotExistsEventTest() {
-        //given
-        final long notExistsEventId = 0L;
-
-        final EventDetailRequest updateRequest = new EventDetailRequest(
-            newName,
-            newLocation,
-            newInformationUrl,
-            beforeDateTime,
-            afterDateTime,
-            newTagRequests,
-            imageUrl,
-            EventType.CONFERENCE
-        );
-
-        //when & then
-        final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.updateEvent(notExistsEventId, updateRequest, now));
-
-        assertEquals(exception.exceptionType(), NOT_FOUND_EVENT);
-      }
-
-      @Test
-      @DisplayName("행사 시작 일시가 행사 종료 일시 이후일 경우 EventException이 발생한다.")
-      void updateEventWithStartDateTimeAfterBeforeDateTimeTest() {
-        //given
-        final LocalDateTime newStartDateTime = afterDateTime;
-        final LocalDateTime newEndDateTime = beforeDateTime;
-
-        final EventDetailRequest updateRequest = new EventDetailRequest(
-            newName,
-            newLocation,
-            newInformationUrl,
-            newStartDateTime,
-            newEndDateTime,
-            newTagRequests,
-            imageUrl,
-            EventType.CONFERENCE
-        );
-
-        final Event event = eventRepository.save(인프콘_2023());
-        final Long eventId = event.getId();
-
-        //when & then
-        final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.updateEvent(eventId, updateRequest, now));
-
-        assertEquals(exception.exceptionType(), START_DATE_TIME_AFTER_END_DATE_TIME);
-      }
-
-      @Test
-      @DisplayName("Tag가 존재하지 않을 경우 EventException이 발생한다.")
-      void updateEventWithNotExistTagTest() {
-        //given
-        final List<TagRequest> newTagRequests = List.of(
-            new TagRequest("존재하지 않는 태그")
-        );
-
-        final EventDetailRequest updateRequest = new EventDetailRequest(
-            newName,
-            newLocation,
-            newInformationUrl,
-            beforeDateTime,
-            afterDateTime,
-            newTagRequests,
-            imageUrl,
-            EventType.CONFERENCE
-        );
-
-        final Event event = eventRepository.save(인프콘_2023());
-        final Long eventId = event.getId();
-
-        //when & then
-        final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.updateEvent(eventId, updateRequest, now));
-
-        assertEquals(exception.exceptionType(), NOT_FOUND_TAG);
-      }
-    }
-
-    @Nested
-    class DeleteEvent {
-
-      @Test
-      @DisplayName("이벤트를 성공적으로 삭제한다.")
-      void deleteEventTest() {
-        //given
-        final Event event = eventRepository.save(인프콘_2023());
-        final Long eventId = event.getId();
-
-        //when
-        eventService.deleteEvent(eventId);
-
-        //then
-        assertFalse(eventRepository.findById(eventId).isPresent());
-      }
-
-      @Test
-      @DisplayName("삭제할 이벤트가 존재하지 않을 경우 EventException이 발생한다.")
-      void deleteEventWithNotExistsEventTest() {
-        //given
-        final long notExistsEventId = 0L;
-
-        //when & then
-        final EventException exception = assertThrowsExactly(EventException.class,
-            () -> eventService.deleteEvent(notExistsEventId));
-
-        assertEquals(exception.exceptionType(), NOT_FOUND_EVENT);
-      }
-    }
-
   }
+
+  @Nested
+  class AddEvent {
+
+    final List<TagRequest> tagRequests = List.of(
+        new TagRequest(IOS().getName()),
+        new TagRequest(AI().getName())
+    );
+    private final LocalDateTime beforeDateTime = LocalDateTime.now();
+    private final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    private final String eventName = "새로운 이름";
+    private final String eventLocation = "새로운 장소";
+    private final String eventInformationUrl = "https://새로운-상세-URL.com";
+    private final String imageUrl = "https://image.com";
+    private final EventType type = EventType.CONFERENCE;
+    private final LocalDate now = LocalDate.now();
+
+    @Test
+    @DisplayName("이벤트를 성공적으로 저장한다.")
+    void addEventTest() {
+      //given
+      final EventDetailRequest request = new EventDetailRequest(
+          eventName,
+          eventLocation,
+          eventInformationUrl,
+          beforeDateTime,
+          afterDateTime,
+          tagRequests,
+          imageUrl,
+          type
+      );
+
+      //when
+      final EventDetailResponse response = eventService.addEvent(request, now);
+      final Event savedEvent = eventRepository.findById(response.getId()).get();
+
+      //then
+      assertAll(
+          () -> assertEquals(eventName, savedEvent.getName()),
+          () -> assertEquals(eventLocation, savedEvent.getLocation()),
+          () -> assertEquals(eventInformationUrl, savedEvent.getInformationUrl()),
+          () -> assertEquals(beforeDateTime, savedEvent.getStartDate()),
+          () -> assertEquals(afterDateTime, savedEvent.getEndDate()),
+          () -> assertThat(savedEvent.getTags()).extracting("tag", Tag.class)
+              .extracting("name", String.class)
+              .containsAll(
+                  tagRequests.stream()
+                      .map(TagRequest::getName)
+                      .collect(Collectors.toList())
+              )
+      );
+    }
+
+    @Test
+    @DisplayName("행사 시작 일시가 행사 종료 일시 이후일 경우 EventException이 발생한다.")
+    void addEventWithStartDateTimeAfterBeforeDateTimeTest() {
+      //given
+      final LocalDateTime startDateTime = afterDateTime;
+      final LocalDateTime endDatetime = beforeDateTime;
+
+      final EventDetailRequest request = new EventDetailRequest(
+          eventName,
+          eventLocation,
+          eventInformationUrl,
+          startDateTime,
+          endDatetime,
+          tagRequests,
+          imageUrl,
+          type
+      );
+
+      //when & then
+      final EventException exception = assertThrowsExactly(EventException.class,
+          () -> eventService.addEvent(request, now));
+
+      assertEquals(exception.exceptionType(),
+          START_DATE_TIME_AFTER_END_DATE_TIME);
+    }
+
+    @Test
+    @DisplayName("Tag가 존재하지 않을 경우 EventException이 발생한다.")
+    void addEventWithNotExistTagTest() {
+      //given
+      final List<TagRequest> tagRequests = List.of(
+          new TagRequest(백엔드().getName()),
+          new TagRequest(안드로이드().getName()),
+          new TagRequest("존재하지 않는 태그")
+      );
+
+      final EventDetailRequest request = new EventDetailRequest(
+          eventName,
+          eventLocation,
+          eventInformationUrl,
+          beforeDateTime,
+          afterDateTime,
+          tagRequests,
+          imageUrl,
+          type
+      );
+
+      //when & then
+      final EventException exception = assertThrowsExactly(EventException.class,
+          () -> eventService.addEvent(request, now));
+
+      assertEquals(exception.exceptionType(),
+          NOT_FOUND_TAG);
+    }
+  }
+
+  @Nested
+  class UpdateEvent {
+
+    final List<TagRequest> newTagRequests = List.of(
+        new TagRequest(IOS().getName()),
+        new TagRequest(AI().getName())
+    );
+    private final LocalDateTime beforeDateTime = LocalDateTime.now();
+    private final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    private final String newName = "새로운 이름";
+    private final String newLocation = "새로운 장소";
+    private final String newInformationUrl = "https://새로운-상세-URL.com";
+    private final String imageUrl = "https://image.com";
+    private final LocalDate now = LocalDate.now();
+
+    @Test
+    @DisplayName("이벤트를 성공적으로 업데이트한다.")
+    void updateEventTest() {
+      //given
+      final LocalDateTime newStartDateTime = beforeDateTime;
+      final LocalDateTime newEndDateTime = afterDateTime;
+
+      final EventDetailRequest updateRequest = new EventDetailRequest(
+          newName,
+          newLocation,
+          newInformationUrl,
+          beforeDateTime,
+          afterDateTime,
+          newTagRequests,
+          imageUrl,
+          EventType.CONFERENCE
+      );
+
+      final Event event = eventRepository.save(인프콘_2023());
+      final Long eventId = event.getId();
+
+      //when
+      eventService.updateEvent(eventId, updateRequest, now);
+      final Event updatedEvent = eventRepository.findById(eventId).get();
+
+      //then
+      assertAll(
+          () -> assertEquals(newName, updatedEvent.getName()),
+          () -> assertEquals(newLocation, updatedEvent.getLocation()),
+          () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
+          () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
+          () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
+          () -> assertThat(updatedEvent.getTags())
+              .extracting("tag", Tag.class)
+              .extracting("name", String.class)
+              .containsAll(
+                  newTagRequests.stream()
+                      .map(TagRequest::getName)
+                      .collect(Collectors.toList())
+              )
+      );
+    }
+
+    @Test
+    @DisplayName("업데이트할 이벤트가 존재하지 않을 경우 EventException이 발생한다.")
+    void updateEventWithNotExistsEventTest() {
+      //given
+      final long notExistsEventId = 0L;
+
+      final EventDetailRequest updateRequest = new EventDetailRequest(
+          newName,
+          newLocation,
+          newInformationUrl,
+          beforeDateTime,
+          afterDateTime,
+          newTagRequests,
+          imageUrl,
+          EventType.CONFERENCE
+      );
+
+      //when & then
+      final EventException exception = assertThrowsExactly(EventException.class,
+          () -> eventService.updateEvent(notExistsEventId, updateRequest, now));
+
+      assertEquals(exception.exceptionType(), NOT_FOUND_EVENT);
+    }
+
+    @Test
+    @DisplayName("행사 시작 일시가 행사 종료 일시 이후일 경우 EventException이 발생한다.")
+    void updateEventWithStartDateTimeAfterBeforeDateTimeTest() {
+      //given
+      final LocalDateTime newStartDateTime = afterDateTime;
+      final LocalDateTime newEndDateTime = beforeDateTime;
+
+      final EventDetailRequest updateRequest = new EventDetailRequest(
+          newName,
+          newLocation,
+          newInformationUrl,
+          newStartDateTime,
+          newEndDateTime,
+          newTagRequests,
+          imageUrl,
+          EventType.CONFERENCE
+      );
+
+      final Event event = eventRepository.save(인프콘_2023());
+      final Long eventId = event.getId();
+
+      //when & then
+      final EventException exception = assertThrowsExactly(EventException.class,
+          () -> eventService.updateEvent(eventId, updateRequest, now));
+
+      assertEquals(exception.exceptionType(), START_DATE_TIME_AFTER_END_DATE_TIME);
+    }
+
+    @Test
+    @DisplayName("Tag가 존재하지 않을 경우 EventException이 발생한다.")
+    void updateEventWithNotExistTagTest() {
+      //given
+      final List<TagRequest> newTagRequests = List.of(
+          new TagRequest("존재하지 않는 태그")
+      );
+
+      final EventDetailRequest updateRequest = new EventDetailRequest(
+          newName,
+          newLocation,
+          newInformationUrl,
+          beforeDateTime,
+          afterDateTime,
+          newTagRequests,
+          imageUrl,
+          EventType.CONFERENCE
+      );
+
+      final Event event = eventRepository.save(인프콘_2023());
+      final Long eventId = event.getId();
+
+      //when & then
+      final EventException exception = assertThrowsExactly(EventException.class,
+          () -> eventService.updateEvent(eventId, updateRequest, now));
+
+      assertEquals(exception.exceptionType(), NOT_FOUND_TAG);
+    }
+  }
+
+  @Nested
+  class DeleteEvent {
+
+    @Test
+    @DisplayName("이벤트를 성공적으로 삭제한다.")
+    void deleteEventTest() {
+      //given
+      final Event event = eventRepository.save(인프콘_2023());
+      final Long eventId = event.getId();
+
+      //when
+      eventService.deleteEvent(eventId);
+
+      //then
+      assertFalse(eventRepository.findById(eventId).isPresent());
+    }
+
+    @Test
+    @DisplayName("삭제할 이벤트가 존재하지 않을 경우 EventException이 발생한다.")
+    void deleteEventWithNotExistsEventTest() {
+      //given
+      final long notExistsEventId = 0L;
+
+      //when & then
+      final EventException exception = assertThrowsExactly(EventException.class,
+          () -> eventService.deleteEvent(notExistsEventId));
+
+      assertEquals(exception.exceptionType(), NOT_FOUND_EVENT);
+    }
+  }
+
 }
+

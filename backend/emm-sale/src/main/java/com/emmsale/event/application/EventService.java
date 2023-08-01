@@ -74,6 +74,21 @@ public class EventService {
     return participant.getId();
   }
 
+  public void cancelParticipate(final Long eventId, final Long memberId, final Member member) {
+    validateMemberNotAllowed(memberId, member);
+    if (!eventRepository.existsById(eventId)) {
+      throw new EventException(NOT_FOUND_EVENT);
+    }
+
+    participantRepository
+        .findByMemberIdAndEventId(memberId, eventId)
+        .ifPresentOrElse(
+            participant -> participantRepository.deleteById(participant.getId()),
+            () -> {
+              throw new EventException(EventExceptionType.NOT_FOUND_PARTICIPANT);
+            });
+  }
+
   @Transactional(readOnly = true)
   public List<EventResponse> findEvents(final EventType categoryName, final LocalDate nowDate,
       final Integer year, final Integer month,
