@@ -139,11 +139,8 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자")
     );
 
-//    when(eventService.participate(any(), any(), any()))
-    //      .thenReturn();
-
     //when
-    mockMvc.perform(delete("/events/%s/participants", eventId)
+    mockMvc.perform(delete(format("/events/%s/participants", eventId))
             .header("Authorization", fakeAccessToken)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
