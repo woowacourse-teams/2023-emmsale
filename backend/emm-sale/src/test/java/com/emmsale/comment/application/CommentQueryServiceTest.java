@@ -4,12 +4,12 @@ import com.emmsale.comment.application.dto.CommentHierarchyResponse;
 import com.emmsale.comment.application.dto.CommentResponse;
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
+import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -35,10 +35,8 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
 
   @BeforeEach
   void init() {
-    event = eventRepository.save(new Event(
-        "event", "location",
-        LocalDateTime.now(), LocalDateTime.now(),
-        "url")
+    event = eventRepository.save(
+        EventFixture.모바일_컨퍼런스()
     );
     member = memberRepository.findById(1L).get();
 

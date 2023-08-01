@@ -22,11 +22,13 @@ create table event
     id              bigint auto_increment primary key,
     created_at      datetime(6),
     updated_at      datetime(6),
-    end_date        datetime(6) not null,
+    end_date        datetime(6)  not null,
     information_url varchar(255) not null,
     location        varchar(255) not null,
     name            varchar(255) not null,
-    start_date      datetime(6) not null
+    start_date      datetime(6)  not null,
+    image_url       varchar(255),
+    type            varchar(20)  not null
 );
 
 create table member
@@ -37,7 +39,7 @@ create table member
     description      varchar(255) not null default '',
     github_id        bigint       not null unique,
     image_url        varchar(255) not null,
-    name             varchar(255) ,
+    name             varchar(255),
     open_profile_url varchar(255) null
 );
 
@@ -50,7 +52,7 @@ create table comment
     is_deleted bit          not null,
     event_id   bigint       not null,
     member_id  bigint       not null,
-    parent_id  bigint null
+    parent_id  bigint       null
 );
 
 create table member_activity
@@ -108,4 +110,3 @@ create table fcm_token
     token     varchar(255) not null,
     member_id bigint       not null unique
 );
-
