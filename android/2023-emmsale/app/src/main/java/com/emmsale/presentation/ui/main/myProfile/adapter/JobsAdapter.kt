@@ -1,12 +1,10 @@
 package com.emmsale.presentation.ui.main.myProfile.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.databinding.ItemMyprofileJobsBinding
 import com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState
 
 class JobsAdapter : ListAdapter<ActivityUiState, JobsViewHolder>(diffUtil) {
@@ -30,27 +28,6 @@ class JobsAdapter : ListAdapter<ActivityUiState, JobsViewHolder>(diffUtil) {
                 oldItem: ActivityUiState,
                 newItem: ActivityUiState,
             ): Boolean = oldItem == newItem
-        }
-    }
-}
-
-class JobsViewHolder(
-    private val binding: ItemMyprofileJobsBinding
-) : RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(job: ActivityUiState) {
-        binding.job = job
-    }
-
-    companion object {
-        fun create(parent: ViewGroup): JobsViewHolder {
-            val binding = ItemMyprofileJobsBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-
-            return JobsViewHolder(binding)
         }
     }
 }
