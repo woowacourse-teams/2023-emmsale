@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter
 )
 fun TextView.setEventDuration(
     startLocalDateTime: LocalDateTime,
-    endLocalDateTime: LocalDateTime
+    endLocalDateTime: LocalDateTime,
 ) {
     val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
     val eventStartDate = startLocalDateTime.format(dateTimeFormatter)
