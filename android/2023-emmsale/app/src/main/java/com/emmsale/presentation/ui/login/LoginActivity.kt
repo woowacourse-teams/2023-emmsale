@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.login
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -119,6 +120,11 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         private const val GITHUB_CODE_PARAMETER = "code"
+
+        fun startActivity(context: Context) {
+            val intent = Intent(context, LoginActivity::class.java)
+            context.startActivity(intent)
+        }
     }
 
     @SuppressLint("InlinedApi")

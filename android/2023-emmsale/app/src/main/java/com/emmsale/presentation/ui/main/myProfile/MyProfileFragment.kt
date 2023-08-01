@@ -7,9 +7,11 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.main.myProfile.adapter.ActivitiesAdapter
 import com.emmsale.presentation.ui.main.myProfile.adapter.JobsAdapter
 import com.emmsale.presentation.ui.main.myProfile.itemDecoration.ActivitiesAdapterDecoration
+import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileScreenUiState
 
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     override val layoutResId: Int = R.layout.fragment_my_profile
@@ -34,9 +36,21 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     private fun setupUiLogic() {
         viewModel.uiState.observe(viewLifecycleOwner) {
-            if (it.isError) {
-                context?.showToast(it.errorMessage)
-            }
+            handleError(it)
+            handleNotLogin(it)
+        }
+    }
+
+    private fun handleError(myProfileScreenUiState: MyProfileScreenUiState) {
+        if (myProfileScreenUiState.isError) {
+            context?.showToast(myProfileScreenUiState.errorMessage)
+        }
+    }
+
+    private fun handleNotLogin(myProfileScreenUiState: MyProfileScreenUiState) {
+        if (myProfileScreenUiState.isNotLogin) {
+            LoginActivity.startActivity(requireContext())
+            activity?.finish()
         }
     }
 

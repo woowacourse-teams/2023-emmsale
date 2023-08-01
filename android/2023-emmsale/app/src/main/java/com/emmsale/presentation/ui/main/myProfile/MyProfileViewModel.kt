@@ -25,7 +25,10 @@ class MyProfileViewModel(
     fun fetchMember() {
         viewModelScope.launch {
             val token = tokenRepository.getToken()
-                ?: throw IllegalStateException("로그인을 하지 않은 상태로 이 화면에 올 수 없습니다. 로그인 로직을 다시 살펴보세요.")
+            if (token == null) {
+                _uiState.postValue(_uiState.value!!.copy(isNotLogin = true))
+                return@launch
+            }
             when (val result = memberRepository.getMember(token.uid)) {
                 is ApiError -> changeErrorUiState(result.message.toString())
                 is ApiException -> changeErrorUiState(result.e.message.toString())
