@@ -46,10 +46,12 @@ class EventTest {
     final String url = "https://information-url.com";
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    final String imageUrl = "https://image.com";
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
-        () -> new Event(name, location, afterDateTime, beforeDateTime, url));
+        () -> new Event(name, location, afterDateTime, beforeDateTime, url, EventType.CONFERENCE,
+            imageUrl));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
   }
@@ -151,10 +153,10 @@ class EventTest {
   void calculateRemainingDay() {
     //given
     final Event 인프콘 = eventFixture();
-    final LocalDateTime today = LocalDateTime.of(2023, 8, 10, 15, 0);
+    final LocalDate today = LocalDate.of(2023, 8, 10);
 
     //when
-    final int actual = 인프콘.calculateRemainingDay(today);
+    final int actual = 인프콘.calculateRemainingDays(today);
 
     //then
     assertThat(actual)

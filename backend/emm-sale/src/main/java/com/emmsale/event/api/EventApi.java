@@ -36,7 +36,7 @@ public class EventApi {
 
   @GetMapping("/{id}")
   public ResponseEntity<EventDetailResponse> findEventById(@PathVariable final Long id) {
-    return ResponseEntity.ok(eventService.findEvent(id));
+    return ResponseEntity.ok(eventService.findEvent(id, LocalDate.now()));
   }
 
   @PostMapping("/{eventId}/participants")
@@ -73,19 +73,19 @@ public class EventApi {
   @ResponseStatus(HttpStatus.CREATED)
   public EventDetailResponse addEvent(
       @RequestBody @Valid final EventDetailRequest request) {
-    return eventService.addEvent(request);
+    return eventService.addEvent(request, LocalDate.now());
   }
 
   @PutMapping("/{event-id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ResponseStatus(HttpStatus.OK)
   public EventDetailResponse updateEvent(@PathVariable(name = "event-id") final Long eventId,
       @RequestBody @Valid final EventDetailRequest request) {
-    return eventService.updateEvent(eventId, request);
+    return eventService.updateEvent(eventId, request, LocalDate.now());
   }
 
   @DeleteMapping("/{event-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public EventDetailResponse deleteEvent(@PathVariable(name = "event-id") final Long eventId) {
-    return eventService.deleteEvent(eventId);
+  public void deleteEvent(@PathVariable(name = "event-id") final Long eventId) {
+    eventService.deleteEvent(eventId);
   }
 }

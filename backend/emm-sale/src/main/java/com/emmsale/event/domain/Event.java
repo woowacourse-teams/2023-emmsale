@@ -10,7 +10,7 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.tag.domain.Tag;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,7 +48,6 @@ public class Event extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private EventType type;
-  @Column(nullable = false)
   private String imageUrl;
   @OneToMany(mappedBy = "event", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
@@ -62,7 +61,9 @@ public class Event extends BaseEntity {
       final String location,
       final LocalDateTime startDate,
       final LocalDateTime endDate,
-      final String informationUrl
+      final String informationUrl,
+      final EventType eventType,
+      final String imageUrl
   ) {
     validateStartBeforeOrEqualEndDateTime(startDate, endDate);
 
@@ -71,6 +72,8 @@ public class Event extends BaseEntity {
     this.startDate = startDate;
     this.endDate = endDate;
     this.informationUrl = informationUrl;
+    this.type = eventType;
+    this.imageUrl = imageUrl;
   }
 
   public Participant addParticipant(final Member member) {
@@ -139,7 +142,7 @@ public class Event extends BaseEntity {
     }
   }
 
-  public int calculateRemainingDay(final LocalDateTime today) {
-    return (int) ChronoUnit.DAYS.between(today, startDate);
+  public int calculateRemainingDays(final LocalDate today) {
+    return Period.between(today, startDate.toLocalDate()).getDays();
   }
 }

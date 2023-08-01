@@ -1,5 +1,7 @@
 package com.emmsale.event.application.dto;
 
+import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventType;
 import com.emmsale.tag.application.dto.TagRequest;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,4 +34,19 @@ public class EventDetailRequest {
   private final LocalDateTime endDateTime;
 
   private final List<TagRequest> tags;
+
+  private final String imageUrl;
+  private final EventType type;
+
+  public Event toEvent() {
+    return new Event(
+        name,
+        location,
+        startDateTime,
+        endDateTime,
+        informationUrl,
+        type,
+        imageUrl
+    );
+  }
 }

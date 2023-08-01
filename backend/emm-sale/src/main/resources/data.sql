@@ -62,27 +62,83 @@ insert into tag(id, name)
 values (4, 'IOS');
 insert into tag(id, name)
 values (5, 'AI');
+insert into tag(id, name)
+values (6, '알고리즘');
+insert into tag(id, name)
+values (7, '정보보안');
 
-insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
 values (1, '인프콘 2023', '2023-06-01T12:00:00', '2023-09-01T12:00:00', '코엑스', 'https://www.naver.com',
-        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
+        'CONFERENCE');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
 values (2, 'AI 컨퍼런스', '2023-07-22T12:00:00', '2023-07-30T12:00:00', '코엑스', 'https://www.naver.com',
-        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
+        'CONFERENCE');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
 values (3, '모바일 컨퍼런스', '2023-08-03T12:00:00', '2023-09-03T12:00:00', '코엑스', 'https://www.naver.com',
-        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
+        'CONFERENCE');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
 values (4, '안드로이드 컨퍼런스', '2023-06-29T12:00:00', '2023-07-16T12:00:00', '코엑스',
         'https://www.naver.com',
-        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
+        'CONFERENCE');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
 values (5, '웹 컨퍼런스', '2023-07-03T12:00:00', '2023-08-03T12:00:00', '코엑스', 'https://www.naver.com',
-        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at)
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), null, 'CONFERENCE');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
 values (6, '옛날 웹 컨퍼런스', '2022-07-03T12:00:00', '2022-08-03T12:00:00', '코엑스',
+        'https://www.naver.com', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
+        'CONFERENCE');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
+values (7, '알고리즘 경진대회', '2023-06-01T12:00:00', '2023-09-01T12:00:00', '온라인',
+        'https://www.naver.com', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
+        'COMPETITION');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
+values (8, '첨단 해커톤', '2023-07-22T12:00:00', '2023-07-30T12:00:00', '코엑스', 'https://www.naver.com',
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
+        'COMPETITION');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
+values (9, 'AI 아이디어 공모전', '2023-08-03T12:00:00', '2023-09-03T12:00:00', '코엑스',
         'https://www.naver.com',
-        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), null, 'COMPETITION');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
+values (10, '구름톤', '2023-06-29T12:00:00', '2023-07-16T12:00:00', '코엑스',
+        'https://www.naver.com',
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
+        'COMPETITION');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
+values (11, 'CTF', '2023-07-03T12:00:00', '2023-08-03T12:00:00', '코엑스', 'https://www.naver.com',
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
+        'COMPETITION');
+insert into event(id, name, start_date, end_date, location, information_url, created_at, updated_at,
+                  image_url, type)
+values (12, '보안 경진대회', '2022-07-03T12:00:00', '2022-08-03T12:00:00', '코엑스',
+        'https://www.naver.com', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
+        'COMPETITION');
+
 
 insert into event_tag(id, event_id, tag_id)
 values (1, 1, 1);
@@ -106,6 +162,26 @@ insert into event_tag(id, event_id, tag_id)
 values (10, 5, 1);
 insert into event_tag(id, event_id, tag_id)
 values (11, 5, 2);
+insert into event_tag(id, event_id, tag_id)
+values (12, 7, 6);
+insert into event_tag(id, event_id, tag_id)
+values (13, 8, 1);
+insert into event_tag(id, event_id, tag_id)
+values (14, 8, 2);
+insert into event_tag(id, event_id, tag_id)
+values (15, 8, 3);
+insert into event_tag(id, event_id, tag_id)
+values (16, 9, 5);
+insert into event_tag(id, event_id, tag_id)
+values (17, 10, 1);
+insert into event_tag(id, event_id, tag_id)
+values (18, 10, 2);
+insert into event_tag(id, event_id, tag_id)
+values (19, 10, 3);
+insert into event_tag(id, event_id, tag_id)
+values (20, 11, 7);
+insert into event_tag(id, event_id, tag_id)
+values (21, 12, 7);
 
 insert into event_member (member_id, event_id) value (1, 1);
 insert into event_member (member_id, event_id) value (2, 1);

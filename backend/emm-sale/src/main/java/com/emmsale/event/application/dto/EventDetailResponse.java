@@ -6,6 +6,7 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.tag.domain.Tag;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -29,8 +30,11 @@ public class EventDetailResponse {
   private final String location;
   private final String status;
   private final List<String> tags;
+  private final String imageUrl;
+  private final Integer remainingDays;
+  private final String type;
 
-  public static EventDetailResponse from(final Event event) {
+  public static EventDetailResponse from(final Event event, final LocalDate today) {
     final List<String> tagNames = event.getTags().stream()
         .map(EventTag::getTag)
         .map(Tag::getName)
@@ -44,7 +48,10 @@ public class EventDetailResponse {
         event.getEndDate(),
         event.getLocation(),
         calculateStatus(event.getStartDate(), event.getEndDate()),
-        tagNames
+        tagNames,
+        event.getImageUrl(),
+        event.calculateRemainingDays(today),
+        event.getType().toString()
     );
   }
 

@@ -14,6 +14,7 @@ import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.comment.exception.CommentException;
 import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
@@ -41,12 +42,17 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @BeforeEach
   void init() {
-    event = eventRepository.save(new Event(
-        "event", "location",
-        LocalDateTime.now(), LocalDateTime.now(),
-        "url"
-    ));
-
+    event = eventRepository.save(
+        new Event(
+            "event",
+            "location",
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            "url",
+            EventType.CONFERENCE,
+            "https://image.com"
+        )
+    );
     댓글_작성자 = memberRepository.findById(1L).get();
   }
 
