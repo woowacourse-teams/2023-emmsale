@@ -1,7 +1,7 @@
 package com.emmsale.data.comment
 
-import com.emmsale.data.comment.dto.CommentFamilyResponse
-import com.emmsale.data.comment.dto.CommentResponse
+import com.emmsale.data.comment.dto.CommentFamilyApiModel
+import com.emmsale.data.comment.dto.CommentApiModel
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -118,8 +118,8 @@ internal class CommentServiceTest {
 
         assertThat(response.body()).isEqualTo(
             listOf(
-                CommentFamilyResponse(
-                    CommentResponse(
+                CommentFamilyApiModel(
+                    CommentApiModel(
                         commentId = 4,
                         memberId = 1,
                         memberName = "홍길동",
@@ -133,8 +133,8 @@ internal class CommentServiceTest {
                     ),
                     listOf()
                 ),
-                CommentFamilyResponse(
-                    CommentResponse(
+                CommentFamilyApiModel(
+                    CommentApiModel(
                         commentId = 5,
                         memberId = 1,
                         memberName = "홍길동",
@@ -147,7 +147,7 @@ internal class CommentServiceTest {
                         deleted = false
                     ),
                     listOf(
-                        CommentResponse(
+                        CommentApiModel(
                             commentId = 2,
                             memberId = 1,
                             memberName = "홍길동",
@@ -159,7 +159,7 @@ internal class CommentServiceTest {
                             updatedAt = "2023:07:25:22:01:05",
                             deleted = false
                         ),
-                        CommentResponse(
+                        CommentApiModel(
                             commentId = 3,
                             memberId = 1,
                             memberName = "홍길동",

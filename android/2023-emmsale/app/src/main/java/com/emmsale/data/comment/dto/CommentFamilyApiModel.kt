@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CommentFamilyResponse(
+data class CommentFamilyApiModel(
     @SerialName("parentComment")
-    val parentComment: CommentResponse,
+    val parentComment: CommentApiModel,
     @SerialName("childComments")
-    val childComments: List<CommentResponse>
+    val childComments: List<CommentApiModel>
 )
