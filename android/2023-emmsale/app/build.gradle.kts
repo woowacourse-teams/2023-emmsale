@@ -8,6 +8,7 @@ plugins {
     kotlin("plugin.serialization") version "1.8.21"
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
+    id("kotlin-parcelize")
 }
 
 android {

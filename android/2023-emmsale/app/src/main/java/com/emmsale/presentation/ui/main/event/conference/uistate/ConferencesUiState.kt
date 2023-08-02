@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.event.conference
+package com.emmsale.presentation.ui.main.event.conference.uistate
 
 import com.emmsale.data.conference.Conference
 import com.emmsale.data.conference.ConferenceStatus

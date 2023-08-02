@@ -1,6 +1,7 @@
 package com.emmsale.presentation.ui.main.event.conference
 
 import androidx.recyclerview.widget.DiffUtil
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
 
 object ConferenceDiffUtil : DiffUtil.ItemCallback<ConferencesUiState>() {
     override fun areItemsTheSame(

@@ -58,7 +58,7 @@
             app:layout_constraintTop_toTopOf="@+id/tv_events_prefix" />
 
         <LinearLayout
-            android:id="@+id/layout_events_filter"
+            android:id="@+id/btn_event_filter"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginEnd="17dp"
@@ -88,17 +88,38 @@
 
         </LinearLayout>
 
+        <HorizontalScrollView
+            android:id="@+id/sv_filters"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingHorizontal="17dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_event_filter">
+
+            <LinearLayout
+                android:id="@+id/layout_conference_filters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+        </HorizontalScrollView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_events"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="7dp"
             android:background="@drawable/bg_event_recyclerview"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_events_filter"
+            app:layout_constraintTop_toBottomOf="@+id/sv_filters"
             tools:itemCount="5"
             tools:listitem="@layout/item_conference" />
 

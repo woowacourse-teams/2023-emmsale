@@ -11,6 +11,9 @@ import com.emmsale.data.conference.ConferenceRepository
 import com.emmsale.data.conference.EventCategory
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.EventsUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
 import kotlinx.coroutines.launch
 
 class ConferenceViewModel(
@@ -18,6 +21,9 @@ class ConferenceViewModel(
 ) : ViewModel() {
     private val _events = MutableLiveData<EventsUiState>()
     val events: LiveData<EventsUiState> = _events
+
+    private val _selectedFilters = MutableLiveData<ConferenceFiltersUiState.Success>()
+    val selectedFilters: LiveData<ConferenceFiltersUiState.Success> = _selectedFilters
 
     fun fetchEvents() {
         viewModelScope.launch {
@@ -32,6 +38,10 @@ class ConferenceViewModel(
                 is ApiException -> _events.value = EventsUiState.Error
             }
         }
+    }
+
+    fun updateConferenceFilter(conferenceFilter: ConferenceFiltersUiState.Success) {
+        _selectedFilters.postValue(conferenceFilter)
     }
 
     companion object {

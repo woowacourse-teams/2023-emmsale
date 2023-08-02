@@ -41,4 +41,5 @@
     <string name="filter_conference_duration_divider_mark">~</string>
     <string name="all_data_loading_failed_message">데이터를 정상적으로 불러오지 못했어요 😢</string>
     <string name="event_filter_duration_date_format">%02d.%02d</string>
+    <string name="event_filter_duration_date_last_format">&#160;- %02d.%02d</string>
 </resources>

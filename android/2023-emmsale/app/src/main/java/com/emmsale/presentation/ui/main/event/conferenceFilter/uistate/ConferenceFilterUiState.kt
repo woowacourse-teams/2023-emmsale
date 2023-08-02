@@ -1,13 +1,10 @@
 package com.emmsale.presentation.ui.main.event.conferenceFilter.uistate
 
-sealed class ConferenceFilterUiState {
-    data class Success(
-        val statuses: List<ConferenceFilterStatusUiState>,
-        val tags: List<ConferenceFilterTagUiState>,
-        var selectedStartDate: ConferenceFilterDateUiState,
-        var selectedEndDate: ConferenceFilterDateUiState,
-    ) : ConferenceFilterUiState()
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-    object Loading : ConferenceFilterUiState()
-    object Error : ConferenceFilterUiState()
-}
+@Parcelize
+data class ConferenceFilterUiState(
+    val name: String,
+    var isSelected: Boolean = false,
+) : Parcelable

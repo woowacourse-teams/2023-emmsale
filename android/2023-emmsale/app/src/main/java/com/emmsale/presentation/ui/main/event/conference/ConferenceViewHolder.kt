@@ -8,6 +8,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ItemConferenceBinding
 import com.emmsale.presentation.common.views.EventTag
 import com.emmsale.presentation.common.views.eventChipOf
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
 
 class ConferenceViewHolder(
     parent: ViewGroup,

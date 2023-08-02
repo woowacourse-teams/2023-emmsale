@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.main.event.conference
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
 
 class ConferenceRecyclerViewAdapter(
     private val onClickConference: (ConferencesUiState) -> Unit,

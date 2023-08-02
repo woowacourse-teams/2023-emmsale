@@ -5,13 +5,13 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.ui.main.event.conference.ConferencesUiState" />
+        <import type="com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState" />
 
         <import type="kotlin.Unit" />
 
         <variable
             name="event"
-            type="com.emmsale.presentation.ui.main.event.conference.ConferencesUiState" />
+            type="com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState" />
 
         <variable
             name="onClickConference"
