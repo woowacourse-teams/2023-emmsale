@@ -26,10 +26,13 @@ class EventViewModel(
     fun fetchEvents() {
         viewModelScope.launch {
             _events.value = EventsUiState.Loading
-            when (val eventsResult =
-                eventRepository.getConferences(year, month, status = "종료된 행사")) {
-                is ApiSuccess -> _events.value =
-                    EventsUiState.Success(eventsResult.data.map(EventUiState::from))
+            when (
+                val eventsResult =
+                    eventRepository.getConferences(year, month, status = "종료된 행사")
+            ) {
+                is ApiSuccess ->
+                    _events.value =
+                        EventsUiState.Success(eventsResult.data.map(EventUiState::from))
 
                 is ApiError -> _events.value = EventsUiState.Error
                 is ApiException -> _events.value = EventsUiState.Error

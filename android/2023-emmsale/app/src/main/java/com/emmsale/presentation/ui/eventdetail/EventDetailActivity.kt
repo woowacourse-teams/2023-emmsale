@@ -17,8 +17,7 @@ class EventDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventDetailBinding
     private val viewModel: EventDetailViewModel by viewModels { EventDetailViewModel.factory }
     private val eventId: Long by lazy {
-        intent.getLongExtra(EVENT_ID_KEY, DEFAULT_EVENT_ID).apply {
-        }
+        intent.getLongExtra(EVENT_ID_KEY, DEFAULT_EVENT_ID)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +25,6 @@ class EventDetailActivity : AppCompatActivity() {
         setUpBinding()
         setUpEventDetail()
         setBackPress()
-        setUpParticipation()
         viewModel.fetchEventDetail(1)
     }
 
@@ -60,16 +58,6 @@ class EventDetailActivity : AppCompatActivity() {
                 }
 
                 else -> showToastMessage("행사 받아오기 실패")
-            }
-        }
-    }
-
-    private fun setUpParticipation() {
-        viewModel.participation.observe(this) { success ->
-            if (success) {
-                showToastMessage("참여 성공")
-            } else {
-                showToastMessage("참여 실패")
             }
         }
     }

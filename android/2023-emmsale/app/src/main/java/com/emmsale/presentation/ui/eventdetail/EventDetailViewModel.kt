@@ -22,17 +22,11 @@ class EventDetailViewModel(
     val eventDetail: LiveData<EventDetailUiState>
         get() = _eventDetail
 
-    private val _participation: MutableLiveData<Boolean> = MutableLiveData()
-    val participation: LiveData<Boolean>
-        get() = _participation
-
     fun fetchEventDetail(id: Long) {
         viewModelScope.launch {
             when (val result = eventDetailRepository.fetchEventDetail(id)) {
                 is ApiSuccess -> _eventDetail.postValue(
-                    EventDetailUiState.from(
-                        result.data,
-                    ),
+                    EventDetailUiState.from(result.data),
                 )
 
                 is ApiError -> _eventDetail.postValue(EventDetailUiState.Error)
