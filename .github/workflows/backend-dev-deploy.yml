@@ -28,7 +28,7 @@ jobs:
       - name: 선택된 브랜치로 checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.ACTION_TOKEN }}
+          token: ${{ secrets.SUBMODULE_TOKEN }}
           submodules: true
 
       - name: JDK 11로 설정
