@@ -31,14 +31,6 @@ jobs:
           token: ${{ secrets.ACTION_TOKEN }}
           submodules: true
 
-      - name: firebase key 생성
-        run: |
-          echo "${{ secrets.FIREBASE_KEY }}" > firebase-kerdy.json
-
-      - name: firebase key 이동
-        run: |
-          cp firebase-kerdy.json src/main/resources
-
       - name: JDK 11로 설정
         uses: actions/setup-java@v3
         with:
