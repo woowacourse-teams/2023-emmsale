@@ -46,7 +46,7 @@
             android:background="@drawable/bg_eventinformation_urlbutton"
             android:text="@string/eventinformation_navigate_website"
             android:fontFamily="@font/nanum_square_bold"
-            android:textSize="25sp"
+            android:textSize="22sp"
             android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_height="60dp"
