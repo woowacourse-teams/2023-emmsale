@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 
 plugins {
     id("org.jetbrains.kotlin.android")
@@ -6,6 +7,7 @@ plugins {
     id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "1.8.21"
     id("kotlin-kapt")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -31,13 +33,6 @@ android {
         buildConfig = true
     }
     buildTypes {
-        getByName("debug") {
-            isMinifyEnabled = true
-            configure<CrashlyticsExtension> {
-                mappingFileUploadEnabled = false
-            }
-        }
-
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
@@ -65,21 +60,6 @@ android {
         useJUnitPlatform()
         testLogging {
             events.addAll(arrayOf(org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED, org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED))
-        }
-    }
-    flavorDimensions += "environment"
-    productFlavors {
-        create("staging") {
-            dimension = "environment"
-            configure<CrashlyticsExtension> {
-                mappingFileUploadEnabled = false
-            }
-        }
-        create("prod") {
-            dimension = "environment"
-            configure<CrashlyticsExtension> {
-                mappingFileUploadEnabled = true
-            }
         }
     }
 }
