@@ -289,4 +289,18 @@ internal class CommentRepositoryImplTest {
             { assertThat((result as ApiSuccess).data).isEqualTo(Unit) }
         )
     }
+
+    @Test
+    @DisplayName("네트워크 통신이 원활해 댓글 삭제에 성공하면 ApiSuccess 객체를 반환한다")
+    fun test5() = runTest {
+        val commentId = 1L
+        coEvery { commentService.deleteComment(commentId) } returns Response.success(Unit)
+
+        val result = sut.deleteComment(commentId)
+
+        assertAll(
+            { assertThat(result).isInstanceOf(ApiSuccess::class.java) },
+            { assertThat((result as ApiSuccess).data).isEqualTo(Unit) }
+        )
+    }
 }

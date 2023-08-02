@@ -101,4 +101,8 @@ class CommentRepositoryImpl(
         withContext(dispatcher) {
             handleApi(commentService.updateComment(commentId, UpdateCommentRequestBody(content))) {}
         }
+
+    override suspend fun deleteComment(commentId: Long): ApiResult<Unit> = withContext(dispatcher) {
+        handleApi(commentService.deleteComment(commentId)) {}
+    }
 }

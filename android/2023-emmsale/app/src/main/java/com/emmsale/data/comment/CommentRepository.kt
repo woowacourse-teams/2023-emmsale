@@ -11,4 +11,6 @@ interface CommentRepository {
     suspend fun saveComment(content: String, eventId: Long, parentId: Long? = null): ApiResult<Unit>
 
     suspend fun updateComment(commentId: Long, content: String): ApiResult<Unit>
+
+    suspend fun deleteComment(commentId: Long): ApiResult<Unit>
 }
