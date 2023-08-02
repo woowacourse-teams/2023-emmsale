@@ -77,8 +77,32 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
         event.getId());
 
     //then
-    Assertions.assertThat(expected)
+    Assertions.assertThat(actual)
         .usingRecursiveComparison()
-        .isEqualTo(actual);
+        .isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("findChildrenComments() : 부모 댓글에 있는 자식 댓글들을 모두 조회할 수 있다.")
+  void test_findChildrenComments() throws Exception {
+    //given
+    final Comment 자식댓글2 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글1, member, "자식댓글2"));
+    final Comment 자식댓글1 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글1, member, "자식댓글1"));
+
+    final List<CommentResponse> expected = List.of(
+        CommentResponse.from(자식댓글2),
+        CommentResponse.from(자식댓글1)
+    );
+
+    //when
+    final List<CommentResponse> actual = commentQueryService.findChildrenComments(
+        부모_댓글1.getId());
+
+    //then
+    Assertions.assertThat(actual)
+        .usingRecursiveComparison()
+        .isEqualTo(expected);
   }
 }
