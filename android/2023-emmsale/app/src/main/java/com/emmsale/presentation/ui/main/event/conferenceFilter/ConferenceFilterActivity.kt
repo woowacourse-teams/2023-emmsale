@@ -31,14 +31,6 @@ class ConferenceFilterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupEventFilters()
-
-        eventDurationBinding.btnFilterEndDuration.setOnClickListener {
-            showToast("End duration clicked")
-        }
-
-        eventDurationBinding.btnFilterStartDuration.setOnClickListener {
-            showToast("Start duration clicked")
-        }
     }
 
     private fun setupEventFilters() {
