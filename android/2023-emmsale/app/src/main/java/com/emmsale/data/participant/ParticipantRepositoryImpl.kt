@@ -1,7 +1,6 @@
 package com.emmsale.data.participant
 
 import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.participant.dto.CompanionRequestBody
 import com.emmsale.data.participant.dto.ParticipantApiModel
@@ -31,8 +30,7 @@ class ParticipantRepositoryImpl(
     }
 
     override suspend fun deleteParticipant(eventId: Long): ApiResult<Unit> {
-        val requestBody = ParticipantRequestBody(currentUid)
-        val response = participantService.deleteParticipant(eventId, requestBody)
+        val response = participantService.deleteParticipant(eventId, currentUid)
         return handleApi(response, mapToDomain = {})
     }
 
@@ -52,6 +50,7 @@ class ParticipantRepositoryImpl(
     }
 
     override suspend fun checkParticipationStatus(eventId: Long): ApiResult<Boolean> {
-        return ApiSuccess(true)
+        val response = participantService.checkIsParticipated(eventId, currentUid)
+        return handleApi(response, mapToDomain = { response.body()!! })
     }
 }

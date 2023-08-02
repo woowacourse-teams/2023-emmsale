@@ -30,7 +30,6 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
         setUpParticipants()
         setUpRequestCompanion()
         setUpParticipation()
-        participationButtonClick()
         setUpParticipationStatus()
         viewModel.fetchParticipants(eventId)
     }
@@ -55,6 +54,7 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
                 is ParticipantsUiState.Success -> {
                     participantAdapter.submitList(it.value)
                     viewModel.checkParticipationStatus(eventId)
+                    participationButtonClick()
                 }
 
                 else -> showToastMessage("참가자들 불러오기 실패")
@@ -88,11 +88,9 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
             when (state) {
                 is ParticipationStatusUiState.Success -> {
                     if (state.isParticipate) {
-                        showToastMessage("참가 상태")
                         participationButton.isSelected = true
                         participationButton.text = "참가 취소"
                     } else {
-                        showToastMessage("불참 상태")
                         participationButton.isSelected = false
                         participationButton.text = "참가 신청"
                     }
@@ -120,7 +118,7 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
     }
 
     private fun showToastMessage(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

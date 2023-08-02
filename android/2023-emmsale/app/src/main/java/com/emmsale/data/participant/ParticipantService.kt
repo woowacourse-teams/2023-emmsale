@@ -9,6 +9,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ParticipantService {
 
@@ -26,8 +27,14 @@ interface ParticipantService {
     @DELETE("events/{eventId}/participants")
     suspend fun deleteParticipant(
         @Path("eventId") eventId: Long,
-        @Body participantRequestBody: ParticipantRequestBody,
+        @Query("member-id") memberId: Long,
     ): Response<Unit>
+
+    @GET("events/{eventId}/participants/already-participate")
+    suspend fun checkIsParticipated(
+        @Path("eventId") eventId: Long,
+        @Query("member-id") memberId: Long,
+    ): Response<Boolean>
 
     @POST("notifications")
     suspend fun postCompanion(
