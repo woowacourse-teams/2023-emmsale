@@ -1,10 +1,12 @@
 package com.emmsale.data.comment
 
+import com.emmsale.data.comment.dto.SaveCommentRequestBody
 import com.emmsale.data.comment.mapper.toData
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.handleApi
 import com.emmsale.data.member.MemberRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -77,4 +79,20 @@ class CommentRepositoryImpl(
             }
             ApiSuccess(childComments)
         }
+
+    override suspend fun saveComment(
+        content: String,
+        eventId: Long,
+        parentId: Long?,
+    ): ApiResult<Unit> = withContext(dispatcher) {
+        handleApi(
+            commentService.saveComment(
+                SaveCommentRequestBody(
+                    content = content,
+                    eventId = eventId,
+                    parentId = parentId
+                )
+            )
+        ) { }
+    }
 }
