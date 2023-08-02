@@ -2,8 +2,6 @@ name: Kerdy Backend Prod Server CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ backend-main ]
 
 jobs:
   build:
@@ -66,8 +64,8 @@ jobs:
       - name: 도커 이미지 빌드 및 푸시
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: ./Dockerfile
+          context: backend/emm-sale
+          file: backend/emm-sale/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/kerdy:latest
 
