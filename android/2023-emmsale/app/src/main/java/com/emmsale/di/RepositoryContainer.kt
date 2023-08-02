@@ -12,6 +12,8 @@ import com.emmsale.data.login.LoginRepository
 import com.emmsale.data.login.LoginRepositoryImpl
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.member.MemberRepositoryImpl
+import com.emmsale.data.participant.ParticipantRepository
+import com.emmsale.data.participant.ParticipantRepositoryImpl
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.data.token.TokenRepositoryImpl
 import com.emmsale.data.uid.UidRepository
@@ -44,5 +46,11 @@ class RepositoryContainer(
     }
     val uidRepository: UidRepository by lazy {
         UidRepositoryImpl(preferenceContainer.preference)
+    }
+    val participantRepository: ParticipantRepository by lazy {
+        ParticipantRepositoryImpl(
+            uidRepository = uidRepository,
+            participantService = serviceContainer.participantService,
+        )
     }
 }

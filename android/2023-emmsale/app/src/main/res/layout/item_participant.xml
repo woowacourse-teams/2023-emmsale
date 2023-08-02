@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="participant"
+            type="com.emmsale.presentation.eventdetail.participant.uistate.ParticipantUiState"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_participant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_participant_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    imageUrl="@{participant.imageUrl}"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/tv_participant_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="18sp"
+                    android:textColor="@color/text_color_black"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toEndOf="@+id/iv_participant_image"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="@{participant.name}"
+                    tools:text="최우석" />
+
+                <TextView
+                    android:id="@+id/tv_participant_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:maxEms="10"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_color_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_participant_image"
+                    app:layout_constraintStart_toEndOf="@+id/iv_participant_image"
+                    android:text="@{participant.description}"
+                    tools:text="안드로이드를 사랑하는 개발자에요" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:background="@drawable/bg_eventinformation_urlbutton"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:textColor="@color/white"
+                    android:id="@+id/button_request_companion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="같이가요"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_participant_image"
+                    app:layout_constraintTop_toTopOf="@+id/iv_participant_image"
+                    android:layout_marginEnd="6dp"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

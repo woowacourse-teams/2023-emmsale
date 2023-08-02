@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -9,9 +10,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="참여자목록" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_participants"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_eventparticipant_participate"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@drawable/bg_eventinformation_urlbutton"
+            android:text="참가하기"
+            android:fontFamily="@font/nanum_square_bold"
+            android:textSize="25sp"
+            android:textColor="@color/white"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:id="@+id/btn_eventparticipant_participate"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="17dp"
+            android:layout_marginEnd="17dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="17dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
