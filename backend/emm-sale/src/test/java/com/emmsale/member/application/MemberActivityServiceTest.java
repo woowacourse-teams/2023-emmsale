@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
-import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
+import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityResponses;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -30,34 +30,34 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
   private MemberRepository memberRepository;
 
   @Test
-  @DisplayName("커리어의 id를 통해서, 사용자의 커리어를 등록하고 사용자의 이름을 수정할 수 있다.")
-  void registerCareer() throws Exception {
+  @DisplayName("Activity의 id를 통해서, 사용자의 Activity를 등록하고 사용자의 이름을 수정할 수 있다.")
+  void registerActivities() throws Exception {
     //given
-    final List<Long> careerIds = List.of(1L, 2L, 3L, 4L);
+    final List<Long> activityIds = List.of(1L, 2L, 3L, 4L);
     final long savedMemberId = 1L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
     final String updateName = "우르";
 
     final MemberActivityInitialRequest request = new MemberActivityInitialRequest(updateName,
-        careerIds);
+        activityIds);
 
     //when & then
     assertAll(
-        () -> assertDoesNotThrow(() -> memberActivityService.registerCareer(member, request)),
+        () -> assertDoesNotThrow(() -> memberActivityService.registerActivities(member, request)),
         () -> assertEquals(updateName, member.getName())
     );
   }
 
   @Test
-  @DisplayName("커리어의 id를 통해서, 사용자의 커리어에 추가할 수 있다.")
-  void addCareer() throws Exception {
+  @DisplayName("Activity의 id를 통해서, 사용자의 Activity에 추가할 수 있다.")
+  void addActivity() throws Exception {
     //given
-    final List<Long> careerIds = List.of(4L, 5L, 6L);
+    final List<Long> activityIds = List.of(4L, 5L, 6L);
     final long savedMemberId = 1L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
-    final MemberActivityAddRequest request = new MemberActivityAddRequest(careerIds);
+    final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
     final List<MemberActivityResponses> expected = List.of(
         new MemberActivityResponses("동아리",
@@ -81,7 +81,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    final List<MemberActivityResponses> actual = memberActivityService.addCareer(member, request);
+    final List<MemberActivityResponses> actual = memberActivityService.addActivity(member, request);
 
     //then
     assertThat(expected)
@@ -91,28 +91,28 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
   }
 
   @Test
-  @DisplayName("addCareer() : 유효하지 않은 careerId들이 있으면 invalid_career_ids Exception이 발생합니다.")
-  void test_addCareer_invalid_career_ids_Exception() throws Exception {
+  @DisplayName("addActivity() : 유효하지 않은 activityId들이 있으면 invalid_activity_ids Exception이 발생합니다.")
+  void test_addActivity_invalid_activity_ids_Exception() throws Exception {
     //given
     final Member savedMember = memberRepository.findById(1L).get();
-    final List<Long> careerIds = List.of(1L, 2L, 7L);
-    final MemberActivityAddRequest request = new MemberActivityAddRequest(careerIds);
+    final List<Long> activityIds = List.of(1L, 2L, 7L);
+    final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
     //when & then
-    assertThatThrownBy(() -> memberActivityService.addCareer(savedMember, request))
+    assertThatThrownBy(() -> memberActivityService.addActivity(savedMember, request))
         .isInstanceOf(MemberException.class)
-        .hasMessage(MemberExceptionType.INVALID_CAREER_IDS.errorMessage());
+        .hasMessage(MemberExceptionType.INVALID_ACTIVITY_IDS.errorMessage());
   }
 
   @Test
-  @DisplayName("deleteCareer() : member Id와 삭제할 career Id를 통해서 사용자의 커리어를 삭제할 수 있다.")
-  void test_deleteCareer() throws Exception {
+  @DisplayName("deleteActivity() : member Id와 삭제할 activity Id를 통해서 사용자의 Activity를 삭제할 수 있다.")
+  void test_deleteActivity() throws Exception {
     //given
-    final List<Long> deleteCareerIds = List.of(1L, 2L);
+    final List<Long> deleteActivityIds = List.of(1L, 2L);
     final long savedMemberId = 1L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
-    final MemberActivityDeleteRequest request = new MemberActivityDeleteRequest(deleteCareerIds);
+    final MemberActivityDeleteRequest request = new MemberActivityDeleteRequest(deleteActivityIds);
 
     final List<MemberActivityResponses> expected = List.of(
         new MemberActivityResponses("동아리",
@@ -122,7 +122,8 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    final List<MemberActivityResponses> actual = memberActivityService.deleteCareer(member, request);
+    final List<MemberActivityResponses> actual = memberActivityService.deleteActivity(member,
+        request);
 
     //then
     assertThat(expected)

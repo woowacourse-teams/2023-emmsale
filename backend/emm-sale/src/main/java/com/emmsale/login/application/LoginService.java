@@ -3,6 +3,7 @@ package com.emmsale.login.application;
 import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.MemberQueryResponse;
 import com.emmsale.login.application.dto.TokenResponse;
+import com.emmsale.login.utils.GithubClient;
 import com.emmsale.login.utils.JwtTokenProvider;
 import com.emmsale.member.application.MemberQueryService;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class LoginService {
 
     return new TokenResponse(
         memberQueryResponse.getMemberId(),
-        memberQueryResponse.isNewMember(),
+        memberQueryResponse.isOnboarded(),
         accessToken
     );
   }

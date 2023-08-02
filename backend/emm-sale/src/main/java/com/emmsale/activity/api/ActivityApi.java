@@ -17,7 +17,7 @@ public class ActivityApi {
   private final ActivityService activityService;
 
   @GetMapping
-  public ResponseEntity<List<ActivityResponses>> findAll(){
+  public ResponseEntity<List<ActivityResponses>> findAll() {
     return ResponseEntity.ok(activityService.findAll());
   }
 }

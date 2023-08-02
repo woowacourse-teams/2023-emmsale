@@ -8,5 +8,5 @@ import lombok.Getter;
 public class MemberQueryResponse {
 
   private long memberId;
-  private boolean isNewMember;
+  private boolean isOnboarded;
 }

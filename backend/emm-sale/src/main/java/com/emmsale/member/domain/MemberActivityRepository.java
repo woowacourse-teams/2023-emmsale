@@ -12,9 +12,9 @@ public interface MemberActivityRepository extends JpaRepository<MemberActivity, 
 
   @Query("select mc from MemberActivity mc "
       + "where mc.member = :member "
-      + "and mc.activity.id in :deleteCareerIds")
-  List<MemberActivity> findAllByMemberAndCareerIds(
+      + "and mc.activity.id in :deleteActivityId")
+  List<MemberActivity> findAllByMemberAndActivityIds(
       @Param("member") final Member member,
-      @Param("deleteCareerIds") final List<Long> deleteCareerIds
+      @Param("deleteActivityId") final List<Long> deleteActivityId
   );
 }

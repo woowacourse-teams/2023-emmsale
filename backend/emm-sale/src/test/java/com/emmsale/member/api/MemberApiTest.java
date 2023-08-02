@@ -1,6 +1,8 @@
 package com.emmsale.member.api;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -9,16 +11,22 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.member.application.MemberActivityService;
-import com.emmsale.member.application.dto.MemberActivityResponse;
+import com.emmsale.member.application.MemberQueryService;
+import com.emmsale.member.application.MemberUpdateService;
+import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
+import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.MemberProfileResponse;
+import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,15 +36,12 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(MemberApi.class)
 class MemberApiTest extends MockMvcTestHelper {
 
-  @MockBean
-  private MemberActivityService memberActivityService;
-
-  private static final ResponseFieldsSnippet RESPONSE_FIELDS = responseFields(
-
+  private static final ResponseFieldsSnippet MEMBER_ACTIVITY_RESPONSE_FIELDS = responseFields(
       fieldWithPath("[].activityType").type(JsonFieldType.STRING).description("activity 분류"),
       fieldWithPath("[].memberActivityResponses[].id").type(JsonFieldType.NUMBER)
           .description("activity id"),
@@ -44,8 +49,22 @@ class MemberApiTest extends MockMvcTestHelper {
           .description("activity 이름")
   );
 
+  private static final ResponseFieldsSnippet MEMBER_PROFILE_RESPONSE_FIELDS = responseFields(
+      fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
+      fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
+      fieldWithPath("description").type(JsonFieldType.STRING).description("사용자 한 줄 자기소개"),
+      fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url")
+  );
+
   private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
+
+  @MockBean
+  private MemberActivityService memberActivityService;
+  @MockBean
+  private MemberUpdateService memberUpdateService;
+  @MockBean
+  private MemberQueryService memberQueryService;
 
   @Test
   @DisplayName("사용자 정보를 잘 저장하면, 204 no Content를 반환해줄 수 있다.")
@@ -54,11 +73,13 @@ class MemberApiTest extends MockMvcTestHelper {
     final List<Long> activityIds = List.of(1L, 2L);
     final String name = "우르";
 
-    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(name, activityIds);
+    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(name,
+        activityIds);
 
     final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
         fieldWithPath("activityIds").description("활동 id들"),
-        fieldWithPath("name").description("사용자 이름"));
+        fieldWithPath("name").description("사용자 이름")
+    );
 
     //when & then
     mockMvc.perform(post("/members")
@@ -97,16 +118,16 @@ class MemberApiTest extends MockMvcTestHelper {
             ))
     );
 
-    when(memberActivityService.addCareer(any(), any()))
+    when(memberActivityService.addActivity(any(), any()))
         .thenReturn(memberActivityResponses);
 
     //when & then
-    mockMvc.perform(post("/members/careers")
+    mockMvc.perform(post("/members/activities")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
-        .andDo(document("add-career", REQUEST_FIELDS, RESPONSE_FIELDS));
+        .andDo(document("add-activity", REQUEST_FIELDS, MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
@@ -123,23 +144,23 @@ class MemberApiTest extends MockMvcTestHelper {
             ))
     );
 
-    when(memberActivityService.deleteCareer(any(), any()))
+    when(memberActivityService.deleteActivity(any(), any()))
         .thenReturn(memberActivityResponses);
 
     //when & then
-    mockMvc.perform(delete("/members/careers")
+    mockMvc.perform(delete("/members/activities")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("delete-career", REQUEST_FIELDS, RESPONSE_FIELDS));
+        .andDo(document("delete-activity", REQUEST_FIELDS, MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
   @DisplayName("내 활동들을 조회할 수 있다.")
-  void test_findCareer() throws Exception {
+  void test_findActivity() throws Exception {
     //given
-    final List<MemberActivityResponses> memberCareerRespons = List.of(
+    final List<MemberActivityResponses> memberActivityResponse = List.of(
         new MemberActivityResponses("동아리",
             List.of(
                 new MemberActivityResponse(1L, "YAPP"),
@@ -161,14 +182,113 @@ class MemberApiTest extends MockMvcTestHelper {
     );
 
     //when
-    when(memberActivityService.findCareers(any()))
-        .thenReturn(memberCareerRespons);
+    when(memberActivityService.findActivities(any()))
+        .thenReturn(memberActivityResponse);
 
     //then
-    mockMvc.perform(get("/members/careers")
+    mockMvc.perform(get("/members/1/activities")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("find-career", RESPONSE_FIELDS));
+        .andDo(document("find-activity", MEMBER_ACTIVITY_RESPONSE_FIELDS));
+  }
+
+  @Test
+  @DisplayName("사용자의 openProfileUrl을 성공적으로 업데이트하면, 200 OK가 반환된다.")
+  void test_updateOpenProfileUrl() throws Exception {
+    // given
+    final String openProfileUrl = "https://open.kakao.com/o/openprofileurl";
+    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(openProfileUrl);
+
+    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+        fieldWithPath("openProfileUrl").description("오픈 채팅 url")
+    );
+
+    // when
+    final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(request)));
+
+    // then
+    result.andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("update-open-profile-url", REQUEST_FIELDS));
+  }
+
+  @Test
+  @DisplayName("사용자의 openProfileUrl이 유효하지 않으면, 400 BAD_REQUEST를 반환한다.")
+  void test_updateOpenProfileUrlWithInvalidUrl() throws Exception {
+    // given
+    final String openProfileUrl = "https://invalid.kakao.com/profile";
+    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(openProfileUrl);
+
+    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+        fieldWithPath("openProfileUrl").description("오픈 채팅 url")
+    );
+
+    // when
+    final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(request)));
+
+    // then
+    result.andExpect(status().isBadRequest())
+        .andDo(print())
+        .andDo(document("update-open-profile-url", REQUEST_FIELDS));
+  }
+
+  @Test
+  @DisplayName("사용자의 description을 성공적으로 업데이트하면, 200 OK가 반환된다.")
+  void test_updateDescription() throws Exception {
+    // given
+    final String description = "안녕하세요 김개발입니다.";
+    final DescriptionRequest request = new DescriptionRequest(description);
+
+    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+        fieldWithPath("description").description("한줄 자기소개(100자 이하여야 함)")
+    );
+
+    // when
+    final ResultActions result = mockMvc.perform(put("/members/description")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(request)));
+
+    // then
+    result.andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("update-description", REQUEST_FIELDS));
+  }
+
+  @Test
+  @DisplayName("특정 사용자의 프로필 정보를 조회할 수 있다.")
+  void test_findProfile() throws Exception {
+    //given
+    final MemberProfileResponse memberProfileResponse = new MemberProfileResponse(1L, "김길동",
+        "안녕하세요, 김길동입니다.", "https://image");
+    when(memberQueryService.findProfile(any()))
+        .thenReturn(memberProfileResponse);
+
+    //when && then
+    mockMvc.perform(get("/members/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("find-profile", MEMBER_PROFILE_RESPONSE_FIELDS));
+  }
+
+  @Test
+  @DisplayName("회원탈퇴를 할 수 있다.")
+  void deleteMemberTest() throws Exception {
+    //given
+    final long memberId = 1L;
+    doNothing().when(memberUpdateService).deleteMember(any(), anyLong());
+    final String accessToken = "access_token";
+
+    //when
+    mockMvc.perform(delete("/members/" + memberId)
+            .header("Authorization", accessToken))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("delete-member"));
   }
 }

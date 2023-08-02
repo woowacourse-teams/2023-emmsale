@@ -2,9 +2,11 @@ package com.emmsale.member.application;
 
 import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.MemberQueryResponse;
+import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import java.util.Optional;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.member.exception.MemberExceptionType;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,14 +26,17 @@ public class MemberQueryService {
   //TODO: 다른 클래스로 메서드 분리
   @Transactional
   public MemberQueryResponse findOrCreateMember(
-      final GithubProfileResponse githubProfileFromGithub) {
-    final Optional<Member> optionalMember = memberRepository.findByGithubId(
-        githubProfileFromGithub.getGithubId());
-    if (optionalMember.isPresent()) {
-      final Member member = optionalMember.get();
-      return new MemberQueryResponse(member.getId(), false);
-    }
-    final Member member = memberRepository.save(githubProfileFromGithub.toMember());
-    return new MemberQueryResponse(member.getId(), true);
+      final GithubProfileResponse githubProfileFromGithub
+  ) {
+    final Member member = memberRepository.findByGithubId(githubProfileFromGithub.getGithubId())
+        .orElseGet(() -> memberRepository.save(githubProfileFromGithub.toMember()));
+    return new MemberQueryResponse(member.getId(), member.isOnboarded());
+  }
+
+  public MemberProfileResponse findProfile(Long memberId) {
+    Member member = memberRepository.findById(memberId)
+        .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
+
+    return MemberProfileResponse.from(member);
   }
 }

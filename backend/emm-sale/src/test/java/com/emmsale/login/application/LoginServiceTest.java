@@ -11,6 +11,7 @@ import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.TokenResponse;
 import com.emmsale.login.exception.LoginException;
 import com.emmsale.login.exception.LoginExceptionType;
+import com.emmsale.login.utils.GithubClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

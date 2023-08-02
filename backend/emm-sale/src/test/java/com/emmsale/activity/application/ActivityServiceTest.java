@@ -19,7 +19,7 @@ class ActivityServiceTest extends ServiceIntegrationTestHelper {
   private ActivityService activityService;
 
   @Test
-  @DisplayName("존재하고 있는 커리어를 전체 조회할 수 있다.")
+  @DisplayName("존재하고 있는 Activity를 전체 조회할 수 있다.")
   void findAll() throws Exception {
     //given
     final List<String> expectedActivities = List.of(
