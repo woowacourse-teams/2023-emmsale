@@ -127,17 +127,13 @@ class EventApiTest extends MockMvcTestHelper {
     final EventParticipateRequest request = new EventParticipateRequest(memberId);
     final String fakeAccessToken = "Bearer accessToken";
 
-    final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자")
-    );
-
     //when
-    mockMvc.perform(delete(format("/events/%s/participants", eventId))
+    mockMvc.perform(delete(format("/events/%s/participants?member-id=%s", eventId, memberId))
             .header("Authorization", fakeAccessToken)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
-        .andDo(document("participate-event-cancel", requestFields));
+        .andDo(document("participate-event-cancel"));
   }
 
   @Test
