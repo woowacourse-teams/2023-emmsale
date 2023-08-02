@@ -75,7 +75,7 @@ jobs:
       - name: 도커 실행
         run: |
           docker stop kerdy && docker rm kerdy && docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev
-          docker run -d -p 8080:8080 --name kerdy ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev
+          docker run -d -p 8080:8080 --name kerdy --network host ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev
 
       - name: 슬랙 메시지 보내기
         uses: 8398a7/action-slack@v3
