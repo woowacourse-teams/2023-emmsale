@@ -5,6 +5,7 @@ on:
 
 jobs:
   build:
+    name: 빌드
     runs-on: ubuntu-22.04
     defaults:
       run:
