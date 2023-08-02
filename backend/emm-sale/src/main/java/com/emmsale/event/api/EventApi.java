@@ -56,10 +56,10 @@ public class EventApi {
   @DeleteMapping("/{eventId}/participants")
   public ResponseEntity<String> cancelParticipateEvent(
       @PathVariable final Long eventId,
-      @RequestBody final EventParticipateRequest request,
+      @RequestParam(name = "member-id") final Long memberId,
       final Member member
   ) {
-    eventService.cancelParticipate(eventId, request.getMemberId(), member);
+    eventService.cancelParticipate(eventId, memberId, member);
 
     return ResponseEntity.noContent().build();
   }
