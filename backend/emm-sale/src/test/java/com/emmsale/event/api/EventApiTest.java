@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -447,5 +448,21 @@ class EventApiTest extends MockMvcTestHelper {
       //then
       result.andExpect(status().isBadRequest());
     }
+  }
+
+  @Test
+  @DisplayName("이미 Event에 멤버가 참여헀는지 확인할 수 있다.")
+  void isAlreadyParticipate() throws Exception {
+    //given
+    final Long memberId = 2L;
+    final Long eventId = 3L;
+    given(eventService.isAlreadyParticipate(eventId, memberId)).willReturn(true);
+
+    //when && then
+    mockMvc.perform(
+            get("/events/{eventId}/participants/already-participate?member-id={memberId}"
+                , eventId, memberId)
+        )
+        .andDo(document("check-already-participate"));
   }
 }

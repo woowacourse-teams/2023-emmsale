@@ -46,3 +46,6 @@ Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5L
 
 ### 행사 참여자 목록 조회
 GET http://localhost:8080/events/1/participants
+
+### 멤버가 행사에 참여했는지 확인
+GET http://localhost:8080/events/1/participants/already-participate?member-id=1

@@ -19,6 +19,7 @@ import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_TAG;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME;
+import static com.emmsale.member.MemberFixture.memberFixture;
 import static com.emmsale.tag.TagFixture.AI;
 import static com.emmsale.tag.TagFixture.IOS;
 import static com.emmsale.tag.TagFixture.백엔드;
@@ -804,5 +805,38 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     }
   }
 
+  @Nested
+  @DisplayName("이벤트에 이미 참가한 멤버인지 확인할 수 있다.")
+  class isAlreadyParticipate {
+
+    @Test
+    @DisplayName("이벤트에 이미 참가한 경우 true를 반환한다.")
+    void alreadyParticipateThenTrue() {
+      //given
+      final Event 인프콘 = eventRepository.save(인프콘_2023());
+      final Member 멤버 = memberRepository.save(memberFixture());
+      eventService.participate(인프콘.getId(), 멤버.getId(), 멤버);
+
+      //when
+      final Boolean actual = eventService.isAlreadyParticipate(인프콘.getId(), 멤버.getId());
+
+      //then
+      assertThat(actual).isTrue();
+    }
+
+    @Test
+    @DisplayName("이벤트에 참가히자 않은 경우 false를 반환한다.")
+    void isNotAlreadyParticipateThenFalse() {
+      //given
+      final Event 인프콘 = eventRepository.save(인프콘_2023());
+      final Member 멤버 = memberRepository.save(memberFixture());
+
+      //when
+      final Boolean actual = eventService.isAlreadyParticipate(인프콘.getId(), 멤버.getId());
+
+      //then
+      assertThat(actual).isFalse();
+    }
+  }
 }
 

@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
   Optional<Participant> findByMemberIdAndEventId(final Long memberId, final Long eventId);
+
+  Boolean existsByEventIdAndMemberId(final Long eventId, final Long memberId);
 }
