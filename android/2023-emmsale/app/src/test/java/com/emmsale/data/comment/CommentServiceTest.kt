@@ -2,6 +2,7 @@ package com.emmsale.data.comment
 
 import com.emmsale.data.comment.dto.CommentFamilyApiModel
 import com.emmsale.data.comment.dto.CommentApiModel
+import com.emmsale.data.comment.dto.SaveCommentRequestBody
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -217,31 +218,77 @@ internal class CommentServiceTest {
         val commentId = 1L
         val response = sut.getChildComments(commentId)
 
-        assertThat(response.body()).isEqualTo(listOf(
-            CommentApiModel(
-                content = "부모댓글1에 대한 자식댓글1",
-                commentId = 2,
-                parentId = 1,
-                eventId = 1,
-                createdAt = "2023:08:01:08:53:08",
-                updatedAt = "2023:08:01:08:53:08",
-                memberId = 1,
-                memberImageUrl = "이미지",
-                memberName = "이름1",
-                deleted = false
-            ),
-            CommentApiModel(
-                content = "부모댓글1에 대한 자식댓글2",
-                commentId = 3,
-                parentId = 1,
-                eventId = 1,
-                createdAt = "2023:08:01:08:53:08",
-                updatedAt = "2023:08:01:08:53:08",
-                memberId = 1,
-                memberImageUrl = "이미지",
-                memberName = "이름1",
-                deleted = false
+        assertThat(response.body()).isEqualTo(
+            listOf(
+                CommentApiModel(
+                    content = "부모댓글1에 대한 자식댓글1",
+                    commentId = 2,
+                    parentId = 1,
+                    eventId = 1,
+                    createdAt = "2023:08:01:08:53:08",
+                    updatedAt = "2023:08:01:08:53:08",
+                    memberId = 1,
+                    memberImageUrl = "이미지",
+                    memberName = "이름1",
+                    deleted = false
+                ),
+                CommentApiModel(
+                    content = "부모댓글1에 대한 자식댓글2",
+                    commentId = 3,
+                    parentId = 1,
+                    eventId = 1,
+                    createdAt = "2023:08:01:08:53:08",
+                    updatedAt = "2023:08:01:08:53:08",
+                    memberId = 1,
+                    memberImageUrl = "이미지",
+                    memberName = "이름1",
+                    deleted = false
+                )
             )
-        ))
+        )
+    }
+
+    @Test
+    @DisplayName("특정 행사의 댓글을 게시했을 때 성공적으로 반영되었다면 파싱된 ApiModel을 받는다")
+    fun test3() = runTest {
+        val content = "ㅎㅇㅎㅇ"
+        val eventId = 1L
+        val mockResponse = MockResponse()
+            .setResponseCode(200)
+            .setBody(
+                """
+                    {
+                        "content": $content,
+                        "commentId": 4,
+                        "parentId": null,
+                        "eventId": $eventId,
+                        "createdAt": "2023:07:25:22:01:05",
+                        "updatedAt": "2023:07:25:22:01:05",
+                        "deleted": false,
+                        "memberId": 1,
+                        "memberName": "홍길동",
+                        "memberImageUrl": "https://naver.com"
+                    }
+                """.trimIndent()
+            )
+        mockWebServer.enqueue(mockResponse)
+
+        val saveCommentRequestBody = SaveCommentRequestBody(content, eventId, null)
+        val response = sut.saveComment(saveCommentRequestBody)
+
+        assertThat(response.body()).isEqualTo(
+            CommentApiModel(
+                content = content,
+                commentId = 4,
+                parentId = null,
+                eventId = eventId,
+                createdAt = "2023:07:25:22:01:05",
+                updatedAt = "2023:07:25:22:01:05",
+                deleted = false,
+                memberId = 1,
+                memberName = "홍길동",
+                memberImageUrl = "https://naver.com"
+            ),
+        )
     }
 }
