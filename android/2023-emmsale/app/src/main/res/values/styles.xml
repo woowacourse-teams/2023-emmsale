@@ -16,11 +16,11 @@
 
     <style name="EventDetail_NotSelectedTabStyle">
         <item name="android:fontFamily">@font/nanum_square_bold</item>
-        <item name="android:textSize">21sp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="EventDetail_SelectedTabStyle">
         <item name="android:fontFamily">@font/nanum_square_bold</item>
-        <item name="android:textSize">21sp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>
