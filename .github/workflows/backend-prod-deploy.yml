@@ -2,8 +2,6 @@ name: Kerdy Backend Prod Server CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ Feature/#164-DEV_PROD_YML_분리_및_서브모듈_적용 ]
 
 jobs:
   build:
