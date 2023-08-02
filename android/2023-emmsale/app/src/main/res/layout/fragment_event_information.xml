@@ -5,17 +5,58 @@
 
     <data>
 
+        <variable
+            name="imageUrl"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <ScrollView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/button_eventinformation_navigatewebsite"
+            android:paddingVertical="25dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="상세정보"/>
+            android:layout_height="wrap_content">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                imageUrl="@{imageUrl}"
+                android:scaleType="fitXY"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:srcCompat="@tools:sample/avatars"
+                android:id="@+id/eventinformation_poster"
+                android:paddingHorizontal="17dp"
+                android:paddingVertical="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@drawable/bg_eventinformation_urlbutton"
+            android:text="@string/eventinformation_navigate_website"
+            android:fontFamily="@font/nanum_square_bold"
+            android:textSize="25sp"
+            android:textColor="@color/white"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:id="@+id/button_eventinformation_navigatewebsite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="17dp"
+            android:layout_marginEnd="17dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="17dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
