@@ -18,6 +18,8 @@ data class MyProfileScreenUiState(
     val isNotLogin: Boolean = false,
 ) {
     companion object {
+        private const val BLANK_DESCRIPTION_SUBSTITUTION = "소개말이 없습니다."
+
         val Loading = MyProfileScreenUiState(
             isLoading = true,
             isError = false,
@@ -39,7 +41,7 @@ data class MyProfileScreenUiState(
                 errorMessage = "",
                 memberId = member.id,
                 memberName = member.name,
-                description = member.description,
+                description = member.description.ifBlank { BLANK_DESCRIPTION_SUBSTITUTION },
                 memberImageUrl = member.imageUrl,
                 jobs = member.getActivities(ActivityType.JOB).map(ActivityUiState::from),
                 educations = member.getActivities(ActivityType.EDUCATION)
