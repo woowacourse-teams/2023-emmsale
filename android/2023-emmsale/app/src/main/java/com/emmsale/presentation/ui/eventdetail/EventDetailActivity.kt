@@ -52,7 +52,7 @@ class EventDetailActivity : AppCompatActivity() {
             when (eventDetailUiState) {
                 is EventDetailUiState.Success -> {
                     binding.eventDetail = eventDetailUiState
-                    addTagChip(eventDetailUiState.tags)
+                    addTag(eventDetailUiState.tags)
                     initFragmentStateAdapter(
                         eventDetailUiState.informationUrl,
                         eventDetailUiState.imageUrl,
@@ -74,11 +74,11 @@ class EventDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun addTagChip(tags: List<String>) {
-        tags.forEach { binding.chipgroupEvendetailTags.addView(createChip(it)) }
+    private fun addTag(tags: List<String>) {
+        tags.forEach { binding.chipgroupEvendetailTags.addView(createTag(it)) }
     }
 
-    private fun createChip(tag: String) = EventTag(this).apply {
+    private fun createTag(tag: String) = EventTag(this).apply {
         text = tag
     }
 
