@@ -16,6 +16,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import retrofit2.Retrofit
 
 internal class CommentServiceTest {
@@ -332,6 +333,22 @@ internal class CommentServiceTest {
                 memberName = "홍길동",
                 memberImageUrl = "https://naver.com"
             ),
+        )
+    }
+
+    @Test
+    @DisplayName("특정 댓글의 내용을 삭제했을 때 성공적으로 반영되었다면 body가 null인 성공적인 Response 객체를 받는다")
+    fun test5() = runTest {
+        val commentId = 1L
+        val mockResponse = MockResponse()
+            .setResponseCode(204)
+        mockWebServer.enqueue(mockResponse)
+
+        val response = sut.deleteComment(commentId)
+
+        assertAll(
+            { assertThat(response.isSuccessful).isTrue },
+            { assertThat(response.body()).isNull() }
         )
     }
 }

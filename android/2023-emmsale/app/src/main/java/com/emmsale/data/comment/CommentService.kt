@@ -6,6 +6,7 @@ import com.emmsale.data.comment.dto.SaveCommentRequestBody
 import com.emmsale.data.comment.dto.UpdateCommentRequestBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -28,4 +29,7 @@ interface CommentService {
         @Path("commentId") commentId: Long,
         @Body updateCommentRequestBody: UpdateCommentRequestBody,
     ): Response<CommentApiModel>
+
+    @DELETE("comments/{commentId}")
+    suspend fun deleteComment(@Path("commentId") commentId: Long): Response<Unit>
 }
