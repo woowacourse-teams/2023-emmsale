@@ -10,7 +10,7 @@ import com.emmsale.R
 import com.emmsale.presentation.utils.extension.dp
 
 @BindingAdapter("app:imageUrl")
-fun ImageView.setImage(imageUrl: String) {
+fun ImageView.setImage(imageUrl: String?) {
     Glide.with(this)
         .load(imageUrl)
         .error(R.color.event_thumbnail_default_color)

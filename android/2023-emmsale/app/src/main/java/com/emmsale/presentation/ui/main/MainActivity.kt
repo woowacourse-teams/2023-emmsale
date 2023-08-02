@@ -2,13 +2,14 @@ package com.emmsale.presentation.ui.main
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
-import com.emmsale.presentation.ui.main.events.EventsFragment
+import com.emmsale.presentation.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.main.event.EventFragment
 import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
 
 class MainActivity : AppCompatActivity() {
@@ -32,7 +33,8 @@ class MainActivity : AppCompatActivity() {
         mainBottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
-                R.id.mi_main_home -> showFragment(EventsFragment.TAG)
+                R.id.mi_main_home -> showFragment(EventFragment.TAG)
+                R.id.mi_main_setting -> EventDetailActivity.startActivity(this, 1)
             }
             return@setOnItemSelectedListener true
         }
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     private fun addAllFragments() {
         supportFragmentManager.commitNow {
             add(R.id.fcv_main, MyProfileFragment(), MyProfileFragment.TAG)
-            add(R.id.fcv_main, EventsFragment(), EventsFragment.TAG)
+            add(R.id.fcv_main, EventFragment(), EventFragment.TAG)
         }
     }
 

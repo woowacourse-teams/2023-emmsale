@@ -1,4 +1,4 @@
-package com.emmsale.presentation.common.firebase.analytics
+package com.emmsale.presentation.common.firebase.analytics // ktlint-disable filename
 
 import com.emmsale.data.token.Token
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -7,7 +7,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 
-object Kerdy {
+object KerdyAnalytics {
     private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
 
     fun initFirebaseAnalytics(token: Token) {
@@ -18,4 +18,3 @@ object Kerdy {
         firebaseAnalytics.logEvent(event, parameters)
     }
 }
-

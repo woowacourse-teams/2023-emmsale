@@ -5,7 +5,7 @@ import com.emmsale.data.common.ServiceFactory
 import com.emmsale.di.RepositoryContainer
 import com.emmsale.di.ServiceContainer
 import com.emmsale.di.SharedPreferenceContainer
-import com.emmsale.presentation.common.firebase.analytics.Kerdy.initFirebaseAnalytics
+import com.emmsale.presentation.common.firebase.analytics.KerdyAnalytics.initFirebaseAnalytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ class KerdyApplication : Application() {
         super.onCreate()
         repositoryContainer = RepositoryContainer(
             serviceContainer = ServiceContainer(ServiceFactory()),
-            preferenceContainer = SharedPreferenceContainer(this)
+            preferenceContainer = SharedPreferenceContainer(this),
         )
         applicationScope.launch {
             repositoryContainer.tokenRepository.getToken()?.let(::initFirebaseAnalytics)
