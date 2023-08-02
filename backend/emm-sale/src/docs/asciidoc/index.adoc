@@ -138,6 +138,9 @@ include::{snippets}/participate-event/http-response.adoc[]
 .HTTP request
 include::{snippets}/participate-event-cancel/http-request.adoc[]
 
+.HTTP request 설명
+include::{snippets}/participate-event-cancel/request-parameters.adoc[]
+
 .HTTP response
 include::{snippets}/participate-event-cancel/http-response.adoc[]
 
