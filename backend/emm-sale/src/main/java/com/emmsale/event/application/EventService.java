@@ -251,6 +251,6 @@ public class EventService {
   }
 
   public Boolean isAlreadyParticipate(final Long eventId, final Long memberId) {
-    return false;
+    return participantRepository.existsByEventIdAndMemberId(eventId, memberId);
   }
 }
