@@ -65,7 +65,7 @@ class ConferenceFilterViewModel(
                 is ApiError,
                 is ApiException,
                 -> {
-                    _eventFilters.postValue(ConferenceFilterUiState.Error("데이터를 정상적으로 불러오지 못했습니다."))
+                    _eventFilters.postValue(ConferenceFilterUiState.Error)
                     emptyList()
                 }
             }

@@ -29,4 +29,16 @@
     <string name="event_search_conference_description">컨퍼런스 검색 화면</string>
     <string name="event_competition">대회</string>
     <string name="event_conference">컨퍼런스</string>
+    <string name="event_filter_title">필터</string>
+    <string name="filter_conference_status_title">진행 상태</string>
+    <string name="filter_all_tag_name">전체</string>
+    <string name="filter_status_in_progress_tag_name">진행 중</string>
+    <string name="filter_status_scheduled_tag_name">진행 예정</string>
+    <string name="filter_status_ended_tag_name">마감</string>
+    <string name="filter_conference_event_tag_title">태그</string>
+    <string name="filter_conference_duration_title">기간</string>
+    <string name="event_filter_apply">적용하기</string>
+    <string name="filter_conference_duration_divider_mark">~</string>
+    <string name="all_data_loading_failed_message">데이터를 정상적으로 불러오지 못했어요 😢</string>
+    <string name="event_filter_duration_date_format">%02d.%02d</string>
 </resources>

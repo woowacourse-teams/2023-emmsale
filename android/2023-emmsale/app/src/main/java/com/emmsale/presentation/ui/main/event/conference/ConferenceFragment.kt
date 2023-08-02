@@ -8,14 +8,13 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentConferenceBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity
 
 class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     override val layoutResId: Int = R.layout.fragment_conference
     private val viewModel: ConferenceViewModel by viewModels { ConferenceViewModel.factory }
     private val eventAdapter: ConferenceRecyclerViewAdapter by lazy {
-        ConferenceRecyclerViewAdapter(
-            ::navigateToEventDetail
-        )
+        ConferenceRecyclerViewAdapter(::navigateToEventDetail)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -23,6 +22,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         initView()
         setupEventsObserver()
         viewModel.fetchEvents()
+        binding.layoutEventsFilter.setOnClickListener { navigateToEventFilter() }
     }
 
     private fun initView() {
@@ -61,5 +61,10 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private fun navigateToEventDetail(event: ConferencesUiState) {
         Log.d("buna", event.toString())
         // EventDetail.startActivity(event)
+    }
+
+
+    private fun navigateToEventFilter() {
+        ConferenceFilterActivity.startActivity(requireContext())
     }
 }

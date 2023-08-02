@@ -24,4 +24,7 @@
     <color name="event_search_stroke_color">#D9D9D9</color>
     <color name="event_selected_search_indicator_color">@color/main_color</color>
     <color name="event_unselected_search_indicator_color">#4DD9D9D9</color>
+    <color name="all_divider_color">#D9D9D9</color>
+    <color name="filter_selected_duration_color">@color/main_color</color>
+    <color name="filter_unselected_duration_color">#D9D9D9</color>
 </resources>

@@ -9,5 +9,5 @@ sealed class ConferenceFilterUiState {
     ) : ConferenceFilterUiState()
 
     object Loading : ConferenceFilterUiState()
-    data class Error(val message: String) : ConferenceFilterUiState()
+    object Error : ConferenceFilterUiState()
 }

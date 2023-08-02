@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/activity_conference_filter">
+
+    <data>
+
+    </data>
+
+    <merge>
+
+        <TextView
+            android:id="@+id/tv_filter_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/filter_conference_status_title"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_conference_status_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="14dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_filter_category">
+
+            <com.emmsale.presentation.common.views.ActivityTag
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_all_tag_name" />
+
+            <com.emmsale.presentation.common.views.ActivityTag
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_status_in_progress_tag_name" />
+
+            <com.emmsale.presentation.common.views.ActivityTag
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_status_scheduled_tag_name" />
+
+            <com.emmsale.presentation.common.views.ActivityTag
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_status_ended_tag_name" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="26dp"
+            android:background="@color/all_divider_color"
+            app:layout_constraintTop_toBottomOf="@+id/cg_conference_status_tags" />
+
+    </merge>
+</layout>

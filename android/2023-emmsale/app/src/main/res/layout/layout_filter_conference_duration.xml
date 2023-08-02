@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:parentTag="android.widget.LinearLayout"
+    tools:showIn="@layout/activity_conference_filter">
+
+    <data>
+
+    </data>
+
+    <merge>
+
+        <TextView
+            android:id="@+id/tv_filter_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="14dp"
+            android:text="@string/filter_conference_duration_title"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_filter_start_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_calendar_tag"
+                android:button="@null"
+                android:enabled="true"
+                android:fontFamily="@font/nanum_square_regular"
+                android:textColor="@color/black"
+                app:backgroundTint="@null"
+                app:icon="@drawable/ic_filter_selected_calendar"
+                app:iconPadding="16dp"
+                app:iconTint="@color/filter_duration_color"
+                app:layout_constraintEnd_toStartOf="@+id/duration_divider"
+                tools:text="23.08" />
+
+            <TextView
+                android:id="@+id/duration_divider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:fontFamily="@font/nanum_square_regular"
+                android:text="@string/filter_conference_duration_divider_mark"
+                app:layout_constraintEnd_toStartOf="@+id/cb_filter_conference_end_duration"
+                app:layout_constraintStart_toEndOf="@+id/cb_filter_conference_start_duration" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_filter_end_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_calendar_tag"
+                android:button="@null"
+                android:enabled="false"
+                android:fontFamily="@font/nanum_square_regular"
+                android:textColor="@color/black"
+                app:backgroundTint="@null"
+                app:icon="@drawable/ic_filter_selected_calendar"
+                app:iconPadding="16dp"
+                app:iconTint="@color/filter_duration_color"
+                app:layout_constraintStart_toEndOf="@+id/duration_divider"
+                tools:text="23.08" />
+
+        </LinearLayout>
+
+    </merge>
+</layout>
