@@ -3,6 +3,7 @@ package com.emmsale.data.comment
 import com.emmsale.data.comment.dto.CommentFamilyApiModel
 import com.emmsale.data.comment.dto.CommentApiModel
 import com.emmsale.data.comment.dto.SaveCommentRequestBody
+import com.emmsale.data.comment.dto.UpdateCommentRequestBody
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -282,6 +283,48 @@ internal class CommentServiceTest {
                 commentId = 4,
                 parentId = null,
                 eventId = eventId,
+                createdAt = "2023:07:25:22:01:05",
+                updatedAt = "2023:07:25:22:01:05",
+                deleted = false,
+                memberId = 1,
+                memberName = "홍길동",
+                memberImageUrl = "https://naver.com"
+            ),
+        )
+    }
+
+    @Test
+    @DisplayName("특정 댓글의 내용을 수정했을 때 성공적으로 반영되었다면 파싱된 ApiModel을 받는다")
+    fun test4() = runTest {
+        val content = "ㅎㅇㅎㅇ"
+        val mockResponse = MockResponse()
+            .setResponseCode(200)
+            .setBody(
+                """
+                    {
+                        "content": $content,
+                        "commentId": 4,
+                        "parentId": null,
+                        "eventId": 1,
+                        "createdAt": "2023:07:25:22:01:05",
+                        "updatedAt": "2023:07:25:22:01:05",
+                        "deleted": false,
+                        "memberId": 1,
+                        "memberName": "홍길동",
+                        "memberImageUrl": "https://naver.com"
+                    }
+                """.trimIndent()
+            )
+        mockWebServer.enqueue(mockResponse)
+
+        val response = sut.updateComment(4, UpdateCommentRequestBody(content))
+
+        assertThat(response.body()).isEqualTo(
+            CommentApiModel(
+                content = content,
+                commentId = 4,
+                parentId = null,
+                eventId = 1,
                 createdAt = "2023:07:25:22:01:05",
                 updatedAt = "2023:07:25:22:01:05",
                 deleted = false,
