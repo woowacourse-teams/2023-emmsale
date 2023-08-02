@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="bottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
         <item name="labelVisibilityMode">unlabeled</item>
         <item name="itemIconSize">34dp</item>
         <item name="backgroundTint">@color/background</item>
         <item name="itemIconTint">@color/color_bottom_navigation_view_icon</item>
     </style>
+
     <style name="basicTextFontStyle">
         <item name="android:fontFamily">@font/nanum_square</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+
+    <style name="EventDetail_NotSelectedTabStyle">
+        <item name="android:fontFamily">@font/nanum_square_bold</item>
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="EventDetail_SelectedTabStyle">
+        <item name="android:fontFamily">@font/nanum_square_bold</item>
+        <item name="android:textSize">21sp</item>
     </style>
 </resources>
