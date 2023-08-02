@@ -88,22 +88,22 @@ public class EventApi {
     return eventService.addEvent(request, LocalDate.now());
   }
 
-  @PutMapping("/{event-id}")
+  @PutMapping("/{eventId}")
   @ResponseStatus(HttpStatus.OK)
-  public EventDetailResponse updateEvent(@PathVariable(name = "event-id") final Long eventId,
+  public EventDetailResponse updateEvent(@PathVariable final Long eventId,
       @RequestBody @Valid final EventDetailRequest request) {
     return eventService.updateEvent(eventId, request, LocalDate.now());
   }
 
-  @DeleteMapping("/{event-id}")
+  @DeleteMapping("/{eventId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteEvent(@PathVariable(name = "event-id") final Long eventId) {
+  public void deleteEvent(@PathVariable final Long eventId) {
     eventService.deleteEvent(eventId);
   }
 
-  @GetMapping("/{event-id}/participants/already-participate")
+  @GetMapping("/{eventId}/participants/already-participate")
   public ResponseEntity<Boolean> isAlreadyParticipate(
-      @PathVariable(name = "event-id") final Long eventId,
+      @PathVariable final Long eventId,
       @RequestParam(name = "member-id") final Long memberId
   ) {
     return ResponseEntity.ok(eventService.isAlreadyParticipate(eventId, memberId));
