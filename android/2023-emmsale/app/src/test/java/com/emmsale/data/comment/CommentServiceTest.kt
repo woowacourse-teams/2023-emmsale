@@ -176,4 +176,72 @@ internal class CommentServiceTest {
             )
         )
     }
+
+    @Test
+    @DisplayName("특정 댓글의 대댓글을 요청했을 때 성공적으로 응답을 받았다면 파싱된 ApiModel을 받는다")
+    fun test2() = runTest {
+        val mockResponse = MockResponse()
+            .setResponseCode(200)
+            .setBody(
+                """
+                    [
+                        {
+                            "content" : "부모댓글1에 대한 자식댓글1",
+                            "commentId" : 2,
+                            "parentId" : 1,
+                            "eventId" : 1,
+                            "createdAt" : "2023:08:01:08:53:08",
+                            "updatedAt" : "2023:08:01:08:53:08",
+                            "memberId" : 1,
+                            "memberImageUrl" : "이미지",
+                            "memberName" : "이름1",
+                            "deleted" : false
+                        },
+                        {
+                            "content" : "부모댓글1에 대한 자식댓글2",
+                            "commentId" : 3,
+                            "parentId" : 1,
+                            "eventId" : 1,
+                            "createdAt" : "2023:08:01:08:53:08",
+                            "updatedAt" : "2023:08:01:08:53:08",
+                            "memberId" : 1,
+                            "memberImageUrl" : "이미지",
+                            "memberName" : "이름1",
+                            "deleted" : false
+                        }
+                    ]
+                """.trimIndent()
+            )
+        mockWebServer.enqueue(mockResponse)
+
+        val commentId = 1L
+        val response = sut.getChildComments(commentId)
+
+        assertThat(response.body()).isEqualTo(listOf(
+            CommentApiModel(
+                content = "부모댓글1에 대한 자식댓글1",
+                commentId = 2,
+                parentId = 1,
+                eventId = 1,
+                createdAt = "2023:08:01:08:53:08",
+                updatedAt = "2023:08:01:08:53:08",
+                memberId = 1,
+                memberImageUrl = "이미지",
+                memberName = "이름1",
+                deleted = false
+            ),
+            CommentApiModel(
+                content = "부모댓글1에 대한 자식댓글2",
+                commentId = 3,
+                parentId = 1,
+                eventId = 1,
+                createdAt = "2023:08:01:08:53:08",
+                updatedAt = "2023:08:01:08:53:08",
+                memberId = 1,
+                memberImageUrl = "이미지",
+                memberName = "이름1",
+                deleted = false
+            )
+        ))
+    }
 }
