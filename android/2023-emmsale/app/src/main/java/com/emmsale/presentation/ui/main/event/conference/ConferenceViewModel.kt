@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.conference.ConferenceCategory
 import com.emmsale.data.conference.ConferenceRepository
+import com.emmsale.data.conference.EventCategory
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class ConferenceViewModel(
         viewModelScope.launch {
             _events.value = EventsUiState.Loading
             when (val eventsResult = conferenceRepository.getConferences(
-                category = ConferenceCategory.CONFERENCE
+                category = EventCategory.CONFERENCE
             )) {
                 is ApiSuccess -> _events.value =
                     EventsUiState.Success(eventsResult.data.map(ConferencesUiState::from))

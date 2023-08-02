@@ -4,7 +4,7 @@ import com.emmsale.data.common.ApiResult
 
 interface ConferenceRepository {
     suspend fun getConferences(
-        category: ConferenceCategory,
+        category: EventCategory,
         year: Int? = null,
         month: Int? = null,
         status: ConferenceStatus? = null,

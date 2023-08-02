@@ -13,7 +13,7 @@ class ConferenceRepositoryImpl(
     private val conferenceService: ConferenceService,
 ) : ConferenceRepository {
     override suspend fun getConferences(
-        category: ConferenceCategory,
+        category: EventCategory,
         year: Int?,
         month: Int?,
         status: ConferenceStatus?,
