@@ -24,6 +24,9 @@ jobs:
     steps:
       - name: workflow_dispatch에서 지정한 branch로 checkout
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.SUBMODULE_TOKEN }}
+          submodules: true
 
       - name: firebase key 생성
         run: |
@@ -65,16 +68,17 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: backend/emm-sale
-          file: backend/emm-sale/Dockerfile
+          file: backend/emm-sale/Dockerfile-prod
+          platforms: linux/arm64/v8
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/kerdy:latest
 
-#  deploy:
-#    needs: build
-#    name: 배포
-#    runs-on: [ self-hosted, label-prod ]
-#    steps:
-#      - name: 도커 실행
-#        run: |
-#            sudo docker stop kerdy && docker rm kerdy && docker rmi ${{ DOCKERHUB_USERNAME }}/kerdy
-#            sudo docker run -d -p 8080:8080 --name kerdy
+  deploy:
+    needs: build
+    name: 배포
+    runs-on: [ self-hosted, label-prod ]
+    steps:
+      - name: 도커 실행
+        run: |
+          docker stop kerdy && docker rm kerdy && docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
+          docker run -d -p 8080:8080 --name kerdy ${{ secrets.DOCKERHUB_USERNAME }}/kerdy

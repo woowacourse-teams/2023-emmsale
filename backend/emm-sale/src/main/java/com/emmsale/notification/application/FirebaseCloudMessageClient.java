@@ -40,7 +40,7 @@ public class FirebaseCloudMessageClient {
   private static final String PREFIX_ACCESS_TOKEN = "Bearer ";
   private static final String PREFIX_FCM_REQUEST_URL = "https://fcm.googleapis.com/v1/projects/";
   private static final String POSTFIX_FCM_REQUEST_URL = "/messages:send";
-  private static final String FIREBASE_KEY_PATH = "firebase-kerdy.json";
+  private static final String FIREBASE_KEY_PATH = "kerdy-submodule/firebase-kerdy.json";
   private static final boolean DEFAULT_VALIDATE_ONLY = false;
 
   private final ObjectMapper objectMapper;

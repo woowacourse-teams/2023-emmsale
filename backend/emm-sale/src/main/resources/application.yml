@@ -15,6 +15,9 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
       format_sql: true
     show-sql: true
+  config:
+    activate:
+      on-profile: default
 
 logging:
   level:
@@ -42,3 +45,21 @@ security:
 firebase:
   project:
     id: kerdy
+
+
+---
+
+spring:
+  config:
+    import: classpath:kerdy-submodule/application-dev.yml
+    activate:
+      on-profile: dev
+
+---
+
+spring:
+  config:
+    import: classpath:kerdy-submodule/application-prod.yml
+    activate:
+      on-profile: prod
+
