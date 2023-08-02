@@ -147,6 +147,45 @@ class CommentApiTest extends MockMvcTestHelper {
   }
 
   @Test
+  @DisplayName("findChildren() : 자식 댓글들이 성공적으로 조회되면 200 OK 를 반환할 수 있다.")
+  void test_findChildren() throws Exception {
+    //given
+    final PathParametersSnippet pathParams = pathParameters(
+        parameterWithName("comment-id").description("부모 ID")
+    );
+
+    ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("[].content").description("저장된 댓글 내용"),
+        fieldWithPath("[].commentId").description("저장된 댓글 id"),
+        fieldWithPath("[].parentId").description("대댓글일 경우 부모 댓글 id").optional(),
+        fieldWithPath("[].eventId").description("행사 id"),
+        fieldWithPath("[].createdAt").description("댓글 생성 시간"),
+        fieldWithPath("[].updatedAt").description("댓글 최근 수정 시간"),
+        fieldWithPath("[].deleted").description("댓글 삭제 여부"),
+        fieldWithPath("[].memberId").description("댓글 작성자 ID"),
+        fieldWithPath("[].memberImageUrl").description("댓글 작성자 이미지 Url"),
+        fieldWithPath("[].memberName").description("댓글 작성자 이름")
+    );
+
+    final List<CommentResponse> result = List.of(
+        new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, false,
+            LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
+        new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, false,
+            LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1")
+    );
+
+    //when
+    when(commentQueryService.findChildrenComments(anyLong()))
+        .thenReturn(result);
+
+    //then
+    mockMvc.perform(get("/comments/{comment-id}/children", 1L))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("get-children-comment", pathParams, responseFields));
+  }
+
+  @Test
   @DisplayName("delete() : 댓글이 정상적으로 삭제되면 204 No Content를 반환할 수 있다.")
   void test_delete() throws Exception {
     //given
@@ -176,7 +215,7 @@ class CommentApiTest extends MockMvcTestHelper {
 
     final RequestFieldsSnippet requestFields = requestFields(
         fieldWithPath("content").type(JsonFieldType.STRING).description("변경할 댓글 내용")
-        );
+    );
 
     final PathParametersSnippet pathParams = pathParameters(
         parameterWithName("comment-id").description("수정할 댓글의 ID")

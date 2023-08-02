@@ -40,6 +40,13 @@ public class CommentApi {
     return commentQueryService.findAllCommentsByEventId(eventId);
   }
 
+  @GetMapping("/comments/{comment-id}/children")
+  public List<CommentResponse> findChildren(
+      @PathVariable("comment-id") final Long commentId
+  ) {
+    return commentQueryService.findChildrenComments(commentId);
+  }
+
   @DeleteMapping("/comments/{comment-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable("comment-id") final Long commentId, final Member member) {
