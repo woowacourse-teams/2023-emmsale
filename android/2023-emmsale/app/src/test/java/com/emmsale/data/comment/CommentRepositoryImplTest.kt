@@ -3,6 +3,7 @@ package com.emmsale.data.comment
 import com.emmsale.data.comment.dto.CommentApiModel
 import com.emmsale.data.comment.dto.CommentFamilyApiModel
 import com.emmsale.data.comment.dto.SaveCommentRequestBody
+import com.emmsale.data.comment.dto.UpdateCommentRequestBody
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.member.Member1
 import com.emmsale.data.member.MemberRepository
@@ -253,6 +254,35 @@ internal class CommentRepositoryImplTest {
         )
 
         val result = sut.saveComment(content, eventId, parentId)
+
+        assertAll(
+            { assertThat(result).isInstanceOf(ApiSuccess::class.java) },
+            { assertThat((result as ApiSuccess).data).isEqualTo(Unit) }
+        )
+    }
+
+    @Test
+    @DisplayName("네트워크 통신이 원활해 댓글 수정에 성공하면 ApiSuccess 객체를 반환한다")
+    fun test4() = runTest {
+        val commentId = 1L
+        val content = "ㅎㅇㅎㅇ"
+        val apiModel = CommentApiModel(
+            commentId = 4,
+            memberId = 1,
+            memberName = "홍길동",
+            memberImageUrl = "https://naver.com",
+            content = content,
+            parentId = null,
+            eventId = 1,
+            createdAt = "2023:07:25:22:01:05",
+            updatedAt = "2023:07:25:22:01:05",
+            deleted = false
+        )
+        coEvery {
+            commentService.updateComment(commentId, UpdateCommentRequestBody(content))
+        } returns Response.success(apiModel)
+
+        val result = sut.updateComment(commentId, content)
 
         assertAll(
             { assertThat(result).isInstanceOf(ApiSuccess::class.java) },

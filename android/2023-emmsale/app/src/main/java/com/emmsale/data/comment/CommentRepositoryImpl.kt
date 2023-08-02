@@ -1,6 +1,7 @@
 package com.emmsale.data.comment
 
 import com.emmsale.data.comment.dto.SaveCommentRequestBody
+import com.emmsale.data.comment.dto.UpdateCommentRequestBody
 import com.emmsale.data.comment.mapper.toData
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
@@ -95,4 +96,9 @@ class CommentRepositoryImpl(
             )
         ) { }
     }
+
+    override suspend fun updateComment(commentId: Long, content: String): ApiResult<Unit> =
+        withContext(dispatcher) {
+            handleApi(commentService.updateComment(commentId, UpdateCommentRequestBody(content))) {}
+        }
 }
