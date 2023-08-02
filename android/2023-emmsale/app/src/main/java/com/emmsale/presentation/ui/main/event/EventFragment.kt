@@ -1,13 +1,13 @@
 package com.emmsale.presentation.ui.main.event
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.recyclerview.EventRecyclerViewAdapter
 import com.emmsale.presentation.ui.main.event.uistate.EventUiState
 import com.emmsale.presentation.ui.main.event.uistate.EventsUiState
@@ -58,7 +58,10 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
     }
 
     private fun navigateToEventDetail(event: EventUiState) {
-        Log.d("buna", event.toString())
-        // EventDetail.startActivity(event)
+        EventDetailActivity.startActivity(requireContext(), event.id)
+    }
+
+    companion object {
+        const val TAG = "eventfragmenttag"
     }
 }
