@@ -16,7 +16,7 @@ class KerdyApplication : Application() {
         super.onCreate()
         repositoryContainer = RepositoryContainer(
             serviceContainer = ServiceContainer(ServiceFactory()),
-            preferenceContainer = SharedPreferenceContainer(this)
+            preferenceContainer = SharedPreferenceContainer(this),
         )
         applicationScope.launch {
             repositoryContainer.tokenRepository.getToken()?.let(::initFirebaseAnalytics)
