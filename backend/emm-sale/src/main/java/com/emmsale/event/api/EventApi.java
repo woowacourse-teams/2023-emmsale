@@ -41,7 +41,7 @@ public class EventApi {
   }
 
   @PostMapping("/{eventId}/participants")
-  public ResponseEntity<String> participateEvent(
+  public ResponseEntity<Void> participateEvent(
       @PathVariable final Long eventId,
       @RequestBody final EventParticipateRequest request,
       final Member member
@@ -99,5 +99,13 @@ public class EventApi {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteEvent(@PathVariable(name = "event-id") final Long eventId) {
     eventService.deleteEvent(eventId);
+  }
+
+  @GetMapping("/{event-id}/participants/already-participate")
+  public ResponseEntity<Boolean> isAlreadyParticipate(
+      @PathVariable(name = "event-id") final Long eventId,
+      @RequestParam(name = "member-id") final Long memberId
+  ) {
+    return ResponseEntity.ok(eventService.isAlreadyParticipate(eventId, memberId));
   }
 }

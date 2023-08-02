@@ -141,6 +141,14 @@ include::{snippets}/participate-event-cancel/http-request.adoc[]
 .HTTP response
 include::{snippets}/participate-event-cancel/http-response.adoc[]
 
+=== `GET`: Event에 이미 참여한 멤버인지 확인
+
+.HTTP request
+include::{snippets}/check-already-participate/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/check-already-participate/http-response.adoc[]
+
 === `GET`: 행사 목록 조회
 
 .HTTP request

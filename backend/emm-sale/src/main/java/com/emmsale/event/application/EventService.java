@@ -249,4 +249,8 @@ public class EventService {
             .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_TAG)))
         .collect(toList());
   }
+
+  public Boolean isAlreadyParticipate(final Long eventId, final Long memberId) {
+    return false;
+  }
 }
