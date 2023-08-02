@@ -5,6 +5,7 @@ on:
 
 jobs:
   build:
+    name: 빌드
     runs-on: ubuntu-22.04
     defaults:
       run:
@@ -82,3 +83,14 @@ jobs:
         run: |
           docker stop kerdy && docker rm kerdy && docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
           docker run -d -p 8080:8080 --name kerdy ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
+      
+      - name: 슬랙 메시지 보내기
+        uses: 8398a7/action-slack@v3
+        with:
+          mention: 'here'
+          if_mention: failure
+          status: ${{ job.status }}
+          fields: workflow,job,commit,message,ref,author,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
