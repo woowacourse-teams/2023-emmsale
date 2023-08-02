@@ -31,7 +31,7 @@ class ConferenceFilterViewModel(
     private val _eventFilters = MutableLiveData<ConferenceFiltersUiState>()
     val eventFilters: LiveData<ConferenceFiltersUiState> = _eventFilters
 
-    init {
+    fun fetchEventFilters() {
         viewModelScope.launch {
             _eventFilters.postValue(ConferenceFiltersUiState.Loading)
 
@@ -72,6 +72,10 @@ class ConferenceFilterViewModel(
 
     fun toggleFilterSelection(filter: ConferenceFilterUiState) {
         filter.isSelected = !filter.isSelected
+    }
+
+    fun updateFilters(filters: ConferenceFiltersUiState?) {
+        filters?.let(_eventFilters::postValue) ?: fetchEventFilters()
     }
 
     companion object {

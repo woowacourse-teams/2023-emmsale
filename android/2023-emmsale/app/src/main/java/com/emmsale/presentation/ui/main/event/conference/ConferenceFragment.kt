@@ -120,6 +120,10 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     }
 
     private fun navigateToEventFilter() {
-        filterActivityLauncher.launch(ConferenceFilterActivity.createIntent(requireContext()))
+        val filterActivityIntent = ConferenceFilterActivity.createIntent(
+            requireContext(),
+            viewModel.selectedFilters.value
+        )
+        filterActivityLauncher.launch(filterActivityIntent)
     }
 }

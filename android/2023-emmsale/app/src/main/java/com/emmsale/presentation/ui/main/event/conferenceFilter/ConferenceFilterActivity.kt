@@ -3,7 +3,6 @@ package com.emmsale.presentation.ui.main.event.conferenceFilter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
@@ -14,6 +13,7 @@ import com.emmsale.databinding.ActivityConferenceFilterBinding
 import com.emmsale.databinding.LayoutFilterConferenceDurationBinding
 import com.emmsale.databinding.LayoutFilterConferenceEventTagBinding
 import com.emmsale.databinding.LayoutFilterConferenceStatusBinding
+import com.emmsale.presentation.common.extension.getParcelableExtraCompat
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
@@ -36,6 +36,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         initView()
         initBackPressedDispatcher()
         setupEventFilters()
+        fetchFilters()
     }
 
     private fun initView() {
@@ -131,17 +132,23 @@ class ConferenceFilterActivity : AppCompatActivity() {
             conferenceDate?.year, conferenceDate?.month
         )
 
+    private fun fetchFilters() {
+        viewModel.updateFilters(intent.getParcelableExtraCompat(FILTERS_KEY))
+    }
+
     companion object {
         const val FILTERS_KEY = "filters_key"
 
-        fun createIntent(context: Context): Intent =
-            Intent(context, ConferenceFilterActivity::class.java)
+        fun createIntent(
+            context: Context,
+            selectedFilters: ConferenceFiltersUiState.Success?,
+        ): Intent = Intent(context, ConferenceFilterActivity::class.java)
+            .putExtra(FILTERS_KEY, selectedFilters)
     }
 
     inner class ConferenceFilterOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             val filters = viewModel.eventFilters.value
-            Log.d("buna", "$filters")
             if (filters is ConferenceFiltersUiState.Success) {
                 val intent = Intent()
                 intent.putExtra(FILTERS_KEY, filters)
