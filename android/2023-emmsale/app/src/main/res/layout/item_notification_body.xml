@@ -8,25 +8,21 @@
         <import type="kotlin.Unit" />
 
         <variable
+            name="notificationBodyClickListener"
+            type="com.emmsale.presentation.ui.notificationBox.recyclerview.body.NotificationBodyClickListener" />
+
+        <variable
             name="notification"
-            type="com.emmsale.presentation.ui.notificationBox.uistate.NotificationUiState" />
-
-        <variable
-            name="onClickNotification"
-            type="kotlin.jvm.functions.Function2&lt;Long, Long, Unit>" />
-
-        <variable
-            name="onDelete"
-            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
+            type="com.emmsale.presentation.ui.notificationBox.uistate.NotificationBodyUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
+        android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="@{() -> onClickNotification.invoke(notification.id, notification.otherUid)}"
+        android:onClick="@{() -> notificationBodyClickListener.onClickBody(notification.id, notification.otherUid)}"
         android:paddingHorizontal="17dp"
         android:paddingVertical="20dp">
 
@@ -34,6 +30,7 @@
             android:id="@+id/iv_member_profile"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            app:imageUrl="@{notification.profileImageUrl}"
             android:contentDescription="@string/notification_member_profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -63,11 +60,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:includeFontPadding="true"
-            android:text="23.08.03"
+            android:text="@{notification.notificationDate}"
             android:textColor="@color/notification_date_text_color"
             android:textSize="11sp"
             app:layout_constraintStart_toStartOf="@+id/tv_member_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_member_name" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_member_name"
+            tools:text="23.08.03" />
 
         <TextView
             android:id="@+id/tv_noti_message"
@@ -92,7 +90,10 @@
             android:layout_marginTop="22dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/bg_reject_btn"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
+            android:onClick="@{() -> notificationBodyClickListener.onReject(notification.id)}"
             android:paddingVertical="10dp"
             android:text="@string/notification_reject"
             android:textColor="@color/white"
@@ -108,7 +109,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/bg_accept_btn"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
+            android:onClick="@{() -> notificationBodyClickListener.onAccept(notification.id)}"
             android:text="@string/notification_accept"
             android:textColor="@color/white"
             android:textSize="13sp"

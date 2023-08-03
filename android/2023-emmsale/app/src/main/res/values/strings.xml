@@ -51,4 +51,5 @@
     <string name="notification_member_profile">사용자 프로필</string>
     <string name="notification_reject">거절</string>
     <string name="notification_accept">수락</string>
+    <string name="notification_header_expand_view">화면을 팽창 시킵니다.</string>
 </resources>

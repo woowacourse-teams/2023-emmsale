@@ -14,7 +14,9 @@ import com.emmsale.data.notification.Notification
 import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
-import com.emmsale.presentation.ui.notificationBox.uistate.NotificationUiState
+import com.emmsale.presentation.ui.notificationBox.uistate.NotificationBodyUiState
+import com.emmsale.presentation.ui.notificationBox.uistate.NotificationHeaderUiState
+import com.emmsale.presentation.ui.notificationBox.uistate.NotificationMemberUiState
 import com.emmsale.presentation.ui.notificationBox.uistate.NotificationsUiState
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -36,18 +38,30 @@ class NotificationBoxViewModel(
 
             when (val result = notificationRepository.getNotifications()) {
                 is ApiSuccess -> {
-                    val notifications: List<NotificationUiState> = result.data.map { notification ->
-                        val otherName = getMemberNameAsync(notification.otherUid)
-                        val conferenceName = getConferenceNameAsync(notification.eventId)
-                        awaitAll(otherName, conferenceName).run {
-                            createNotificationUiState(
-                                notification = notification,
-                                otherName = getOrNull(0).toString(),
-                                conferenceName = getOrNull(0).toString(),
+                    val notifications: List<NotificationBodyUiState> =
+                        result.data.map { notification ->
+                            val notiMember = getNotificationMemberAsync(notification.otherUid)
+                            val conferenceName = getConferenceNameAsync(notification.eventId)
+                            awaitAll(notiMember, conferenceName).run {
+                                createNotificationUiState(
+                                    notification = notification,
+                                    notificationMember = getOrNull(0) as? NotificationMemberUiState,
+                                    conferenceName = getOrNull(1).toString(),
+                                )
+                            }
+                        }
+
+                    val finalNotification = notifications.groupBy { it.conferenceId }
+                    val notificationHeaders =
+                        finalNotification.map { (conferenceId, notifications) ->
+                            NotificationHeaderUiState(
+                                eventId = conferenceId,
+                                conferenceName = notifications[0].conferenceName,
+                                notifications = notifications,
                             )
                         }
-                    }
-                    _notifications.postValue(NotificationsUiState(notifications = notifications))
+
+                    _notifications.postValue(NotificationsUiState(notifications = notificationHeaders))
                 }
 
                 is ApiException,
@@ -59,21 +73,22 @@ class NotificationBoxViewModel(
 
     private fun createNotificationUiState(
         notification: Notification,
-        otherName: String,
+        notificationMember: NotificationMemberUiState?,
         conferenceName: String,
-    ) = NotificationUiState(
+    ): NotificationBodyUiState = NotificationBodyUiState(
         id = notification.id,
         otherUid = notification.otherUid,
-        otherName = otherName,
+        otherName = notificationMember?.name ?: "",
         conferenceId = notification.eventId,
         conferenceName = conferenceName,
         message = notification.message,
+        profileImageUrl = notificationMember?.profileImageUrl ?: "",
     )
 
-    private suspend fun getMemberNameAsync(userId: Long): Deferred<String?> =
+    private suspend fun getNotificationMemberAsync(userId: Long): Deferred<NotificationMemberUiState?> =
         viewModelScope.async {
             when (val member = memberRepository.getMember(userId)) {
-                is ApiSuccess -> member.data.name
+                is ApiSuccess -> NotificationMemberUiState(member.data.name, member.data.imageUrl)
                 is ApiException,
                 is ApiError,
                 -> null
@@ -91,8 +106,26 @@ class NotificationBoxViewModel(
         }
 
     // TODO: 4차 스프린트 구현 예정
-    fun deleteNotification(notificationId: Long) {
+    // TODO: 컨퍼런스 동행 수락
+    fun acceptCompanion(notificationId: Long) {
         Log.d("kerdy", notificationId.toString())
+    }
+
+    // TODO: 4차 스프린트 구현 예정
+    // TODO: 컨퍼런스 동행 거절
+    fun rejectCompanion(notificationId: Long) {
+        Log.d("kerdy", notificationId.toString())
+    }
+
+    fun toggleExpand(eventId: Long) {
+        _notifications.postValue(_notifications.value?.copy(
+            notifications = _notifications.value?.notifications?.map { header ->
+                when (header.eventId == eventId) {
+                    true -> header.copy(isExpanded = !header.isExpanded)
+                    false -> header
+                }
+            } ?: emptyList()
+        ))
     }
 
     companion object {

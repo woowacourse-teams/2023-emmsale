@@ -6,18 +6,18 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityNotificationBoxBinding
-import com.emmsale.presentation.ui.notificationBox.recyclerview.NotificationBoxAdapter
+import com.emmsale.presentation.ui.notificationBox.recyclerview.body.NotificationBodyClickListener
+import com.emmsale.presentation.ui.notificationBox.recyclerview.header.NotificationBoxHeaderAdapter
+import com.emmsale.presentation.ui.notificationBox.recyclerview.header.NotificationHeaderClickListener
 
-class NotificationBoxActivity : AppCompatActivity() {
+class NotificationBoxActivity : AppCompatActivity(), NotificationHeaderClickListener,
+    NotificationBodyClickListener {
     private val viewModel: NotificationBoxViewModel by viewModels { NotificationBoxViewModel.factory }
     private val binding: ActivityNotificationBoxBinding by lazy {
         ActivityNotificationBoxBinding.inflate(layoutInflater)
     }
-    private val notificationBoxAdapter: NotificationBoxAdapter by lazy {
-        NotificationBoxAdapter(
-            onClickNotification = ::navigateToNotificationDetail,
-            onDelete = viewModel::deleteNotification,
-        )
+    private val notificationBoxHeaderAdapter: NotificationBoxHeaderAdapter by lazy {
+        NotificationBoxHeaderAdapter(this, this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class NotificationBoxActivity : AppCompatActivity() {
     private fun setupNotifications() {
         viewModel.fetchNotifications()
         viewModel.notifications.observe(this) { uiState ->
-            notificationBoxAdapter.submitList(uiState.notifications)
+            notificationBoxHeaderAdapter.submitList(uiState.notifications)
         }
     }
 
@@ -40,7 +40,7 @@ class NotificationBoxActivity : AppCompatActivity() {
     }
 
     private fun initNotificationBoxRecyclerView() {
-        binding.rvNotiBox.adapter = notificationBoxAdapter
+        binding.rvNotiBox.adapter = notificationBoxHeaderAdapter
         binding.rvNotiBox.setHasFixedSize(true)
     }
 
@@ -48,9 +48,25 @@ class NotificationBoxActivity : AppCompatActivity() {
         binding.tbNotiBox.setNavigationOnClickListener { finish() }
     }
 
+    override fun onClickBody(notificationId: Long, otherUid: Long) {
+        navigateToNotificationDetail(notificationId, otherUid)
+    }
+
     private fun navigateToNotificationDetail(notificationId: Long, otherUid: Long) {
         // TODO: 상대방 uid를 바탕으로, Notification 상세 화면 조회
         // TODO: 다이얼로그로 띄우기
+    }
+
+    override fun onAccept(notificationId: Long) {
+        viewModel.acceptCompanion(notificationId)
+    }
+
+    override fun onReject(notificationId: Long) {
+        viewModel.rejectCompanion(notificationId)
+    }
+
+    override fun onToggleClick(eventId: Long) {
+        viewModel.toggleExpand(eventId)
     }
 
     companion object {

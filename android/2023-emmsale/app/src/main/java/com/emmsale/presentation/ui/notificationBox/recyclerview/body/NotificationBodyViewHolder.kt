@@ -1,27 +1,25 @@
-package com.emmsale.presentation.ui.notificationBox.recyclerview
+package com.emmsale.presentation.ui.notificationBox.recyclerview.body
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ItemNotificationBodyBinding
-import com.emmsale.presentation.ui.notificationBox.uistate.NotificationUiState
+import com.emmsale.presentation.ui.notificationBox.uistate.NotificationBodyUiState
 
-class NotificationViewHolder(
+class NotificationBodyViewHolder(
     parent: ViewGroup,
-    onClickNotification: (notificationId: Long, otherUid: Long) -> Unit,
-    onDelete: (notificationId: Long) -> Unit,
+    notificationBodyClickListener: NotificationBodyClickListener,
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_notification_body, parent, false)
 ) {
     private val binding = ItemNotificationBodyBinding.bind(itemView)
 
     init {
-        binding.onClickNotification = onClickNotification
-        binding.onDelete = onDelete
+        binding.notificationBodyClickListener = notificationBodyClickListener
     }
 
-    fun bind(notification: NotificationUiState) {
+    fun bind(notification: NotificationBodyUiState) {
         binding.notification = notification
     }
 }
