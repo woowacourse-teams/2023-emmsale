@@ -125,7 +125,7 @@ include::{snippets}/find-event/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-event/response-fields.adoc[]
 
-=== `POST` : 컨퍼런스에 함께가기 요청(컨퍼런스에 함께 가는 멤버에 등록)
+=== `POST` : 행사에 함께가기 요청(행사에 함께 가는 멤버에 등록)
 
 .HTTP request
 include::{snippets}/participate-event/http-request.adoc[]
@@ -133,7 +133,7 @@ include::{snippets}/participate-event/http-request.adoc[]
 .HTTP response
 include::{snippets}/participate-event/http-response.adoc[]
 
-=== `DELETE` : 컨퍼런스에 함께가기 요청 취소(컨퍼런스에 함께 가는 멤버에서 삭제)
+=== `DELETE` : 행사에 함께가기 요청 취소(행사에 함께 가는 멤버에서 삭제)
 
 .HTTP request
 include::{snippets}/participate-event-cancel/http-request.adoc[]
@@ -144,7 +144,7 @@ include::{snippets}/participate-event-cancel/request-parameters.adoc[]
 .HTTP response
 include::{snippets}/participate-event-cancel/http-response.adoc[]
 
-=== `GET`: Event에 이미 참여한 멤버인지 확인
+=== `GET`: 행사사에 이미 참여한 멤버인지 확인
 
 .HTTP request
 include::{snippets}/check-already-participate/http-request.adoc[]
@@ -177,7 +177,7 @@ include::{snippets}/find-participants/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-participants/response-fields.adoc[]
 
-=== `POST` : 이벤트 생성
+=== `POST` : 행사 생성
 
 .HTTP request
 include::{snippets}/add-event/http-request.adoc[]
@@ -191,7 +191,7 @@ include::{snippets}/add-event/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/add-event/response-fields.adoc[]
 
-=== `PUT` : 이벤트 업데이트
+=== `PUT` : 행사 업데이트
 
 .HTTP request
 include::{snippets}/update-event/http-request.adoc[]
@@ -205,7 +205,7 @@ include::{snippets}/update-event/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/update-event/response-fields.adoc[]
 
-=== `PUT` : 이벤트 삭제
+=== `PUT` : 행사 삭제
 
 .HTTP request
 include::{snippets}/delete-event/http-request.adoc[]
