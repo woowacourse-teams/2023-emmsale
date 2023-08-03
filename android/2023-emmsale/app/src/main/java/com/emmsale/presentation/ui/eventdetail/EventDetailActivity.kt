@@ -25,7 +25,7 @@ class EventDetailActivity : AppCompatActivity() {
         setUpBinding()
         setUpEventDetail()
         setBackPress()
-        viewModel.fetchEventDetail(1)
+        viewModel.fetchEventDetail(eventId)
     }
 
     private fun initFragmentStateAdapter(informationUrl: String, imageUrl: String) {
