@@ -7,8 +7,6 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEach
-import androidx.core.view.forEachIndexed
 import com.emmsale.R
 import com.emmsale.databinding.ActivityConferenceFilterBinding
 import com.emmsale.databinding.LayoutFilterConferenceDurationBinding
@@ -137,16 +135,14 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun removeFilterStatuses() {
-        eventStatusBinding.cgConferenceStatusChips.forEach { view ->
-            eventStatusBinding.cgConferenceStatusChips.removeView(view)
-        }
+        eventStatusBinding.cgConferenceStatusChips.removeAllViews()
     }
 
     private fun removeFilterTagsExcludingAllTag() {
-        eventTagBinding.cgConferenceTagChips.forEachIndexed { index, view ->
-            if (index == 0) return@forEachIndexed
-            eventTagBinding.cgConferenceTagChips.removeView(view)
-        }
+        eventTagBinding.cgConferenceTagChips.removeViews(
+            1,
+            eventTagBinding.cgConferenceTagChips.childCount - 1
+        )
     }
 
     private fun addTagFilter(
