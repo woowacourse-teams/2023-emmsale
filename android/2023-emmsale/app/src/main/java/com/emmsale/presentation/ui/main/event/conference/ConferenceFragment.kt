@@ -101,9 +101,12 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         endDate: ConferenceFilterDateUiState?,
     ) {
         val startDateString = startDate?.transformToDateString(requireContext())
-        val endDateString = endDate?.transformToDateString(requireContext(), true)
+        val endDateString = endDate?.transformToDateString(requireContext(), true) ?: ""
         val durationString = "$startDateString$endDateString"
-        binding.layoutConferenceFilters.addView(createFilterTag(durationString))
+
+        if (startDateString != null) {
+            binding.layoutConferenceFilters.addView(createFilterTag(durationString))
+        }
     }
 
     private fun createFilterTag(title: String): FilterTag = filterChipOf {

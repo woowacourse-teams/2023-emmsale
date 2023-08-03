@@ -151,6 +151,9 @@ class ConferenceFilterActivity : AppCompatActivity() {
     ) {
         eventDurationBinding.btnFilterStartDuration.text = startDate?.transformToDateString(this)
         eventDurationBinding.btnFilterEndDuration.text = endDate?.transformToDateString(this)
+
+        eventDurationBinding.btnFilterStartDuration.isActive = (startDate != null)
+        eventDurationBinding.btnFilterEndDuration.isActive = (endDate != null)
     }
 
     private fun setupIsEventTagAllSelected() {

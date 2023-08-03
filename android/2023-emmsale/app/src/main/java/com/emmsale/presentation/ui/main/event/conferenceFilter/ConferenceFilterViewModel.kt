@@ -18,16 +18,11 @@ import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.Conferenc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
 
 class ConferenceFilterViewModel(
     private val eventTagRepository: EventTagRepository,
-    private val selectedStartDate: ConferenceFilterDateUiState = ConferenceFilterDateUiState(
-        LocalDateTime.now().year, LocalDateTime.now().month.value
-    ),
-    private val selectedEndDate: ConferenceFilterDateUiState = ConferenceFilterDateUiState(
-        LocalDateTime.now().year, LocalDateTime.now().month.value
-    ),
+    private var selectedStartDate: ConferenceFilterDateUiState? = null,
+    private var selectedEndDate: ConferenceFilterDateUiState? = null,
 ) : ViewModel() {
     private val _eventFilters = MutableLiveData<ConferenceFiltersUiState>()
     val eventFilters: LiveData<ConferenceFiltersUiState> = _eventFilters
