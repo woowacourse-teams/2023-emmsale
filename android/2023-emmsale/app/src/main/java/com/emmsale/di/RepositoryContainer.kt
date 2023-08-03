@@ -48,7 +48,6 @@ class RepositoryContainer(
     val commentRepository: CommentRepository by lazy {
         CommentRepositoryImpl(
             commentService = serviceContainer.commentService,
-            memberRepository = memberRepository
         )
     }
     val eventTagRepository: EventTagRepository by lazy {
