@@ -3,9 +3,12 @@ name: Build & upload to Firebase App Distribution
 on:
   pull_request:
     branches: [ android-main ]
+    types: 
+      - closed
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     name: Firebase CD
     runs-on: ubuntu-latest
 
