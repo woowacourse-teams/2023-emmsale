@@ -57,7 +57,7 @@ class CommentRepositoryTest {
   }
 
   @Test
-  @DisplayName("findParentAndChildrenByParentId() : 부모 ID가 주어졌을 때, 해당 자식 댓글들을 모두 조회할 수 있다.")
+  @DisplayName("findParentAndChildrenByParentId() : 부모 ID가 주어졌을 때, 부모, 자식 댓글들을 모두 조회할 수 있다.")
   void test_findByParentId() throws Exception {
     //given
     final Event event1 = eventRepository.save(EventFixture.AI_컨퍼런스());
