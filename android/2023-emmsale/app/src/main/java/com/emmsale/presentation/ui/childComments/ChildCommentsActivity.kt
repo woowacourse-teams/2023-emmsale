@@ -78,7 +78,7 @@ class ChildCommentsActivity : AppCompatActivity() {
         binding.tvChildcommentsParentcommentlastmodifieddate.text = childCommentsScreenUiState.parentComment.lastModifiedDate
         binding.tvChildcommentsParentcommentlastmodifieddate.isVisible = childCommentsScreenUiState.parentComment.isDeleted.not()
         binding.ivChildcommentsParentcommentdeletebutton.isVisible = !childCommentsScreenUiState.parentComment.isDeleted && childCommentsScreenUiState.parentComment.isDeletable
-        binding.tvChildcommentsParentcommentisupdated.isVisible = childCommentsScreenUiState.parentComment.isUpdated
+        binding.tvChildcommentsParentcommentisupdated.isVisible = childCommentsScreenUiState.parentComment.isUpdated && childCommentsScreenUiState.parentComment.isDeleted.not()
     }
 
     private fun handleError(childCommentsScreenUiState: ChildCommentsScreenUiState) {
