@@ -55,6 +55,31 @@ class CommentRepositoryImpl(
             ApiSuccess(comments)
         }
 
+    override suspend fun getComment(commentId: Long): ApiResult<Comment> = withContext(dispatcher) {
+        val commentResponse = commentService.getComment(commentId)
+        val commentApiModel = commentResponse.body() ?: return@withContext ApiError(
+            commentResponse.code(), commentResponse.message()
+        )
+
+        val parentCommentAuthorDeferred = async { memberRepository.getMember(commentApiModel.parentComment.memberId) }
+        val childCommentAuthorsDeferred =
+            commentApiModel.childComments.map { async { memberRepository.getMember(it.memberId) } }
+        val authorResults = awaitAll(
+            parentCommentAuthorDeferred,
+            *childCommentAuthorsDeferred.toTypedArray()
+        )
+        authorResults.forEach {
+            when (it) {
+                is ApiError -> return@withContext ApiError(it.code, it.message)
+                is ApiException -> return@withContext ApiException(it.e)
+                else -> {}
+            }
+        }
+        val authors = authorResults.map { it as ApiSuccess }.map { it.data }
+        val comment = commentApiModel.toData(authors[0], authors.subList(1, authors.size))
+        ApiSuccess(comment)
+    }
+
     override suspend fun getChildComments(commentId: Long): ApiResult<List<Comment>> =
         withContext(dispatcher) {
             val childCommentsResponse = commentService.getChildComments(commentId)

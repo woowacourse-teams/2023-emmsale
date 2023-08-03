@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".presentation.ui.childComments.ChildCommentsActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.main.MainActivity"
             android:exported="false" />
         <activity

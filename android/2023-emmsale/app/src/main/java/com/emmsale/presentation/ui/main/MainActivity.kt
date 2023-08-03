@@ -8,6 +8,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
+import com.emmsale.presentation.ui.comment.CommentsFragment
 import com.emmsale.presentation.ui.main.events.EventsFragment
 import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
 
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
                 R.id.mi_main_home -> showFragment(EventsFragment.TAG)
+                R.id.mi_main_setting -> showFragment(CommentsFragment.TAG)
             }
             return@setOnItemSelectedListener true
         }
@@ -44,6 +46,11 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.commitNow {
             add(R.id.fcv_main, MyProfileFragment(), MyProfileFragment.TAG)
             add(R.id.fcv_main, EventsFragment(), EventsFragment.TAG)
+            add(
+                R.id.fcv_main,
+                CommentsFragment().apply { arguments = Bundle().apply { putLong("eventId", 1L) } },
+                CommentsFragment.TAG
+            )
         }
     }
 

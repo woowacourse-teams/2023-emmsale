@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.childComments.ChildCommentsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.childComments.ChildCommentsActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_childcomment_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_childcomments_toolbartitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/childcomments_toolbartitle"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_childcomments_upbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:src="@drawable/ic_all_upbutton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/all_goback" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            onRefresh="@{() -> viewModel.fetchComment(viewModel.uiState.parentComment.commentId)}"
+            app:layout_constraintTop_toBottomOf="@id/cl_childcomment_toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_childcomments_parentcommentauthorname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@{viewModel.uiState.parentComment.isDeleted ? @string/comment_deletedCommentAuthorName : viewModel.uiState.parentComment.authorName}"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="김커디" />
+
+                <TextView
+                    android:id="@+id/tv_childcomments_parentcommentlastmodifieddate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:text="@{viewModel.uiState.parentComment.lastModifiedDate}"
+                    android:textColor="@color/decorator_color"
+                    android:textSize="11sp"
+                    android:visibility="@{viewModel.uiState.parentComment.isDeleted ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_childcomments_parentcommentauthorname"
+                    app:layout_constraintStart_toEndOf="@+id/tv_childcomments_parentcommentauthorname"
+                    app:layout_constraintTop_toTopOf="@+id/tv_childcomments_parentcommentauthorname"
+                    tools:text="2023.08.03" />
+
+                <TextView
+                    android:id="@+id/tv_childcomments_parentcommentisupdated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="@string/comments_isupdated"
+                    android:textColor="@color/decorator_color"
+                    android:textSize="11sp"
+                    android:visibility="@{(viewModel.uiState.parentComment.isUpdated &amp;&amp; !viewModel.uiState.parentComment.isDeleted)? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_childcomments_parentcommentlastmodifieddate"
+                    app:layout_constraintStart_toEndOf="@+id/tv_childcomments_parentcommentlastmodifieddate"
+                    app:layout_constraintTop_toTopOf="@+id/tv_childcomments_parentcommentlastmodifieddate" />
+
+                <TextView
+                    android:id="@+id/tv_childcomments_parentcommentcontent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="17dp"
+                    android:text="@{viewModel.uiState.parentComment.isDeleted ? @string/comment_deletedCommentContent : viewModel.uiState.parentComment.content}"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_childcomments_parentcommentauthorname"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_childcomments_parentcommentauthorname"
+                    tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하" />
+
+                <ImageView
+                    android:id="@+id/iv_childcomments_parentcommentdeletebutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="13dp"
+                    android:contentDescription="@string/comment_deletebutton"
+                    android:padding="4dp"
+                    android:visibility="@{viewModel.uiState.parentComment.isDeleted || !viewModel.uiState.parentComment.isDeletable ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_childcomments_parentcommentauthorname"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_childcomments_parentcommentauthorname"
+                    app:srcCompat="@drawable/ic_comment_delete" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@color/edittext_underline"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_childcomments_parentcommentcontent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_childcomments_childcomments"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/layout_childcomments_postchildcomment"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view"
+                    tools:itemCount="10"
+                    tools:listitem="@layout/item_childcomments_childcomment" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_childcomments_postchildcomment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background"
+                    android:paddingStart="17dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="17dp"
+                    android:paddingBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_childcomments_innerpostchildcomment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_comments_commenteditview"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <EditText
+                            android:id="@+id/et_childcomments_editchildcommentcontent"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="1dp"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/nanum_square_regular"
+                            android:hint="@string/childcomments_editchildcommenthint"
+                            android:importantForAutofill="no"
+                            android:inputType="text|textMultiLine"
+                            android:maxLines="3"
+                            android:padding="18dp"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:maxLength="255"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_childcomments_postchildcommentbutton"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_childcomments_postchildcommentbutton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="1dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:enabled="@{viewModel.uiState.isLoading || etChildcommentsEditchildcommentcontent.text.toString().isBlank() ? false : true}"
+                            android:padding="18dp"
+                            android:text="@string/comments_commentsubmitbuttonlabel"
+                            android:textColor="@color/main_color"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:visibility="@{viewModel.uiState.isLoading ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_childcomments_childcomments"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
