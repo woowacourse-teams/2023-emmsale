@@ -13,7 +13,7 @@ sealed class EventDetailUiState {
         val endDate: String,
         val informationUrl: String,
         val tags: List<String>,
-        val imageUrl: String,
+        val imageUrl: String?,
     ) : EventDetailUiState()
 
     object Error : EventDetailUiState()

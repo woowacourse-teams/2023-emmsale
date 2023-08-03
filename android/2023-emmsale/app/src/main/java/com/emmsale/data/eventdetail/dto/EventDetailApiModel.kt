@@ -23,7 +23,7 @@ data class EventDetailApiModel(
     @SerialName("tags")
     val tags: List<String>,
     @SerialName("imageUrl")
-    val imageUrl: String,
+    val imageUrl: String?,
     @SerialName("remainingDays")
     val remainingDays: Int,
     @SerialName("type")
