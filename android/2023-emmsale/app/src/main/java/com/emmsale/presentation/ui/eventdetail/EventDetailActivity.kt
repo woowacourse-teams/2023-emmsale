@@ -27,20 +27,6 @@ class EventDetailActivity : AppCompatActivity() {
         setBackPress()
         viewModel.fetchEventDetail(eventId)
     }
-
-    private fun initFragmentStateAdapter(informationUrl: String, imageUrl: String) {
-        binding.vpEventdetail.adapter =
-            EventDetailFragmentStateAdpater(this, eventId, informationUrl, imageUrl)
-        TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
-            when (position) {
-                INFORMATION_TAB_POSITION -> tab.text = "상세 정보"
-                COMMENT_TAB_POSITION -> tab.text = "댓글"
-                PARTICIPANT_TAB_POSITION -> tab.text = "같이가요"
-            }
-        }.attach()
-        binding.vpEventdetail.isUserInputEnabled = false
-    }
-
     private fun setUpBinding() {
         binding = ActivityEventDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -61,6 +47,19 @@ class EventDetailActivity : AppCompatActivity() {
                 else -> showToast("행사 받아오기 실패")
             }
         }
+    }
+
+    private fun initFragmentStateAdapter(informationUrl: String, imageUrl: String?) {
+        binding.vpEventdetail.adapter =
+            EventDetailFragmentStateAdpater(this, eventId, informationUrl, imageUrl)
+        TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
+            when (position) {
+                INFORMATION_TAB_POSITION -> tab.text = "상세 정보"
+                COMMENT_TAB_POSITION -> tab.text = "댓글"
+                PARTICIPANT_TAB_POSITION -> tab.text = "같이가요"
+            }
+        }.attach()
+        binding.vpEventdetail.isUserInputEnabled = false
     }
 
     private fun addTag(tags: List<String>) {

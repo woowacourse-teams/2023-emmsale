@@ -3,7 +3,6 @@ package com.emmsale.presentation.ui.eventdetail.information
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventInformationBinding
@@ -24,7 +23,6 @@ class EventInfoFragment() : BaseFragment<FragmentEventInformationBinding>() {
         super.onViewCreated(view, savedInstanceState)
         urlButtonClick()
         binding.imageUrl = imageUrl
-        Log.d("imageUrl", imageUrl!!)
     }
 
     private fun urlButtonClick() {
@@ -42,7 +40,7 @@ class EventInfoFragment() : BaseFragment<FragmentEventInformationBinding>() {
         private const val INFORMATION_URL_KEY = "INFORMATION_URL_KEY"
         private const val IMAGE_URL_KEY = "IMAGE_URL_KEY"
 
-        fun create(informationUrl: String, imageUrl: String): EventInfoFragment {
+        fun create(informationUrl: String, imageUrl: String?): EventInfoFragment {
             val fragment = EventInfoFragment()
             fragment.arguments = Bundle().apply {
                 putString(INFORMATION_URL_KEY, informationUrl)

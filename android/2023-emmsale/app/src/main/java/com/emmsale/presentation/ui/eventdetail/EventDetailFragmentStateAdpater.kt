@@ -11,7 +11,7 @@ class EventDetailFragmentStateAdpater(
     fragmentActivity: FragmentActivity,
     private val eventId: Long,
     private val informationUrl: String,
-    private val imageUrl: String,
+    private val imageUrl: String?,
 ) : FragmentStateAdapter(fragmentActivity) {
 
     override fun getItemCount(): Int = EVENT_DETAIL_TAB_COUNT
