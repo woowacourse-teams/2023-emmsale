@@ -33,4 +33,16 @@
         <item name="android:stateListAnimator">@null</item>
         <item name="android:drawablePadding">12dp</item>
     </style>
+
+    <style name="DatePickerDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorAccent">@color/main_color</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorPrimaryInverse">@color/date_picker_header_text_color</item>
+        <item name="android:textColorSecondaryInverse">@color/date_picker_header_text_color</item>
+        <item name="android:buttonBarButtonStyle">@style/DatePickerDialogTextButtonStyle</item>
+    </style>
+
+    <style name="DatePickerDialogTextButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/date_picker_bottom_button_color</item>
+    </style>
 </resources>

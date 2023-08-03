@@ -44,6 +44,7 @@ fun Context.showDatePickerDialog(block: (date: LocalDate) -> Unit) {
     val todayDate = LocalDate.now()
     DatePickerDialog(
         this,
+        R.style.DatePickerDialogTheme,
         { _, year, month, dayOfMonth ->
             block(LocalDate.of(year, month + 1, dayOfMonth))
         },
