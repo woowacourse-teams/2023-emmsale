@@ -8,9 +8,6 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
-import com.emmsale.presentation.ui.comment.CommentsFragment
-import com.emmsale.presentation.ui.main.events.EventsFragment
-import com.emmsale.presentation.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.EventFragment
 import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
 
@@ -31,18 +28,18 @@ class MainActivity : AppCompatActivity() {
         binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
-                R.id.mi_main_home -> showFragment(EventsFragment.TAG)
+                R.id.mi_main_event -> showFragment(EventFragment.TAG)
             }
             return@setOnItemSelectedListener true
         }
 
-        binding.bnvMain.selectedItemId = R.id.mi_main_home
+        binding.bnvMain.selectedItemId = R.id.mi_main_event
     }
 
     private fun addAllFragments() {
         supportFragmentManager.commitNow {
             add(R.id.fcv_main, MyProfileFragment(), MyProfileFragment.TAG)
-            add(R.id.fcv_main, EventsFragment(), EventsFragment.TAG)
+            add(R.id.fcv_main, EventFragment(), EventFragment.TAG)
         }
     }
 

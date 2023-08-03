@@ -4,8 +4,6 @@ import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.activity.ActivityRepositoryImpl
 import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.comment.CommentRepositoryImpl
-import com.emmsale.data.event.EventRepository
-import com.emmsale.data.event.EventRepositoryImpl
 import com.emmsale.data.conference.ConferenceRepository
 import com.emmsale.data.conference.ConferenceRepositoryImpl
 import com.emmsale.data.eventTag.EventTagRepository

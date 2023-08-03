@@ -121,12 +121,10 @@ class ChildCommentsActivity : AppCompatActivity() {
         binding.etChildcommentsEditchildcommentcontent.apply {
             text.clear()
         }
-        this.showToast(getString(R.string.comments_completepostcomment))
     }
 
     private fun onChildCommentDelete(commentId: Long) {
         viewModel.deleteComment(commentId, parentCommentId)
-        this.showToast(getString(R.string.comments_completedeletecomment))
     }
 
     private fun onParentCommentDeleteButtonClick() {

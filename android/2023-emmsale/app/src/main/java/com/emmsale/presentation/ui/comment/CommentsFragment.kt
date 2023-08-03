@@ -17,7 +17,7 @@ class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
     override val layoutResId: Int = R.layout.fragment_comments
 
     private val eventId: Long by lazy {
-        arguments?.getLong("eventId")
+        arguments?.getLong(KEY_EVENT_ID)
             ?: throw IllegalStateException("컨퍼런스의 댓글 프래그먼트는 컨퍼런스 아이디를 모르면 존재 의미가 없습니다. 로직을 다시 확인해주세요")
     }
 
@@ -61,7 +61,6 @@ class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
 
     private fun onCommentDelete(commentId: Long) {
         viewModel.deleteComment(commentId, eventId)
-        context?.showToast(getString(R.string.comments_completedeletecomment))
     }
 
     private fun setUpUiLogic() {
@@ -99,10 +98,17 @@ class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
         binding.etCommentsEditcommentcontent.apply {
             text.clear()
         }
-        context?.showToast(getString(R.string.comments_completepostcomment))
     }
 
     companion object {
-        const val TAG = "CommentsFragment"
+        private const val KEY_EVENT_ID = "KEY_EVENT_ID"
+
+        fun create(eventId: Long): CommentsFragment {
+            val fragment = CommentsFragment()
+            fragment.arguments = Bundle().apply {
+                putLong(KEY_EVENT_ID, eventId)
+            }
+            return fragment
+        }
     }
 }
