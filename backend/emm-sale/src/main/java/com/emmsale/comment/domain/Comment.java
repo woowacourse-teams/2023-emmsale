@@ -78,6 +78,14 @@ public class Comment extends BaseEntity {
     this.content = content;
   }
 
+  public boolean isRoot() {
+    return parent == null;
+  }
+
+  public boolean isChild() {
+    return parent != null;
+  }
+
   public Optional<Comment> getParent() {
     return Optional.ofNullable(parent);
   }

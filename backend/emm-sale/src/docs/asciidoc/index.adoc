@@ -1,4 +1,4 @@
-= EMM-SALE API Docs
+= Kerdy API Docs
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -229,7 +229,7 @@ include::{snippets}/get-comment/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/get-comment/response-fields.adoc[]
 
-=== `GET` : 대댓글 모두 조회
+=== `GET` : 특정 댓글 조회(대댓글 있을 경우 같이 조회)
 
 .HTTP request 설명
 include::{snippets}/get-children-comment/path-parameters.adoc[]

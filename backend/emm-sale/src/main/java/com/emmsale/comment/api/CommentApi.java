@@ -40,11 +40,11 @@ public class CommentApi {
     return commentQueryService.findAllCommentsByEventId(eventId);
   }
 
-  @GetMapping("/comments/{comment-id}/children")
-  public List<CommentResponse> findChildren(
+  @GetMapping("/comments/{comment-id}")
+  public CommentHierarchyResponse findParentWithChildren(
       @PathVariable("comment-id") final Long commentId
   ) {
-    return commentQueryService.findChildrenComments(commentId);
+    return commentQueryService.findParentWithChildren(commentId);
   }
 
   @DeleteMapping("/comments/{comment-id}")

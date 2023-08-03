@@ -10,5 +10,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
   @Query("select c From Comment c inner join Event e on c.event.id = e.id where e.id = :eventId")
   List<Comment> findByEventId(@Param("eventId") final Long eventId);
 
-  List<Comment> findByParentId(Long parentId);
+  @Query("select c1 From Comment c1 left outer join c1.parent p where c1.id=:id or p.id=:id")
+  List<Comment> findParentAndChildrenByParentId(@Param("id") Long commentId);
 }
