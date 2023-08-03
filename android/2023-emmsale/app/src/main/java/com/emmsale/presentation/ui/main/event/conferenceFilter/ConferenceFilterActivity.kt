@@ -19,6 +19,8 @@ import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
+import com.emmsale.presentation.utils.extension.checkAll
+import com.emmsale.presentation.utils.extension.uncheckAll
 import com.google.android.material.chip.ChipGroup
 
 class ConferenceFilterActivity : AppCompatActivity() {
@@ -35,6 +37,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         setContentView(binding.root)
         initView()
         initBackPressedDispatcher()
+        setupIsEventTagAllSelected()
         setupEventFilters()
         fetchFilters()
     }
@@ -42,6 +45,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
     private fun initView() {
         initEventFilterToolbarNavClickListener()
         initEventFilterApplyButtonClickListener()
+        initTagAllFilterButtonClickListener()
     }
 
     private fun initEventFilterToolbarNavClickListener() {
@@ -50,6 +54,16 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun initEventFilterApplyButtonClickListener() {
         binding.btnFilterApply.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+    }
+
+    private fun initTagAllFilterButtonClickListener() {
+        eventTagBinding.tagAllFilter.setOnClickListener {
+            if (eventTagBinding.tagAllFilter.isChecked) {
+                eventTagBinding.cgConferenceTagChips.checkAll()
+            } else {
+                eventTagBinding.cgConferenceTagChips.uncheckAll()
+            }
+        }
     }
 
     private fun initBackPressedDispatcher() {
@@ -83,37 +97,50 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun updateConferenceStatus(eventStatuses: List<ConferenceFilterUiState>) {
         removeFilterStatuses()
-        eventStatuses.forEach {
-            addTagFilter(eventStatusBinding.cgConferenceStatusTags, it)
+        eventStatuses.forEach { filter ->
+            addTagFilter(eventStatusBinding.cgConferenceStatusChips, filter) {
+                viewModel.toggleFilterSelection(filter)
+            }
         }
     }
 
     private fun updateConferenceTags(eventTags: List<ConferenceFilterUiState>) {
         removeFilterTagsExcludingAllTag()
-        eventTags.forEach {
-            addTagFilter(eventTagBinding.cgConferenceTagTags, it)
+        eventTags.forEach { filter ->
+            addTagFilter(eventTagBinding.cgConferenceTagChips, filter) {
+                viewModel.toggleFilterSelection(filter)
+                if (filter.isSelected) {
+                    viewModel.addSelectedTagFilterCount(1)
+                } else {
+                    viewModel.minusSelectedTagFilterCount(1)
+                }
+            }
         }
     }
 
     private fun removeFilterStatuses() {
-        eventStatusBinding.cgConferenceStatusTags.forEachIndexed { _, view ->
-            eventStatusBinding.cgConferenceStatusTags.removeView(view)
+        eventStatusBinding.cgConferenceStatusChips.forEachIndexed { _, view ->
+            eventStatusBinding.cgConferenceStatusChips.removeView(view)
         }
     }
 
     private fun removeFilterTagsExcludingAllTag() {
-        eventTagBinding.cgConferenceTagTags.forEachIndexed { index, view ->
+        eventTagBinding.cgConferenceTagChips.forEachIndexed { index, view ->
             if (index == 0) return@forEachIndexed
-            eventTagBinding.cgConferenceTagTags.removeView(view)
+            eventTagBinding.cgConferenceTagChips.removeView(view)
         }
     }
 
-    private fun addTagFilter(chipGroup: ChipGroup, tag: ConferenceFilterUiState) {
+    private fun addTagFilter(
+        chipGroup: ChipGroup,
+        tag: ConferenceFilterUiState,
+        block: () -> Unit,
+    ) {
         chipGroup.addView(
             activityChipOf {
                 text = tag.name
                 isChecked = tag.isSelected
-                setOnCheckedChangeListener { _, _ -> viewModel.toggleFilterSelection(tag) }
+                setOnCheckedChangeListener { _, _ -> block() }
             }
         )
     }
@@ -122,15 +149,19 @@ class ConferenceFilterActivity : AppCompatActivity() {
         startDate: ConferenceFilterDateUiState?,
         endDate: ConferenceFilterDateUiState?,
     ) {
-        eventDurationBinding.btnFilterStartDuration.text = transformConferenceDate(startDate)
-        eventDurationBinding.btnFilterEndDuration.text = transformConferenceDate(endDate)
+        eventDurationBinding.btnFilterStartDuration.text = startDate?.transformToDateString(this)
+        eventDurationBinding.btnFilterEndDuration.text = endDate?.transformToDateString(this)
     }
 
-    private fun transformConferenceDate(conferenceDate: ConferenceFilterDateUiState?): String =
-        getString(
-            R.string.event_filter_duration_date_format,
-            conferenceDate?.year, conferenceDate?.month
-        )
+    private fun setupIsEventTagAllSelected() {
+        viewModel.isTagAllSelected.observe(this) { isTagAllSelected ->
+            updateTagFilterViews(isTagAllSelected)
+        }
+    }
+
+    private fun updateTagFilterViews(isTagAllSelected: Boolean) {
+        eventTagBinding.tagAllFilter.isChecked = isTagAllSelected
+    }
 
     private fun fetchFilters() {
         viewModel.updateFilters(intent.getParcelableExtraCompat(FILTERS_KEY))

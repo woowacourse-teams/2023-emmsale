@@ -21,7 +21,7 @@
             android:textStyle="bold" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_conference_status_tags"
+            android:id="@+id/cg_conference_status_chips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
@@ -33,7 +33,7 @@
             android:layout_height="0.5dp"
             android:layout_marginTop="26dp"
             android:background="@color/all_divider_color"
-            app:layout_constraintTop_toBottomOf="@+id/cg_conference_status_tags" />
+            app:layout_constraintTop_toBottomOf="@+id/cg_conference_status_chips" />
 
     </merge>
 </layout>

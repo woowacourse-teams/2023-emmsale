@@ -21,7 +21,7 @@
             android:textStyle="bold" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_conference_tag_tags"
+            android:id="@+id/cg_conference_tag_chips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
@@ -29,6 +29,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_filter_category">
 
             <com.emmsale.presentation.common.views.ActivityTag
+                android:id="@+id/tag_all_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_all_tag_name" />
@@ -40,7 +41,7 @@
             android:layout_height="0.5dp"
             android:layout_marginTop="26dp"
             android:background="@color/all_divider_color"
-            app:layout_constraintTop_toBottomOf="@+id/cg_conference_tag_tags" />
+            app:layout_constraintTop_toBottomOf="@+id/cg_conference_tag_chips" />
 
     </merge>
 </layout>

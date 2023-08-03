@@ -3,6 +3,7 @@ package com.emmsale.presentation.ui.main.event.conferenceFilter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
@@ -31,7 +32,16 @@ class ConferenceFilterViewModel(
     private val _eventFilters = MutableLiveData<ConferenceFiltersUiState>()
     val eventFilters: LiveData<ConferenceFiltersUiState> = _eventFilters
 
-    fun fetchEventFilters() {
+    private val _selectedTagFilterCount = MutableLiveData<Int>()
+    val isTagAllSelected: LiveData<Boolean> = _selectedTagFilterCount.map { count ->
+        val filters = _eventFilters.value
+        when {
+            filters is ConferenceFiltersUiState.Success && count == filters.tags.size -> true
+            else -> false
+        }
+    }
+
+    private fun fetchEventFilters() {
         viewModelScope.launch {
             _eventFilters.postValue(ConferenceFiltersUiState.Loading)
 
@@ -46,6 +56,7 @@ class ConferenceFilterViewModel(
                     selectedEndDate = selectedEndDate,
                 )
             )
+            _selectedTagFilterCount.postValue(tags.count { it.isSelected })
         }
     }
 
@@ -74,8 +85,20 @@ class ConferenceFilterViewModel(
         filter.isSelected = !filter.isSelected
     }
 
+    fun addSelectedTagFilterCount(count: Int) {
+        _selectedTagFilterCount.value = (_selectedTagFilterCount.value ?: 0) + count
+    }
+
+    fun minusSelectedTagFilterCount(count: Int) {
+        _selectedTagFilterCount.value = (_selectedTagFilterCount.value ?: 0) - count
+    }
+
     fun updateFilters(filters: ConferenceFiltersUiState?) {
         filters?.let(_eventFilters::postValue) ?: fetchEventFilters()
+
+        if (filters is ConferenceFiltersUiState.Success) {
+            _selectedTagFilterCount.postValue(filters.tags.count { it.isSelected })
+        }
     }
 
     companion object {
