@@ -59,7 +59,7 @@
                 android:layout_marginVertical="3dp"
                 android:layout_marginStart="16dp"
                 android:contentDescription="@string/notification_header_expand_view"
-                android:src="@{header.isExpanded ? @drawable/ic_toggle_down : @drawable/ic_toggle_up}"
+                android:src="@{header.isExpanded ? @drawable/ic_toggle_up : @drawable/ic_toggle_down}"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_header_title"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintStart_toEndOf="@+id/tv_header_title"
