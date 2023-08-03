@@ -3,10 +3,10 @@ package com.emmsale.presentation.eventdetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityEventDetailBinding
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.EventDetailFragmentStateAdpater
 import com.emmsale.presentation.ui.eventdetail.EventDetailViewModel
 import com.emmsale.presentation.ui.eventdetail.EventTag
@@ -58,7 +58,7 @@ class EventDetailActivity : AppCompatActivity() {
                     )
                 }
 
-                else -> showToastMessage("행사 받아오기 실패")
+                else -> showToast("행사 받아오기 실패")
             }
         }
     }
@@ -69,10 +69,6 @@ class EventDetailActivity : AppCompatActivity() {
 
     private fun createTag(tag: String) = EventTag(this).apply {
         text = tag
-    }
-
-    private fun showToastMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     private fun setBackPress() {
