@@ -18,11 +18,12 @@ import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.Conferenc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 class ConferenceFilterViewModel(
     private val eventTagRepository: EventTagRepository,
-    private var selectedStartDate: ConferenceFilterDateUiState? = null,
-    private var selectedEndDate: ConferenceFilterDateUiState? = null,
+    private val selectedStartDate: ConferenceFilterDateUiState? = null,
+    private val selectedEndDate: ConferenceFilterDateUiState? = null,
 ) : ViewModel() {
     private val _eventFilters = MutableLiveData<ConferenceFiltersUiState>()
     val eventFilters: LiveData<ConferenceFiltersUiState> = _eventFilters
@@ -32,6 +33,12 @@ class ConferenceFilterViewModel(
         val filters = _eventFilters.value
         when {
             filters is ConferenceFiltersUiState.Success && count == filters.tags.size -> true
+            else -> false
+        }
+    }
+    val isStartDateSelected: LiveData<Boolean> = _eventFilters.map { filters ->
+        when {
+            filters is ConferenceFiltersUiState.Success && filters.selectedStartDate != null -> true
             else -> false
         }
     }
@@ -94,6 +101,45 @@ class ConferenceFilterViewModel(
         if (filters is ConferenceFiltersUiState.Success) {
             _selectedTagFilterCount.postValue(filters.tags.count { it.isSelected })
         }
+    }
+
+    fun updateStartDate(startDate: LocalDate) {
+        val filterDate = ConferenceFilterDateUiState(startDate.year, startDate.monthValue)
+
+        if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedEndDate?.let {
+                val endDate = LocalDate.of(it.year, it.month, 1)
+                startDate.isAfter(endDate)
+            } == true) {
+            _eventFilters.postValue(
+                (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
+                    selectedStartDate = filterDate,
+                    selectedEndDate = null,
+                )
+            )
+            return
+        }
+
+        _eventFilters.postValue(
+            (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
+                selectedStartDate = filterDate
+            )
+        )
+    }
+
+    fun updateEndDate(endDate: LocalDate) {
+        if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedStartDate?.let {
+                val startDate = LocalDate.of(it.year, it.month, 1)
+                endDate.isAfter(startDate) || (endDate.year == startDate.year && endDate.monthValue == startDate.monthValue)
+            } == true) {
+            return
+        }
+
+        val filterDate = ConferenceFilterDateUiState(endDate.year, endDate.monthValue)
+        _eventFilters.postValue(
+            (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
+                selectedEndDate = filterDate
+            )
+        )
     }
 
     companion object {

@@ -7,6 +7,7 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.forEach
 import androidx.core.view.forEachIndexed
 import com.emmsale.R
 import com.emmsale.databinding.ActivityConferenceFilterBinding
@@ -14,6 +15,7 @@ import com.emmsale.databinding.LayoutFilterConferenceDurationBinding
 import com.emmsale.databinding.LayoutFilterConferenceEventTagBinding
 import com.emmsale.databinding.LayoutFilterConferenceStatusBinding
 import com.emmsale.presentation.common.extension.getParcelableExtraCompat
+import com.emmsale.presentation.common.extension.showDatePickerDialog
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
@@ -38,6 +40,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         initView()
         initBackPressedDispatcher()
         setupIsEventTagAllSelected()
+        setupIsStartDateSelected()
         setupEventFilters()
         fetchFilters()
     }
@@ -46,6 +49,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         initEventFilterToolbarNavClickListener()
         initEventFilterApplyButtonClickListener()
         initTagAllFilterButtonClickListener()
+        initDurationButtonClickListener()
     }
 
     private fun initEventFilterToolbarNavClickListener() {
@@ -62,6 +66,20 @@ class ConferenceFilterActivity : AppCompatActivity() {
                 eventTagBinding.cgConferenceTagChips.checkAll()
             } else {
                 eventTagBinding.cgConferenceTagChips.uncheckAll()
+            }
+        }
+    }
+
+    private fun initDurationButtonClickListener() {
+        eventDurationBinding.btnFilterStartDuration.setOnClickListener {
+            showDatePickerDialog { date ->
+                viewModel.updateStartDate(date)
+            }
+        }
+
+        eventDurationBinding.btnFilterEndDuration.setOnClickListener {
+            showDatePickerDialog { date ->
+                viewModel.updateEndDate(date)
             }
         }
     }
@@ -119,7 +137,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun removeFilterStatuses() {
-        eventStatusBinding.cgConferenceStatusChips.forEachIndexed { _, view ->
+        eventStatusBinding.cgConferenceStatusChips.forEach { view ->
             eventStatusBinding.cgConferenceStatusChips.removeView(view)
         }
     }
@@ -168,6 +186,12 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun fetchFilters() {
         viewModel.updateFilters(intent.getParcelableExtraCompat(FILTERS_KEY))
+    }
+
+    private fun setupIsStartDateSelected() {
+        viewModel.isStartDateSelected.observe(this) { isSelected ->
+            eventDurationBinding.btnFilterEndDuration.isEnabled = isSelected
+        }
     }
 
     companion object {
