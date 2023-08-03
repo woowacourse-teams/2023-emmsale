@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View" />
 
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.eventdetail.participant.EventParticipantViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,12 +19,12 @@
             android:id="@+id/rv_participants"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginHorizontal="17dp"
+            android:paddingVertical="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btn_eventparticipant_participate"/>
+            app:layout_constraintBottom_toTopOf="@id/btn_eventparticipant_participate" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:background="@drawable/bg_eventinformation_urlbutton"
@@ -37,5 +41,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="17dp" />
+
+        <ProgressBar
+            android:id="@+id/pb_eventDetailParticipant_loadingbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

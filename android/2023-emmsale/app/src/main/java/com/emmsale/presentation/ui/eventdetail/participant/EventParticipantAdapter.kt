@@ -9,7 +9,7 @@ import com.emmsale.databinding.ItemParticipantBinding
 import com.emmsale.presentation.eventdetail.participant.uistate.ParticipantUiState
 
 class EventParticipantAdapter(
-    private val requestCompanion: (Long) -> Unit,
+    private val requestCompanion: (Long, String) -> Unit,
     private val showMemberProfile: (Long) -> Unit,
 ) : ListAdapter<ParticipantUiState, ParticipantViewHolder>(diffUtil) {
 
@@ -44,13 +44,18 @@ class EventParticipantAdapter(
 
 class ParticipantViewHolder(
     private val binding: ItemParticipantBinding,
-    private val requestCompanion: (Long) -> Unit,
+    private val requestCompanion: (Long, String) -> Unit,
     private val showMemberProfile: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.buttonRequestCompanion.setOnClickListener { requestCompanion(binding.participant!!.id) }
-        binding.ivParticipantImage.setOnClickListener { showMemberProfile(binding.participant!!.id) }
+        binding.buttonRequestCompanion.setOnClickListener {
+            requestCompanion(
+                binding.participant!!.memberId,
+                binding.participant!!.name,
+            )
+        }
+        binding.ivParticipantImage.setOnClickListener { showMemberProfile(binding.participant!!.memberId) }
     }
 
     fun bind(participant: ParticipantUiState) {
@@ -60,7 +65,7 @@ class ParticipantViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
-            requestCompanion: (Long) -> Unit,
+            requestCompanion: (Long, String) -> Unit,
             showMemberProfile: (Long) -> Unit,
         ): ParticipantViewHolder {
             val binding = ItemParticipantBinding.inflate(

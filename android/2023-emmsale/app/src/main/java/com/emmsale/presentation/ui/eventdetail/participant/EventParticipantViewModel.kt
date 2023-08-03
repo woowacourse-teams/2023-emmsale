@@ -16,6 +16,10 @@ class EventParticipantViewModel(
     private val participantRepository: ParticipantRepository,
 ) : ViewModel() {
 
+    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
     private val _participants: MutableLiveData<ParticipantsUiState> = MutableLiveData()
     val participants: LiveData<ParticipantsUiState>
         get() = _participants
@@ -24,22 +28,19 @@ class EventParticipantViewModel(
     val requestCompanion: LiveData<Boolean>
         get() = _requestCompanion
 
-    private val _participationSaving: MutableLiveData<Boolean> = MutableLiveData()
-    val participationSaving: LiveData<Boolean>
-        get() = _participationDeletion
-
-    private val _participationDeletion: MutableLiveData<Boolean> = MutableLiveData()
-    val participationDeletion: LiveData<Boolean>
-        get() = _participationDeletion
-
     private val _isParticipate: MutableLiveData<ParticipationStatusUiState> = MutableLiveData()
     val isParticipate: LiveData<ParticipationStatusUiState>
         get() = _isParticipate
 
     fun fetchParticipants(eventId: Long) {
+        _isLoading.postValue(true)
         viewModelScope.launch {
             when (val response = participantRepository.fetchEventParticipants(eventId)) {
-                is ApiSuccess -> _participants.postValue(ParticipantsUiState.from(response.data))
+                is ApiSuccess -> {
+                    _participants.postValue(ParticipantsUiState.from(response.data))
+                    _isLoading.postValue(false)
+                }
+
                 else -> _participants.postValue(ParticipantsUiState.Error)
             }
         }
@@ -48,8 +49,8 @@ class EventParticipantViewModel(
     fun saveParticipant(eventId: Long) {
         viewModelScope.launch {
             when (val response = participantRepository.saveParticipant(eventId)) {
-                is ApiSuccess -> _participationDeletion.postValue(true)
-                else -> _participationDeletion.postValue(false)
+                is ApiSuccess -> _isParticipate.postValue(ParticipationStatusUiState.Success(true))
+                else -> _isParticipate.postValue(ParticipationStatusUiState.Error)
             }
         }
     }
@@ -57,15 +58,19 @@ class EventParticipantViewModel(
     fun deleteParticipant(eventId: Long) {
         viewModelScope.launch {
             when (participantRepository.deleteParticipant(eventId)) {
-                is ApiSuccess -> _participationDeletion.postValue(true)
-                else -> _participationDeletion.postValue(false)
+                is ApiSuccess -> {
+                    _isParticipate.postValue(ParticipationStatusUiState.Success(false))
+                    fetchParticipants(eventId)
+                }
+
+                else -> _isParticipate.postValue(ParticipationStatusUiState.Error)
             }
         }
     }
 
-    fun requestCompanion(eventId: Long, memberId: Long) {
+    fun requestCompanion(eventId: Long, memberId: Long, message: String) {
         viewModelScope.launch {
-            when (participantRepository.requestCompanion(eventId, memberId, "")) {
+            when (participantRepository.requestCompanion(eventId, memberId, message)) {
                 is ApiSuccess -> _requestCompanion.postValue(true)
                 else -> _requestCompanion.postValue(false)
             }
@@ -84,10 +89,6 @@ class EventParticipantViewModel(
                 else -> ParticipationStatusUiState.Error
             }
         }
-    }
-
-    private fun getRequestMessage(): String {
-        return ""
     }
 
     companion object {

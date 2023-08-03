@@ -11,6 +11,7 @@ import com.emmsale.presentation.eventdetail.participant.uistate.ParticipantsUiSt
 import com.emmsale.presentation.eventdetail.participant.uistate.ParticipationStatusUiState
 import com.emmsale.presentation.ui.eventdetail.participant.EventParticipantAdapter
 import com.emmsale.presentation.ui.eventdetail.participant.EventParticipantViewModel
+import com.emmsale.presentation.ui.eventdetail.participant.ParticipantFragmentDialog
 
 class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>() {
     override val layoutResId: Int = R.layout.fragment_event_participant
@@ -20,7 +21,7 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
         arguments?.getLong(EVENT_ID_KEY) ?: throw IllegalArgumentException("아이디못가져옴")
     }
     private val participantAdapter: EventParticipantAdapter by lazy {
-        EventParticipantAdapter(::requestCompanion, ::showMemberProfile)
+        EventParticipantAdapter(::showRequestDialog, ::showMemberProfile)
     }
     private val participationButton: AppCompatButton by lazy { binding.btnEventparticipantParticipate }
 
@@ -29,7 +30,6 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
         initRecyclerView()
         setUpParticipants()
         setUpRequestCompanion()
-        setUpParticipation()
         setUpParticipationStatus()
         viewModel.fetchParticipants(eventId)
     }
@@ -41,8 +41,15 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
         }
     }
 
-    private fun requestCompanion(memberId: Long) {
-        viewModel.requestCompanion(eventId, memberId)
+    private fun showRequestDialog(memberId: Long, memberName: String) {
+        ParticipantFragmentDialog(memberName, memberId, ::requestCompanion).show(
+            parentFragmentManager,
+            "Participant",
+        )
+    }
+
+    private fun requestCompanion(memberId: Long, message: String) {
+        viewModel.requestCompanion(eventId, memberId, message)
     }
 
     private fun showMemberProfile(memberId: Long) {
@@ -72,33 +79,32 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
         }
     }
 
-    private fun setUpParticipation() {
-        viewModel.participationSaving.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                showToastMessage("참가 성공")
-                viewModel.checkParticipationStatus(eventId)
-            } else {
-                showToastMessage("참가 실패")
-            }
-        }
-    }
-
     private fun setUpParticipationStatus() {
         viewModel.isParticipate.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is ParticipationStatusUiState.Success -> {
                     if (state.isParticipate) {
-                        participationButton.isSelected = true
-                        participationButton.text = "참가 취소"
+                        setButtonParticipationState()
+                        showToastMessage("참가 상태입니다!")
                     } else {
-                        participationButton.isSelected = false
-                        participationButton.text = "참가 신청"
+                        setButtonAbsenceState()
+                        showToastMessage("불참 상태입니다!")
                     }
                 }
 
                 else -> showToastMessage("참여 여부 확인 불가")
             }
         }
+    }
+
+    private fun setButtonParticipationState() {
+        participationButton.isSelected = true
+        participationButton.text = "참가 취소"
+    }
+
+    private fun setButtonAbsenceState() {
+        participationButton.isSelected = false
+        participationButton.text = "참가 신청"
     }
 
     private fun participationButtonClick() {

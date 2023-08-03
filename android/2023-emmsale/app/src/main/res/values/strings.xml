@@ -27,4 +27,6 @@
     <string name="d_day_format">D-%d</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragmentdialog_participant_requestcomapanion">함께 하기 요청</string>
+    <string name="fragmentdialog_participant_message_format">%s께 함께하기 요청을\n보내시겠습니까?</string>
 </resources>
