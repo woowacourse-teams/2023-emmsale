@@ -129,7 +129,7 @@ class ConferenceFilterViewModel(
     fun updateEndDate(endDate: LocalDate) {
         if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedStartDate?.let {
                 val startDate = LocalDate.of(it.year, it.month, 1)
-                endDate.isAfter(startDate) || (endDate.year == startDate.year && endDate.monthValue == startDate.monthValue)
+                endDate.isBefore(startDate) || (endDate.year == startDate.year && endDate.monthValue == startDate.monthValue)
             } == true) {
             return
         }
