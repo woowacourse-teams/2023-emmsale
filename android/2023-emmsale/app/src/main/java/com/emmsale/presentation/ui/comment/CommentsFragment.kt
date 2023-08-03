@@ -33,6 +33,10 @@ class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
         initDataBinding()
         initCommentsRecyclerView()
         setUpUiLogic()
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         viewModel.fetchComments(eventId)
     }
