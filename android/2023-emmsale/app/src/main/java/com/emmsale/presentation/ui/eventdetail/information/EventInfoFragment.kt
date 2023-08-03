@@ -3,6 +3,7 @@ package com.emmsale.presentation.ui.eventdetail.information
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventInformationBinding
@@ -23,6 +24,7 @@ class EventInfoFragment() : BaseFragment<FragmentEventInformationBinding>() {
         super.onViewCreated(view, savedInstanceState)
         urlButtonClick()
         binding.imageUrl = imageUrl
+        Log.d("imageUrl", imageUrl!!)
     }
 
     private fun urlButtonClick() {
