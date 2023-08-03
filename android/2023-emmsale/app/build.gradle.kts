@@ -27,7 +27,7 @@ android {
         buildConfigField(
             "String",
             "GITHUB_CLIENT_ID",
-            getApiKey("GH_CLIENT_ID")
+            getApiKey("GH_CLIENT_ID"),
         )
     }
     buildFeatures {
@@ -57,6 +57,12 @@ android {
     dataBinding {
         enable = true
     }
+    tasks.withType(Test::class) {
+        useJUnitPlatform()
+        testLogging {
+            events.addAll(arrayOf(org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED, org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED))
+        }
+    }
 }
 
 fun getApiKey(propertyKey: String): String {
@@ -81,6 +87,7 @@ dependencies {
     implementation("com.squareup.okhttp3:mockwebserver:4.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.8.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
@@ -94,4 +101,7 @@ dependencies {
     testImplementation("io.mockk:mockk-android:1.13.5")
     testImplementation("io.mockk:mockk-agent:1.13.5")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // imageview
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 }

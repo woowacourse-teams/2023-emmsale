@@ -8,6 +8,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
+import com.emmsale.presentation.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.EventFragment
 import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
 
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
                 R.id.mi_main_event -> showFragment(EventFragment.TAG)
+                R.id.mi_main_setting -> EventDetailActivity.startActivity(this, 1)
             }
             return@setOnItemSelectedListener true
         }

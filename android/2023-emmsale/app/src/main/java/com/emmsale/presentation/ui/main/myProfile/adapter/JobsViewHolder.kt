@@ -19,7 +19,7 @@ class JobsViewHolder(
             val binding = ItemMyprofileJobsBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
+                false,
             )
 
             return JobsViewHolder(binding)

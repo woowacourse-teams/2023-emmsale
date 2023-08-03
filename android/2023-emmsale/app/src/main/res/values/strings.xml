@@ -42,4 +42,8 @@
     <string name="all_data_loading_failed_message">데이터를 정상적으로 불러오지 못했어요 😢</string>
     <string name="event_filter_duration_date_format">%02d.%02d</string>
     <string name="event_filter_duration_date_last_format">&#160;- %02d.%02d</string>
+    <string name="eventinformation_navigate_website">웹사이트로 이동</string>
+    <string name="fragmentdialog_participant_requestcomapanion">함께 하기 요청</string>
+    <string name="fragmentdialog_participant_message_format">%s께 함께하기 요청을\n보내시겠습니까?</string>
+    <string name="item_participant_requestcompanion">같이 가요</string>
 </resources>

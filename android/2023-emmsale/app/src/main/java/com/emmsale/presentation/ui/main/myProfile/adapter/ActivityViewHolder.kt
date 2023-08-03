@@ -19,7 +19,7 @@ class ActivityViewHolder(
             val binding = ItemMyprofileActivitiesBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
+                false,
             )
 
             return ActivityViewHolder(binding)

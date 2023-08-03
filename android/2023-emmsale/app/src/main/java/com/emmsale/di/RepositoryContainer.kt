@@ -6,14 +6,20 @@ import com.emmsale.data.conference.ConferenceRepository
 import com.emmsale.data.conference.ConferenceRepositoryImpl
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.data.eventTag.EventTagRepositoryImpl
+import com.emmsale.data.eventdetail.EventDetailRepository
+import com.emmsale.data.eventdetail.EventDetailRepositoryImpl
 import com.emmsale.data.fcmToken.FcmTokenRepository
 import com.emmsale.data.fcmToken.FcmTokenRepositoryImpl
 import com.emmsale.data.login.LoginRepository
 import com.emmsale.data.login.LoginRepositoryImpl
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.member.MemberRepositoryImpl
+import com.emmsale.data.participant.ParticipantRepository
+import com.emmsale.data.participant.ParticipantRepositoryImpl
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.data.token.TokenRepositoryImpl
+import com.emmsale.data.uid.UidRepository
+import com.emmsale.data.uid.UidRepositoryImpl
 
 class RepositoryContainer(
     serviceContainer: ServiceContainer,
@@ -39,5 +45,17 @@ class RepositoryContainer(
     }
     val eventTagRepository: EventTagRepository by lazy {
         EventTagRepositoryImpl(eventTagService = serviceContainer.eventTagService)
+    }
+    val eventDetailRepository: EventDetailRepository by lazy {
+        EventDetailRepositoryImpl(eventDetailService = serviceContainer.eventDetailService)
+    }
+    val uidRepository: UidRepository by lazy {
+        UidRepositoryImpl(preferenceContainer.preference)
+    }
+    val participantRepository: ParticipantRepository by lazy {
+        ParticipantRepositoryImpl(
+            uidRepository = uidRepository,
+            participantService = serviceContainer.participantService,
+        )
     }
 }

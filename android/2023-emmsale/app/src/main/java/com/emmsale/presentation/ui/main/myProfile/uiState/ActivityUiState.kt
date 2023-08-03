@@ -11,7 +11,7 @@ data class ActivityUiState(
         fun from(activity: Activity1): ActivityUiState =
             ActivityUiState(
                 id = activity.id,
-                name = activity.name
+                name = activity.name,
             )
     }
 }
