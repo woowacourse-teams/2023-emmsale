@@ -38,6 +38,7 @@ class EventDetailActivity : AppCompatActivity() {
                 PARTICIPANT_TAB_POSITION -> tab.text = "같이가요"
             }
         }.attach()
+        binding.vpEventdetail.isUserInputEnabled = false
     }
 
     private fun setUpBinding() {
