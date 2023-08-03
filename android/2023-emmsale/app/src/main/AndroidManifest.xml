@@ -21,11 +21,17 @@
             android:name=".presentation.ui.childComments.ChildCommentsActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity"
+            android:exported="true" />
+        <activity
             android:name=".presentation.ui.main.MainActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".presentation.ui.onboarding.OnboardingActivity"
             android:exported="true" />
+        <activity
+            android:name=".presentation.eventdetail.EventDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:exported="true"

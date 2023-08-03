@@ -1,64 +1,54 @@
 package com.emmsale.presentation.ui.main.event
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
-import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.main.event.recyclerview.EventRecyclerViewAdapter
-import com.emmsale.presentation.ui.main.event.uistate.EventUiState
-import com.emmsale.presentation.ui.main.event.uistate.EventsUiState
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class EventFragment : BaseFragment<FragmentEventBinding>() {
     override val layoutResId: Int = R.layout.fragment_event
-    private val viewModel: EventViewModel by viewModels { EventViewModel.factory }
-    private val eventAdapter: EventRecyclerViewAdapter by lazy { EventRecyclerViewAdapter(::navigateToEventDetail) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
-        setupEventsObserver()
-        viewModel.fetchEvents()
+        initEventViewPager()
     }
 
-    private fun initView() {
-        initViewModel()
-        initEventRecyclerView()
+    private fun initEventViewPager() {
+        initEventFragmentStateAdapter()
+        initEventTabLayoutMediator()
+        initEventTabLayoutSelectedListener()
     }
 
-    private fun initViewModel() {
-        binding.viewModel = viewModel
+    private fun initEventFragmentStateAdapter() {
+        binding.vpEvent.adapter = EventFragmentStateAdapter(this)
     }
 
-    private fun initEventRecyclerView() {
-        binding.rvEvents.adapter = eventAdapter
-        binding.rvEvents.addItemDecoration(EventRecyclerViewDivider(requireContext()))
+    private fun initEventTabLayoutMediator() {
+        val eventTabNames = listOf(
+            getString(R.string.event_conference),
+            getString(R.string.event_competition),
+        )
+
+        TabLayoutMediator(binding.tlEvent, binding.vpEvent) { tab, position ->
+            tab.text = eventTabNames[position]
+        }.attach()
     }
 
-    private fun setupEventsObserver() {
-        viewModel.events.observe(viewLifecycleOwner) { eventsResult ->
-            when (eventsResult) {
-                is EventsUiState.Success -> {
-                    binding.progressbarLoading.visibility = View.GONE
-                    eventAdapter.submitList(eventsResult.events)
-                    binding.tvEventsCount.text =
-                        getString(R.string.event_count_format, eventsResult.eventSize)
-                }
-
-                is EventsUiState.Loading -> binding.progressbarLoading.visibility = View.VISIBLE
-                is EventsUiState.Error -> {
-                    binding.progressbarLoading.visibility = View.GONE
-                    requireContext().showToast("행사 목록을 불러올 수 없어요 \uD83D\uDE22")
-                }
+    private fun initEventTabLayoutSelectedListener() {
+        binding.tlEvent.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                binding.vpEvent.currentItem = tab.position
             }
-        }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
     }
 
-    private fun navigateToEventDetail(event: EventUiState) {
-        Log.d("buna", event.toString())
-        // EventDetail.startActivity(event)
+    companion object {
+        val TAG: String = EventFragment::class.java.simpleName
     }
 }

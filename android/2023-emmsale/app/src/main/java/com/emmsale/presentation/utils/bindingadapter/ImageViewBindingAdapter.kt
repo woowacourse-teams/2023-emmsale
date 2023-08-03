@@ -10,20 +10,29 @@ import com.emmsale.R
 import com.emmsale.presentation.utils.extension.dp
 
 @BindingAdapter("app:imageUrl")
-fun ImageView.setImage(imageUrl: String) {
+fun ImageView.setImage(imageUrl: String?) {
     Glide.with(this)
         .load(imageUrl)
-        .error(R.color.event_thumbnail_default_color)
-        .fallback(drawable)
+        .placeholder(R.drawable.img_all_error)
+        .error(R.drawable.img_all_error)
+        .fallback(R.drawable.img_all_error)
         .into(this)
 }
 
-@BindingAdapter("app:imageUrl", "app:roundedImageRadius")
-fun ImageView.setRoundedImageUrl(imageUrl: String, radius: Int) {
+@BindingAdapter(
+    "app:imageUrl",
+    "app:roundedImageRadius",
+    requireAll = true,
+)
+fun ImageView.setRoundedImageUrl(
+    imageUrl: String?,
+    radius: Int,
+) {
     Glide.with(this)
         .load(imageUrl)
-        .error(R.color.event_thumbnail_default_color)
-        .fallback(drawable)
+        .placeholder(R.drawable.img_all_error)
+        .error(R.drawable.img_all_error)
+        .fallback(R.drawable.img_all_error)
         .transform(CenterCrop(), RoundedCorners(radius.dp))
         .into(this)
 }
@@ -36,8 +45,9 @@ fun ImageView.setCircleImage(imageUrl: String, isCircle: Boolean) {
     }
     Glide.with(this)
         .load(imageUrl)
-        .error(R.color.event_thumbnail_default_color)
-        .fallback(drawable)
+        .placeholder(R.drawable.img_all_error)
+        .error(R.drawable.img_all_error)
+        .fallback(R.drawable.img_all_error)
         .transform(CenterCrop(), CircleCrop())
         .into(this)
 }

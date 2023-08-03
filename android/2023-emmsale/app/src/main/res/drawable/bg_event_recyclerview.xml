@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+
+    <item
+        android:bottom="-0.5dp"
+        android:end="-0.5dp"
+        android:start="-0.5dp">
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="0.5dp"
+                android:color="@color/event_recycler_view_divider" />
+        </shape>
+    </item>
+</layer-list>

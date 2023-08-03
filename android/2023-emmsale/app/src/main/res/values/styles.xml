@@ -1,13 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="bottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
         <item name="labelVisibilityMode">unlabeled</item>
         <item name="itemIconSize">34dp</item>
         <item name="backgroundTint">@color/background</item>
         <item name="itemIconTint">@color/color_bottom_navigation_view_icon</item>
     </style>
+
     <style name="basicTextFontStyle">
         <item name="android:fontFamily">@font/nanum_square</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="EventTabLayoutFontStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="EventFilterToolbarTitleFontStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="IconTextButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="activeTextColor">@color/black</item>
+        <item name="inactiveTextColor">@color/black</item>
+        <item name="activeIconColor">@color/default_active_color</item>
+        <item name="inactiveIconColor">@color/default_inactive_color</item>
+        <item name="active">false</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:drawablePadding">12dp</item>
+    </style>
+
+    <style name="DatePickerDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorAccent">@color/main_color</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorPrimaryInverse">@color/date_picker_header_text_color</item>
+        <item name="android:textColorSecondaryInverse">@color/date_picker_header_text_color</item>
+        <item name="android:buttonBarButtonStyle">@style/DatePickerDialogTextButtonStyle</item>
+    </style>
+
+    <style name="DatePickerDialogTextButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/date_picker_bottom_button_color</item>
+    </style>
+
+
+    <style name="EventDetail_NotSelectedTabStyle">
+        <item name="android:fontFamily">@font/nanum_square_bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="EventDetail_SelectedTabStyle">
+        <item name="android:fontFamily">@font/nanum_square_bold</item>
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>

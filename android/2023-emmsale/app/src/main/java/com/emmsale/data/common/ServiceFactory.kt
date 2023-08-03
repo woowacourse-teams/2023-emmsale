@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
@@ -15,8 +16,11 @@ class ServiceFactory {
         isLenient = true
     }
     private val jsonConverterFactory = json.asConverterFactory(jsonMediaType)
-
+    private val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
     private val okhttpClient = OkHttpClient.Builder()
+        .addInterceptor(httpLoggingInterceptor)
         .addInterceptor(AuthInterceptor())
         .connectTimeout(120, TimeUnit.SECONDS)
         .readTimeout(120, TimeUnit.SECONDS)
@@ -32,6 +36,6 @@ class ServiceFactory {
     fun <T> create(service: Class<T>): T = retrofit.create(service)
 
     companion object {
-        private const val BASE_URL = "https://kerdy.kro.kr/"
+        private const val BASE_URL = "https://kerdy.kro.kr"
     }
 }
