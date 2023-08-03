@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".presentation.ui.notificationBox.NotificationBoxActivity"
+            android:exported="true" />
+        <activity
             android:name=".presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity"
             android:exported="true" />
         <activity

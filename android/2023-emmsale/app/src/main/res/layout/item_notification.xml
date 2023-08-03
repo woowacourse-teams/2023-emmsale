@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="notification"
+            type="com.emmsale.presentation.ui.notificationBox.uistate.NotificationUiState" />
+
+        <variable
+            name="onClickNotification"
+            type="kotlin.jvm.functions.Function2&lt;Long, Long, Unit>" />
+
+        <variable
+            name="onDelete"
+            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> onClickNotification.invoke(notification.id, notification.otherUid)}"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="20dp">
+
+        <TextView
+            android:id="@+id/tv_noti_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/btn_delete_noti"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="김길동 님이 '2023 인프콘'에 같이 가고 싶어 해요!" />
+
+        <ImageView
+            android:id="@+id/btn_delete_noti"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/notification_box_delete_noti"
+            android:focusable="true"
+            android:onClick="@{() -> onDelete.invoke(notification.id)}"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

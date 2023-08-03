@@ -46,4 +46,6 @@
     <string name="fragmentdialog_participant_requestcomapanion">함께 하기 요청</string>
     <string name="fragmentdialog_participant_message_format">%s께 함께하기 요청을\n보내시겠습니까?</string>
     <string name="item_participant_requestcompanion">같이 가요</string>
+    <string name="notification_box_title">알림 보관함</string>
+    <string name="notification_box_delete_noti">알림 삭제</string>
 </resources>
