@@ -3,10 +3,10 @@ package com.emmsale.presentation.eventdetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityEventDetailBinding
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.EventDetailFragmentStateAdpater
 import com.emmsale.presentation.ui.eventdetail.EventDetailViewModel
 import com.emmsale.presentation.ui.eventdetail.EventTag
@@ -25,21 +25,8 @@ class EventDetailActivity : AppCompatActivity() {
         setUpBinding()
         setUpEventDetail()
         setBackPress()
-        viewModel.fetchEventDetail(1)
+        viewModel.fetchEventDetail(eventId)
     }
-
-    private fun initFragmentStateAdapter(informationUrl: String, imageUrl: String) {
-        binding.vpEventdetail.adapter =
-            EventDetailFragmentStateAdpater(this, eventId, informationUrl, imageUrl)
-        TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
-            when (position) {
-                INFORMATION_TAB_POSITION -> tab.text = "상세 정보"
-                COMMENT_TAB_POSITION -> tab.text = "댓글"
-                PARTICIPANT_TAB_POSITION -> tab.text = "같이가요"
-            }
-        }.attach()
-    }
-
     private fun setUpBinding() {
         binding = ActivityEventDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -57,9 +44,22 @@ class EventDetailActivity : AppCompatActivity() {
                     )
                 }
 
-                else -> showToastMessage("행사 받아오기 실패")
+                else -> showToast("행사 받아오기 실패")
             }
         }
+    }
+
+    private fun initFragmentStateAdapter(informationUrl: String, imageUrl: String?) {
+        binding.vpEventdetail.adapter =
+            EventDetailFragmentStateAdpater(this, eventId, informationUrl, imageUrl)
+        TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
+            when (position) {
+                INFORMATION_TAB_POSITION -> tab.text = "상세 정보"
+                COMMENT_TAB_POSITION -> tab.text = "댓글"
+                PARTICIPANT_TAB_POSITION -> tab.text = "같이가요"
+            }
+        }.attach()
+        binding.vpEventdetail.isUserInputEnabled = false
     }
 
     private fun addTag(tags: List<String>) {
@@ -68,10 +68,6 @@ class EventDetailActivity : AppCompatActivity() {
 
     private fun createTag(tag: String) = EventTag(this).apply {
         text = tag
-    }
-
-    private fun showToastMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     private fun setBackPress() {

@@ -2,7 +2,6 @@ package com.emmsale.presentation.ui.main.event.conference
 
 import android.app.Activity.RESULT_OK
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
@@ -13,6 +12,7 @@ import com.emmsale.presentation.common.extension.getParcelableExtraCompat
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.FilterTag
 import com.emmsale.presentation.common.views.filterChipOf
+import com.emmsale.presentation.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.EventsUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity
@@ -30,7 +30,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
             val filters: ConferenceFiltersUiState.Success = result.data?.getParcelableExtraCompat(
-                ConferenceFilterActivity.FILTERS_KEY
+                ConferenceFilterActivity.FILTERS_KEY,
             ) ?: return@registerForActivityResult
 
             viewModel.updateConferenceFilter(filters)
@@ -118,14 +118,13 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     }
 
     private fun navigateToEventDetail(event: ConferencesUiState) {
-        Log.d("buna", event.toString())
-        // EventDetail.startActivity(event)
+        EventDetailActivity.startActivity(requireContext(), event.id)
     }
 
     private fun navigateToEventFilter() {
         val filterActivityIntent = ConferenceFilterActivity.createIntent(
             requireContext(),
-            viewModel.selectedFilters.value
+            viewModel.selectedFilters.value,
         )
         filterActivityLauncher.launch(filterActivityIntent)
     }

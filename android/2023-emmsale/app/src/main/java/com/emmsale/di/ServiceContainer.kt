@@ -1,6 +1,7 @@
 package com.emmsale.di
 
 import com.emmsale.data.activity.ActivityService
+import com.emmsale.data.comment.CommentService
 import com.emmsale.data.common.ServiceFactory
 import com.emmsale.data.conference.ConferenceService
 import com.emmsale.data.eventTag.EventTagService
@@ -18,6 +19,7 @@ class ServiceContainer(serviceFactory: ServiceFactory) {
     val memberService: MemberService by lazy { serviceFactory.create(MemberService::class.java) }
     val conferenceService: ConferenceService by lazy { serviceFactory.create(ConferenceService::class.java) }
     val fcmTokenService: FcmTokenService by lazy { serviceFactory.create(FcmTokenService::class.java) }
+    val commentService: CommentService by lazy { serviceFactory.create(CommentService::class.java) }
     val eventTagService: EventTagService by lazy { FakeEventTagService() }
     val eventDetailService: EventDetailService by lazy { serviceFactory.create(EventDetailService::class.java) }
     val participantService: ParticipantService by lazy { serviceFactory.create(ParticipantService::class.java) }

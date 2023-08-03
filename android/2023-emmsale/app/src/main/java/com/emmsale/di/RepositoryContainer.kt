@@ -2,6 +2,8 @@ package com.emmsale.di
 
 import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.activity.ActivityRepositoryImpl
+import com.emmsale.data.comment.CommentRepository
+import com.emmsale.data.comment.CommentRepositoryImpl
 import com.emmsale.data.conference.ConferenceRepository
 import com.emmsale.data.conference.ConferenceRepositoryImpl
 import com.emmsale.data.eventTag.EventTagRepository
@@ -44,6 +46,12 @@ class RepositoryContainer(
     }
     val fcmTokenRepository: FcmTokenRepository by lazy {
         FcmTokenRepositoryImpl(fcmTokenService = serviceContainer.fcmTokenService)
+    }
+    val commentRepository: CommentRepository by lazy {
+        CommentRepositoryImpl(
+            commentService = serviceContainer.commentService,
+            memberRepository = memberRepository
+        )
     }
     val eventTagRepository: EventTagRepository by lazy {
         EventTagRepositoryImpl(eventTagService = serviceContainer.eventTagService)
