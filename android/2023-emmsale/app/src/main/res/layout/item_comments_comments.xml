@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="comment"
+            type="com.emmsale.presentation.ui.comment.uiState.CommentUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_comment_authorname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="18dp"
+            android:text="@{comment.isDeleted ? @string/comment_deletedCommentAuthorName : comment.authorName}"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="김커디" />
+
+        <TextView
+            android:id="@+id/tv_comment_lastmodifieddate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@{comment.lastModifiedDate}"
+            android:textColor="@color/decorator_color"
+            android:textSize="11sp"
+            android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_comment_authorname"
+            app:layout_constraintStart_toEndOf="@+id/tv_comment_authorname"
+            app:layout_constraintTop_toTopOf="@+id/tv_comment_authorname"
+            tools:text="2023.08.03" />
+
+        <TextView
+            android:id="@+id/tv_comment_isupdated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:text="@string/comments_isupdated"
+            android:textColor="@color/decorator_color"
+            android:textSize="11sp"
+            android:visibility="@{(comment.isUpdated &amp;&amp; !comment.isDeleted)? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_comment_lastmodifieddate"
+            app:layout_constraintStart_toEndOf="@+id/tv_comment_lastmodifieddate"
+            app:layout_constraintTop_toTopOf="@+id/tv_comment_lastmodifieddate" />
+
+        <TextView
+            android:id="@+id/tv_comment_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="17dp"
+            android:text="@{comment.isDeleted ? @string/comment_deletedCommentContent : comment.content}"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_comment_authorname"
+            app:layout_constraintTop_toBottomOf="@+id/tv_comment_authorname"
+            tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하" />
+
+        <TextView
+            android:id="@+id/tv_comment_childcommentscount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="10dp"
+            android:padding="4dp"
+            android:text="@{@string/comments_childcommentscountformat(comment.childCommentsCount)}"
+            android:textColor="@color/decorator_color"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_comment_content"
+            tools:text="답글 0" />
+
+        <ImageView
+            android:id="@+id/iv_comment_deletebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="13dp"
+            android:contentDescription="@string/comment_deletebutton"
+            android:padding="4dp"
+            android:visibility="@{comment.isDeleted || !comment.isDeletable ? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_comment_authorname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_comment_authorname"
+            app:srcCompat="@drawable/ic_comment_delete" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

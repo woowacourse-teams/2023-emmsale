@@ -8,7 +8,6 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
-import com.emmsale.presentation.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.EventFragment
 import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
 
@@ -30,7 +29,6 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
                 R.id.mi_main_event -> showFragment(EventFragment.TAG)
-                R.id.mi_main_setting -> EventDetailActivity.startActivity(this, 1)
             }
             return@setOnItemSelectedListener true
         }
@@ -49,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.commit {
             val fragment = supportFragmentManager.findFragmentByTag(tag)
                 ?: throw IllegalStateException("태그 ${tag}로 프래그먼트를 찾을 수 없습니다. 프래그먼트 초기화 로직을 다시 살펴보세요.")
-            supportFragmentManager.fragments.forEach(::hide)
+            supportFragmentManager.fragments.forEach { hide(it) }
             show(fragment)
         }
     }
