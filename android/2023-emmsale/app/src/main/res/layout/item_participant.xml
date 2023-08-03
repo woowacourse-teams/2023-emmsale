@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="participant"
-            type="com.emmsale.presentation.eventdetail.participant.uistate.ParticipantUiState"/>
+            type="com.emmsale.presentation.eventdetail.participant.uistate.ParticipantUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,6 +28,7 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_participant_image"
+                    imageUrl="@{participant.imageUrl}"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_marginStart="10dp"
@@ -35,51 +37,50 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    imageUrl="@{participant.imageUrl}"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
                     android:id="@+id/tv_participant_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_extra_bold"
-                    android:textSize="18sp"
-                    android:textColor="@color/text_color_black"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/nanum_square_extra_bold"
+                    android:text="@{participant.name}"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toEndOf="@+id/iv_participant_image"
                     app:layout_constraintTop_toTopOf="@+id/iv_participant_image"
-                    android:text="@{participant.name}"
-                    tools:text="최우석"
-                    android:layout_marginTop="10dp" />
+                    tools:text="최우석" />
 
                 <TextView
                     android:id="@+id/tv_participant_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:maxEms="9"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/nanum_square_regular"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_color_black"
-                    app:layout_constraintStart_toEndOf="@+id/iv_participant_image"
+                    android:maxEms="9"
                     android:text="@{participant.description}"
-                    tools:text="안드로이드를 사랑하는 개발자에요"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toEndOf="@+id/iv_participant_image"
                     app:layout_constraintTop_toBottomOf="@+id/tv_participant_username"
-                    android:layout_marginTop="10dp" />
+                    tools:text="안드로이드를 사랑하는 개발자에요" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:stateListAnimator="@null"
-                    android:background="@drawable/bg_eventinformation_urlbutton"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:textColor="@color/white"
                     android:id="@+id/button_request_companion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/item_participant_requestcompanion"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_participant_image"
-                    app:layout_constraintTop_toTopOf="@+id/iv_participant_image"
                     android:layout_marginEnd="14dp"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    android:background="@drawable/bg_eventinformation_urlbutton"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:stateListAnimator="@null"
+                    android:text="@string/item_participant_requestcompanion"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_participant_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/iv_participant_image" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

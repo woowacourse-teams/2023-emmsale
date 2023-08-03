@@ -41,21 +41,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="13dp"
+                android:contentDescription="@string/all_goback"
                 android:src="@drawable/ic_all_upbutton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/all_goback" />
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            onRefresh="@{() -> viewModel.fetchComment(viewModel.uiState.parentComment.commentId)}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            onRefresh="@{() -> viewModel.fetchComment(viewModel.uiState.parentComment.commentId)}"
-            app:layout_constraintTop_toBottomOf="@id/cl_childcomment_toolbar"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_childcomment_toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -182,11 +182,11 @@
                             android:hint="@string/childcomments_editchildcommenthint"
                             android:importantForAutofill="no"
                             android:inputType="text|textMultiLine"
+                            android:maxLength="255"
                             android:maxLines="3"
                             android:padding="18dp"
                             android:textColor="@color/black"
                             android:textSize="14sp"
-                            android:maxLength="255"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/tv_childcomments_postchildcommentbutton"
                             app:layout_constraintStart_toStartOf="parent"

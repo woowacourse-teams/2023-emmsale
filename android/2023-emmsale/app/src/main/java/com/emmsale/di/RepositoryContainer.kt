@@ -16,6 +16,8 @@ import com.emmsale.data.login.LoginRepository
 import com.emmsale.data.login.LoginRepositoryImpl
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.member.MemberRepositoryImpl
+import com.emmsale.data.notification.NotificationRepository
+import com.emmsale.data.notification.NotificationRepositoryImpl
 import com.emmsale.data.participant.ParticipantRepository
 import com.emmsale.data.participant.ParticipantRepositoryImpl
 import com.emmsale.data.token.TokenRepository
@@ -65,5 +67,8 @@ class RepositoryContainer(
             uidRepository = uidRepository,
             participantService = serviceContainer.participantService,
         )
+    }
+    val notificationRepository: NotificationRepository by lazy {
+        NotificationRepositoryImpl(notificationService = serviceContainer.notificationService)
     }
 }
