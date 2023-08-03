@@ -41,7 +41,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         initView()
         setupEventsObserver()
         setupFiltersObserver()
-        viewModel.fetchEvents()
+        viewModel.fetchConference()
     }
 
     private fun initView() {

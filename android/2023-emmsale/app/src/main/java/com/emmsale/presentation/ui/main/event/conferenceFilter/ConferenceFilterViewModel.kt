@@ -61,15 +61,15 @@ class ConferenceFilterViewModel(
     }
 
     private fun fetchConferenceStatuses(): List<ConferenceFilterUiState> =
-        listOf("진행 중", "진행 예정", "마감").map { conferenceName ->
-            ConferenceFilterUiState(conferenceName)
+        listOf("진행 중", "진행 예정", "마감").mapIndexed { index, conferenceName ->
+            ConferenceFilterUiState(index.toLong(), conferenceName)
         }
 
     private suspend fun fetchConferenceTags(): List<ConferenceFilterUiState> =
         withContext(Dispatchers.IO) {
             when (val eventTagResult = eventTagRepository.getEventTags(EventCategory.CONFERENCE)) {
                 is ApiSuccess -> eventTagResult.data.map { eventTag ->
-                    ConferenceFilterUiState(name = eventTag.name)
+                    ConferenceFilterUiState(eventTag.id, eventTag.name)
                 }
 
                 is ApiError,

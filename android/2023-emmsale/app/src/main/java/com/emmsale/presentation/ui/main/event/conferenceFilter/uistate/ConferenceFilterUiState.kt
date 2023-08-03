@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ConferenceFilterUiState(
+    val id: Long,
     val name: String,
     var isSelected: Boolean = false,
 ) : Parcelable
