@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="notificationBodyClickListener"
+            type="com.emmsale.presentation.ui.notificationBox.recyclerview.body.NotificationBodyClickListener" />
+
+        <variable
+            name="notification"
+            type="com.emmsale.presentation.ui.notificationBox.uistate.NotificationBodyUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> notificationBodyClickListener.onClickBody(notification.id, notification.otherUid)}"
+        android:paddingHorizontal="17dp"
+        android:paddingVertical="20dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_member_profile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:imageUrl="@{notification.profileImageUrl}"
+            android:contentDescription="@string/notification_member_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_member_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="@{notification.otherName}"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_member_profile"
+            app:layout_constraintTop_toTopOf="@+id/iv_member_profile"
+            tools:text="김커디" />
+
+        <TextView
+            android:id="@+id/tv_noti_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:includeFontPadding="true"
+            android:text="@{notification.notificationDate}"
+            android:textColor="@color/notification_date_text_color"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_member_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_member_name"
+            tools:text="23.08.03" />
+
+        <TextView
+            android:id="@+id/tv_noti_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="@{notification.message}"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/iv_member_profile"
+            app:layout_constraintTop_toBottomOf="@+id/iv_member_profile"
+            tools:text="안녕하세요, 같이 가고싶습니다." />
+
+        <TextView
+            android:id="@+id/btn_reject"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_reject_btn"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:onClick="@{() -> notificationBodyClickListener.onReject(notification.id)}"
+            android:paddingVertical="10dp"
+            android:text="@string/notification_reject"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_accept"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_noti_message" />
+
+        <TextView
+            android:id="@+id/btn_accept"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_accept_btn"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:onClick="@{() -> notificationBodyClickListener.onAccept(notification.id)}"
+            android:text="@string/notification_accept"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/btn_reject"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_reject"
+            app:layout_constraintTop_toTopOf="@+id/btn_reject" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

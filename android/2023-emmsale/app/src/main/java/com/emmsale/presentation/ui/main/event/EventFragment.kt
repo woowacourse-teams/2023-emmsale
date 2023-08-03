@@ -5,6 +5,7 @@ import android.view.View
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
+import com.emmsale.presentation.ui.notificationBox.NotificationBoxActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -13,7 +14,12 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
+    private fun initView() {
         initEventViewPager()
+        initNotificationButtonClickListener()
     }
 
     private fun initEventViewPager() {
@@ -46,6 +52,12 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+    }
+
+    private fun initNotificationButtonClickListener() {
+        binding.btnNotifications.setOnClickListener {
+            NotificationBoxActivity.startActivity(requireContext())
+        }
     }
 
     companion object {

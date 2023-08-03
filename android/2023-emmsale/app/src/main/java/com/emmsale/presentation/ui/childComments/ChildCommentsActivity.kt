@@ -4,10 +4,10 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.emmsale.R
@@ -73,12 +73,20 @@ class ChildCommentsActivity : AppCompatActivity() {
 
     private fun handleParentComment(childCommentsScreenUiState: ChildCommentsScreenUiState) {
         binding.progressBar.isVisible = childCommentsScreenUiState.isLoading
-        binding.tvChildcommentsParentcommentauthorname.text = if (childCommentsScreenUiState.parentComment.isDeleted.not()) childCommentsScreenUiState.parentComment.authorName else getString(R.string.comment_deletedCommentAuthorName)
-        binding.tvChildcommentsParentcommentcontent.text = childCommentsScreenUiState.parentComment.content
-        binding.tvChildcommentsParentcommentlastmodifieddate.text = childCommentsScreenUiState.parentComment.lastModifiedDate
-        binding.tvChildcommentsParentcommentlastmodifieddate.isVisible = childCommentsScreenUiState.parentComment.isDeleted.not()
-        binding.ivChildcommentsParentcommentdeletebutton.isVisible = !childCommentsScreenUiState.parentComment.isDeleted && childCommentsScreenUiState.parentComment.isDeletable
-        binding.tvChildcommentsParentcommentisupdated.isVisible = childCommentsScreenUiState.parentComment.isUpdated && childCommentsScreenUiState.parentComment.isDeleted.not()
+        binding.tvChildcommentsParentcommentauthorname.text =
+            if (childCommentsScreenUiState.parentComment.isDeleted.not()) childCommentsScreenUiState.parentComment.authorName else getString(
+                R.string.comment_deletedCommentAuthorName
+            )
+        binding.tvChildcommentsParentcommentcontent.text =
+            childCommentsScreenUiState.parentComment.content
+        binding.tvChildcommentsParentcommentlastmodifieddate.text =
+            childCommentsScreenUiState.parentComment.lastModifiedDate
+        binding.tvChildcommentsParentcommentlastmodifieddate.isVisible =
+            childCommentsScreenUiState.parentComment.isDeleted.not()
+        binding.ivChildcommentsParentcommentdeletebutton.isVisible =
+            !childCommentsScreenUiState.parentComment.isDeleted && childCommentsScreenUiState.parentComment.isDeletable
+        binding.tvChildcommentsParentcommentisupdated.isVisible =
+            childCommentsScreenUiState.parentComment.isUpdated && childCommentsScreenUiState.parentComment.isDeleted.not()
     }
 
     private fun handleError(childCommentsScreenUiState: ChildCommentsScreenUiState) {

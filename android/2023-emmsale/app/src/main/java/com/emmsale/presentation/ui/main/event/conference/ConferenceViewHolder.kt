@@ -16,7 +16,7 @@ class ConferenceViewHolder(
 ) : ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false)
 ) {
-    private val binding: ItemConferenceBinding = ItemConferenceBinding.bind(itemView)
+    private val binding = ItemConferenceBinding.bind(itemView)
 
     init {
         binding.onClickConference = onClickConference

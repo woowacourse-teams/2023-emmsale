@@ -10,6 +10,7 @@ import com.emmsale.data.eventdetail.EventDetailService
 import com.emmsale.data.fcmToken.FcmTokenService
 import com.emmsale.data.login.LoginService
 import com.emmsale.data.member.MemberService
+import com.emmsale.data.notification.NotificationService
 import com.emmsale.data.participant.ParticipantService
 
 class ServiceContainer(serviceFactory: ServiceFactory) {
@@ -22,4 +23,5 @@ class ServiceContainer(serviceFactory: ServiceFactory) {
     val eventTagService: EventTagService by lazy { FakeEventTagService() }
     val eventDetailService: EventDetailService by lazy { serviceFactory.create(EventDetailService::class.java) }
     val participantService: ParticipantService by lazy { serviceFactory.create(ParticipantService::class.java) }
+    val notificationService: NotificationService by lazy { serviceFactory.create(NotificationService::class.java) }
 }

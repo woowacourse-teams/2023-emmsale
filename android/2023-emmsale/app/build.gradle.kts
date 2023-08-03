@@ -34,6 +34,9 @@ android {
         buildConfig = true
     }
     buildTypes {
+        getByName("debug") {
+            buildConfigField("String", "BASE_URL", "\"https://kerdy.kro.kr\"")
+        }
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
@@ -45,6 +48,7 @@ android {
                 strippedNativeLibsDir = "$buildDir/ndklibs/obj"
                 unstrippedNativeLibsDir = "$buildDir/ndklibs/libs"
             }
+            buildConfigField("String", "BASE_URL", "\"https://prod.kerdy.kro.kr\"")
         }
     }
     compileOptions {
@@ -60,7 +64,13 @@ android {
     tasks.withType(Test::class) {
         useJUnitPlatform()
         testLogging {
-            events.addAll(arrayOf(org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED, org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED))
+            events.addAll(
+                arrayOf(
+                    org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
+                    org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
+                    org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
+                )
+            )
         }
     }
 }
