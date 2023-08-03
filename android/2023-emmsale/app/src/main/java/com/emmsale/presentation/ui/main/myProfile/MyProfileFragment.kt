@@ -6,7 +6,6 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.main.myProfile.adapter.ActivitiesAdapter
 import com.emmsale.presentation.ui.main.myProfile.adapter.JobsAdapter
@@ -45,7 +44,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     private fun handleError(myProfileScreenUiState: MyProfileScreenUiState) {
         if (myProfileScreenUiState.isError) {
-            context?.showToast(myProfileScreenUiState.errorMessage)
+//            context?.showToast(myProfileScreenUiState.errorMessage)
         }
     }
 

@@ -18,8 +18,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity"
+            android:exported="true" />
+        <activity
             android:name=".presentation.ui.main.MainActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".presentation.ui.onboarding.OnboardingActivity"
             android:exported="true" />

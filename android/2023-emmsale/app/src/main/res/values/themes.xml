@@ -1,8 +1,10 @@
 <resources>
+
     <style name="Theme.Emmsale" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/status_bar_color</item>
         <item name="bottomNavigationStyle">@style/bottomNavigationViewStyle</item>
         <item name="android:textViewStyle">@style/basicTextFontStyle</item>
+        <item name="IconTextButtonStyle">@style/IconTextButtonStyle</item>
     </style>
 </resources>

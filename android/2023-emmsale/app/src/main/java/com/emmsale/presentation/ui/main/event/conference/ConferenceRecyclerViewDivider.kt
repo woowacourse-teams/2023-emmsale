@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.event
+package com.emmsale.presentation.ui.main.event.conference
 
 import android.content.Context
 import android.graphics.Canvas
@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 
-class EventRecyclerViewDivider(context: Context) : RecyclerView.ItemDecoration() {
+class ConferenceRecyclerViewDivider(context: Context) : RecyclerView.ItemDecoration() {
     private val divider: Drawable? by lazy {
         ContextCompat.getDrawable(context, R.drawable.bg_event_recycler_view_divider)
     }

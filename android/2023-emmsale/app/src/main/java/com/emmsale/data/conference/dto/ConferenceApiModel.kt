@@ -1,6 +1,7 @@
-package com.emmsale.data.event.dto
+package com.emmsale.data.conference.dto
 
-import com.emmsale.data.event.Event
+import com.emmsale.data.conference.Conference
+import com.emmsale.data.conference.ConferenceStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
@@ -21,16 +22,16 @@ data class ConferenceApiModel(
     @SerialName("tags")
     val tags: List<String>,
     @SerialName("imageUrl")
-    val posterUrl: String,
+    val posterUrl: String? = null,
     @SerialName("remainingDays")
     val dDay: Int,
 ) {
-    fun toData(): Event = Event(
+    fun toData(): Conference = Conference(
         id = id,
         name = name,
         startDate = parseDate(startDate),
         endDate = parseDate(endDate),
-        status = status,
+        status = ConferenceStatus.from(status),
         tags = tags,
         posterUrl = posterUrl,
         dDay = dDay,
@@ -46,4 +47,4 @@ data class ConferenceApiModel(
     }
 }
 
-fun List<ConferenceApiModel>.toData(): List<Event> = map { it.toData() }
+fun List<ConferenceApiModel>.toData(): List<Conference> = map { it.toData() }

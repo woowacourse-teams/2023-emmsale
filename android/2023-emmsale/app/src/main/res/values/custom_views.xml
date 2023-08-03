@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="IconTextButtonStyle" format="reference" />
+
+    <declare-styleable name="IconTextButton">
+        <attr name="icon" format="reference" />
+        <attr name="activeTextColor" format="color" />
+        <attr name="inactiveTextColor" format="color" />
+        <attr name="activeIconColor" format="color" />
+        <attr name="inactiveIconColor" format="color" />
+        <attr name="activeBackground" format="reference" />
+        <attr name="inactiveBackground" format="reference" />
+        <attr name="active" format="boolean" />
+    </declare-styleable>
+</resources>

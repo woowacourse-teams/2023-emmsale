@@ -8,6 +8,7 @@ plugins {
     kotlin("plugin.serialization") version "1.8.21"
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -78,7 +79,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.browser:browser:1.5.0")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
-    implementation("com.google.firebase:firebase-messaging-ktx:23.2.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("androidx.fragment:fragment-ktx:1.6.1")
@@ -95,13 +95,12 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-messaging:23.2.0")
 
     testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.2")
     testImplementation("org.assertj", "assertj-core", "3.22.0")
     testImplementation("io.mockk:mockk-android:1.13.5")
     testImplementation("io.mockk:mockk-agent:1.13.5")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
     // imageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
