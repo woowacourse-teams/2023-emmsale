@@ -1,17 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View" />
 
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.eventdetail.participant.EventParticipantViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="참여자목록" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_participants"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="17dp"
+            android:paddingVertical="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_eventparticipant_participate" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:stateListAnimator="@null"
+            android:background="@drawable/bg_eventinformation_urlbutton"
+            android:text="참가 신청"
+            android:fontFamily="@font/nanum_square_bold"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:id="@+id/btn_eventparticipant_participate"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="17dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="17dp" />
+
+        <ProgressBar
+            android:id="@+id/pb_eventDetailParticipant_loadingbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

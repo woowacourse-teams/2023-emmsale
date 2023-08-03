@@ -8,6 +8,7 @@ import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.eventdetail.EventDetailRepository
+import com.emmsale.data.member.MemberRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.uistate.EventDetailUiState
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class EventDetailViewModel(
     private val eventDetailRepository: EventDetailRepository,
+    private val memberRepository: MemberRepository,
 ) : ViewModel() {
 
     private val _eventDetail: MutableLiveData<EventDetailUiState> =
@@ -39,6 +41,7 @@ class EventDetailViewModel(
         val factory = ViewModelFactory {
             EventDetailViewModel(
                 eventDetailRepository = KerdyApplication.repositoryContainer.eventDetailRepository,
+                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
             )
         }
     }

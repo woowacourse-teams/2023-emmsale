@@ -141,22 +141,27 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tablayout_eventdetail"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/tablayout_eventdetail" />
 
-        <ImageView
-            android:scaleType="fitXY"
-            app:imageUrl="@{eventDetail.imageUrl}"
+
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="100dp"
             android:layout_height="0dp"
-            tools:srcCompat="@tools:sample/avatars"
             android:id="@+id/iv_eventdetail_poster"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="17dp"
             android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@+id/appbarlayout_eventdetail"
-            app:layout_constraintBottom_toBottomOf="@+id/chipgroup_evendetail_tags" />
+            app:layout_constraintBottom_toBottomOf="@+id/chipgroup_evendetail_tags">
+
+            <ImageView
+                android:scaleType="fitXY"
+                app:imageUrl="@{eventDetail.imageUrl}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:srcCompat="@tools:sample/avatars" />
+        </com.google.android.material.card.MaterialCardView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
