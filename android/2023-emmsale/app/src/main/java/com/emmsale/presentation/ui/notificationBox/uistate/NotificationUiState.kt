@@ -6,4 +6,5 @@ data class NotificationUiState(
     val otherUid: Long,
     val conferenceId: Long,
     val conferenceName: String,
+    val message: String,
 )

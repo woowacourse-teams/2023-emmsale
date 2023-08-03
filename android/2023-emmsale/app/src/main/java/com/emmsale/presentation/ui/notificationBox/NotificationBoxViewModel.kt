@@ -67,6 +67,7 @@ class NotificationBoxViewModel(
         otherName = otherName,
         conferenceId = notification.eventId,
         conferenceName = conferenceName,
+        message = notification.message,
     )
 
     private suspend fun getMemberNameAsync(userId: Long): Deferred<String?> =

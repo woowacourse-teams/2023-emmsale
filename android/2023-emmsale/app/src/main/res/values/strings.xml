@@ -48,4 +48,7 @@
     <string name="item_participant_requestcompanion">같이 가요</string>
     <string name="notification_box_title">알림 보관함</string>
     <string name="notification_box_delete_noti">알림 삭제</string>
+    <string name="notification_member_profile">사용자 프로필</string>
+    <string name="notification_reject">거절</string>
+    <string name="notification_accept">수락</string>
 </resources>

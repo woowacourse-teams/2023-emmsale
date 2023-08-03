@@ -35,8 +35,17 @@ class NotificationBoxActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        initNotificationBoxRecyclerView()
+        initNavigationClickListener()
+    }
+
+    private fun initNotificationBoxRecyclerView() {
         binding.rvNotiBox.adapter = notificationBoxAdapter
         binding.rvNotiBox.setHasFixedSize(true)
+    }
+
+    private fun initNavigationClickListener() {
+        binding.tbNotiBox.setNavigationOnClickListener { finish() }
     }
 
     private fun navigateToNotificationDetail(notificationId: Long, otherUid: Long) {

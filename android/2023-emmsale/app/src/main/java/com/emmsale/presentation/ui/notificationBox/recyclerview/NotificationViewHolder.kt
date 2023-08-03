@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
-import com.emmsale.databinding.ItemNotificationBinding
+import com.emmsale.databinding.ItemNotificationBodyBinding
 import com.emmsale.presentation.ui.notificationBox.uistate.NotificationUiState
 
 class NotificationViewHolder(
@@ -12,9 +12,9 @@ class NotificationViewHolder(
     onClickNotification: (notificationId: Long, otherUid: Long) -> Unit,
     onDelete: (notificationId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_notification, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.item_notification_body, parent, false)
 ) {
-    private val binding = ItemNotificationBinding.bind(itemView)
+    private val binding = ItemNotificationBodyBinding.bind(itemView)
 
     init {
         binding.onClickNotification = onClickNotification
