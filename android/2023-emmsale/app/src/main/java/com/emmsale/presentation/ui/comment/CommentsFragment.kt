@@ -17,8 +17,10 @@ class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
     override val layoutResId: Int = R.layout.fragment_comments
 
     private val eventId: Long by lazy {
-        arguments?.getLong(KEY_EVENT_ID)
-            ?: throw IllegalStateException("컨퍼런스의 댓글 프래그먼트는 컨퍼런스 아이디를 모르면 존재 의미가 없습니다. 로직을 다시 확인해주세요")
+        arguments?.getLong(KEY_EVENT_ID)?.run {
+            if (this < 1) throw IllegalStateException("컨퍼런스의 댓글 프래그먼트는 1 이상이어야 합니다. 로직을 다시 확인해주세요")
+            this
+        } ?: throw IllegalStateException("컨퍼런스의 댓글 프래그먼트는 컨퍼런스 아이디를 모르면 존재 의미가 없습니다. 로직을 다시 확인해주세요")
     }
 
     private val viewModel: CommentsViewModel by viewModels {
