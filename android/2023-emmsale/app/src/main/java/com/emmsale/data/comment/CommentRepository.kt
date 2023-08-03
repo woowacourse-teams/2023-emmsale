@@ -8,8 +8,6 @@ interface CommentRepository {
 
     suspend fun getComment(commentId: Long): ApiResult<Comment>
 
-    suspend fun getChildComments(commentId: Long): ApiResult<List<Comment>>
-
     suspend fun saveComment(content: String, eventId: Long, parentId: Long? = null): ApiResult<Unit>
 
     suspend fun updateComment(commentId: Long, content: String): ApiResult<Unit>

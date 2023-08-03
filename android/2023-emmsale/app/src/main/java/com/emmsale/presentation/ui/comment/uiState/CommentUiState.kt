@@ -22,14 +22,14 @@ data class CommentUiState(
             comment: Comment,
             loginMember: Member1,
         ) = CommentUiState(
-            authorName = comment.author.name,
+            authorName = comment.authorName,
             lastModifiedDate = comment.updatedAt.format(dateTimeFormatter),
             isUpdated = comment.createdAt != comment.updatedAt,
             commentId = comment.id,
             content = comment.content,
             childCommentsCount = comment.childComments.size,
-            isUpdatable = comment.author == loginMember,
-            isDeletable = comment.author == loginMember,
+            isUpdatable = comment.authorId == loginMember.id,
+            isDeletable = comment.authorId == loginMember.id,
             isDeleted = comment.deleted
         )
     }
