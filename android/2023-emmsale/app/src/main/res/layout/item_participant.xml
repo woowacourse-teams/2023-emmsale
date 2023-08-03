@@ -25,10 +25,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_participant_image"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
@@ -42,15 +42,15 @@
                     android:id="@+id/tv_participant_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_regular"
+                    android:fontFamily="@font/nanum_square_extra_bold"
                     android:textSize="18sp"
                     android:textColor="@color/text_color_black"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
                     app:layout_constraintStart_toEndOf="@+id/iv_participant_image"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/iv_participant_image"
                     android:text="@{participant.name}"
-                    tools:text="최우석" />
+                    tools:text="최우석"
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:id="@+id/tv_participant_description"
@@ -64,17 +64,18 @@
                     app:layout_constraintStart_toEndOf="@+id/iv_participant_image"
                     android:text="@{participant.description}"
                     tools:text="안드로이드를 사랑하는 개발자에요"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="20dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_participant_username"
+                    android:layout_marginTop="10dp" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:stateListAnimator="@null"
                     android:background="@drawable/bg_eventinformation_urlbutton"
                     android:fontFamily="@font/nanum_square_bold"
                     android:textColor="@color/white"
                     android:id="@+id/button_request_companion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="같이가요"
+                    android:text="@string/item_participant_requestcompanion"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_participant_image"
                     app:layout_constraintTop_toTopOf="@+id/iv_participant_image"
                     android:layout_marginEnd="14dp"

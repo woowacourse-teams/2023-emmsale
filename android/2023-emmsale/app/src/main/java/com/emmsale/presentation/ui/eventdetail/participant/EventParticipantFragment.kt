@@ -85,14 +85,12 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
                 is ParticipationStatusUiState.Success -> {
                     if (state.isParticipate) {
                         setButtonParticipationState()
-                        showToastMessage("참가 상태입니다!")
                     } else {
                         setButtonAbsenceState()
-                        showToastMessage("불참 상태입니다!")
                     }
                 }
 
-                else -> showToastMessage("참여 여부 확인 불가")
+                else -> showToastMessage("참가 여부 확인이 불가합니다")
             }
         }
     }
@@ -113,8 +111,10 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
                 is ParticipationStatusUiState.Success -> {
                     if (state.isParticipate) {
                         viewModel.deleteParticipant(eventId)
+                        showToastMessage("참가를 취소합니다")
                     } else {
                         viewModel.saveParticipant(eventId)
+                        showToastMessage("참가합니다~")
                     }
                 }
 

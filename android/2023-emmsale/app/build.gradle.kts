@@ -102,4 +102,7 @@ dependencies {
     testImplementation("io.mockk:mockk-android:1.13.5")
     testImplementation("io.mockk:mockk-agent:1.13.5")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
+
+    // imageview
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 }

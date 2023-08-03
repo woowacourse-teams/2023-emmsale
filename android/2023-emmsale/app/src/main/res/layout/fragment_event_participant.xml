@@ -27,16 +27,17 @@
             app:layout_constraintBottom_toTopOf="@id/btn_eventparticipant_participate" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:stateListAnimator="@null"
             android:background="@drawable/bg_eventinformation_urlbutton"
-            android:text="참가하기"
+            android:text="참가 신청"
             android:fontFamily="@font/nanum_square_bold"
-            android:textSize="25sp"
+            android:textSize="18sp"
             android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:id="@+id/btn_eventparticipant_participate"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="17dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginEnd="17dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
