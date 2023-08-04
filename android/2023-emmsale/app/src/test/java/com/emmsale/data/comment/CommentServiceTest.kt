@@ -4,7 +4,6 @@ import com.emmsale.data.comment.dto.CommentFamilyApiModel
 import com.emmsale.data.comment.dto.CommentApiModel
 import com.emmsale.data.comment.dto.SaveCommentRequestBody
 import com.emmsale.data.comment.dto.UpdateCommentRequestBody
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -18,6 +17,8 @@ import org.junit.jupiter.api.assertAll
 import retrofit2.Retrofit
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+
 
 internal class CommentServiceTest {
 
