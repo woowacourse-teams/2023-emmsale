@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import retrofit2.Retrofit
 
-
 internal class CommentServiceTest {
 
     private lateinit var mockWebServer: MockWebServer
