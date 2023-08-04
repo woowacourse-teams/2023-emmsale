@@ -35,15 +35,18 @@ class ConferenceViewModel(
     ) {
         viewModelScope.launch {
             _events.value = EventsUiState.Loading
-            when (val eventsResult = conferenceRepository.getConferences(
-                category = EventCategory.CONFERENCE,
-                year = year,
-                month = month,
-                status = status,
-                tag = tag,
-            )) {
-                is ApiSuccess -> _events.value =
-                    EventsUiState.Success(eventsResult.data.map(ConferencesUiState::from))
+            when (
+                val eventsResult = conferenceRepository.getConferences(
+                    category = EventCategory.CONFERENCE,
+                    year = year,
+                    month = month,
+                    status = status,
+                    tag = tag,
+                )
+            ) {
+                is ApiSuccess ->
+                    _events.value =
+                        EventsUiState.Success(eventsResult.data.map(ConferencesUiState::from))
 
                 is ApiError -> _events.value = EventsUiState.Error
                 is ApiException -> _events.value = EventsUiState.Error

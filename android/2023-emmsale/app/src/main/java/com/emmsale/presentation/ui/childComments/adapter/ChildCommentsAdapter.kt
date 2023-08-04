@@ -1,8 +1,8 @@
 package com.emmsale.presentation.ui.childComments.adapter
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.emmsale.presentation.ui.childComments.uiState.CommentUiState
 
 class ChildCommentsAdapter(
@@ -28,7 +28,6 @@ class ChildCommentsAdapter(
                 oldItem: CommentUiState,
                 newItem: CommentUiState,
             ): Boolean = oldItem == newItem
-
         }
     }
 }

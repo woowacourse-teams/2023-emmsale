@@ -67,7 +67,7 @@ class IconTextButton : AppCompatButton {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         initIcon(context)
-        updateActivationView(context)
+        updateActivationView()
     }
 
     private fun initIcon(context: Context) {
@@ -77,7 +77,7 @@ class IconTextButton : AppCompatButton {
         }
     }
 
-    private fun updateActivationView(context: Context) {
+    private fun updateActivationView() {
         when (isActive) {
             true -> {
                 setTextColor(activeTextColor)
@@ -97,4 +97,3 @@ class IconTextButton : AppCompatButton {
         }
     }
 }
-

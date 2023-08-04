@@ -1,7 +1,7 @@
 package com.emmsale.data.comment
 
-import com.emmsale.data.comment.dto.CommentFamilyApiModel
 import com.emmsale.data.comment.dto.CommentApiModel
+import com.emmsale.data.comment.dto.CommentFamilyApiModel
 import com.emmsale.data.comment.dto.SaveCommentRequestBody
 import com.emmsale.data.comment.dto.UpdateCommentRequestBody
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
