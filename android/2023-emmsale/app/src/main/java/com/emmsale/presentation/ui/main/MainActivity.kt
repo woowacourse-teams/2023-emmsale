@@ -10,6 +10,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
 import com.emmsale.presentation.ui.main.event.EventFragment
 import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
+import com.emmsale.presentation.ui.setting.SettingFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
                 R.id.mi_main_event -> showFragment(EventFragment.TAG)
+                R.id.mi_main_setting -> showFragment(SettingFragment.TAG)
             }
             return@setOnItemSelectedListener true
         }
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.commitNow {
             add(R.id.fcv_main, MyProfileFragment(), MyProfileFragment.TAG)
             add(R.id.fcv_main, EventFragment(), EventFragment.TAG)
+            add(R.id.fcv_main, SettingFragment(), SettingFragment.TAG)
         }
     }
 
