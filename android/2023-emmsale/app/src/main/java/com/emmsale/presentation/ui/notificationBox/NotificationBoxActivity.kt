@@ -3,6 +3,7 @@ package com.emmsale.presentation.ui.notificationBox
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityNotificationBoxBinding
@@ -10,7 +11,9 @@ import com.emmsale.presentation.ui.notificationBox.recyclerview.body.Notificatio
 import com.emmsale.presentation.ui.notificationBox.recyclerview.header.NotificationBoxHeaderAdapter
 import com.emmsale.presentation.ui.notificationBox.recyclerview.header.NotificationHeaderClickListener
 
-class NotificationBoxActivity : AppCompatActivity(), NotificationHeaderClickListener,
+class NotificationBoxActivity :
+    AppCompatActivity(),
+    NotificationHeaderClickListener,
     NotificationBodyClickListener {
     private val viewModel: NotificationBoxViewModel by viewModels { NotificationBoxViewModel.factory }
     private val binding: ActivityNotificationBoxBinding by lazy {
@@ -53,8 +56,7 @@ class NotificationBoxActivity : AppCompatActivity(), NotificationHeaderClickList
     }
 
     private fun navigateToNotificationDetail(notificationId: Long, otherUid: Long) {
-        // TODO: 상대방 uid를 바탕으로, Notification 상세 화면 조회
-        // TODO: 다이얼로그로 띄우기
+        Log.d("NotificationBoxActivity", "$notificationId, $otherUid")
     }
 
     override fun onAccept(notificationId: Long) {

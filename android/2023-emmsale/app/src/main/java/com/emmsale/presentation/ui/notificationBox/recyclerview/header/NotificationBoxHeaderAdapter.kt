@@ -22,4 +22,3 @@ class NotificationBoxHeaderAdapter(
         holder.bind(getItem(position))
     }
 }
-

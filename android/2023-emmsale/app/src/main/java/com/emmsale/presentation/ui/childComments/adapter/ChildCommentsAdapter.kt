@@ -28,7 +28,6 @@ class ChildCommentsAdapter(
                 oldItem: CommentUiState,
                 newItem: CommentUiState,
             ): Boolean = oldItem == newItem
-
         }
     }
 }

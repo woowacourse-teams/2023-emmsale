@@ -29,7 +29,6 @@ class CommentsAdapter(
                 oldItem: CommentUiState,
                 newItem: CommentUiState,
             ): Boolean = oldItem == newItem
-
         }
     }
 }

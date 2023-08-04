@@ -74,17 +74,6 @@ class CommentsViewModel(
         }
     }
 
-    fun updateComment(commentId: Long, content: String, eventId: Long) {
-        changeLoadingUiState()
-        viewModelScope.launch {
-            when (commentRepository.updateComment(commentId, content)) {
-                is ApiError -> changeErrorUiState("댓글 수정에 실패했습니다.")
-                is ApiException -> changeErrorUiState("댓글 수정에 실패했습니다.")
-                is ApiSuccess -> fetchComments(eventId)
-            }
-        }
-    }
-
     fun deleteComment(commentId: Long, eventId: Long) {
         changeLoadingUiState()
         viewModelScope.launch {
