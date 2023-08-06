@@ -1,8 +1,5 @@
 package com.emmsale.event.application;
 
-import static com.emmsale.event.exception.EventExceptionType.INVALID_MONTH;
-import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR;
-import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR_AND_MONTH;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
@@ -30,6 +27,7 @@ import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -42,10 +40,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class EventService {
 
-  private static final int MIN_MONTH = 1;
-  private static final int MAX_MONTH = 12;
-  private static final int MIN_YEAR = 2015;
-
   private final EventRepository eventRepository;
   private final ParticipantRepository participantRepository;
   private final EventTagRepository eventTagRepository;
@@ -55,6 +49,10 @@ public class EventService {
     if (member.isNotMe(memberId)) {
       throw new EventException(EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT);
     }
+  }
+
+  private static boolean isExistFilterDate(final String startDate, final String endDate) {
+    return startDate != null || endDate != null;
   }
 
   @Transactional(readOnly = true)
@@ -90,21 +88,21 @@ public class EventService {
   }
 
   @Transactional(readOnly = true)
-  public List<EventResponse> findEvents(final EventType categoryName, final LocalDate nowDate,
-      final Integer year, final Integer month,
-      final String tagName, final String statusName) {
-    List<Event> events = eventRepository.findEventsByType(categoryName);
+  public List<EventResponse> findEvents(final EventType category, final LocalDate nowDate,
+      final String startDate, final String endDate,
+      final List<String> tagNames, final List<EventStatus> statuses) {
+    List<Event> events = eventRepository.findEventsByType(category);
 
-    if (isExistTagName(tagName)) {
-      events = filterByTag(tagName);
+    if (isExistTagNames(tagNames)) {
+      events = filterByTags(events, tagNames);
     }
-    if (isExistBothYearAndMonth(year, month)) {
-      events = filterByPeriod(events, year, month);
+    if (isExistFilterDate(startDate, endDate)) {
+      events = filterByPeriod(events, startDate, endDate);
     }
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events);
 
-    return filterEventResponsesByStatus(nowDate, statusName, eventsForEventStatus);
+    return filterByStatuses(nowDate, statuses, eventsForEventStatus);
   }
 
   @Transactional(readOnly = true)
@@ -117,52 +115,76 @@ public class EventService {
         .collect(toUnmodifiableList());
   }
 
-  private boolean isExistTagName(final String tagName) {
-    return tagName != null;
+  private boolean isExistTagNames(final List<String> tagNames) {
+    return tagNames != null;
   }
 
-  private List<Event> filterByTag(final String tagName) {
-    final Tag tag = tagRepository.findByName(tagName)
-        .orElseThrow(() -> new TagException(NOT_FOUND_TAG));
-    return eventTagRepository.findEventTagsByTag(tag)
+  private List<Event> filterByTags(List<Event> events, final List<String> tagNames) {
+    List<Tag> tags = tagNames.stream().map(tagName ->
+        tagRepository.findByName(tagName)
+            .orElseThrow(() -> new TagException(NOT_FOUND_TAG))
+    ).collect(toList());
+    List<Event> tagedEvents = eventTagRepository.findEventTagsByTagIn(tags)
         .stream()
-        .map(EventTag::getEvent)
-        .collect(toList());
-  }
-
-  private boolean isExistBothYearAndMonth(final Integer year, final Integer month) {
-    if ((year == null && month != null) || (year != null && month == null)) {
-      throw new EventException(INVALID_YEAR_AND_MONTH);
-    }
-    return (year != null && month != null);
-  }
-
-  private List<Event> filterByPeriod(final List<Event> events, final int year, final int month) {
-    validateYearAndMonth(year, month);
+        .map(EventTag::getEvent).collect(toList());
     return events.stream()
-        .filter(event -> isOverlapToMonth(year, month,
+        .filter(event -> tagedEvents.contains(event)).collect(toList());
+
+//    return eventTagRepository.findEventTagsByTagIn(tags)
+//        .stream()
+//        .map(EventTag::getEvent)
+//        .distinct()
+//        .collect(toList());
+  }
+
+  private List<Event> filterByPeriod(final List<Event> events, final String startDate,
+      final String endDate) {
+    LocalDate filterStart = validateStartDate(startDate);
+    LocalDate filterEnd = validateEndDate(endDate);
+    validateEndDateAfterDateStart(filterStart, filterEnd);
+
+    return events.stream()
+        .filter(event -> isOverlapToMonth(filterStart, filterEnd,
             event.getStartDate().toLocalDate(), event.getEndDate().toLocalDate())
         )
         .collect(toList());
   }
 
-  private void validateYearAndMonth(final int year, final int month) {
-    if (year < MIN_YEAR) {
-      throw new EventException(INVALID_YEAR);
-    }
-    if (month < MIN_MONTH || month > MAX_MONTH) {
-      throw new EventException(INVALID_MONTH);
+
+  private LocalDate validateStartDate(final String date) {
+    try {
+      if (date == null) {
+        return LocalDate.MIN;
+      }
+      return LocalDate.parse(date);
+    } catch (DateTimeParseException exception) {
+      throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
     }
   }
 
-  private boolean isOverlapToMonth(final int year, final int month,
-      final LocalDate eventStart, final LocalDate eventEnd) {
-    final LocalDate monthStart = LocalDate.of(year, month, 1);
-    final LocalDate monthEnd = LocalDate.of(year, month, monthStart.lengthOfMonth());
+  private LocalDate validateEndDate(final String date) {
+    try {
+      if (date == null) {
+        return LocalDate.MAX;
+      }
+      return LocalDate.parse(date);
+    } catch (DateTimeParseException exception) {
+      throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
+    }
+  }
 
-    return (isBeforeOrEquals(eventStart, monthEnd) && isBeforeOrEquals(monthStart, eventEnd))
-        || (isBeforeOrEquals(monthStart, eventStart) && isBeforeOrEquals(eventStart, monthEnd))
-        || (isBeforeOrEquals(monthStart, eventEnd) && isBeforeOrEquals(eventEnd, monthEnd));
+  private void validateEndDateAfterDateStart(LocalDate startDate, LocalDate endDate) {
+    if (endDate.isBefore(startDate)) {
+      throw new EventException(EventExceptionType.START_DATE_AFTER_END_DATE);
+    }
+  }
+
+  private boolean isOverlapToMonth(final LocalDate startDate, final LocalDate endDate,
+      final LocalDate eventStart, final LocalDate eventEnd) {
+    return
+        (isBeforeOrEquals(eventStart, endDate) && isBeforeOrEquals(startDate, eventEnd))
+            || (isBeforeOrEquals(startDate, eventStart) && isBeforeOrEquals(eventStart, endDate))
+            || (isBeforeOrEquals(startDate, eventEnd) && isBeforeOrEquals(eventEnd, endDate));
   }
 
   private boolean isBeforeOrEquals(final LocalDate criteria, final LocalDate comparison) {
@@ -179,26 +201,31 @@ public class EventService {
         );
   }
 
-
-  private List<EventResponse> filterEventResponsesByStatus(LocalDate today, final String statusName,
+  private List<EventResponse> filterByStatuses(LocalDate today,
+      final List<EventStatus> statuses,
       final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
-    if (isExistStatusName(statusName)) {
-      EventStatus status = EventStatus.from(statusName);
-      List<Event> filteredEvents = eventsForEventStatus.get(status);
-      if (cannotFoundKeyStatus(filteredEvents)) {
-        return List.of();
-      }
-      return EventResponse.makeEventResponsesByStatus(today, status, filteredEvents);
+    if (isExistStatusName(statuses)) {
+      return filterEventResponseByStatuses(today, statuses, eventsForEventStatus);
     }
     return EventResponse.mergeEventResponses(today, eventsForEventStatus);
   }
 
-  private boolean cannotFoundKeyStatus(final List<Event> filteredEvents) {
-    return filteredEvents == null;
+  private boolean isExistStatusName(final List<EventStatus> statuses) {
+    return statuses != null;
   }
 
-  private boolean isExistStatusName(final String statusName) {
-    return statusName != null;
+  private List<EventResponse> filterEventResponseByStatuses(final LocalDate today,
+      final List<EventStatus> statuses,
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
+    return eventsForEventStatus.entrySet()
+        .stream()
+        .filter(entry -> statuses.contains(entry.getKey()))
+        .map(entry -> EventResponse.makeEventResponsesByStatus(today, entry.getKey(),
+            entry.getValue()))
+        .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
+          combinedEvents.addAll(eventsToAdd);
+          return combinedEvents;
+        });
   }
 
   public EventDetailResponse addEvent(final EventDetailRequest request, final LocalDate today) {

@@ -4,7 +4,6 @@ import static java.lang.String.format;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -58,8 +57,6 @@ import org.springframework.test.web.servlet.ResultActions;
 @WebMvcTest(EventApi.class)
 class EventApiTest extends MockMvcTestHelper {
 
-  private static final int QUERY_YEAR = 2023;
-  private static final int QUERY_MONTH = 7;
   private static final ResponseFieldsSnippet EVENT_DETAIL_RESPONSE_FILED = responseFields(
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("event 식별자"),
       fieldWithPath("name").type(JsonFieldType.STRING).description("envent 이름"),
@@ -146,10 +143,10 @@ class EventApiTest extends MockMvcTestHelper {
     // given
     final RequestParametersSnippet requestParameters = requestParameters(
         parameterWithName("category").description("행사 카테고리(CONFERENCE, COMPETITION)"),
-        parameterWithName("year").description("조회하고자 하는 연도(2015 이상의 값)(option)").optional(),
-        parameterWithName("month").description("조회하고자 하는 월(1~12)(option)").optional(),
-        parameterWithName("tag").description("필터링하려는 태그(option)").optional(),
-        parameterWithName("status").description("필터링하려는 상태(option)").optional()
+        parameterWithName("start_date").description("필터링하려는 기간의 시작일(option)").optional(),
+        parameterWithName("end_date").description("필터링하려는 기간의 끝일(option)").optional(),
+        parameterWithName("tags").description("필터링하려는 태그(option)").optional(),
+        parameterWithName("statuses").description("필터링하려는 상태(option)").optional()
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -179,22 +176,20 @@ class EventApiTest extends MockMvcTestHelper {
         new EventResponse(2L, "AI 컨퍼런스", LocalDateTime.parse("2023-07-22T12:00:00"),
             LocalDateTime.parse("2023-07-30T12:00:00"), List.of("AI"), "진행 예정",
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3),
-        new EventResponse(4L, "안드로이드 컨퍼런스", LocalDateTime.parse("2023-06-29T12:00:00"),
-            LocalDateTime.parse("2023-07-16T12:00:00"), List.of("백엔드", "프론트엔드"), "종료된 행사",
-            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
             3)
 
     );
 
-    when(eventService.findEvents(any(), any(LocalDate.class), eq(QUERY_YEAR), eq(QUERY_MONTH),
-        eq(null), eq(null))).thenReturn(eventResponses);
+    when(eventService.findEvents(any(EventType.class), any(LocalDate.class), eq("2023-07-01"),
+        eq("2023-07-31"),
+        eq(null), any())).thenReturn(eventResponses);
 
     // when & then
     mockMvc.perform(get("/events")
             .param("category", "CONFERENCE")
-            .param("year", "2023")
-            .param("month", "7")
+            .param("start_date", "2023-07-01")
+            .param("end_date", "2023-07-31")
+            .param("statuses", "UPCOMING,IN_PROGRESS")
         )
         .andExpect(status().isOk())
         .andDo(document("find-events", requestParameters, responseFields));
@@ -448,22 +443,5 @@ class EventApiTest extends MockMvcTestHelper {
       //then
       result.andExpect(status().isBadRequest());
     }
-  }
-
-  @Test
-  @DisplayName("이미 Event에 멤버가 참여헀는지 확인할 수 있다.")
-  void isAlreadyParticipate() throws Exception {
-    //given
-    final Long memberId = 2L;
-    final Long eventId = 3L;
-    given(eventService.isAlreadyParticipate(eventId, memberId)).willReturn(true);
-
-    //when && then
-    mockMvc.perform(
-            get("/events/{eventId}/participants/already-participate?member-id={memberId}"
-                , eventId, memberId)
-        )
-        .andExpect(status().isOk())
-        .andDo(document("check-already-participate"));
   }
 }
