@@ -108,7 +108,7 @@ class ConferenceFilterViewModel(
             ConferenceFilterDateUiState(startDate.year, startDate.monthValue, startDate.dayOfMonth)
 
         if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedEndDate?.let {
-                val endDate = LocalDate.of(it.year, it.month, 1)
+                val endDate = LocalDate.of(it.year, it.month, it.day)
                 startDate.isAfter(endDate)
             } == true
         ) {
@@ -130,8 +130,8 @@ class ConferenceFilterViewModel(
 
     fun updateEndDate(endDate: LocalDate) {
         if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedStartDate?.let {
-                val startDate = LocalDate.of(it.year, it.month, 1)
-                endDate.isBefore(startDate) || (endDate.year == startDate.year && endDate.monthValue == startDate.monthValue)
+                val startDate = LocalDate.of(it.year, it.month, it.day)
+                endDate.isBefore(startDate) || (endDate.year == startDate.year && endDate.monthValue == startDate.monthValue && endDate.dayOfMonth == startDate.dayOfMonth)
             } == true
         ) {
             return
