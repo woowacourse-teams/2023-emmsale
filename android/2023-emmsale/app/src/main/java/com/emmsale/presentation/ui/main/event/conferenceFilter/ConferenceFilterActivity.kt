@@ -141,7 +141,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
     private fun removeFilterTagsExcludingAllTag() {
         eventTagBinding.cgConferenceTagChips.removeViews(
             1,
-            eventTagBinding.cgConferenceTagChips.childCount - 1
+            eventTagBinding.cgConferenceTagChips.childCount - 1,
         )
     }
 
@@ -155,7 +155,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
                 text = tag.name
                 isChecked = tag.isSelected
                 setOnCheckedChangeListener { _, _ -> block() }
-            }
+            },
         )
     }
 

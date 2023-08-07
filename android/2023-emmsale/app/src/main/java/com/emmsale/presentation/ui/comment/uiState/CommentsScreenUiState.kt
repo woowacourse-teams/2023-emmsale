@@ -15,7 +15,7 @@ data class CommentsScreenUiState(
             isLoading = true,
             isError = false,
             errorMessage = "",
-            comments = listOf()
+            comments = listOf(),
         )
 
         fun create(
@@ -30,7 +30,7 @@ data class CommentsScreenUiState(
                     comment = it,
                     loginMember = loginMember,
                 )
-            }
+            },
         )
     }
 }

@@ -56,7 +56,7 @@ class ConferenceFilterViewModel(
                     tags = tags,
                     selectedStartDate = selectedStartDate,
                     selectedEndDate = selectedEndDate,
-                )
+                ),
             )
             _selectedTagFilterCount.postValue(tags.count { it.isSelected })
         }
@@ -107,31 +107,31 @@ class ConferenceFilterViewModel(
         val filterDate = ConferenceFilterDateUiState(startDate.year, startDate.monthValue)
 
         if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedEndDate?.let {
-            val endDate = LocalDate.of(it.year, it.month, 1)
-            startDate.isAfter(endDate)
-        } == true
+                val endDate = LocalDate.of(it.year, it.month, 1)
+                startDate.isAfter(endDate)
+            } == true
         ) {
             _eventFilters.postValue(
                 (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
                     selectedStartDate = filterDate,
                     selectedEndDate = null,
-                )
+                ),
             )
             return
         }
 
         _eventFilters.postValue(
             (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
-                selectedStartDate = filterDate
-            )
+                selectedStartDate = filterDate,
+            ),
         )
     }
 
     fun updateEndDate(endDate: LocalDate) {
         if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedStartDate?.let {
-            val startDate = LocalDate.of(it.year, it.month, 1)
-            endDate.isBefore(startDate) || (endDate.year == startDate.year && endDate.monthValue == startDate.monthValue)
-        } == true
+                val startDate = LocalDate.of(it.year, it.month, 1)
+                endDate.isBefore(startDate) || (endDate.year == startDate.year && endDate.monthValue == startDate.monthValue)
+            } == true
         ) {
             return
         }
@@ -139,15 +139,15 @@ class ConferenceFilterViewModel(
         val filterDate = ConferenceFilterDateUiState(endDate.year, endDate.monthValue)
         _eventFilters.postValue(
             (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
-                selectedEndDate = filterDate
-            )
+                selectedEndDate = filterDate,
+            ),
         )
     }
 
     companion object {
         val factory = ViewModelFactory {
             ConferenceFilterViewModel(
-                eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository
+                eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository,
             )
         }
     }

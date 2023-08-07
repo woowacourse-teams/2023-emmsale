@@ -8,5 +8,5 @@ data class CommentFamilyApiModel(
     @SerialName("parentComment")
     val parentComment: CommentApiModel,
     @SerialName("childComments")
-    val childComments: List<CommentApiModel>
+    val childComments: List<CommentApiModel>,
 )

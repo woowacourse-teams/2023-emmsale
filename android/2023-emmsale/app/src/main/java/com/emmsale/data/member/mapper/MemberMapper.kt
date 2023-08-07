@@ -12,7 +12,7 @@ fun MemberWithoutActivitiesApiModel.toData(activities: List<ActivitiesAssociated
         name = this.name,
         description = this.description,
         imageUrl = this.imageUrl,
-        activities = activities.toData()
+        activities = activities.toData(),
     )
 
 private fun List<ActivitiesAssociatedByActivityTypeApiModel>.toData(): List<Activity1> =
@@ -23,7 +23,7 @@ private fun ActivitiesAssociatedByActivityTypeApiModel.toData(): List<Activity1>
         Activity1(
             id = it.id,
             activityType = activityType.toData(),
-            name = it.name
+            name = it.name,
         )
     }
 

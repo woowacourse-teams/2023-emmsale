@@ -21,7 +21,7 @@ fun Context.checkPostNotificationPermission(): Boolean {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true
     return ActivityCompat.checkSelfPermission(
         this,
-        Manifest.permission.POST_NOTIFICATIONS
+        Manifest.permission.POST_NOTIFICATIONS,
     ) == PackageManager.PERMISSION_GRANTED
 }
 

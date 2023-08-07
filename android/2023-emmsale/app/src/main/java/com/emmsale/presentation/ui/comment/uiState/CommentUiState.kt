@@ -30,7 +30,7 @@ data class CommentUiState(
             childCommentsCount = comment.childComments.size,
             isUpdatable = comment.authorId == loginMember.id,
             isDeletable = comment.authorId == loginMember.id,
-            isDeleted = comment.deleted
+            isDeleted = comment.deleted,
         )
     }
 }

@@ -18,7 +18,7 @@ class CommentViewHolder(
     init {
         binding.tvCommentChildcommentscount.setOnClickListener {
             onChildCommentsView(
-                binding.comment?.commentId ?: return@setOnClickListener
+                binding.comment?.commentId ?: return@setOnClickListener,
             )
         }
         binding.ivCommentDeletebutton.setOnClickListener { onDeleteButtonClick() }
@@ -33,7 +33,7 @@ class CommentViewHolder(
 
         dialog.tvCommentdeletedialogPositivebutton.setOnClickListener {
             onCommentDelete(
-                binding.comment?.commentId ?: return@setOnClickListener
+                binding.comment?.commentId ?: return@setOnClickListener,
             )
             alertDialog.cancel()
         }
@@ -60,7 +60,7 @@ class CommentViewHolder(
             val binding = ItemCommentsCommentsBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
+                false,
             )
 
             return CommentViewHolder(binding, onChildCommentsView, onCommentDelete)

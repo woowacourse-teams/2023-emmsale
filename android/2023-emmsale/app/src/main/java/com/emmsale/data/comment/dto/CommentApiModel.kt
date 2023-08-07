@@ -24,5 +24,5 @@ data class CommentApiModel(
     @SerialName("memberName")
     val memberName: String,
     @SerialName("deleted")
-    val deleted: Boolean
+    val deleted: Boolean,
 )

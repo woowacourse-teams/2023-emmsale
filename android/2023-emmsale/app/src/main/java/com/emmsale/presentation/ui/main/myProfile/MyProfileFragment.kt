@@ -61,7 +61,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     private fun handleActivities(myProfileScreenUiState: MyProfileScreenUiState) {
         (binding.rvMyprofileEducations.adapter as ActivitiesAdapter).submitList(
-            myProfileScreenUiState.educations
+            myProfileScreenUiState.educations,
         )
         (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfileScreenUiState.clubs)
     }

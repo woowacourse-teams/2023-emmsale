@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UpdateCommentRequestBody(
     @SerialName("content")
-    val content: String
+    val content: String,
 )

@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 @BindingAdapter(
     "app:startEventDateTime",
     "app:endEventDateTime",
-    requireAll = true
+    requireAll = true,
 )
 fun TextView.setEventDuration(
     startLocalDateTime: LocalDateTime,

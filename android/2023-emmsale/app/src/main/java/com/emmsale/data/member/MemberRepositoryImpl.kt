@@ -24,11 +24,11 @@ class MemberRepositoryImpl(
 
         val memberApiModel = memberResponse.body() ?: return@withContext ApiError(
             memberResponse.code(),
-            memberResponse.errorBody().toString()
+            memberResponse.errorBody().toString(),
         )
         val activitiesApiModels = activitiesResponse.body() ?: return@withContext ApiError(
             activitiesResponse.code(),
-            activitiesResponse.errorBody().toString()
+            activitiesResponse.errorBody().toString(),
         )
 
         ApiSuccess(memberApiModel.toData(activitiesApiModels))

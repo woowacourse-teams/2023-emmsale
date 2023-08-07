@@ -42,8 +42,8 @@ class MyProfileViewModel(
             uiState.value!!.copy(
                 isLoading = false,
                 isError = true,
-                errorMessage = errorMessage
-            )
+                errorMessage = errorMessage,
+            ),
         )
     }
 
@@ -51,7 +51,7 @@ class MyProfileViewModel(
         val factory = ViewModelFactory {
             MyProfileViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository
+                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
             )
         }
     }

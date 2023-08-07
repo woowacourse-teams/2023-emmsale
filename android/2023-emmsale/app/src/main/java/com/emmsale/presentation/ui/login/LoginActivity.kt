@@ -110,7 +110,7 @@ class LoginActivity : AppCompatActivity() {
         FirebaseMessaging.getInstance().token.addOnSuccessListener { fcmToken ->
             viewModel.login(
                 fcmToken = fcmToken,
-                code = intent?.parseGithubCode() ?: ""
+                code = intent?.parseGithubCode() ?: "",
             )
         }
     }

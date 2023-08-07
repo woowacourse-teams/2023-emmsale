@@ -14,7 +14,7 @@ class ConferenceViewHolder(
     parent: ViewGroup,
     onClickConference: (ConferencesUiState) -> Unit,
 ) : ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false),
 ) {
     private val binding = ItemConferenceBinding.bind(itemView)
 
