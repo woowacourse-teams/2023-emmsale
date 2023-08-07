@@ -108,7 +108,6 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
 
     //when
     final List<MemberActivityResponses> actual = memberActivityService.addActivity(member, request);
-
     //then
     assertThat(expected)
         .usingRecursiveComparison()
@@ -121,7 +120,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
   void test_addActivity_invalid_activity_ids_Exception() throws Exception {
     //given
     final Member savedMember = memberRepository.findById(1L).get();
-    final List<Long> activityIds = List.of(1L, 2L, 7L);
+    final List<Long> activityIds = List.of(4L, 5L, 7L);
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
     //when & then
@@ -138,10 +137,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
     final List<Long> activityIds = List.of(1L, 2L, 7L);
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
-    // when
-    memberActivityService.addActivity(savedMember, request);
-
-    // then
+    // when, then
     assertThatThrownBy(() -> memberActivityService.addActivity(savedMember, request))
         .isInstanceOf(MemberException.class)
         .hasMessage(MemberExceptionType.ALREADY_EXIST_ACTIVITY.errorMessage());
@@ -152,7 +148,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
   void test_addActivity_ALREADY_EXIST_ACTIVITY_Exception_duplicate_input() throws Exception {
     //given
     final Member savedMember = memberRepository.findById(1L).get();
-    final List<Long> activityIds = List.of(1L, 2L, 1L);
+    final List<Long> activityIds = List.of(4L, 4L, 5L);
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
     // when, then

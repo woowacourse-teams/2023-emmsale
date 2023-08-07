@@ -31,6 +31,9 @@ public class MemberActivityService {
       final Member member,
       final MemberActivityInitialRequest memberActivityInitialRequest
   ) {
+    if (member.isOnboarded()) {
+      throw new MemberException(MemberExceptionType.ALREADY_ONBOARDING);
+    }
     final List<Long> activityIds = memberActivityInitialRequest.getActivityIds();
     saveMemberActivities(member, activityIds);
 
@@ -62,9 +65,28 @@ public class MemberActivityService {
       final MemberActivityAddRequest memberActivityAddRequest
   ) {
     final List<Long> activityIds = memberActivityAddRequest.getActivityIds();
+    final List<MemberActivity> memberActivities = memberActivityRepository.findAllByMember(member);
+    if (isAlreadyExistActivity(memberActivities, activityIds) || hasDuplicateId(memberActivities,
+        activityIds)) {
+      throw new MemberException(MemberExceptionType.ALREADY_EXIST_ACTIVITY);
+    }
     saveMemberActivities(member, activityIds);
 
     return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
+  }
+
+  private boolean isAlreadyExistActivity(final List<MemberActivity> memberActivities,
+      final List<Long> activityIds) {
+    return memberActivities
+        .stream()
+        .anyMatch(memberActivity ->
+            activityIds.contains(memberActivity.getActivity().getId())
+        );
+  }
+
+  private boolean hasDuplicateId(final List<MemberActivity> memberActivities,
+      final List<Long> activityIds) {
+    return activityIds.stream().distinct().count() != memberActivities.size();
   }
 
   public List<MemberActivityResponses> deleteActivity(
