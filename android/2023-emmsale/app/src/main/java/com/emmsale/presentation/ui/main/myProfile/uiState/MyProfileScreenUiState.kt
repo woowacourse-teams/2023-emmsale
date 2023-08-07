@@ -11,7 +11,7 @@ data class MyProfileScreenUiState(
     val memberName: String,
     val description: String,
     val memberImageUrl: String,
-    val jobs: List<ActivityUiState>,
+    val categories: List<ActivityUiState>,
     val educations: List<ActivityUiState>,
     val clubs: List<ActivityUiState>,
     val isNotLogin: Boolean = false,
@@ -27,7 +27,7 @@ data class MyProfileScreenUiState(
             memberName = "",
             description = "",
             memberImageUrl = "",
-            jobs = listOf(),
+            categories = listOf(),
             educations = listOf(),
             clubs = listOf(),
         )
@@ -41,7 +41,7 @@ data class MyProfileScreenUiState(
                 memberName = member.name,
                 description = member.description.ifBlank { BLANK_DESCRIPTION_SUBSTITUTION },
                 memberImageUrl = member.imageUrl,
-                jobs = member.getActivities(ActivityType.JOB).map(ActivityUiState::from),
+                categories = member.getActivities(ActivityType.CATEGORY).map(ActivityUiState::from),
                 educations = member.getActivities(ActivityType.EDUCATION)
                     .map(ActivityUiState::from),
                 clubs = member.getActivities(ActivityType.CLUB).map(ActivityUiState::from),

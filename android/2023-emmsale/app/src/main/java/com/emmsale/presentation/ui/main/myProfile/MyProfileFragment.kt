@@ -7,9 +7,9 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.main.myProfile.adapter.ActivitiesAdapter
-import com.emmsale.presentation.ui.main.myProfile.adapter.JobsAdapter
 import com.emmsale.presentation.ui.main.myProfile.itemDecoration.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileScreenUiState
 
@@ -25,7 +25,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
         initDataBinding()
         setupUiLogic()
-        initRecyclerViews()
+        initActivitiesRecyclerView()
 
         viewModel.fetchMember()
     }
@@ -38,7 +38,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         viewModel.uiState.observe(viewLifecycleOwner) {
             handleError(it)
             handleNotLogin(it)
-            handleJobs(it)
+            handleCategories(it)
             handleActivities(it)
         }
     }
@@ -57,8 +57,13 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         }
     }
 
-    private fun handleJobs(myProfileScreenUiState: MyProfileScreenUiState) {
-        (binding.rvMyprofileJobs.adapter as JobsAdapter).submitList(myProfileScreenUiState.jobs)
+    private fun handleCategories(myProfileScreenUiState: MyProfileScreenUiState) {
+        binding.cgMyprofileCategories.removeAllViews()
+
+        myProfileScreenUiState.categories.forEach {
+            val tagView = CategoryTag(requireContext()).apply { text = it.name }
+            binding.cgMyprofileCategories.addView(tagView)
+        }
     }
 
     private fun handleActivities(myProfileScreenUiState: MyProfileScreenUiState) {
@@ -66,18 +71,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             myProfileScreenUiState.educations,
         )
         (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfileScreenUiState.clubs)
-    }
-
-    private fun initRecyclerViews() {
-        initJobsRecyclerView()
-        initActivitiesRecyclerView()
-    }
-
-    private fun initJobsRecyclerView() {
-        binding.rvMyprofileJobs.apply {
-            adapter = JobsAdapter()
-            itemAnimator = null
-        }
     }
 
     private fun initActivitiesRecyclerView() {
