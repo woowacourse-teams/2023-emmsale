@@ -12,7 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
         <TextView
@@ -21,7 +21,7 @@
             android:fontFamily="@font/nanum_square_bold"
             android:textSize="12sp"
             android:textColor="@color/text_color_black"
-            android:id="@+id/tv_eventparticipant_membername"
+            android:id="@+id/tv_eventrecruitment_membername"
             tools:text="김커디"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -31,15 +31,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_eventparticipant_date"
+            android:id="@+id/tv_eventrecruitment_date"
             android:fontFamily="@font/nanum_square_regular"
             android:textSize="11sp"
             android:textColor="@color/text_color_gray"
-            app:layout_constraintStart_toEndOf="@+id/tv_eventparticipant_membername"
-            app:layout_constraintTop_toTopOf="@+id/tv_eventparticipant_membername"
+            app:layout_constraintStart_toEndOf="@+id/tv_eventrecruitment_membername"
+            app:layout_constraintTop_toTopOf="@+id/tv_eventrecruitment_membername"
             android:layout_marginStart="7dp"
             tools:text="2023.08.03"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_eventparticipant_membername" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_eventrecruitment_membername" />
 
         <TextView
             android:text="TextView"
@@ -48,8 +48,10 @@
             android:layout_marginTop="15dp"
             android:maxLines="1"
             android:ellipsize="end"
-            app:layout_constraintTop_toBottomOf="@+id/tv_eventparticipant_membername"
-            android:id="@+id/tv_eventparticipant_message"
+            android:fontFamily="@font/nanum_square_regular"
+            android:textSize="13sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_eventrecruitment_membername"
+            android:id="@+id/tv_eventrecruitment_message"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="아무나 같이가실 분 구합니다! 역에서 만나서 같이가면 좋을 것 같아요! 많이들 신청해 주세용!!!"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/text_color_gray"
-            app:layout_constraintTop_toBottomOf="@id/tv_eventparticipant_message"
+            app:layout_constraintTop_toBottomOf="@id/tv_eventrecruitment_message"
             android:layout_marginTop="16dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
