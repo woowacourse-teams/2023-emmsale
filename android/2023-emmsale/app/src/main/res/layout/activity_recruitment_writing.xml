@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.eventdetail.participant.RecruitmentWritingActivity">
+        tools:context=".presentation.ui.eventdetail.recruitment.RecruitmentWritingActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarlayout_recruitmentwriting"

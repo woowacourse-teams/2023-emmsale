@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.eventdetail.participant
+package com.emmsale.presentation.ui.eventdetail.recruitment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,11 +8,11 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.participant.ParticipantRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
-import com.emmsale.presentation.eventdetail.participant.uistate.ParticipantsUiState
-import com.emmsale.presentation.eventdetail.participant.uistate.ParticipationStatusUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentStatusUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentsUiState
 import kotlinx.coroutines.launch
 
-class EventParticipantViewModel(
+class EventRecruitmentViewModel(
     private val participantRepository: ParticipantRepository,
 ) : ViewModel() {
 
@@ -20,16 +20,16 @@ class EventParticipantViewModel(
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
-    private val _participants: MutableLiveData<ParticipantsUiState> = MutableLiveData()
-    val participants: LiveData<ParticipantsUiState>
+    private val _participants: MutableLiveData<RecruitmentsUiState> = MutableLiveData()
+    val participants: LiveData<RecruitmentsUiState>
         get() = _participants
 
     private val _requestCompanion: MutableLiveData<Boolean> = MutableLiveData()
     val requestCompanion: LiveData<Boolean>
         get() = _requestCompanion
 
-    private val _isParticipate: MutableLiveData<ParticipationStatusUiState> = MutableLiveData()
-    val isParticipate: LiveData<ParticipationStatusUiState>
+    private val _isParticipate: MutableLiveData<RecruitmentStatusUiState> = MutableLiveData()
+    val isParticipate: LiveData<RecruitmentStatusUiState>
         get() = _isParticipate
 
     fun fetchParticipants(eventId: Long) {
@@ -37,11 +37,11 @@ class EventParticipantViewModel(
         viewModelScope.launch {
             when (val response = participantRepository.fetchEventParticipants(eventId)) {
                 is ApiSuccess -> {
-                    _participants.postValue(ParticipantsUiState.from(response.data))
+                    _participants.postValue(RecruitmentsUiState.from(response.data))
                     _isLoading.postValue(false)
                 }
 
-                else -> _participants.postValue(ParticipantsUiState.Error)
+                else -> _participants.postValue(RecruitmentsUiState.Error)
             }
         }
     }
@@ -49,8 +49,8 @@ class EventParticipantViewModel(
     fun saveParticipant(eventId: Long) {
         viewModelScope.launch {
             when (val response = participantRepository.saveParticipant(eventId)) {
-                is ApiSuccess -> _isParticipate.postValue(ParticipationStatusUiState.Success(true))
-                else -> _isParticipate.postValue(ParticipationStatusUiState.Error)
+                is ApiSuccess -> _isParticipate.postValue(RecruitmentStatusUiState.Success(true))
+                else -> _isParticipate.postValue(RecruitmentStatusUiState.Error)
             }
         }
     }
@@ -59,11 +59,11 @@ class EventParticipantViewModel(
         viewModelScope.launch {
             when (participantRepository.deleteParticipant(eventId)) {
                 is ApiSuccess -> {
-                    _isParticipate.postValue(ParticipationStatusUiState.Success(false))
+                    _isParticipate.postValue(RecruitmentStatusUiState.Success(false))
                     fetchParticipants(eventId)
                 }
 
-                else -> _isParticipate.postValue(ParticipationStatusUiState.Error)
+                else -> _isParticipate.postValue(RecruitmentStatusUiState.Error)
             }
         }
     }
@@ -81,19 +81,19 @@ class EventParticipantViewModel(
         viewModelScope.launch {
             when (val response = participantRepository.checkParticipationStatus(eventId)) {
                 is ApiSuccess -> _isParticipate.postValue(
-                    ParticipationStatusUiState.Success(
+                    RecruitmentStatusUiState.Success(
                         response.data,
                     ),
                 )
 
-                else -> ParticipationStatusUiState.Error
+                else -> RecruitmentStatusUiState.Error
             }
         }
     }
 
     companion object {
         val factory = ViewModelFactory {
-            EventParticipantViewModel(
+            EventRecruitmentViewModel(
                 KerdyApplication.repositoryContainer.participantRepository,
             )
         }

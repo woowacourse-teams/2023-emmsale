@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="participant"
-            type="com.emmsale.presentation.eventdetail.participant.uistate.ParticipantUiState" />
+            name="recruitment"
+            type="com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

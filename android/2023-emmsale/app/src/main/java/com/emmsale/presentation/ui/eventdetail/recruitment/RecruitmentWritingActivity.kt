@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.eventdetail.participant
+package com.emmsale.presentation.ui.eventdetail.recruitment
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

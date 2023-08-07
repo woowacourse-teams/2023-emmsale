@@ -5,18 +5,18 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.emmsale.R
-import com.emmsale.databinding.FragmentEventParticipantBinding
+import com.emmsale.databinding.FragmentEventRecruitmentBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
-import com.emmsale.presentation.eventdetail.participant.uistate.ParticipantsUiState
-import com.emmsale.presentation.eventdetail.participant.uistate.ParticipationStatusUiState
-import com.emmsale.presentation.ui.eventdetail.participant.EventParticipantAdapter
-import com.emmsale.presentation.ui.eventdetail.participant.EventParticipantViewModel
-import com.emmsale.presentation.ui.eventdetail.participant.ParticipantFragmentDialog
+import com.emmsale.presentation.ui.eventdetail.recruitment.EventParticipantAdapter
+import com.emmsale.presentation.ui.eventdetail.recruitment.EventRecruitmentViewModel
+import com.emmsale.presentation.ui.eventdetail.recruitment.RecruitmentFragmentDialog
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentStatusUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentsUiState
 
-class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>() {
-    override val layoutResId: Int = R.layout.fragment_event_participant
+class EventRecruitmentFragment : BaseFragment<FragmentEventRecruitmentBinding>() {
+    override val layoutResId: Int = R.layout.fragment_event_recruitment
 
-    private val viewModel: EventParticipantViewModel by viewModels { EventParticipantViewModel.factory }
+    private val viewModel: EventRecruitmentViewModel by viewModels { EventRecruitmentViewModel.factory }
     private val eventId: Long by lazy {
         arguments?.getLong(EVENT_ID_KEY) ?: throw IllegalArgumentException("아이디못가져옴")
     }
@@ -42,7 +42,7 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
     }
 
     private fun showRequestDialog(memberId: Long, memberName: String) {
-        ParticipantFragmentDialog(memberName, memberId, ::requestCompanion).show(
+        RecruitmentFragmentDialog(memberName, memberId, ::requestCompanion).show(
             parentFragmentManager,
             "Participant",
         )
@@ -58,7 +58,7 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
     private fun setUpParticipants() {
         viewModel.participants.observe(viewLifecycleOwner) {
             when (it) {
-                is ParticipantsUiState.Success -> {
+                is RecruitmentsUiState.Success -> {
                     participantAdapter.submitList(it.value)
                     viewModel.checkParticipationStatus(eventId)
                     participationButtonClick()
@@ -82,7 +82,7 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
     private fun setUpParticipationStatus() {
         viewModel.isParticipate.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is ParticipationStatusUiState.Success -> {
+                is RecruitmentStatusUiState.Success -> {
                     if (state.isParticipate) {
                         setButtonParticipationState()
                     } else {
@@ -108,7 +108,7 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
     private fun participationButtonClick() {
         participationButton.setOnClickListener {
             when (val state = viewModel.isParticipate.value) {
-                is ParticipationStatusUiState.Success -> {
+                is RecruitmentStatusUiState.Success -> {
                     if (state.isParticipate) {
                         viewModel.deleteParticipant(eventId)
                         showToastMessage("참가를 취소합니다")
@@ -130,8 +130,8 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
     companion object {
         private const val EVENT_ID_KEY = "EVENT_ID_KEY"
 
-        fun create(eventId: Long): EventParticipantFragment {
-            val fragment = EventParticipantFragment()
+        fun create(eventId: Long): EventRecruitmentFragment {
+            val fragment = EventRecruitmentFragment()
             fragment.arguments = Bundle().apply {
                 putLong(EVENT_ID_KEY, eventId)
             }

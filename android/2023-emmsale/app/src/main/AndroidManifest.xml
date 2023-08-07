@@ -18,7 +18,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name=".presentation.ui.eventdetail.participant.RecruitmentWritingActivity"
+            android:name=".presentation.ui.eventdetail.recruitment.RecruitmentDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.ui.eventdetail.recruitment.RecruitmentWritingActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.ui.notificationBox.NotificationBoxActivity"
