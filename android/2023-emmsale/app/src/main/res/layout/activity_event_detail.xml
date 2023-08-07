@@ -111,7 +111,7 @@
             android:drawableLeft="@drawable/ic_eventdetail_date"
             android:drawablePadding="12dp"
             android:fontFamily="@font/nanum_square_regular"
-            android:text="@{eventDetail.startDate}"
+            android:text="@{@string/eventdetail_date_format(eventDetail.startDate,eventDetail.endDate)}"
             android:textColor="@color/text_color_black"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
