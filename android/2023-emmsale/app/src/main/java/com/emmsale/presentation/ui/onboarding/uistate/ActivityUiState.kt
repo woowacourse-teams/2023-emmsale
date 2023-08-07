@@ -10,7 +10,7 @@ data class ActivityUiState(
     companion object {
         fun from(activity: Activity): ActivityUiState = ActivityUiState(
             id = activity.id,
-            name = activity.name
+            name = activity.name,
         )
     }
 }

@@ -31,7 +31,7 @@ data class MyProfileScreenUiState(
             jobs = listOf(),
             educations = listOf(),
             clubs = listOf(),
-            events = listOf()
+            events = listOf(),
         )
 
         fun from(member: Member1): MyProfileScreenUiState {
@@ -47,7 +47,7 @@ data class MyProfileScreenUiState(
                 educations = member.getActivities(ActivityType.EDUCATION)
                     .map(ActivityUiState::from),
                 clubs = member.getActivities(ActivityType.CLUB).map(ActivityUiState::from),
-                events = member.getActivities(ActivityType.EVENT).map(ActivityUiState::from)
+                events = member.getActivities(ActivityType.EVENT).map(ActivityUiState::from),
             )
         }
     }

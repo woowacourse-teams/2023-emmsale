@@ -3,7 +3,8 @@ package com.emmsale.data.conference
 enum class ConferenceStatus(val text: String) {
     IN_PROGRESS("진행 중"),
     SCHEDULED("진행 예정"),
-    ENDED("종료된 행사");
+    ENDED("종료된 행사"),
+    ;
 
     companion object {
         fun from(status: String): ConferenceStatus = values().find { it.text == status }

@@ -34,9 +34,9 @@ class CommentRepositoryImpl(
                 SaveCommentRequestBody(
                     content = content,
                     eventId = eventId,
-                    parentId = parentId
-                )
-            )
+                    parentId = parentId,
+                ),
+            ),
         ) { }
     }
 

@@ -11,7 +11,7 @@ import com.emmsale.presentation.ui.childComments.uiState.CommentUiState
 
 class ChildCommentViewHolder(
     private val binding: ItemChildcommentsChildcommentBinding,
-    private val onCommentDelete: (Long) -> Unit
+    private val onCommentDelete: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
@@ -27,7 +27,7 @@ class ChildCommentViewHolder(
 
         dialog.tvCommentdeletedialogPositivebutton.setOnClickListener {
             onCommentDelete(
-                binding.comment?.commentId ?: return@setOnClickListener
+                binding.comment?.commentId ?: return@setOnClickListener,
             )
             alertDialog.cancel()
         }
@@ -50,7 +50,7 @@ class ChildCommentViewHolder(
             val binding = ItemChildcommentsChildcommentBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
+                false,
             )
 
             return ChildCommentViewHolder(binding, onCommentDelete)

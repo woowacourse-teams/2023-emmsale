@@ -27,6 +27,7 @@ class EventDetailActivity : AppCompatActivity() {
         setBackPress()
         viewModel.fetchEventDetail(eventId)
     }
+
     private fun setUpBinding() {
         binding = ActivityEventDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)

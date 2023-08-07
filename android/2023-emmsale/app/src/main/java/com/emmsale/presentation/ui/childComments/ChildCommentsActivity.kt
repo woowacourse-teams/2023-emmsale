@@ -54,8 +54,9 @@ class ChildCommentsActivity : AppCompatActivity() {
             itemAnimator = null
             addItemDecoration(
                 DividerItemDecoration(
-                    this@ChildCommentsActivity, DividerItemDecoration.VERTICAL
-                )
+                    this@ChildCommentsActivity,
+                    DividerItemDecoration.VERTICAL,
+                ),
             )
         }
     }
@@ -74,9 +75,13 @@ class ChildCommentsActivity : AppCompatActivity() {
     private fun handleParentComment(childCommentsScreenUiState: ChildCommentsScreenUiState) {
         binding.progressBar.isVisible = childCommentsScreenUiState.isLoading
         binding.tvChildcommentsParentcommentauthorname.text =
-            if (childCommentsScreenUiState.parentComment.isDeleted.not()) childCommentsScreenUiState.parentComment.authorName else getString(
-                R.string.comment_deletedCommentAuthorName
-            )
+            if (childCommentsScreenUiState.parentComment.isDeleted.not()) {
+                childCommentsScreenUiState.parentComment.authorName
+            } else {
+                getString(
+                    R.string.comment_deletedCommentAuthorName,
+                )
+            }
         binding.tvChildcommentsParentcommentcontent.text =
             childCommentsScreenUiState.parentComment.content
         binding.tvChildcommentsParentcommentlastmodifieddate.text =
@@ -104,7 +109,7 @@ class ChildCommentsActivity : AppCompatActivity() {
 
     private fun handleChildComments(childCommentsScreenUiState: ChildCommentsScreenUiState) {
         (binding.rvChildcommentsChildcomments.adapter as ChildCommentsAdapter).submitList(
-            childCommentsScreenUiState.childComments
+            childCommentsScreenUiState.childComments,
         )
     }
 
@@ -124,7 +129,7 @@ class ChildCommentsActivity : AppCompatActivity() {
         viewModel.saveChildComment(
             content = binding.etChildcommentsEditchildcommentcontent.text.toString(),
             parentCommentId = parentCommentId,
-            eventId = eventId
+            eventId = eventId,
         )
         binding.etChildcommentsEditchildcommentcontent.apply {
             text.clear()

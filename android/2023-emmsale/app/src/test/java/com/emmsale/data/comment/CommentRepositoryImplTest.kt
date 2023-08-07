@@ -47,17 +47,17 @@ internal class CommentRepositoryImplTest {
             eventId = eventId,
             createdAt = "2023:07:25:22:01:05",
             updatedAt = "2023:07:25:22:01:05",
-            deleted = false
+            deleted = false,
         )
         coEvery { commentService.saveComment(saveCommentRequestBody) } returns Response.success(
-            apiModel
+            apiModel,
         )
 
         val result = sut.saveComment(content, eventId, parentId)
 
         assertAll(
             { assertThat(result).isInstanceOf(ApiSuccess::class.java) },
-            { assertThat((result as ApiSuccess).data).isEqualTo(Unit) }
+            { assertThat((result as ApiSuccess).data).isEqualTo(Unit) },
         )
     }
 
@@ -76,7 +76,7 @@ internal class CommentRepositoryImplTest {
             eventId = 1,
             createdAt = "2023:07:25:22:01:05",
             updatedAt = "2023:07:25:22:01:05",
-            deleted = false
+            deleted = false,
         )
         coEvery {
             commentService.updateComment(commentId, UpdateCommentRequestBody(content))
@@ -86,7 +86,7 @@ internal class CommentRepositoryImplTest {
 
         assertAll(
             { assertThat(result).isInstanceOf(ApiSuccess::class.java) },
-            { assertThat((result as ApiSuccess).data).isEqualTo(Unit) }
+            { assertThat((result as ApiSuccess).data).isEqualTo(Unit) },
         )
     }
 
@@ -100,7 +100,7 @@ internal class CommentRepositoryImplTest {
 
         assertAll(
             { assertThat(result).isInstanceOf(ApiSuccess::class.java) },
-            { assertThat((result as ApiSuccess).data).isEqualTo(Unit) }
+            { assertThat((result as ApiSuccess).data).isEqualTo(Unit) },
         )
     }
 }

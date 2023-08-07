@@ -125,8 +125,8 @@ class NotificationBoxViewModel(
                         true -> header.copy(isExpanded = !header.isExpanded)
                         false -> header
                     }
-                } ?: emptyList()
-            )
+                } ?: emptyList(),
+            ),
         )
     }
 

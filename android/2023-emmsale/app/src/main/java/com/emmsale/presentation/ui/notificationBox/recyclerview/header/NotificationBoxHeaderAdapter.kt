@@ -15,7 +15,7 @@ class NotificationBoxHeaderAdapter(
     ): NotificationHeaderViewHolder = NotificationHeaderViewHolder(
         parent,
         notificationHeaderClickListener,
-        notificationBodyClickListener
+        notificationBodyClickListener,
     )
 
     override fun onBindViewHolder(holder: NotificationHeaderViewHolder, position: Int) {

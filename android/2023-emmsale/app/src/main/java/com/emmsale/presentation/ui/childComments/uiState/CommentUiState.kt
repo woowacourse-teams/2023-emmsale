@@ -28,7 +28,7 @@ data class CommentUiState(
             content = comment.content,
             isUpdatable = comment.authorId == loginMember.id,
             isDeletable = comment.authorId == loginMember.id,
-            isDeleted = comment.deleted
+            isDeleted = comment.deleted,
         )
     }
 }

@@ -10,5 +10,5 @@ data class SaveCommentRequestBody(
     @SerialName("eventId")
     val eventId: Long,
     @SerialName("parentId")
-    val parentId: Long? = null
+    val parentId: Long? = null,
 )

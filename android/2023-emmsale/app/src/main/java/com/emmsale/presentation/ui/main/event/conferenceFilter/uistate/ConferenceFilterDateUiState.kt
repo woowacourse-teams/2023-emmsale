@@ -12,11 +12,15 @@ data class ConferenceFilterDateUiState(
 ) : Parcelable {
     fun transformToDateString(context: Context, isLast: Boolean = false): String = when (isLast) {
         true -> context.getString(
-            R.string.event_filter_duration_date_last_format, year % 1000, month
+            R.string.event_filter_duration_date_last_format,
+            year % 1000,
+            month,
         )
 
         false -> context.getString(
-            R.string.event_filter_duration_date_format, year % 1000, month
+            R.string.event_filter_duration_date_format,
+            year % 1000,
+            month,
         )
     }
 }

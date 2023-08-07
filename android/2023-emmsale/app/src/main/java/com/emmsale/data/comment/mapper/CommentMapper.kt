@@ -17,7 +17,7 @@ fun CommentFamilyApiModel.toData() = Comment(
     createdAt = LocalDateTime.parse(parentComment.createdAt, dateTimeFormatter),
     updatedAt = LocalDateTime.parse(parentComment.updatedAt, dateTimeFormatter),
     deleted = parentComment.deleted,
-    childComments = childComments.toData()
+    childComments = childComments.toData(),
 )
 
 @JvmName("mapCommentApiModelToData")
@@ -31,7 +31,7 @@ fun CommentApiModel.toData() = Comment(
     createdAt = LocalDateTime.parse(createdAt, dateTimeFormatter),
     updatedAt = LocalDateTime.parse(updatedAt, dateTimeFormatter),
     deleted = deleted,
-    listOf()
+    listOf(),
 )
 
 private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")

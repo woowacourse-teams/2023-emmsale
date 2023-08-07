@@ -40,7 +40,7 @@ class CommentsViewModel(
             val commentsDeferred = async { commentRepository.getComments(eventId) }
             val (loginMemberResult, commentsResult) = awaitAll(
                 loginMemberDeferred,
-                commentsDeferred
+                commentsDeferred,
             )
             when (loginMemberResult) {
                 is ApiError -> changeErrorUiState(loginMemberResult.message.toString())
@@ -57,7 +57,7 @@ class CommentsViewModel(
                     CommentsScreenUiState.create(
                         comments = commentsResult.data as List<Comment>,
                         loginMember = loginMember,
-                    )
+                    ),
                 )
             }
         }
@@ -90,7 +90,7 @@ class CommentsViewModel(
             uiState.value!!.copy(
                 isLoading = true,
                 isError = false,
-            )
+            ),
         )
     }
 
@@ -99,8 +99,8 @@ class CommentsViewModel(
             uiState.value!!.copy(
                 isLoading = false,
                 isError = true,
-                errorMessage = errorMessage
-            )
+                errorMessage = errorMessage,
+            ),
         )
     }
 
@@ -109,7 +109,7 @@ class CommentsViewModel(
             CommentsViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 commentRepository = KerdyApplication.repositoryContainer.commentRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository
+                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
             )
         }
     }

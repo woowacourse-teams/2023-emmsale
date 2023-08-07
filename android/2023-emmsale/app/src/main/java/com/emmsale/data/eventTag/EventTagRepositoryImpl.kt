@@ -17,7 +17,7 @@ class EventTagRepositoryImpl(
         withContext(dispatcher) {
             handleApi(
                 response = eventTagService.getConferenceTags(category.text),
-                mapToDomain = List<ConferenceTagApiModel>::toData
+                mapToDomain = List<ConferenceTagApiModel>::toData,
             )
         }
 }

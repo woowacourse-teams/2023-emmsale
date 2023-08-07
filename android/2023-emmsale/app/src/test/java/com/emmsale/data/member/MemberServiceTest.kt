@@ -59,7 +59,7 @@ internal class MemberServiceTest {
                         "description": null,
                         "imageUrl": "https://avatars.githubusercontent.com/u/38097088?v=4"
                     }
-                """.trimIndent()
+                """.trimIndent(),
             )
         mockWebServer.enqueue(mockResponse)
 
@@ -70,8 +70,8 @@ internal class MemberServiceTest {
                 id = 4L,
                 name = "THOMAS",
                 description = "",
-                imageUrl = "https://avatars.githubusercontent.com/u/38097088?v=4"
-            )
+                imageUrl = "https://avatars.githubusercontent.com/u/38097088?v=4",
+            ),
         )
     }
 
@@ -114,7 +114,7 @@ internal class MemberServiceTest {
                         "name" : "Backend"
                       } ]
                     } ]
-                """.trimIndent()
+                """.trimIndent(),
             )
         mockWebServer.enqueue(mockResponse)
 
@@ -127,7 +127,7 @@ internal class MemberServiceTest {
                     memberActivityResponses = listOf(
                         ActivityApiModel(
                             id = 1,
-                            name = "YAPP"
+                            name = "YAPP",
                         ),
                         ActivityApiModel(
                             id = 2,
@@ -135,38 +135,38 @@ internal class MemberServiceTest {
                         ),
                         ActivityApiModel(
                             id = 3,
-                            name = "nexters"
-                        )
-                    )
+                            name = "nexters",
+                        ),
+                    ),
                 ),
                 ActivitiesAssociatedByActivityTypeApiModel(
                     activityType = "컨퍼런스",
                     memberActivityResponses = listOf(
                         ActivityApiModel(
                             id = 4,
-                            name = "인프콘"
-                        )
-                    )
+                            name = "인프콘",
+                        ),
+                    ),
                 ),
                 ActivitiesAssociatedByActivityTypeApiModel(
                     activityType = "교육",
                     memberActivityResponses = listOf(
                         ActivityApiModel(
                             id = 5,
-                            name = "우아한테크코스"
-                        )
-                    )
+                            name = "우아한테크코스",
+                        ),
+                    ),
                 ),
                 ActivitiesAssociatedByActivityTypeApiModel(
                     activityType = "직무",
                     memberActivityResponses = listOf(
                         ActivityApiModel(
                             id = 6,
-                            name = "Backend"
-                        )
-                    )
-                )
-            )
+                            name = "Backend",
+                        ),
+                    ),
+                ),
+            ),
         )
     }
 }
