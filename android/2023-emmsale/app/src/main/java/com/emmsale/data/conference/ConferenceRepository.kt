@@ -7,7 +7,7 @@ interface ConferenceRepository {
         category: EventCategory,
         year: Int? = null,
         month: Int? = null,
-        status: ConferenceStatus? = null,
-        tag: String? = null,
+        statuses: List<ConferenceStatus> = emptyList(),
+        tags: List<String> = emptyList(),
     ): ApiResult<List<Conference>>
 }

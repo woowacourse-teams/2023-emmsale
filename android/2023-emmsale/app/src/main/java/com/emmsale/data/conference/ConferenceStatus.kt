@@ -11,3 +11,5 @@ enum class ConferenceStatus(val text: String) {
             ?: throw IllegalArgumentException("${status}는 올바르지 않은 행사 상태입니다.")
     }
 }
+
+fun List<ConferenceStatus>.toTexts(): List<String> = map { it.text }

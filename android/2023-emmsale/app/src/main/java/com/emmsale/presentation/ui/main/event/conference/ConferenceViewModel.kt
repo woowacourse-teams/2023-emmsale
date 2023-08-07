@@ -27,11 +27,15 @@ class ConferenceViewModel(
     private val _selectedFilters = MutableLiveData<ConferenceFiltersUiState.Success>()
     val selectedFilters: LiveData<ConferenceFiltersUiState.Success> = _selectedFilters
 
-    fun fetchConference(
+    init {
+        fetchConference()
+    }
+
+    private fun fetchConference(
         year: Int? = null,
         month: Int? = null,
-        status: ConferenceStatus? = null,
-        tag: String? = null,
+        statuses: List<ConferenceStatus> = emptyList(),
+        tags: List<String> = emptyList(),
     ) {
         viewModelScope.launch {
             _events.value = EventsUiState.Loading
@@ -40,8 +44,8 @@ class ConferenceViewModel(
                     category = EventCategory.CONFERENCE,
                     year = year,
                     month = month,
-                    status = status,
-                    tag = tag,
+                    statuses = statuses,
+                    tags = tags,
                 )
             ) {
                 is ApiSuccess ->
@@ -59,16 +63,20 @@ class ConferenceViewModel(
         fetchConference(
             year = conferenceFilter.selectedStartDate?.year,
             month = conferenceFilter.selectedStartDate?.month,
-            status = conferenceFilter.statuses.find { it.isSelected }?.toStatusOrNull(),
-            tag = conferenceFilter.tags.find { it.isSelected }?.name,
+            statuses = conferenceFilter.statuses
+                .filter { it.isSelected }
+                .map { it.toStatus() },
+            tags = conferenceFilter.tags
+                .filter { it.isSelected }
+                .map { it.name },
         )
     }
 
-    private fun ConferenceFilterUiState.toStatusOrNull(): ConferenceStatus? = when (id) {
+    private fun ConferenceFilterUiState.toStatus(): ConferenceStatus = when (id) {
         0L -> ConferenceStatus.IN_PROGRESS
         1L -> ConferenceStatus.SCHEDULED
         2L -> ConferenceStatus.ENDED
-        else -> null
+        else -> throw IllegalArgumentException("Unknown status id: $id")
     }
 
     companion object {
