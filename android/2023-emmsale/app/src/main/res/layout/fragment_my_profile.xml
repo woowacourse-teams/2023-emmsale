@@ -123,7 +123,7 @@
                     <View
                         android:id="@+id/view_myprofile_divider"
                         android:layout_width="0dp"
-                        android:layout_height="1dp"
+                        android:layout_height="0.5dp"
                         android:layout_marginTop="10dp"
                         android:background="@color/edittext_underline"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -132,7 +132,7 @@
 
                     <View
                         android:id="@+id/view_myprofile_educationicontoclubicon"
-                        android:layout_width="2dp"
+                        android:layout_width="1.4dp"
                         android:layout_height="0dp"
                         android:background="@color/edittext_underline"
                         app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_educationicon"
