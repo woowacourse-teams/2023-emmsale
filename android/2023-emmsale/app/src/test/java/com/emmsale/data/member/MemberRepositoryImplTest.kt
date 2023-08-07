@@ -24,7 +24,7 @@ internal class MemberRepositoryImplTest {
         id = 1L,
         name = "토마스",
         description = "",
-        imageUrl = ""
+        imageUrl = "",
     )
 
     @BeforeEach
@@ -45,30 +45,30 @@ internal class MemberRepositoryImplTest {
                 listOf(
                     ActivityApiModel(
                         id = 1L,
-                        name = "DDD 5기"
+                        name = "DDD 5기",
                     ),
                     ActivityApiModel(
                         id = 2L,
-                        name = "SOPT 13기"
-                    )
-                )
+                        name = "SOPT 13기",
+                    ),
+                ),
             ),
             ActivitiesAssociatedByActivityTypeApiModel(
                 "직무",
                 listOf(
                     ActivityApiModel(
                         id = 3L,
-                        name = "Backend"
+                        name = "Backend",
                     ),
                     ActivityApiModel(
                         id = 4L,
-                        name = "Frontend"
-                    )
-                )
-            )
+                        name = "Frontend",
+                    ),
+                ),
+            ),
         )
         coEvery { memberService.getActivities(memberId) } returns Response.success(
-            activitiesApiModel
+            activitiesApiModel,
         )
 
         val result = sut.getMember(memberId)
@@ -77,9 +77,9 @@ internal class MemberRepositoryImplTest {
             { assertThat(result).isInstanceOf(ApiSuccess::class.java) },
             {
                 assertThat((result as ApiSuccess).data).isEqualTo(
-                    memberApiModel.toData(activitiesApiModel)
+                    memberApiModel.toData(activitiesApiModel),
                 )
-            }
+            },
         )
     }
 }

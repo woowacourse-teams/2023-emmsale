@@ -14,7 +14,7 @@ class NotificationHeaderViewHolder(
     notificationHeaderClickListener: NotificationHeaderClickListener,
     notificationBodyClickListener: NotificationBodyClickListener,
 ) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_notification_header, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.item_notification_header, parent, false),
 ) {
     private val binding = ItemNotificationHeaderBinding.bind(itemView)
     private val notificationBoxBodyAdapter =

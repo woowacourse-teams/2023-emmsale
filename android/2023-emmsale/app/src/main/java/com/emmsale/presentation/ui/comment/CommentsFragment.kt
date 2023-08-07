@@ -49,14 +49,14 @@ class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
         binding.rvCommentsComments.apply {
             adapter = CommentsAdapter(
                 onChildCommentsView = ::onChildCommentsView,
-                onCommentDelete = ::onCommentDelete
+                onCommentDelete = ::onCommentDelete,
             )
             itemAnimator = null
             addItemDecoration(
                 DividerItemDecoration(
                     requireContext(),
-                    DividerItemDecoration.VERTICAL
-                )
+                    DividerItemDecoration.VERTICAL,
+                ),
             )
         }
     }

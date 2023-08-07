@@ -25,9 +25,9 @@ data class ChildCommentsScreenUiState(
                 content = "",
                 isUpdatable = false,
                 isDeletable = false,
-                isDeleted = false
+                isDeleted = false,
             ),
-            childComments = listOf()
+            childComments = listOf(),
         )
 
         fun create(comment: Comment, loginMember: Member1) = ChildCommentsScreenUiState(
@@ -36,7 +36,7 @@ data class ChildCommentsScreenUiState(
             isError = false,
             errorMessage = "",
             parentComment = CommentUiState.create(comment, loginMember),
-            childComments = comment.childComments.map { CommentUiState.create(it, loginMember) }
+            childComments = comment.childComments.map { CommentUiState.create(it, loginMember) },
         )
     }
 }

@@ -30,13 +30,17 @@ class IconTextButton : AppCompatButton {
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(
-        context, attrs, R.attr.IconTextButtonStyle
+        context,
+        attrs,
+        R.attr.IconTextButtonStyle,
     ) {
         initViewAttrs(context, attrs, R.attr.IconTextButtonStyle)
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context, attrs, defStyleAttr
+        context,
+        attrs,
+        defStyleAttr,
     ) {
         initViewAttrs(context, attrs, defStyleAttr)
     }
@@ -47,7 +51,10 @@ class IconTextButton : AppCompatButton {
         defStyleAttr: Int = 0,
     ) {
         context.obtainStyledAttributes(
-            attrs, R.styleable.IconTextButton, defStyleAttr, 0
+            attrs,
+            R.styleable.IconTextButton,
+            defStyleAttr,
+            0,
         ).use {
             iconResId = it.getResourceId(R.styleable.IconTextButton_icon, 0)
 

@@ -52,7 +52,7 @@ class ChildCommentsViewModel(
                     ChildCommentsScreenUiState.create(
                         comment = commentResult.data as Comment,
                         loginMember = loginMember,
-                    )
+                    ),
                 )
             }
         }
@@ -85,8 +85,8 @@ class ChildCommentsViewModel(
             uiState.value!!.copy(
                 isLoading = false,
                 isError = true,
-                errorMessage = errorMessage
-            )
+                errorMessage = errorMessage,
+            ),
         )
     }
 
@@ -95,7 +95,7 @@ class ChildCommentsViewModel(
             uiState.value!!.copy(
                 isLoading = true,
                 isError = false,
-            )
+            ),
         )
     }
 
@@ -104,7 +104,7 @@ class ChildCommentsViewModel(
             ChildCommentsViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 commentRepository = KerdyApplication.repositoryContainer.commentRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository
+                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
             )
         }
     }

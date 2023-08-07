@@ -11,7 +11,7 @@ class NotificationBodyViewHolder(
     parent: ViewGroup,
     notificationBodyClickListener: NotificationBodyClickListener,
 ) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_notification_body, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.item_notification_body, parent, false),
 ) {
     private val binding = ItemNotificationBodyBinding.bind(itemView)
 

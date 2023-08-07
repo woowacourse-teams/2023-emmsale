@@ -56,7 +56,7 @@ class ConferenceFilterViewModel(
                     tags = tags,
                     selectedStartDate = selectedStartDate,
                     selectedEndDate = selectedEndDate,
-                )
+                ),
             )
             _selectedTagFilterCount.postValue(tags.count { it.isSelected })
         }
@@ -115,15 +115,15 @@ class ConferenceFilterViewModel(
                 (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
                     selectedStartDate = filterDate,
                     selectedEndDate = null,
-                )
+                ),
             )
             return
         }
 
         _eventFilters.postValue(
             (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
-                selectedStartDate = filterDate
-            )
+                selectedStartDate = filterDate,
+            ),
         )
     }
 
@@ -139,15 +139,15 @@ class ConferenceFilterViewModel(
         val filterDate = ConferenceFilterDateUiState(endDate.year, endDate.monthValue)
         _eventFilters.postValue(
             (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
-                selectedEndDate = filterDate
-            )
+                selectedEndDate = filterDate,
+            ),
         )
     }
 
     companion object {
         val factory = ViewModelFactory {
             ConferenceFilterViewModel(
-                eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository
+                eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository,
             )
         }
     }

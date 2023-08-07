@@ -14,7 +14,7 @@ data class ActivitiesApiModel(
 ) {
     fun toData(): Activities = Activities(
         category = category,
-        activities.map { it.toData() }
+        activities.map { it.toData() },
     )
 }
 
@@ -29,6 +29,6 @@ data class ActivityApiModel(
 ) {
     fun toData(): Activity = Activity(
         id = id,
-        name = name
+        name = name,
     )
 }

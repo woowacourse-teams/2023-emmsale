@@ -21,7 +21,7 @@ class ConferenceRepositoryImpl(
     ): ApiResult<List<Conference>> = withContext(dispatcher) {
         handleApi(
             conferenceService.getEvents(category.text, year, month, status?.text, tag),
-            List<ConferenceApiModel>::toData
+            List<ConferenceApiModel>::toData,
         )
     }
 }

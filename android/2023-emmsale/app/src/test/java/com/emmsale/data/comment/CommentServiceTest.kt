@@ -112,7 +112,7 @@ internal class CommentServiceTest {
                             ]
                         }
                     ]
-                """.trimIndent()
+                """.trimIndent(),
             )
         mockWebServer.enqueue(mockResponse)
 
@@ -132,9 +132,9 @@ internal class CommentServiceTest {
                         eventId = 1,
                         createdAt = "2023:07:25:22:01:05",
                         updatedAt = "2023:07:25:22:01:05",
-                        deleted = false
+                        deleted = false,
                     ),
-                    listOf()
+                    listOf(),
                 ),
                 CommentFamilyApiModel(
                     CommentApiModel(
@@ -147,7 +147,7 @@ internal class CommentServiceTest {
                         eventId = 1,
                         createdAt = "2023:07:25:22:01:05",
                         updatedAt = "2023:07:25:22:01:05",
-                        deleted = false
+                        deleted = false,
                     ),
                     listOf(
                         CommentApiModel(
@@ -160,7 +160,7 @@ internal class CommentServiceTest {
                             eventId = 1,
                             createdAt = "2023:07:25:22:01:05",
                             updatedAt = "2023:07:25:22:01:05",
-                            deleted = false
+                            deleted = false,
                         ),
                         CommentApiModel(
                             commentId = 3,
@@ -172,11 +172,11 @@ internal class CommentServiceTest {
                             eventId = 1,
                             createdAt = "2023:07:25:22:01:05",
                             updatedAt = "2023:07:25:22:01:05",
-                            deleted = false
-                        )
-                    )
-                )
-            )
+                            deleted = false,
+                        ),
+                    ),
+                ),
+            ),
         )
     }
 
@@ -213,7 +213,7 @@ internal class CommentServiceTest {
                             "deleted" : false
                         }
                     ]
-                """.trimIndent()
+                """.trimIndent(),
             )
         mockWebServer.enqueue(mockResponse)
 
@@ -232,7 +232,7 @@ internal class CommentServiceTest {
                     memberId = 1,
                     memberImageUrl = "이미지",
                     memberName = "이름1",
-                    deleted = false
+                    deleted = false,
                 ),
                 CommentApiModel(
                     content = "부모댓글1에 대한 자식댓글2",
@@ -244,9 +244,9 @@ internal class CommentServiceTest {
                     memberId = 1,
                     memberImageUrl = "이미지",
                     memberName = "이름1",
-                    deleted = false
-                )
-            )
+                    deleted = false,
+                ),
+            ),
         )
     }
 
@@ -271,7 +271,7 @@ internal class CommentServiceTest {
                         "memberName": "홍길동",
                         "memberImageUrl": "https://naver.com"
                     }
-                """.trimIndent()
+                """.trimIndent(),
             )
         mockWebServer.enqueue(mockResponse)
 
@@ -289,7 +289,7 @@ internal class CommentServiceTest {
                 deleted = false,
                 memberId = 1,
                 memberName = "홍길동",
-                memberImageUrl = "https://naver.com"
+                memberImageUrl = "https://naver.com",
             ),
         )
     }
@@ -314,7 +314,7 @@ internal class CommentServiceTest {
                         "memberName": "홍길동",
                         "memberImageUrl": "https://naver.com"
                     }
-                """.trimIndent()
+                """.trimIndent(),
             )
         mockWebServer.enqueue(mockResponse)
 
@@ -331,7 +331,7 @@ internal class CommentServiceTest {
                 deleted = false,
                 memberId = 1,
                 memberName = "홍길동",
-                memberImageUrl = "https://naver.com"
+                memberImageUrl = "https://naver.com",
             ),
         )
     }
@@ -348,7 +348,7 @@ internal class CommentServiceTest {
 
         assertAll(
             { assertThat(response.isSuccessful).isTrue },
-            { assertThat(response.body()).isNull() }
+            { assertThat(response.body()).isNull() },
         )
     }
 }
