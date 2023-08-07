@@ -37,6 +37,15 @@ class MyProfileViewModel(
         }
     }
 
+    fun onErrorMessageViewed() {
+        _uiState.postValue(
+            uiState.value!!.copy(
+                isError = false,
+                errorMessage = "",
+            ),
+        )
+    }
+
     private fun changeErrorUiState(errorMessage: String) {
         _uiState.postValue(
             uiState.value!!.copy(
