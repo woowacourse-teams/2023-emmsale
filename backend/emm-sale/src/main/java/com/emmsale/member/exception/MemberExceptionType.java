@@ -14,6 +14,12 @@ public enum MemberExceptionType implements BaseExceptionType {
       HttpStatus.BAD_REQUEST,
       "요청한 activity id들 중에 유효하지 않은 값이 존재합니다"
   ),
+
+  ALREADY_EXIST_ACTIVITY(
+      HttpStatus.BAD_REQUEST,
+      "요청한 activity id는 이미 존재합니다."
+  ),
+
   NULL_DESCRIPTION(
       HttpStatus.BAD_REQUEST,
       "한 줄 자기소개는 null이 될 수 없습니다."
