@@ -64,7 +64,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             myProfileScreenUiState.educations
         )
         (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfileScreenUiState.clubs)
-        (binding.rvMyprofileEvents.adapter as ActivitiesAdapter).submitList(myProfileScreenUiState.events)
     }
 
     private fun initRecyclerViews() {
@@ -83,7 +82,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         listOf(
             binding.rvMyprofileEducations,
             binding.rvMyprofileClubs,
-            binding.rvMyprofileEvents
         ).forEach {
             val decoration = ActivitiesAdapterDecoration()
             it.apply {
