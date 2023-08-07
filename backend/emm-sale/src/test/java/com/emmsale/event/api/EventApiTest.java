@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -143,10 +144,12 @@ class EventApiTest extends MockMvcTestHelper {
     // given
     final RequestParametersSnippet requestParameters = requestParameters(
         parameterWithName("category").description("행사 카테고리(CONFERENCE, COMPETITION)"),
-        parameterWithName("start_date").description("필터링하려는 기간의 시작일(option)").optional(),
-        parameterWithName("end_date").description("필터링하려는 기간의 끝일(option)").optional(),
+        parameterWithName("start_date").description("필터링하려는 기간의 시작일(yyyy-mm-dd)(option)")
+            .optional(),
+        parameterWithName("end_date").description("필터링하려는 기간의 끝일(yyyy-mm-dd)(option)").optional(),
         parameterWithName("tags").description("필터링하려는 태그(option)").optional(),
-        parameterWithName("statuses").description("필터링하려는 상태(option)").optional()
+        parameterWithName("statuses").description("필터링하려는 상태(UPCOMING, IN_PROGRESS, ENDED)(option)")
+            .optional()
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -274,6 +277,23 @@ class EventApiTest extends MockMvcTestHelper {
 
     //then
     result.andExpect(status().isNoContent()).andDo(print()).andDo(document("delete-event"));
+  }
+
+  @Test
+  @DisplayName("이미 Event에 멤버가 참여헀는지 확인할 수 있다.")
+  void isAlreadyParticipate() throws Exception {
+    //given
+    final Long memberId = 2L;
+    final Long eventId = 3L;
+    given(eventService.isAlreadyParticipate(eventId, memberId)).willReturn(true);
+
+    //when && then
+    mockMvc.perform(
+            get("/events/{eventId}/participants/already-participate?member-id={memberId}"
+                , eventId, memberId)
+        )
+        .andExpect(status().isOk())
+        .andDo(document("check-already-participate"));
   }
 
   @Nested
@@ -444,4 +464,5 @@ class EventApiTest extends MockMvcTestHelper {
       result.andExpect(status().isBadRequest());
     }
   }
+
 }

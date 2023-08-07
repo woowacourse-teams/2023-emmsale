@@ -119,22 +119,23 @@ public class EventService {
     return tagNames != null;
   }
 
-  private List<Event> filterByTags(List<Event> events, final List<String> tagNames) {
-    List<Tag> tags = tagNames.stream().map(tagName ->
-        tagRepository.findByName(tagName)
-            .orElseThrow(() -> new TagException(NOT_FOUND_TAG))
-    ).collect(toList());
-    List<Event> tagedEvents = eventTagRepository.findEventTagsByTagIn(tags)
-        .stream()
-        .map(EventTag::getEvent).collect(toList());
-    return events.stream()
-        .filter(event -> tagedEvents.contains(event)).collect(toList());
+  private List<Event> filterByTags(final List<Event> events, final List<String> tagNames) {
+    final List<Tag> tags = tagRepository.findByNameIn(tagNames);
+    validateTags(tagNames, tags);
 
-//    return eventTagRepository.findEventTagsByTagIn(tags)
-//        .stream()
-//        .map(EventTag::getEvent)
-//        .distinct()
-//        .collect(toList());
+    return events.stream()
+        .filter(event -> event.getTags()
+            .stream()
+            .map(EventTag::getTag)
+            .anyMatch(tags::contains)
+        )
+        .collect(toList());
+  }
+
+  private void validateTags(final List<String> tagNames, final List<Tag> tags) {
+    if (tags.size() != tagNames.size()) {
+      throw new TagException(NOT_FOUND_TAG);
+    }
   }
 
   private List<Event> filterByPeriod(final List<Event> events, final String startDate,
