@@ -47,7 +47,7 @@
             android:lineHeight="20dp"
             android:text="@{eventDetail.name}"
             android:textColor="@color/text_color_black"
-            android:textSize="22sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventstatus"
@@ -67,7 +67,7 @@
         <View
             android:id="@+id/line_eventdetail_top"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_marginTop="15dp"
             android:background="@color/text_color_white"
             app:layout_constraintTop_toBottomOf="@id/chipgroup_evendetail_tags" />
@@ -81,7 +81,7 @@
             android:fontFamily="@font/nanum_square_bold"
             android:text="@{eventDetail.status}"
             android:textColor="@color/text_color_green"
-            android:textSize="18sp"
+            android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appbarlayout_eventdetail"
             tools:text="진행중" />
@@ -97,7 +97,7 @@
             android:fontFamily="@font/nanum_square_regular"
             android:text="@{eventDetail.location}"
             android:textColor="@color/text_color_black"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_eventdate"
             tools:text="삼성동 코엑스 몰 2층 101" />
@@ -113,7 +113,7 @@
             android:fontFamily="@font/nanum_square_regular"
             android:text="@{eventDetail.startDate}"
             android:textColor="@color/text_color_black"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line_eventdetail_top"
             tools:text="2023.8.15 12:00 " />
@@ -128,6 +128,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventplace"
             app:tabIndicatorColor="@color/text_color_green"
             app:tabIndicatorFullWidth="true"
+            app:tabIndicatorHeight="2dp"
             app:tabSelectedTextAppearance="@style/EventDetail_SelectedTabStyle"
             app:tabSelectedTextColor="@color/text_color_green"
             app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle"
