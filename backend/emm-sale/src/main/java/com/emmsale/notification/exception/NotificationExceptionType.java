@@ -28,6 +28,11 @@ public enum NotificationExceptionType implements BaseExceptionType {
   GOOGLE_REQUEST_TOKEN_ERROR(
       HttpStatus.INTERNAL_SERVER_ERROR,
       "구글에 토큰 요청할 때 발생한 에러"
+  ),
+
+  NOT_FOUND_OPEN_PROFILE_URL(
+      HttpStatus.NOT_FOUND,
+      "오픈 카톡 URL이 없으면 같이 가기 요청을 보낼 수 없습니다."
   )
 
   ;
