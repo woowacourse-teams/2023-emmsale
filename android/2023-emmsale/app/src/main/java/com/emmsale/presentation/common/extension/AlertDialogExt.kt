@@ -13,14 +13,14 @@ fun AlertDialog.Builder.title(text: String): AlertDialog.Builder = this.setTitle
 fun AlertDialog.Builder.message(text: String): AlertDialog.Builder = this.setMessage(text)
 
 fun AlertDialog.Builder.positiveButton(
-    text: String = context.getString(R.string.okay),
+    text: String = context.getString(R.string.all_okay),
     handleClick: (which: Int) -> Unit = {},
 ): AlertDialog.Builder {
     return this.setPositiveButton(text) { _, which -> handleClick(which) }
 }
 
 fun AlertDialog.Builder.negativeButton(
-    text: String = context.getString(R.string.cancel),
+    text: String = context.getString(R.string.all_cancel),
     handleClick: (which: Int) -> Unit = {},
 ): AlertDialog.Builder {
     return this.setNegativeButton(text) { _, which -> handleClick(which) }
