@@ -49,13 +49,6 @@ class ParticipantViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.buttonRequestCompanion.setOnClickListener {
-            requestCompanion(
-                binding.participant!!.memberId,
-                binding.participant!!.name,
-            )
-        }
-        binding.ivParticipantImage.setOnClickListener { showMemberProfile(binding.participant!!.memberId) }
     }
 
     fun bind(participant: ParticipantUiState) {
