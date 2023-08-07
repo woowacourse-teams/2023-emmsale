@@ -3,11 +3,11 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     id("org.jetbrains.kotlin.android")
     id("com.android.application") version "8.0.2"
-    id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "1.8.21"
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
