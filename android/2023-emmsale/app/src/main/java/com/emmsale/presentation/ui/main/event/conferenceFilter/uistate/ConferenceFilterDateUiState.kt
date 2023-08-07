@@ -9,18 +9,21 @@ import kotlinx.parcelize.Parcelize
 data class ConferenceFilterDateUiState(
     var year: Int,
     var month: Int,
+    var day: Int,
 ) : Parcelable {
     fun transformToDateString(context: Context, isLast: Boolean = false): String = when (isLast) {
         true -> context.getString(
             R.string.event_filter_duration_date_last_format,
             year % 1000,
             month,
+            day,
         )
 
         false -> context.getString(
             R.string.event_filter_duration_date_format,
             year % 1000,
             month,
+            day,
         )
     }
 }

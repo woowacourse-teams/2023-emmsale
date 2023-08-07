@@ -14,6 +14,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.EventsUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
 import kotlinx.coroutines.launch
@@ -32,8 +33,8 @@ class ConferenceViewModel(
     }
 
     private fun fetchConference(
-        year: Int? = null,
-        month: Int? = null,
+        startDate: String? = null,
+        endDate: String? = null,
         statuses: List<ConferenceStatus> = emptyList(),
         tags: List<String> = emptyList(),
     ) {
@@ -42,8 +43,8 @@ class ConferenceViewModel(
             when (
                 val eventsResult = conferenceRepository.getConferences(
                     category = EventCategory.CONFERENCE,
-                    year = year,
-                    month = month,
+                    startDate = startDate,
+                    endDate = endDate,
                     statuses = statuses,
                     tags = tags,
                 )
@@ -61,8 +62,8 @@ class ConferenceViewModel(
     fun updateConferenceFilter(conferenceFilter: ConferenceFiltersUiState.Success) {
         _selectedFilters.postValue(conferenceFilter)
         fetchConference(
-            year = conferenceFilter.selectedStartDate?.year,
-            month = conferenceFilter.selectedStartDate?.month,
+            startDate = conferenceFilter.selectedStartDate?.transformToDateString(),
+            endDate = conferenceFilter.selectedEndDate?.transformToDateString(),
             statuses = conferenceFilter.statuses
                 .filter { it.isSelected }
                 .map { it.toStatus() },
@@ -71,6 +72,8 @@ class ConferenceViewModel(
                 .map { it.name },
         )
     }
+
+    private fun ConferenceFilterDateUiState.transformToDateString(): String = "$year-$month-$day"
 
     private fun ConferenceFilterUiState.toStatus(): ConferenceStatus = when (id) {
         0L -> ConferenceStatus.IN_PROGRESS

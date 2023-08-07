@@ -14,13 +14,19 @@ class ConferenceRepositoryImpl(
 ) : ConferenceRepository {
     override suspend fun getConferences(
         category: EventCategory,
-        year: Int?,
-        month: Int?,
+        startDate: String?,
+        endDate: String?,
         statuses: List<ConferenceStatus>,
         tags: List<String>,
     ): ApiResult<List<Conference>> = withContext(dispatcher) {
         handleApi(
-            conferenceService.getEvents(category.text, year, month, statuses.toTexts(), tags),
+            conferenceService.getEvents(
+                category.text,
+                startDate,
+                endDate,
+                statuses.toTexts(),
+                tags,
+            ),
             List<ConferenceApiModel>::toData,
         )
     }

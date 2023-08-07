@@ -104,7 +104,8 @@ class ConferenceFilterViewModel(
     }
 
     fun updateStartDate(startDate: LocalDate) {
-        val filterDate = ConferenceFilterDateUiState(startDate.year, startDate.monthValue)
+        val filterDate =
+            ConferenceFilterDateUiState(startDate.year, startDate.monthValue, startDate.dayOfMonth)
 
         if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedEndDate?.let {
                 val endDate = LocalDate.of(it.year, it.month, 1)
@@ -136,7 +137,8 @@ class ConferenceFilterViewModel(
             return
         }
 
-        val filterDate = ConferenceFilterDateUiState(endDate.year, endDate.monthValue)
+        val filterDate =
+            ConferenceFilterDateUiState(endDate.year, endDate.monthValue, endDate.dayOfMonth)
         _eventFilters.postValue(
             (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
                 selectedEndDate = filterDate,

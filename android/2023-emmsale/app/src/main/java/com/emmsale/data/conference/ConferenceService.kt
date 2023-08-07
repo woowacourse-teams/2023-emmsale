@@ -9,8 +9,8 @@ interface ConferenceService {
     @GET("/events")
     suspend fun getEvents(
         @Query("category") category: String,
-        @Query("year") year: Int? = null,
-        @Query("month") month: Int? = null,
+        @Query("start_date") startDate: String? = null,
+        @Query("end_date") endDate: String? = null,
         @Query("statuses") statuses: List<String> = emptyList(),
         @Query("tags") tags: List<String> = emptyList(),
     ): Response<List<ConferenceApiModel>>
