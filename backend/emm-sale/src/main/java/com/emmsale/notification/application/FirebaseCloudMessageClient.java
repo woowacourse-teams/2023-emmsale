@@ -102,24 +102,20 @@ public class FirebaseCloudMessageClient {
     try {
       return objectMapper.writeValueAsString(fcmMessage);
     } catch (JsonProcessingException e) {
-      log.error("메세지 보낼 때 JSON 변환 에러", e);
       throw new NotificationException(CONVERTING_JSON_ERROR);
     }
   }
 
   private String getAccessToken() {
-    final String firebaseConfigPath = FIREBASE_KEY_PATH;
-
     try {
       final GoogleCredentials googleCredentials = GoogleCredentials
-          .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+          .fromStream(new ClassPathResource(FIREBASE_KEY_PATH).getInputStream())
           .createScoped(List.of(GOOGLE_AUTH_URL));
 
       googleCredentials.refreshIfExpired();
 
       return googleCredentials.getAccessToken().getTokenValue();
     } catch (IOException e) {
-      log.error("구글 토큰 요청 에러", e);
       throw new NotificationException(GOOGLE_REQUEST_TOKEN_ERROR);
     }
   }
