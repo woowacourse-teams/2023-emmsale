@@ -12,6 +12,10 @@ public enum BlockExceptionType implements BaseExceptionType {
   ALREADY_BLOCKED_MEMBER(
       HttpStatus.BAD_REQUEST,
       "이미 차단한 사용자입니다."
+  ),
+  BAD_REQUEST_SELF_BLOCK(
+      HttpStatus.BAD_REQUEST,
+      "자기 자신은 차단할 수 없습니다."
   );
 
   private final HttpStatus httpStatus;

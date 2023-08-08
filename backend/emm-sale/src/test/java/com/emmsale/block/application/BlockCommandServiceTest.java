@@ -84,5 +84,22 @@ class BlockCommandServiceTest extends ServiceIntegrationTestHelper {
       //then
       assertEquals(expectExceptionType, actualException.exceptionType());
     }
+
+    @Test
+    @DisplayName("자기 자신을 차단할 경우 BAD_REQUEST_SELF_BLOCK 타입의 Exception이 발생한다.")
+    void registerWithSelfBlockTest() {
+      //given
+      final BlockRequest blockRequest = new BlockRequest(requestMember.getId());
+      final BlockExceptionType expectExceptionType = BlockExceptionType.BAD_REQUEST_SELF_BLOCK;
+
+      //when
+      final BlockException actualException = assertThrowsExactly(
+          BlockException.class,
+          () -> blockCommandService.register(requestMember, blockRequest)
+      );
+
+      //then
+      assertEquals(expectExceptionType, actualException.exceptionType());
+    }
   }
 }

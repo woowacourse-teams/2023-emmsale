@@ -23,10 +23,17 @@ public class BlockCommandService {
     final Member blockMember = memberRepository.findById(blockRequest.getBlockMemberId())
         .orElseThrow(() -> new BlockException(BlockExceptionType.NOT_FOUND_MEMBER));
 
+    validateSelfBlock(requestMember.getId(), blockMember.getId());
     validateAlreadyBlocked(requestMember.getId(), blockMember.getId());
 
     final Block block = new Block(requestMember, blockMember);
     blockRepository.save(block);
+  }
+
+  private void validateSelfBlock(final Long requestMemberId, final Long blockMemberId) {
+    if (requestMemberId.equals(blockMemberId)) {
+      throw new BlockException(BlockExceptionType.BAD_REQUEST_SELF_BLOCK);
+    }
   }
 
   private void validateAlreadyBlocked(final Long requestMemberId, final Long blockMemberId) {
