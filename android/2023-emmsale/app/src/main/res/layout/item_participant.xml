@@ -76,7 +76,7 @@
                     android:background="@drawable/bg_eventinformation_urlbutton"
                     android:fontFamily="@font/nanum_square_bold"
                     android:stateListAnimator="@null"
-                    android:text="@string/item_participant_requestcompanion"
+                    android:text="@string/recruitment_request_companion"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_participant_image"
                     app:layout_constraintEnd_toEndOf="parent"

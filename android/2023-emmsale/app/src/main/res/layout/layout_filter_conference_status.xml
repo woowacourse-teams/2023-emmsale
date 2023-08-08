@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
             android:layout_marginTop="20dp"
-            android:text="@string/filter_conference_status_title"
+            android:text="@string/eventfilter_conference_status_title"
             android:textSize="15sp"
             android:textStyle="bold" />
 

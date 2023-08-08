@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
-        if (isGranted) showToast(getString(R.string.post_notification_permission_granted_message))
+        if (isGranted) showToast(getString(R.string.login_post_notification_permission_granted_message))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

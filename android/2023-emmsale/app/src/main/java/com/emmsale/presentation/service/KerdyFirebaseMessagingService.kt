@@ -17,11 +17,13 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationMessage = message.data["message"] ?: return
 
         notificationHelper.showNotification(
-            title = getString(R.string.follow_notification_title_format),
-            message = getString(R.string.follow_notification_message_format).format(senderName),
+            title = getString(R.string.kerdyfirebasemessaging_follow_notification_title_format),
+            message = getString(R.string.kerdyfirebasemessaging_follow_notification_message_format).format(
+                senderName,
+            ),
             channelId = FOLLOW_CHANNEL_ID,
-            channelName = getString(R.string.follow_notification_channel_name),
-            channelDescription = getString(R.string.follow_notification_channel_description),
+            channelName = getString(R.string.kerdyfirebasemessaging_follow_notification_channel_name),
+            channelDescription = getString(R.string.kerdyfirebasemessaging_follow_notification_channel_description),
         )
     }
 

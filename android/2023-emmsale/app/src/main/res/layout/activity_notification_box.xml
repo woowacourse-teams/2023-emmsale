@@ -22,7 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/notification_box_title"
+            app:title="@string/notificationbox_title"
             app:titleCentered="true"
             app:titleTextAppearance="@style/EventFilterToolbarTitleFontStyle" />
 

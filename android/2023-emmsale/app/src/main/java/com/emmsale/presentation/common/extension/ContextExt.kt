@@ -27,7 +27,7 @@ fun Context.checkPostNotificationPermission(): Boolean {
 
 fun Context.showPermissionRequestDialog() {
     showDialog {
-        message(getString(R.string.post_notification_permission_needed_message))
+        message(getString(R.string.login_post_notification_permission_needed_message))
         positiveButton { navigateToApplicationSettings() }
         negativeButton { }
     }

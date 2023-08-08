@@ -79,7 +79,7 @@ class ChildCommentsActivity : AppCompatActivity() {
                 childCommentsScreenUiState.parentComment.authorName
             } else {
                 getString(
-                    R.string.comment_deletedCommentAuthorName,
+                    R.string.comment_deleted_comment_author_name,
                 )
             }
         binding.tvChildcommentsParentcommentcontent.text =
