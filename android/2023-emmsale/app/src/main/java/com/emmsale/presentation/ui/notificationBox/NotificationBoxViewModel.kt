@@ -28,61 +28,54 @@ class NotificationBoxViewModel(
     private val eventDetailRepository: EventDetailRepository,
     private val notificationRepository: NotificationRepository,
 ) : ViewModel() {
-    private val _notifications = MutableLiveData<NotificationsUiState>()
+    private val _notifications = MutableLiveData(NotificationsUiState())
     val notifications: LiveData<NotificationsUiState> = _notifications
 
-    fun fetchNotifications() {
+    init {
+        fetchNotifications()
+    }
+
+    private fun fetchNotifications() {
         viewModelScope.launch {
-            _notifications.postValue(NotificationsUiState(isLoading = true))
+            _notifications.postValue(_notifications.value?.copy(isLoading = true))
 
-            when (val result = notificationRepository.getNotifications()) {
-                is ApiSuccess -> {
-                    val notifications: List<NotificationBodyUiState> =
-                        result.data.map { notification ->
-                            val notiMember = getNotificationMemberAsync(notification.otherUid)
-                            val conferenceName = getConferenceNameAsync(notification.eventId)
-                            awaitAll(notiMember, conferenceName).run {
-                                createNotificationUiState(
-                                    notification = notification,
-                                    notificationMember = getOrNull(0) as? NotificationMemberUiState,
-                                    conferenceName = getOrNull(1).toString(),
-                                )
-                            }
-                        }
-
-                    val finalNotification = notifications.groupBy { it.conferenceId }
-                    val notificationHeaders =
-                        finalNotification.map { (conferenceId, notifications) ->
-                            NotificationHeaderUiState(
-                                eventId = conferenceId,
-                                conferenceName = notifications[0].conferenceName,
-                                notifications = notifications,
-                            )
-                        }
-
-                    _notifications.postValue(NotificationsUiState(notifications = notificationHeaders))
-                }
-
+            when (val notificationsResult = notificationRepository.getNotifications()) {
+                is ApiSuccess -> updateNotifications(notificationsResult)
                 is ApiException,
                 is ApiError,
-                -> _notifications.postValue(NotificationsUiState(isError = false))
+                -> _notifications.postValue(NotificationsUiState(isError = true))
             }
         }
     }
 
-    private fun createNotificationUiState(
-        notification: Notification,
-        notificationMember: NotificationMemberUiState?,
-        conferenceName: String,
-    ): NotificationBodyUiState = NotificationBodyUiState(
-        id = notification.id,
-        otherUid = notification.otherUid,
-        otherName = notificationMember?.name ?: "",
-        conferenceId = notification.eventId,
-        conferenceName = conferenceName,
-        message = notification.message,
-        profileImageUrl = notificationMember?.profileImageUrl ?: "",
-    )
+    private suspend fun updateNotifications(
+        notificationsResult: ApiSuccess<List<Notification>>,
+    ) {
+        val notifications = getNotificationBody(notificationsResult).groupBy { it.conferenceId }
+        val notificationHeaders = notifications.map { (conferenceId, notifications) ->
+            NotificationHeaderUiState(
+                eventId = conferenceId,
+                conferenceName = notifications[0].conferenceName,
+                notifications = notifications,
+            )
+        }
+
+        _notifications.postValue(NotificationsUiState(notifications = notificationHeaders))
+    }
+
+    private suspend fun getNotificationBody(
+        result: ApiSuccess<List<Notification>>,
+    ): List<NotificationBodyUiState> = result.data.map { notification ->
+        val notiMember = getNotificationMemberAsync(notification.otherUid)
+        val conferenceName = getConferenceNameAsync(notification.eventId)
+        awaitAll(notiMember, conferenceName).run {
+            NotificationBodyUiState.from(
+                notification = notification,
+                notificationMember = getOrNull(MEMBER_INDEX) as? NotificationMemberUiState,
+                conferenceName = getOrNull(CONFERENCE_NAME_INDEX).toString(),
+            )
+        }
+    }
 
     private suspend fun getNotificationMemberAsync(userId: Long): Deferred<NotificationMemberUiState?> =
         viewModelScope.async {
@@ -104,23 +97,26 @@ class NotificationBoxViewModel(
             }
         }
 
+    fun toggleExpand(eventId: Long) {
+        _notifications.postValue(_notifications.value?.toggleNotificationExpanded(eventId))
+    }
+
     // TODO: 4차 스프린트 구현 예정
     // TODO: 컨퍼런스 동행 수락
-    fun acceptCompanion(notificationId: Long) {
+    fun acceptRecruit(notificationId: Long) {
         Log.d("kerdy", notificationId.toString())
     }
 
     // TODO: 4차 스프린트 구현 예정
     // TODO: 컨퍼런스 동행 거절
-    fun rejectCompanion(notificationId: Long) {
+    fun rejectRecruit(notificationId: Long) {
         Log.d("kerdy", notificationId.toString())
     }
 
-    fun toggleExpand(eventId: Long) {
-        _notifications.postValue(_notifications.value?.toggleNotificationExpanded(eventId))
-    }
-
     companion object {
+        private const val MEMBER_INDEX = 0
+        private const val CONFERENCE_NAME_INDEX = 1
+
         val factory = ViewModelFactory {
             NotificationBoxViewModel(
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
