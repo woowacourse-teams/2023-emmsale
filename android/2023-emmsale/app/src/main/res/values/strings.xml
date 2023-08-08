@@ -21,6 +21,11 @@
     <string name="onboardingname_sub_message">설정 시 변경이 불가합니다.</string>
     <string name="onboardingname_hint">입력해주세요.</string>
 
+    <string name="onboardingfield_page">2/4</string>
+    <string name="onboardingfield_title">관심 분야</string>
+    <string name="onboardingfield_message">관심 있는 카테고리를 선택해 주세요.</string>
+    <string name="onboardingfield_sub_message">복수 선택이 최대 4개까지 가능합니다.</string>
+
     <string name="kerdyfirebasemessaging_follow_notification_title_format">같이 가기 요청</string>
     <string name="kerdyfirebasemessaging_follow_notification_message_format">%s님께서 같이 가기를 요청하였어요!</string>
     <string name="kerdyfirebasemessaging_follow_notification_channel_name">같이 가기 알림 채널</string>
