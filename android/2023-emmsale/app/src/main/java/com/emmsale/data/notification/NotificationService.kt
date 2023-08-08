@@ -4,6 +4,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface NotificationService {
-    @GET("/notifications")
+    @GET("/request-notification")
     suspend fun getNotifications(): Response<List<NotificationApiModel>>
 }
