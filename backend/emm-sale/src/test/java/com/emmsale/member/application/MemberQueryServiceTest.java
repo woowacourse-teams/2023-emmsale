@@ -24,7 +24,7 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("사용자를 조회하고 조회 결과를 반환한다.")
   void findOrCreateMemberTest() {
     //given
-    final MemberQueryResponse expectResponse = new MemberQueryResponse(1L, true);
+    final MemberQueryResponse expectResponse = new MemberQueryResponse(1L, false);
 
     final GithubProfileResponse githubProfileFromGithub = new GithubProfileResponse("1", "name",
         "username", "https://imageUrl.com");
@@ -67,7 +67,7 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
     void findProfile_success() {
       //given
       final Long memberId = 1L;
-      final MemberProfileResponse expectResponse = new MemberProfileResponse(memberId, "member1",
+      final MemberProfileResponse expectResponse = new MemberProfileResponse(memberId, null,
           "", "https://imageurl.com");
 
       //when
