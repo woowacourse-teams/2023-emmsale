@@ -107,7 +107,8 @@ class EventApiTest extends MockMvcTestHelper {
 
     final RequestFieldsSnippet requestFields = requestFields(
         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자"),
-        fieldWithPath("content").type(JsonFieldType.STRING).description("함께 해요 게시글의 내용")
+        fieldWithPath("content").type(JsonFieldType.STRING)
+            .description("함께 해요 게시글의 내용(공백 불가, 255자 최대)")
     );
 
     when(eventService.participate(any(), any(), any())).thenReturn(participantId);
