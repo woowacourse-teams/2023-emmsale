@@ -11,10 +11,10 @@ class FcmTokenRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val fcmTokenService: FcmTokenService,
 ) : FcmTokenRepository {
-    override suspend fun saveFcmToken(fcmToken: FcmToken): ApiResult<Unit> =
+    override suspend fun saveFcmToken(uid: Long, fcmToken: String): ApiResult<Unit> =
         withContext(dispatcher) {
             handleApi(
-                execute = { fcmTokenService.saveFcmToken(FcmTokenApiModel.from(fcmToken)) },
+                execute = { fcmTokenService.saveFcmToken(FcmTokenApiModel(uid, fcmToken)) },
                 mapToDomain = { },
             )
         }

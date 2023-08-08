@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.fcmToken.FcmToken
 import com.emmsale.data.fcmToken.FcmTokenRepository
 import com.emmsale.data.login.Login
 import com.emmsale.data.login.LoginRepository
@@ -49,7 +48,7 @@ class LoginViewModel(
     }
 
     private suspend fun saveFcmToken(uid: Long, fcmToken: String): Job = viewModelScope.launch {
-        fcmTokenRepository.saveFcmToken(FcmToken(uid, fcmToken))
+        fcmTokenRepository.saveFcmToken(uid, fcmToken)
     }
 
     private suspend fun saveUserToken(loginResult: Login) {
