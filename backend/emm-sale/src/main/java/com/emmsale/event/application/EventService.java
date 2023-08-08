@@ -1,5 +1,7 @@
 package com.emmsale.event.application;
 
+import static com.emmsale.event.domain.repository.EventSpecification.filterByCategory;
+import static com.emmsale.event.domain.repository.EventSpecification.filterByTags;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
@@ -13,10 +15,10 @@ import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
-import com.emmsale.event.domain.EventTag;
 import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.Participant;
 import com.emmsale.event.domain.repository.EventRepository;
+import com.emmsale.event.domain.repository.EventSpecification;
 import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.domain.repository.ParticipantRepository;
 import com.emmsale.event.exception.EventException;
@@ -27,11 +29,13 @@ import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +43,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class EventService {
+
+  public static final String MIN_DATE = "2000-01-01";
+  public static final String MAX_DATE = "2999-12-31";
 
   private final EventRepository eventRepository;
   private final ParticipantRepository participantRepository;
@@ -84,17 +91,23 @@ public class EventService {
   }
 
   @Transactional(readOnly = true)
-  public List<EventResponse> findEvents(final EventType category, final LocalDate nowDate,
-      final String startDate, final String endDate,
+  public List<EventResponse> findEvents(final EventType category,
+      final LocalDate nowDate, final String startDate, final String endDate,
       final List<String> tagNames, final List<EventStatus> statuses) {
-    List<Event> events = eventRepository.findEventsByType(category);
+    Specification<Event> spec = Specification.where(filterByCategory(category));
 
     if (isExistTagNames(tagNames)) {
-      events = filterByTags(events, tagNames);
+      validateTags(tagNames);
+      spec = spec.and(filterByTags(tagNames));
     }
+
     if (isExistFilterDate(startDate, endDate)) {
-      events = filterByPeriod(events, startDate, endDate);
+      LocalDateTime startDateTime = validateStartDate(startDate);
+      LocalDateTime endDateTime = validateEndDate(endDate);
+      validateEndDateAfterDateStart(startDateTime, endDateTime);
+      spec = spec.and(EventSpecification.filterByPeriod(startDateTime, endDateTime));
     }
+    List<Event> events = eventRepository.findAll(spec);
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events);
 
@@ -115,20 +128,8 @@ public class EventService {
     return tagNames != null;
   }
 
-  private List<Event> filterByTags(final List<Event> events, final List<String> tagNames) {
+  private void validateTags(final List<String> tagNames) {
     final List<Tag> tags = tagRepository.findByNameIn(tagNames);
-    validateTags(tagNames, tags);
-
-    return events.stream()
-        .filter(event -> event.getTags()
-            .stream()
-            .map(EventTag::getTag)
-            .anyMatch(tags::contains)
-        )
-        .collect(toList());
-  }
-
-  private void validateTags(final List<String> tagNames, final List<Tag> tags) {
     if (tags.size() != tagNames.size()) {
       throw new TagException(NOT_FOUND_TAG);
     }
@@ -138,58 +139,32 @@ public class EventService {
     return startDate != null || endDate != null;
   }
 
-  private List<Event> filterByPeriod(final List<Event> events, final String startDate,
-      final String endDate) {
-    LocalDate filterStart = validateStartDate(startDate);
-    LocalDate filterEnd = validateEndDate(endDate);
-    validateEndDateAfterDateStart(filterStart, filterEnd);
-
-    return events.stream()
-        .filter(event -> isOverlapToMonth(filterStart, filterEnd,
-            event.getStartDate().toLocalDate(), event.getEndDate().toLocalDate())
-        )
-        .collect(toList());
-  }
-
-
-  private LocalDate validateStartDate(final String date) {
+  private LocalDateTime validateStartDate(final String date) {
     try {
       if (date == null) {
-        return LocalDate.MIN;
+        return LocalDate.parse(MIN_DATE).atStartOfDay();
       }
-      return LocalDate.parse(date);
+      return LocalDate.parse(date).atStartOfDay();
     } catch (DateTimeParseException exception) {
       throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
     }
   }
 
-  private LocalDate validateEndDate(final String date) {
+  private LocalDateTime validateEndDate(final String date) {
     try {
       if (date == null) {
-        return LocalDate.MAX;
+        return LocalDate.parse(MAX_DATE).atTime(23, 59, 59);
       }
-      return LocalDate.parse(date);
+      return LocalDate.parse(date).atTime(23, 59, 59);
     } catch (DateTimeParseException exception) {
       throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
     }
   }
 
-  private void validateEndDateAfterDateStart(LocalDate startDate, LocalDate endDate) {
+  private void validateEndDateAfterDateStart(LocalDateTime startDate, LocalDateTime endDate) {
     if (endDate.isBefore(startDate)) {
       throw new EventException(EventExceptionType.START_DATE_AFTER_END_DATE);
     }
-  }
-
-  private boolean isOverlapToMonth(final LocalDate startDate, final LocalDate endDate,
-      final LocalDate eventStart, final LocalDate eventEnd) {
-    return
-        (isBeforeOrEquals(eventStart, endDate) && isBeforeOrEquals(startDate, eventEnd))
-            || (isBeforeOrEquals(startDate, eventStart) && isBeforeOrEquals(eventStart, endDate))
-            || (isBeforeOrEquals(startDate, eventEnd) && isBeforeOrEquals(eventEnd, endDate));
-  }
-
-  private boolean isBeforeOrEquals(final LocalDate criteria, final LocalDate comparison) {
-    return criteria.isBefore(comparison) || criteria.isEqual(comparison);
   }
 
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,

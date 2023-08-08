@@ -381,7 +381,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           .isEqualTo(expectedEvents);
     }
 
-    // TODO: 2023-08-06  status 필터링 시 정렬 안깨지는지 확인
     @Test
     @DisplayName("2023년 7월 21일에 2023년 7월 31일 이전에 있는 행사를 조회하면, 해당 기간에 걸쳐있는 모든 행사 목록을 조회할 수 있다.")
     void findEvents_before_2023_7_31() {
@@ -568,6 +567,24 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
           null, null, null,
           List.of(EventStatus.UPCOMING, IN_PROGRESS));
+
+      // then
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status")
+          .isEqualTo(expectedEvents);
+    }
+
+    @Test
+    @DisplayName("9월에 존재하는 진행 예정인 '안드로이드', '백엔드' 태그를 포함하는 행사 목록을 조회할 수 있다.")
+    void findEvents_period_tags_filter() {
+      // given
+      final List<EventResponse> expectedEvents = List.of(모바일_컨퍼런스);
+
+      // when
+      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+          "2023-09-01", "2023-09-30", List.of("안드로이드", "백엔드"),
+          List.of(EventStatus.UPCOMING));
 
       // then
       assertThat(actualEvents)
