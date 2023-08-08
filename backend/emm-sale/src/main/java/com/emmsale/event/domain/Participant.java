@@ -1,6 +1,8 @@
 package com.emmsale.event.domain;
 
 import com.emmsale.base.BaseEntity;
+import com.emmsale.event.exception.EventException;
+import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,5 +46,21 @@ public class Participant extends BaseEntity {
 
   public boolean isSameMember(final Member member) {
     return this.member.isMe(member);
+  }
+
+  public void updateContent(final String content) {
+    this.content = content;
+  }
+
+  public void validateEvent(final Long eventId) {
+    if (!event.getId().equals(eventId)) {
+      throw new EventException(EventExceptionType.PARTICIPANT_NOT_BELONG_EVENT);
+    }
+  }
+
+  public void validateOwner(final Member member) {
+    if (!this.member.getId().equals(member.getId())) {
+      throw new EventException(EventExceptionType.FORBIDDEN_UPDATE_PARTICIPATE);
+    }
   }
 }
