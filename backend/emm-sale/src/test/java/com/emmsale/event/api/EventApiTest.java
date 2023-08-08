@@ -281,6 +281,23 @@ class EventApiTest extends MockMvcTestHelper {
     result.andExpect(status().isNoContent()).andDo(print()).andDo(document("delete-event"));
   }
 
+  @Test
+  @DisplayName("이미 Event에 멤버가 참여헀는지 확인할 수 있다.")
+  void isAlreadyParticipate() throws Exception {
+    //given
+    final Long memberId = 2L;
+    final Long eventId = 3L;
+    given(eventService.isAlreadyParticipate(eventId, memberId)).willReturn(true);
+
+    //when && then
+    mockMvc.perform(
+            get("/events/{eventId}/participants/already-participate?member-id={memberId}"
+                , eventId, memberId)
+        )
+        .andExpect(status().isOk())
+        .andDo(document("check-already-participate"));
+  }
+
   @Nested
   class AddEvent {
 
@@ -413,7 +430,7 @@ class EventApiTest extends MockMvcTestHelper {
 
       final String request = "{" + "\"name\":\"인프콘 2023\"," + "\"location\":\"코엑스\","
           + "\"informationUrl\":\"https://~~~\"," + "\"startDateTime\":" + startDateTime + ","
-          + "\"endDateTime\":\"2023-01-02T12:00:00\""
+          + "\"endDateTime\":\"2023-01-02T12:00:00\","
           + ",\"tags\":[{\"name\":\"백엔드\"},{\"name\":\"안드로이드\"}]" + "}";
 
       //when
@@ -437,33 +454,19 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
       final String request = "{" + "\"name\":\"인프콘 2023\"," + "\"location\":\"코엑스\","
-          + "\"informationUrl\":\"https://~~~\"," + "\"startDateTime\":\"2023-01-01T12:00:00\""
+          + "\"informationUrl\":\"https://~~~\"," + "\"startDateTime\":\"2023-01-01T12:00:00\","
           + "\"endDateTime\":" + endDateTime + ","
           + ",\"tags\":[{\"name\":\"백엔드\"},{\"name\":\"안드로이드\"}]" + "}";
 
       //when
       final ResultActions result = mockMvc.perform(
-          post("/events").contentType(MediaType.APPLICATION_JSON_VALUE).content(request));
+          post("/events")
+              .contentType(MediaType.APPLICATION_JSON_VALUE)
+              .content(request)
+      );
 
       //then
       result.andExpect(status().isBadRequest());
     }
-  }
-
-  @Test
-  @DisplayName("이미 Event에 멤버가 참여헀는지 확인할 수 있다.")
-  void isAlreadyParticipate() throws Exception {
-    //given
-    final Long memberId = 2L;
-    final Long eventId = 3L;
-    given(eventService.isAlreadyParticipate(eventId, memberId)).willReturn(true);
-
-    //when && then
-    mockMvc.perform(
-            get("/events/{eventId}/participants/already-participate?member-id={memberId}"
-                , eventId, memberId)
-        )
-        .andExpect(status().isOk())
-        .andDo(document("check-already-participate"));
   }
 }
