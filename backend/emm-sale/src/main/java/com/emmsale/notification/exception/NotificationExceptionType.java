@@ -38,7 +38,14 @@ public enum NotificationExceptionType implements BaseExceptionType {
   FIREBASE_CONNECT_ERROR(
       HttpStatus.INTERNAL_SERVER_ERROR,
       "파이어베이스 접속 시 발생한 에러"
-  );
+  ),
+
+  ALREADY_EXIST_NOTIFICATION(
+      HttpStatus.BAD_REQUEST,
+      "이미 요청된 알림입니다."
+  )
+
+  ;
 
   private final HttpStatus httpStatus;
   private final String errorMessage;
