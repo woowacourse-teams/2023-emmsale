@@ -10,7 +10,6 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.fcmToken.FcmTokenRepository
 import com.emmsale.data.login.Login
 import com.emmsale.data.login.LoginRepository
-import com.emmsale.data.token.Token
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
@@ -40,7 +39,7 @@ class LoginViewModel(
 
     private suspend fun saveTokens(login: Login, fcmToken: String) {
         saveUserToken(login)
-        saveFcmToken(login.uid, fcmToken)
+        saveFcmToken(login.token.uid, fcmToken)
         when (login.isOnboarded) {
             true -> changeLoginState(LoginUiState.Login)
             false -> changeLoginState(LoginUiState.Onboarded)
@@ -51,8 +50,8 @@ class LoginViewModel(
         fcmTokenRepository.saveFcmToken(uid, fcmToken)
     }
 
-    private suspend fun saveUserToken(loginResult: Login) {
-        tokenRepository.saveToken(Token.from(loginResult))
+    private suspend fun saveUserToken(login: Login) {
+        tokenRepository.saveToken(login.token)
     }
 
     private fun changeLoginState(loginState: LoginUiState) {
