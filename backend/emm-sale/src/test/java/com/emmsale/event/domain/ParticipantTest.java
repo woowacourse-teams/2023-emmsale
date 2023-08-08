@@ -6,6 +6,7 @@ import static com.emmsale.event.exception.EventExceptionType.PARTICIPANT_NOT_BEL
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import com.emmsale.event.exception.EventException;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class ParticipantTest {
 
@@ -24,7 +24,7 @@ class ParticipantTest {
   @BeforeEach
   void setUp() {
     member = new Member(1L, 2L, "이미지URL", "멤버");
-    event = Mockito.spy(eventFixture());
+    event = spy(eventFixture());
     when(event.getId()).thenReturn(1L);
   }
 

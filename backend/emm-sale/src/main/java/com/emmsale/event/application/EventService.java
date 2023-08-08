@@ -4,6 +4,7 @@ import static com.emmsale.event.exception.EventExceptionType.INVALID_MONTH;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_YEAR_AND_MONTH;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
+import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
@@ -93,7 +94,7 @@ public class EventService {
         .ifPresentOrElse(
             participant -> participantRepository.deleteById(participant.getId()),
             () -> {
-              throw new EventException(EventExceptionType.NOT_FOUND_PARTICIPANT);
+              throw new EventException(NOT_FOUND_PARTICIPANT);
             });
   }
 
@@ -268,6 +269,10 @@ public class EventService {
       final ParticipateUpdateRequest request,
       final Member member
   ) {
-
+    final Participant participant = participantRepository.findById(participantId)
+        .orElseThrow(() -> new EventException(NOT_FOUND_PARTICIPANT));
+    participant.validateEvent(eventId);
+    participant.validateOwner(member);
+    participant.updateContent(request.getContent());
   }
 }
