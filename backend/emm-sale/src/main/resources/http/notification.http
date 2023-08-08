@@ -1,6 +1,6 @@
 ### 알림 저장
 
-POST http://localhost:8080/notifications
+POST http://localhost:8080/requestNotifications
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 ### FCM 토큰 저장 API (새롭게 저장)
 
-POST http://localhost:8080/notifications/token
+POST http://localhost:8080/requestNotifications/token
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 
 ### FCM 토큰 저장 API (기존에 있던 것 수정)
 
-POST http://localhost:8080/notifications/token
+POST http://localhost:8080/requestNotifications/token
 Content-Type: application/json
 
 {
@@ -32,7 +32,7 @@ Content-Type: application/json
 
 ### 알림 상태를 변경하는 API
 
-PATCH http://localhost:8080/notifications/2
+PATCH http://localhost:8080/requestNotifications/2
 Content-Type: application/json
 
 {
@@ -41,4 +41,4 @@ Content-Type: application/json
 
 ### id로 알림 조회하는 API
 
-GET http://localhost:8080/notifications/1
+GET http://localhost:8080/requestNotifications/1

@@ -7,7 +7,7 @@ truncate table tag;
 truncate table event_tag;
 truncate table member_tag;
 truncate table event_member;
-truncate table notification;
+truncate table request_notification;
 truncate table fcm_token;
 
 insert into activity(id, type, name)

@@ -9,13 +9,13 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.notification.application.dto.FcmTokenRequest;
-import com.emmsale.notification.application.dto.NotificationModifyRequest;
-import com.emmsale.notification.application.dto.NotificationRequest;
-import com.emmsale.notification.application.dto.NotificationResponse;
+import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
+import com.emmsale.notification.application.dto.RequestNotificationRequest;
+import com.emmsale.notification.application.dto.RequestNotificationResponse;
 import com.emmsale.notification.domain.FcmToken;
 import com.emmsale.notification.domain.FcmTokenRepository;
-import com.emmsale.notification.domain.Notification;
-import com.emmsale.notification.domain.NotificationRepository;
+import com.emmsale.notification.domain.RequestNotification;
+import com.emmsale.notification.domain.RequestNotificationRepository;
 import com.emmsale.notification.exception.NotificationException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,32 +26,32 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class NotificationCommandService {
+public class RequestNotificationCommandService {
 
-  private final NotificationRepository notificationRepository;
+  private final RequestNotificationRepository requestNotificationRepository;
   private final FcmTokenRepository fcmTokenRepository;
   private final MemberRepository memberRepository;
   private final FirebaseCloudMessageClient firebaseCloudMessageClient;
 
-  public NotificationResponse create(final NotificationRequest notificationRequest) {
-    final Long senderId = notificationRequest.getSenderId();
-    final Long receiverId = notificationRequest.getReceiverId();
-    final Long eventId = notificationRequest.getEventId();
+  public RequestNotificationResponse create(final RequestNotificationRequest requestNotificationRequest) {
+    final Long senderId = requestNotificationRequest.getSenderId();
+    final Long receiverId = requestNotificationRequest.getReceiverId();
+    final Long eventId = requestNotificationRequest.getEventId();
 
     validateAlreadyExistedNotification(senderId, receiverId, eventId);
     validateExistedSenderOrReceiver(List.of(senderId, receiverId));
 
-    final Notification savedNotification = notificationRepository.save(
-        new Notification(
+    final RequestNotification savedRequestNotification = requestNotificationRepository.save(
+        new RequestNotification(
             senderId,
             receiverId,
             eventId,
-            notificationRequest.getMessage()
+            requestNotificationRequest.getMessage()
         ));
 
-    firebaseCloudMessageClient.sendMessageTo(receiverId, savedNotification);
+    firebaseCloudMessageClient.sendMessageTo(receiverId, savedRequestNotification);
 
-    return NotificationResponse.from(savedNotification);
+    return RequestNotificationResponse.from(savedRequestNotification);
   }
 
   private void validateAlreadyExistedNotification(
@@ -59,7 +59,7 @@ public class NotificationCommandService {
       final Long receiverId,
       final Long eventId
   ) {
-    if (notificationRepository.existsBySenderIdAndReceiverIdAndEventId(
+    if (requestNotificationRepository.existsBySenderIdAndReceiverIdAndEventId(
         senderId, receiverId, eventId
     )) {
       throw new NotificationException(ALREADY_EXIST_NOTIFICATION);
@@ -100,21 +100,21 @@ public class NotificationCommandService {
   }
 
   public void modify(
-      final NotificationModifyRequest notificationModifyRequest,
+      final RequestNotificationModifyRequest requestNotificationModifyRequest,
       final Long notificationId
   ) {
-    final Notification savedNotification = notificationRepository.findById(notificationId)
+    final RequestNotification savedRequestNotification = requestNotificationRepository.findById(notificationId)
         .orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
 
-    savedNotification.modifyStatus(notificationModifyRequest.getUpdatedStatus());
+    savedRequestNotification.modifyStatus(requestNotificationModifyRequest.getUpdatedStatus());
   }
 
-  public List<NotificationResponse> findAllNotifications(final Member member) {
-    final List<Notification> notifications = notificationRepository.findAllByReceiverId(
+  public List<RequestNotificationResponse> findAllNotifications(final Member member) {
+    final List<RequestNotification> requestNotifications = requestNotificationRepository.findAllByReceiverId(
         member.getId());
 
-    return notifications.stream()
-        .map(NotificationResponse::from)
+    return requestNotifications.stream()
+        .map(RequestNotificationResponse::from)
         .collect(Collectors.toList());
   }
 }

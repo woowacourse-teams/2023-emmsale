@@ -14,14 +14,14 @@ import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.notification.application.dto.FcmTokenRequest;
-import com.emmsale.notification.application.dto.NotificationModifyRequest;
-import com.emmsale.notification.application.dto.NotificationRequest;
-import com.emmsale.notification.application.dto.NotificationResponse;
+import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
+import com.emmsale.notification.application.dto.RequestNotificationRequest;
+import com.emmsale.notification.application.dto.RequestNotificationResponse;
 import com.emmsale.notification.domain.FcmToken;
 import com.emmsale.notification.domain.FcmTokenRepository;
-import com.emmsale.notification.domain.Notification;
-import com.emmsale.notification.domain.NotificationRepository;
-import com.emmsale.notification.domain.NotificationStatus;
+import com.emmsale.notification.domain.RequestNotification;
+import com.emmsale.notification.domain.RequestNotificationRepository;
+import com.emmsale.notification.domain.RequestNotificationStatus;
 import com.emmsale.notification.exception.NotificationException;
 import com.emmsale.notification.exception.NotificationExceptionType;
 import java.util.List;
@@ -32,25 +32,25 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
+class RequestRequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
-  private NotificationCommandService notificationCommandService;
+  private RequestNotificationCommandService requestNotificationCommandService;
   @Autowired
   private FcmTokenRepository fcmTokenRepository;
   @Autowired
-  private NotificationRepository notificationRepository;
+  private RequestNotificationRepository requestNotificationRepository;
   @Autowired
   private MemberRepository memberRepository;
-  private NotificationCommandService mockingNotificationCommandService;
+  private RequestNotificationCommandService mockingRequestNotificationCommandService;
   private FirebaseCloudMessageClient firebaseCloudMessageClient;
 
   @BeforeEach
   void setUp() {
     firebaseCloudMessageClient = mock(FirebaseCloudMessageClient.class);
 
-    mockingNotificationCommandService = new NotificationCommandService(
-        notificationRepository,
+    mockingRequestNotificationCommandService = new RequestNotificationCommandService(
+        requestNotificationRepository,
         fcmTokenRepository,
         memberRepository,
         firebaseCloudMessageClient
@@ -67,21 +67,21 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
     final String message = "알림 메시지야";
     final long notificationId = 1L;
 
-    final NotificationRequest request = new NotificationRequest(
+    final RequestNotificationRequest request = new RequestNotificationRequest(
         senderId,
         receiverId,
         message,
         eventId
     );
 
-    final NotificationResponse expected = new NotificationResponse(
+    final RequestNotificationResponse expected = new RequestNotificationResponse(
         notificationId, senderId, receiverId, message, eventId
     );
 
     doNothing().when(firebaseCloudMessageClient).sendMessageTo(anyLong(), any());
 
     //when
-    final NotificationResponse actual = mockingNotificationCommandService.create(request);
+    final RequestNotificationResponse actual = mockingRequestNotificationCommandService.create(request);
 
     //then
     assertThat(actual)
@@ -102,7 +102,7 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
     final FcmTokenRequest request = new FcmTokenRequest(updateToken, memberId);
 
     //when
-    notificationCommandService.registerFcmToken(request);
+    requestNotificationCommandService.registerFcmToken(request);
 
     //then
     final FcmToken updatedFcmToken = fcmTokenRepository.findByMemberId(memberId).get();
@@ -120,7 +120,7 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
     final FcmTokenRequest request = new FcmTokenRequest(token, memberId);
 
     //when
-    notificationCommandService.registerFcmToken(request);
+    requestNotificationCommandService.registerFcmToken(request);
 
     //then
     final FcmToken createdFcmToken = fcmTokenRepository.findByMemberId(memberId).get();
@@ -145,7 +145,7 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
     final long eventId = 3L;
     final String message = "알림 메시지야";
 
-    final NotificationRequest request = new NotificationRequest(
+    final RequestNotificationRequest request = new RequestNotificationRequest(
         senderId,
         receiverId,
         message,
@@ -153,7 +153,7 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    assertThatThrownBy(() -> notificationCommandService.create(request))
+    assertThatThrownBy(() -> requestNotificationCommandService.create(request))
         .isInstanceOf(NotificationException.class)
         .hasMessage(NotificationExceptionType.BAD_REQUEST_MEMBER_ID.errorMessage());
 
@@ -169,19 +169,19 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
     final long eventId = 3L;
     final String message = "알림 메시지야";
 
-    final NotificationModifyRequest request =
-        new NotificationModifyRequest(NotificationStatus.IN_PROGRESS);
-    final Notification savedNotification =
-        notificationRepository.save(new Notification(senderId, receiverId, eventId, message));
+    final RequestNotificationModifyRequest request =
+        new RequestNotificationModifyRequest(RequestNotificationStatus.IN_PROGRESS);
+    final RequestNotification savedRequestNotification =
+        requestNotificationRepository.save(new RequestNotification(senderId, receiverId, eventId, message));
 
     //when
-    notificationCommandService.modify(request, savedNotification.getId());
+    requestNotificationCommandService.modify(request, savedRequestNotification.getId());
 
-    final Notification updatedNotification =
-        notificationRepository.findById(savedNotification.getId()).get();
+    final RequestNotification updatedRequestNotification =
+        requestNotificationRepository.findById(savedRequestNotification.getId()).get();
 
     //then
-    assertEquals(request.getUpdatedStatus(), updatedNotification.getStatus());
+    assertEquals(request.getUpdatedStatus(), updatedRequestNotification.getStatus());
   }
 
   @Test
@@ -194,15 +194,15 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
     final String message1 = "message123";
     final String message2 = "message321";
 
-    notificationRepository.save(
-        new Notification(sender.getId(), receiver.getId(), 123L, message1)
+    requestNotificationRepository.save(
+        new RequestNotification(sender.getId(), receiver.getId(), 123L, message1)
     );
-    notificationRepository.save(
-        new Notification(sender.getId(), receiver.getId(), 321L, message2)
+    requestNotificationRepository.save(
+        new RequestNotification(sender.getId(), receiver.getId(), 321L, message2)
     );
 
     //when
-    final List<NotificationResponse> notifications = notificationCommandService.findAllNotifications(
+    final List<RequestNotificationResponse> notifications = requestNotificationCommandService.findAllNotifications(
         receiver);
 
     //then

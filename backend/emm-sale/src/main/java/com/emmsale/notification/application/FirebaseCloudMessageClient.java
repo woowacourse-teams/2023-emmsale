@@ -15,7 +15,7 @@ import com.emmsale.notification.application.dto.FcmMessage.Data;
 import com.emmsale.notification.application.dto.FcmMessage.Message;
 import com.emmsale.notification.domain.FcmToken;
 import com.emmsale.notification.domain.FcmTokenRepository;
-import com.emmsale.notification.domain.Notification;
+import com.emmsale.notification.domain.RequestNotification;
 import com.emmsale.notification.exception.NotificationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,12 +54,12 @@ public class FirebaseCloudMessageClient {
   @Value("${firebase.project.id}")
   private String projectId;
 
-  public void sendMessageTo(final Long receiverId, final Notification notification) {
+  public void sendMessageTo(final Long receiverId, final RequestNotification requestNotification) {
 
     final FcmToken fcmToken = fcmTokenRepository.findByMemberId(receiverId)
         .orElseThrow(() -> new NotificationException(NOT_FOUND_FCM_TOKEN));
 
-    final String message = makeMessage(fcmToken.getToken(), notification);
+    final String message = makeMessage(fcmToken.getToken(), requestNotification);
 
     final HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
@@ -81,9 +81,9 @@ public class FirebaseCloudMessageClient {
     }
   }
 
-  private String makeMessage(final String targetToken, final Notification notification) {
+  private String makeMessage(final String targetToken, final RequestNotification requestNotification) {
 
-    final Long senderId = notification.getSenderId();
+    final Long senderId = requestNotification.getSenderId();
     final Member sender = memberRepository.findById(senderId)
         .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 
@@ -92,7 +92,7 @@ public class FirebaseCloudMessageClient {
 
     final Data messageData = new Data(
         sender.getName(), senderId.toString(),
-        notification.getReceiverId().toString(), notification.getMessage(),
+        requestNotification.getReceiverId().toString(), requestNotification.getMessage(),
         openProfileUrl
     );
 
