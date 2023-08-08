@@ -10,6 +10,9 @@ data class OnboardingUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
 ) {
+    val selectedActivityIds = (fields + educations + clubs)
+        .filter { it.isSelected }
+        .map { it.id }
 
     companion object {
         fun from(activities: List<Activity>): OnboardingUiState = OnboardingUiState(

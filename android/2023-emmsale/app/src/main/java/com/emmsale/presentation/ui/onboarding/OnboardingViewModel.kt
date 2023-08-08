@@ -1,6 +1,5 @@
 package com.emmsale.presentation.ui.onboarding
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,8 +28,6 @@ class OnboardingViewModel(
         MutableLiveData(OnboardingUiState())
     val activities: LiveData<OnboardingUiState> = _activities
 
-    private val selectedActivityIds: MutableList<Long> = mutableListOf()
-
     private val _memberUiState = MutableLiveData<MemberUiState>()
     val memberUiState: LiveData<MemberUiState> = _memberUiState
 
@@ -41,20 +38,9 @@ class OnboardingViewModel(
 
     private fun fetchActivities(): Job = viewModelScope.launch {
         when (val activitiesResult = activityRepository.getActivities()) {
-            is ApiSuccess -> {
-                Log.d("buna", activitiesResult.data.toString())
-                _activities.postValue(OnboardingUiState.from(activitiesResult.data))
-            }
-
-            is ApiError -> {
-                Log.d("buna", activitiesResult.code.toString())
-                _activities.postValue(_activities.value?.copy(isError = true))
-            }
-
-            is ApiException -> {
-                Log.d("buna", "Exception" + activitiesResult.e.toString())
-                _activities.postValue(_activities.value?.copy(isError = true))
-            }
+            is ApiSuccess -> _activities.postValue(OnboardingUiState.from(activitiesResult.data))
+            is ApiError -> _activities.postValue(_activities.value?.copy(isError = true))
+            is ApiException -> _activities.postValue(_activities.value?.copy(isError = true))
         }
     }
 
@@ -71,11 +57,6 @@ class OnboardingViewModel(
             educations = educations!!,
             clubs = clubs!!,
         )
-
-        when (isSelected) {
-            true -> selectedActivityIds.add(tagId)
-            false -> selectedActivityIds.remove(tagId)
-        }
     }
 
     fun updateMember() {
@@ -83,7 +64,7 @@ class OnboardingViewModel(
 
         viewModelScope.launch {
             _memberUiState.value = MemberUiState.Loading
-            val member = Member(memberName, selectedActivityIds)
+            val member = Member(memberName, _activities.value!!.selectedActivityIds)
 
             when (memberRepository.updateMember(member)) {
                 is ApiSuccess -> _memberUiState.value = MemberUiState.Success
