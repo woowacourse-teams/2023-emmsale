@@ -21,6 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_conference_filter"
             app:navigationIcon="@drawable/ic_back"
             app:title="@string/eventfilter_title"
             app:titleCentered="true"
