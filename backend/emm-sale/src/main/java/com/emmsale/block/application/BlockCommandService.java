@@ -26,7 +26,7 @@ public class BlockCommandService {
     validateSelfBlock(requestMember.getId(), blockMember.getId());
     validateAlreadyBlocked(requestMember.getId(), blockMember.getId());
 
-    final Block block = new Block(requestMember, blockMember);
+    final Block block = new Block(requestMember.getId(), blockMember.getId());
     blockRepository.save(block);
   }
 

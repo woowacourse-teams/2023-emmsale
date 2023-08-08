@@ -54,7 +54,7 @@ class BlockCommandServiceTest extends ServiceIntegrationTestHelper {
       //given
       final BlockRequest blockRequest = new BlockRequest(blockMember.getId());
       final BlockExceptionType expectException = BlockExceptionType.ALREADY_BLOCKED_MEMBER;
-      final Block block = new Block(requestMember, blockMember);
+      final Block block = new Block(requestMember.getId(), blockMember.getId());
       blockRepository.save(block);
 
       //when

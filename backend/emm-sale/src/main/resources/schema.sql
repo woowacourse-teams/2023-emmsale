@@ -112,11 +112,12 @@ create table fcm_token
     member_id bigint       not null unique
 );
 
+-- 2023-08-08 17:20
 create table block
 (
     id                bigint auto_increment primary key,
-    block_member_id   bigint not null,
-    request_member_id bigint not null,
-    created_at        datetime(6),
-    updated_at        datetime(6)
+    block_member_id   bigint      not null,
+    request_member_id bigint      not null,
+    created_at        datetime(6) null,
+    updated_at        datetime(6) null
 );

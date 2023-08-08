@@ -1,14 +1,11 @@
 package com.emmsale.block.domain;
 
 import com.emmsale.base.BaseEntity;
-import com.emmsale.member.domain.Member;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,15 +19,13 @@ public class Block extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(nullable = false)
-  private Member requestMember;
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(nullable = false)
-  private Member blockMember;
+  @Column(nullable = false)
+  private Long requestMemberId;
+  @Column(nullable = false)
+  private Long blockMemberId;
 
-  public Block(final Member requestMember, final Member blockMember) {
-    this.requestMember = requestMember;
-    this.blockMember = blockMember;
+  public Block(final Long requestMemberId, final Long blockMemberId) {
+    this.requestMemberId = requestMemberId;
+    this.blockMemberId = blockMemberId;
   }
 }
