@@ -5,8 +5,8 @@
     <string name="follow_notification_channel_name">같이 가기 알림 채널</string>
     <string name="follow_notification_channel_description">같이 가기 요청을 받기 위한 알림 채널입니다.</string>
     <string name="post_notification_permission_granted_message">푸시 알림 권한을 허용하였습니다.</string>
-    <string name="cancel">취소</string>
-    <string name="okay">확인</string>
+    <string name="all_cancel">취소</string>
+    <string name="all_okay">확인</string>
     <string name="post_notification_permission_needed_message">알림 권한이 필요해요!</string>
     <string name="main_menuitemnameofprofile">프로필</string>
     <string name="main_menuitemnameofhome">홈</string>
@@ -74,6 +74,7 @@
     <string name="notification_accept">수락</string>
     <string name="notification_header_expand_view">화면을 팽창 시킵니다.</string>
     <string name="eventdetail_date_format">%s ~ %s</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="conference_filter_clear">초기화</string>
+    <string name="filters_clear_title">필터 초기화</string>
+    <string name="filters_clear_message">선택된 필터를 모두 초기화 할까요?</string>
 </resources>
