@@ -22,7 +22,7 @@ public enum MemberExceptionType implements BaseExceptionType {
 
   ALREADY_EXIST_ACTIVITY(
       HttpStatus.BAD_REQUEST,
-      "요청한 activity id는 이미 존재합니다."
+      "이미 등록된 활동입니다."
   ),
 
   NULL_DESCRIPTION(
