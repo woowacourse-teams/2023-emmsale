@@ -9,6 +9,7 @@ data class OnboardingUiState(
     val clubs: List<ActivityUiState> = emptyList(),
     val isLoading: Boolean = false,
     val isError: Boolean = false,
+    val memberSavingUiState: MemberSavingUiState = MemberSavingUiState.None,
 ) {
     val selectedActivityIds = (fields + educations + clubs)
         .filter { it.isSelected }

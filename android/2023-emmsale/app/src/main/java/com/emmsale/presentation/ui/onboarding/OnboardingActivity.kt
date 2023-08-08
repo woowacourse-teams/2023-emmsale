@@ -10,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityOnboardingBinding
 import com.emmsale.presentation.ui.main.MainActivity
-import com.emmsale.presentation.ui.onboarding.uistate.MemberUiState
+import com.emmsale.presentation.ui.onboarding.uistate.MemberSavingUiState
 
 class OnboardingActivity : AppCompatActivity() {
     private val binding: ActivityOnboardingBinding by lazy {
@@ -26,15 +26,15 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(binding.root)
         initFragmentStateAdapter()
         initBackPressedDispatcher()
-        setupMemberUiState()
+        setupActivitiesUiState()
     }
 
-    private fun setupMemberUiState() {
-        viewModel.memberUiState.observe(this) { memberState ->
-            when (memberState) {
-                is MemberUiState.Success -> navigateToMain()
-                is MemberUiState.Failed -> showMemberUpdateFailed()
-                is MemberUiState.Loading -> binding.progressbarLoading.visibility = View.VISIBLE
+    private fun setupActivitiesUiState() {
+        viewModel.activities.observe(this) { activities ->
+            when (activities.memberSavingUiState) {
+                is MemberSavingUiState.None -> Unit
+                is MemberSavingUiState.Success -> navigateToMain()
+                is MemberSavingUiState.Failed -> showMemberUpdateFailed()
             }
         }
     }
