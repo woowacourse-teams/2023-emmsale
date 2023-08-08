@@ -53,7 +53,7 @@ public class Event extends BaseEntity {
   private List<EventTag> tags = new ArrayList<>();
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
-  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
   private List<Participant> participants = new ArrayList<>();
 
   public Event(
@@ -76,12 +76,13 @@ public class Event extends BaseEntity {
     this.imageUrl = imageUrl;
   }
 
-  public Participant addParticipant(final Member member) {
-    final Participant participant = new Participant(member, this);
+  public Participant addParticipant(final Member member, final String content) {
+    final Participant participant = new Participant(member, this, content);
     participants.add(participant);
     return participant;
   }
 
+  // 요거 이전에 발견하지 못했었는데 나중에 반환값 void로 바꿔도 될까요? 반환하는 값을 쓰지 않는 것 같아서요.
   public List<EventTag> addAllEventTags(final List<Tag> tags) {
     final List<EventTag> eventTags = tags.stream()
         .map(tag -> new EventTag(this, tag))

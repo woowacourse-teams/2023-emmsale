@@ -1,6 +1,7 @@
 package com.emmsale.event.domain;
 
 import com.emmsale.member.domain.Member;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class Participant {
   @JoinColumn(nullable = false)
   private Event event;
 
+  @Column(nullable = false)
   private String content;
 
   public Participant(final Member member, final Event event, final String content) {

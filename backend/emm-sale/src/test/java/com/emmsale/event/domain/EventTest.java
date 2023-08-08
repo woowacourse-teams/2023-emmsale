@@ -120,9 +120,10 @@ class EventTest {
       //given
       final Event 인프콘 = eventFixture();
       final Member 멤버 = new Member(1L, 1L, "imageUrl", "멤버");
+      final String 내용 = "저랑 같이 갈 사람 구합니다.";
 
       //when
-      인프콘.addParticipant(멤버);
+      인프콘.addParticipant(멤버, 내용);
 
       //then
       final List<Member> members = 인프콘.getParticipants().stream()
@@ -139,10 +140,13 @@ class EventTest {
       //given
       final Event 인프콘 = eventFixture();
       final Member 멤버 = new Member(1L, 1L, "이미지URL", "멤버");
-      인프콘.addParticipant(멤버);
+      final String 내용 = "저랑 같이 갈 사람 구합니다.";
+
+      //when
+      인프콘.addParticipant(멤버, 내용);
 
       //when && then
-      assertThatThrownBy(() -> 인프콘.addParticipant(멤버))
+      assertThatThrownBy(() -> 인프콘.addParticipant(멤버, 내용))
           .isInstanceOf(EventException.class)
           .hasMessage(EventExceptionType.ALREADY_PARTICIPATED.errorMessage());
     }
