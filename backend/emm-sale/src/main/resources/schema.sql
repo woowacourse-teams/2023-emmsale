@@ -9,6 +9,7 @@ drop table if exists kerdy.member_tag;
 drop table if exists kerdy.event_member;
 drop table if exists kerdy.request_notification;
 drop table if exists kerdy.fcm_token;
+drop table if exists kerdy.update_notification;
 
 create table activity
 (
@@ -52,7 +53,7 @@ create table comment
     is_deleted bit          not null,
     event_id   bigint       not null,
     member_id  bigint       not null,
-    parent_id  bigint       null
+    parent_id  bigint null
 );
 
 create table member_activity
@@ -113,3 +114,12 @@ create table fcm_token
 
 -- 2023.08.08 17:04
 rename table notification TO request_notification;
+
+create table update_notification
+(
+    id          bigint auto_increment primary key,
+    receiver_id bigint       not null,
+    redirect_id bigint       not null,
+    type        varchar(255) not null
+);
+
