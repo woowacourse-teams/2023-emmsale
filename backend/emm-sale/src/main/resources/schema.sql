@@ -22,11 +22,11 @@ create table event
     id              bigint auto_increment primary key,
     created_at      datetime(6),
     updated_at      datetime(6),
-    end_date        datetime(6) not null,
+    end_date        datetime(6)  not null,
     information_url varchar(255) not null,
     location        varchar(255) not null,
     name            varchar(255) not null,
-    start_date      datetime(6) not null,
+    start_date      datetime(6)  not null,
     image_url       varchar(255),
     type            varchar(20)  not null
 );
@@ -89,8 +89,9 @@ create table member_tag
 create table event_member
 (
     id        bigint auto_increment primary key,
-    member_id bigint not null,
-    event_id  bigint not null
+    member_id bigint       not null,
+    event_id  bigint       not null,
+    content   varchar(255) not null
 );
 create table notification
 (

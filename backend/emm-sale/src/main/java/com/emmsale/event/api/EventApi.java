@@ -43,10 +43,10 @@ public class EventApi {
   @PostMapping("/{eventId}/participants")
   public ResponseEntity<Void> participateEvent(
       @PathVariable final Long eventId,
-      @RequestBody final EventParticipateRequest request,
+      @RequestBody @Valid final EventParticipateRequest request,
       final Member member
   ) {
-    final Long participantId = eventService.participate(eventId, request.getMemberId(), member);
+    final Long participantId = eventService.participate(eventId, request, member);
 
     return ResponseEntity
         .created(create(format("/events/%s/participants/%s", eventId, participantId)))

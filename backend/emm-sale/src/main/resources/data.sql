@@ -183,10 +183,10 @@ values (20, 11, 7);
 insert into event_tag(id, event_id, tag_id)
 values (21, 12, 7);
 
-insert into event_member (member_id, event_id) value (1, 1);
-insert into event_member (member_id, event_id) value (2, 1);
-insert into event_member (member_id, event_id) value (3, 1);
+insert into event_member (member_id, event_id, content) value (1, 1, '빈 게시글 내용');
+insert into event_member (member_id, event_id, content) value (2, 1, '빈 게시글 내용');
+insert into event_member (member_id, event_id, content) value (3, 1, '빈 게시글 내용');
 
-insert into event_member (member_id, event_id) value (1, 2);
-insert into event_member (member_id, event_id) value (2, 2);
-insert into event_member (member_id, event_id) value (3, 2);
+insert into event_member (member_id, event_id, content) value (1, 2, '빈 게시글 내용');
+insert into event_member (member_id, event_id, content) value (2, 2, '빈 게시글 내용');
+insert into event_member (member_id, event_id, content) value (3, 2, '빈 게시글 내용');
