@@ -88,10 +88,12 @@ create table member_tag
 
 create table event_member
 (
-    id        bigint auto_increment primary key,
-    member_id bigint       not null,
-    event_id  bigint       not null,
-    content   varchar(255) not null
+    id         bigint auto_increment primary key,
+    created_at datetime(6),
+    updated_at datetime(6),
+    member_id  bigint       not null,
+    event_id   bigint       not null,
+    content    varchar(255) not null
 );
 create table notification
 (
@@ -111,3 +113,10 @@ create table fcm_token
     token     varchar(255) not null,
     member_id bigint       not null unique
 );
+
+/*
+ 2023-08-08 02:40
+ alter table event_member add column content varchar(255) not null;
+ alter table event_member add column created_at datetime(6);
+ alter table event_member add column updated_at datetime(6;
+ */

@@ -1,5 +1,6 @@
 package com.emmsale.event.domain;
 
+import com.emmsale.base.BaseEntity;
 import com.emmsale.member.domain.Member;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "event_member")
-public class Participant {
+public class Participant extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
