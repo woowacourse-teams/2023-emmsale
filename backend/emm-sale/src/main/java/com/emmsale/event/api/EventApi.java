@@ -9,6 +9,7 @@ import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.event.application.dto.ParticipateUpdateRequest;
 import com.emmsale.event.domain.EventType;
 import com.emmsale.member.domain.Member;
 import java.time.LocalDate;
@@ -51,6 +52,17 @@ public class EventApi {
     return ResponseEntity
         .created(create(format("/events/%s/participants/%s", eventId, participantId)))
         .build();
+  }
+
+  @PutMapping("/{eventId}/participants/{participantId}")
+  public ResponseEntity<Void> updateParticipate(
+      @PathVariable final Long eventId,
+      @PathVariable final Long participantId,
+      @RequestBody @Valid final ParticipateUpdateRequest request,
+      final Member member
+  ) {
+    eventService.updateParticipant(eventId, participantId, request, member);
+    return ResponseEntity.ok().build();
   }
 
   @DeleteMapping("/{eventId}/participants")

@@ -15,6 +15,7 @@ import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.event.application.dto.ParticipateUpdateRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
@@ -259,5 +260,14 @@ public class EventService {
   @Transactional(readOnly = true)
   public Boolean isAlreadyParticipate(final Long eventId, final Long memberId) {
     return participantRepository.existsByEventIdAndMemberId(eventId, memberId);
+  }
+
+  public void updateParticipant(
+      final Long eventId,
+      final Long participantId,
+      final ParticipateUpdateRequest request,
+      final Member member
+  ) {
+
   }
 }
