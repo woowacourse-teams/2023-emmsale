@@ -155,7 +155,7 @@ include::{snippets}/participate-event-cancel/request-parameters.adoc[]
 .HTTP response
 include::{snippets}/participate-event-cancel/http-response.adoc[]
 
-=== `GET`: 행사사에 이미 참여한 멤버인지 확인
+=== `GET`: 행사에 이미 참여한 멤버인지 확인
 
 .HTTP request
 include::{snippets}/check-already-participate/http-request.adoc[]
