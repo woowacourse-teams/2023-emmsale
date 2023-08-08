@@ -67,8 +67,8 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun askFilterClear() {
         showDialog {
-            title(getString(R.string.filters_clear_title))
-            message(getString(R.string.filters_clear_message))
+            title(getString(R.string.eventfilter_clear_title))
+            message(getString(R.string.eventfilter_clear_message))
             positiveButton(getString(R.string.all_okay)) { viewModel.clearFilters() }
             negativeButton(getString(R.string.all_cancel))
         }

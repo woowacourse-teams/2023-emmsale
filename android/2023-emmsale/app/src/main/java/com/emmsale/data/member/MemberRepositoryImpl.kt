@@ -35,6 +35,9 @@ class MemberRepositoryImpl(
     }
 
     override suspend fun updateMember(member: Member): ApiResult<Unit> = withContext(dispatcher) {
-        handleApi(memberService.updateMember(MemberApiModel.from(member))) { }
+        handleApi(
+            execute = { memberService.updateMember(MemberApiModel.from(member)) },
+            mapToDomain = { },
+        )
     }
 }

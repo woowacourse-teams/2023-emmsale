@@ -16,22 +16,30 @@ class ParticipantRepositoryImpl(
     private val currentUid = uidRepository.getCurrentUid()
 
     override suspend fun fetchEventParticipants(eventId: Long): ApiResult<List<Participant>> {
-        val response = participantService.getParticipants(eventId)
         return handleApi(
-            response = response,
+            execute = { participantService.getParticipants(eventId) },
             mapToDomain = List<ParticipantApiModel>::toData,
         )
     }
 
     override suspend fun saveParticipant(eventId: Long): ApiResult<Unit> {
         val requestBody = ParticipantRequestBody(currentUid)
-        val response = participantService.saveParticipant(eventId, requestBody)
-        return handleApi(response, mapToDomain = { })
+        return handleApi(
+            execute = { participantService.saveParticipant(eventId, requestBody) },
+            mapToDomain = { },
+        )
     }
 
     override suspend fun deleteParticipant(eventId: Long): ApiResult<Unit> {
-        val response = participantService.deleteParticipant(eventId, currentUid)
-        return handleApi(response, mapToDomain = {})
+        return handleApi(
+            execute = {
+                participantService.deleteParticipant(
+                    eventId,
+                    currentUid,
+                )
+            },
+            mapToDomain = {},
+        )
     }
 
     override suspend fun requestCompanion(
@@ -45,12 +53,16 @@ class ParticipantRepositoryImpl(
             eventId = eventId,
             message = message,
         )
-        val response = participantService.postCompanion(requestBody)
-        return handleApi(response, mapToDomain = {})
+        return handleApi(
+            execute = { participantService.postCompanion(requestBody) },
+            mapToDomain = {},
+        )
     }
 
     override suspend fun checkParticipationStatus(eventId: Long): ApiResult<Boolean> {
-        val response = participantService.checkIsParticipated(eventId, currentUid)
-        return handleApi(response, mapToDomain = { response.body()!! })
+        return handleApi(
+            execute = { participantService.checkIsParticipated(eventId, currentUid) },
+            mapToDomain = { true },
+        )
     }
 }

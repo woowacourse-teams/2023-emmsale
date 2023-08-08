@@ -16,7 +16,7 @@ class EventTagRepositoryImpl(
     override suspend fun getEventTags(category: EventCategory): ApiResult<List<EventTag>> =
         withContext(dispatcher) {
             handleApi(
-                response = eventTagService.getConferenceTags(category.text),
+                execute = { eventTagService.getConferenceTags(category.text) },
                 mapToDomain = List<ConferenceTagApiModel>::toData,
             )
         }

@@ -12,6 +12,9 @@ class LoginRepositoryImpl(
     private val loginService: LoginService,
 ) : LoginRepository {
     override suspend fun saveGithubCode(code: String): ApiResult<Login> = withContext(dispatcher) {
-        handleApi(loginService.saveGithubCode(code), LoginApiModel::toData)
+        handleApi(
+            execute = { loginService.saveGithubCode(code) },
+            mapToDomain = LoginApiModel::toData,
+        )
     }
 }

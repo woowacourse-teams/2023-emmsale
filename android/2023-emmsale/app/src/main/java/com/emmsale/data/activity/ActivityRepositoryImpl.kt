@@ -14,6 +14,9 @@ class ActivityRepositoryImpl(
 ) : ActivityRepository {
 
     override suspend fun getActivities(): ApiResult<List<Activity>> = withContext(dispatcher) {
-        handleApi(activityService.getActivities(), List<ActivitiesApiModel>::toData)
+        handleApi(
+            execute = { activityService.getActivities() },
+            mapToDomain = List<ActivitiesApiModel>::toData,
+        )
     }
 }
