@@ -45,8 +45,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class EventService {
 
-  public static final String MIN_DATE = "2000-01-01";
-  public static final String MAX_DATE = "2999-12-31";
+  private static final String MIN_DATE = "2000-01-01";
+  private static final String MAX_DATE = "2999-12-31";
 
   private final EventRepository eventRepository;
   private final ParticipantRepository participantRepository;
