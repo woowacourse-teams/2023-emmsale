@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EventTagRepository extends JpaRepository<EventTag, Long> {
 
-  List<EventTag> findEventTagsByTag(Tag tag);
+  List<EventTag> findEventTagsByTagIn(List<Tag> tags);
 
   void deleteAllByEventId(Long eventId);
 }

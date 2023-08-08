@@ -5,22 +5,22 @@ Content-Type: application/json
 
 ### 날짜 필터링이 적용된 경우
 
-GET http://localhost:8080/events?category=CONFERENCE&year=2023&month=7
+GET http://localhost:8080/events?category=CONFERENCE&start_date=2023-09-01
 Content-Type: application/json
 
 ### 상태 필터링이 적용된 경우
 
-GET http://localhost:8080/events?category=CONFERENCE&status=진행 중
+GET http://localhost:8080/events?category=CONFERENCE&statuses=ENDED,IN_PROGRESS
 Content-Type: application/json
 
 ### 태그 필터링이 적용된 경우
 
-GET http://localhost:8080/events?category=CONFERENCE&tag=안드로이드
+GET http://localhost:8080/events?category=CONFERENCE&tags=AI,백엔드
 Content-Type: application/json
 
 ### 태그 필터링과 상태 필터링이 모두 적용된 경우
 
-GET http://localhost:8080/events?category=CONFERENCE&year=2023&month=7&tag=백엔드&status=진행 중
+GET http://localhost:8080/events?category=CONFERENCE&tags=백엔드&statuses=IN_PROGRESS
 Content-Type: application/json
 
 ### Event 상세조회
