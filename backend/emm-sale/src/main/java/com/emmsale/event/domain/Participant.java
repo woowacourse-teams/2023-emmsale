@@ -1,6 +1,8 @@
 package com.emmsale.event.domain;
 
+import com.emmsale.base.BaseEntity;
 import com.emmsale.member.domain.Member;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "event_member")
-public class Participant {
+public class Participant extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +32,14 @@ public class Participant {
   @JoinColumn(nullable = false)
   private Event event;
 
-  public Participant(final Member member, final Event event) {
+  @Column(nullable = false)
+  private String content;
+
+  public Participant(final Member member, final Event event, final String content) {
     event.validateAlreadyParticipate(member);
     this.member = member;
     this.event = event;
+    this.content = content;
   }
 
   public boolean isSameMember(final Member member) {

@@ -2,6 +2,7 @@ package com.emmsale.event.application;
 
 import static com.emmsale.event.EventFixture.AI_아이디어_공모전;
 import static com.emmsale.event.EventFixture.AI_컨퍼런스;
+import static com.emmsale.event.EventFixture.createEventParticipateRequest;
 import static com.emmsale.event.EventFixture.eventFixture;
 import static com.emmsale.event.EventFixture.구름톤;
 import static com.emmsale.event.EventFixture.날짜_8월_10일;
@@ -33,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
+import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.event.domain.Event;
@@ -125,25 +127,29 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   }
 
   @Test
-  @DisplayName("event의 id로 참여자 목록을 조회할 수 있다.")
+  @DisplayName("event의 id로 참가 게시글 목록을 조회할 수 있다.")
   void findParticipants() {
     // given
     final Event 인프콘 = eventRepository.save(eventFixture());
     final Member 멤버1 = memberRepository.save(new Member(123L, "image1.com"));
     final Member 멤버2 = memberRepository.save(new Member(124L, "image2.com"));
 
-    final Long 멤버1_참가자_ID = eventService.participate(인프콘.getId(), 멤버1.getId(), 멤버1);
-    final Long 멤버2_참가자_ID = eventService.participate(인프콘.getId(), 멤버2.getId(), 멤버2);
+    final EventParticipateRequest requestMember1 = createEventParticipateRequest(멤버1);
+    final EventParticipateRequest requestMember2 = createEventParticipateRequest(멤버2);
+
+    final Long 멤버1_참가글_ID = eventService.participate(인프콘.getId(), requestMember1, 멤버1);
+    final Long 멤버2_참가글_ID = eventService.participate(인프콘.getId(), requestMember2, 멤버2);
+
+    final List<ParticipantResponse> expected = List.of(
+        new ParticipantResponse(멤버1_참가글_ID, 멤버1.getId(), 멤버1.getName(), 멤버1.getImageUrl(),
+            멤버1.getDescription(), requestMember1.getContent(), LocalDate.now(), LocalDate.now()),
+        new ParticipantResponse(멤버2_참가글_ID, 멤버2.getId(), 멤버2.getName(), 멤버2.getImageUrl(),
+            멤버2.getDescription(), requestMember2.getContent(), LocalDate.now(), LocalDate.now())
+    );
 
     //when
     final List<ParticipantResponse> actual = eventService.findParticipants(인프콘.getId());
 
-    final List<ParticipantResponse> expected = List.of(
-        new ParticipantResponse(멤버1_참가자_ID, 멤버1.getId(), 멤버1.getName(), 멤버1.getImageUrl(),
-            멤버1.getDescription()),
-        new ParticipantResponse(멤버2_참가자_ID, 멤버2.getId(), 멤버2.getName(), 멤버2.getImageUrl(),
-            멤버2.getDescription())
-    );
     //then
     assertThat(actual)
         .usingRecursiveFieldByFieldElementComparator()
@@ -194,7 +200,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Member member = memberRepository.findById(memberId).get();
       final Event 인프콘 = eventRepository.save(eventFixture());
 
-      final Long participantId = eventService.participate(인프콘.getId(), memberId, member);
+      final Long participantId = eventService.participate(인프콘.getId(),
+          createEventParticipateRequest(member), member);
 
       assertThat(participantId)
           .isNotNull();
@@ -206,9 +213,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Long memberId = 1L;
       final Long otherMemberId = 2L;
       final Member member = memberRepository.findById(memberId).get();
+      final EventParticipateRequest request = new EventParticipateRequest(otherMemberId, "빈 게시글");
       final Event 인프콘 = eventRepository.save(eventFixture());
 
-      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), otherMemberId, member))
+      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), request, member))
           .isInstanceOf(EventException.class)
           .hasMessage(FORBIDDEN_PARTICIPATE_EVENT.errorMessage());
     }
@@ -219,9 +227,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Long memberId = 1L;
       final Member member = memberRepository.findById(memberId).get();
       final Event 인프콘 = eventRepository.save(eventFixture());
-      eventService.participate(인프콘.getId(), memberId, member);
+      final EventParticipateRequest request = createEventParticipateRequest(member);
+      eventService.participate(인프콘.getId(), request, member);
 
-      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), memberId, member))
+      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), request, member))
           .isInstanceOf(EventException.class)
           .hasMessage(ALREADY_PARTICIPATED.errorMessage());
     }
@@ -239,7 +248,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Member member = memberRepository.findById(memberId).get();
       final Event 인프콘 = eventRepository.save(eventFixture());
 
-      final Long participantId = eventService.participate(인프콘.getId(), memberId, member);
+      final Long participantId = eventService.participate(인프콘.getId(),
+          createEventParticipateRequest(member), member);
 
       // when
       eventService.cancelParticipate(인프콘.getId(), memberId, member);
@@ -883,7 +893,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       //given
       final Event 인프콘 = eventRepository.save(인프콘_2023());
       final Member 멤버 = memberRepository.save(memberFixture());
-      eventService.participate(인프콘.getId(), 멤버.getId(), 멤버);
+      eventService.participate(인프콘.getId(), createEventParticipateRequest(멤버), 멤버);
 
       //when
       final Boolean actual = eventService.isAlreadyParticipate(인프콘.getId(), 멤버.getId());

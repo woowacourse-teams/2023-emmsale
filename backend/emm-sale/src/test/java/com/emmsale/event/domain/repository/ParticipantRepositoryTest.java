@@ -39,7 +39,7 @@ class ParticipantRepositoryTest {
       //given
       final Event 인프콘 = eventRepository.save(인프콘_2023());
       final Member 멤버 = memberRepository.save(memberFixture());
-      participantRepository.save(new Participant(멤버, 인프콘));
+      participantRepository.save(new Participant(멤버, 인프콘, "빈 문자열"));
 
       //when
       final Boolean actual = participantRepository.existsByEventIdAndMemberId(인프콘.getId(),

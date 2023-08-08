@@ -47,24 +47,11 @@ public class EventDetailResponse {
         event.getStartDate(),
         event.getEndDate(),
         event.getLocation(),
-        calculateStatus(event.getStartDate(), event.getEndDate()),
+        event.calculateEventStatus(today).getValue(),
         tagNames,
         event.getImageUrl(),
         event.calculateRemainingDays(today),
         event.getType().toString()
     );
-  }
-
-  private static String calculateStatus(
-      final LocalDateTime startDate,
-      final LocalDateTime endDate
-  ) {
-    final LocalDateTime now = LocalDateTime.now();
-    if (startDate.isBefore(now)) {
-      return EXPECTED;
-    } else if (endDate.isBefore(now)) {
-      return IN_PROGRESS;
-    }
-    return END;
   }
 }

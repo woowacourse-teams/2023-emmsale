@@ -26,13 +26,14 @@ Content-Type: application/json
 ### Event 상세조회
 GET http://localhost:8080/events/1
 
-### Event 참여자 목록에 멤버 추가
+### 함께 해요 목록에 게시글 추가
 POST http://localhost:8080/events/1/participants
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
 
 {
-  "memberId": 1
+  "memberId": 1,
+  "content": "함께 해요 게시글의 내용"
 }
 
 ### Event 참여자 목록에서 멤버 삭제

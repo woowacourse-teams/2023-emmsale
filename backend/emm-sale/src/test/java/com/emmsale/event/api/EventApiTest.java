@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.application.EventService;
+import com.emmsale.event.application.dto.EventCancelParticipateRequest;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
@@ -98,11 +99,15 @@ class EventApiTest extends MockMvcTestHelper {
     final Long eventId = 1L;
     final Long memberId = 2L;
     final Long participantId = 3L;
-    final EventParticipateRequest request = new EventParticipateRequest(memberId);
+    final String content = "함께 해요 게시글의 내용";
+    final EventParticipateRequest request = new EventParticipateRequest(memberId, content);
     final String fakeAccessToken = "Bearer accessToken";
 
     final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자"));
+        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자"),
+        fieldWithPath("content").type(JsonFieldType.STRING)
+            .description("함께 해요 게시글의 내용(공백 불가, 255자 최대)")
+    );
 
     when(eventService.participate(any(), any(), any())).thenReturn(participantId);
 
@@ -122,7 +127,7 @@ class EventApiTest extends MockMvcTestHelper {
     //given
     final Long eventId = 1L;
     final Long memberId = 2L;
-    final EventParticipateRequest request = new EventParticipateRequest(memberId);
+    final EventCancelParticipateRequest request = new EventCancelParticipateRequest(memberId);
     final String fakeAccessToken = "Bearer accessToken";
 
     final RequestParametersSnippet requestParameters = requestParameters(
@@ -208,10 +213,17 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
         fieldWithPath("[].name").type(JsonFieldType.STRING).description("member 이름"),
         fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
-        fieldWithPath("[].description").type(JsonFieldType.STRING).description("한줄 자기 소개"));
+        fieldWithPath("[].description").type(JsonFieldType.STRING).description("한줄 자기 소개"),
+        fieldWithPath("[].content").type(JsonFieldType.STRING).description("함께해요 게시글 내용"),
+        fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("함께해요 게시글 작성 날짜"),
+        fieldWithPath("[].updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜")
+    );
     final List<ParticipantResponse> responses = List.of(
-        new ParticipantResponse(1L, 1L, "스캇", "imageUrl", "토마토 던지는 사람"),
-        new ParticipantResponse(2L, 2L, "홍실", "imageUrl", "토마토 맞는 사람"));
+        new ParticipantResponse(1L, 1L, "스캇", "imageUrl", "토마토 던지는 사람", "저랑 같이 컨퍼런스 갈 사람",
+            LocalDate.of(2023, 7, 15), LocalDate.of(2023, 7, 15)),
+        new ParticipantResponse(2L, 2L, "홍실", "imageUrl", "토마토 맞는 사람", "스캇 말고 저랑 갈 사람",
+            LocalDate.of(2023, 7, 22), LocalDate.of(2023, 7, 22))
+    );
 
     when(eventService.findParticipants(eventId)).thenReturn(responses);
 
@@ -428,7 +440,7 @@ class EventApiTest extends MockMvcTestHelper {
 
       final String request = "{" + "\"name\":\"인프콘 2023\"," + "\"location\":\"코엑스\","
           + "\"informationUrl\":\"https://~~~\"," + "\"startDateTime\":" + startDateTime + ","
-          + "\"endDateTime\":\"2023-01-02T12:00:00\""
+          + "\"endDateTime\":\"2023-01-02T12:00:00\","
           + ",\"tags\":[{\"name\":\"백엔드\"},{\"name\":\"안드로이드\"}]" + "}";
 
       //when
@@ -452,13 +464,16 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
       final String request = "{" + "\"name\":\"인프콘 2023\"," + "\"location\":\"코엑스\","
-          + "\"informationUrl\":\"https://~~~\"," + "\"startDateTime\":\"2023-01-01T12:00:00\""
+          + "\"informationUrl\":\"https://~~~\"," + "\"startDateTime\":\"2023-01-01T12:00:00\","
           + "\"endDateTime\":" + endDateTime + ","
           + ",\"tags\":[{\"name\":\"백엔드\"},{\"name\":\"안드로이드\"}]" + "}";
 
       //when
       final ResultActions result = mockMvc.perform(
-          post("/events").contentType(MediaType.APPLICATION_JSON_VALUE).content(request));
+          post("/events")
+              .contentType(MediaType.APPLICATION_JSON_VALUE)
+              .content(request)
+      );
 
       //then
       result.andExpect(status().isBadRequest());

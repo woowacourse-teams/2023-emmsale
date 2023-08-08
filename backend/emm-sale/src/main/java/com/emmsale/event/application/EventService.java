@@ -11,6 +11,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
+import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.event.domain.Event;
@@ -65,12 +66,18 @@ public class EventService {
     return EventDetailResponse.from(event, today);
   }
 
-  public Long participate(final Long eventId, final Long memberId, final Member member) {
+  public Long participate(
+      final Long eventId,
+      final EventParticipateRequest request,
+      final Member member
+  ) {
+    final Long memberId = request.getMemberId();
+    final String content = request.getContent();
     validateMemberNotAllowed(memberId, member);
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
-    final Participant participant = event.addParticipant(member);
+    final Participant participant = event.addParticipant(member, content);
     participantRepository.save(participant);
     return participant.getId();
   }
@@ -253,6 +260,7 @@ public class EventService {
         .collect(toList());
   }
 
+  @Transactional(readOnly = true)
   public Boolean isAlreadyParticipate(final Long eventId, final Long memberId) {
     return participantRepository.existsByEventIdAndMemberId(eventId, memberId);
   }

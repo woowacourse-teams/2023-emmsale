@@ -28,6 +28,21 @@ public enum NotificationExceptionType implements BaseExceptionType {
   GOOGLE_REQUEST_TOKEN_ERROR(
       HttpStatus.INTERNAL_SERVER_ERROR,
       "구글에 토큰 요청할 때 발생한 에러"
+  ),
+
+  NOT_FOUND_OPEN_PROFILE_URL(
+      HttpStatus.NOT_FOUND,
+      "오픈 카톡 URL이 없으면 같이 가기 요청을 보낼 수 없습니다."
+  ),
+
+  FIREBASE_CONNECT_ERROR(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      "파이어베이스 접속 시 발생한 에러"
+  ),
+
+  ALREADY_EXIST_NOTIFICATION(
+      HttpStatus.BAD_REQUEST,
+      "이미 요청된 알림입니다."
   )
 
   ;
