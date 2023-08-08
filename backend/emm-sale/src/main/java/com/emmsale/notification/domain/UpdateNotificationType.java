@@ -13,14 +13,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum UpdateNotificationType {
 
-  COMMENT(Comment.class),
-  EVENT(Event.class);
+  COMMENT(Comment.class.getName()),
+  EVENT(Event.class.getName());
 
-  private final Class<?> classType;
+  private final String notificationType;
 
-  public static UpdateNotificationType from(final Class<?> classType) {
+  public static UpdateNotificationType from(final String notificationType) {
     return Arrays.stream(values())
-        .filter(it -> it.classType.isAssignableFrom(classType))
+        .filter(it -> it.notificationType.equals(notificationType))
         .findAny()
         .orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION_TYPE));
   }

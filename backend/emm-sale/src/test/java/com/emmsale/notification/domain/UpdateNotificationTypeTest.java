@@ -15,22 +15,22 @@ class UpdateNotificationTypeTest {
   @ParameterizedTest
   @MethodSource("convertClassTypeToEnum")
   @DisplayName("from() : 클래스 타입을 통해서 어떤 알림의 종류인지 알 수 있다.")
-  void test_from(final Class<?> classType, final UpdateNotificationType type) throws Exception {
+  void test_from(final String notificationType, final UpdateNotificationType type) throws Exception {
     //when & then
-    assertEquals(UpdateNotificationType.from(classType), type);
+    assertEquals(UpdateNotificationType.from(notificationType), type);
   }
 
   static Stream<Arguments> convertClassTypeToEnum() {
 
-    final Class<?> classType1 = Event.class;
+    final String notificationType1 = Event.class.getName();
     final UpdateNotificationType type1 = UpdateNotificationType.EVENT;
 
-    final Class<?> classType2 = Comment.class;
+    final String notificationType2 = Comment.class.getName();
     final UpdateNotificationType type2 = UpdateNotificationType.COMMENT;
 
     return Stream.of(
-        Arguments.of(classType1, type1),
-        Arguments.of(classType2, type2)
+        Arguments.of(notificationType1, type1),
+        Arguments.of(notificationType2, type2)
     );
   }
 }

@@ -41,7 +41,7 @@ class UpdateNotificationCommandServiceTest extends ServiceIntegrationTestHelper 
     final UpdateNotificationEvent event = new UpdateNotificationEvent(
         1L,
         2L,
-        UpdateNotificationType.COMMENT
+        UpdateNotificationType.COMMENT.name()
     );
 
     //when
