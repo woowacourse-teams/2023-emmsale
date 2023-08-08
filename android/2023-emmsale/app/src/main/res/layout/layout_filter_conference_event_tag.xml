@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="26dp"
-            android:background="@color/all_divider_color"
+            android:background="@color/light_gray"
             app:layout_constraintTop_toBottomOf="@+id/cg_conference_tag_chips" />
 
     </merge>

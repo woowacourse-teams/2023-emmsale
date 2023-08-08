@@ -111,7 +111,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0.5dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/edittext_underline"
+                        android:background="@color/light_gray"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cg_myprofile_categories" />
@@ -120,7 +120,7 @@
                         android:id="@+id/view_myprofile_educationicontoclubicon"
                         android:layout_width="1.4dp"
                         android:layout_height="0dp"
-                        android:background="@color/edittext_underline"
+                        android:background="@color/light_gray"
                         app:layout_constraintBottom_toTopOf="@+id/iv_myprofile_clubicon"
                         app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_educationicon"
                         app:layout_constraintStart_toStartOf="@+id/iv_myprofile_educationicon"

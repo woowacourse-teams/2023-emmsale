@@ -6,14 +6,14 @@
             <item android:state_enabled="false">
                 <shape android:shape="rectangle">
                     <corners android:radius="15dp" />
-                    <solid android:color="@color/disable_color" />
+                    <solid android:color="@color/light_gray" />
                 </shape>
             </item>
 
             <item android:state_enabled="true">
                 <shape android:shape="rectangle">
                     <corners android:radius="15dp" />
-                    <solid android:color="@color/main_color" />
+                    <solid android:color="@color/primary_color" />
                 </shape>
             </item>
         </selector>

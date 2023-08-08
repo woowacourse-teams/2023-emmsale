@@ -13,7 +13,7 @@
         <shape>
             <stroke
                 android:width="0.5dp"
-                android:color="@color/all_divider_color" />
+                android:color="@color/light_gray" />
         </shape>
     </item>
 </layer-list>

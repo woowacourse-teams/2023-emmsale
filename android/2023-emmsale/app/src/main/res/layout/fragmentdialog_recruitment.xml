@@ -74,7 +74,7 @@
                         app:boxCornerRadiusBottomStart="15dp"
                         app:boxCornerRadiusTopEnd="15dp"
                         app:boxCornerRadiusTopStart="15dp"
-                        app:boxStrokeColor="@color/edittext_stroke_color"
+                        app:boxStrokeColor="@color/light_gray"
                         app:boxStrokeWidth="0.5dp"
                         app:layout_constraintBottom_toTopOf="@id/materialDivider_reqeustcompanion"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -88,7 +88,7 @@
                             android:fontFamily="@font/nanum_square"
                             android:gravity="start"
                             android:hint="요청 메세지를 작성해주세요"
-                            android:textColorHint="@color/text_color_white"
+                            android:textColorHint="@color/light_gray"
                             android:textSize="13sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -116,7 +116,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginStart="1dp"
-                        android:backgroundTint="@color/primary_background"
+                        android:backgroundTint="@color/white"
                         android:fontFamily="@font/nanum_square_bold"
                         android:text="요청"
                         android:textColor="@color/primary_color"
@@ -131,7 +131,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginEnd="1dp"
-                        android:backgroundTint="@color/primary_background"
+                        android:backgroundTint="@color/white"
                         android:fontFamily="@font/nanum_square_bold"
                         android:text="취소"
                         android:textColor="@color/black"

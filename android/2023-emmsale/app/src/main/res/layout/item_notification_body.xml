@@ -61,7 +61,7 @@
             android:layout_marginTop="6dp"
             android:includeFontPadding="true"
             android:text="@{notification.notificationDate}"
-            android:textColor="@color/notification_date_text_color"
+            android:textColor="@color/gray"
             android:textSize="11sp"
             app:layout_constraintStart_toStartOf="@+id/tv_member_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_member_name"

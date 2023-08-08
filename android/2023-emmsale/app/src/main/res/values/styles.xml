@@ -4,7 +4,7 @@
     <style name="bottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
         <item name="labelVisibilityMode">unlabeled</item>
         <item name="itemIconSize">34dp</item>
-        <item name="backgroundTint">@color/background</item>
+        <item name="backgroundTint">@color/white</item>
         <item name="itemIconTint">@color/color_bottom_navigation_view_icon</item>
     </style>
 
@@ -27,15 +27,15 @@
     <style name="IconTextButtonStyle" parent="Widget.AppCompat.Button">
         <item name="activeTextColor">@color/black</item>
         <item name="inactiveTextColor">@color/black</item>
-        <item name="activeIconColor">@color/default_active_color</item>
-        <item name="inactiveIconColor">@color/default_inactive_color</item>
+        <item name="activeIconColor">@color/primary_color</item>
+        <item name="inactiveIconColor">@color/light_gray</item>
         <item name="active">false</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="android:drawablePadding">12dp</item>
     </style>
 
     <style name="DatePickerDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <item name="colorAccent">@color/main_color</item>
+        <item name="colorAccent">@color/primary_color</item>
         <item name="android:textColorPrimary">@color/black</item>
         <item name="android:textColorPrimaryInverse">@color/date_picker_header_text_color</item>
         <item name="android:textColorSecondaryInverse">@color/date_picker_header_text_color</item>

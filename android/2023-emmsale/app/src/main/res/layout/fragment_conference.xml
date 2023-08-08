@@ -36,7 +36,7 @@
             android:layout_marginStart="6dp"
             android:gravity="center"
             android:text="0"
-            android:textColor="@color/event_total_event_count_text_color"
+            android:textColor="@color/primary_color"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/tv_events_prefix"
