@@ -15,12 +15,12 @@ import com.emmsale.BuildConfig
 import com.emmsale.R
 import com.emmsale.databinding.ActivityLoginBinding
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
+import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
 import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.emmsale.presentation.utils.builder.uri
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginActivity : AppCompatActivity() {
@@ -91,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoginFailedMessage() {
         changeLoadingVisibility(false)
-        Snackbar.make(binding.root, "로그인에 실패했어요 \uD83D\uDE25", Snackbar.LENGTH_SHORT).show()
+        binding.root.showSnackbar(getString(R.string.login_failed_message))
     }
 
     private fun changeLoadingVisibility(isShow: Boolean) {

@@ -20,7 +20,7 @@
             android:id="@+id/iv_login_logo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:contentDescription="login logo"
+            android:contentDescription="@string/login_logo"
             android:src="@drawable/img_login_logo"
             app:layout_constraintBottom_toTopOf="@+id/btn_github_login"
             app:layout_constraintDimensionRatio="1"
@@ -52,14 +52,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
-                android:contentDescription="login github"
+                android:contentDescription="@string/login_github_button_label"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_login_github" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Github으로 로그인"
+                android:text="@string/login_github_button_label"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </LinearLayout>

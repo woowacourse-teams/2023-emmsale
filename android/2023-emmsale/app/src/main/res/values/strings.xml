@@ -18,6 +18,9 @@
     <string name="kerdyfirebasemessaging_follow_notification_channel_name">같이 가기 알림 채널</string>
     <string name="kerdyfirebasemessaging_follow_notification_channel_description">같이 가기 요청을 받기 위한 알림 채널입니다.</string>
 
+    <string name="login_failed_message">로그인에 실패했어요 😥</string>
+    <string name="login_logo">로그인 로고</string>
+    <string name="login_github_button_label">Github으로 로그인</string>
     <string name="login_post_notification_permission_granted_message">푸시 알림 권한을 허용하였습니다.</string>
     <string name="login_post_notification_permission_needed_message">알림 권한이 필요해요!</string>
 
