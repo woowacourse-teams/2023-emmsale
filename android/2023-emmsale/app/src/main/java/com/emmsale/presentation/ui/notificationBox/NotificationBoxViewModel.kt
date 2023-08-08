@@ -28,7 +28,6 @@ class NotificationBoxViewModel(
     private val eventDetailRepository: EventDetailRepository,
     private val notificationRepository: NotificationRepository,
 ) : ViewModel() {
-
     private val _notifications = MutableLiveData<NotificationsUiState>()
     val notifications: LiveData<NotificationsUiState> = _notifications
 
@@ -118,16 +117,7 @@ class NotificationBoxViewModel(
     }
 
     fun toggleExpand(eventId: Long) {
-        _notifications.postValue(
-            _notifications.value?.copy(
-                notifications = _notifications.value?.notifications?.map { header ->
-                    when (header.eventId == eventId) {
-                        true -> header.copy(isExpanded = !header.isExpanded)
-                        false -> header
-                    }
-                } ?: emptyList(),
-            ),
-        )
+        _notifications.postValue(_notifications.value?.toggleNotificationExpanded(eventId))
     }
 
     companion object {
