@@ -14,10 +14,17 @@ public class ParticipantResponse {
   private final String name;
   private final String imageUrl;
   private final String description;
+  private final String content;
 
   public static ParticipantResponse from(final Participant participant) {
     final Member member = participant.getMember();
-    return new ParticipantResponse(participant.getId(), member.getId(), member.getName(),
-        member.getImageUrl(), member.getDescription());
+    return new ParticipantResponse(
+        participant.getId(),
+        member.getId(),
+        member.getName(),
+        member.getImageUrl(),
+        member.getDescription(),
+        participant.getContent()
+    );
   }
 }
