@@ -82,6 +82,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_name_setting_warning"
             android:inputType="text"
+            android:importantForAutofill="no"
             app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <View
