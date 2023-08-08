@@ -14,6 +14,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.EventsUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
 import kotlinx.coroutines.launch
@@ -27,21 +28,25 @@ class ConferenceViewModel(
     private val _selectedFilters = MutableLiveData<ConferenceFiltersUiState.Success>()
     val selectedFilters: LiveData<ConferenceFiltersUiState.Success> = _selectedFilters
 
-    fun fetchConference(
-        year: Int? = null,
-        month: Int? = null,
-        status: ConferenceStatus? = null,
-        tag: String? = null,
+    init {
+        fetchConference()
+    }
+
+    private fun fetchConference(
+        startDate: String? = null,
+        endDate: String? = null,
+        statuses: List<ConferenceStatus> = emptyList(),
+        tags: List<String> = emptyList(),
     ) {
         viewModelScope.launch {
             _events.value = EventsUiState.Loading
             when (
                 val eventsResult = conferenceRepository.getConferences(
                     category = EventCategory.CONFERENCE,
-                    year = year,
-                    month = month,
-                    status = status,
-                    tag = tag,
+                    startDate = startDate,
+                    endDate = endDate,
+                    statuses = statuses,
+                    tags = tags,
                 )
             ) {
                 is ApiSuccess ->
@@ -57,18 +62,24 @@ class ConferenceViewModel(
     fun updateConferenceFilter(conferenceFilter: ConferenceFiltersUiState.Success) {
         _selectedFilters.postValue(conferenceFilter)
         fetchConference(
-            year = conferenceFilter.selectedStartDate?.year,
-            month = conferenceFilter.selectedStartDate?.month,
-            status = conferenceFilter.statuses.find { it.isSelected }?.toStatusOrNull(),
-            tag = conferenceFilter.tags.find { it.isSelected }?.name,
+            startDate = conferenceFilter.selectedStartDate?.transformToDateString(),
+            endDate = conferenceFilter.selectedEndDate?.transformToDateString(),
+            statuses = conferenceFilter.statuses
+                .filter { it.isSelected }
+                .map { it.toStatus() },
+            tags = conferenceFilter.tags
+                .filter { it.isSelected }
+                .map { it.name },
         )
     }
 
-    private fun ConferenceFilterUiState.toStatusOrNull(): ConferenceStatus? = when (id) {
+    private fun ConferenceFilterDateUiState.transformToDateString(): String = "$year-$month-$day"
+
+    private fun ConferenceFilterUiState.toStatus(): ConferenceStatus = when (id) {
         0L -> ConferenceStatus.IN_PROGRESS
         1L -> ConferenceStatus.SCHEDULED
         2L -> ConferenceStatus.ENDED
-        else -> null
+        else -> throw IllegalArgumentException("Unknown status id: $id")
     }
 
     companion object {
