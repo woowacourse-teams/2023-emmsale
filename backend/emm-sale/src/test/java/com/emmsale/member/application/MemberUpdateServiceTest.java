@@ -42,7 +42,7 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
     final Member actualMember = memberRepository.findById(member.getId()).get();
 
     // then
-    assertThat(actualMember.getOpenProfileUrl()).isEqualTo(expectOpenProfileUrl);
+    assertThat(actualMember.getOptionalOpenProfileUrl().get()).isEqualTo(expectOpenProfileUrl);
   }
 
   @Nested

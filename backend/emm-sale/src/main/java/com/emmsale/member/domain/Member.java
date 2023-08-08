@@ -3,6 +3,7 @@ package com.emmsale.member.domain;
 import com.emmsale.base.BaseEntity;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,6 +30,7 @@ public class Member extends BaseEntity {
   @Column(nullable = false)
   private String description;
   @Column
+  @Getter(value = AccessLevel.PRIVATE)
   private String openProfileUrl;
   @Column(nullable = false)
   private String imageUrl;
@@ -91,5 +93,9 @@ public class Member extends BaseEntity {
 
   public boolean isOnboarded() {
     return name != null;
+  }
+
+  public Optional<String> getOptionalOpenProfileUrl() {
+    return Optional.ofNullable(openProfileUrl);
   }
 }

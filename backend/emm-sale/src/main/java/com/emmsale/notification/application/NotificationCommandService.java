@@ -38,10 +38,6 @@ public class NotificationCommandService {
 
     final List<Long> memberIds = List.of(senderId, receiverId);
 
-    if (isNotExistedSenderOrReceiver(memberIds)) {
-      throw new NotificationException(BAD_REQUEST_MEMBER_ID);
-    }
-
     validateExistedSenderOrReceiver(memberIds);
 
     final Notification savedNotification = notificationRepository.save(
