@@ -119,4 +119,8 @@
     <string name="onboardingeducation_title">교육 활동</string>
     <string name="onboardingeducation_message">교육 이력이 있나요?</string>
     <string name="onboardingeducation_sub_message">교육받은 활동이 있다면 추가해 주세요.</string>
+    <string name="onboardingeclub_page">4/4</string>
+    <string name="onboardingeclub_title">동아리 활동</string>
+    <string name="onboardingeclub_message">동아리 활동이 있나요?</string>
+    <string name="onboardingeclub_sub_message">동아리 활동을 했다면 추가해 주세요.</string>
 </resources>
