@@ -34,7 +34,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("Activity의 id를 통해서, 사용자의 Activity를 등록하고 사용자의 이름을 수정할 수 있다.")
   void registerActivities() throws Exception {
     //given
-    final List<Long> activityIds = List.of(1L, 2L, 3L, 4L);
+    final List<Long> activityIds = List.of(1L, 2L, 3L);
     final long savedMemberId = 1L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
@@ -154,7 +154,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
     // when, then
     assertThatThrownBy(() -> memberActivityService.addActivity(savedMember, request))
         .isInstanceOf(MemberException.class)
-        .hasMessage(MemberExceptionType.ALREADY_EXIST_ACTIVITY.errorMessage());
+        .hasMessage(MemberExceptionType.DUPLICATE_ACTIVITY.errorMessage());
   }
 
   @Test

@@ -25,6 +25,11 @@ public enum MemberExceptionType implements BaseExceptionType {
       "이미 등록된 활동입니다."
   ),
 
+  DUPLICATE_ACTIVITY(
+      HttpStatus.BAD_REQUEST,
+      "요청에 중복된 활동 ID가 포함되어 있습니다."
+  ),
+
   NULL_DESCRIPTION(
       HttpStatus.BAD_REQUEST,
       "한 줄 자기소개는 null이 될 수 없습니다."

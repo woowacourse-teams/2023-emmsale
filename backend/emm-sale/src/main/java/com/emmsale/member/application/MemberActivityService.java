@@ -13,6 +13,7 @@ import com.emmsale.member.domain.MemberActivityRepository;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
+import java.util.HashSet;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -66,8 +67,10 @@ public class MemberActivityService {
   ) {
     final List<Long> activityIds = memberActivityAddRequest.getActivityIds();
     final List<MemberActivity> memberActivities = memberActivityRepository.findAllByMember(member);
-    if (isAlreadyExistActivity(memberActivities, activityIds) || hasDuplicateId(memberActivities,
-        activityIds)) {
+    if (hasDuplicateId(memberActivities, activityIds)) {
+      throw new MemberException(MemberExceptionType.DUPLICATE_ACTIVITY);
+    }
+    if (isAlreadyExistActivity(memberActivities, activityIds)) {
       throw new MemberException(MemberExceptionType.ALREADY_EXIST_ACTIVITY);
     }
     saveMemberActivities(member, activityIds);
@@ -86,7 +89,7 @@ public class MemberActivityService {
 
   private boolean hasDuplicateId(final List<MemberActivity> memberActivities,
       final List<Long> activityIds) {
-    return activityIds.stream().distinct().count() != memberActivities.size();
+    return new HashSet<>(activityIds).size() != memberActivities.size();
   }
 
   public List<MemberActivityResponses> deleteActivity(
