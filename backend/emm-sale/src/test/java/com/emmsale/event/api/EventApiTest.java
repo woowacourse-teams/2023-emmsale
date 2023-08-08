@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.application.EventService;
+import com.emmsale.event.application.dto.EventCancelParticipateRequest;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
@@ -100,11 +101,14 @@ class EventApiTest extends MockMvcTestHelper {
     final Long eventId = 1L;
     final Long memberId = 2L;
     final Long participantId = 3L;
-    final EventParticipateRequest request = new EventParticipateRequest(memberId);
+    final String content = "함께 해요 게시글의 내용";
+    final EventParticipateRequest request = new EventParticipateRequest(memberId, content);
     final String fakeAccessToken = "Bearer accessToken";
 
     final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자"));
+        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자"),
+        fieldWithPath("content").type(JsonFieldType.STRING).description("함께 해요 게시글의 내용")
+    );
 
     when(eventService.participate(any(), any(), any())).thenReturn(participantId);
 
@@ -124,7 +128,7 @@ class EventApiTest extends MockMvcTestHelper {
     //given
     final Long eventId = 1L;
     final Long memberId = 2L;
-    final EventParticipateRequest request = new EventParticipateRequest(memberId);
+    final EventCancelParticipateRequest request = new EventCancelParticipateRequest(memberId);
     final String fakeAccessToken = "Bearer accessToken";
 
     final RequestParametersSnippet requestParameters = requestParameters(

@@ -125,7 +125,10 @@ include::{snippets}/find-event/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-event/response-fields.adoc[]
 
-=== `POST` : 행사에 함께가기 요청(행사에 함께 가는 멤버에 등록)
+=== `POST` : 행사의 함께 해요 목록에 게시글 추가
+
+.HTTP request 설명
+include::{snippets}/participate-event/request-fields.adoc[]
 
 .HTTP request
 include::{snippets}/participate-event/http-request.adoc[]
