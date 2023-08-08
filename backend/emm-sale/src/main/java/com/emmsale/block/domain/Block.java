@@ -1,5 +1,6 @@
 package com.emmsale.block.domain;
 
+import com.emmsale.base.BaseEntity;
 import com.emmsale.member.domain.Member;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Block {
+public class Block extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +28,9 @@ public class Block {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private Member blockMember;
+
+  public Block(final Member requestMember, final Member blockMember) {
+    this.requestMember = requestMember;
+    this.blockMember = blockMember;
+  }
 }

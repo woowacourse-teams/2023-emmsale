@@ -352,3 +352,17 @@ include::{snippets}/find-all-notifications/response-fields.adoc[]
 
 .HTTP response
 include::{snippets}/find-all-notifications/http-response.adoc[]
+
+== Block
+
+=== `POST` : 사용자 차단 등록
+
+.HTTP request 설명
+include::{snippets}/register-block/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/register-block/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/register-block/http-response.adoc[]
+

@@ -116,5 +116,7 @@ create table block
 (
     id                bigint auto_increment primary key,
     block_member_id   bigint not null,
-    request_member_id bigint not null
+    request_member_id bigint not null,
+    created_at        datetime(6),
+    updated_at        datetime(6)
 );
