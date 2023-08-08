@@ -51,10 +51,6 @@ public class EventService {
     }
   }
 
-  private static boolean isExistFilterDate(final String startDate, final String endDate) {
-    return startDate != null || endDate != null;
-  }
-
   @Transactional(readOnly = true)
   public EventDetailResponse findEvent(final Long id, final LocalDate today) {
     final Event event = eventRepository.findById(id)
@@ -136,6 +132,10 @@ public class EventService {
     if (tags.size() != tagNames.size()) {
       throw new TagException(NOT_FOUND_TAG);
     }
+  }
+
+  private boolean isExistFilterDate(final String startDate, final String endDate) {
+    return startDate != null || endDate != null;
   }
 
   private List<Event> filterByPeriod(final List<Event> events, final String startDate,
