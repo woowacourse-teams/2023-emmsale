@@ -146,6 +146,12 @@ class ConferenceFilterViewModel(
         )
     }
 
+    fun clearFilters() {
+        val conferenceFilters = _eventFilters.value as? ConferenceFiltersUiState.Success ?: return
+        _eventFilters.postValue(conferenceFilters.resetSelection())
+        _selectedTagFilterCount.postValue(0)
+    }
+
     companion object {
         val factory = ViewModelFactory {
             ConferenceFilterViewModel(

@@ -10,7 +10,15 @@ sealed class ConferenceFiltersUiState {
         val tags: List<ConferenceFilterUiState> = emptyList(),
         var selectedStartDate: ConferenceFilterDateUiState? = null,
         var selectedEndDate: ConferenceFilterDateUiState? = null,
-    ) : ConferenceFiltersUiState(), Parcelable
+    ) : ConferenceFiltersUiState(), Parcelable {
+
+        fun resetSelection(): Success = copy(
+            statuses = statuses.map { status -> status.copy(isSelected = false) },
+            tags = tags.map { tag -> tag.copy(isSelected = false) },
+            selectedStartDate = null,
+            selectedEndDate = null,
+        )
+    }
 
     object Loading : ConferenceFiltersUiState()
     object Error : ConferenceFiltersUiState()
