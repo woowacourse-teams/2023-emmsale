@@ -30,8 +30,8 @@
             android:id="@+id/iv_member_profile"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:imageUrl="@{notification.profileImageUrl}"
             android:contentDescription="@string/notification_member_profile"
+            app:imageUrl="@{notification.profileImageUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />

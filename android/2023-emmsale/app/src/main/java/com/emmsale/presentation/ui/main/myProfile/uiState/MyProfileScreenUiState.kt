@@ -41,7 +41,7 @@ data class MyProfileScreenUiState(
                 memberName = member.name,
                 description = member.description.ifBlank { BLANK_DESCRIPTION_SUBSTITUTION },
                 memberImageUrl = member.imageUrl,
-                categories = member.getActivities(ActivityType.CATEGORY).map(ActivityUiState::from),
+                categories = member.getActivities(ActivityType.FIELD).map(ActivityUiState::from),
                 educations = member.getActivities(ActivityType.EDUCATION)
                     .map(ActivityUiState::from),
                 clubs = member.getActivities(ActivityType.CLUB).map(ActivityUiState::from),

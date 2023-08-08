@@ -25,8 +25,9 @@ class OnboardingClubFragment : BaseFragment<FragmentOnboardingClubBinding>(), Vi
     }
 
     private fun setupClubs() {
-        viewModel.clubs.observe(viewLifecycleOwner) { clubs ->
-            clubs?.activities?.forEach(::addClubChip)
+        viewModel.activities.observe(viewLifecycleOwner) { activities ->
+            binding.chipgroupClubTags.removeAllViews()
+            activities.clubs.forEach(::addClubChip)
         }
     }
 
@@ -34,10 +35,12 @@ class OnboardingClubFragment : BaseFragment<FragmentOnboardingClubBinding>(), Vi
         binding.chipgroupClubTags.addView(createChip(clubTag))
     }
 
-    private fun createChip(clubTag: ActivityUiState) = activityChipOf {
-        text = clubTag.name
-        isChecked = clubTag.isSelected
-        setOnCheckedChangeListener { _, _ -> viewModel.toggleTagSelection(clubTag) }
+    private fun createChip(activity: ActivityUiState) = activityChipOf {
+        text = activity.name
+        isChecked = activity.isSelected
+        setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateSelection(activity.id, isChecked)
+        }
     }
 
     override fun onClick(view: View) {

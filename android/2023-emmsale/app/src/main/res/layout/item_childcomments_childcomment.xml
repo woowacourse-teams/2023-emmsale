@@ -90,10 +90,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginTop="17dp"
+            android:importantForAccessibility="no"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_childcomment_arrow"
-            android:importantForAccessibility="no" />
+            app:srcCompat="@drawable/ic_childcomment_arrow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

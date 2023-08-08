@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.main.myProfile.uiState
 
-import com.emmsale.data.activity.Activity1
+import com.emmsale.data.activity.Activity
 
 data class ActivityUiState(
     val id: Long,
@@ -8,7 +8,7 @@ data class ActivityUiState(
 ) {
 
     companion object {
-        fun from(activity: Activity1): ActivityUiState =
+        fun from(activity: Activity): ActivityUiState =
             ActivityUiState(
                 id = activity.id,
                 name = activity.name,

@@ -9,7 +9,7 @@ data class MemberApiModel(
     @SerialName("name")
     val name: String,
     @SerialName("activityIds")
-    val activityIds: List<Int>,
+    val activityIds: List<Long>,
 ) {
     companion object {
         fun from(member: Member): MemberApiModel = MemberApiModel(

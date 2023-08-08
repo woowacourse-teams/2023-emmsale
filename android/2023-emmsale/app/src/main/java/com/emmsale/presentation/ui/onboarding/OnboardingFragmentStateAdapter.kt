@@ -8,7 +8,7 @@ class OnboardingFragmentStateAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
     private val fragments: List<Fragment> = listOf(
         OnboardingNameFragment(),
-        OnboardingJobFragment(),
+        OnboardingFieldFragment(),
         OnboardingEducationFragment(),
         OnboardingClubFragment(),
     )

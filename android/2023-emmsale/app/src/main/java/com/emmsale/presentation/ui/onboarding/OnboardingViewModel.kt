@@ -1,9 +1,9 @@
 package com.emmsale.presentation.ui.onboarding
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.common.ApiError
@@ -13,10 +13,8 @@ import com.emmsale.data.member.Member
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
-import com.emmsale.presentation.ui.onboarding.uistate.ActivitiesUiState
-import com.emmsale.presentation.ui.onboarding.uistate.ActivityTypeContentUiState
-import com.emmsale.presentation.ui.onboarding.uistate.ActivityUiState
 import com.emmsale.presentation.ui.onboarding.uistate.MemberUiState
+import com.emmsale.presentation.ui.onboarding.uistate.OnboardingUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -27,58 +25,56 @@ class OnboardingViewModel(
     val name: MutableLiveData<String> = MutableLiveData()
 
     // TODO("Error Handling on OnboardingActivity")
-    private val _activities: MutableLiveData<ActivityTypeContentUiState> = MutableLiveData()
-    private val selectedActivityIds: MutableList<Int> = mutableListOf()
+    private val _activities: MutableLiveData<OnboardingUiState> =
+        MutableLiveData(OnboardingUiState())
+    val activities: LiveData<OnboardingUiState> = _activities
 
-    val educations: LiveData<ActivitiesUiState?> = _activities.map { activityTypeContent ->
-        when (activityTypeContent) {
-            is ActivityTypeContentUiState.Success ->
-                findActivity(activityTypeContent, ActivityCategory.EDUCATION)
-
-            is ActivityTypeContentUiState.Error -> null
-        }
-    }
-
-    val clubs: LiveData<ActivitiesUiState?> = _activities.map { activityTypeContent ->
-        when (activityTypeContent) {
-            is ActivityTypeContentUiState.Success ->
-                findActivity(activityTypeContent, ActivityCategory.CLUB)
-
-            is ActivityTypeContentUiState.Error -> null
-        }
-    }
-
-    val jobs: LiveData<ActivitiesUiState?> = _activities.map { activityTypeContent ->
-        when (activityTypeContent) {
-            is ActivityTypeContentUiState.Success ->
-                findActivity(activityTypeContent, ActivityCategory.JOB)
-
-            is ActivityTypeContentUiState.Error -> null
-        }
-    }
+    private val selectedActivityIds: MutableList<Long> = mutableListOf()
 
     private val _memberUiState = MutableLiveData<MemberUiState>()
     val memberUiState: LiveData<MemberUiState> = _memberUiState
 
     init {
+        _activities.value = _activities.value?.copy(isLoading = true)
         fetchActivities()
     }
 
     private fun fetchActivities(): Job = viewModelScope.launch {
         when (val activitiesResult = activityRepository.getActivities()) {
-            is ApiSuccess ->
-                _activities.postValue(ActivityTypeContentUiState.from(activitiesResult.data))
+            is ApiSuccess -> {
+                Log.d("buna", activitiesResult.data.toString())
+                _activities.postValue(OnboardingUiState.from(activitiesResult.data))
+            }
 
-            is ApiError -> _activities.postValue(ActivityTypeContentUiState.Error)
-            is ApiException -> _activities.postValue(ActivityTypeContentUiState.Error)
+            is ApiError -> {
+                Log.d("buna", activitiesResult.code.toString())
+                _activities.postValue(_activities.value?.copy(isError = true))
+            }
+
+            is ApiException -> {
+                Log.d("buna", "Exception" + activitiesResult.e.toString())
+                _activities.postValue(_activities.value?.copy(isError = true))
+            }
         }
     }
 
-    fun toggleTagSelection(tag: ActivityUiState) {
-        tag.isSelected = !tag.isSelected
-        when (tag.isSelected) {
-            true -> selectedActivityIds.add(tag.id)
-            false -> selectedActivityIds.remove(tag.id)
+    fun updateSelection(tagId: Long, isSelected: Boolean) {
+        val fields = _activities.value?.fields
+            ?.map { if (tagId == it.id) it.copy(isSelected = isSelected) else it }
+        val educations = _activities.value?.educations
+            ?.map { if (tagId == it.id) it.copy(isSelected = isSelected) else it }
+        val clubs = _activities.value?.clubs
+            ?.map { if (tagId == it.id) it.copy(isSelected = isSelected) else it }
+
+        _activities.value = _activities.value?.copy(
+            fields = fields!!,
+            educations = educations!!,
+            clubs = clubs!!,
+        )
+
+        when (isSelected) {
+            true -> selectedActivityIds.add(tagId)
+            false -> selectedActivityIds.remove(tagId)
         }
     }
 
@@ -96,11 +92,6 @@ class OnboardingViewModel(
             }
         }
     }
-
-    private fun findActivity(
-        activityTypeContent: ActivityTypeContentUiState.Success,
-        category: ActivityCategory,
-    ): ActivitiesUiState? = activityTypeContent.activities.find { it.category == category.title }
 
     companion object {
         val factory = ViewModelFactory {

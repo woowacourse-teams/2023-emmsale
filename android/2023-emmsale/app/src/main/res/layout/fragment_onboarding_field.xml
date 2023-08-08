@@ -65,7 +65,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_category_title" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipgroup_job_tags"
+            android:id="@+id/chipgroup_field_tags"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="34dp"
@@ -90,7 +90,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chipgroup_job_tags" />
+            app:layout_constraintTop_toBottomOf="@+id/chipgroup_field_tags" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

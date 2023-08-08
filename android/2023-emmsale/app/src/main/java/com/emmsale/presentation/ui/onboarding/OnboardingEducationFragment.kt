@@ -27,8 +27,9 @@ class OnboardingEducationFragment :
     }
 
     private fun setupEducations() {
-        viewModel.educations.observe(viewLifecycleOwner) { educations ->
-            educations?.activities?.forEach(::addEducationChip)
+        viewModel.activities.observe(viewLifecycleOwner) { activities ->
+            binding.chipgroupEduTags.removeAllViews()
+            activities.educations.forEach(::addEducationChip)
         }
     }
 
@@ -36,10 +37,12 @@ class OnboardingEducationFragment :
         binding.chipgroupEduTags.addView(createChip(educationTag))
     }
 
-    private fun createChip(educationTag: ActivityUiState) = activityChipOf {
-        text = educationTag.name
-        isChecked = educationTag.isSelected
-        setOnCheckedChangeListener { _, _ -> viewModel.toggleTagSelection(educationTag) }
+    private fun createChip(activity: ActivityUiState) = activityChipOf {
+        text = activity.name
+        isChecked = activity.isSelected
+        setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateSelection(activity.id, isChecked)
+        }
     }
 
     override fun onClick(view: View) {
