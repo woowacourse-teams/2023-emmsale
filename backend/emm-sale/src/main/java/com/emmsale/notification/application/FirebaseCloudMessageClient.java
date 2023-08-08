@@ -1,6 +1,7 @@
 package com.emmsale.notification.application;
 
 import static com.emmsale.notification.exception.NotificationExceptionType.CONVERTING_JSON_ERROR;
+import static com.emmsale.notification.exception.NotificationExceptionType.FIREBASE_CONNECT_ERROR;
 import static com.emmsale.notification.exception.NotificationExceptionType.GOOGLE_REQUEST_TOKEN_ERROR;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_FCM_TOKEN;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_OPEN_PROFILE_URL;
@@ -76,7 +77,7 @@ public class FirebaseCloudMessageClient {
     );
 
     if (exchange.getStatusCode().isError()) {
-      log.error("firebase 접속 에러 = {}", exchange.getBody());
+      throw new NotificationException(FIREBASE_CONNECT_ERROR);
     }
   }
 

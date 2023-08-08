@@ -33,9 +33,12 @@ public enum NotificationExceptionType implements BaseExceptionType {
   NOT_FOUND_OPEN_PROFILE_URL(
       HttpStatus.NOT_FOUND,
       "오픈 카톡 URL이 없으면 같이 가기 요청을 보낼 수 없습니다."
-  )
+  ),
 
-  ;
+  FIREBASE_CONNECT_ERROR(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      "파이어베이스 접속 시 발생한 에러"
+  );
 
   private final HttpStatus httpStatus;
   private final String errorMessage;
