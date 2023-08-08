@@ -107,7 +107,8 @@ class EventApiTest extends MockMvcTestHelper {
 
     final RequestFieldsSnippet requestFields = requestFields(
         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자"),
-        fieldWithPath("content").type(JsonFieldType.STRING).description("함께 해요 게시글의 내용")
+        fieldWithPath("content").type(JsonFieldType.STRING)
+            .description("함께 해요 게시글의 내용(공백 불가, 255자 최대)")
     );
 
     when(eventService.participate(any(), any(), any())).thenReturn(participantId);
@@ -214,10 +215,17 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
         fieldWithPath("[].name").type(JsonFieldType.STRING).description("member 이름"),
         fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
-        fieldWithPath("[].description").type(JsonFieldType.STRING).description("한줄 자기 소개"));
+        fieldWithPath("[].description").type(JsonFieldType.STRING).description("한줄 자기 소개"),
+        fieldWithPath("[].content").type(JsonFieldType.STRING).description("함께해요 게시글 내용"),
+        fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("함께해요 게시글 작성 날짜"),
+        fieldWithPath("[].updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜")
+    );
     final List<ParticipantResponse> responses = List.of(
-        new ParticipantResponse(1L, 1L, "스캇", "imageUrl", "토마토 던지는 사람"),
-        new ParticipantResponse(2L, 2L, "홍실", "imageUrl", "토마토 맞는 사람"));
+        new ParticipantResponse(1L, 1L, "스캇", "imageUrl", "토마토 던지는 사람", "저랑 같이 컨퍼런스 갈 사람",
+            LocalDate.of(2023, 7, 15), LocalDate.of(2023, 7, 15)),
+        new ParticipantResponse(2L, 2L, "홍실", "imageUrl", "토마토 맞는 사람", "스캇 말고 저랑 갈 사람",
+            LocalDate.of(2023, 7, 22), LocalDate.of(2023, 7, 22))
+    );
 
     when(eventService.findParticipants(eventId)).thenReturn(responses);
 
