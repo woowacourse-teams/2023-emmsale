@@ -1,6 +1,7 @@
 package com.emmsale.notification.application;
 
 import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
+import static com.emmsale.notification.exception.NotificationExceptionType.ALREADY_EXIST_NOTIFICATION;
 import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
 
@@ -35,22 +36,34 @@ public class NotificationCommandService {
   public NotificationResponse create(final NotificationRequest notificationRequest) {
     final Long senderId = notificationRequest.getSenderId();
     final Long receiverId = notificationRequest.getReceiverId();
+    final Long eventId = notificationRequest.getEventId();
 
-    final List<Long> memberIds = List.of(senderId, receiverId);
-
-    validateExistedSenderOrReceiver(memberIds);
+    validateAlreadyExistedNotification(senderId, receiverId, eventId);
+    validateExistedSenderOrReceiver(List.of(senderId, receiverId));
 
     final Notification savedNotification = notificationRepository.save(
         new Notification(
             senderId,
             receiverId,
-            notificationRequest.getEventId(),
+            eventId,
             notificationRequest.getMessage()
         ));
 
     firebaseCloudMessageClient.sendMessageTo(receiverId, savedNotification);
 
     return NotificationResponse.from(savedNotification);
+  }
+
+  private void validateAlreadyExistedNotification(
+      final Long senderId,
+      final Long receiverId,
+      final Long eventId
+  ) {
+    if (notificationRepository.existsBySenderIdAndReceiverIdAndEventId(
+        senderId, receiverId, eventId
+    )) {
+      throw new NotificationException(ALREADY_EXIST_NOTIFICATION);
+    }
   }
 
   private void validateExistedSenderOrReceiver(final List<Long> memberIds) {

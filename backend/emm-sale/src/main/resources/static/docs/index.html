@@ -466,14 +466,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_event">Event</a>
 <ul class="sectlevel2">
 <li><a href="#_get_행사_상세정보_조회"><code>GET</code> : 행사 상세정보 조회</a></li>
-<li><a href="#_post_컨퍼런스에_함께가기_요청컨퍼런스에_함께_가는_멤버에_등록"><code>POST</code> : 컨퍼런스에 함께가기 요청(컨퍼런스에 함께 가는 멤버에 등록)</a></li>
-<li><a href="#_delete_컨퍼런스에_함께가기_요청_취소컨퍼런스에_함께_가는_멤버에서_삭제"><code>DELETE</code> : 컨퍼런스에 함께가기 요청 취소(컨퍼런스에 함께 가는 멤버에서 삭제)</a></li>
-<li><a href="#_get_event에_이미_참여한_멤버인지_확인"><code>GET</code>: Event에 이미 참여한 멤버인지 확인</a></li>
+<li><a href="#_post_행사에_함께가기_요청행사에_함께_가는_멤버에_등록"><code>POST</code> : 행사에 함께가기 요청(행사에 함께 가는 멤버에 등록)</a></li>
+<li><a href="#_delete_행사에_함께가기_요청_취소행사에_함께_가는_멤버에서_삭제"><code>DELETE</code> : 행사에 함께가기 요청 취소(행사에 함께 가는 멤버에서 삭제)</a></li>
+<li><a href="#_get_행사사에_이미_참여한_멤버인지_확인"><code>GET</code>: 행사사에 이미 참여한 멤버인지 확인</a></li>
 <li><a href="#_get_행사_목록_조회"><code>GET</code>: 행사 목록 조회</a></li>
 <li><a href="#_get_행사_참여자_목록_조회"><code>GET</code> : 행사 참여자 목록 조회</a></li>
-<li><a href="#_post_이벤트_생성"><code>POST</code> : 이벤트 생성</a></li>
-<li><a href="#_put_이벤트_업데이트"><code>PUT</code> : 이벤트 업데이트</a></li>
-<li><a href="#_put_이벤트_삭제"><code>PUT</code> : 이벤트 삭제</a></li>
+<li><a href="#_post_행사_생성"><code>POST</code> : 행사 생성</a></li>
+<li><a href="#_put_행사_업데이트"><code>PUT</code> : 행사 업데이트</a></li>
+<li><a href="#_put_행사_삭제"><code>PUT</code> : 행사 삭제</a></li>
 </ul>
 </li>
 <li><a href="#_comment">Comment</a>
@@ -1200,7 +1200,7 @@ Content-Length: 361
 </table>
 </div>
 <div class="sect2">
-<h3 id="_post_컨퍼런스에_함께가기_요청컨퍼런스에_함께_가는_멤버에_등록"><a class="link" href="#_post_컨퍼런스에_함께가기_요청컨퍼런스에_함께_가는_멤버에_등록"><code>POST</code> : 컨퍼런스에 함께가기 요청(컨퍼런스에 함께 가는 멤버에 등록)</a></h3>
+<h3 id="_post_행사에_함께가기_요청행사에_함께_가는_멤버에_등록"><a class="link" href="#_post_행사에_함께가기_요청행사에_함께_가는_멤버에_등록"><code>POST</code> : 행사에 함께가기 요청(행사에 함께 가는 멤버에 등록)</a></h3>
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
@@ -1224,7 +1224,7 @@ Location: /events/1/participants/3</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_delete_컨퍼런스에_함께가기_요청_취소컨퍼런스에_함께_가는_멤버에서_삭제"><a class="link" href="#_delete_컨퍼런스에_함께가기_요청_취소컨퍼런스에_함께_가는_멤버에서_삭제"><code>DELETE</code> : 컨퍼런스에 함께가기 요청 취소(컨퍼런스에 함께 가는 멤버에서 삭제)</a></h3>
+<h3 id="_delete_행사에_함께가기_요청_취소행사에_함께_가는_멤버에서_삭제"><a class="link" href="#_delete_행사에_함께가기_요청_취소행사에_함께_가는_멤버에서_삭제"><code>DELETE</code> : 행사에 함께가기 요청 취소(행사에 함께 가는 멤버에서 삭제)</a></h3>
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
@@ -1266,7 +1266,7 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect2">
-<h3 id="_get_event에_이미_참여한_멤버인지_확인"><a class="link" href="#_get_event에_이미_참여한_멤버인지_확인"><code>GET</code>: Event에 이미 참여한 멤버인지 확인</a></h3>
+<h3 id="_get_행사사에_이미_참여한_멤버인지_확인"><a class="link" href="#_get_행사사에_이미_참여한_멤버인지_확인"><code>GET</code>: 행사사에 이미 참여한 멤버인지 확인</a></h3>
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
@@ -1508,7 +1508,7 @@ Content-Length: 259
 </table>
 </div>
 <div class="sect2">
-<h3 id="_post_이벤트_생성"><a class="link" href="#_post_이벤트_생성"><code>POST</code> : 이벤트 생성</a></h3>
+<h3 id="_post_행사_생성"><a class="link" href="#_post_행사_생성"><code>POST</code> : 행사 생성</a></h3>
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
@@ -1686,7 +1686,7 @@ Content-Length: 342
 </table>
 </div>
 <div class="sect2">
-<h3 id="_put_이벤트_업데이트"><a class="link" href="#_put_이벤트_업데이트"><code>PUT</code> : 이벤트 업데이트</a></h3>
+<h3 id="_put_행사_업데이트"><a class="link" href="#_put_행사_업데이트"><code>PUT</code> : 행사 업데이트</a></h3>
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
@@ -1864,7 +1864,7 @@ Content-Length: 342
 </table>
 </div>
 <div class="sect2">
-<h3 id="_put_이벤트_삭제"><a class="link" href="#_put_이벤트_삭제"><code>PUT</code> : 이벤트 삭제</a></h3>
+<h3 id="_put_행사_삭제"><a class="link" href="#_put_행사_삭제"><code>PUT</code> : 행사 삭제</a></h3>
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
@@ -1925,8 +1925,8 @@ Content-Length: 1313
     "commentId" : 4,
     "parentId" : null,
     "eventId" : 1,
-    "createdAt" : "2023:08:03:12:52:10",
-    "updatedAt" : "2023:08:03:12:52:10",
+    "createdAt" : "2023:08:08:14:54:06",
+    "updatedAt" : "2023:08:08:14:54:06",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -1939,8 +1939,8 @@ Content-Length: 1313
     "commentId" : 5,
     "parentId" : null,
     "eventId" : 1,
-    "createdAt" : "2023:08:03:12:52:10",
-    "updatedAt" : "2023:08:03:12:52:10",
+    "createdAt" : "2023:08:08:14:54:06",
+    "updatedAt" : "2023:08:08:14:54:06",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -1951,8 +1951,8 @@ Content-Length: 1313
     "commentId" : 2,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:08:03:12:52:10",
-    "updatedAt" : "2023:08:03:12:52:10",
+    "createdAt" : "2023:08:08:14:54:06",
+    "updatedAt" : "2023:08:08:14:54:06",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -1962,8 +1962,8 @@ Content-Length: 1313
     "commentId" : 3,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:08:03:12:52:10",
-    "updatedAt" : "2023:08:03:12:52:10",
+    "createdAt" : "2023:08:08:14:54:06",
+    "updatedAt" : "2023:08:08:14:54:06",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -2136,8 +2136,8 @@ Content-Length: 967
     "commentId" : 5,
     "parentId" : null,
     "eventId" : 1,
-    "createdAt" : "2023:08:03:12:52:11",
-    "updatedAt" : "2023:08:03:12:52:11",
+    "createdAt" : "2023:08:08:14:54:06",
+    "updatedAt" : "2023:08:08:14:54:06",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -2148,8 +2148,8 @@ Content-Length: 967
     "commentId" : 2,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:08:03:12:52:11",
-    "updatedAt" : "2023:08:03:12:52:11",
+    "createdAt" : "2023:08:08:14:54:06",
+    "updatedAt" : "2023:08:08:14:54:06",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -2159,8 +2159,8 @@ Content-Length: 967
     "commentId" : 3,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:08:03:12:52:11",
-    "updatedAt" : "2023:08:03:12:52:11",
+    "createdAt" : "2023:08:08:14:54:06",
+    "updatedAt" : "2023:08:08:14:54:06",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -2321,8 +2321,8 @@ Content-Length: 259
   "commentId" : 2,
   "parentId" : 1,
   "eventId" : 1,
-  "createdAt" : "2023:08:03:12:52:11",
-  "updatedAt" : "2023:08:03:12:52:11",
+  "createdAt" : "2023:08:08:14:54:06",
+  "updatedAt" : "2023:08:08:14:54:06",
   "memberId" : 1,
   "memberImageUrl" : "이미지",
   "memberName" : "이름1",
@@ -2501,8 +2501,8 @@ Content-Length: 259
   "commentId" : 5,
   "parentId" : null,
   "eventId" : 1,
-  "createdAt" : "2023:08:03:12:52:11",
-  "updatedAt" : "2023:08:03:12:52:11",
+  "createdAt" : "2023:08:08:14:54:06",
+  "updatedAt" : "2023:08:08:14:54:06",
   "memberId" : 1,
   "memberImageUrl" : "이미지",
   "memberName" : "이름1",
@@ -3030,7 +3030,7 @@ Content-Length: 245
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-03 12:34:57 +0900
+Last updated 2023-08-03 15:52:08 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
