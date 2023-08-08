@@ -30,10 +30,13 @@ public class Participant {
   @JoinColumn(nullable = false)
   private Event event;
 
-  public Participant(final Member member, final Event event) {
+  private String content;
+
+  public Participant(final Member member, final Event event, final String content) {
     event.validateAlreadyParticipate(member);
     this.member = member;
     this.event = event;
+    this.content = content;
   }
 
   public boolean isSameMember(final Member member) {
