@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ConferenceTagApiModel(
+data class EventTagApiModel(
     @SerialName("id")
     val id: Long,
     @SerialName("name")
