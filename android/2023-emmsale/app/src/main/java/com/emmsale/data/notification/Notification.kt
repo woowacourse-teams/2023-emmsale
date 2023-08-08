@@ -1,6 +1,6 @@
 package com.emmsale.data.notification
 
-class Notification(
+data class Notification(
     val id: Long,
     val otherUid: Long,
     val myUid: Long,
