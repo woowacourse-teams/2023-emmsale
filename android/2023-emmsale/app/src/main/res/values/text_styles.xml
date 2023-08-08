@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- KerdyTextStyle Common Text Parent Style -->
+
+    <style name="KerdyTextStyle">
+        <item name="android:fontFamily">@font/nanum_square</item>
+    </style>
+
+    <style name="KerdyTextStyle12" parent="KerdyTextStyle">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="KerdyTextStyle13" parent="KerdyTextStyle">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="KerdyTextStyle14" parent="KerdyTextStyle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="KerdyTextStyle15" parent="KerdyTextStyle">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="KerdyTextStyle16" parent="KerdyTextStyle">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="KerdyTextStyle17" parent="KerdyTextStyle">
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="KerdyTextStyle18" parent="KerdyTextStyle">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- KerdyTextStyle Regular Text Style -->
+
+    <style name="KerdyTextStyleRegular12" parent="KerdyTextStyle12">
+        <item name="android:fontWeight">400</item>
+    </style>
+
+    <style name="KerdyTextStyleRegular13" parent="KerdyTextStyle13">
+        <item name="android:fontWeight">400</item>
+    </style>
+
+    <style name="KerdyTextStyleRegular14" parent="KerdyTextStyle14">
+        <item name="android:fontWeight">400</item>
+    </style>
+
+    <style name="KerdyTextStyleRegular15" parent="KerdyTextStyle15">
+        <item name="android:fontWeight">400</item>
+    </style>
+
+    <style name="KerdyTextStyleRegular16" parent="KerdyTextStyle16">
+        <item name="android:fontWeight">400</item>
+    </style>
+
+    <style name="KerdyTextStyleRegular17" parent="KerdyTextStyle17">
+        <item name="android:fontWeight">400</item>
+    </style>
+
+    <style name="KerdyTextStyleRegular18" parent="KerdyTextStyle18">
+        <item name="android:fontWeight">400</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryRegular12" parent="KerdyTextStyleRegular12">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryRegular13" parent="KerdyTextStyleRegular13">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryRegular14" parent="KerdyTextStyleRegular14">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryRegular15" parent="KerdyTextStyleRegular15">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryRegular16" parent="KerdyTextStyleRegular16">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryRegular17" parent="KerdyTextStyleRegular17">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryRegular18" parent="KerdyTextStyleRegular18">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryRegular12" parent="KerdyTextStyleRegular12">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryRegular13" parent="KerdyTextStyleRegular13">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryRegular14" parent="KerdyTextStyleRegular14">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryRegular15" parent="KerdyTextStyleRegular15">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryRegular16" parent="KerdyTextStyleRegular16">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryRegular17" parent="KerdyTextStyleRegular17">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryRegular18" parent="KerdyTextStyleRegular18">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackRegular12" parent="KerdyTextStyleRegular12">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackRegular13" parent="KerdyTextStyleRegular13">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackRegular14" parent="KerdyTextStyleRegular14">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackRegular15" parent="KerdyTextStyleRegular15">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackRegular16" parent="KerdyTextStyleRegular16">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackRegular17" parent="KerdyTextStyleRegular17">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackRegular18" parent="KerdyTextStyleRegular18">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayRegular12" parent="KerdyTextStyleRegular12">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayRegular13" parent="KerdyTextStyleRegular13">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayRegular14" parent="KerdyTextStyleRegular14">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayRegular15" parent="KerdyTextStyleRegular15">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayRegular16" parent="KerdyTextStyleRegular16">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayRegular17" parent="KerdyTextStyleRegular17">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayRegular18" parent="KerdyTextStyleRegular18">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayRegular12" parent="KerdyTextStyleRegular12">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayRegular13" parent="KerdyTextStyleRegular13">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayRegular14" parent="KerdyTextStyleRegular14">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayRegular15" parent="KerdyTextStyleRegular15">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayRegular16" parent="KerdyTextStyleRegular16">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayRegular17" parent="KerdyTextStyleRegular17">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayRegular18" parent="KerdyTextStyleRegular18">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteRegular12" parent="KerdyTextStyleRegular12">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteRegular13" parent="KerdyTextStyleRegular13">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteRegular14" parent="KerdyTextStyleRegular14">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteRegular15" parent="KerdyTextStyleRegular15">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteRegular16" parent="KerdyTextStyleRegular16">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteRegular17" parent="KerdyTextStyleRegular17">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteRegular18" parent="KerdyTextStyleRegular18">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayRegular12" parent="KerdyTextStyleRegular12">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayRegular13" parent="KerdyTextStyleRegular13">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayRegular14" parent="KerdyTextStyleRegular14">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayRegular15" parent="KerdyTextStyleRegular15">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayRegular16" parent="KerdyTextStyleRegular16">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayRegular17" parent="KerdyTextStyleRegular17">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayRegular18" parent="KerdyTextStyleRegular18">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <!-- KerdyTextStyle Bold Text Style -->
+
+    <style name="KerdyTextStyleBold12" parent="KerdyTextStyle12">
+        <item name="android:fontWeight">700</item>
+    </style>
+
+    <style name="KerdyTextStyleBold13" parent="KerdyTextStyle13">
+        <item name="android:fontWeight">700</item>
+    </style>
+
+    <style name="KerdyTextStyleBold14" parent="KerdyTextStyle14">
+        <item name="android:fontWeight">700</item>
+    </style>
+
+    <style name="KerdyTextStyleBold15" parent="KerdyTextStyle15">
+        <item name="android:fontWeight">700</item>
+    </style>
+
+    <style name="KerdyTextStyleBold16" parent="KerdyTextStyle16">
+        <item name="android:fontWeight">700</item>
+    </style>
+
+    <style name="KerdyTextStyleBold17" parent="KerdyTextStyle17">
+        <item name="android:fontWeight">700</item>
+    </style>
+
+    <style name="KerdyTextStyleBold18" parent="KerdyTextStyle18">
+        <item name="android:fontWeight">700</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryBold12" parent="KerdyTextStyleBold12">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryBold13" parent="KerdyTextStyleBold13">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryBold14" parent="KerdyTextStyleBold14">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryBold15" parent="KerdyTextStyleBold15">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryBold16" parent="KerdyTextStyleBold16">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryBold17" parent="KerdyTextStyleBold17">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryBold18" parent="KerdyTextStyleBold18">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryBold12" parent="KerdyTextStyleBold12">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryBold13" parent="KerdyTextStyleBold13">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryBold14" parent="KerdyTextStyleBold14">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryBold15" parent="KerdyTextStyleBold15">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryBold16" parent="KerdyTextStyleBold16">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryBold17" parent="KerdyTextStyleBold17">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryBold18" parent="KerdyTextStyleBold18">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackBold12" parent="KerdyTextStyleBold12">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackBold13" parent="KerdyTextStyleBold13">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackBold14" parent="KerdyTextStyleBold14">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackBold15" parent="KerdyTextStyleBold15">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackBold16" parent="KerdyTextStyleBold16">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackBold17" parent="KerdyTextStyleBold17">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackBold18" parent="KerdyTextStyleBold18">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayBold12" parent="KerdyTextStyleBold12">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayBold13" parent="KerdyTextStyleBold13">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayBold14" parent="KerdyTextStyleBold14">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayBold15" parent="KerdyTextStyleBold15">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayBold16" parent="KerdyTextStyleBold16">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayBold17" parent="KerdyTextStyleBold17">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayBold18" parent="KerdyTextStyleBold18">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayBold12" parent="KerdyTextStyleBold12">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayBold13" parent="KerdyTextStyleBold13">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayBold14" parent="KerdyTextStyleBold14">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayBold15" parent="KerdyTextStyleBold15">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayBold16" parent="KerdyTextStyleBold16">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayBold17" parent="KerdyTextStyleBold17">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayBold18" parent="KerdyTextStyleBold18">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteBold12" parent="KerdyTextStyleBold12">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteBold13" parent="KerdyTextStyleBold13">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteBold14" parent="KerdyTextStyleBold14">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteBold15" parent="KerdyTextStyleBold15">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteBold16" parent="KerdyTextStyleBold16">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteBold17" parent="KerdyTextStyleBold17">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteBold18" parent="KerdyTextStyleBold18">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayBold12" parent="KerdyTextStyleBold12">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayBold13" parent="KerdyTextStyleBold13">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayBold14" parent="KerdyTextStyleBold14">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayBold15" parent="KerdyTextStyleBold15">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayBold16" parent="KerdyTextStyleBold16">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayBold17" parent="KerdyTextStyleBold17">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayBold18" parent="KerdyTextStyleBold18">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <!-- KerdyTextStyle Extra Bold Text Style -->
+
+    <style name="KerdyTextStyleExtraBold12" parent="KerdyTextStyle12">
+        <item name="android:fontWeight">900</item>
+    </style>
+
+    <style name="KerdyTextStyleExtraBold13" parent="KerdyTextStyle13">
+        <item name="android:fontWeight">900</item>
+    </style>
+
+    <style name="KerdyTextStyleExtraBold14" parent="KerdyTextStyle14">
+        <item name="android:fontWeight">900</item>
+    </style>
+
+    <style name="KerdyTextStyleExtraBold15" parent="KerdyTextStyle15">
+        <item name="android:fontWeight">900</item>
+    </style>
+
+    <style name="KerdyTextStyleExtraBold16" parent="KerdyTextStyle16">
+        <item name="android:fontWeight">900</item>
+    </style>
+
+    <style name="KerdyTextStyleExtraBold17" parent="KerdyTextStyle17">
+        <item name="android:fontWeight">900</item>
+    </style>
+
+    <style name="KerdyTextStyleExtraBold18" parent="KerdyTextStyle18">
+        <item name="android:fontWeight">900</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryExtraBold12" parent="KerdyTextStyleExtraBold12">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryExtraBold13" parent="KerdyTextStyleExtraBold13">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryExtraBold14" parent="KerdyTextStyleExtraBold14">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryExtraBold15" parent="KerdyTextStyleExtraBold15">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryExtraBold16" parent="KerdyTextStyleExtraBold16">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryExtraBold17" parent="KerdyTextStyleExtraBold17">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStylePrimaryExtraBold18" parent="KerdyTextStyleExtraBold18">
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryExtraBold12" parent="KerdyTextStyleExtraBold12">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryExtraBold13" parent="KerdyTextStyleExtraBold13">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryExtraBold14" parent="KerdyTextStyleExtraBold14">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryExtraBold15" parent="KerdyTextStyleExtraBold15">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryExtraBold16" parent="KerdyTextStyleExtraBold16">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryExtraBold17" parent="KerdyTextStyleExtraBold17">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleSecondaryExtraBold18" parent="KerdyTextStyleExtraBold18">
+        <item name="android:textColor">@color/secondary_color</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackExtraBold12" parent="KerdyTextStyleExtraBold12">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackExtraBold13" parent="KerdyTextStyleExtraBold13">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackExtraBold14" parent="KerdyTextStyleExtraBold14">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackExtraBold15" parent="KerdyTextStyleExtraBold15">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackExtraBold16" parent="KerdyTextStyleExtraBold16">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackExtraBold17" parent="KerdyTextStyleExtraBold17">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleBlackExtraBold18" parent="KerdyTextStyleExtraBold18">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayExtraBold12" parent="KerdyTextStyleExtraBold12">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayExtraBold13" parent="KerdyTextStyleExtraBold13">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayExtraBold14" parent="KerdyTextStyleExtraBold14">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayExtraBold15" parent="KerdyTextStyleExtraBold15">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayExtraBold16" parent="KerdyTextStyleExtraBold16">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayExtraBold17" parent="KerdyTextStyleExtraBold17">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleGrayExtraBold18" parent="KerdyTextStyleExtraBold18">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayExtraBold12" parent="KerdyTextStyleExtraBold12">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayExtraBold13" parent="KerdyTextStyleExtraBold13">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayExtraBold14" parent="KerdyTextStyleExtraBold14">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayExtraBold15" parent="KerdyTextStyleExtraBold15">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayExtraBold16" parent="KerdyTextStyleExtraBold16">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayExtraBold17" parent="KerdyTextStyleExtraBold17">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleDarkGrayExtraBold18" parent="KerdyTextStyleExtraBold18">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteExtraBold12" parent="KerdyTextStyleExtraBold12">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteExtraBold13" parent="KerdyTextStyleExtraBold13">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteExtraBold14" parent="KerdyTextStyleExtraBold14">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteExtraBold15" parent="KerdyTextStyleExtraBold15">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteExtraBold16" parent="KerdyTextStyleExtraBold16">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteExtraBold17" parent="KerdyTextStyleExtraBold17">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleWhiteExtraBold18" parent="KerdyTextStyleExtraBold18">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayExtraBold12" parent="KerdyTextStyleExtraBold12">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayExtraBold13" parent="KerdyTextStyleExtraBold13">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayExtraBold14" parent="KerdyTextStyleExtraBold14">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayExtraBold15" parent="KerdyTextStyleExtraBold15">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayExtraBold16" parent="KerdyTextStyleExtraBold16">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayExtraBold17" parent="KerdyTextStyleExtraBold17">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="KerdyTextStyleLightGrayExtraBold18" parent="KerdyTextStyleExtraBold18">
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+</resources>
