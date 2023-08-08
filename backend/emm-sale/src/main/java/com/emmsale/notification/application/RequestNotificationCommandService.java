@@ -49,7 +49,7 @@ public class RequestNotificationCommandService {
             requestNotificationRequest.getMessage()
         ));
 
-    firebaseCloudMessageClient.sendMessageTo(receiverId, savedRequestNotification);
+    firebaseCloudMessageClient.sendMessageTo(savedRequestNotification);
 
     return RequestNotificationResponse.from(savedRequestNotification);
   }

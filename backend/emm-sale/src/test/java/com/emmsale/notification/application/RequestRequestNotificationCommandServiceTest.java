@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 
@@ -78,10 +77,11 @@ class RequestRequestNotificationCommandServiceTest extends ServiceIntegrationTes
         notificationId, senderId, receiverId, message, eventId
     );
 
-    doNothing().when(firebaseCloudMessageClient).sendMessageTo(anyLong(), any());
+    doNothing().when(firebaseCloudMessageClient).sendMessageTo((RequestNotification) any());
 
     //when
-    final RequestNotificationResponse actual = mockingRequestNotificationCommandService.create(request);
+    final RequestNotificationResponse actual = mockingRequestNotificationCommandService.create(
+        request);
 
     //then
     assertThat(actual)
@@ -172,7 +172,8 @@ class RequestRequestNotificationCommandServiceTest extends ServiceIntegrationTes
     final RequestNotificationModifyRequest request =
         new RequestNotificationModifyRequest(RequestNotificationStatus.IN_PROGRESS);
     final RequestNotification savedRequestNotification =
-        requestNotificationRepository.save(new RequestNotification(senderId, receiverId, eventId, message));
+        requestNotificationRepository.save(
+            new RequestNotification(senderId, receiverId, eventId, message));
 
     //when
     requestNotificationCommandService.modify(request, savedRequestNotification.getId());
