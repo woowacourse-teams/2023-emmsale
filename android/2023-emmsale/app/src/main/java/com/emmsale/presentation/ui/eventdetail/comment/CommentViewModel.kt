@@ -25,15 +25,15 @@ class CommentViewModel(
     private val memberRepository: MemberRepository,
 ) : ViewModel() {
 
-    private val _uiState = NotNullMutableLiveData(CommentsUiState.Loading)
-    val uiState: NotNullLiveData<CommentsUiState> = _uiState
+    private val _commentsUiState = NotNullMutableLiveData(CommentsUiState.Loading)
+    val commentsUiState: NotNullLiveData<CommentsUiState> = _commentsUiState
 
     fun fetchComments(eventId: Long) {
         changeLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
-                _uiState.postValue(_uiState.value.copy(isNotLogin = true))
+                _commentsUiState.postValue(_commentsUiState.value.copy(isNotLogin = true))
                 return@launch
             }
             val loginMemberDeferred = async { memberRepository.getMember(token.uid) }
@@ -61,7 +61,7 @@ class CommentViewModel(
             when (commentsResult) {
                 is ApiError -> changeCommentFetchingErrorState()
                 is ApiException -> changeCommentFetchingErrorState()
-                is ApiSuccess -> _uiState.value = CommentsUiState.create(
+                is ApiSuccess -> _commentsUiState.value = CommentsUiState.create(
                     comments = commentsResult.data as List<Comment>,
                     loginMember = loginMember,
                 )
@@ -92,7 +92,7 @@ class CommentViewModel(
     }
 
     private fun changeLoadingState() {
-        _uiState.value = uiState.value.copy(
+        _commentsUiState.value = commentsUiState.value.copy(
             isLoading = true,
             isCommentsFetchingError = false,
             isCommentPostingError = false,
@@ -101,7 +101,7 @@ class CommentViewModel(
     }
 
     private fun changeCommentFetchingErrorState() {
-        _uiState.value = uiState.value.copy(
+        _commentsUiState.value = commentsUiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = true,
             isCommentPostingError = false,
@@ -110,7 +110,7 @@ class CommentViewModel(
     }
 
     private fun changeCommentPostingErrorState() {
-        _uiState.value = uiState.value.copy(
+        _commentsUiState.value = commentsUiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = false,
             isCommentPostingError = true,
@@ -119,7 +119,7 @@ class CommentViewModel(
     }
 
     private fun changeCommentDeletionErrorState() {
-        _uiState.value = uiState.value.copy(
+        _commentsUiState.value = commentsUiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = false,
             isCommentPostingError = false,

@@ -70,7 +70,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     }
 
     private fun setUpUiLogic() {
-        viewModel.uiState.observe(viewLifecycleOwner) {
+        viewModel.commentsUiState.observe(viewLifecycleOwner) {
             handleError(it)
             handleNotLogin(it)
             handleComments(it)

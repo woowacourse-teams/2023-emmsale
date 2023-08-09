@@ -9,7 +9,6 @@ data class CommentsUiState(
     val isCommentsFetchingError: Boolean,
     val isCommentPostingError: Boolean,
     val isCommentDeletionError: Boolean,
-    val errorMessage: String,
     val comments: List<CommentUiState>,
 ) {
     companion object {
@@ -19,7 +18,6 @@ data class CommentsUiState(
             isCommentsFetchingError = false,
             isCommentPostingError = false,
             isCommentDeletionError = false,
-            errorMessage = "",
             comments = listOf(),
         )
 
@@ -32,7 +30,6 @@ data class CommentsUiState(
             isCommentsFetchingError = false,
             isCommentPostingError = false,
             isCommentDeletionError = false,
-            errorMessage = "",
             comments = comments.map {
                 CommentUiState.create(
                     comment = it,
