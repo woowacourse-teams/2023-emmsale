@@ -1,4 +1,4 @@
-package com.emmsale.presentation.utils.bindingadapter
+package com.emmsale.presentation.common.bindingadapter
 
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout

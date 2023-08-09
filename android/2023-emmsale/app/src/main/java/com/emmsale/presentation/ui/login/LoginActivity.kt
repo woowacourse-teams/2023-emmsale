@@ -20,7 +20,6 @@ import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
 import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
-import com.emmsale.presentation.utils.builder.uri
 import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginActivity : AppCompatActivity() {
@@ -114,6 +113,8 @@ class LoginActivity : AppCompatActivity() {
             )
         }
     }
+
+    private fun uri(block: Uri.Builder.() -> Unit): Uri = Uri.Builder().apply(block).build()
 
     private fun Intent.parseGithubCode(): String? =
         data?.getQueryParameter(GITHUB_CODE_PARAMETER)

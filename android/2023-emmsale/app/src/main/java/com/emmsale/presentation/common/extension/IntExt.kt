@@ -1,4 +1,4 @@
-package com.emmsale.presentation.utils.extension
+package com.emmsale.presentation.common.extension
 
 import android.content.res.Resources
 import kotlin.math.roundToInt

@@ -1,4 +1,4 @@
-package com.emmsale.presentation.utils.extension
+package com.emmsale.presentation.common.extension
 
 import android.widget.Checkable
 import androidx.core.view.forEach

@@ -12,6 +12,7 @@ import com.emmsale.databinding.ActivityConferenceFilterBinding
 import com.emmsale.databinding.LayoutFilterConferenceDurationBinding
 import com.emmsale.databinding.LayoutFilterConferenceEventTagBinding
 import com.emmsale.databinding.LayoutFilterConferenceStatusBinding
+import com.emmsale.presentation.common.extension.checkAll
 import com.emmsale.presentation.common.extension.getParcelableExtraCompat
 import com.emmsale.presentation.common.extension.message
 import com.emmsale.presentation.common.extension.negativeButton
@@ -20,12 +21,11 @@ import com.emmsale.presentation.common.extension.showDatePickerDialog
 import com.emmsale.presentation.common.extension.showDialog
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.extension.title
+import com.emmsale.presentation.common.extension.uncheckAll
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
-import com.emmsale.presentation.utils.extension.checkAll
-import com.emmsale.presentation.utils.extension.uncheckAll
 import com.google.android.material.chip.ChipGroup
 
 class ConferenceFilterActivity : AppCompatActivity() {

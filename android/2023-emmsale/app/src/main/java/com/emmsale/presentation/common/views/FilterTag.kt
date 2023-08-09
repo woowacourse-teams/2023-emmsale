@@ -8,7 +8,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.emmsale.R
-import com.emmsale.presentation.utils.extension.dp
+import com.emmsale.presentation.common.extension.dp
 
 class FilterTag : AppCompatTextView {
     constructor(context: Context) : super(context)

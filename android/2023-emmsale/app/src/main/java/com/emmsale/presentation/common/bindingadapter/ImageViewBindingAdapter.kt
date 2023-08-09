@@ -1,4 +1,4 @@
-package com.emmsale.presentation.utils.bindingadapter
+package com.emmsale.presentation.common.bindingadapter
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -7,7 +7,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.emmsale.R
-import com.emmsale.presentation.utils.extension.dp
+import com.emmsale.presentation.common.extension.dp
 
 @BindingAdapter("app:imageUrl")
 fun ImageView.setImage(imageUrl: String?) {
