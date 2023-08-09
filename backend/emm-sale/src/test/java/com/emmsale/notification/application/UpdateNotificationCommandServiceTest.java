@@ -7,11 +7,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.emmsale.comment.domain.Comment;
+import com.emmsale.comment.event.UpdateNotificationEvent;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
-import com.emmsale.notification.domain.UpdateNotificationType;
-import com.emmsale.comment.event.UpdateNotificationEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class UpdateNotificationCommandServiceTest extends ServiceIntegrationTestHelper 
     final UpdateNotificationEvent event = new UpdateNotificationEvent(
         1L,
         2L,
-        UpdateNotificationType.COMMENT.name()
+        Comment.class.getName()
     );
 
     //when

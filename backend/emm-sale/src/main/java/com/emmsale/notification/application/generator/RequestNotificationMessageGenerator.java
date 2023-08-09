@@ -7,9 +7,9 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
-import com.emmsale.notification.application.dto.FcmMessage;
-import com.emmsale.notification.application.dto.FcmMessage.Data;
-import com.emmsale.notification.application.dto.FcmMessage.Message;
+import com.emmsale.notification.application.dto.RequestNotificationMessage;
+import com.emmsale.notification.application.dto.RequestNotificationMessage.Data;
+import com.emmsale.notification.application.dto.RequestNotificationMessage.Message;
 import com.emmsale.notification.domain.RequestNotification;
 import com.emmsale.notification.exception.NotificationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class RequestNotificationMessageGenerator implements NotificationMessageGenerator {
+
+  private static final String REQUEST_NOTIFICATION_TYPE = "REQUEST";
 
   private final RequestNotification requestNotification;
 
@@ -38,15 +40,15 @@ public class RequestNotificationMessageGenerator implements NotificationMessageG
     final Data messageData = new Data(
         sender.getName(), senderId.toString(),
         requestNotification.getReceiverId().toString(), requestNotification.getMessage(),
-        openProfileUrl
+        openProfileUrl, REQUEST_NOTIFICATION_TYPE, requestNotification.getCreatedAt()
     );
 
-    final FcmMessage fcmMessage = new FcmMessage(
+    final RequestNotificationMessage requestNotificationMessage = new RequestNotificationMessage(
         DEFAULT_VALIDATE_ONLY, new Message(messageData, targetToken)
     );
 
     try {
-      return objectMapper.writeValueAsString(fcmMessage);
+      return objectMapper.writeValueAsString(requestNotificationMessage);
     } catch (JsonProcessingException e) {
       throw new NotificationException(CONVERTING_JSON_ERROR);
     }

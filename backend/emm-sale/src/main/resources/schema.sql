@@ -120,6 +120,7 @@ create table update_notification
     id          bigint auto_increment primary key,
     receiver_id bigint       not null,
     redirect_id bigint       not null,
-    type        varchar(255) not null
+    type        varchar(255) not null,
+    created_at  datetime(6)
 );
 

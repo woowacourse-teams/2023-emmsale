@@ -1,12 +1,13 @@
 package com.emmsale.notification.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class FcmMessage {
+public class RequestNotificationMessage {
 
   @JsonProperty("validate_only")
   private final boolean validateOnly;
@@ -29,5 +30,7 @@ public class FcmMessage {
     private final String receiverId;
     private final String message;
     private final String openProfileUrl;
+    private final String notificationType;
+    private final LocalDateTime createdAt;
   }
 }
