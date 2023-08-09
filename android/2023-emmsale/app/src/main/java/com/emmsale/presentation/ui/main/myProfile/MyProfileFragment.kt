@@ -11,7 +11,7 @@ import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.main.myProfile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.main.myProfile.recyclerView.ActivitiesAdapterDecoration
-import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileScreenUiState
+import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
 
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     override val layoutResId: Int = R.layout.fragment_my_profile
@@ -35,41 +35,43 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     private fun setupUiLogic() {
-        viewModel.uiState.observe(viewLifecycleOwner) {
-            handleError(it)
+        viewModel.isLogin.observe(viewLifecycleOwner) {
             handleNotLogin(it)
-            handleCategories(it)
+        }
+        viewModel.myProfile.observe(viewLifecycleOwner) {
+            handleError(it)
+            handleFields(it)
             handleActivities(it)
         }
     }
 
-    private fun handleError(myProfileScreenUiState: MyProfileScreenUiState) {
-        if (myProfileScreenUiState.isProfileFetchingError) {
+    private fun handleError(myProfile: MyProfileUiState) {
+        if (myProfile.isFetchingError) {
             context?.showToast(getString(R.string.myprofile_profile_fetching_error_message))
         }
     }
 
-    private fun handleNotLogin(myProfileScreenUiState: MyProfileScreenUiState) {
-        if (myProfileScreenUiState.isNotLogin) {
+    private fun handleNotLogin(isLogin: Boolean) {
+        if (!isLogin) {
             LoginActivity.startActivity(requireContext())
             activity?.finish()
         }
     }
 
-    private fun handleCategories(myProfileScreenUiState: MyProfileScreenUiState) {
-        binding.cgMyprofileCategories.removeAllViews()
+    private fun handleFields(myProfile: MyProfileUiState) {
+        binding.cgMyprofileFields.removeAllViews()
 
-        myProfileScreenUiState.fields.forEach {
+        myProfile.fields.forEach {
             val tagView = CategoryTag(requireContext()).apply { text = it.name }
-            binding.cgMyprofileCategories.addView(tagView)
+            binding.cgMyprofileFields.addView(tagView)
         }
     }
 
-    private fun handleActivities(myProfileScreenUiState: MyProfileScreenUiState) {
+    private fun handleActivities(myProfile: MyProfileUiState) {
         (binding.rvMyprofileEducations.adapter as ActivitiesAdapter).submitList(
-            myProfileScreenUiState.educations,
+            myProfile.educations,
         )
-        (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfileScreenUiState.clubs)
+        (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfile.clubs)
     }
 
     private fun initActivitiesRecyclerView() {

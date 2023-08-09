@@ -1,8 +1,8 @@
 package com.emmsale.presentation.ui.main.myProfile.uiState
 
-data class MyProfileScreenUiState(
+data class MyProfileUiState(
     val isLoading: Boolean,
-    val isProfileFetchingError: Boolean,
+    val isFetchingError: Boolean,
     val memberId: Long,
     val memberName: String,
     val description: String,
@@ -10,12 +10,11 @@ data class MyProfileScreenUiState(
     val fields: List<ActivityUiState>,
     val educations: List<ActivityUiState>,
     val clubs: List<ActivityUiState>,
-    val isNotLogin: Boolean = false,
 ) {
     companion object {
-        val Loading = MyProfileScreenUiState(
+        val Loading = MyProfileUiState(
             isLoading = true,
-            isProfileFetchingError = false,
+            isFetchingError = false,
             memberId = -1,
             memberName = "",
             description = "",

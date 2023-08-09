@@ -61,7 +61,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="23dp"
-                        android:text="@{viewModel.uiState.memberName}"
+                        android:text="@{viewModel.myProfile.memberName}"
                         android:textSize="17sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@+id/tv_myprofile_hello"
@@ -74,7 +74,7 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="9dp"
                         android:layout_marginEnd="19dp"
-                        android:text="@{viewModel.uiState.description.isBlank() ? @string/myprofile_no_description : viewModel.uiState.description }"
+                        android:text="@{viewModel.myProfile.description.isBlank() ? @string/myprofile_no_description : viewModel.myProfile.description }"
                         android:textSize="13sp"
                         app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_memberimage"
                         app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
@@ -100,7 +100,7 @@
                         android:layout_marginBottom="7dp"
                         android:contentDescription="@string/myprofile_memberimagedescription"
                         android:scaleType="centerCrop"
-                        app:imageUrl="@{viewModel.uiState.memberImageUrl}"
+                        app:imageUrl="@{viewModel.myProfile.memberImageUrl}"
                         app:isCircle="@{true}"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_myprofile_imagedecoration"
                         app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_imagedecoration"
@@ -114,7 +114,7 @@
                         android:background="@color/light_gray"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cg_myprofile_categories" />
+                        app:layout_constraintTop_toBottomOf="@+id/cg_myprofile_fields" />
 
                     <View
                         android:id="@+id/view_myprofile_educationicontoclubicon"
@@ -226,7 +226,7 @@
                         app:srcCompat="@drawable/ic_myprofile_activitylabeldecorator" />
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/cg_myprofile_categories"
+                        android:id="@+id/cg_myprofile_fields"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="29dp"
@@ -246,7 +246,7 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:visibility="@{viewModel.uiState.isLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.myProfile.isLoading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
