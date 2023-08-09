@@ -2,6 +2,8 @@ package com.emmsale.presentation.common.extension
 
 import android.Manifest
 import android.app.DatePickerDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,6 +12,8 @@ import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.emmsale.R
 import java.time.LocalDate
 
@@ -53,3 +57,50 @@ fun Context.showDatePickerDialog(block: (date: LocalDate) -> Unit) {
         todayDate.dayOfMonth,
     ).show()
 }
+
+fun Context.showNotification(
+    title: String,
+    message: String,
+    notificationId: Int = System.currentTimeMillis().toInt(),
+    channelId: String,
+    channelName: String,
+    channelDescription: String,
+) {
+    val notificationManager = NotificationManagerCompat.from(this)
+
+    if (checkPostNotificationPermission()) {
+        createNotificationChannel(
+            notificationManager,
+            channelId,
+            channelName,
+            channelDescription,
+        )
+        val notification = createNotification(channelId, title, message)
+        notificationManager.notify(notificationId, notification)
+    }
+}
+
+private fun createNotificationChannel(
+    notificationManager: NotificationManagerCompat,
+    channelId: String,
+    channelName: String,
+    channelDescription: String,
+) {
+    val importance = NotificationManager.IMPORTANCE_HIGH
+    val channel = NotificationChannel(channelId, channelName, importance).apply {
+        description = channelDescription
+    }
+    notificationManager.createNotificationChannel(channel)
+}
+
+private fun Context.createNotification(
+    channelId: String,
+    title: String,
+    message: String,
+) = NotificationCompat.Builder(this, channelId)
+    .setSmallIcon(R.drawable.ic_launcher_foreground)
+    .setContentTitle(title)
+    .setContentText(message)
+    .setPriority(NotificationCompat.PRIORITY_HIGH)
+    .setAutoCancel(true)
+    .build()

@@ -1,12 +1,11 @@
 package com.emmsale.presentation.service
 
 import com.emmsale.R
-import com.emmsale.presentation.common.notification.NotificationHelper
+import com.emmsale.presentation.common.extension.showNotification
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class KerdyFirebaseMessagingService : FirebaseMessagingService() {
-    private val notificationHelper: NotificationHelper by lazy { NotificationHelper(this) }
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
@@ -16,7 +15,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val openProfileUrl = message.data["openProfileUrl"] ?: return
         val notificationMessage = message.data["message"] ?: return
 
-        notificationHelper.showNotification(
+        baseContext.showNotification(
             title = getString(R.string.kerdyfirebasemessaging_follow_notification_title_format),
             message = getString(R.string.kerdyfirebasemessaging_follow_notification_message_format).format(
                 senderName,
