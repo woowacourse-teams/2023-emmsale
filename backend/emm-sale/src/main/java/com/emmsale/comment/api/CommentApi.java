@@ -36,8 +36,8 @@ public class CommentApi {
   }
 
   @GetMapping("/comments")
-  public List<CommentHierarchyResponse> findAll(@RequestParam final Long eventId) {
-    return commentQueryService.findAllCommentsByEventId(eventId);
+  public List<CommentHierarchyResponse> findAll(@RequestParam final Long eventId, final Member member) {
+    return commentQueryService.findAllCommentsByEventId(eventId, member);
   }
 
   @GetMapping("/comments/{comment-id}")

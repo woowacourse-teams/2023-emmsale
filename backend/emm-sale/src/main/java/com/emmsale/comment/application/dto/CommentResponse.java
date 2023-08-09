@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CommentResponse {
 
+  private static final String BLOCKED_MEMBER_CONTENT = "차단된 사용자의 댓글입니다.";
+
   private String content;
   private Long commentId;
   private Long parentId;
@@ -42,5 +44,9 @@ public class CommentResponse {
     return comment.getParent()
         .map(Comment::getId)
         .orElse(null);
+  }
+
+  public void hideContent() {
+    this.content = BLOCKED_MEMBER_CONTENT;
   }
 }

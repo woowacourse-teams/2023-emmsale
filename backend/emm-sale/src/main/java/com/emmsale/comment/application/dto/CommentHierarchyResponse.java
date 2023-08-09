@@ -36,7 +36,8 @@ public class CommentHierarchyResponse {
     return new CommentHierarchyResponse(parentComment, childComments);
   }
 
-  public static List<CommentHierarchyResponse> convertAllFrom(final List<Comment> comments) {
+  public static List<CommentHierarchyResponse> convertAllFrom(final List<Comment> comments,
+      final List<Long> blockedMemberIds) {
 
     final Map<Comment, List<Comment>> groupedByParent =
         groupingByParentAndSortedByCreatedAt(comments);
@@ -53,7 +54,26 @@ public class CommentHierarchyResponse {
       );
     }
 
+    for (final CommentHierarchyResponse response : result) {
+      final CommentResponse parent = response.getParentComment();
+
+      hideContentIfBlockedMember(parent, blockedMemberIds);
+
+      final List<CommentResponse> children = response.getChildComments();
+
+      for (final CommentResponse child : children) {
+        hideContentIfBlockedMember(child, blockedMemberIds);
+      }
+    }
+
     return result;
+  }
+
+  private static void hideContentIfBlockedMember(final CommentResponse commentResponse,
+      final List<Long> blockedMemberIds) {
+    if (blockedMemberIds.contains(commentResponse.getMemberId())) {
+      commentResponse.hideContent();
+    }
   }
 
   private static Map<Comment, List<Comment>> groupingByParentAndSortedByCreatedAt(

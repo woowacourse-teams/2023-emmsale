@@ -1,5 +1,10 @@
 package com.emmsale.comment.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.emmsale.block.domain.Block;
+import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.comment.application.dto.CommentHierarchyResponse;
 import com.emmsale.comment.application.dto.CommentResponse;
 import com.emmsale.comment.domain.Comment;
@@ -12,9 +17,9 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import java.util.Collections;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,6 +33,8 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
   private MemberRepository memberRepository;
   @Autowired
   private CommentRepository commentRepository;
+  @Autowired
+  private BlockRepository blockRepository;
   private Event event;
   private Member member;
   private Comment 부모_댓글1;
@@ -74,10 +81,10 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
 
     //when
     final List<CommentHierarchyResponse> actual = commentQueryService.findAllCommentsByEventId(
-        event.getId());
+        event.getId(), member);
 
     //then
-    Assertions.assertThat(actual)
+    assertThat(actual)
         .usingRecursiveComparison()
         .isEqualTo(expected);
   }
@@ -105,8 +112,60 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
         commentQueryService.findParentWithChildren(부모_댓글1.getId());
 
     //then
-    Assertions.assertThat(actual)
+    assertThat(actual)
         .usingRecursiveComparison()
         .isEqualTo(expected);
+  }
+
+  @Nested
+  @DisplayName("차단된 사용자의 댓글 조회 테스트")
+  class HideContent {
+
+    private static final String BLOCKED_MEMBER_CONTENT = "차단된 사용자의 댓글입니다.";
+
+    @Test
+    @DisplayName("차단한 사용자의 루트 댓글 내용을 `BLOCKED_MEMBER_CONTENT`으로 대체한다.")
+    void blockedUserCommentsQuery1() {
+      //given
+      final long blockedMemberId = 2L;
+      final Member blockedMember = memberRepository.findById(blockedMemberId).get();
+
+      commentRepository.save(Comment.createRoot(event, blockedMember, "차단한 사용자의 루트 댓글"));
+
+      final Block block = new Block(member.getId(), blockedMemberId);
+      blockRepository.save(block);
+
+      //when
+      final List<CommentHierarchyResponse> result = commentQueryService.findAllCommentsByEventId(
+          event.getId(), member);
+
+      //then
+      final int lastIndexOfResult = result.size() - 1;
+      final String actualBlockedMemberContent = result.get(lastIndexOfResult).getParentComment()
+          .getContent();
+      assertEquals(BLOCKED_MEMBER_CONTENT, actualBlockedMemberContent);
+    }
+
+    @Test
+    @DisplayName("차단하지 않은 사용자의 루트 댓글에 달린 차단한 사용자의 대댓글 내용을 `BLOCKED_MEMBER_CONTENT`으로 대체한다.")
+    void blockedUserCommentsQuery2() {
+      //given
+      final long blockedMemberId = 2L;
+      final Member blockedMember = memberRepository.findById(blockedMemberId).get();
+
+      commentRepository.save(Comment.createChild(event, 부모_댓글1, blockedMember, "차단한 사용자의 대댓글"));
+
+      final Block block = new Block(member.getId(), blockedMemberId);
+      blockRepository.save(block);
+
+      //when
+      final List<CommentHierarchyResponse> result = commentQueryService.findAllCommentsByEventId(
+          event.getId(), member);
+
+      //then
+      final String actualBlockedMemberContent = result.get(1).getChildComments().get(0)
+          .getContent();
+      assertEquals(BLOCKED_MEMBER_CONTENT, actualBlockedMemberContent);
+    }
   }
 }

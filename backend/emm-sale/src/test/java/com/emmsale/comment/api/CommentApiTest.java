@@ -41,18 +41,12 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 @WebMvcTest(CommentApi.class)
 class CommentApiTest extends MockMvcTestHelper {
 
-  @MockBean
-  private CommentCommandService commentCommandService;
-  @MockBean
-  private CommentQueryService commentQueryService;
-
   private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
       fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용"),
       fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("댓글을 생성할 행사 id"),
       fieldWithPath("parentId").type(JsonFieldType.NUMBER)
           .description("대댓글일 경우 부모 댓글 id (부모 댓글일 경우 id null)").optional()
   );
-
   private static final ResponseFieldsSnippet RESPONSE_FIELDS = responseFields(
       fieldWithPath("content").description("저장된 댓글 내용"),
       fieldWithPath("commentId").description("저장된 댓글 id"),
@@ -65,6 +59,10 @@ class CommentApiTest extends MockMvcTestHelper {
       fieldWithPath("memberImageUrl").description("댓글 작성자 이미지 Url"),
       fieldWithPath("memberName").description("댓글 작성자 이름")
   );
+  @MockBean
+  private CommentCommandService commentCommandService;
+  @MockBean
+  private CommentQueryService commentQueryService;
 
   @Test
   @DisplayName("create() : 댓글에 제대로 저장이 되면 200 OK를 반환해줄 수 있다.")
@@ -92,6 +90,8 @@ class CommentApiTest extends MockMvcTestHelper {
   @DisplayName("findAll() : 행사에 있는 모든 댓글을 성공적으로 조회하면 200 OK를 반환할 수 있다.")
   void test_findAll() throws Exception {
     //given
+    final String accessToken = "Bearer AccessToken";
+
     final RequestParametersSnippet requestParam = requestParameters(
         parameterWithName("eventId").description("댓글을 볼 행사 id"));
 
@@ -136,11 +136,13 @@ class CommentApiTest extends MockMvcTestHelper {
                 ))
         ));
 
-    when(commentQueryService.findAllCommentsByEventId(anyLong()))
+    when(commentQueryService.findAllCommentsByEventId(anyLong(), any()))
         .thenReturn(result);
 
     //when & then
-    mockMvc.perform(get("/comments").queryParam("eventId", "1"))
+    mockMvc.perform(get("/comments")
+            .queryParam("eventId", "1")
+            .header("Authorization", accessToken))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("get-comment", requestParam, responseFieldsSnippet));
