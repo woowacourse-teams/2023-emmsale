@@ -23,9 +23,7 @@ public enum CommentExceptionType implements BaseExceptionType {
   FORBIDDEN_MODIFY_DELETED_COMMENT(
       HttpStatus.FORBIDDEN,
       "삭제된 댓글은 수정할 수 없습니다."
-  )
-
-  ;
+  );
 
   private final HttpStatus httpStatus;
   private final String errorMessage;
