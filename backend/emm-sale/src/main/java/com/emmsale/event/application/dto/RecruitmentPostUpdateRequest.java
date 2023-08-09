@@ -5,11 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class ParticipateUpdateRequest {
+public class RecruitmentPostUpdateRequest {
 
   private final String content;
 
-  private ParticipateUpdateRequest() {
+  private RecruitmentPostUpdateRequest() {
     this(null);
   }
 }

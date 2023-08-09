@@ -54,7 +54,7 @@ public class Event extends BaseEntity {
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
   @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
-  private List<Participant> participants = new ArrayList<>();
+  private List<RecruitmentPost> recruitmentPosts = new ArrayList<>();
 
   public Event(
       final String name,
@@ -76,10 +76,10 @@ public class Event extends BaseEntity {
     this.imageUrl = imageUrl;
   }
 
-  public Participant addParticipant(final Member member, final String content) {
-    final Participant participant = new Participant(member, this, content);
-    participants.add(participant);
-    return participant;
+  public RecruitmentPost createRecruitmentPost(final Member member, final String content) {
+    final RecruitmentPost recruitmentPost = new RecruitmentPost(member, this, content);
+    recruitmentPosts.add(recruitmentPost);
+    return recruitmentPost;
   }
 
   public void addAllEventTags(final List<Tag> tags) {
@@ -89,15 +89,15 @@ public class Event extends BaseEntity {
     this.tags.addAll(eventTags);
   }
 
-  public void validateAlreadyParticipate(final Member member) {
-    if (isAlreadyParticipate(member)) {
-      throw new EventException(EventExceptionType.ALREADY_PARTICIPATED);
+  public void validateAlreadyCreateRecruitmentPost(final Member member) {
+    if (isAlreadyCreateRecruitmentPost(member)) {
+      throw new EventException(EventExceptionType.ALREADY_CREATE_RECRUITMENT_POST);
     }
   }
 
-  private boolean isAlreadyParticipate(final Member member) {
-    return participants.stream()
-        .anyMatch(participant -> participant.isSameMember(member));
+  private boolean isAlreadyCreateRecruitmentPost(final Member member) {
+    return recruitmentPosts.stream()
+        .anyMatch(post -> post.isSameMember(member));
   }
 
   public EventStatus calculateEventStatus(final LocalDate now) {

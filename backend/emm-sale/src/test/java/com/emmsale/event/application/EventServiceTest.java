@@ -2,7 +2,7 @@ package com.emmsale.event.application;
 
 import static com.emmsale.event.EventFixture.AI_아이디어_공모전;
 import static com.emmsale.event.EventFixture.AI_컨퍼런스;
-import static com.emmsale.event.EventFixture.createEventParticipateRequest;
+import static com.emmsale.event.EventFixture.createRecruitmentPostRequest;
 import static com.emmsale.event.EventFixture.eventFixture;
 import static com.emmsale.event.EventFixture.구름톤;
 import static com.emmsale.event.EventFixture.날짜_8월_10일;
@@ -11,14 +11,14 @@ import static com.emmsale.event.EventFixture.안드로이드_컨퍼런스;
 import static com.emmsale.event.EventFixture.웹_컨퍼런스;
 import static com.emmsale.event.EventFixture.인프콘_2023;
 import static com.emmsale.event.domain.EventStatus.IN_PROGRESS;
-import static com.emmsale.event.exception.EventExceptionType.ALREADY_PARTICIPATED;
-import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT;
-import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_UPDATE_PARTICIPATE;
+import static com.emmsale.event.exception.EventExceptionType.ALREADY_CREATE_RECRUITMENT_POST;
+import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_CREATE_RECRUITMENT_POST;
+import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_UPDATE_RECRUITMENT_POST;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_DATE_FORMAT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
-import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_PARTICIPANT;
+import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_RECRUITMENT_POST;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_TAG;
-import static com.emmsale.event.exception.EventExceptionType.PARTICIPANT_NOT_BELONG_EVENT;
+import static com.emmsale.event.exception.EventExceptionType.RECRUITMENT_POST_NOT_BELONG_EVENT;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_AFTER_END_DATE;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME;
 import static com.emmsale.member.MemberFixture.memberFixture;
@@ -36,18 +36,18 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
-import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
-import com.emmsale.event.application.dto.ParticipantResponse;
-import com.emmsale.event.application.dto.ParticipateUpdateRequest;
+import com.emmsale.event.application.dto.RecruitmentPostRequest;
+import com.emmsale.event.application.dto.RecruitmentPostResponse;
+import com.emmsale.event.application.dto.RecruitmentPostUpdateRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.event.domain.EventType;
-import com.emmsale.event.domain.Participant;
+import com.emmsale.event.domain.RecruitmentPost;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
-import com.emmsale.event.domain.repository.ParticipantRepository;
+import com.emmsale.event.domain.repository.RecruitmentPostRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
@@ -101,7 +101,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   @Autowired
   private EventTagRepository eventTagRepository;
   @Autowired
-  private ParticipantRepository participantRepository;
+  private RecruitmentPostRepository recruitmentPostRepository;
   @Autowired
   private TagRepository tagRepository;
 
@@ -131,27 +131,27 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
   @Test
   @DisplayName("event의 id로 참가 게시글 목록을 조회할 수 있다.")
-  void findParticipants() {
+  void findRecruitmentPosts() {
     // given
     final Event 인프콘 = eventRepository.save(eventFixture());
     final Member 멤버1 = memberRepository.save(new Member(123L, "image1.com"));
     final Member 멤버2 = memberRepository.save(new Member(124L, "image2.com"));
 
-    final EventParticipateRequest requestMember1 = createEventParticipateRequest(멤버1);
-    final EventParticipateRequest requestMember2 = createEventParticipateRequest(멤버2);
+    final RecruitmentPostRequest requestMember1 = createRecruitmentPostRequest(멤버1);
+    final RecruitmentPostRequest requestMember2 = createRecruitmentPostRequest(멤버2);
 
-    final Long 멤버1_참가글_ID = eventService.participate(인프콘.getId(), requestMember1, 멤버1);
-    final Long 멤버2_참가글_ID = eventService.participate(인프콘.getId(), requestMember2, 멤버2);
+    final Long 멤버1_참가글_ID = eventService.createRecruitmentPost(인프콘.getId(), requestMember1, 멤버1);
+    final Long 멤버2_참가글_ID = eventService.createRecruitmentPost(인프콘.getId(), requestMember2, 멤버2);
 
-    final List<ParticipantResponse> expected = List.of(
-        new ParticipantResponse(멤버1_참가글_ID, 멤버1.getId(), 멤버1.getName(), 멤버1.getImageUrl(),
+    final List<RecruitmentPostResponse> expected = List.of(
+        new RecruitmentPostResponse(멤버1_참가글_ID, 멤버1.getId(), 멤버1.getName(), 멤버1.getImageUrl(),
             멤버1.getDescription(), requestMember1.getContent(), LocalDate.now(), LocalDate.now()),
-        new ParticipantResponse(멤버2_참가글_ID, 멤버2.getId(), 멤버2.getName(), 멤버2.getImageUrl(),
+        new RecruitmentPostResponse(멤버2_참가글_ID, 멤버2.getId(), 멤버2.getName(), 멤버2.getImageUrl(),
             멤버2.getDescription(), requestMember2.getContent(), LocalDate.now(), LocalDate.now())
     );
 
     //when
-    final List<ParticipantResponse> actual = eventService.findParticipants(인프콘.getId());
+    final List<RecruitmentPostResponse> actual = eventService.findRecruitmentPosts(인프콘.getId());
 
     //then
     assertThat(actual)
@@ -194,7 +194,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
   @Nested
   @DisplayName("event 참가자 목록에 멤버를 추가할 수 있다.")
-  class Participate {
+  class CreateRecruitmentPost {
 
     @Test
     @DisplayName("정상적으로 멤버를 추가한다.")
@@ -203,10 +203,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Member member = memberRepository.findById(memberId).get();
       final Event 인프콘 = eventRepository.save(eventFixture());
 
-      final Long participantId = eventService.participate(인프콘.getId(),
-          createEventParticipateRequest(member), member);
+      final Long postId = eventService.createRecruitmentPost(인프콘.getId(),
+          createRecruitmentPostRequest(member), member);
 
-      assertThat(participantId)
+      assertThat(postId)
           .isNotNull();
     }
 
@@ -216,47 +216,47 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Long memberId = 1L;
       final Long otherMemberId = 2L;
       final Member member = memberRepository.findById(memberId).get();
-      final EventParticipateRequest request = new EventParticipateRequest(otherMemberId, "빈 게시글");
+      final RecruitmentPostRequest request = new RecruitmentPostRequest(otherMemberId, "빈 게시글");
       final Event 인프콘 = eventRepository.save(eventFixture());
 
-      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), request, member))
+      assertThatThrownBy(() -> eventService.createRecruitmentPost(인프콘.getId(), request, member))
           .isInstanceOf(EventException.class)
-          .hasMessage(FORBIDDEN_PARTICIPATE_EVENT.errorMessage());
+          .hasMessage(FORBIDDEN_CREATE_RECRUITMENT_POST.errorMessage());
     }
 
     @Test
     @DisplayName("이미 참가한 멤버면 Exception이 발생한다.")
-    void fail_alreadyParticipate() {
+    void fail_alreadyRecruit() {
       final Long memberId = 1L;
       final Member member = memberRepository.findById(memberId).get();
       final Event 인프콘 = eventRepository.save(eventFixture());
-      final EventParticipateRequest request = createEventParticipateRequest(member);
-      eventService.participate(인프콘.getId(), request, member);
+      final RecruitmentPostRequest request = createRecruitmentPostRequest(member);
+      eventService.createRecruitmentPost(인프콘.getId(), request, member);
 
-      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), request, member))
+      assertThatThrownBy(() -> eventService.createRecruitmentPost(인프콘.getId(), request, member))
           .isInstanceOf(EventException.class)
-          .hasMessage(ALREADY_PARTICIPATED.errorMessage());
+          .hasMessage(ALREADY_CREATE_RECRUITMENT_POST.errorMessage());
     }
   }
 
   @Nested
-  @DisplayName("event 참가자 목록에서 멤버를 삭제할 수 있다.")
-  class CancelParticipate {
+  @DisplayName("이벤트 모집 게시글을 삭제할 수 있다.")
+  class DeleteRecruitmentPost {
 
     @Test
-    @DisplayName("정상적으로 멤버를 삭제한다.")
-    void cancelParticipate_success() {
+    @DisplayName("정상적으로 모집글을 삭제한다.")
+    void deleteRecruitmentPost_success() {
       //given
       final Long memberId = 1L;
       final Member member = memberRepository.findById(memberId).get();
       final Event 인프콘 = eventRepository.save(eventFixture());
 
-      final Long participantId = eventService.participate(인프콘.getId(),
-          createEventParticipateRequest(member), member);
+      final Long postId = eventService.createRecruitmentPost(인프콘.getId(),
+          createRecruitmentPostRequest(member), member);
 
       // when
-      eventService.cancelParticipate(인프콘.getId(), memberId, member);
-      final Optional<Participant> actual = participantRepository.findById(participantId);
+      eventService.deleteRecruitmentPost(인프콘.getId(), memberId, member);
+      final Optional<RecruitmentPost> actual = recruitmentPostRepository.findById(postId);
 
       // then
       assertThat(actual).isEmpty();
@@ -264,7 +264,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
     @Test
     @DisplayName("존재하지 않는 행사면 예외가 발생한다.")
-    void cancelParticipate_not_found_event() {
+    void eventNotFound() {
       // given
       final Long memberId = 1L;
       final Member member = memberRepository.findById(memberId).get();
@@ -272,7 +272,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Long invalidEventId = 999L;
 
       // when
-      final ThrowingCallable actual = () -> eventService.cancelParticipate(invalidEventId, memberId,
+      final ThrowingCallable actual = () -> eventService.deleteRecruitmentPost(invalidEventId,
+          memberId,
           member);
 
       // then
@@ -281,8 +282,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     }
 
     @Test
-    @DisplayName("존재하지 않는 참여자면 예외가 발생한다.")
-    void cancelParticipate_not_found_participant() {
+    @DisplayName("존재하지 않는 모집 게시글이면 예외가 발생한다.")
+    void recruitmentPostNotFound() {
       // given
       final Long memberId = 1L;
       final Member member = memberRepository.findById(memberId).get();
@@ -290,12 +291,12 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Long eventId = eventRepository.save(eventFixture()).getId();
 
       // when
-      final ThrowingCallable actual = () -> eventService.cancelParticipate(eventId, memberId,
+      final ThrowingCallable actual = () -> eventService.deleteRecruitmentPost(eventId, memberId,
           member);
 
       // then
       assertThatThrownBy(actual).isInstanceOf(EventException.class)
-          .hasMessage(NOT_FOUND_PARTICIPANT.errorMessage());
+          .hasMessage(NOT_FOUND_RECRUITMENT_POST.errorMessage());
     }
   }
 
@@ -887,18 +888,18 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
   @Nested
   @DisplayName("이벤트에 이미 참가한 멤버인지 확인할 수 있다.")
-  class isAlreadyParticipate {
+  class isAlreadyRecruit {
 
     @Test
     @DisplayName("이벤트에 이미 참가한 경우 true를 반환한다.")
-    void alreadyParticipateThenTrue() {
+    void isExistThenTrue() {
       //given
       final Event 인프콘 = eventRepository.save(인프콘_2023());
       final Member 멤버 = memberRepository.save(memberFixture());
-      eventService.participate(인프콘.getId(), createEventParticipateRequest(멤버), 멤버);
+      eventService.createRecruitmentPost(인프콘.getId(), createRecruitmentPostRequest(멤버), 멤버);
 
       //when
-      final Boolean actual = eventService.isAlreadyParticipate(인프콘.getId(), 멤버.getId());
+      final Boolean actual = eventService.isAlreadyRecruit(인프콘.getId(), 멤버.getId());
 
       //then
       assertThat(actual).isTrue();
@@ -906,13 +907,13 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
     @Test
     @DisplayName("이벤트에 참가히자 않은 경우 false를 반환한다.")
-    void isNotAlreadyParticipateThenFalse() {
+    void isNotExistThenFalse() {
       //given
       final Event 인프콘 = eventRepository.save(인프콘_2023());
       final Member 멤버 = memberRepository.save(memberFixture());
 
       //when
-      final Boolean actual = eventService.isAlreadyParticipate(인프콘.getId(), 멤버.getId());
+      final Boolean actual = eventService.isAlreadyRecruit(인프콘.getId(), 멤버.getId());
 
       //then
       assertThat(actual).isFalse();
@@ -921,36 +922,36 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
   @Nested
   @DisplayName("행사 참가 게시글을 수정할 수 있다.")
-  class UpdateParticipant {
+  class UpdateRecruitmentPost {
 
     private Member member;
     private Event event;
-    private Long participantId;
+    private Long recruitmentPostId;
 
     @BeforeEach
     void setUp() {
       member = memberRepository.save(memberFixture());
       event = eventRepository.save(eventFixture());
-      final EventParticipateRequest request = createEventParticipateRequest(member);
-      participantId = eventService.participate(event.getId(), request, member);
+      final RecruitmentPostRequest request = createRecruitmentPostRequest(member);
+      recruitmentPostId = eventService.createRecruitmentPost(event.getId(), request, member);
     }
 
     @Test
     @DisplayName("정상적으로 성공하는 경우")
     void success() {
       //given
-      final ParticipateUpdateRequest request = new ParticipateUpdateRequest("수정할 내용");
+      final RecruitmentPostUpdateRequest request = new RecruitmentPostUpdateRequest("수정할 내용");
 
       //when
-      eventService.updateParticipant(event.getId(), participantId, request, member);
+      eventService.updateRecruitmentPost(event.getId(), recruitmentPostId, request, member);
 
       //then
-      final Optional<Participant> updatedParticipant
-          = participantRepository.findById(participantId);
+      final Optional<RecruitmentPost> updatedPost
+          = recruitmentPostRepository.findById(recruitmentPostId);
 
       assertAll(
-          () -> assertThat(updatedParticipant).isNotEmpty(),
-          () -> assertThat(updatedParticipant.get().getContent())
+          () -> assertThat(updatedPost).isNotEmpty(),
+          () -> assertThat(updatedPost.get().getContent())
               .isEqualTo(request.getContent())
       );
     }
@@ -959,7 +960,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("member가 행사참가 게시글의 소유자가 아닌 경우")
     void invalidOwner() {
       //given
-      final ParticipateUpdateRequest request = new ParticipateUpdateRequest("변환할 내용");
+      final RecruitmentPostUpdateRequest request = new RecruitmentPostUpdateRequest("변환할 내용");
       final Member otherMember = memberRepository.save(new Member(
           4321L,
           "이미지URL"
@@ -967,22 +968,24 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       //when && then
       assertThatThrownBy(
-          () -> eventService.updateParticipant(event.getId(), participantId, request, otherMember))
+          () -> eventService.updateRecruitmentPost(event.getId(), recruitmentPostId, request,
+              otherMember))
           .isInstanceOf(EventException.class)
-          .hasMessage(FORBIDDEN_UPDATE_PARTICIPATE.errorMessage());
+          .hasMessage(FORBIDDEN_UPDATE_RECRUITMENT_POST.errorMessage());
     }
 
     @Test
     @DisplayName("eventId가 행사 참가 게시글의 event의 Id가 아닌 경우")
     void invalidEventId() {
       //given
-      final ParticipateUpdateRequest request = new ParticipateUpdateRequest("변환할 내용");
+      final RecruitmentPostUpdateRequest request = new RecruitmentPostUpdateRequest("변환할 내용");
 
       //when && then
       assertThatThrownBy(
-          () -> eventService.updateParticipant(event.getId() + 1, participantId, request, member))
+          () -> eventService.updateRecruitmentPost(event.getId() + 1, recruitmentPostId, request,
+              member))
           .isInstanceOf(EventException.class)
-          .hasMessage(PARTICIPANT_NOT_BELONG_EVENT.errorMessage());
+          .hasMessage(RECRUITMENT_POST_NOT_BELONG_EVENT.errorMessage());
     }
   }
 }

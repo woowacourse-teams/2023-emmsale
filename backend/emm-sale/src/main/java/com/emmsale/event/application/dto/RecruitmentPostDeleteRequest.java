@@ -5,11 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class EventCancelParticipateRequest {
+public class RecruitmentPostDeleteRequest {
 
   private final Long memberId;
 
-  private EventCancelParticipateRequest() {
+  private RecruitmentPostDeleteRequest() {
     this(null);
   }
 }

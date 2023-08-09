@@ -115,7 +115,7 @@ class EventTest {
   }
 
   @Nested
-  class addParticipant {
+  class addRecruitmentPost {
 
     @Test
     @DisplayName("Event에 Member를 추가할 수 있다.")
@@ -126,11 +126,11 @@ class EventTest {
       final String 내용 = "저랑 같이 갈 사람 구합니다.";
 
       //when
-      인프콘.addParticipant(멤버, 내용);
+      인프콘.createRecruitmentPost(멤버, 내용);
 
       //then
-      final List<Member> members = 인프콘.getParticipants().stream()
-          .map(Participant::getMember)
+      final List<Member> members = 인프콘.getRecruitmentPosts().stream()
+          .map(RecruitmentPost::getMember)
           .collect(Collectors.toList());
       assertThat(members)
           .usingRecursiveFieldByFieldElementComparator()
@@ -146,12 +146,12 @@ class EventTest {
       final String 내용 = "저랑 같이 갈 사람 구합니다.";
 
       //when
-      인프콘.addParticipant(멤버, 내용);
+      인프콘.createRecruitmentPost(멤버, 내용);
 
       //when && then
-      assertThatThrownBy(() -> 인프콘.addParticipant(멤버, 내용))
+      assertThatThrownBy(() -> 인프콘.createRecruitmentPost(멤버, 내용))
           .isInstanceOf(EventException.class)
-          .hasMessage(EventExceptionType.ALREADY_PARTICIPATED.errorMessage());
+          .hasMessage(EventExceptionType.ALREADY_CREATE_RECRUITMENT_POST.errorMessage());
     }
   }
 

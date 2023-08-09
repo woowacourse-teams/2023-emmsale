@@ -1,6 +1,6 @@
 package com.emmsale.event;
 
-import com.emmsale.event.application.dto.EventParticipateRequest;
+import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventType;
 import com.emmsale.member.domain.Member;
@@ -74,7 +74,7 @@ public class EventFixture {
     return LocalDate.of(2023, 8, 10);
   }
 
-  public static EventParticipateRequest createEventParticipateRequest(final Member member){
-    return new EventParticipateRequest(member.getId(), "같이 가요 요청 글");
+  public static RecruitmentPostRequest createRecruitmentPostRequest(final Member member){
+    return new RecruitmentPostRequest(member.getId(), "같이 가요 요청 글");
   }
 }

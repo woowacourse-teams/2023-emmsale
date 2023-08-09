@@ -4,7 +4,6 @@ import static java.lang.String.format;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,18 +18,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.application.EventService;
-import com.emmsale.event.application.dto.EventCancelParticipateRequest;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
-import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
-import com.emmsale.event.application.dto.ParticipantResponse;
-import com.emmsale.event.application.dto.ParticipateUpdateRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
@@ -95,57 +89,6 @@ class EventApiTest extends MockMvcTestHelper {
   }
 
   @Test
-  @DisplayName("Event에 참여게시글을 추가할 수 있다.")
-  void participateEvent() throws Exception {
-    //given
-    final Long eventId = 1L;
-    final Long memberId = 2L;
-    final Long participantId = 3L;
-    final String content = "함께 해요 게시글의 내용";
-    final EventParticipateRequest request = new EventParticipateRequest(memberId, content);
-    final String fakeAccessToken = "Bearer accessToken";
-
-    final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자"),
-        fieldWithPath("content").type(JsonFieldType.STRING)
-            .description("함께 해요 게시글의 내용(공백 불가, 255자 최대)")
-    );
-
-    when(eventService.participate(any(), any(), any())).thenReturn(participantId);
-
-    //when
-    mockMvc.perform(
-            post("/events/{eventId}/participants", eventId).header("Authorization", fakeAccessToken)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))).andExpect(status().isCreated())
-        .andExpect(header().string("Location",
-            format("/events/%s/participants/%s", eventId, participantId)))
-        .andDo(document("participate-event", requestFields));
-  }
-
-  @Test
-  @DisplayName("Event에 사용자를 참여자 목록에서 제거할 수 있다.")
-  void cancelParticipateEvent() throws Exception {
-    //given
-    final Long eventId = 1L;
-    final Long memberId = 2L;
-    final EventCancelParticipateRequest request = new EventCancelParticipateRequest(memberId);
-    final String fakeAccessToken = "Bearer accessToken";
-
-    final RequestParametersSnippet requestParameters = requestParameters(
-        parameterWithName("member-id").description("멤버 식별자")
-    );
-
-    //when
-    mockMvc.perform(delete(format("/events/%s/participants?member-id=%s", eventId, memberId))
-            .header("Authorization", fakeAccessToken)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isNoContent())
-        .andDo(document("participate-event-cancel", requestParameters));
-  }
-
-  @Test
   @DisplayName("특정 카테고리의 행사 목록을 조회할 수 있으면 200 OK를 반환한다.")
   void findEvents() throws Exception {
     // given
@@ -206,62 +149,6 @@ class EventApiTest extends MockMvcTestHelper {
   }
 
   @Test
-  @DisplayName("행사의 참여 게시글을 전체 조회할 수 있다.")
-  void findParticipants() throws Exception {
-    //given
-    final Long eventId = 1L;
-    final ResponseFieldsSnippet responseFields = responseFields(
-        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("참여자 식별자"),
-        fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
-        fieldWithPath("[].name").type(JsonFieldType.STRING).description("member 이름"),
-        fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
-        fieldWithPath("[].description").type(JsonFieldType.STRING).description("한줄 자기 소개"),
-        fieldWithPath("[].content").type(JsonFieldType.STRING).description("함께해요 게시글 내용"),
-        fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("함께해요 게시글 작성 날짜"),
-        fieldWithPath("[].updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜")
-    );
-    final List<ParticipantResponse> responses = List.of(
-        new ParticipantResponse(1L, 1L, "스캇", "imageUrl", "토마토 던지는 사람", "저랑 같이 컨퍼런스 갈 사람",
-            LocalDate.of(2023, 7, 15), LocalDate.of(2023, 7, 15)),
-        new ParticipantResponse(2L, 2L, "홍실", "imageUrl", "토마토 맞는 사람", "스캇 말고 저랑 갈 사람",
-            LocalDate.of(2023, 7, 22), LocalDate.of(2023, 7, 22))
-    );
-
-    when(eventService.findParticipants(eventId)).thenReturn(responses);
-
-    //when && then
-    mockMvc.perform(get(format("/events/%s/participants", eventId))).andExpect(status().isOk())
-        .andDo(document("find-participants", responseFields));
-  }
-
-  @Test
-  @DisplayName("Event에 참여게시글을 수정할 수 있다.")
-  void updateParticipate() throws Exception {
-    //given
-    final Long eventId = 1L;
-    final Long participantId = 3L;
-    final String content = "함께 해요 게시글의 내용";
-    final ParticipateUpdateRequest request = new ParticipateUpdateRequest(content);
-    final String fakeAccessToken = "Bearer accessToken";
-
-    final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("content").type(JsonFieldType.STRING)
-            .description("함께 해요 게시글의 내용(공백 불가, 255자 최대)")
-    );
-
-    //when
-    mockMvc.perform(
-            put("/events/{eventId}/participants/{participantId}", eventId, participantId)
-                .header("Authorization", fakeAccessToken)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isOk())
-        .andDo(document("update-participate", requestFields));
-
-    verify(eventService).updateParticipant(any(), any(), any(), any());
-  }
-
-  @Test
   @DisplayName("이벤트를 성공적으로 업데이트하면 200, OK를 반환한다.")
   void updateEventTest() throws Exception {
     //given
@@ -318,23 +205,6 @@ class EventApiTest extends MockMvcTestHelper {
 
     //then
     result.andExpect(status().isNoContent()).andDo(print()).andDo(document("delete-event"));
-  }
-
-  @Test
-  @DisplayName("이미 Event에 멤버가 참여헀는지 확인할 수 있다.")
-  void isAlreadyParticipate() throws Exception {
-    //given
-    final Long memberId = 2L;
-    final Long eventId = 3L;
-    given(eventService.isAlreadyParticipate(eventId, memberId)).willReturn(true);
-
-    //when && then
-    mockMvc.perform(
-            get("/events/{eventId}/participants/already-participate?member-id={memberId}"
-                , eventId, memberId)
-        )
-        .andExpect(status().isOk())
-        .andDo(document("check-already-participate"));
   }
 
   @Nested

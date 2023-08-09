@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class EventParticipateRequest {
+public class RecruitmentPostRequest {
 
   private final Long memberId;
   @NotBlank
