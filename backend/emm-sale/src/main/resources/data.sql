@@ -191,12 +191,3 @@ insert into event_member (member_id, event_id, content) value (3, 1, '빈 게시
 insert into event_member (member_id, event_id, content) value (1, 2, '빈 게시글 내용');
 insert into event_member (member_id, event_id, content) value (2, 2, '빈 게시글 내용');
 insert into event_member (member_id, event_id, content) value (3, 2, '빈 게시글 내용');
-
-insert into report (id, reporter_id, reported_id, content, reason_type, type, created_at)
-values (1, 1, 2, '메롱메롱', 'ABUSE', 'COMMENT', CURRENT_TIMESTAMP());
-insert into report (id, reporter_id, reported_id, content, reason_type, type, created_at)
-values (2, 2, 1, '대충 심한 욕설', 'ABUSE', 'PARTICIPANT', CURRENT_TIMESTAMP());
-insert into report (id, reporter_id, reported_id, content, reason_type, type, created_at)
-values (3, 1, 3, '사회적 물의를 일으킬 수 있는 발언', 'ABUSE', 'REQUEST_NOTIFICATION', CURRENT_TIMESTAMP());
-insert into report (id, reporter_id, reported_id, content, reason_type, type, created_at)
-values (4, 4, 1, '도배글', 'ABUSE', 'COMMENT', CURRENT_TIMESTAMP());

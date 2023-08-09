@@ -24,7 +24,7 @@ public class ReportApi {
   @PostMapping("/reports")
   @ResponseStatus(HttpStatus.CREATED)
   public ReportResponse create(@RequestBody final ReportRequest reportRequest, Member member) {
-    return reportCommandService.create(reportRequest);
+    return reportCommandService.create(reportRequest, member);
   }
 
   @GetMapping("/reports")

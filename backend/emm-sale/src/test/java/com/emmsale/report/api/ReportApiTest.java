@@ -40,6 +40,7 @@ class ReportApiTest extends MockMvcTestHelper {
   @DisplayName("특정 게시글을 신고할 수 있다.")
   void addReport() throws Exception {
     // given
+    final String accessToken = "Bearer access_token";
     final RequestFieldsSnippet requestFields = requestFields(
         fieldWithPath("reporterId").type(JsonFieldType.NUMBER).description("신고자의 Id"),
         fieldWithPath("reportedId").type(JsonFieldType.NUMBER).description("신고 대상자의 Id(당하는 사람)"),
@@ -70,10 +71,12 @@ class ReportApiTest extends MockMvcTestHelper {
         reportRequest.getContent(), reportRequest.getReasonType(), reportRequest.getType(),
         LocalDateTime.parse("2023-08-09T13:25:00"));
 
-    when(reportCommandService.create(any())).thenReturn(reportResponse);
+    when(reportCommandService.create(any(), any())).thenReturn(reportResponse);
 
     // when & then
-    mockMvc.perform(post("/reports").contentType(MediaType.APPLICATION_JSON_VALUE)
+    mockMvc.perform(post("/reports")
+            .header("Authorization", accessToken)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(objectMapper.writeValueAsString(reportRequest)))
         .andExpect(status().isCreated())
         .andDo(document("add-report", requestFields, responseFields));
