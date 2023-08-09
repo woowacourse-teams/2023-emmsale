@@ -1,6 +1,6 @@
 package com.emmsale.comment.domain;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -69,7 +69,8 @@ class CommentRepositoryTest {
         Comment.createChild(event1, parent, member, "자식댓글2"));
 
     //when
-    List<Comment> childrenComments = commentRepository.findParentAndChildrenByParentId(parent.getId());
+    final List<Comment> childrenComments = commentRepository.findParentAndChildrenByParentId(
+        parent.getId());
 
     //then
     final List<Long> resultIds = childrenComments.stream()

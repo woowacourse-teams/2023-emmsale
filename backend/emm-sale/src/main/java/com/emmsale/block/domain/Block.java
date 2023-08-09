@@ -18,7 +18,6 @@ public class Block extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
   @Column(nullable = false)
   private Long requestMemberId;
   @Column(nullable = false)

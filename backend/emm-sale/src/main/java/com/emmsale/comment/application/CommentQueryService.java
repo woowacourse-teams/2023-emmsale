@@ -30,7 +30,8 @@ public class CommentQueryService {
     return CommentHierarchyResponse.convertAllFrom(comments, blockedMemberIds);
   }
 
-  public CommentHierarchyResponse findParentWithChildren(final Long commentId, final Member member) {
+  public CommentHierarchyResponse findParentWithChildren(final Long commentId,
+      final Member member) {
 
     final List<Long> blockedMemberIds = getBlockedMemberIds(member);
 
