@@ -1,7 +1,6 @@
 package com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState
 
 import com.emmsale.data.comment.Comment
-import com.emmsale.data.member.Member
 
 data class ChildCommentsUiState(
     val isNotLogin: Boolean,
@@ -32,14 +31,14 @@ data class ChildCommentsUiState(
             childComments = listOf(),
         )
 
-        fun create(comment: Comment, loginMember: Member) = ChildCommentsUiState(
+        fun create(comment: Comment, loginMemberId: Long) = ChildCommentsUiState(
             isNotLogin = false,
             isLoading = false,
             isCommentsFetchingError = false,
             isCommentPostingError = false,
             isCommentDeletionError = false,
-            parentComment = CommentUiState.create(comment, loginMember),
-            childComments = comment.childComments.map { CommentUiState.create(it, loginMember) },
+            parentComment = CommentUiState.create(comment, loginMemberId),
+            childComments = comment.childComments.map { CommentUiState.create(it, loginMemberId) },
         )
     }
 }
