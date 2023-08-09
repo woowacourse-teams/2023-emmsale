@@ -92,7 +92,7 @@ public class Comment extends BaseEntity {
     return Optional.ofNullable(parent);
   }
 
-  public String getContentAndHideIfBlockedMember(final List<Long> blockedMemberIds) {
+  public String getContentOrHideIfBlockedMember(final List<Long> blockedMemberIds) {
     if (blockedMemberIds.contains(member.getId())) {
       return BLOCKED_MEMBER_CONTENT;
     }

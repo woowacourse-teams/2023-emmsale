@@ -43,7 +43,7 @@ class CommentTest {
     final List<Long> emptyBlockedMemberIds = Collections.emptyList();
 
     //when
-    final String actual = comment.getContentAndHideIfBlockedMember(emptyBlockedMemberIds);
+    final String actual = comment.getContentOrHideIfBlockedMember(emptyBlockedMemberIds);
 
     //then
     assertEquals(expectContent, actual);
@@ -59,7 +59,7 @@ class CommentTest {
     final List<Long> emptyBlockedMemberIds = List.of(blockedMember.getId());
 
     //when
-    final String actual = comment.getContentAndHideIfBlockedMember(emptyBlockedMemberIds);
+    final String actual = comment.getContentOrHideIfBlockedMember(emptyBlockedMemberIds);
 
     //then
     assertEquals(BLOCKED_MEMBER_CONTENT, actual);

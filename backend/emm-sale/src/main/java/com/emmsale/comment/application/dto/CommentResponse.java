@@ -42,7 +42,7 @@ public class CommentResponse {
   public static CommentResponse from(final Comment comment, final List<Long> blockedMemberIds) {
     final Member member = comment.getMember();
     return new CommentResponse(
-        comment.getContentAndHideIfBlockedMember(blockedMemberIds), comment.getId(),
+        comment.getContentOrHideIfBlockedMember(blockedMemberIds), comment.getId(),
         getParentId(comment), comment.getEvent().getId(),
         comment.isDeleted(), comment.getCreatedAt(),
         comment.getUpdatedAt(), member.getId(),
