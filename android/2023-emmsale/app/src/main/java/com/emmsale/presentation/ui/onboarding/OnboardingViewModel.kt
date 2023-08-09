@@ -59,10 +59,7 @@ class OnboardingViewModel(
             _activities.value = _activities.value.copy(isLoading = true)
 
             when (
-                memberRepository.updateMember(
-                    name.value!!,
-                    _activities.value.selectedActivityIds,
-                )
+                memberRepository.updateMember(name.value!!, _activities.value.selectedActivityIds)
             ) {
                 is ApiSuccess -> updateMemberSavingUiState(MemberSavingUiState.Success)
                 is ApiError -> updateMemberSavingUiState(MemberSavingUiState.Failed)
