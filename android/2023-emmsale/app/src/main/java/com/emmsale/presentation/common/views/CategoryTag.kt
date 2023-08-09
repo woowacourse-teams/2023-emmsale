@@ -13,7 +13,7 @@ class CategoryTag(
 ) : androidx.appcompat.widget.AppCompatTextView(context, attrs) {
 
     init {
-        setTextSize(Dimension.SP, 13f)
+        setTextSize(Dimension.SP, 13F)
         gravity = Gravity.CENTER
         background = ContextCompat.getDrawable(context, R.drawable.bg_myprofile_categorytag)
         setTextColor(ContextCompat.getColor(context, R.color.black))

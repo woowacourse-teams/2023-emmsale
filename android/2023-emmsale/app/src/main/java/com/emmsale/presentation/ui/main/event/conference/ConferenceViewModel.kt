@@ -62,8 +62,8 @@ class ConferenceViewModel(
     fun updateConferenceFilter(conferenceFilter: ConferenceFiltersUiState.Success) {
         _selectedFilters.postValue(conferenceFilter)
         fetchConference(
-            startDate = conferenceFilter.selectedStartDate?.transformToDateString(),
-            endDate = conferenceFilter.selectedEndDate?.transformToDateString(),
+            startDate = conferenceFilter.selectedStartDate?.toDateString(),
+            endDate = conferenceFilter.selectedEndDate?.toDateString(),
             statuses = conferenceFilter.statuses
                 .filter { it.isSelected }
                 .map { it.toStatus() },
@@ -73,7 +73,12 @@ class ConferenceViewModel(
         )
     }
 
-    private fun ConferenceFilterDateUiState.transformToDateString(): String = "$year-$month-$day"
+    private fun ConferenceFilterDateUiState.toDateString(): String {
+        val year = year.toString().padStart(2, '0')
+        val month = month.toString().padStart(2, '0')
+        val day = day.toString().padStart(2, '0')
+        return "$year-$month-$day"
+    }
 
     private fun ConferenceFilterUiState.toStatus(): ConferenceStatus = when (id) {
         0L -> ConferenceStatus.IN_PROGRESS

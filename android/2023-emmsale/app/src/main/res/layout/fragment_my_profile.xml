@@ -74,7 +74,7 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="9dp"
                         android:layout_marginEnd="19dp"
-                        android:text="@{viewModel.uiState.description}"
+                        android:text="@{viewModel.uiState.description.isBlank() ? @string/myprofile_no_description : viewModel.uiState.description }"
                         android:textSize="13sp"
                         app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_memberimage"
                         app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
@@ -110,21 +110,21 @@
                         android:id="@+id/view_myprofile_divider"
                         android:layout_width="0dp"
                         android:layout_height="0.5dp"
-                        android:background="@color/edittext_underline"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/light_gray"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginTop="10dp"
                         app:layout_constraintTop_toBottomOf="@+id/cg_myprofile_categories" />
 
                     <View
                         android:id="@+id/view_myprofile_educationicontoclubicon"
                         android:layout_width="1.4dp"
                         android:layout_height="0dp"
-                        android:background="@color/edittext_underline"
+                        android:background="@color/light_gray"
+                        app:layout_constraintBottom_toTopOf="@+id/iv_myprofile_clubicon"
                         app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_educationicon"
                         app:layout_constraintStart_toStartOf="@+id/iv_myprofile_educationicon"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_educationicon"
-                        app:layout_constraintBottom_toTopOf="@+id/iv_myprofile_clubicon" />
+                        app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_educationicon" />
 
                     <ImageView
                         android:id="@+id/iv_myprofile_educationicon"
@@ -194,14 +194,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="15dp"
+                        android:layout_marginBottom="39dp"
                         android:overScrollMode="never"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iv_myprofile_clubicon"
                         app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_clubicon"
                         tools:itemCount="2"
-                        tools:listitem="@layout/item_myprofile_activities"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginBottom="39dp" />
+                        tools:listitem="@layout/item_myprofile_activities" />
 
                     <ImageView
                         android:id="@+id/iv_myprofile_educationlabeldecorator"
@@ -229,10 +229,10 @@
                         android:id="@+id/cg_myprofile_categories"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="29dp"
                         app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_memberimage"
                         app:layout_constraintStart_toStartOf="@+id/tv_myprofile_hello"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_onelineintroduce"
-                        android:layout_marginTop="29dp">
+                        app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_onelineintroduce">
 
                     </com.google.android.material.chip.ChipGroup>
 

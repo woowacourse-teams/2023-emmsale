@@ -11,12 +11,4 @@ fun NotificationApiModel.toData(): Notification = Notification(
     eventId = eventId,
 )
 
-fun Notification.toApiModel(): NotificationApiModel = NotificationApiModel(
-    id = id,
-    otherUid = otherUid,
-    myUid = myUid,
-    message = message,
-    eventId = eventId,
-)
-
 fun List<NotificationApiModel>.toData(): List<Notification> = map { it.toData() }

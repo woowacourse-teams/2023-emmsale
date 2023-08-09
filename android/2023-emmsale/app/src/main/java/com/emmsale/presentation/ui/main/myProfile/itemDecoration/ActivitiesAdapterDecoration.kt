@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.main.myProfile.itemDecoration
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.presentation.utils.extension.dp
+import com.emmsale.presentation.common.extension.dp
 
 class ActivitiesAdapterDecoration : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(

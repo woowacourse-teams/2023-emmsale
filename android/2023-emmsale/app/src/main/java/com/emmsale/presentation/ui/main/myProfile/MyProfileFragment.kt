@@ -60,7 +60,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     private fun handleCategories(myProfileScreenUiState: MyProfileScreenUiState) {
         binding.cgMyprofileCategories.removeAllViews()
 
-        myProfileScreenUiState.categories.forEach {
+        myProfileScreenUiState.fields.forEach {
             val tagView = CategoryTag(requireContext()).apply { text = it.name }
             binding.cgMyprofileCategories.addView(tagView)
         }

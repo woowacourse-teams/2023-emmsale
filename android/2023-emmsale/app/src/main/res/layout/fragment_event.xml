@@ -63,7 +63,7 @@
             app:tabIndicatorColor="@color/color_event_tab_indicator"
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="2dp"
-            app:tabSelectedTextColor="@color/event_selected_search_indicator_color"
+            app:tabSelectedTextColor="@color/primary_color"
             app:tabTextAppearance="@style/EventTabLayoutFontStyle"
             app:tabTextColor="@color/black" />
 

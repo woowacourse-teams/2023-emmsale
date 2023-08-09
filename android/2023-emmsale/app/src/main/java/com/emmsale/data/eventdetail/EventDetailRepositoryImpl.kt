@@ -9,9 +9,8 @@ class EventDetailRepositoryImpl(
 ) : EventDetailRepository {
 
     override suspend fun fetchEventDetail(eventId: Long): ApiResult<EventDetail> {
-        val response = eventDetailService.fetchEventDetail(eventId)
         return handleApi(
-            response = response,
+            execute = { eventDetailService.fetchEventDetail(eventId) },
             mapToDomain = EventDetailApiModel::toData,
         )
     }

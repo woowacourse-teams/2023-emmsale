@@ -13,6 +13,9 @@ class NotificationRepositoryImpl(
 ) : NotificationRepository {
     override suspend fun getNotifications(): ApiResult<List<Notification>> =
         withContext(dispatcher) {
-            handleApi(notificationService.getNotifications(), List<NotificationApiModel>::toData)
+            handleApi(
+                execute = { notificationService.getNotifications() },
+                mapToDomain = List<NotificationApiModel>::toData,
+            )
         }
 }

@@ -19,7 +19,7 @@
             android:layout_marginTop="20dp"
             android:background="?attr/selectableItemBackground"
             android:paddingVertical="23dp"
-            android:text="@string/commentsmenudialog_deletebuttonlabel"
+            android:text="@string/commentsmenudialog_delete_button_label"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
             android:layout_marginBottom="6dp"
             android:background="?attr/selectableItemBackground"
             android:paddingVertical="23dp"
-            android:text="@string/commentsmenudialog_reportbuttonlabel"
+            android:text="@string/commentsmenudialog_report_button_label"
             android:textColor="#FF0000"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +44,7 @@
             android:id="@+id/view_commentsmenu_divider2"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/edittext_underline"
+            android:background="@color/light_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_commentsmenu_deletebutton" />
@@ -54,10 +54,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:importantForAccessibility="no"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/img_commentsmenu_topdecoration"
-            android:importantForAccessibility="no" />
+            app:srcCompat="@drawable/img_commentsmenu_topdecoration" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

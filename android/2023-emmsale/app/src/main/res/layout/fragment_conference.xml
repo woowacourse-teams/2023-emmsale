@@ -35,8 +35,8 @@
             android:layout_height="0dp"
             android:layout_marginStart="6dp"
             android:gravity="center"
-            android:text="0"
-            android:textColor="@color/event_total_event_count_text_color"
+            android:text="@string/conference_default_people_count"
+            android:textColor="@color/primary_color"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/tv_events_prefix"
@@ -73,6 +73,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/event_filter"
                 android:layout_marginEnd="2dp"
                 android:src="@drawable/ic_event_filter" />
 

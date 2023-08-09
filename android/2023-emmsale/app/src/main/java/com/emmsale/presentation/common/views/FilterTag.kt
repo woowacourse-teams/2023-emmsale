@@ -4,11 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.ViewGroup
+import androidx.annotation.Dimension
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.emmsale.R
-import com.emmsale.presentation.utils.extension.dp
+import com.emmsale.presentation.common.extension.dp
 
 class FilterTag : AppCompatTextView {
     constructor(context: Context) : super(context)
@@ -19,7 +20,7 @@ class FilterTag : AppCompatTextView {
     }
 
     private fun initView() {
-        textSize = 13F
+        setTextSize(Dimension.SP, 13F)
         gravity = Gravity.CENTER
         minimumHeight = 0
         background = ContextCompat.getDrawable(context, R.drawable.bg_filter_tag)

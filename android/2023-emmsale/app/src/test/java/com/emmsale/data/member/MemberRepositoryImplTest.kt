@@ -1,9 +1,7 @@
 package com.emmsale.data.member
 
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.member.dto.ActivitiesAssociatedByActivityTypeApiModel
-import com.emmsale.data.member.dto.ActivityApiModel
-import com.emmsale.data.member.dto.MemberWithoutActivitiesApiModel
+import com.emmsale.data.member.dto.MemberApiModel
 import com.emmsale.data.member.mapper.toData
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -20,7 +18,7 @@ internal class MemberRepositoryImplTest {
     private lateinit var memberService: MemberService
     private lateinit var sut: MemberRepositoryImpl
 
-    private val memberApiModelFixture = MemberWithoutActivitiesApiModel(
+    private val memberApiModelFixture = MemberApiModel(
         id = 1L,
         name = "토마스",
         description = "",
@@ -39,37 +37,6 @@ internal class MemberRepositoryImplTest {
         val memberId = 1L
         val memberApiModel = memberApiModelFixture.copy(memberId)
         coEvery { memberService.getMember(memberId) } returns Response.success(memberApiModel)
-        val activitiesApiModel = listOf(
-            ActivitiesAssociatedByActivityTypeApiModel(
-                "동아리",
-                listOf(
-                    ActivityApiModel(
-                        id = 1L,
-                        name = "DDD 5기",
-                    ),
-                    ActivityApiModel(
-                        id = 2L,
-                        name = "SOPT 13기",
-                    ),
-                ),
-            ),
-            ActivitiesAssociatedByActivityTypeApiModel(
-                "직무",
-                listOf(
-                    ActivityApiModel(
-                        id = 3L,
-                        name = "Backend",
-                    ),
-                    ActivityApiModel(
-                        id = 4L,
-                        name = "Frontend",
-                    ),
-                ),
-            ),
-        )
-        coEvery { memberService.getActivities(memberId) } returns Response.success(
-            activitiesApiModel,
-        )
 
         val result = sut.getMember(memberId)
 
@@ -77,7 +44,7 @@ internal class MemberRepositoryImplTest {
             { assertThat(result).isInstanceOf(ApiSuccess::class.java) },
             {
                 assertThat((result as ApiSuccess).data).isEqualTo(
-                    memberApiModel.toData(activitiesApiModel),
+                    memberApiModel.toData(),
                 )
             },
         )
