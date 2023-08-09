@@ -3,6 +3,10 @@ package com.emmsale.presentation.ui.onboarding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.emmsale.presentation.ui.onboarding.club.OnboardingClubFragment
+import com.emmsale.presentation.ui.onboarding.education.OnboardingEducationFragment
+import com.emmsale.presentation.ui.onboarding.field.OnboardingFieldFragment
+import com.emmsale.presentation.ui.onboarding.name.OnboardingNameFragment
 
 class OnboardingFragmentStateAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {

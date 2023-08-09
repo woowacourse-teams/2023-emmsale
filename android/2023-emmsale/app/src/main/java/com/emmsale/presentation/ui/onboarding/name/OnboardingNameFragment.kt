@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.onboarding
+package com.emmsale.presentation.ui.onboarding.name
 
 import android.os.Bundle
 import android.view.View
@@ -6,6 +6,8 @@ import androidx.fragment.app.activityViewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentOnboardingNameBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
+import com.emmsale.presentation.ui.onboarding.OnboardingActivity
+import com.emmsale.presentation.ui.onboarding.OnboardingViewModel
 
 class OnboardingNameFragment : BaseFragment<FragmentOnboardingNameBinding>(), View.OnClickListener {
     val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }

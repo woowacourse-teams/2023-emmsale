@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="20dp"
-        tools:context=".presentation.ui.onboarding.OnboardingNameFragment">
+        tools:context=".presentation.ui.onboarding.name.OnboardingNameFragment">
 
         <TextView
             android:id="@+id/tv_onboarding_page"

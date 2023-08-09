@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.onboarding
+package com.emmsale.presentation.ui.onboarding.club
 
 import android.os.Bundle
 import android.view.View
@@ -7,6 +7,8 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentOnboardingClubBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.views.activityChipOf
+import com.emmsale.presentation.ui.onboarding.OnboardingActivity
+import com.emmsale.presentation.ui.onboarding.OnboardingViewModel
 import com.emmsale.presentation.ui.onboarding.uistate.ActivityUiState
 
 class OnboardingClubFragment : BaseFragment<FragmentOnboardingClubBinding>(), View.OnClickListener {
