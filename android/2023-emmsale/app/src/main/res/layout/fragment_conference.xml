@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.main.event.conference.ConferenceViewModel" />
@@ -73,8 +75,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/event_filter"
                 android:layout_marginEnd="2dp"
+                android:contentDescription="@string/event_filter"
                 android:src="@drawable/ic_event_filter" />
 
             <TextView
@@ -129,12 +131,13 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:indeterminate="true"
-            android:visibility="gone"
+            android:visibility="@{viewModel.events.loading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="0.15"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

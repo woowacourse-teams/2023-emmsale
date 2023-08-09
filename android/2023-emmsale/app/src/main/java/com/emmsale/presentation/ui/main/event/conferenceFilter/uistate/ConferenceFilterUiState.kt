@@ -7,5 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class ConferenceFilterUiState(
     val id: Long,
     val name: String,
-    var isSelected: Boolean = false,
-) : Parcelable
+    val isSelected: Boolean = false,
+) : Parcelable {
+    fun toggleSelection(): ConferenceFilterUiState = copy(isSelected = !isSelected)
+}

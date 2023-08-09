@@ -12,6 +12,8 @@ import com.emmsale.data.conference.ConferenceStatus
 import com.emmsale.data.conference.EventCategory
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.common.livedata.NotNullLiveData
+import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.EventsUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
@@ -22,11 +24,11 @@ import kotlinx.coroutines.launch
 class ConferenceViewModel(
     private val conferenceRepository: ConferenceRepository,
 ) : ViewModel() {
-    private val _events = MutableLiveData<EventsUiState>()
-    val events: LiveData<EventsUiState> = _events
+    private val _events = NotNullMutableLiveData(EventsUiState())
+    val events: NotNullLiveData<EventsUiState> = _events
 
-    private val _selectedFilters = MutableLiveData<ConferenceFiltersUiState.Success>()
-    val selectedFilters: LiveData<ConferenceFiltersUiState.Success> = _selectedFilters
+    private val _selectedFilters = MutableLiveData<ConferenceFiltersUiState>()
+    val selectedFilters: LiveData<ConferenceFiltersUiState> = _selectedFilters
 
     init {
         fetchConference()
@@ -39,7 +41,7 @@ class ConferenceViewModel(
         tags: List<String> = emptyList(),
     ) {
         viewModelScope.launch {
-            _events.value = EventsUiState.Loading
+            _events.value = _events.value.copy(isLoading = true)
             when (
                 val eventsResult = conferenceRepository.getConferences(
                     category = EventCategory.CONFERENCE,
@@ -50,24 +52,27 @@ class ConferenceViewModel(
                 )
             ) {
                 is ApiSuccess ->
-                    _events.value =
-                        EventsUiState.Success(eventsResult.data.map(ConferencesUiState::from))
+                    _events.value = _events.value.copy(
+                        events = eventsResult.data.map(ConferencesUiState::from),
+                        isLoading = false,
+                    )
 
-                is ApiError -> _events.value = EventsUiState.Error
-                is ApiException -> _events.value = EventsUiState.Error
+                is ApiError,
+                is ApiException,
+                -> _events.value = _events.value.copy(isError = true, isLoading = false)
             }
         }
     }
 
-    fun updateConferenceFilter(conferenceFilter: ConferenceFiltersUiState.Success) {
+    fun updateConferenceFilter(conferenceFilter: ConferenceFiltersUiState) {
         _selectedFilters.postValue(conferenceFilter)
         fetchConference(
             startDate = conferenceFilter.selectedStartDate?.toDateString(),
             endDate = conferenceFilter.selectedEndDate?.toDateString(),
-            statuses = conferenceFilter.statuses
+            statuses = conferenceFilter.conferenceStatusFilters
                 .filter { it.isSelected }
                 .map { it.toStatus() },
-            tags = conferenceFilter.tags
+            tags = conferenceFilter.conferenceTagFilters
                 .filter { it.isSelected }
                 .map { it.name },
         )
@@ -81,9 +86,9 @@ class ConferenceViewModel(
     }
 
     private fun ConferenceFilterUiState.toStatus(): ConferenceStatus = when (id) {
-        0L -> ConferenceStatus.IN_PROGRESS
-        1L -> ConferenceStatus.SCHEDULED
-        2L -> ConferenceStatus.ENDED
+        1000L -> ConferenceStatus.IN_PROGRESS
+        1001L -> ConferenceStatus.SCHEDULED
+        1002L -> ConferenceStatus.ENDED
         else -> throw IllegalArgumentException("Unknown status id: $id")
     }
 

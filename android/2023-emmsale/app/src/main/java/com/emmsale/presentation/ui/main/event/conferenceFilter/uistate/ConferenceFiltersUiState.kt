@@ -3,23 +3,36 @@ package com.emmsale.presentation.ui.main.event.conferenceFilter.uistate
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-sealed class ConferenceFiltersUiState {
-    @Parcelize
-    data class Success(
-        val statuses: List<ConferenceFilterUiState> = emptyList(),
-        val tags: List<ConferenceFilterUiState> = emptyList(),
-        var selectedStartDate: ConferenceFilterDateUiState? = null,
-        var selectedEndDate: ConferenceFilterDateUiState? = null,
-    ) : ConferenceFiltersUiState(), Parcelable {
+@Parcelize
+data class ConferenceFiltersUiState(
+    val conferenceStatusFilters: List<ConferenceFilterUiState> = emptyList(),
+    val conferenceTagFilters: List<ConferenceFilterUiState> = emptyList(),
+    val selectedStartDate: ConferenceFilterDateUiState? = null,
+    val selectedEndDate: ConferenceFilterDateUiState? = null,
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
+) : Parcelable {
+    fun toggleFilterSelection(filterId: Long): ConferenceFiltersUiState = copy(
+        conferenceStatusFilters = conferenceStatusFilters.map { filter ->
+            when (filter.id) {
+                filterId -> filter.toggleSelection()
+                else -> filter
+            }
+        },
+        conferenceTagFilters = conferenceTagFilters.map { filter ->
+            when (filter.id) {
+                filterId -> filter.toggleSelection()
+                else -> filter
+            }
+        },
+    )
 
-        fun resetSelection(): Success = copy(
-            statuses = statuses.map { status -> status.copy(isSelected = false) },
-            tags = tags.map { tag -> tag.copy(isSelected = false) },
-            selectedStartDate = null,
-            selectedEndDate = null,
-        )
-    }
-
-    object Loading : ConferenceFiltersUiState()
-    object Error : ConferenceFiltersUiState()
+    fun resetSelection(): ConferenceFiltersUiState = copy(
+        conferenceStatusFilters = conferenceStatusFilters.map { status ->
+            status.copy(isSelected = false)
+        },
+        conferenceTagFilters = conferenceTagFilters.map { tag -> tag.copy(isSelected = false) },
+        selectedStartDate = null,
+        selectedEndDate = null,
+    )
 }

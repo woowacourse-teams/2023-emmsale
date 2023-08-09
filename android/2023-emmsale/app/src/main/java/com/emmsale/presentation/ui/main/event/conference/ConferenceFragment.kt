@@ -16,7 +16,6 @@ import com.emmsale.presentation.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewAdapter
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewDivider
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
-import com.emmsale.presentation.ui.main.event.conference.uistate.EventsUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
@@ -31,7 +30,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private val filterActivityLauncher =
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
-            val filters: ConferenceFiltersUiState.Success = result.data?.getParcelableExtraCompat(
+            val filters: ConferenceFiltersUiState = result.data?.getParcelableExtraCompat(
                 ConferenceFilterActivity.FILTERS_KEY,
             ) ?: return@registerForActivityResult
 
@@ -62,18 +61,12 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
 
     private fun setupEventsObserver() {
         viewModel.events.observe(viewLifecycleOwner) { eventsResult ->
-            when (eventsResult) {
-                is EventsUiState.Success -> {
-                    binding.progressbarLoading.visibility = View.GONE
+            when {
+                eventsResult.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
+                !eventsResult.isError -> {
                     eventAdapter.submitList(eventsResult.events)
                     binding.tvEventsCount.text =
                         getString(R.string.event_count_format, eventsResult.eventSize)
-                }
-
-                is EventsUiState.Loading -> binding.progressbarLoading.visibility = View.VISIBLE
-                is EventsUiState.Error -> {
-                    binding.progressbarLoading.visibility = View.GONE
-                    requireContext().showToast(getString(R.string.all_data_loading_failed_message))
                 }
             }
         }
@@ -82,7 +75,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private fun setupFiltersObserver() {
         viewModel.selectedFilters.observe(viewLifecycleOwner) { filters ->
             clearFilterViews()
-            addFilterViews(filters.tags + filters.statuses)
+            addFilterViews(filters.conferenceTagFilters + filters.conferenceStatusFilters)
             addDurationFilter(filters.selectedStartDate, filters.selectedEndDate)
         }
     }

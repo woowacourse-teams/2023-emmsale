@@ -3,13 +3,12 @@ package com.emmsale.presentation.ui.main.event.conference.uistate
 import com.emmsale.data.conference.Conference
 import com.emmsale.data.conference.ConferenceStatus
 
-sealed class EventsUiState {
-    data class Success(val events: List<ConferencesUiState>) : EventsUiState() {
-        val eventSize: Int = events.size
-    }
-
-    object Loading : EventsUiState()
-    object Error : EventsUiState()
+data class EventsUiState(
+    val events: List<ConferencesUiState> = emptyList(),
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
+) {
+    val eventSize: Int = events.size
 }
 
 data class ConferencesUiState(
@@ -20,15 +19,13 @@ data class ConferencesUiState(
     val posterUrl: String?,
 ) {
     companion object {
-        fun from(conference: Conference): ConferencesUiState {
-            return ConferencesUiState(
-                id = conference.id,
-                name = conference.name,
-                tags = conference.tags,
-                status = getStatus(conference),
-                posterUrl = conference.posterUrl,
-            )
-        }
+        fun from(conference: Conference): ConferencesUiState = ConferencesUiState(
+            id = conference.id,
+            name = conference.name,
+            tags = conference.tags,
+            status = getStatus(conference),
+            posterUrl = conference.posterUrl,
+        )
 
         private fun getStatus(conference: Conference): String = when (conference.status) {
             ConferenceStatus.IN_PROGRESS -> "진행중"

@@ -3,7 +3,6 @@ package com.emmsale.presentation.ui.main.event.conferenceFilter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -108,30 +107,20 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun setupEventFilters() {
         viewModel.eventFilters.observe(this) { eventFilters ->
-            when (eventFilters) {
-                is ConferenceFiltersUiState.Success -> {
-                    updateFilterViews(eventFilters)
-                    binding.progressbarLoading.visibility = View.GONE
-                }
-
-                is ConferenceFiltersUiState.Error -> {
-                    showToast(getString(R.string.all_data_loading_failed_message))
-                    binding.progressbarLoading.visibility = View.GONE
-                }
-
-                is ConferenceFiltersUiState.Loading ->
-                    binding.progressbarLoading.visibility = View.VISIBLE
+            when {
+                eventFilters.isError -> showToast(getString(R.string.all_data_loading_failed_message))
+                !eventFilters.isLoading && !eventFilters.isError -> updateFilterViews(eventFilters)
             }
         }
     }
 
-    private fun updateFilterViews(eventFilters: ConferenceFiltersUiState.Success) {
-        updateConferenceStatus(eventFilters.statuses)
-        updateConferenceTags(eventFilters.tags)
+    private fun updateFilterViews(eventFilters: ConferenceFiltersUiState) {
+        updateConferenceStatuses(eventFilters.conferenceStatusFilters)
+        updateConferenceTags(eventFilters.conferenceTagFilters)
         updateConferenceDurations(eventFilters.selectedStartDate, eventFilters.selectedEndDate)
     }
 
-    private fun updateConferenceStatus(eventStatuses: List<ConferenceFilterUiState>) {
+    private fun updateConferenceStatuses(eventStatuses: List<ConferenceFilterUiState>) {
         removeFilterStatuses()
         eventStatuses.forEach { filter ->
             addTagFilter(eventStatusBinding.cgConferenceStatusChips, filter) {
@@ -141,7 +130,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun updateConferenceTags(eventTags: List<ConferenceFilterUiState>) {
-        removeFilterTagsExcludingAllTag()
+        removeTagFiltersExcludingAllTag()
         eventTags.forEach { filter ->
             addTagFilter(eventTagBinding.cgConferenceTagChips, filter) {
                 viewModel.toggleFilterSelection(filter)
@@ -158,9 +147,10 @@ class ConferenceFilterActivity : AppCompatActivity() {
         eventStatusBinding.cgConferenceStatusChips.removeAllViews()
     }
 
-    private fun removeFilterTagsExcludingAllTag() {
+    private fun removeTagFiltersExcludingAllTag() {
+        val startTagWithoutAllTagPosition = 1
         eventTagBinding.cgConferenceTagChips.removeViews(
-            1,
+            startTagWithoutAllTagPosition,
             eventTagBinding.cgConferenceTagChips.childCount - 1,
         )
     }
@@ -215,19 +205,16 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
         fun createIntent(
             context: Context,
-            selectedFilters: ConferenceFiltersUiState.Success?,
+            selectedFilters: ConferenceFiltersUiState?,
         ): Intent = Intent(context, ConferenceFilterActivity::class.java)
             .putExtra(FILTERS_KEY, selectedFilters)
     }
 
     inner class ConferenceFilterOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val filters = viewModel.eventFilters.value
-            if (filters is ConferenceFiltersUiState.Success) {
-                val intent = Intent()
-                intent.putExtra(FILTERS_KEY, filters)
-                setResult(RESULT_OK, intent)
-            }
+            val intent = Intent()
+            intent.putExtra(FILTERS_KEY, viewModel.eventFilters.value)
+            setResult(RESULT_OK, intent)
             finish()
         }
     }
