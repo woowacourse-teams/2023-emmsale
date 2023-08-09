@@ -8,8 +8,8 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentCommentsBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.eventdetail.comment.adpater.CommentsAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
+import com.emmsale.presentation.ui.eventdetail.comment.recyclerview.CommentsAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 

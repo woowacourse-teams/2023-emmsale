@@ -14,7 +14,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.databinding.DialogCommentDeleteBinding
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.eventdetail.comment.childComment.adapter.ChildCommentAdapter
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerview.ChildCommentAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsScreenUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 

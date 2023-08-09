@@ -9,9 +9,9 @@ import com.emmsale.databinding.FragmentEventParticipantBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.eventdetail.participant.uistate.ParticipantsUiState
 import com.emmsale.presentation.eventdetail.participant.uistate.ParticipationStatusUiState
-import com.emmsale.presentation.ui.eventdetail.participant.EventParticipantAdapter
 import com.emmsale.presentation.ui.eventdetail.participant.EventParticipantViewModel
 import com.emmsale.presentation.ui.eventdetail.participant.ParticipantFragmentDialog
+import com.emmsale.presentation.ui.eventdetail.participant.recyclerview.EventParticipantAdapter
 
 class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>() {
     override val layoutResId: Int = R.layout.fragment_event_participant
