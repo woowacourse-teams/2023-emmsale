@@ -332,6 +332,13 @@ include::{snippets}/modify-notification/http-request.adoc[]
 
 include::{snippets}/modify-notification/path-parameters.adoc[]
 
+=== `DELETE` : 알림 삭제
+
+.HTTP request
+include::{snippets}/delete-notification/http-request.adoc[]
+
+include::{snippets}/delete-notification/path-parameters.adoc[]
+
 === `POST` : FcmToken 생성
 
 .HTTP request 설명

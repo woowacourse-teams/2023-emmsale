@@ -4,6 +4,7 @@ import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 import static com.emmsale.notification.exception.NotificationExceptionType.ALREADY_EXIST_NOTIFICATION;
 import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
+import static com.emmsale.notification.exception.NotificationExceptionType.NOT_OWNER;
 
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -116,5 +117,20 @@ public class NotificationCommandService {
     return notifications.stream()
         .map(NotificationResponse::from)
         .collect(Collectors.toList());
+  }
+
+  public void delete(final Member member, final Long notificationId) {
+    final Notification notification = notificationRepository.findById(notificationId)
+        .orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
+
+    validateNotificationOwner(notification, member);
+
+    notificationRepository.delete(notification);
+  }
+
+  private void validateNotificationOwner(final Notification notification, final Member member) {
+    if (notification.isNotOwner(member.getId())) {
+      throw new NotificationException(NOT_OWNER);
+    }
   }
 }
