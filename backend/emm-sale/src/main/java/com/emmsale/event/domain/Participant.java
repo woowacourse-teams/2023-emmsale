@@ -53,7 +53,7 @@ public class Participant extends BaseEntity {
   }
 
   public void validateEvent(final Long eventId) {
-    if (!event.getId().equals(eventId)) {
+    if (event.isDiffer(eventId)) {
       throw new EventException(EventExceptionType.PARTICIPANT_NOT_BELONG_EVENT);
     }
   }
