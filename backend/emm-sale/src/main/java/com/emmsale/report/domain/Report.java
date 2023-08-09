@@ -3,6 +3,8 @@ package com.emmsale.report.domain;
 import com.emmsale.base.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,13 +27,18 @@ public class Report extends BaseEntity {
   @Column(nullable = false)
   private String content;
   @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  private ReportReasonType reasonType;
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
   private ReportType type;
 
   public Report(final Long reporterId, final Long reportedId, final String content,
-      final ReportType type) {
+      final ReportReasonType reasonType, final ReportType type) {
     this.reporterId = reporterId;
     this.reportedId = reportedId;
     this.content = content;
+    this.reasonType = reasonType;
     this.type = type;
   }
 }
