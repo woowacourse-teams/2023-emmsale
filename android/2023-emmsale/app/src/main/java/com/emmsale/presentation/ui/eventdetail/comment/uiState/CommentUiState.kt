@@ -1,7 +1,6 @@
 package com.emmsale.presentation.ui.eventdetail.comment.uiState
 
 import com.emmsale.data.comment.Comment
-import com.emmsale.data.member.Member
 import java.time.format.DateTimeFormatter
 
 data class CommentUiState(
@@ -20,7 +19,7 @@ data class CommentUiState(
 
         fun create(
             comment: Comment,
-            loginMember: Member,
+            loginMemberId: Long,
         ) = CommentUiState(
             authorName = comment.authorName,
             lastModifiedDate = comment.updatedAt.format(dateTimeFormatter),
@@ -28,8 +27,8 @@ data class CommentUiState(
             commentId = comment.id,
             content = comment.content,
             childCommentsCount = comment.childComments.size,
-            isUpdatable = comment.authorId == loginMember.id,
-            isDeletable = comment.authorId == loginMember.id,
+            isUpdatable = comment.authorId == loginMemberId,
+            isDeletable = comment.authorId == loginMemberId,
             isDeleted = comment.deleted,
         )
     }

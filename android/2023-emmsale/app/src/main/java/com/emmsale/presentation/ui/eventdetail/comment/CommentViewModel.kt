@@ -7,22 +7,17 @@ import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.member.Member
-import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class CommentViewModel(
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
-    private val memberRepository: MemberRepository,
 ) : ViewModel() {
 
     private val _commentsUiState = NotNullMutableLiveData(CommentsUiState.Loading)
@@ -33,38 +28,13 @@ class CommentViewModel(
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
-                _commentsUiState.postValue(_commentsUiState.value.copy(isNotLogin = true))
+                changeNotLoginState()
                 return@launch
             }
-            val loginMemberDeferred = async { memberRepository.getMember(token.uid) }
-            val commentsDeferred = async { commentRepository.getComments(eventId) }
-            val (loginMemberResult, commentsResult) = awaitAll(
-                loginMemberDeferred,
-                commentsDeferred,
-            )
-            when (loginMemberResult) {
-                is ApiError -> {
-                    changeCommentFetchingErrorState()
-                    return@launch
-                }
 
-                is ApiException -> {
-                    changeCommentFetchingErrorState()
-                    return@launch
-                }
-
-                else -> {}
-            }
-            val loginMember = (loginMemberResult as ApiSuccess).data as Member
-
-            @Suppress("UNCHECKED_CAST")
-            when (commentsResult) {
-                is ApiError -> changeCommentFetchingErrorState()
-                is ApiException -> changeCommentFetchingErrorState()
-                is ApiSuccess -> _commentsUiState.value = CommentsUiState.create(
-                    comments = commentsResult.data as List<Comment>,
-                    loginMember = loginMember,
-                )
+            when (val result = commentRepository.getComments(eventId)) {
+                is ApiError, is ApiException -> changeCommentFetchingErrorState()
+                is ApiSuccess -> setCommentsState(result.data, token.uid)
             }
         }
     }
@@ -89,6 +59,14 @@ class CommentViewModel(
                 is ApiSuccess -> fetchComments(eventId)
             }
         }
+    }
+
+    private fun setCommentsState(comments: List<Comment>, loginMemberId: Long) {
+        _commentsUiState.value = CommentsUiState.create(comments, loginMemberId)
+    }
+
+    private fun changeNotLoginState() {
+        _commentsUiState.value = _commentsUiState.value.copy(isNotLogin = true)
     }
 
     private fun changeLoadingState() {
@@ -132,7 +110,6 @@ class CommentViewModel(
             CommentViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 commentRepository = KerdyApplication.repositoryContainer.commentRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
             )
         }
     }
