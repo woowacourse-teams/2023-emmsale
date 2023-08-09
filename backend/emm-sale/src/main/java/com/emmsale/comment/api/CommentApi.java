@@ -36,15 +36,17 @@ public class CommentApi {
   }
 
   @GetMapping("/comments")
-  public List<CommentHierarchyResponse> findAll(@RequestParam final Long eventId, final Member member) {
+  public List<CommentHierarchyResponse> findAll(@RequestParam final Long eventId,
+      final Member member) {
     return commentQueryService.findAllCommentsByEventId(eventId, member);
   }
 
   @GetMapping("/comments/{comment-id}")
   public CommentHierarchyResponse findParentWithChildren(
-      @PathVariable("comment-id") final Long commentId
+      @PathVariable("comment-id") final Long commentId,
+      final Member member
   ) {
-    return commentQueryService.findParentWithChildren(commentId);
+    return commentQueryService.findParentWithChildren(commentId, member);
   }
 
   @DeleteMapping("/comments/{comment-id}")

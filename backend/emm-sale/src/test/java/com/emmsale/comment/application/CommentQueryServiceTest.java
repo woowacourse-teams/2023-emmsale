@@ -109,7 +109,7 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
 
     //when
     final CommentHierarchyResponse actual =
-        commentQueryService.findParentWithChildren(부모_댓글1.getId());
+        commentQueryService.findParentWithChildren(부모_댓글1.getId(), member);
 
     //then
     assertThat(actual)

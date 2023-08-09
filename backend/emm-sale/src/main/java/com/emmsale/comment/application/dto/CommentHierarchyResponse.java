@@ -21,15 +21,16 @@ public class CommentHierarchyResponse {
   private final CommentResponse parentComment;
   private final List<CommentResponse> childComments;
 
-  public static CommentHierarchyResponse from(final List<Comment> comments) {
+  public static CommentHierarchyResponse from(final List<Comment> comments,
+      final List<Long> blockedMemberIds) {
     final List<CommentResponse> childComments = comments.stream()
         .filter(Comment::isChild)
-        .map(CommentResponse::from)
+        .map(comment -> CommentResponse.from(comment, blockedMemberIds))
         .collect(Collectors.toList());
 
     final CommentResponse parentComment = comments.stream()
         .filter(Comment::isRoot)
-        .map(CommentResponse::from)
+        .map(comment -> CommentResponse.from(comment, blockedMemberIds))
         .findFirst()
         .orElseThrow(() -> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT));
 
@@ -47,33 +48,15 @@ public class CommentHierarchyResponse {
     for (final Entry<Comment, List<Comment>> entry : groupedByParent.entrySet()) {
       final Comment parentComment = entry.getKey();
       final List<CommentResponse> childCommentResponses =
-          mapToCommentResponse(entry, parentComment);
+          mapToCommentResponse(entry, parentComment, blockedMemberIds);
 
       result.add(
-          new CommentHierarchyResponse(CommentResponse.from(parentComment), childCommentResponses)
+          new CommentHierarchyResponse(CommentResponse.from(parentComment, blockedMemberIds),
+              childCommentResponses)
       );
     }
 
-    for (final CommentHierarchyResponse response : result) {
-      final CommentResponse parent = response.getParentComment();
-
-      hideContentIfBlockedMember(parent, blockedMemberIds);
-
-      final List<CommentResponse> children = response.getChildComments();
-
-      for (final CommentResponse child : children) {
-        hideContentIfBlockedMember(child, blockedMemberIds);
-      }
-    }
-
     return result;
-  }
-
-  private static void hideContentIfBlockedMember(final CommentResponse commentResponse,
-      final List<Long> blockedMemberIds) {
-    if (blockedMemberIds.contains(commentResponse.getMemberId())) {
-      commentResponse.hideContent();
-    }
   }
 
   private static Map<Comment, List<Comment>> groupingByParentAndSortedByCreatedAt(
@@ -89,11 +72,12 @@ public class CommentHierarchyResponse {
 
   private static List<CommentResponse> mapToCommentResponse(
       final Entry<Comment, List<Comment>> entry,
-      final Comment parentComment
+      final Comment parentComment,
+      final List<Long> blockedMemberIds
   ) {
     return entry.getValue().stream()
         .filter(it -> isNotSameKeyAndValue(parentComment, it))
-        .map(CommentResponse::from)
+        .map(comment -> CommentResponse.from(comment, blockedMemberIds))
         .sorted(Comparator.comparing(CommentResponse::getCreatedAt))
         .collect(Collectors.toList());
   }

@@ -23,21 +23,27 @@ public class CommentQueryService {
   public List<CommentHierarchyResponse> findAllCommentsByEventId(final Long eventId,
       final Member member) {
 
-    final List<Long> blockedMemberIds = blockRepository.findAllByRequestMemberId(member.getId())
-        .stream()
-        .map(Block::getBlockMemberId)
-        .collect(Collectors.toList());
+    final List<Long> blockedMemberIds = getBlockedMemberIds(member);
 
     final List<Comment> comments = commentRepository.findByEventId(eventId);
 
     return CommentHierarchyResponse.convertAllFrom(comments, blockedMemberIds);
   }
 
-  public CommentHierarchyResponse findParentWithChildren(final Long commentId) {
+  public CommentHierarchyResponse findParentWithChildren(final Long commentId, final Member member) {
+
+    final List<Long> blockedMemberIds = getBlockedMemberIds(member);
 
     final List<Comment> parentWithChildrenComments
         = commentRepository.findParentAndChildrenByParentId(commentId);
 
-    return CommentHierarchyResponse.from(parentWithChildrenComments);
+    return CommentHierarchyResponse.from(parentWithChildrenComments, blockedMemberIds);
+  }
+
+  private List<Long> getBlockedMemberIds(final Member member) {
+    return blockRepository.findAllByRequestMemberId(member.getId())
+        .stream()
+        .map(Block::getBlockMemberId)
+        .collect(Collectors.toList());
   }
 }

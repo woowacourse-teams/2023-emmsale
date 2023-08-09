@@ -193,11 +193,12 @@ class CommentApiTest extends MockMvcTestHelper {
         );
 
     //when
-    when(commentQueryService.findParentWithChildren(anyLong()))
+    when(commentQueryService.findParentWithChildren(anyLong(), any()))
         .thenReturn(result);
 
     //then
-    mockMvc.perform(get("/comments/{comment-id}", 1L))
+    mockMvc.perform(get("/comments/{comment-id}", 1L)
+            .header("Authorization", "Bearer AccessToken"))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("get-children-comment", pathParams, responseFields));

@@ -4,6 +4,7 @@ import com.emmsale.comment.domain.Comment;
 import com.emmsale.member.domain.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class CommentResponse {
-
-  private static final String BLOCKED_MEMBER_CONTENT = "차단된 사용자의 댓글입니다.";
 
   private String content;
   private Long commentId;
@@ -40,13 +39,21 @@ public class CommentResponse {
     );
   }
 
+  public static CommentResponse from(final Comment comment, final List<Long> blockedMemberIds) {
+    final Member member = comment.getMember();
+    return new CommentResponse(
+        comment.getContentAndHideIfBlockedMember(blockedMemberIds), comment.getId(),
+        getParentId(comment), comment.getEvent().getId(),
+        comment.isDeleted(), comment.getCreatedAt(),
+        comment.getUpdatedAt(), member.getId(),
+        member.getImageUrl(), member.getName()
+    );
+  }
+
   private static Long getParentId(final Comment comment) {
     return comment.getParent()
         .map(Comment::getId)
         .orElse(null);
   }
 
-  public void hideContent() {
-    this.content = BLOCKED_MEMBER_CONTENT;
-  }
 }
