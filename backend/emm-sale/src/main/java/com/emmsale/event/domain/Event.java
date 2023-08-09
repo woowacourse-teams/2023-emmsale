@@ -142,4 +142,8 @@ public class Event extends BaseEntity {
   public int calculateRemainingDays(final LocalDate today) {
     return Period.between(today, startDate.toLocalDate()).getDays();
   }
+
+  public boolean isDiffer(final Long eventId) {
+    return !this.getId().equals(eventId);
+  }
 }
