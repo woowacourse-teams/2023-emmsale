@@ -82,15 +82,11 @@ public class Event extends BaseEntity {
     return participant;
   }
 
-  // 요거 이전에 발견하지 못했었는데 나중에 반환값 void로 바꿔도 될까요? 반환하는 값을 쓰지 않는 것 같아서요.
-  public List<EventTag> addAllEventTags(final List<Tag> tags) {
+  public void addAllEventTags(final List<Tag> tags) {
     final List<EventTag> eventTags = tags.stream()
         .map(tag -> new EventTag(this, tag))
         .collect(Collectors.toList());
-
     this.tags.addAll(eventTags);
-
-    return eventTags;
   }
 
   public void validateAlreadyParticipate(final Member member) {
@@ -145,5 +141,9 @@ public class Event extends BaseEntity {
 
   public int calculateRemainingDays(final LocalDate today) {
     return Period.between(today, startDate.toLocalDate()).getDays();
+  }
+
+  public boolean isDiffer(final Long eventId) {
+    return !this.getId().equals(eventId);
   }
 }

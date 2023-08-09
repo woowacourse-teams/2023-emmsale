@@ -136,6 +136,14 @@ include::{snippets}/participate-event/http-request.adoc[]
 .HTTP response
 include::{snippets}/participate-event/http-response.adoc[]
 
+=== `PUT` : 행사의 함께 해요 목록에 게시글 수정
+
+.HTTP request
+include::{snippets}/update-participate/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/update-participate/http-response.adoc[]
+
 === `DELETE` : 행사에 함께가기 요청 취소(행사에 함께 가는 멤버에서 삭제)
 
 .HTTP request

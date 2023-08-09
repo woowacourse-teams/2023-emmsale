@@ -13,10 +13,12 @@ import static com.emmsale.event.EventFixture.인프콘_2023;
 import static com.emmsale.event.domain.EventStatus.IN_PROGRESS;
 import static com.emmsale.event.exception.EventExceptionType.ALREADY_PARTICIPATED;
 import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT;
+import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_UPDATE_PARTICIPATE;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_DATE_FORMAT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_TAG;
+import static com.emmsale.event.exception.EventExceptionType.PARTICIPANT_NOT_BELONG_EVENT;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_AFTER_END_DATE;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME;
 import static com.emmsale.member.MemberFixture.memberFixture;
@@ -37,6 +39,7 @@ import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.event.application.dto.ParticipateUpdateRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
@@ -405,7 +408,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
     }
-
 
     @ParameterizedTest
     @NullSource
@@ -916,5 +918,71 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       assertThat(actual).isFalse();
     }
   }
-}
 
+  @Nested
+  @DisplayName("행사 참가 게시글을 수정할 수 있다.")
+  class UpdateParticipant {
+
+    private Member member;
+    private Event event;
+    private Long participantId;
+
+    @BeforeEach
+    void setUp() {
+      member = memberRepository.save(memberFixture());
+      event = eventRepository.save(eventFixture());
+      final EventParticipateRequest request = createEventParticipateRequest(member);
+      participantId = eventService.participate(event.getId(), request, member);
+    }
+
+    @Test
+    @DisplayName("정상적으로 성공하는 경우")
+    void success() {
+      //given
+      final ParticipateUpdateRequest request = new ParticipateUpdateRequest("수정할 내용");
+
+      //when
+      eventService.updateParticipant(event.getId(), participantId, request, member);
+
+      //then
+      final Optional<Participant> updatedParticipant
+          = participantRepository.findById(participantId);
+
+      assertAll(
+          () -> assertThat(updatedParticipant).isNotEmpty(),
+          () -> assertThat(updatedParticipant.get().getContent())
+              .isEqualTo(request.getContent())
+      );
+    }
+
+    @Test
+    @DisplayName("member가 행사참가 게시글의 소유자가 아닌 경우")
+    void invalidOwner() {
+      //given
+      final ParticipateUpdateRequest request = new ParticipateUpdateRequest("변환할 내용");
+      final Member otherMember = memberRepository.save(new Member(
+          4321L,
+          "이미지URL"
+      ));
+
+      //when && then
+      assertThatThrownBy(
+          () -> eventService.updateParticipant(event.getId(), participantId, request, otherMember))
+          .isInstanceOf(EventException.class)
+          .hasMessage(FORBIDDEN_UPDATE_PARTICIPATE.errorMessage());
+    }
+
+    @Test
+    @DisplayName("eventId가 행사 참가 게시글의 event의 Id가 아닌 경우")
+    void invalidEventId() {
+      //given
+      final ParticipateUpdateRequest request = new ParticipateUpdateRequest("변환할 내용");
+
+      //when && then
+      assertThatThrownBy(
+          () -> eventService.updateParticipant(event.getId() + 1, participantId, request, member))
+          .isInstanceOf(EventException.class)
+          .hasMessage(PARTICIPANT_NOT_BELONG_EVENT.errorMessage());
+    }
+  }
+}

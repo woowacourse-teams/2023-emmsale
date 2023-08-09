@@ -35,6 +35,10 @@ public class Member extends BaseEntity {
   @Column(nullable = false)
   private String imageUrl;
 
+  protected void setId(final Long id) {
+    this.id = id;
+  }
+
   public Member(final Long id, final Long githubId, final String imageUrl, final String name) {
     this.id = id;
     this.githubId = githubId;

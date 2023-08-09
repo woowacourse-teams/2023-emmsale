@@ -3,6 +3,7 @@ package com.emmsale.event.application;
 import static com.emmsale.event.domain.repository.EventSpecification.filterByCategory;
 import static com.emmsale.event.domain.repository.EventSpecification.filterByTags;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
+import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
@@ -14,6 +15,7 @@ import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.event.application.dto.ParticipateUpdateRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
@@ -93,7 +95,7 @@ public class EventService {
         .ifPresentOrElse(
             participant -> participantRepository.deleteById(participant.getId()),
             () -> {
-              throw new EventException(EventExceptionType.NOT_FOUND_PARTICIPANT);
+              throw new EventException(NOT_FOUND_PARTICIPANT);
             });
   }
 
@@ -263,5 +265,18 @@ public class EventService {
   @Transactional(readOnly = true)
   public Boolean isAlreadyParticipate(final Long eventId, final Long memberId) {
     return participantRepository.existsByEventIdAndMemberId(eventId, memberId);
+  }
+
+  public void updateParticipant(
+      final Long eventId,
+      final Long participantId,
+      final ParticipateUpdateRequest request,
+      final Member member
+  ) {
+    final Participant participant = participantRepository.findById(participantId)
+        .orElseThrow(() -> new EventException(NOT_FOUND_PARTICIPANT));
+    participant.validateEvent(eventId);
+    participant.validateOwner(member);
+    participant.updateContent(request.getContent());
   }
 }
