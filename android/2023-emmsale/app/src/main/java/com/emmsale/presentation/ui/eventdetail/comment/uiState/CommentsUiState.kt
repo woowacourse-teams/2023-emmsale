@@ -3,20 +3,18 @@ package com.emmsale.presentation.ui.eventdetail.comment.uiState
 import com.emmsale.data.comment.Comment
 
 data class CommentsUiState(
-    val isNotLogin: Boolean,
     val isLoading: Boolean,
-    val isCommentsFetchingError: Boolean,
-    val isCommentPostingError: Boolean,
-    val isCommentDeletionError: Boolean,
+    val isFetchingError: Boolean,
+    val isPostingError: Boolean,
+    val isDeletionError: Boolean,
     val comments: List<CommentUiState>,
 ) {
     companion object {
         val Loading = CommentsUiState(
-            isNotLogin = false,
             isLoading = true,
-            isCommentsFetchingError = false,
-            isCommentPostingError = false,
-            isCommentDeletionError = false,
+            isFetchingError = false,
+            isPostingError = false,
+            isDeletionError = false,
             comments = listOf(),
         )
 
@@ -24,11 +22,10 @@ data class CommentsUiState(
             comments: List<Comment>,
             loginMemberId: Long,
         ) = CommentsUiState(
-            isNotLogin = false,
             isLoading = false,
-            isCommentsFetchingError = false,
-            isCommentPostingError = false,
-            isCommentDeletionError = false,
+            isFetchingError = false,
+            isPostingError = false,
+            isDeletionError = false,
             comments = comments.map {
                 CommentUiState.create(
                     comment = it,

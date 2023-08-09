@@ -20,8 +20,11 @@ class CommentViewModel(
     private val commentRepository: CommentRepository,
 ) : ViewModel() {
 
-    private val _commentsUiState = NotNullMutableLiveData(CommentsUiState.Loading)
-    val commentsUiState: NotNullLiveData<CommentsUiState> = _commentsUiState
+    private val _isLogin = NotNullMutableLiveData(true)
+    val isLogin: NotNullLiveData<Boolean> = _isLogin
+
+    private val _comments = NotNullMutableLiveData(CommentsUiState.Loading)
+    val comments: NotNullLiveData<CommentsUiState> = _comments
 
     fun fetchComments(eventId: Long) {
         changeLoadingState()
@@ -62,46 +65,46 @@ class CommentViewModel(
     }
 
     private fun setCommentsState(comments: List<Comment>, loginMemberId: Long) {
-        _commentsUiState.value = CommentsUiState.create(comments, loginMemberId)
+        _comments.value = CommentsUiState.create(comments, loginMemberId)
     }
 
     private fun changeNotLoginState() {
-        _commentsUiState.value = _commentsUiState.value.copy(isNotLogin = true)
+        _isLogin.value = false
     }
 
     private fun changeLoadingState() {
-        _commentsUiState.value = commentsUiState.value.copy(
+        _comments.value = comments.value.copy(
             isLoading = true,
-            isCommentsFetchingError = false,
-            isCommentPostingError = false,
-            isCommentDeletionError = false,
+            isFetchingError = false,
+            isPostingError = false,
+            isDeletionError = false,
         )
     }
 
     private fun changeCommentFetchingErrorState() {
-        _commentsUiState.value = commentsUiState.value.copy(
+        _comments.value = comments.value.copy(
             isLoading = false,
-            isCommentsFetchingError = true,
-            isCommentPostingError = false,
-            isCommentDeletionError = false,
+            isFetchingError = true,
+            isPostingError = false,
+            isDeletionError = false,
         )
     }
 
     private fun changeCommentPostingErrorState() {
-        _commentsUiState.value = commentsUiState.value.copy(
+        _comments.value = comments.value.copy(
             isLoading = false,
-            isCommentsFetchingError = false,
-            isCommentPostingError = true,
-            isCommentDeletionError = false,
+            isFetchingError = false,
+            isPostingError = true,
+            isDeletionError = false,
         )
     }
 
     private fun changeCommentDeletionErrorState() {
-        _commentsUiState.value = commentsUiState.value.copy(
+        _comments.value = comments.value.copy(
             isLoading = false,
-            isCommentsFetchingError = false,
-            isCommentPostingError = false,
-            isCommentDeletionError = true,
+            isFetchingError = false,
+            isPostingError = false,
+            isDeletionError = true,
         )
     }
 

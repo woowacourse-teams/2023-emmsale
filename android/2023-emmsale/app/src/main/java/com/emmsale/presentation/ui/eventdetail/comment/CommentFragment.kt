@@ -32,7 +32,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
 
         initDataBinding()
         initCommentsRecyclerView()
-        setUpUiLogic()
+        setupUiLogic()
     }
 
     override fun onStart() {
@@ -69,54 +69,56 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
         viewModel.deleteComment(commentId, eventId)
     }
 
-    private fun setUpUiLogic() {
-        viewModel.commentsUiState.observe(viewLifecycleOwner) {
-            handleError(it)
+    private fun setupUiLogic() {
+        viewModel.isLogin.observe(viewLifecycleOwner) {
             handleNotLogin(it)
+        }
+        viewModel.comments.observe(viewLifecycleOwner) {
+            handleError(it)
             handleComments(it)
-            handleEditComment()
+            handleCommentEditing()
         }
     }
 
-    private fun handleError(commentsUiState: CommentsUiState) {
-        fun handleCommentsFetchingError(commentsUiState: CommentsUiState) {
-            if (commentsUiState.isCommentsFetchingError) {
+    private fun handleError(comments: CommentsUiState) {
+        fun handleCommentsFetchingError(comments: CommentsUiState) {
+            if (comments.isFetchingError) {
                 context?.showToast(getString(R.string.comments_comments_fetching_error_message))
             }
         }
 
-        fun handleCommentPostingError(commentsUiState: CommentsUiState) {
-            if (commentsUiState.isCommentPostingError) {
+        fun handleCommentPostingError(comments: CommentsUiState) {
+            if (comments.isPostingError) {
                 context?.showToast(getString(R.string.comments_comments_posting_error_message))
             }
         }
 
-        fun handleCommentDeletionError(commentsUiState: CommentsUiState) {
-            if (commentsUiState.isCommentDeletionError) {
+        fun handleCommentDeletionError(comments: CommentsUiState) {
+            if (comments.isDeletionError) {
                 context?.showToast(getString(R.string.comments_comments_deletion_error_message))
             }
         }
-        handleCommentsFetchingError(commentsUiState)
-        handleCommentPostingError(commentsUiState)
-        handleCommentDeletionError(commentsUiState)
+        handleCommentsFetchingError(comments)
+        handleCommentPostingError(comments)
+        handleCommentDeletionError(comments)
     }
 
-    private fun handleNotLogin(commentsUiState: CommentsUiState) {
-        if (commentsUiState.isNotLogin) {
+    private fun handleNotLogin(isLogin: Boolean) {
+        if (!isLogin) {
             LoginActivity.startActivity(requireContext())
             activity?.finish()
         }
     }
 
-    private fun handleComments(commentsUiState: CommentsUiState) {
-        (binding.rvCommentsComments.adapter as CommentsAdapter).submitList(commentsUiState.comments)
+    private fun handleComments(comments: CommentsUiState) {
+        (binding.rvCommentsComments.adapter as CommentsAdapter).submitList(comments.comments)
     }
 
-    private fun handleEditComment() {
-        binding.tvCommentsPostcommentbutton.setOnClickListener { onCommentSave() }
+    private fun handleCommentEditing() {
+        binding.tvCommentsPostcommentbutton.setOnClickListener { onCommentSubmitButtonClick() }
     }
 
-    private fun onCommentSave() {
+    private fun onCommentSubmitButtonClick() {
         viewModel.saveComment(binding.etCommentsEditcommentcontent.text.toString(), eventId)
         binding.etCommentsEditcommentcontent.apply {
             text.clear()
