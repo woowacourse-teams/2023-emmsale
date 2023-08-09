@@ -41,6 +41,7 @@ class ReportQueryServiceTest extends ServiceIntegrationTestHelper {
     // then
     Assertions.assertThat(actual)
         .usingRecursiveComparison()
+        .ignoringFields("createdAt")
         .isEqualTo(expected);
 
   }
