@@ -73,11 +73,11 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     private fun initActivitiesRecyclerView() {
+        val decoration = ActivitiesAdapterDecoration()
         listOf(
             binding.rvMyprofileEducations,
             binding.rvMyprofileClubs,
         ).forEach {
-            val decoration = ActivitiesAdapterDecoration()
             it.apply {
                 adapter = ActivitiesAdapter()
                 itemAnimator = null
