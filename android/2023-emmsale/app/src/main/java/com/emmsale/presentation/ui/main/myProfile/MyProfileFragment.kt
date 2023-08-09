@@ -9,8 +9,8 @@ import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
-import com.emmsale.presentation.ui.main.myProfile.adapter.ActivitiesAdapter
-import com.emmsale.presentation.ui.main.myProfile.itemDecoration.ActivitiesAdapterDecoration
+import com.emmsale.presentation.ui.main.myProfile.recyclerView.ActivitiesAdapter
+import com.emmsale.presentation.ui.main.myProfile.recyclerView.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileScreenUiState
 
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {

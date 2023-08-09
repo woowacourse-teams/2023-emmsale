@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.myProfile.itemDecoration
+package com.emmsale.presentation.ui.main.myProfile.recyclerView
 
 import android.graphics.Rect
 import android.view.View
