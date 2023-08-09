@@ -2,8 +2,7 @@ package com.emmsale.presentation.ui.main.myProfile.uiState
 
 data class MyProfileScreenUiState(
     val isLoading: Boolean,
-    val isError: Boolean,
-    val errorMessage: String,
+    val isProfileFetchingError: Boolean,
     val memberId: Long,
     val memberName: String,
     val description: String,
@@ -16,8 +15,7 @@ data class MyProfileScreenUiState(
     companion object {
         val Loading = MyProfileScreenUiState(
             isLoading = true,
-            isError = false,
-            errorMessage = "",
+            isProfileFetchingError = false,
             memberId = -1,
             memberName = "",
             description = "",

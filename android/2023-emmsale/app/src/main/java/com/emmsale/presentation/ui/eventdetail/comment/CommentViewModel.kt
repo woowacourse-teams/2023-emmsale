@@ -29,7 +29,7 @@ class CommentViewModel(
     val uiState: NotNullLiveData<CommentsUiState> = _uiState
 
     fun fetchComments(eventId: Long) {
-        changeLoadingStateOnUi()
+        changeLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
@@ -44,12 +44,12 @@ class CommentViewModel(
             )
             when (loginMemberResult) {
                 is ApiError -> {
-                    changeCommentFetchingErrorStateOnUi()
+                    changeCommentFetchingErrorState()
                     return@launch
                 }
 
                 is ApiException -> {
-                    changeCommentFetchingErrorStateOnUi()
+                    changeCommentFetchingErrorState()
                     return@launch
                 }
 
@@ -59,8 +59,8 @@ class CommentViewModel(
 
             @Suppress("UNCHECKED_CAST")
             when (commentsResult) {
-                is ApiError -> changeCommentFetchingErrorStateOnUi()
-                is ApiException -> changeCommentFetchingErrorStateOnUi()
+                is ApiError -> changeCommentFetchingErrorState()
+                is ApiException -> changeCommentFetchingErrorState()
                 is ApiSuccess -> _uiState.value = CommentsUiState.create(
                     comments = commentsResult.data as List<Comment>,
                     loginMember = loginMember,
@@ -70,28 +70,28 @@ class CommentViewModel(
     }
 
     fun saveComment(content: String, eventId: Long) {
-        changeLoadingStateOnUi()
+        changeLoadingState()
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId)) {
-                is ApiError -> changeCommentPostingErrorStateOnUi()
-                is ApiException -> changeCommentPostingErrorStateOnUi()
+                is ApiError -> changeCommentPostingErrorState()
+                is ApiException -> changeCommentPostingErrorState()
                 is ApiSuccess -> fetchComments(eventId)
             }
         }
     }
 
     fun deleteComment(commentId: Long, eventId: Long) {
-        changeLoadingStateOnUi()
+        changeLoadingState()
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
-                is ApiError -> changeCommentDeletionErrorStateOnUi()
-                is ApiException -> changeCommentDeletionErrorStateOnUi()
+                is ApiError -> changeCommentDeletionErrorState()
+                is ApiException -> changeCommentDeletionErrorState()
                 is ApiSuccess -> fetchComments(eventId)
             }
         }
     }
 
-    private fun changeLoadingStateOnUi() {
+    private fun changeLoadingState() {
         _uiState.value = uiState.value.copy(
             isLoading = true,
             isCommentsFetchingError = false,
@@ -100,7 +100,7 @@ class CommentViewModel(
         )
     }
 
-    private fun changeCommentFetchingErrorStateOnUi() {
+    private fun changeCommentFetchingErrorState() {
         _uiState.value = uiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = true,
@@ -109,7 +109,7 @@ class CommentViewModel(
         )
     }
 
-    private fun changeCommentPostingErrorStateOnUi() {
+    private fun changeCommentPostingErrorState() {
         _uiState.value = uiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = false,
@@ -118,7 +118,7 @@ class CommentViewModel(
         )
     }
 
-    private fun changeCommentDeletionErrorStateOnUi() {
+    private fun changeCommentDeletionErrorState() {
         _uiState.value = uiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = false,

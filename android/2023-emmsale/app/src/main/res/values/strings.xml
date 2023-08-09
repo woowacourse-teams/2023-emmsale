@@ -58,6 +58,7 @@
     <string name="myprofile_clubslabel">동아리 활동</string>
     <string name="myprofile_eventslabel">참여 행사</string>
     <string name="myprofile_no_description">소개말이 없습니다.</string>
+    <string name="myprofile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
 
     <string name="event_poster_description">event poster</string>
     <string name="event_filter">필터 설정</string>
@@ -77,7 +78,7 @@
     <string name="comments_complete_edit_comment">댓글이 수정되었습니다.</string>
     <string name="comments_complete_delete_comment">댓글이 삭제되었습니다.</string>
     <string name="comments_complete_post_comment">댓글을 게시했습니다.</string>
-    <string name="comments_comments_fetching_error_message">댓글을 불러오는 데 실패했어요 😥</string>
+    <string name="comments_comments_fetching_error_message">댓글들을 불러오는 데 실패했어요 😥</string>
     <string name="comments_comments_posting_error_message">댓글을 게시하는 데 실패했어요 😥</string>
     <string name="comments_comments_deletion_error_message">댓글을 삭제하는 데 실패했어요 😥</string>
 

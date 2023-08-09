@@ -40,11 +40,11 @@ class ChildCommentViewModel(
             val (loginMemberResult, commentResult) = awaitAll(loginMemberDeferred, commentDeferred)
             when (loginMemberResult) {
                 is ApiError -> {
-                    changeCommentFetchingErrorStateOnUi()
+                    changeCommentFetchingErrorState()
                     return@launch
                 }
                 is ApiException -> {
-                    changeCommentFetchingErrorStateOnUi()
+                    changeCommentFetchingErrorState()
                     return@launch
                 }
                 else -> {}
@@ -52,8 +52,8 @@ class ChildCommentViewModel(
             val loginMember = (loginMemberResult as ApiSuccess).data as Member
 
             when (commentResult) {
-                is ApiError -> changeCommentFetchingErrorStateOnUi()
-                is ApiException -> changeCommentFetchingErrorStateOnUi()
+                is ApiError -> changeCommentFetchingErrorState()
+                is ApiException -> changeCommentFetchingErrorState()
                 is ApiSuccess -> _uiState.value = ChildCommentsUiState.create(
                     comment = commentResult.data as Comment,
                     loginMember = loginMember,
@@ -63,28 +63,28 @@ class ChildCommentViewModel(
     }
 
     fun saveChildComment(content: String, parentCommentId: Long, eventId: Long) {
-        changeLoadingStateOnUi()
+        changeLoadingState()
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId, parentCommentId)) {
-                is ApiError -> changeCommentPostingErrorStateOnUi()
-                is ApiException -> changeCommentPostingErrorStateOnUi()
+                is ApiError -> changeCommentPostingErrorState()
+                is ApiException -> changeCommentPostingErrorState()
                 is ApiSuccess -> fetchComment(parentCommentId)
             }
         }
     }
 
     fun deleteComment(commentId: Long, parentCommentId: Long) {
-        changeLoadingStateOnUi()
+        changeLoadingState()
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
-                is ApiError -> changeCommentDeletionErrorStateOnUi()
-                is ApiException -> changeCommentDeletionErrorStateOnUi()
+                is ApiError -> changeCommentDeletionErrorState()
+                is ApiException -> changeCommentDeletionErrorState()
                 is ApiSuccess -> fetchComment(parentCommentId)
             }
         }
     }
 
-    private fun changeCommentFetchingErrorStateOnUi() {
+    private fun changeCommentFetchingErrorState() {
         _uiState.value = uiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = true,
@@ -93,7 +93,7 @@ class ChildCommentViewModel(
         )
     }
 
-    private fun changeCommentPostingErrorStateOnUi() {
+    private fun changeCommentPostingErrorState() {
         _uiState.value = uiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = false,
@@ -102,7 +102,7 @@ class ChildCommentViewModel(
         )
     }
 
-    private fun changeCommentDeletionErrorStateOnUi() {
+    private fun changeCommentDeletionErrorState() {
         _uiState.value = uiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = false,
@@ -111,7 +111,7 @@ class ChildCommentViewModel(
         )
     }
 
-    private fun changeLoadingStateOnUi() {
+    private fun changeLoadingState() {
         _uiState.value = uiState.value.copy(
             isLoading = true,
             isCommentsFetchingError = false,
