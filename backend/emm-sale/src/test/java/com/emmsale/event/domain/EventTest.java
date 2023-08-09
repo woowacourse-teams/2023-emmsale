@@ -53,11 +53,73 @@ class EventTest {
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
-        () -> new Event(name, location, afterDateTime, beforeDateTime, null, null, url,
+        () -> new Event(name, location, afterDateTime, beforeDateTime, beforeDateTime,
+            beforeDateTime, url,
             EventType.CONFERENCE,
             imageUrl));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
+  }
+
+  @Test
+  @DisplayName("Event 생성시 subscriptionStartDate가 subscriptionEndDate 이후일 경우 EventException이 발생한다.")
+  void newEvent_fail_SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END() {
+    //given
+    final String name = "이름";
+    final String location = "장소";
+    final String url = "https://information-url.com";
+    final LocalDateTime beforeDateTime = LocalDateTime.now();
+    final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    final String imageUrl = "https://image.com";
+
+    //when & then
+    final EventException exception = assertThrowsExactly(EventException.class,
+        () -> new Event(name, location, beforeDateTime, afterDateTime,
+            afterDateTime, beforeDateTime, url, EventType.CONFERENCE, imageUrl));
+
+    assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END,
+        exception.exceptionType());
+  }
+
+  @Test
+  @DisplayName("Event 생성시 subscriptionEndDate가 endDate 이후일 경우 EventException이 발생한다.")
+  void newEvent_fail_SUBSCRIPTION_END_AFTER_EVENT_END() {
+    //given
+    final String name = "이름";
+    final String location = "장소";
+    final String url = "https://information-url.com";
+    final LocalDateTime beforeDateTime = LocalDateTime.now();
+    final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    final String imageUrl = "https://image.com";
+
+    //when & then
+    final EventException exception = assertThrowsExactly(EventException.class,
+        () -> new Event(name, location, beforeDateTime, beforeDateTime,
+            beforeDateTime, afterDateTime, url, EventType.CONFERENCE, imageUrl));
+
+    assertEquals(EventExceptionType.SUBSCRIPTION_END_AFTER_EVENT_END, exception.exceptionType());
+  }
+
+  @Test
+  @DisplayName("Event 생성시 subscriptionStartDate가 startDate 이후일 경우 EventException이 발생한다.")
+  void newEvent_fail_SUBSCRIPTION_START_AFTER_EVENT_START() {
+    //given
+    final String name = "이름";
+    final String location = "장소";
+    final String url = "https://information-url.com";
+    final LocalDateTime beforeDateTime = LocalDateTime.now();
+    final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    final String imageUrl = "https://image.com";
+
+    //when & then
+    final EventException exception = assertThrowsExactly(EventException.class,
+        () -> new Event(name, location, beforeDateTime, afterDateTime, afterDateTime, afterDateTime,
+            url,
+            EventType.CONFERENCE,
+            imageUrl));
+
+    assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_EVENT_START,
+        exception.exceptionType());
   }
 
   @Test
@@ -79,8 +141,8 @@ class EventTest {
         newLocation,
         newStartDateTime,
         newEndDateTime,
-        null,
-        null,
+        newStartDateTime,
+        newEndDateTime,
         newInformationUrl,
         newTags
     );
@@ -112,9 +174,74 @@ class EventTest {
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> event.updateEventContent(newName, newLocation, afterDateTime, beforeDateTime,
-            null, null, newInformationUrl, newTags));
+            beforeDateTime, afterDateTime, newInformationUrl, newTags));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
+  }
+
+  @Test
+  @DisplayName("Event 수정 시 subscriptionStartDate가 subscriptionEndDate 이후일 경우 EventException이 발생한다.")
+  void updateEvent_fail_SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END() {
+    //given
+    final String newName = "새로운 이름";
+    final String newLocation = "새로운 장소";
+    final LocalDateTime beforeDateTime = LocalDateTime.now();
+    final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    final String newInformationUrl = "https://새로운-상세-URL.com";
+    final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+
+    final Event event = EventFixture.인프콘_2023();
+
+    //when & then
+    final EventException exception = assertThrowsExactly(EventException.class,
+        () -> event.updateEventContent(newName, newLocation, beforeDateTime, afterDateTime,
+            afterDateTime, beforeDateTime, newInformationUrl, newTags));
+
+    assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END,
+        exception.exceptionType());
+  }
+
+  @Test
+  @DisplayName("Event 수정 시 subscriptionEndDate가 endDate 이후일 경우 EventException이 발생한다.")
+  void updateEvent_fail_SUBSCRIPTION_END_AFTER_EVENT_END() {
+    //given
+    final String newName = "새로운 이름";
+    final String newLocation = "새로운 장소";
+    final LocalDateTime beforeDateTime = LocalDateTime.now();
+    final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    final String newInformationUrl = "https://새로운-상세-URL.com";
+    final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+
+    final Event event = EventFixture.인프콘_2023();
+
+    //when & then
+    final EventException exception = assertThrowsExactly(EventException.class,
+        () -> event.updateEventContent(newName, newLocation, beforeDateTime, beforeDateTime,
+            beforeDateTime, afterDateTime, newInformationUrl, newTags));
+
+    assertEquals(EventExceptionType.SUBSCRIPTION_END_AFTER_EVENT_END, exception.exceptionType());
+  }
+
+  @Test
+  @DisplayName("Event 수정 시 subscriptionStartDate가 startDate 이후일 경우 EventException이 발생한다.")
+  void updateEvent_fail_SUBSCRIPTION_START_AFTER_EVENT_START() {
+    //given
+    final String newName = "새로운 이름";
+    final String newLocation = "새로운 장소";
+    final LocalDateTime beforeDateTime = LocalDateTime.now();
+    final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
+    final String newInformationUrl = "https://새로운-상세-URL.com";
+    final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+
+    final Event event = EventFixture.인프콘_2023();
+
+    //when & then
+    final EventException exception = assertThrowsExactly(EventException.class,
+        () -> event.updateEventContent(newName, newLocation, beforeDateTime, afterDateTime,
+            afterDateTime, afterDateTime, newInformationUrl, newTags));
+
+    assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_EVENT_START,
+        exception.exceptionType());
   }
 
   @Test

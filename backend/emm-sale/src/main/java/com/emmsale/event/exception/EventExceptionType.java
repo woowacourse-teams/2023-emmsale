@@ -23,13 +23,25 @@ public enum EventExceptionType implements BaseExceptionType {
       HttpStatus.NOT_FOUND,
       "해당하는 태그를 찾을 수 없습니다."
   ),
+  SUBSCRIPTION_START_AFTER_EVENT_START(
+      HttpStatus.BAD_REQUEST,
+      "신청 시작일은 행사 시작일 이후일 수 없습니다."
+  ),
+  SUBSCRIPTION_END_AFTER_EVENT_END(
+      HttpStatus.BAD_REQUEST,
+      "신청 마감일은 행사 마감일 이후일 수 없습니다."
+  ),
+  SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END(
+      HttpStatus.BAD_REQUEST,
+      "행사의 신청 시작일이 신청 마감일 이후일 수 없습니다."
+  ),
   START_DATE_TIME_AFTER_END_DATE_TIME(
       HttpStatus.BAD_REQUEST,
-      "행사의 시작 일시가 종료 일시 이후일 수 없습니다."
+      "행사의 시작 일시가 마감 일시 이후일 수 없습니다."
   ),
   START_DATE_AFTER_END_DATE(
       HttpStatus.BAD_REQUEST,
-      "조회하려는 날짜 범위의 시작일이 종료일 이후일 수 없습니다."
+      "조회하려는 날짜 범위의 시작일이 마감일 이후일 수 없습니다."
   ),
   PARTICIPANT_NOT_BELONG_EVENT(
       HttpStatus.BAD_REQUEST,

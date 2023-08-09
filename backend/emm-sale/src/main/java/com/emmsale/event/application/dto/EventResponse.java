@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,13 @@ public class EventResponse {
   private final LocalDateTime startDate;
   @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
   private final LocalDateTime endDate;
+  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  private final LocalDateTime subscriptionStartDate;
+  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  private final LocalDateTime subscriptionEndDate;
   private final List<String> tags;
   private final String status;
+  private final String subscriptionStatus;
   private final String imageUrl;
   private final int remainingDays;
 
@@ -39,7 +44,7 @@ public class EventResponse {
   }
 
   public static List<EventResponse> mergeEventResponses(LocalDate today,
-      final EnumMap<EventStatus, List<Event>> groupByEventStatus) {
+      final Map<EventStatus, List<Event>> groupByEventStatus) {
     return groupByEventStatus.entrySet().stream()
         .map(entry -> makeEventResponsesByStatus(today, entry.getKey(), entry.getValue()))
         .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
@@ -51,10 +56,12 @@ public class EventResponse {
   private static EventResponse from(LocalDate today, EventStatus status, Event event) {
     return
         new EventResponse(event.getId(), event.getName(), event.getStartDate(), event.getEndDate(),
+            event.getSubscriptionStartDate(), event.getSubscriptionEndDate(),
             event.getTags()
                 .stream()
                 .map(tag -> tag.getTag().getName())
-                .collect(Collectors.toList()), status.name(), event.getImageUrl(),
+                .collect(Collectors.toList()), status.name(),
+            event.calculateEventSubscriptionStatus(today).name(), event.getImageUrl(),
             event.calculateRemainingDays(today));
   }
 

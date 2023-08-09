@@ -43,7 +43,9 @@ public class Event extends BaseEntity {
   private LocalDateTime startDate;
   @Column(nullable = false)
   private LocalDateTime endDate;
+  @Column(nullable = false)
   private LocalDateTime subscriptionStartDate;
+  @Column(nullable = false)
   private LocalDateTime subscriptionEndDate;
   @Column(nullable = false)
   private String informationUrl;
@@ -70,6 +72,7 @@ public class Event extends BaseEntity {
       final String imageUrl
   ) {
     validateStartBeforeOrEqualEndDateTime(startDate, endDate);
+    validateSubscriptionDateTimes(subscriptionStartDate, subscriptionEndDate, startDate, endDate);
 
     this.name = name;
     this.location = location;
@@ -117,10 +120,6 @@ public class Event extends BaseEntity {
   }
 
   public EventSubscriptionStatus calculateEventSubscriptionStatus(final LocalDate now) {
-    if (subscriptionStartDate == null) {
-      // TODO: 2023-08-09 적절한지 한 번 더 확인하기
-      return EventSubscriptionStatus.ALWAYS;
-    }
     if (now.isBefore(subscriptionStartDate.toLocalDate())) {
       return EventSubscriptionStatus.UPCOMING;
     }
@@ -141,6 +140,7 @@ public class Event extends BaseEntity {
       final List<Tag> tags
   ) {
     validateStartBeforeOrEqualEndDateTime(startDate, endDate);
+    validateSubscriptionDateTimes(subscriptionStartDate, subscriptionEndDate, startDate, endDate);
 
     this.name = name;
     this.location = location;
@@ -160,6 +160,20 @@ public class Event extends BaseEntity {
       final LocalDateTime endDateTime) {
     if (startDateTime.isAfter(endDateTime)) {
       throw new EventException(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME);
+    }
+  }
+
+  private void validateSubscriptionDateTimes(final LocalDateTime subscriptionStartDateTime,
+      final LocalDateTime subscriptionEndDateTime, final LocalDateTime startDateTime,
+      final LocalDateTime endDateTime) {
+    if (subscriptionStartDateTime.isAfter(subscriptionEndDateTime)) {
+      throw new EventException(EventExceptionType.SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END);
+    }
+    if (subscriptionEndDateTime.isAfter(endDateTime)) {
+      throw new EventException(EventExceptionType.SUBSCRIPTION_END_AFTER_EVENT_END);
+    }
+    if (subscriptionStartDateTime.isAfter(startDateTime)) {
+      throw new EventException(EventExceptionType.SUBSCRIPTION_START_AFTER_EVENT_START);
     }
   }
 
