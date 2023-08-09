@@ -59,7 +59,7 @@ public class Participant extends BaseEntity {
   }
 
   public void validateOwner(final Member member) {
-    if (!this.member.getId().equals(member.getId())) {
+    if (this.member.isNotMe(member)) {
       throw new EventException(EventExceptionType.FORBIDDEN_UPDATE_PARTICIPATE);
     }
   }
