@@ -4,6 +4,7 @@ import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 import static com.emmsale.notification.exception.NotificationExceptionType.ALREADY_EXIST_NOTIFICATION;
 import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
+import static com.emmsale.notification.exception.NotificationExceptionType.NOT_OWNER;
 
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -33,7 +34,8 @@ public class RequestNotificationCommandService {
   private final MemberRepository memberRepository;
   private final FirebaseCloudMessageClient firebaseCloudMessageClient;
 
-  public RequestNotificationResponse create(final RequestNotificationRequest requestNotificationRequest) {
+  public RequestNotificationResponse create(
+      final RequestNotificationRequest requestNotificationRequest) {
     final Long senderId = requestNotificationRequest.getSenderId();
     final Long receiverId = requestNotificationRequest.getReceiverId();
     final Long eventId = requestNotificationRequest.getEventId();
@@ -103,7 +105,8 @@ public class RequestNotificationCommandService {
       final RequestNotificationModifyRequest requestNotificationModifyRequest,
       final Long notificationId
   ) {
-    final RequestNotification savedRequestNotification = requestNotificationRepository.findById(notificationId)
+    final RequestNotification savedRequestNotification = requestNotificationRepository.findById(
+            notificationId)
         .orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
 
     savedRequestNotification.modifyStatus(requestNotificationModifyRequest.getUpdatedStatus());
@@ -116,5 +119,23 @@ public class RequestNotificationCommandService {
     return requestNotifications.stream()
         .map(RequestNotificationResponse::from)
         .collect(Collectors.toList());
+  }
+
+  public void delete(final Member member, final Long notificationId) {
+    final RequestNotification notification = requestNotificationRepository.findById(notificationId)
+        .orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
+
+    validateNotificationOwner(notification, member);
+
+    requestNotificationRepository.delete(notification);
+  }
+
+  private void validateNotificationOwner(
+      final RequestNotification notification,
+      final Member member
+  ) {
+    if (notification.isNotOwner(member.getId())) {
+      throw new NotificationException(NOT_OWNER);
+    }
   }
 }

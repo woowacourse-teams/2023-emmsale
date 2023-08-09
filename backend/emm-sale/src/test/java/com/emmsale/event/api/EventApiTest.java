@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -23,11 +24,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.application.EventService;
+import com.emmsale.event.application.dto.EventCancelParticipateRequest;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.event.application.dto.ParticipateUpdateRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
@@ -58,8 +61,6 @@ import org.springframework.test.web.servlet.ResultActions;
 @WebMvcTest(EventApi.class)
 class EventApiTest extends MockMvcTestHelper {
 
-  private static final int QUERY_YEAR = 2023;
-  private static final int QUERY_MONTH = 7;
   private static final ResponseFieldsSnippet EVENT_DETAIL_RESPONSE_FILED = responseFields(
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("event 식별자"),
       fieldWithPath("name").type(JsonFieldType.STRING).description("envent 이름"),
@@ -94,17 +95,21 @@ class EventApiTest extends MockMvcTestHelper {
   }
 
   @Test
-  @DisplayName("Event에 사용자를 참여자로 추가할 수 있다.")
+  @DisplayName("Event에 참여게시글을 추가할 수 있다.")
   void participateEvent() throws Exception {
     //given
     final Long eventId = 1L;
     final Long memberId = 2L;
     final Long participantId = 3L;
-    final EventParticipateRequest request = new EventParticipateRequest(memberId);
+    final String content = "함께 해요 게시글의 내용";
+    final EventParticipateRequest request = new EventParticipateRequest(memberId, content);
     final String fakeAccessToken = "Bearer accessToken";
 
     final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자"));
+        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 식별자"),
+        fieldWithPath("content").type(JsonFieldType.STRING)
+            .description("함께 해요 게시글의 내용(공백 불가, 255자 최대)")
+    );
 
     when(eventService.participate(any(), any(), any())).thenReturn(participantId);
 
@@ -124,7 +129,7 @@ class EventApiTest extends MockMvcTestHelper {
     //given
     final Long eventId = 1L;
     final Long memberId = 2L;
-    final EventParticipateRequest request = new EventParticipateRequest(memberId);
+    final EventCancelParticipateRequest request = new EventCancelParticipateRequest(memberId);
     final String fakeAccessToken = "Bearer accessToken";
 
     final RequestParametersSnippet requestParameters = requestParameters(
@@ -146,10 +151,12 @@ class EventApiTest extends MockMvcTestHelper {
     // given
     final RequestParametersSnippet requestParameters = requestParameters(
         parameterWithName("category").description("행사 카테고리(CONFERENCE, COMPETITION)"),
-        parameterWithName("year").description("조회하고자 하는 연도(2015 이상의 값)(option)").optional(),
-        parameterWithName("month").description("조회하고자 하는 월(1~12)(option)").optional(),
-        parameterWithName("tag").description("필터링하려는 태그(option)").optional(),
-        parameterWithName("status").description("필터링하려는 상태(option)").optional()
+        parameterWithName("start_date").description("필터링하려는 기간의 시작일(yyyy-mm-dd)(option)")
+            .optional(),
+        parameterWithName("end_date").description("필터링하려는 기간의 끝일(yyyy-mm-dd)(option)").optional(),
+        parameterWithName("tags").description("필터링하려는 태그(option)").optional(),
+        parameterWithName("statuses").description("필터링하려는 상태(UPCOMING, IN_PROGRESS, ENDED)(option)")
+            .optional()
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -179,29 +186,27 @@ class EventApiTest extends MockMvcTestHelper {
         new EventResponse(2L, "AI 컨퍼런스", LocalDateTime.parse("2023-07-22T12:00:00"),
             LocalDateTime.parse("2023-07-30T12:00:00"), List.of("AI"), "진행 예정",
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3),
-        new EventResponse(4L, "안드로이드 컨퍼런스", LocalDateTime.parse("2023-06-29T12:00:00"),
-            LocalDateTime.parse("2023-07-16T12:00:00"), List.of("백엔드", "프론트엔드"), "종료된 행사",
-            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
             3)
 
     );
 
-    when(eventService.findEvents(any(), any(LocalDate.class), eq(QUERY_YEAR), eq(QUERY_MONTH),
-        eq(null), eq(null))).thenReturn(eventResponses);
+    when(eventService.findEvents(any(EventType.class), any(LocalDate.class), eq("2023-07-01"),
+        eq("2023-07-31"),
+        eq(null), any())).thenReturn(eventResponses);
 
     // when & then
     mockMvc.perform(get("/events")
             .param("category", "CONFERENCE")
-            .param("year", "2023")
-            .param("month", "7")
+            .param("start_date", "2023-07-01")
+            .param("end_date", "2023-07-31")
+            .param("statuses", "UPCOMING,IN_PROGRESS")
         )
         .andExpect(status().isOk())
         .andDo(document("find-events", requestParameters, responseFields));
   }
 
   @Test
-  @DisplayName("행사의 참여자를 전체 조회할 수 있다.")
+  @DisplayName("행사의 참여 게시글을 전체 조회할 수 있다.")
   void findParticipants() throws Exception {
     //given
     final Long eventId = 1L;
@@ -210,16 +215,50 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
         fieldWithPath("[].name").type(JsonFieldType.STRING).description("member 이름"),
         fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
-        fieldWithPath("[].description").type(JsonFieldType.STRING).description("한줄 자기 소개"));
+        fieldWithPath("[].description").type(JsonFieldType.STRING).description("한줄 자기 소개"),
+        fieldWithPath("[].content").type(JsonFieldType.STRING).description("함께해요 게시글 내용"),
+        fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("함께해요 게시글 작성 날짜"),
+        fieldWithPath("[].updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜")
+    );
     final List<ParticipantResponse> responses = List.of(
-        new ParticipantResponse(1L, 1L, "스캇", "imageUrl", "토마토 던지는 사람"),
-        new ParticipantResponse(2L, 2L, "홍실", "imageUrl", "토마토 맞는 사람"));
+        new ParticipantResponse(1L, 1L, "스캇", "imageUrl", "토마토 던지는 사람", "저랑 같이 컨퍼런스 갈 사람",
+            LocalDate.of(2023, 7, 15), LocalDate.of(2023, 7, 15)),
+        new ParticipantResponse(2L, 2L, "홍실", "imageUrl", "토마토 맞는 사람", "스캇 말고 저랑 갈 사람",
+            LocalDate.of(2023, 7, 22), LocalDate.of(2023, 7, 22))
+    );
 
     when(eventService.findParticipants(eventId)).thenReturn(responses);
 
     //when && then
     mockMvc.perform(get(format("/events/%s/participants", eventId))).andExpect(status().isOk())
         .andDo(document("find-participants", responseFields));
+  }
+
+  @Test
+  @DisplayName("Event에 참여게시글을 수정할 수 있다.")
+  void updateParticipate() throws Exception {
+    //given
+    final Long eventId = 1L;
+    final Long participantId = 3L;
+    final String content = "함께 해요 게시글의 내용";
+    final ParticipateUpdateRequest request = new ParticipateUpdateRequest(content);
+    final String fakeAccessToken = "Bearer accessToken";
+
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("content").type(JsonFieldType.STRING)
+            .description("함께 해요 게시글의 내용(공백 불가, 255자 최대)")
+    );
+
+    //when
+    mockMvc.perform(
+            put("/events/{eventId}/participants/{participantId}", eventId, participantId)
+                .header("Authorization", fakeAccessToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isOk())
+        .andDo(document("update-participate", requestFields));
+
+    verify(eventService).updateParticipant(any(), any(), any(), any());
   }
 
   @Test
@@ -469,4 +508,5 @@ class EventApiTest extends MockMvcTestHelper {
       result.andExpect(status().isBadRequest());
     }
   }
+
 }

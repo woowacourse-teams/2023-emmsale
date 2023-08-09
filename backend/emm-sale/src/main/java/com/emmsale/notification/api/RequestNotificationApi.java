@@ -10,6 +10,7 @@ import com.emmsale.notification.application.dto.RequestNotificationResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +28,8 @@ public class RequestNotificationApi {
 
   @PostMapping("/request-notifications")
   @ResponseStatus(HttpStatus.CREATED)
-  public RequestNotificationResponse create(@RequestBody final RequestNotificationRequest requestNotificationRequest) {
+  public RequestNotificationResponse create(
+      @RequestBody final RequestNotificationRequest requestNotificationRequest) {
     return requestNotificationCommandService.create(requestNotificationRequest);
   }
 
@@ -56,5 +58,14 @@ public class RequestNotificationApi {
   @ResponseStatus(HttpStatus.OK)
   public List<RequestNotificationResponse> findAll(final Member member) {
     return requestNotificationCommandService.findAllNotifications(member);
+  }
+
+  @DeleteMapping("/request-notifications/{request-notification-id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void delete(
+      final Member member,
+      @PathVariable("request-notification-id") final Long notificationId
+  ) {
+    requestNotificationCommandService.delete(member, notificationId);
   }
 }

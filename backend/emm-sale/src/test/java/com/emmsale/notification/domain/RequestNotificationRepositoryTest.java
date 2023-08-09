@@ -15,7 +15,7 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Sql("/data-test.sql")
-class RequestRequestNotificationRepositoryTest {
+class RequestNotificationRepositoryTest {
 
   @Autowired
   private RequestNotificationRepository requestNotificationRepository;

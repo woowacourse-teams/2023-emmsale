@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -35,7 +36,7 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
 
 @WebMvcTest(RequestNotificationApi.class)
-class RequestRequestNotificationApiTest extends MockMvcTestHelper {
+class RequestNotificationApiTest extends MockMvcTestHelper {
 
   @MockBean
   private RequestNotificationCommandService requestNotificationCommandService;
@@ -215,5 +216,26 @@ class RequestRequestNotificationApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-all-requestNotification", responseFields));
+  }
+
+  @Test
+  @DisplayName("delete() : 알림 상태를 성공적으로 변경되면 204 No Content를 반환할 수 있다.")
+  void test_delete() throws Exception {
+    //given
+    final PathParametersSnippet pathParameters = pathParameters(
+        parameterWithName("request-notification-id").description("삭제할 알림 ID")
+    );
+
+    final long notificationId = 1L;
+
+    doNothing().when(requestNotificationCommandService).delete(any(), any());
+
+    //when & then
+    mockMvc.perform(delete("/request-notifications/{request-notification-id}", notificationId)
+            .header("Authorization", "Bearer AccessToken")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("delete-request-notification", pathParameters));
   }
 }

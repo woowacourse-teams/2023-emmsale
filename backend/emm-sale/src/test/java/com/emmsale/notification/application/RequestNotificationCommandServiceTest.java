@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -31,7 +33,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class RequestRequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper {
+class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
   private RequestNotificationCommandService requestNotificationCommandService;
@@ -209,5 +211,54 @@ class RequestRequestNotificationCommandServiceTest extends ServiceIntegrationTes
     //then
     assertThat(notifications).extracting("message", String.class)
         .containsExactly(message1, message2);
+  }
+
+  @Test
+  @DisplayName("알림을 삭제한다.")
+  void test_delete() {
+    //given
+    final Member sender = memberRepository.findById(1L).get();
+    final Member receiver = memberRepository.findById(2L).get();
+
+    final String message = "message";
+    final long eventId = 123L;
+
+    final RequestNotification notification = requestNotificationRepository.save(
+        new RequestNotification(sender.getId(), receiver.getId(), eventId, message)
+    );
+    final Long notificationId = notification.getId();
+
+    //when
+    requestNotificationCommandService.delete(receiver, notificationId);
+
+    //then
+    assertFalse(requestNotificationRepository.findById(notificationId).isPresent());
+  }
+
+  @Test
+  @DisplayName("알림의 소유자가 아닐 경우 NOT_OWNER 타입의 NotificationException이 발생한다.")
+  void test_deleteByNotOwner() {
+    //given
+    final Member sender = memberRepository.findById(1L).get();
+    final Member receiver = memberRepository.findById(2L).get();
+
+    final String message = "message";
+    final long eventId = 123L;
+
+    final RequestNotification notification = requestNotificationRepository.save(
+        new RequestNotification(sender.getId(), receiver.getId(), eventId, message)
+    );
+    final Long notificationId = notification.getId();
+
+    final NotificationExceptionType expectExceptionType = NotificationExceptionType.NOT_OWNER;
+
+    //when
+    final NotificationException actualException = assertThrowsExactly(
+        NotificationException.class,
+        () -> requestNotificationCommandService.delete(sender, notificationId)
+    );
+
+    //then
+    assertEquals(expectExceptionType, actualException.exceptionType());
   }
 }
