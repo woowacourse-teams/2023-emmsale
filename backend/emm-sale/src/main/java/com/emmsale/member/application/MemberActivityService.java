@@ -13,6 +13,7 @@ import com.emmsale.member.domain.MemberActivityRepository;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
+import java.util.HashSet;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,9 @@ public class MemberActivityService {
       final Member member,
       final MemberActivityInitialRequest memberActivityInitialRequest
   ) {
+    if (member.isOnboarded()) {
+      throw new MemberException(MemberExceptionType.ALREADY_ONBOARDING);
+    }
     final List<Long> activityIds = memberActivityInitialRequest.getActivityIds();
     saveMemberActivities(member, activityIds);
 
@@ -62,9 +66,30 @@ public class MemberActivityService {
       final MemberActivityAddRequest memberActivityAddRequest
   ) {
     final List<Long> activityIds = memberActivityAddRequest.getActivityIds();
+    final List<MemberActivity> memberActivities = memberActivityRepository.findAllByMember(member);
+    if (hasDuplicateId(memberActivities, activityIds)) {
+      throw new MemberException(MemberExceptionType.DUPLICATE_ACTIVITY);
+    }
+    if (isAlreadyExistActivity(memberActivities, activityIds)) {
+      throw new MemberException(MemberExceptionType.ALREADY_EXIST_ACTIVITY);
+    }
     saveMemberActivities(member, activityIds);
 
     return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
+  }
+
+  private boolean isAlreadyExistActivity(final List<MemberActivity> memberActivities,
+      final List<Long> activityIds) {
+    return memberActivities
+        .stream()
+        .anyMatch(memberActivity ->
+            activityIds.contains(memberActivity.getActivity().getId())
+        );
+  }
+
+  private boolean hasDuplicateId(final List<MemberActivity> memberActivities,
+      final List<Long> activityIds) {
+    return new HashSet<>(activityIds).size() != memberActivities.size();
   }
 
   public List<MemberActivityResponses> deleteActivity(

@@ -53,7 +53,7 @@ public class Event extends BaseEntity {
   private List<EventTag> tags = new ArrayList<>();
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
-  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
   private List<Participant> participants = new ArrayList<>();
 
   public Event(
@@ -76,20 +76,17 @@ public class Event extends BaseEntity {
     this.imageUrl = imageUrl;
   }
 
-  public Participant addParticipant(final Member member) {
-    final Participant participant = new Participant(member, this);
+  public Participant addParticipant(final Member member, final String content) {
+    final Participant participant = new Participant(member, this, content);
     participants.add(participant);
     return participant;
   }
 
-  public List<EventTag> addAllEventTags(final List<Tag> tags) {
+  public void addAllEventTags(final List<Tag> tags) {
     final List<EventTag> eventTags = tags.stream()
         .map(tag -> new EventTag(this, tag))
         .collect(Collectors.toList());
-
     this.tags.addAll(eventTags);
-
-    return eventTags;
   }
 
   public void validateAlreadyParticipate(final Member member) {
@@ -144,5 +141,9 @@ public class Event extends BaseEntity {
 
   public int calculateRemainingDays(final LocalDate today) {
     return Period.between(today, startDate.toLocalDate()).getDays();
+  }
+
+  public boolean isDiffer(final Long eventId) {
+    return !this.getId().equals(eventId);
   }
 }

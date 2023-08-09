@@ -1,7 +1,9 @@
 package com.emmsale.event;
 
+import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventType;
+import com.emmsale.member.domain.Member;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -68,8 +70,11 @@ public class EventFixture {
     );
   }
 
-
   public static LocalDate 날짜_8월_10일() {
     return LocalDate.of(2023, 8, 10);
+  }
+
+  public static EventParticipateRequest createEventParticipateRequest(final Member member){
+    return new EventParticipateRequest(member.getId(), "같이 가요 요청 글");
   }
 }

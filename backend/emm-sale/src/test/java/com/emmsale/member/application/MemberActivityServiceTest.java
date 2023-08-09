@@ -17,6 +17,7 @@ import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import java.util.List;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("Activity의 id를 통해서, 사용자의 Activity를 등록하고 사용자의 이름을 수정할 수 있다.")
   void registerActivities() throws Exception {
     //given
-    final List<Long> activityIds = List.of(1L, 2L, 3L, 4L);
+    final List<Long> activityIds = List.of(1L, 2L, 3L);
     final long savedMemberId = 1L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
@@ -47,6 +48,31 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
         () -> assertDoesNotThrow(() -> memberActivityService.registerActivities(member, request)),
         () -> assertEquals(updateName, member.getName())
     );
+  }
+
+  @Test
+  @DisplayName("특정 사용자에 대해 이미 등록되어 있는 Activity를 등록하려고 하면 예외를 반환한다.")
+  void registerActivities_fail() throws Exception {
+    //given
+    final List<Long> activityIds = List.of(1L, 2L, 3L, 4L);
+    final long savedMemberId = 1L;
+
+    final Member member = memberRepository.findById(savedMemberId).get();
+    final String updateName = "우르";
+
+    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(updateName,
+        activityIds);
+
+    // when
+    memberActivityService.registerActivities(member, request);
+    final ThrowingCallable actual = () -> memberActivityService.registerActivities(member,
+        request);
+
+    // then
+    assertThatThrownBy(actual)
+        .isInstanceOf(MemberException.class)
+        .hasMessage(MemberExceptionType.ALREADY_ONBOARDING.errorMessage());
+
   }
 
   @Test
@@ -82,7 +108,6 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
 
     //when
     final List<MemberActivityResponses> actual = memberActivityService.addActivity(member, request);
-
     //then
     assertThat(expected)
         .usingRecursiveComparison()
@@ -95,13 +120,41 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
   void test_addActivity_invalid_activity_ids_Exception() throws Exception {
     //given
     final Member savedMember = memberRepository.findById(1L).get();
-    final List<Long> activityIds = List.of(1L, 2L, 7L);
+    final List<Long> activityIds = List.of(4L, 5L, 7L);
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
     //when & then
     assertThatThrownBy(() -> memberActivityService.addActivity(savedMember, request))
         .isInstanceOf(MemberException.class)
         .hasMessage(MemberExceptionType.INVALID_ACTIVITY_IDS.errorMessage());
+  }
+
+  @Test
+  @DisplayName("addActivity() : 이미 존재하는 activityId들이 있으면 ALREADY_EXIST_ACTIVITY Exception이 발생합니다.")
+  void test_addActivity_ALREADY_EXIST_ACTIVITY_Exception_duplicate_try() throws Exception {
+    //given
+    final Member savedMember = memberRepository.findById(1L).get();
+    final List<Long> activityIds = List.of(1L, 2L, 7L);
+    final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
+
+    // when, then
+    assertThatThrownBy(() -> memberActivityService.addActivity(savedMember, request))
+        .isInstanceOf(MemberException.class)
+        .hasMessage(MemberExceptionType.ALREADY_EXIST_ACTIVITY.errorMessage());
+  }
+
+  @Test
+  @DisplayName("addActivity() : 중복되는 Activity Id가 포함되어 있으면 ALREADY_EXIST_ACTIVITY Exception이 발생합니다.")
+  void test_addActivity_ALREADY_EXIST_ACTIVITY_Exception_duplicate_input() throws Exception {
+    //given
+    final Member savedMember = memberRepository.findById(1L).get();
+    final List<Long> activityIds = List.of(4L, 4L, 5L);
+    final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
+
+    // when, then
+    assertThatThrownBy(() -> memberActivityService.addActivity(savedMember, request))
+        .isInstanceOf(MemberException.class)
+        .hasMessage(MemberExceptionType.DUPLICATE_ACTIVITY.errorMessage());
   }
 
   @Test

@@ -47,4 +47,8 @@ public class Notification extends BaseEntity {
   public void modifyStatus(final NotificationStatus status) {
     this.status = status;
   }
+
+  public boolean isNotOwner(final Long memberId) {
+    return !receiverId.equals(memberId);
+  }
 }

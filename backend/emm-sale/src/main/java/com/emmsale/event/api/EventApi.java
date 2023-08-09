@@ -9,6 +9,8 @@ import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.ParticipantResponse;
+import com.emmsale.event.application.dto.ParticipateUpdateRequest;
+import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
 import com.emmsale.member.domain.Member;
 import java.time.LocalDate;
@@ -43,14 +45,25 @@ public class EventApi {
   @PostMapping("/{eventId}/participants")
   public ResponseEntity<Void> participateEvent(
       @PathVariable final Long eventId,
-      @RequestBody final EventParticipateRequest request,
+      @RequestBody @Valid final EventParticipateRequest request,
       final Member member
   ) {
-    final Long participantId = eventService.participate(eventId, request.getMemberId(), member);
+    final Long participantId = eventService.participate(eventId, request, member);
 
     return ResponseEntity
         .created(create(format("/events/%s/participants/%s", eventId, participantId)))
         .build();
+  }
+
+  @PutMapping("/{eventId}/participants/{participantId}")
+  public ResponseEntity<Void> updateParticipate(
+      @PathVariable final Long eventId,
+      @PathVariable final Long participantId,
+      @RequestBody @Valid final ParticipateUpdateRequest request,
+      final Member member
+  ) {
+    eventService.updateParticipant(eventId, participantId, request, member);
+    return ResponseEntity.ok().build();
   }
 
   @DeleteMapping("/{eventId}/participants")
@@ -73,12 +86,12 @@ public class EventApi {
   @GetMapping
   public ResponseEntity<List<EventResponse>> findEvents(
       @RequestParam final EventType category,
-      @RequestParam(required = false) final Integer year,
-      @RequestParam(required = false) final Integer month,
-      @RequestParam(required = false) final String tag,
-      @RequestParam(required = false) final String status) {
+      @RequestParam(name = "start_date", required = false) final String startDate,
+      @RequestParam(name = "end_date", required = false) final String endDate,
+      @RequestParam(required = false) final List<String> tags,
+      @RequestParam(required = false) final List<EventStatus> statuses) {
     return ResponseEntity.ok(
-        eventService.findEvents(category, LocalDate.now(), year, month, tag, status));
+        eventService.findEvents(category, LocalDate.now(), startDate, endDate, tags, statuses));
   }
 
   @PostMapping

@@ -10,10 +10,26 @@ public enum MemberExceptionType implements BaseExceptionType {
       "해당 멤버는 존재하지 않습니다."
   ),
 
+  ALREADY_ONBOARDING(
+      HttpStatus.BAD_REQUEST,
+      "이미 온보딩을 완료한 사용자입니다."
+  ),
+
   INVALID_ACTIVITY_IDS(
       HttpStatus.BAD_REQUEST,
       "요청한 activity id들 중에 유효하지 않은 값이 존재합니다"
   ),
+
+  ALREADY_EXIST_ACTIVITY(
+      HttpStatus.BAD_REQUEST,
+      "이미 등록된 활동입니다."
+  ),
+
+  DUPLICATE_ACTIVITY(
+      HttpStatus.BAD_REQUEST,
+      "요청에 중복된 활동 ID가 포함되어 있습니다."
+  ),
+
   NULL_DESCRIPTION(
       HttpStatus.BAD_REQUEST,
       "한 줄 자기소개는 null이 될 수 없습니다."

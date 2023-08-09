@@ -1,8 +1,10 @@
 package com.emmsale.notification.application;
 
-import static com.emmsale.notification.exception.NotificationExceptionType.*;
 import static com.emmsale.notification.exception.NotificationExceptionType.CONVERTING_JSON_ERROR;
+import static com.emmsale.notification.exception.NotificationExceptionType.FIREBASE_CONNECT_ERROR;
+import static com.emmsale.notification.exception.NotificationExceptionType.GOOGLE_REQUEST_TOKEN_ERROR;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_FCM_TOKEN;
+import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_OPEN_PROFILE_URL;
 
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -42,6 +44,7 @@ public class FirebaseCloudMessageClient {
   private static final String POSTFIX_FCM_REQUEST_URL = "/messages:send";
   private static final String FIREBASE_KEY_PATH = "kerdy-submodule/firebase-kerdy.json";
   private static final boolean DEFAULT_VALIDATE_ONLY = false;
+  private static final String GOOGLE_AUTH_URL = "https://www.googleapis.com/auth/cloud-platform";
 
   private final ObjectMapper objectMapper;
   private final MemberRepository memberRepository;
@@ -74,7 +77,7 @@ public class FirebaseCloudMessageClient {
     );
 
     if (exchange.getStatusCode().isError()) {
-      log.error("firebase 접속 에러 = {}", exchange.getBody());
+      throw new NotificationException(FIREBASE_CONNECT_ERROR);
     }
   }
 
@@ -84,37 +87,36 @@ public class FirebaseCloudMessageClient {
     final Member sender = memberRepository.findById(senderId)
         .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 
+    final String openProfileUrl = sender.getOptionalOpenProfileUrl()
+        .orElseThrow(() -> new NotificationException(NOT_FOUND_OPEN_PROFILE_URL));
+
     final Data messageData = new Data(
         sender.getName(), senderId.toString(),
         notification.getReceiverId().toString(), notification.getMessage(),
-        sender.getOpenProfileUrl()
+        openProfileUrl
     );
 
-    final Message message = new Message(messageData, targetToken);
-
-    final FcmMessage fcmMessage = new FcmMessage(DEFAULT_VALIDATE_ONLY, message);
+    final FcmMessage fcmMessage = new FcmMessage(
+        DEFAULT_VALIDATE_ONLY, new Message(messageData, targetToken)
+    );
 
     try {
       return objectMapper.writeValueAsString(fcmMessage);
     } catch (JsonProcessingException e) {
-      log.error("메세지 보낼 때 JSON 변환 에러", e);
       throw new NotificationException(CONVERTING_JSON_ERROR);
     }
   }
 
   private String getAccessToken() {
-    final String firebaseConfigPath = FIREBASE_KEY_PATH;
-
     try {
       final GoogleCredentials googleCredentials = GoogleCredentials
-          .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-          .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+          .fromStream(new ClassPathResource(FIREBASE_KEY_PATH).getInputStream())
+          .createScoped(List.of(GOOGLE_AUTH_URL));
 
       googleCredentials.refreshIfExpired();
 
       return googleCredentials.getAccessToken().getTokenValue();
     } catch (IOException e) {
-      log.error("구글 토큰 요청 에러", e);
       throw new NotificationException(GOOGLE_REQUEST_TOKEN_ERROR);
     }
   }

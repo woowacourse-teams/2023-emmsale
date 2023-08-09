@@ -112,12 +112,20 @@ create table fcm_token
     member_id bigint       not null unique
 );
 
+-- 2023-08-08 14:40
+alter table event_member
+    add column content varchar(255) not null;
+alter table event_member
+    add column created_at datetime(6);
+alter table event_member
+    add column updated_at datetime(6);
+
 -- 2023-08-08 17:20
 create table block
 (
     id                bigint auto_increment primary key,
-    block_member_id   bigint not null,
-    request_member_id bigint not null,
-    created_at        datetime(6),
-    updated_at        datetime(6)
+    block_member_id   bigint      not null,
+    request_member_id bigint      not null,
+    created_at        datetime(6) null,
+    updated_at        datetime(6) null
 );

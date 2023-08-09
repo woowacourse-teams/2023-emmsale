@@ -1,8 +1,10 @@
 package com.emmsale.notification.application;
 
 import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
+import static com.emmsale.notification.exception.NotificationExceptionType.ALREADY_EXIST_NOTIFICATION;
 import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
+import static com.emmsale.notification.exception.NotificationExceptionType.NOT_OWNER;
 
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -35,26 +37,34 @@ public class NotificationCommandService {
   public NotificationResponse create(final NotificationRequest notificationRequest) {
     final Long senderId = notificationRequest.getSenderId();
     final Long receiverId = notificationRequest.getReceiverId();
+    final Long eventId = notificationRequest.getEventId();
 
-    final List<Long> memberIds = List.of(senderId, receiverId);
-
-    if (isNotExistedSenderOrReceiver(memberIds)) {
-      throw new NotificationException(BAD_REQUEST_MEMBER_ID);
-    }
-
-    validateExistedSenderOrReceiver(memberIds);
+    validateAlreadyExistedNotification(senderId, receiverId, eventId);
+    validateExistedSenderOrReceiver(List.of(senderId, receiverId));
 
     final Notification savedNotification = notificationRepository.save(
         new Notification(
             senderId,
             receiverId,
-            notificationRequest.getEventId(),
+            eventId,
             notificationRequest.getMessage()
         ));
 
     firebaseCloudMessageClient.sendMessageTo(receiverId, savedNotification);
 
     return NotificationResponse.from(savedNotification);
+  }
+
+  private void validateAlreadyExistedNotification(
+      final Long senderId,
+      final Long receiverId,
+      final Long eventId
+  ) {
+    if (notificationRepository.existsBySenderIdAndReceiverIdAndEventId(
+        senderId, receiverId, eventId
+    )) {
+      throw new NotificationException(ALREADY_EXIST_NOTIFICATION);
+    }
   }
 
   private void validateExistedSenderOrReceiver(final List<Long> memberIds) {
@@ -107,5 +117,20 @@ public class NotificationCommandService {
     return notifications.stream()
         .map(NotificationResponse::from)
         .collect(Collectors.toList());
+  }
+
+  public void delete(final Member member, final Long notificationId) {
+    final Notification notification = notificationRepository.findById(notificationId)
+        .orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
+
+    validateNotificationOwner(notification, member);
+
+    notificationRepository.delete(notification);
+  }
+
+  private void validateNotificationOwner(final Notification notification, final Member member) {
+    if (notification.isNotOwner(member.getId())) {
+      throw new NotificationException(NOT_OWNER);
+    }
   }
 }

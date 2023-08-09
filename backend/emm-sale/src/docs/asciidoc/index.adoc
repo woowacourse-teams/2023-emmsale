@@ -125,13 +125,24 @@ include::{snippets}/find-event/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-event/response-fields.adoc[]
 
-=== `POST` : 행사에 함께가기 요청(행사에 함께 가는 멤버에 등록)
+=== `POST` : 행사의 함께 해요 목록에 게시글 추가
+
+.HTTP request 설명
+include::{snippets}/participate-event/request-fields.adoc[]
 
 .HTTP request
 include::{snippets}/participate-event/http-request.adoc[]
 
 .HTTP response
 include::{snippets}/participate-event/http-response.adoc[]
+
+=== `PUT` : 행사의 함께 해요 목록에 게시글 수정
+
+.HTTP request
+include::{snippets}/update-participate/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/update-participate/http-response.adoc[]
 
 === `DELETE` : 행사에 함께가기 요청 취소(행사에 함께 가는 멤버에서 삭제)
 
@@ -144,7 +155,7 @@ include::{snippets}/participate-event-cancel/request-parameters.adoc[]
 .HTTP response
 include::{snippets}/participate-event-cancel/http-response.adoc[]
 
-=== `GET`: 행사사에 이미 참여한 멤버인지 확인
+=== `GET`: 행사에 이미 참여한 멤버인지 확인
 
 .HTTP request
 include::{snippets}/check-already-participate/http-request.adoc[]
@@ -320,6 +331,13 @@ include::{snippets}/modify-notification/request-fields.adoc[]
 include::{snippets}/modify-notification/http-request.adoc[]
 
 include::{snippets}/modify-notification/path-parameters.adoc[]
+
+=== `DELETE` : 알림 삭제
+
+.HTTP request
+include::{snippets}/delete-notification/http-request.adoc[]
+
+include::{snippets}/delete-notification/path-parameters.adoc[]
 
 === `POST` : FcmToken 생성
 
