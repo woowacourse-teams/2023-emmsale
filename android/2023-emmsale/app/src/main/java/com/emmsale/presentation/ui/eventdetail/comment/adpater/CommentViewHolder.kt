@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.comment.adpater
+package com.emmsale.presentation.ui.eventdetail.comment.adpater
 
 import android.app.AlertDialog
 import android.graphics.drawable.ColorDrawable
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.DialogCommentDeleteBinding
 import com.emmsale.databinding.ItemCommentsCommentsBinding
-import com.emmsale.presentation.ui.comment.uiState.CommentUiState
+import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState
 
 class CommentViewHolder(
     private val binding: ItemCommentsCommentsBinding,

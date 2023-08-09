@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.comment.uiState
+package com.emmsale.presentation.ui.eventdetail.comment.uiState
 
 import com.emmsale.data.comment.Comment
 import com.emmsale.data.member.Member1

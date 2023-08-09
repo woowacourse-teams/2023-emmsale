@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.childComments.adapter
+package com.emmsale.presentation.ui.eventdetail.comment.childComment.adapter
 
 import android.app.AlertDialog
 import android.graphics.drawable.ColorDrawable
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.DialogCommentDeleteBinding
 import com.emmsale.databinding.ItemChildcommentsChildcommentBinding
-import com.emmsale.presentation.ui.childComments.uiState.CommentUiState
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.CommentUiState
 
 class ChildCommentViewHolder(
     private val binding: ItemChildcommentsChildcommentBinding,

@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.childComments
+package com.emmsale.presentation.ui.eventdetail.comment.childComment
 
 import android.app.AlertDialog
 import android.content.Context
@@ -14,18 +14,18 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.databinding.DialogCommentDeleteBinding
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.childComments.adapter.ChildCommentsAdapter
-import com.emmsale.presentation.ui.childComments.uiState.ChildCommentsScreenUiState
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.adapter.ChildCommentAdapter
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsScreenUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 
-class ChildCommentsActivity : AppCompatActivity() {
+class ChildCommentActivity : AppCompatActivity() {
 
     private val binding by lazy {
         ActivityChildCommentsBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: ChildCommentsViewModel by viewModels {
-        ChildCommentsViewModel.factory
+    private val viewModel: ChildCommentViewModel by viewModels {
+        ChildCommentViewModel.factory
     }
 
     private val eventId: Long by lazy { intent.getLongExtra(KEY_EVENT_ID, -1) }
@@ -50,11 +50,11 @@ class ChildCommentsActivity : AppCompatActivity() {
 
     private fun initChildCommentsRecyclerView() {
         binding.rvChildcommentsChildcomments.apply {
-            adapter = ChildCommentsAdapter(::onChildCommentDelete)
+            adapter = ChildCommentAdapter(::onChildCommentDelete)
             itemAnimator = null
             addItemDecoration(
                 DividerItemDecoration(
-                    this@ChildCommentsActivity,
+                    this@ChildCommentActivity,
                     DividerItemDecoration.VERTICAL,
                 ),
             )
@@ -108,7 +108,7 @@ class ChildCommentsActivity : AppCompatActivity() {
     }
 
     private fun handleChildComments(childCommentsScreenUiState: ChildCommentsScreenUiState) {
-        (binding.rvChildcommentsChildcomments.adapter as ChildCommentsAdapter).submitList(
+        (binding.rvChildcommentsChildcomments.adapter as ChildCommentAdapter).submitList(
             childCommentsScreenUiState.childComments,
         )
     }
@@ -166,7 +166,7 @@ class ChildCommentsActivity : AppCompatActivity() {
         private const val KEY_PARENT_COMMENT_ID = "KEY_PARENT_COMMENT_ID"
 
         fun startActivity(context: Context, eventId: Long, parentCommentId: Long) {
-            val intent = Intent(context, ChildCommentsActivity::class.java).apply {
+            val intent = Intent(context, ChildCommentActivity::class.java).apply {
                 putExtra(KEY_EVENT_ID, eventId)
                 putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

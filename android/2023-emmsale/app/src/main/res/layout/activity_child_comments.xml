@@ -9,13 +9,13 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.childComments.ChildCommentsViewModel" />
+            type="com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.childComments.ChildCommentsActivity">
+        tools:context=".presentation.ui.eventdetail.comment.childComment.ChildCommentActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_childcomment_toolbar"

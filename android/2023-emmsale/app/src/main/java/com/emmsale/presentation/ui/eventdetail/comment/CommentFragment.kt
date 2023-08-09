@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.comment
+package com.emmsale.presentation.ui.eventdetail.comment
 
 import android.os.Bundle
 import android.view.View
@@ -8,12 +8,12 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentCommentsBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.childComments.ChildCommentsActivity
-import com.emmsale.presentation.ui.comment.adpater.CommentsAdapter
-import com.emmsale.presentation.ui.comment.uiState.CommentsScreenUiState
+import com.emmsale.presentation.ui.eventdetail.comment.adpater.CommentsAdapter
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
+import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 
-class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
+class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     override val layoutResId: Int = R.layout.fragment_comments
 
     private val eventId: Long by lazy {
@@ -23,8 +23,8 @@ class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
         } ?: throw IllegalStateException("컨퍼런스의 댓글 프래그먼트는 컨퍼런스 아이디를 모르면 존재 의미가 없습니다. 로직을 다시 확인해주세요")
     }
 
-    private val viewModel: CommentsViewModel by viewModels {
-        CommentsViewModel.factory
+    private val viewModel: CommentViewModel by viewModels {
+        CommentViewModel.factory
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,7 +62,7 @@ class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
     }
 
     private fun onChildCommentsView(commentId: Long) {
-        ChildCommentsActivity.startActivity(requireContext(), eventId, commentId)
+        ChildCommentActivity.startActivity(requireContext(), eventId, commentId)
     }
 
     private fun onCommentDelete(commentId: Long) {
@@ -78,21 +78,21 @@ class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
         }
     }
 
-    private fun handleError(commentsScreenUiState: CommentsScreenUiState) {
-        if (commentsScreenUiState.isError) {
-            context?.showToast(commentsScreenUiState.errorMessage)
+    private fun handleError(commentsUiState: CommentsUiState) {
+        if (commentsUiState.isError) {
+            context?.showToast(commentsUiState.errorMessage)
         }
     }
 
-    private fun handleNotLogin(commentsScreenUiState: CommentsScreenUiState) {
-        if (commentsScreenUiState.isNotLogin) {
+    private fun handleNotLogin(commentsUiState: CommentsUiState) {
+        if (commentsUiState.isNotLogin) {
             LoginActivity.startActivity(requireContext())
             activity?.finish()
         }
     }
 
-    private fun handleComments(commentsScreenUiState: CommentsScreenUiState) {
-        (binding.rvCommentsComments.adapter as CommentsAdapter).submitList(commentsScreenUiState.comments)
+    private fun handleComments(commentsUiState: CommentsUiState) {
+        (binding.rvCommentsComments.adapter as CommentsAdapter).submitList(commentsUiState.comments)
     }
 
     private fun handleEditComment() {
@@ -109,8 +109,8 @@ class CommentsFragment : BaseFragment<FragmentCommentsBinding>() {
     companion object {
         private const val KEY_EVENT_ID = "KEY_EVENT_ID"
 
-        fun create(eventId: Long): CommentsFragment {
-            val fragment = CommentsFragment()
+        fun create(eventId: Long): CommentFragment {
+            val fragment = CommentFragment()
             fragment.arguments = Bundle().apply {
                 putLong(KEY_EVENT_ID, eventId)
             }

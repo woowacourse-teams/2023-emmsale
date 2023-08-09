@@ -1,20 +1,19 @@
-package com.emmsale.presentation.ui.comment.adpater
+package com.emmsale.presentation.ui.eventdetail.comment.childComment.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.presentation.ui.comment.uiState.CommentUiState
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.CommentUiState
 
-class CommentsAdapter(
-    private val onChildCommentsView: (Long) -> Unit,
-    private val onCommentDelete: (Long) -> Unit,
-) : ListAdapter<CommentUiState, CommentViewHolder>(diffUtil) {
+class ChildCommentAdapter(
+    private val onDelete: (Long) -> Unit,
+) : ListAdapter<CommentUiState, ChildCommentViewHolder>(diffUtil) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
-        return CommentViewHolder.create(parent, onChildCommentsView, onCommentDelete)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildCommentViewHolder {
+        return ChildCommentViewHolder.create(parent, onDelete)
     }
 
-    override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ChildCommentViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

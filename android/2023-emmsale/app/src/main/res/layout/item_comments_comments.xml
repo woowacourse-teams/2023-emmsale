@@ -9,7 +9,7 @@
 
         <variable
             name="comment"
-            type="com.emmsale.presentation.ui.comment.uiState.CommentUiState" />
+            type="com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

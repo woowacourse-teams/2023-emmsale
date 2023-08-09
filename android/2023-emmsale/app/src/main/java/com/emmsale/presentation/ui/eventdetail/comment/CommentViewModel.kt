@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.childComments
+package com.emmsale.presentation.ui.eventdetail.comment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,21 +14,22 @@ import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
-import com.emmsale.presentation.ui.childComments.uiState.ChildCommentsScreenUiState
+import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
-class ChildCommentsViewModel(
+class CommentViewModel(
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
     private val memberRepository: MemberRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData(ChildCommentsScreenUiState.Loading)
-    val uiState: LiveData<ChildCommentsScreenUiState> = _uiState
+    private val _uiState = MutableLiveData(CommentsUiState.Loading)
+    val uiState: LiveData<CommentsUiState> = _uiState
 
-    fun fetchComment(commentId: Long) {
+    fun fetchComments(eventId: Long) {
+        changeLoadingUiState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
@@ -36,8 +37,11 @@ class ChildCommentsViewModel(
                 return@launch
             }
             val loginMemberDeferred = async { memberRepository.getMember(token.uid) }
-            val commentDeferred = async { commentRepository.getComment(commentId) }
-            val (loginMemberResult, commentResult) = awaitAll(loginMemberDeferred, commentDeferred)
+            val commentsDeferred = async { commentRepository.getComments(eventId) }
+            val (loginMemberResult, commentsResult) = awaitAll(
+                loginMemberDeferred,
+                commentsDeferred,
+            )
             when (loginMemberResult) {
                 is ApiError -> changeErrorUiState(loginMemberResult.message.toString())
                 is ApiException -> changeErrorUiState(loginMemberResult.e.message.toString())
@@ -45,12 +49,13 @@ class ChildCommentsViewModel(
             }
             val loginMember = (loginMemberResult as ApiSuccess).data as Member1
 
-            when (commentResult) {
-                is ApiError -> changeErrorUiState(commentResult.message.toString())
-                is ApiException -> changeErrorUiState(commentResult.e.message.toString())
+            @Suppress("UNCHECKED_CAST")
+            when (commentsResult) {
+                is ApiError -> changeErrorUiState(commentsResult.message.toString())
+                is ApiException -> changeErrorUiState(commentsResult.e.message.toString())
                 is ApiSuccess -> _uiState.postValue(
-                    ChildCommentsScreenUiState.create(
-                        comment = commentResult.data as Comment,
+                    CommentsUiState.create(
+                        comments = commentsResult.data as List<Comment>,
                         loginMember = loginMember,
                     ),
                 )
@@ -58,26 +63,35 @@ class ChildCommentsViewModel(
         }
     }
 
-    fun saveChildComment(content: String, parentCommentId: Long, eventId: Long) {
+    fun saveComment(content: String, eventId: Long) {
         changeLoadingUiState()
         viewModelScope.launch {
-            when (commentRepository.saveComment(content, eventId, parentCommentId)) {
+            when (commentRepository.saveComment(content, eventId)) {
                 is ApiError -> changeErrorUiState("댓글 게시에 실패했습니다.")
                 is ApiException -> changeErrorUiState("댓글 게시에 실패했습니다.")
-                is ApiSuccess -> fetchComment(parentCommentId)
+                is ApiSuccess -> fetchComments(eventId)
             }
         }
     }
 
-    fun deleteComment(commentId: Long, parentCommentId: Long) {
+    fun deleteComment(commentId: Long, eventId: Long) {
         changeLoadingUiState()
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
                 is ApiError -> changeErrorUiState("댓글 삭제에 실패했습니다.")
                 is ApiException -> changeErrorUiState("댓글 삭제에 실패했습니다.")
-                is ApiSuccess -> fetchComment(parentCommentId)
+                is ApiSuccess -> fetchComments(eventId)
             }
         }
+    }
+
+    private fun changeLoadingUiState() {
+        _uiState.postValue(
+            uiState.value!!.copy(
+                isLoading = true,
+                isError = false,
+            ),
+        )
     }
 
     private fun changeErrorUiState(errorMessage: String) {
@@ -90,18 +104,9 @@ class ChildCommentsViewModel(
         )
     }
 
-    private fun changeLoadingUiState() {
-        _uiState.postValue(
-            uiState.value!!.copy(
-                isLoading = true,
-                isError = false,
-            ),
-        )
-    }
-
     companion object {
         val factory = ViewModelFactory {
-            ChildCommentsViewModel(
+            CommentViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 commentRepository = KerdyApplication.repositoryContainer.commentRepository,
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
