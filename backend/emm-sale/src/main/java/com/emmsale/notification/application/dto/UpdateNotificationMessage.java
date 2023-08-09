@@ -28,7 +28,7 @@ public class UpdateNotificationMessage {
 
     private final Long receiverId;
     private final Long redirectId;
-    private final UpdateNotificationType updateNotificationType;
+    private final UpdateNotificationType notificationType;
     private final LocalDateTime createdAt;
   }
 }
