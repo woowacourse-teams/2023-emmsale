@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState
 
 import com.emmsale.data.comment.Comment
-import com.emmsale.data.member.Member1
+import com.emmsale.data.member.Member
 
 data class ChildCommentsScreenUiState(
     val isNotLogin: Boolean,
@@ -30,7 +30,7 @@ data class ChildCommentsScreenUiState(
             childComments = listOf(),
         )
 
-        fun create(comment: Comment, loginMember: Member1) = ChildCommentsScreenUiState(
+        fun create(comment: Comment, loginMember: Member) = ChildCommentsScreenUiState(
             isNotLogin = false,
             isLoading = false,
             isError = false,

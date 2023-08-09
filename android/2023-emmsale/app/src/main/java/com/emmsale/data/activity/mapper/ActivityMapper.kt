@@ -4,10 +4,17 @@ import com.emmsale.data.activity.Activity
 import com.emmsale.data.activity.ActivityType
 import com.emmsale.data.activity.dto.ActivitiesApiModel
 import com.emmsale.data.activity.dto.ActivityApiModel
+import com.emmsale.data.activity.dto.MemberActivitiesApiModel
 
 fun List<ActivitiesApiModel>.toData(): List<Activity> = flatMap { it.toData() }
 
 fun ActivitiesApiModel.toData(): List<Activity> = activities.map { it.toData(category) }
+
+@JvmName("mapMemberActivitiesApiModelToData")
+fun List<MemberActivitiesApiModel>.toData(): List<Activity> = flatMap { it.toData() }
+
+fun MemberActivitiesApiModel.toData(): List<Activity> =
+    memberActivityResponses.map { it.toData(activityType) }
 
 fun ActivityApiModel.toData(category: String): Activity = Activity(
     id = id,

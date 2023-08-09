@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState
 
 import com.emmsale.data.comment.Comment
-import com.emmsale.data.member.Member1
+import com.emmsale.data.member.Member
 import java.time.format.DateTimeFormatter
 
 data class CommentUiState(
@@ -19,7 +19,7 @@ data class CommentUiState(
 
         fun create(
             comment: Comment,
-            loginMember: Member1,
+            loginMember: Member,
         ) = CommentUiState(
             authorName = comment.authorName,
             lastModifiedDate = comment.updatedAt.format(dateTimeFormatter),

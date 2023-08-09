@@ -1,18 +1,12 @@
-package com.emmsale.data.member.dto
+package com.emmsale.data.activity.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ActivitiesAssociatedByActivityTypeApiModel(
+data class MemberActivitiesApiModel(
     @SerialName("activityType")
     val activityType: String,
     @SerialName("memberActivityResponses")
     val memberActivityResponses: List<ActivityApiModel>,
-)
-
-@Serializable
-data class ActivityApiModel(
-    val id: Long,
-    val name: String,
 )

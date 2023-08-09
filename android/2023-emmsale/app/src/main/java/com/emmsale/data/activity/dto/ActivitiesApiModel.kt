@@ -10,11 +10,3 @@ data class ActivitiesApiModel(
     @SerialName("activityResponses")
     val activities: List<ActivityApiModel> = emptyList(),
 )
-
-@Serializable
-data class ActivityApiModel(
-    @SerialName("id")
-    val id: Long,
-    @SerialName("name")
-    val name: String,
-)

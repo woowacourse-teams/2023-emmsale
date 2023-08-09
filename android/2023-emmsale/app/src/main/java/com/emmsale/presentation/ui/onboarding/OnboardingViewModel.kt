@@ -7,7 +7,6 @@ import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.member.Member
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
@@ -58,9 +57,13 @@ class OnboardingViewModel(
     fun updateMember() {
         viewModelScope.launch {
             _activities.value = _activities.value.copy(isLoading = true)
-            val member = Member(name.value!!, _activities.value.selectedActivityIds)
 
-            when (memberRepository.updateMember(member)) {
+            when (
+                memberRepository.updateMember(
+                    name.value!!,
+                    _activities.value.selectedActivityIds,
+                )
+            ) {
                 is ApiSuccess -> updateMemberSavingUiState(MemberSavingUiState.Success)
                 is ApiError -> updateMemberSavingUiState(MemberSavingUiState.Failed)
                 is ApiException -> updateMemberSavingUiState(MemberSavingUiState.Failed)

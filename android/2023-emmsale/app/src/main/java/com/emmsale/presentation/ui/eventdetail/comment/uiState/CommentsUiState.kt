@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.eventdetail.comment.uiState
 
 import com.emmsale.data.comment.Comment
-import com.emmsale.data.member.Member1
+import com.emmsale.data.member.Member
 
 data class CommentsUiState(
     val isNotLogin: Boolean = false,
@@ -20,7 +20,7 @@ data class CommentsUiState(
 
         fun create(
             comments: List<Comment>,
-            loginMember: Member1,
+            loginMember: Member,
         ) = CommentsUiState(
             isLoading = false,
             isError = false,

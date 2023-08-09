@@ -9,7 +9,7 @@ import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.member.Member1
+import com.emmsale.data.member.Member
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
@@ -47,7 +47,7 @@ class CommentViewModel(
                 is ApiException -> changeErrorUiState(loginMemberResult.e.message.toString())
                 else -> {}
             }
-            val loginMember = (loginMemberResult as ApiSuccess).data as Member1
+            val loginMember = (loginMemberResult as ApiSuccess).data as Member
 
             @Suppress("UNCHECKED_CAST")
             when (commentsResult) {
