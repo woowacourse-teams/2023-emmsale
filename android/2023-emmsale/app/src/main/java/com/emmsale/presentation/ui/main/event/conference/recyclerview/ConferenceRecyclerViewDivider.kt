@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.event.conference
+package com.emmsale.presentation.ui.main.event.conference.recyclerview
 
 import android.content.Context
 import android.graphics.Canvas

@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.event.conference
+package com.emmsale.presentation.ui.main.event.conference.recyclerview
 
 import androidx.recyclerview.widget.DiffUtil
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
