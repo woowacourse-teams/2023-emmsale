@@ -79,15 +79,26 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     }
 
     private fun handleError(commentsUiState: CommentsUiState) {
-        if (commentsUiState.isCommentsFetchingError) {
-            context?.showToast(getString(R.string.comments_comments_fetching_error_message))
+        fun handleCommentsFetchingError(commentsUiState: CommentsUiState) {
+            if (commentsUiState.isCommentsFetchingError) {
+                context?.showToast(getString(R.string.comments_comments_fetching_error_message))
+            }
         }
-        if (commentsUiState.isCommentPostingError) {
-            context?.showToast(getString(R.string.comments_comments_posting_error_message))
+
+        fun handleCommentPostingError(commentsUiState: CommentsUiState) {
+            if (commentsUiState.isCommentPostingError) {
+                context?.showToast(getString(R.string.comments_comments_posting_error_message))
+            }
         }
-        if (commentsUiState.isCommentDeletionError) {
-            context?.showToast(getString(R.string.comments_comments_deletion_error_message))
+
+        fun handleCommentDeletionError(commentsUiState: CommentsUiState) {
+            if (commentsUiState.isCommentDeletionError) {
+                context?.showToast(getString(R.string.comments_comments_deletion_error_message))
+            }
         }
+        handleCommentsFetchingError(commentsUiState)
+        handleCommentPostingError(commentsUiState)
+        handleCommentDeletionError(commentsUiState)
     }
 
     private fun handleNotLogin(commentsUiState: CommentsUiState) {

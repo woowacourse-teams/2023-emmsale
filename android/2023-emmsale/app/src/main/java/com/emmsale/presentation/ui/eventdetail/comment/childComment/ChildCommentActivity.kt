@@ -95,15 +95,26 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private fun handleError(childCommentsUiState: ChildCommentsUiState) {
-        if (childCommentsUiState.isCommentsFetchingError) {
-            this.showToast(getString(R.string.comments_comments_fetching_error_message))
+        fun handleCommentsFetchingError(childCommentsUiState: ChildCommentsUiState) {
+            if (childCommentsUiState.isCommentsFetchingError) {
+                showToast(getString(R.string.comments_comments_fetching_error_message))
+            }
         }
-        if (childCommentsUiState.isCommentPostingError) {
-            this.showToast(getString(R.string.comments_comments_posting_error_message))
+
+        fun handleCommentPostingError(childCommentsUiState: ChildCommentsUiState) {
+            if (childCommentsUiState.isCommentPostingError) {
+                showToast(getString(R.string.comments_comments_posting_error_message))
+            }
         }
-        if (childCommentsUiState.isCommentDeletionError) {
-            this.showToast(getString(R.string.comments_comments_deletion_error_message))
+
+        fun handleCommentDeletionError(childCommentsUiState: ChildCommentsUiState) {
+            if (childCommentsUiState.isCommentDeletionError) {
+                showToast(getString(R.string.comments_comments_deletion_error_message))
+            }
         }
+        handleCommentsFetchingError(childCommentsUiState)
+        handleCommentPostingError(childCommentsUiState)
+        handleCommentDeletionError(childCommentsUiState)
     }
 
     private fun handleNotLogin(childCommentsUiState: ChildCommentsUiState) {
