@@ -693,8 +693,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           eventInformationUrl,
           startDateTime,
           endDatetime,
-          null,
-          null,
+          beforeDateTime,
+          afterDateTime,
           tagRequests,
           imageUrl,
           type
@@ -812,8 +812,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           beforeDateTime,
           afterDateTime,
-          null,
-          null,
+          beforeDateTime,
+          afterDateTime,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE
@@ -839,8 +839,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           newStartDateTime,
           newEndDateTime,
-          null,
-          null,
+          beforeDateTime,
+          afterDateTime,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE
@@ -870,8 +870,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           beforeDateTime,
           afterDateTime,
-          null,
-          null,
+          beforeDateTime,
+          afterDateTime,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE

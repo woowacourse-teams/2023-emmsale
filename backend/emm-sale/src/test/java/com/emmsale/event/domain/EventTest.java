@@ -54,9 +54,7 @@ class EventTest {
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, afterDateTime, beforeDateTime, beforeDateTime,
-            beforeDateTime, url,
-            EventType.CONFERENCE,
-            imageUrl));
+            beforeDateTime, url, EventType.CONFERENCE, imageUrl));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
   }
@@ -114,9 +112,7 @@ class EventTest {
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, beforeDateTime, afterDateTime, afterDateTime, afterDateTime,
-            url,
-            EventType.CONFERENCE,
-            imageUrl));
+            url, EventType.CONFERENCE, imageUrl));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_EVENT_START,
         exception.exceptionType());
