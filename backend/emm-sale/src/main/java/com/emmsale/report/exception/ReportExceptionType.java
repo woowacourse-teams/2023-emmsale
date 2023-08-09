@@ -13,7 +13,7 @@ public enum ReportExceptionType implements BaseExceptionType {
       HttpStatus.BAD_REQUEST,
       "자기 자신은 신고할 수 없습니다."
   ),
-  FORBIDDEN_REPORT(
+  REPORTER_MISMATCH(
       HttpStatus.FORBIDDEN,
       "신고 권한이 없습니다."
   ),

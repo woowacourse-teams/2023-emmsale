@@ -21,22 +21,41 @@ public class ReportCommandService {
   private final MemberRepository memberRepository;
 
   public ReportResponse create(final ReportRequest reportRequest, final Member member) {
-    if (member.isNotMe(reportRequest.getReporterId())) {
-      throw new ReportException(ReportExceptionType.FORBIDDEN_REPORT);
-    }
-    if (member.isMe(reportRequest.getReportedId())) {
-      throw new ReportException(ReportExceptionType.REPORT_MYSELF);
-    }
-    if (!memberRepository.existsById(reportRequest.getReportedId())) {
-      throw new ReportException(ReportExceptionType.NOT_FOUND_MEMBER);
-    }
-    if (reportRepository.existsReportByReporterIdAndReportedId(reportRequest.getReporterId(),
-        reportRequest.getReportedId())) {
-      throw new ReportException(ReportExceptionType.ALREADY_EXIST_REPORT);
-    }
+    validateReportRequest(reportRequest, member);
     final Report report = reportRequest.toReport();
 
     return ReportResponse.of(reportRepository.save(report));
   }
 
+  private void validateReportRequest(final ReportRequest reportRequest, final Member member) {
+    validateReporterMismatch(reportRequest.getReporterId(), member);
+    validateReportMySelf(reportRequest.getReportedId(), member);
+    validateExistReportedMember(reportRequest.getReportedId());
+    validateAlreadyExistReport(reportRequest);
+  }
+
+  private void validateReporterMismatch(final Long reporterId, final Member member) {
+    if (member.isNotMe(reporterId)) {
+      throw new ReportException(ReportExceptionType.REPORTER_MISMATCH);
+    }
+  }
+
+  private void validateReportMySelf(final Long reportedId, final Member member) {
+    if (member.isMe(reportedId)) {
+      throw new ReportException(ReportExceptionType.REPORT_MYSELF);
+    }
+  }
+
+  private void validateExistReportedMember(final Long reportedId) {
+    if (!memberRepository.existsById(reportedId)) {
+      throw new ReportException(ReportExceptionType.NOT_FOUND_MEMBER);
+    }
+  }
+
+  private void validateAlreadyExistReport(final ReportRequest reportRequest) {
+    if (reportRepository.existsReportByReporterIdAndReportedId(
+        reportRequest.getReporterId(), reportRequest.getReportedId())) {
+      throw new ReportException(ReportExceptionType.ALREADY_EXIST_REPORT);
+    }
+  }
 }

@@ -104,12 +104,12 @@ class ReportApiTest extends MockMvcTestHelper {
     final List<ReportResponse> reportResponses = List.of(
         new ReportResponse(1L, 1L, 2L, "메롱메롱", ReportReasonType.ABUSE, ReportType.COMMENT,
             LocalDateTime.parse("2023-08-09T13:25:00")),
-        new ReportResponse(2L, 2L, 1L, "대충 심한 욕설", ReportReasonType.ABUSE, ReportType.PARTICIPANT,
+        new ReportResponse(2L, 2L, 1L, "☆★ 특가 세일 ★☆", ReportReasonType.SPAM, ReportType.PARTICIPANT,
             LocalDateTime.parse("2023-08-11T13:25:00")),
-        new ReportResponse(3L, 1L, 3L, "사회적 물의를 일으킬 수 있는 발언", ReportReasonType.ABUSE,
+        new ReportResponse(3L, 1L, 3L, "저는 스티브잡스입니다.", ReportReasonType.IMPERSONATION,
             ReportType.REQUEST_NOTIFICATION,
             LocalDateTime.parse("2023-08-11T13:50:00")),
-        new ReportResponse(4L, 4L, 1L, "도배글", ReportReasonType.ABUSE, ReportType.COMMENT,
+        new ReportResponse(4L, 4L, 1L, "도배글", ReportReasonType.SPAM, ReportType.COMMENT,
             LocalDateTime.parse("2023-08-12T13:25:00"))
 
     );
