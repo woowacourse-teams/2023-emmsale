@@ -43,10 +43,12 @@ class ChildCommentViewModel(
                     changeCommentFetchingErrorState()
                     return@launch
                 }
+
                 is ApiException -> {
                     changeCommentFetchingErrorState()
                     return@launch
                 }
+
                 else -> {}
             }
             val loginMember = (loginMemberResult as ApiSuccess).data as Member
