@@ -11,6 +11,7 @@ import com.emmsale.notification.domain.UpdateNotificationType;
 import com.emmsale.notification.exception.NotificationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -28,8 +29,9 @@ public class UpdateNotificationMessageGenerator implements NotificationMessageGe
     final Long receiverId = updateNotification.getReceiverId();
     final Long redirectId = updateNotification.getRedirectId();
     final UpdateNotificationType type = updateNotification.getUpdateNotificationType();
+    final LocalDateTime createdAt = updateNotification.getCreatedAt();
 
-    final Data data = new Data(receiverId, redirectId, type);
+    final Data data = new Data(receiverId, redirectId, type, createdAt);
 
     final UpdateNotificationMessage updateNotificationMessage =
         new UpdateNotificationMessage(DEFAULT_VALIDATE_ONLY, new Message(data, targetToken));

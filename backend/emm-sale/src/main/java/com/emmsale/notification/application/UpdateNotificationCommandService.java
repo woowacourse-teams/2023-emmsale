@@ -20,7 +20,8 @@ public class UpdateNotificationCommandService {
     final UpdateNotification updateNotification = new UpdateNotification(
         updateNotificationEvent.getReceiverId(),
         updateNotificationEvent.getRedirectId(),
-        UpdateNotificationType.from(updateNotificationEvent.getUpdateNotificationType())
+        UpdateNotificationType.from(updateNotificationEvent.getUpdateNotificationType()),
+        updateNotificationEvent.getCreatedAt()
     );
 
     final UpdateNotification savedNotification =

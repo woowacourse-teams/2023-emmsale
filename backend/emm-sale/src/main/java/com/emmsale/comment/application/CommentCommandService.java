@@ -10,13 +10,18 @@ import com.emmsale.comment.application.dto.CommentModifyRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
+import com.emmsale.comment.event.UpdateNotificationEvent;
 import com.emmsale.comment.exception.CommentException;
 import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
+import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.member.domain.Member;
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +33,7 @@ public class CommentCommandService {
 
   private final CommentRepository commentRepository;
   private final EventRepository eventRepository;
+  private final EventPublisher eventPublisher;
 
   public CommentResponse create(
       final CommentAddRequest commentAddRequest,
@@ -46,7 +52,28 @@ public class CommentCommandService {
         )
         .orElseGet(() -> Comment.createRoot(savedEvent, member, content));
 
-    return CommentResponse.from(commentRepository.save(comment));
+    final Comment savedComment = commentRepository.save(comment);
+
+    publishNotificationExceptMe(member, savedComment);
+
+    return CommentResponse.from(savedComment);
+  }
+
+  private void publishNotificationExceptMe(final Member member, final Comment savedComment) {
+    final Set<Comment> notificationCandidates = savedComment.getParent()
+        .map(parent -> commentRepository.findParentAndChildrenByParentId(parent.getId())
+            .stream()
+            .filter(it -> it.isNotMyComment(member.getId()))
+            .collect(Collectors.toUnmodifiableSet())
+        )
+        .orElse(Collections.emptySet());
+
+    notificationCandidates.stream()
+        .map(it -> new UpdateNotificationEvent(
+            it.getMember().getId(),
+            it.getId(),
+            it.getClass().getName()))
+        .forEach(eventPublisher::publish);
   }
 
   private Comment findSavedComment(final Long commentId) {

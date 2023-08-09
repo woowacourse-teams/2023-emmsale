@@ -86,6 +86,10 @@ public class Comment extends BaseEntity {
     return parent != null;
   }
 
+  public boolean isNotMyComment(final Long memberId) {
+    return this.member.isNotMe(memberId);
+  }
+
   public Optional<Comment> getParent() {
     return Optional.ofNullable(parent);
   }

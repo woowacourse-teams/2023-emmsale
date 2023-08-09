@@ -1,5 +1,6 @@
 package com.emmsale.notification.domain;
 
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -28,14 +29,17 @@ public class UpdateNotification {
   @Enumerated(EnumType.STRING)
   @Column(name = "type")
   private UpdateNotificationType updateNotificationType;
+  private LocalDateTime createdAt;
 
   public UpdateNotification(
       final Long receiverId,
       final Long redirectId,
-      final UpdateNotificationType updateNotificationType
+      final UpdateNotificationType updateNotificationType,
+      final LocalDateTime createdAt
   ) {
     this.receiverId = receiverId;
     this.redirectId = redirectId;
     this.updateNotificationType = updateNotificationType;
+    this.createdAt = createdAt;
   }
 }
