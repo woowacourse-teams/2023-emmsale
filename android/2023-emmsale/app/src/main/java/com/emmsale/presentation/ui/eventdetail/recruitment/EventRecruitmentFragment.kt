@@ -1,3 +1,4 @@
+
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -5,46 +6,46 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.emmsale.R
-import com.emmsale.databinding.FragmentEventParticipantBinding
+import com.emmsale.databinding.FragmentEventRecruitmentBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
-import com.emmsale.presentation.eventdetail.participant.uistate.ParticipantsUiState
-import com.emmsale.presentation.eventdetail.participant.uistate.ParticipationStatusUiState
-import com.emmsale.presentation.ui.eventdetail.participant.EventParticipantViewModel
-import com.emmsale.presentation.ui.eventdetail.participant.ParticipantFragmentDialog
-import com.emmsale.presentation.ui.eventdetail.participant.recyclerview.EventParticipantAdapter
+import com.emmsale.presentation.eventdetail.recruitment.uistate.RecruitmentStatusUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.EventRecruitmentViewModel
+import com.emmsale.presentation.ui.eventdetail.recruitment.RecruitmentFragmentDialog
+import com.emmsale.presentation.ui.eventdetail.recruitment.recyclerview.EventRecruitmentAdapter
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentsUiState
 
-class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>() {
-    override val layoutResId: Int = R.layout.fragment_event_participant
+class EventRecruitmentFragment : BaseFragment<FragmentEventRecruitmentBinding>() {
+    override val layoutResId: Int = R.layout.fragment_event_recruitment
 
-    private val viewModel: EventParticipantViewModel by viewModels { EventParticipantViewModel.factory }
+    private val viewModel: EventRecruitmentViewModel by viewModels { EventRecruitmentViewModel.factory }
     private val eventId: Long by lazy {
         arguments?.getLong(EVENT_ID_KEY) ?: throw IllegalArgumentException("아이디못가져옴")
     }
-    private val participantAdapter: EventParticipantAdapter by lazy {
-        EventParticipantAdapter(::showRequestDialog, ::showMemberProfile)
+    private val recruitmentAdapter: EventRecruitmentAdapter by lazy {
+        EventRecruitmentAdapter(::showRequestDialog, ::showMemberProfile)
     }
-    private val participationButton: AppCompatButton by lazy { binding.btnEventparticipantParticipate }
+    private val recruitmentButton: AppCompatButton by lazy { binding.btnEventrecruitmentParticipate }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        setUpParticipants()
+        setUpRecruitments()
         setUpRequestCompanion()
         setUpParticipationStatus()
-        viewModel.fetchParticipants(eventId)
+        viewModel.fetchRecruitments(eventId)
     }
 
     private fun initRecyclerView() {
-        binding.rvParticipants.apply {
-            adapter = participantAdapter
+        binding.rvRecruitment.apply {
+            adapter = recruitmentAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
     private fun showRequestDialog(memberId: Long, memberName: String) {
-        ParticipantFragmentDialog(memberName, memberId, ::requestCompanion).show(
+        RecruitmentFragmentDialog(memberName, memberId, ::requestCompanion).show(
             parentFragmentManager,
-            "Participant",
+            "Recruitment",
         )
     }
 
@@ -55,11 +56,11 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
     private fun showMemberProfile(memberId: Long) {
     }
 
-    private fun setUpParticipants() {
-        viewModel.participants.observe(viewLifecycleOwner) {
+    private fun setUpRecruitments() {
+        viewModel.recruitments.observe(viewLifecycleOwner) {
             when (it) {
-                is ParticipantsUiState.Success -> {
-                    participantAdapter.submitList(it.value)
+                is RecruitmentsUiState.Success -> {
+                    recruitmentAdapter.submitList(it.value)
                     viewModel.checkParticipationStatus(eventId)
                     participationButtonClick()
                 }
@@ -80,9 +81,9 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
     }
 
     private fun setUpParticipationStatus() {
-        viewModel.isParticipate.observe(viewLifecycleOwner) { state ->
+        viewModel.isRecruited.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is ParticipationStatusUiState.Success -> {
+                is RecruitmentStatusUiState.Success -> {
                     if (state.isParticipate) {
                         setButtonParticipationState()
                     } else {
@@ -96,24 +97,24 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
     }
 
     private fun setButtonParticipationState() {
-        participationButton.isSelected = true
-        participationButton.text = "참가 취소"
+        recruitmentButton.isSelected = true
+        recruitmentButton.text = "참가 취소"
     }
 
     private fun setButtonAbsenceState() {
-        participationButton.isSelected = false
-        participationButton.text = "참가 신청"
+        recruitmentButton.isSelected = false
+        recruitmentButton.text = "참가 신청"
     }
 
     private fun participationButtonClick() {
-        participationButton.setOnClickListener {
-            when (val state = viewModel.isParticipate.value) {
-                is ParticipationStatusUiState.Success -> {
+        recruitmentButton.setOnClickListener {
+            when (val state = viewModel.isRecruited.value) {
+                is RecruitmentStatusUiState.Success -> {
                     if (state.isParticipate) {
-                        viewModel.deleteParticipant(eventId)
+                        viewModel.deleteRecruitment(eventId)
                         showToastMessage("참가를 취소합니다")
                     } else {
-                        viewModel.saveParticipant(eventId)
+                        viewModel.saveRecruitment(eventId)
                         showToastMessage("참가합니다~")
                     }
                 }
@@ -130,8 +131,8 @@ class EventParticipantFragment : BaseFragment<FragmentEventParticipantBinding>()
     companion object {
         private const val EVENT_ID_KEY = "EVENT_ID_KEY"
 
-        fun create(eventId: Long): EventParticipantFragment {
-            val fragment = EventParticipantFragment()
+        fun create(eventId: Long): EventRecruitmentFragment {
+            val fragment = EventRecruitmentFragment()
             fragment.arguments = Bundle().apply {
                 putLong(EVENT_ID_KEY, eventId)
             }

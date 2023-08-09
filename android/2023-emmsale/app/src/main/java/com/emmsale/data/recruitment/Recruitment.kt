@@ -1,6 +1,6 @@
-package com.emmsale.data.participant
+package com.emmsale.data.recruitment
 
-data class Participant(
+data class Recruitment(
     val id: Long,
     val memberId: Long,
     val name: String,

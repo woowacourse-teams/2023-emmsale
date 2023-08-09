@@ -1,10 +1,10 @@
-package com.emmsale.data.participant.dto
+package com.emmsale.data.recruitment.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ParticipantRequestBody(
+data class RecruitmentRequestBody(
     @SerialName("memberId")
     val memberId: Long,
 )

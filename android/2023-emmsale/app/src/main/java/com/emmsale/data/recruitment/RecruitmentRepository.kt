@@ -1,15 +1,15 @@
-package com.emmsale.data.participant
+package com.emmsale.data.recruitment
 
 import com.emmsale.data.common.ApiResult
 
-interface ParticipantRepository {
+interface RecruitmentRepository {
 
-    suspend fun fetchEventParticipants(
+    suspend fun fetchEventRecruitments(
         eventId: Long,
-    ): ApiResult<List<Participant>>
+    ): ApiResult<List<Recruitment>>
 
-    suspend fun saveParticipant(eventId: Long): ApiResult<Unit>
-    suspend fun deleteParticipant(eventId: Long): ApiResult<Unit>
+    suspend fun saveRecruitment(eventId: Long): ApiResult<Unit>
+    suspend fun deleteRecruitment(eventId: Long): ApiResult<Unit>
 
     suspend fun requestCompanion(
         eventId: Long,

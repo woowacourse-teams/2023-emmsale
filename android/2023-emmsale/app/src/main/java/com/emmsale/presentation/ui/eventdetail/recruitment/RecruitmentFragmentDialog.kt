@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.eventdetail.participant
+package com.emmsale.presentation.ui.eventdetail.recruitment
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.emmsale.databinding.FragmentdialogRecruitmentBinding
 
-class ParticipantFragmentDialog(
+class RecruitmentFragmentDialog(
     private val memberName: String,
     private val memberId: Long,
     private val requestCompanion: (Long, String) -> Unit,

@@ -57,7 +57,7 @@ class EventDetailActivity : AppCompatActivity() {
             when (position) {
                 INFORMATION_TAB_POSITION -> tab.text = "상세 정보"
                 COMMENT_TAB_POSITION -> tab.text = "댓글"
-                PARTICIPANT_TAB_POSITION -> tab.text = "같이가요"
+                RECRUITMENT_TAB_POSITION -> tab.text = "같이가요"
             }
         }.attach()
         binding.vpEventdetail.isUserInputEnabled = false
@@ -82,7 +82,7 @@ class EventDetailActivity : AppCompatActivity() {
         private const val DEFAULT_EVENT_ID = 1L
         private const val INFORMATION_TAB_POSITION = 0
         private const val COMMENT_TAB_POSITION = 1
-        private const val PARTICIPANT_TAB_POSITION = 2
+        private const val RECRUITMENT_TAB_POSITION = 2
 
         fun startActivity(context: Context, eventId: Long) {
             val intent = Intent(context, EventDetailActivity::class.java)

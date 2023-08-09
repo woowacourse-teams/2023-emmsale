@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.eventdetail
 
-import EventParticipantFragment
+import EventRecruitmentFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -20,7 +20,7 @@ class EventDetailFragmentStateAdpater(
         return when (position) {
             INFORMATION_TAB -> EventInfoFragment.create(informationUrl, imageUrl)
             COMMENT_TAB -> CommentFragment.create(eventId)
-            PARTICIPANT_TAB -> EventParticipantFragment.create(eventId)
+            RECRUITMENT_TAB -> EventRecruitmentFragment.create(eventId)
             else -> throw IllegalArgumentException("알수없는 ViewPager 오류입니다.")
         }
     }
@@ -28,7 +28,7 @@ class EventDetailFragmentStateAdpater(
     companion object {
         private const val INFORMATION_TAB = 0
         private const val COMMENT_TAB = 1
-        private const val PARTICIPANT_TAB = 2
+        private const val RECRUITMENT_TAB = 2
         private const val EVENT_DETAIL_TAB_COUNT = 3
     }
 }

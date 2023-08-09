@@ -1,11 +1,11 @@
-package com.emmsale.data.participant.dto
+package com.emmsale.data.recruitment.dto
 
-import com.emmsale.data.participant.Participant
+import com.emmsale.data.recruitment.Recruitment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ParticipantApiModel(
+data class RecruitmentApiModel(
     @SerialName("id")
     val id: Long,
     @SerialName("memberId")
@@ -18,8 +18,8 @@ data class ParticipantApiModel(
     val description: String?,
 )
 
-fun List<ParticipantApiModel>.toData(): List<Participant> = map {
-    Participant(
+fun List<RecruitmentApiModel>.toData(): List<Recruitment> = map {
+    Recruitment(
         id = it.id,
         memberId = it.memberId,
         name = it.name,

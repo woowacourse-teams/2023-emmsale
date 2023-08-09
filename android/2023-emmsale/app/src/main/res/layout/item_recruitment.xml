@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="participant"
-            type="com.emmsale.presentation.eventdetail.participant.uistate.ParticipantUiState" />
+            name="recruitment"
+            type="com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +16,7 @@
 
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_participant"
+            android:id="@+id/cv_recruitment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="17dp"
@@ -26,9 +26,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/iv_participant_image"
-                    imageUrl="@{participant.imageUrl}"
+                <ImageView
+                    android:id="@+id/iv_recruitment_image"
+                    app:imageUrl="@{recruitment.imageUrl}"
+                    app:isCircle="@{true}"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_marginStart="10dp"
@@ -46,11 +47,11 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/nanum_square_extra_bold"
-                    android:text="@{participant.name}"
+                    android:text="@{recruitment.name}"
                     android:textColor="@color/black"
                     android:textSize="18sp"
-                    app:layout_constraintStart_toEndOf="@+id/iv_participant_image"
-                    app:layout_constraintTop_toTopOf="@+id/iv_participant_image"
+                    app:layout_constraintStart_toEndOf="@+id/iv_recruitment_image"
+                    app:layout_constraintTop_toTopOf="@+id/iv_recruitment_image"
                     tools:text="최우석" />
 
                 <TextView
@@ -61,10 +62,10 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/nanum_square_regular"
                     android:maxEms="9"
-                    android:text="@{participant.description}"
+                    android:text="@{recruitment.description}"
                     android:textColor="@color/black"
                     android:textSize="13sp"
-                    app:layout_constraintStart_toEndOf="@+id/iv_participant_image"
+                    app:layout_constraintStart_toEndOf="@+id/iv_recruitment_image"
                     app:layout_constraintTop_toBottomOf="@+id/tv_participant_username"
                     tools:text="안드로이드를 사랑하는 개발자에요" />
 
@@ -78,9 +79,9 @@
                     android:stateListAnimator="@null"
                     android:text="@string/recruitment_request_companion"
                     android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_participant_image"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_recruitment_image"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/iv_participant_image" />
+                    app:layout_constraintTop_toTopOf="@+id/iv_recruitment_image" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
