@@ -54,7 +54,7 @@ public class EventResponse {
             event.getTags()
                 .stream()
                 .map(tag -> tag.getTag().getName())
-                .collect(Collectors.toList()), status.getValue(), event.getImageUrl(),
+                .collect(Collectors.toList()), status.name(), event.getImageUrl(),
             event.calculateRemainingDays(today));
   }
 

@@ -33,6 +33,11 @@ public class EventDetailRequest {
   @NotNull(message = "행사의 종료 일시를 입력해 주세요.")
   private final LocalDateTime endDateTime;
 
+  @DateTimeFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime subscriptionStartDateTime;
+  @DateTimeFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime subscriptionEndDateTime;
+
   private final List<TagRequest> tags;
 
   private final String imageUrl;
@@ -44,6 +49,8 @@ public class EventDetailRequest {
         location,
         startDateTime,
         endDateTime,
+        subscriptionStartDateTime,
+        subscriptionEndDateTime,
         informationUrl,
         type,
         imageUrl

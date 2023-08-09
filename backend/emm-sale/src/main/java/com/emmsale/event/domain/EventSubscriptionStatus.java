@@ -1,10 +1,7 @@
 package com.emmsale.event.domain;
 
-import lombok.Getter;
-
-@Getter
-public enum EventStatus {
-
+public enum EventSubscriptionStatus {
+  ALWAYS,
   IN_PROGRESS,
   UPCOMING,
   ENDED;

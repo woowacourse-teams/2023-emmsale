@@ -47,7 +47,7 @@ public class EventDetailResponse {
         event.getStartDate(),
         event.getEndDate(),
         event.getLocation(),
-        event.calculateEventStatus(today).getValue(),
+        event.calculateEventStatus(today).name(),
         tagNames,
         event.getImageUrl(),
         event.calculateRemainingDays(today),

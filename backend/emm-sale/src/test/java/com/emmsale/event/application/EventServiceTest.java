@@ -75,20 +75,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
-      List.of(), "진행 중", null, 0);
+      List.of(), "IN_PROGRESS", null, 0);
   private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
-      List.of(), "진행 중", null, 0);
+      List.of(), "IN_PROGRESS", null, 0);
   private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스", null, null,
-      List.of(), "종료된 행사", null, 0);
+      List.of(), "ENDED", null, 0);
   private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null,
-      List.of(), "진행 예정", null, 0);
+      List.of(), "UPCOMING", null, 0);
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
-      List.of(), "진행 예정", null, 0);
+      List.of(), "UPCOMING", null, 0);
   private static final EventResponse AI_아이디어_공모전 = new EventResponse(null, "AI 아이디어 공모전", null,
       null,
-      List.of(), "종료된 행사", null, 0);
+      List.of(), "ENDED", null, 0);
   private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null, null,
-      List.of(), "진행 중", null, 0);
+      List.of(), "IN_PROGRESS", null, 0);
 
 
   private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
@@ -315,7 +315,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           null, null, null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
     }
 
@@ -330,7 +332,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           null, null, null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
     }
 
@@ -345,7 +349,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-07-01", "2023-07-31", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
     }
 
@@ -360,7 +366,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-08-01", "2023-08-31", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
     }
 
@@ -375,7 +383,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-06-01", "2023-06-30", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
     }
 
@@ -390,7 +400,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-07-17", null, null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
     }
 
@@ -405,7 +417,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           null, "2023-07-31", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status")
           .isEqualTo(expectedEvents);
     }
 
@@ -632,6 +646,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           eventInformationUrl,
           beforeDateTime,
           afterDateTime,
+          null,
+          null,
           tagRequests,
           imageUrl,
           type
@@ -671,6 +687,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           eventInformationUrl,
           startDateTime,
           endDatetime,
+          null,
+          null,
           tagRequests,
           imageUrl,
           type
@@ -700,6 +718,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           eventInformationUrl,
           beforeDateTime,
           afterDateTime,
+          null,
+          null,
           tagRequests,
           imageUrl,
           type
@@ -742,6 +762,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           beforeDateTime,
           afterDateTime,
+          null,
+          null,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE
@@ -784,6 +806,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           beforeDateTime,
           afterDateTime,
+          null,
+          null,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE
@@ -809,6 +833,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           newStartDateTime,
           newEndDateTime,
+          null,
+          null,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE
@@ -838,6 +864,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           beforeDateTime,
           afterDateTime,
+          null,
+          null,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE

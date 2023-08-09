@@ -48,6 +48,8 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
             "location",
             LocalDateTime.now(),
             LocalDateTime.now(),
+            null,
+            null,
             "url",
             EventType.CONFERENCE,
             "https://image.com"

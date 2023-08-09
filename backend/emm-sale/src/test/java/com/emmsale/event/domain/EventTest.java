@@ -53,7 +53,8 @@ class EventTest {
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
-        () -> new Event(name, location, afterDateTime, beforeDateTime, url, EventType.CONFERENCE,
+        () -> new Event(name, location, afterDateTime, beforeDateTime, null, null, url,
+            EventType.CONFERENCE,
             imageUrl));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
@@ -78,6 +79,8 @@ class EventTest {
         newLocation,
         newStartDateTime,
         newEndDateTime,
+        null,
+        null,
         newInformationUrl,
         newTags
     );
@@ -109,9 +112,24 @@ class EventTest {
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> event.updateEventContent(newName, newLocation, afterDateTime, beforeDateTime,
-            newInformationUrl, newTags));
+            null, null, newInformationUrl, newTags));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
+  }
+
+  @Test
+  @DisplayName("현재날짜로부터 남은 날짜를 계산할 수 있다.")
+  void calculateRemainingDay() {
+    //given
+    final Event 인프콘 = eventFixture();
+    final LocalDate today = LocalDate.of(2023, 8, 10);
+
+    //when
+    final int actual = 인프콘.calculateRemainingDays(today);
+
+    //then
+    assertThat(actual)
+        .isEqualTo(5);
   }
 
   @Nested
@@ -153,21 +171,6 @@ class EventTest {
           .isInstanceOf(EventException.class)
           .hasMessage(EventExceptionType.ALREADY_PARTICIPATED.errorMessage());
     }
-  }
-
-  @Test
-  @DisplayName("현재날짜로부터 남은 날짜를 계산할 수 있다.")
-  void calculateRemainingDay() {
-    //given
-    final Event 인프콘 = eventFixture();
-    final LocalDate today = LocalDate.of(2023, 8, 10);
-
-    //when
-    final int actual = 인프콘.calculateRemainingDays(today);
-
-    //then
-    assertThat(actual)
-        .isEqualTo(5);
   }
 
   @Nested

@@ -272,12 +272,13 @@ class EventApiTest extends MockMvcTestHelper {
         .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
     final EventDetailRequest request = new EventDetailRequest(event.getName(), event.getLocation(),
-        event.getInformationUrl(), event.getStartDate(), event.getEndDate(), tags,
+        event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
+        event.getSubscriptionStartDate(), event.getSubscriptionEndDate(), tags,
         event.getImageUrl(), event.getType());
 
     final EventDetailResponse response = new EventDetailResponse(eventId, request.getName(),
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
-        request.getLocation(), EventStatus.IN_PROGRESS.getValue(),
+        request.getLocation(), EventStatus.IN_PROGRESS.name(),
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()), request.getImageUrl(),
         10, request.getType().toString());
 
@@ -288,6 +289,10 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
         fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
         fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
+        fieldWithPath("subscriptionStartDateTime").type(JsonFieldType.STRING)
+            .description("행사(Event) 신청시작일시").optional(),
+        fieldWithPath("subscriptionEndDateTime").type(JsonFieldType.STRING)
+            .description("행사(Event) 신청종료일시").optional(),
         fieldWithPath("informationUrl").type(JsonFieldType.STRING)
             .description("행사(Event) 상세 정보 URL"),
         fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("연관 태그명"),
@@ -351,11 +356,12 @@ class EventApiTest extends MockMvcTestHelper {
 
       final EventDetailRequest request = new EventDetailRequest(event.getName(),
           event.getLocation(), event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
+          event.getSubscriptionStartDate(), event.getSubscriptionEndDate(),
           tags, event.getImageUrl(), event.getType());
 
       final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
-          request.getLocation(), EventStatus.IN_PROGRESS.getValue(),
+          request.getLocation(), EventStatus.IN_PROGRESS.name(),
           tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
           request.getImageUrl(), 10, request.getType().toString());
 
@@ -366,6 +372,10 @@ class EventApiTest extends MockMvcTestHelper {
           fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
           fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
           fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
+          fieldWithPath("subscriptionStartDateTime").type(JsonFieldType.STRING)
+              .description("행사(Event) 신청시작일시").optional(),
+          fieldWithPath("subscriptionEndDateTime").type(JsonFieldType.STRING)
+              .description("행사(Event) 신청종료일시").optional(),
           fieldWithPath("informationUrl").type(JsonFieldType.STRING)
               .description("행사(Event) 상세 정보 URL"),
           fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("연관 태그명"),
@@ -394,7 +404,8 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
       final EventDetailRequest request = new EventDetailRequest(eventName, event.getLocation(),
-          event.getInformationUrl(), event.getStartDate(), event.getEndDate(), tags, null,
+          event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
+          event.getSubscriptionStartDate(), event.getSubscriptionEndDate(), tags, null,
           EventType.COMPETITION);
 
       //when
@@ -418,7 +429,8 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
       final EventDetailRequest request = new EventDetailRequest(event.getName(), eventLocation,
-          event.getInformationUrl(), event.getStartDate(), event.getEndDate(), tags,
+          event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
+          event.getSubscriptionStartDate(), event.getSubscriptionEndDate(), tags,
           event.getImageUrl(), event.getType());
 
       //when
@@ -443,7 +455,8 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
       final EventDetailRequest request = new EventDetailRequest(event.getName(),
-          event.getLocation(), informationUrl, event.getStartDate(), event.getEndDate(), tags,
+          event.getLocation(), informationUrl, event.getStartDate(), event.getEndDate(),
+          event.getSubscriptionStartDate(), event.getSubscriptionEndDate(), tags,
           event.getImageUrl(), event.getType());
 
       //when

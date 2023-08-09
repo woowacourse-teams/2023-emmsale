@@ -25,7 +25,7 @@ class EventDetailResponseTest {
         구름톤.getStartDate(),
         구름톤.getEndDate(),
         구름톤.getLocation(),
-        EventStatus.UPCOMING.getValue(),
+        EventStatus.UPCOMING.name(),
         Collections.emptyList(),
         구름톤.getImageUrl(),
         2,

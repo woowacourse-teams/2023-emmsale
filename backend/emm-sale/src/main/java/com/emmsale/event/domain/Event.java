@@ -43,6 +43,8 @@ public class Event extends BaseEntity {
   private LocalDateTime startDate;
   @Column(nullable = false)
   private LocalDateTime endDate;
+  private LocalDateTime subscriptionStartDate;
+  private LocalDateTime subscriptionEndDate;
   @Column(nullable = false)
   private String informationUrl;
   @Enumerated(EnumType.STRING)
@@ -61,6 +63,8 @@ public class Event extends BaseEntity {
       final String location,
       final LocalDateTime startDate,
       final LocalDateTime endDate,
+      final LocalDateTime subscriptionStartDate,
+      final LocalDateTime subscriptionEndDate,
       final String informationUrl,
       final EventType eventType,
       final String imageUrl
@@ -71,6 +75,8 @@ public class Event extends BaseEntity {
     this.location = location;
     this.startDate = startDate;
     this.endDate = endDate;
+    this.subscriptionStartDate = subscriptionStartDate;
+    this.subscriptionEndDate = subscriptionEndDate;
     this.informationUrl = informationUrl;
     this.type = eventType;
     this.imageUrl = imageUrl;
@@ -110,11 +116,27 @@ public class Event extends BaseEntity {
     return EventStatus.IN_PROGRESS;
   }
 
+  public EventSubscriptionStatus calculateEventSubscriptionStatus(final LocalDate now) {
+    if (subscriptionStartDate == null) {
+      // TODO: 2023-08-09 적절한지 한 번 더 확인하기
+      return EventSubscriptionStatus.ALWAYS;
+    }
+    if (now.isBefore(subscriptionStartDate.toLocalDate())) {
+      return EventSubscriptionStatus.UPCOMING;
+    }
+    if (now.isAfter(subscriptionEndDate.toLocalDate())) {
+      return EventSubscriptionStatus.ENDED;
+    }
+    return EventSubscriptionStatus.IN_PROGRESS;
+  }
+
   public Event updateEventContent(
       final String name,
       final String location,
       final LocalDateTime startDate,
       final LocalDateTime endDate,
+      final LocalDateTime subscriptionStartDate,
+      final LocalDateTime subscriptionEndDate,
       final String informationUrl,
       final List<Tag> tags
   ) {
@@ -124,6 +146,8 @@ public class Event extends BaseEntity {
     this.location = location;
     this.startDate = startDate;
     this.endDate = endDate;
+    this.subscriptionStartDate = subscriptionStartDate;
+    this.subscriptionEndDate = subscriptionEndDate;
     this.informationUrl = informationUrl;
     this.tags = new ArrayList<>();
 
