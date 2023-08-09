@@ -14,8 +14,8 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.databinding.DialogCommentDeleteBinding
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerview.ChildCommentAdapter
-import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsScreenUiState
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentAdapter
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 
 class ChildCommentActivity : AppCompatActivity() {
@@ -72,44 +72,50 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleParentComment(childCommentsScreenUiState: ChildCommentsScreenUiState) {
-        binding.progressBar.isVisible = childCommentsScreenUiState.isLoading
+    private fun handleParentComment(childCommentsUiState: ChildCommentsUiState) {
+        binding.progressBar.isVisible = childCommentsUiState.isLoading
         binding.tvChildcommentsParentcommentauthorname.text =
-            if (childCommentsScreenUiState.parentComment.isDeleted.not()) {
-                childCommentsScreenUiState.parentComment.authorName
+            if (childCommentsUiState.parentComment.isDeleted.not()) {
+                childCommentsUiState.parentComment.authorName
             } else {
                 getString(
                     R.string.comment_deleted_comment_author_name,
                 )
             }
         binding.tvChildcommentsParentcommentcontent.text =
-            childCommentsScreenUiState.parentComment.content
+            childCommentsUiState.parentComment.content
         binding.tvChildcommentsParentcommentlastmodifieddate.text =
-            childCommentsScreenUiState.parentComment.lastModifiedDate
+            childCommentsUiState.parentComment.lastModifiedDate
         binding.tvChildcommentsParentcommentlastmodifieddate.isVisible =
-            childCommentsScreenUiState.parentComment.isDeleted.not()
+            childCommentsUiState.parentComment.isDeleted.not()
         binding.ivChildcommentsParentcommentdeletebutton.isVisible =
-            !childCommentsScreenUiState.parentComment.isDeleted && childCommentsScreenUiState.parentComment.isDeletable
+            !childCommentsUiState.parentComment.isDeleted && childCommentsUiState.parentComment.isDeletable
         binding.tvChildcommentsParentcommentisupdated.isVisible =
-            childCommentsScreenUiState.parentComment.isUpdated && childCommentsScreenUiState.parentComment.isDeleted.not()
+            childCommentsUiState.parentComment.isUpdated && childCommentsUiState.parentComment.isDeleted.not()
     }
 
-    private fun handleError(childCommentsScreenUiState: ChildCommentsScreenUiState) {
-        if (childCommentsScreenUiState.isError) {
-            this.showToast(childCommentsScreenUiState.errorMessage)
+    private fun handleError(childCommentsUiState: ChildCommentsUiState) {
+        if (childCommentsUiState.isCommentsFetchingError) {
+            this.showToast(getString(R.string.comments_comments_fetching_error_message))
+        }
+        if (childCommentsUiState.isCommentPostingError) {
+            this.showToast(getString(R.string.comments_comments_posting_error_message))
+        }
+        if (childCommentsUiState.isCommentDeletionError) {
+            this.showToast(getString(R.string.comments_comments_deletion_error_message))
         }
     }
 
-    private fun handleNotLogin(childCommentsScreenUiState: ChildCommentsScreenUiState) {
-        if (childCommentsScreenUiState.isNotLogin) {
+    private fun handleNotLogin(childCommentsUiState: ChildCommentsUiState) {
+        if (childCommentsUiState.isNotLogin) {
             LoginActivity.startActivity(this)
             finish()
         }
     }
 
-    private fun handleChildComments(childCommentsScreenUiState: ChildCommentsScreenUiState) {
+    private fun handleChildComments(childCommentsUiState: ChildCommentsUiState) {
         (binding.rvChildcommentsChildcomments.adapter as ChildCommentAdapter).submitList(
-            childCommentsScreenUiState.childComments,
+            childCommentsUiState.childComments,
         )
     }
 

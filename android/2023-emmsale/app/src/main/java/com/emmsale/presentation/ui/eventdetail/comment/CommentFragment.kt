@@ -9,7 +9,7 @@ import com.emmsale.databinding.FragmentCommentsBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
-import com.emmsale.presentation.ui.eventdetail.comment.recyclerview.CommentsAdapter
+import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 
@@ -79,8 +79,14 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     }
 
     private fun handleError(commentsUiState: CommentsUiState) {
-        if (commentsUiState.isError) {
-            context?.showToast(commentsUiState.errorMessage)
+        if (commentsUiState.isCommentsFetchingError) {
+            context?.showToast(getString(R.string.comments_comments_fetching_error_message))
+        }
+        if (commentsUiState.isCommentPostingError) {
+            context?.showToast(getString(R.string.comments_comments_posting_error_message))
+        }
+        if (commentsUiState.isCommentDeletionError) {
+            context?.showToast(getString(R.string.comments_comments_deletion_error_message))
         }
     }
 

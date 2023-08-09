@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.eventdetail.comment.recyclerview
+package com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView
 
 import android.app.AlertDialog
 import android.graphics.drawable.ColorDrawable
@@ -6,22 +6,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.DialogCommentDeleteBinding
-import com.emmsale.databinding.ItemCommentsCommentsBinding
-import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState
+import com.emmsale.databinding.ItemChildcommentsChildcommentBinding
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.CommentUiState
 
-class CommentViewHolder(
-    private val binding: ItemCommentsCommentsBinding,
-    private val onChildCommentsView: (Long) -> Unit,
+class ChildCommentViewHolder(
+    private val binding: ItemChildcommentsChildcommentBinding,
     private val onCommentDelete: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.tvCommentChildcommentscount.setOnClickListener {
-            onChildCommentsView(
-                binding.comment?.commentId ?: return@setOnClickListener,
-            )
-        }
-        binding.ivCommentDeletebutton.setOnClickListener { onDeleteButtonClick() }
+        binding.ivChildcommentDeletebutton.setOnClickListener { onDeleteButtonClick() }
     }
 
     private fun onDeleteButtonClick() {
@@ -52,18 +46,14 @@ class CommentViewHolder(
     }
 
     companion object {
-        fun create(
-            parent: ViewGroup,
-            onChildCommentsView: (Long) -> Unit,
-            onCommentDelete: (Long) -> Unit,
-        ): CommentViewHolder {
-            val binding = ItemCommentsCommentsBinding.inflate(
+        fun create(parent: ViewGroup, onCommentDelete: (Long) -> Unit): ChildCommentViewHolder {
+            val binding = ItemChildcommentsChildcommentBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
 
-            return CommentViewHolder(binding, onChildCommentsView, onCommentDelete)
+            return ChildCommentViewHolder(binding, onCommentDelete)
         }
     }
 }

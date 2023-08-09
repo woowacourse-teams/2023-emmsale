@@ -3,20 +3,22 @@ package com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState
 import com.emmsale.data.comment.Comment
 import com.emmsale.data.member.Member
 
-data class ChildCommentsScreenUiState(
+data class ChildCommentsUiState(
     val isNotLogin: Boolean,
     val isLoading: Boolean,
-    val isError: Boolean,
-    val errorMessage: String,
+    val isCommentsFetchingError: Boolean,
+    val isCommentPostingError: Boolean,
+    val isCommentDeletionError: Boolean,
     val parentComment: CommentUiState,
     val childComments: List<CommentUiState>,
 ) {
     companion object {
-        val Loading = ChildCommentsScreenUiState(
+        val Loading = ChildCommentsUiState(
             isNotLogin = false,
             isLoading = true,
-            isError = false,
-            errorMessage = "",
+            isCommentsFetchingError = false,
+            isCommentPostingError = false,
+            isCommentDeletionError = false,
             parentComment = CommentUiState(
                 authorName = "",
                 lastModifiedDate = "",
@@ -30,11 +32,12 @@ data class ChildCommentsScreenUiState(
             childComments = listOf(),
         )
 
-        fun create(comment: Comment, loginMember: Member) = ChildCommentsScreenUiState(
+        fun create(comment: Comment, loginMember: Member) = ChildCommentsUiState(
             isNotLogin = false,
             isLoading = false,
-            isError = false,
-            errorMessage = "",
+            isCommentsFetchingError = false,
+            isCommentPostingError = false,
+            isCommentDeletionError = false,
             parentComment = CommentUiState.create(comment, loginMember),
             childComments = comment.childComments.map { CommentUiState.create(it, loginMember) },
         )
