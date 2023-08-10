@@ -115,10 +115,10 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     }
 
     private fun handleCommentEditing() {
-        binding.tvCommentsPostcommentbutton.setOnClickListener { onCommentSubmitButtonClick() }
+        binding.tvCommentsPostcommentbutton.setOnClickListener { onCommentSave() }
     }
 
-    private fun onCommentSubmitButtonClick() {
+    private fun onCommentSave() {
         viewModel.saveComment(binding.etCommentsEditcommentcontent.text.toString(), eventId)
         binding.etCommentsEditcommentcontent.apply {
             text.clear()

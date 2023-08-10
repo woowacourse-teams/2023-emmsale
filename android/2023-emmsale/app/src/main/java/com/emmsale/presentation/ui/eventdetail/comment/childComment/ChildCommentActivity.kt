@@ -45,7 +45,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
-        binding.ivChildcommentsParentcommentdeletebutton.setOnClickListener { onParentCommentDeleteButtonClick() }
+        binding.ivChildcommentsParentcommentdeletebutton.setOnClickListener { onParentCommentDelete() }
     }
 
     private fun initChildCommentsRecyclerView() {
@@ -157,7 +157,7 @@ class ChildCommentActivity : AppCompatActivity() {
         viewModel.deleteComment(commentId, parentCommentId)
     }
 
-    private fun onParentCommentDeleteButtonClick() {
+    private fun onParentCommentDelete() {
         val dialog = DialogCommentDeleteBinding.inflate(LayoutInflater.from(binding.root.context))
 
         val alertDialog = AlertDialog.Builder(binding.root.context)
