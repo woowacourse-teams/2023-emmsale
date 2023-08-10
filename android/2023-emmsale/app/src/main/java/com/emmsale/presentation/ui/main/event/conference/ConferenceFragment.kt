@@ -15,7 +15,7 @@ import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewAdapter
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewDivider
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceItemUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateOptionUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilteringOptionUiState
@@ -60,13 +60,13 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     }
 
     private fun setupEventsObserver() {
-        viewModel.events.observe(viewLifecycleOwner) { eventsResult ->
+        viewModel.conference.observe(viewLifecycleOwner) { eventsResult ->
             when {
                 eventsResult.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
                 !eventsResult.isLoading -> {
-                    eventAdapter.submitList(eventsResult.events)
+                    eventAdapter.submitList(eventsResult.conferenceItems)
                     binding.tvEventsCount.text =
-                        getString(R.string.event_count_format, eventsResult.eventSize)
+                        getString(R.string.event_count_format, eventsResult.conferenceSize)
                 }
             }
         }
@@ -111,7 +111,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         binding.btnEventFilter.setOnClickListener { navigateToEventFilter() }
     }
 
-    private fun navigateToEventDetail(event: ConferenceUiState) {
+    private fun navigateToEventDetail(event: ConferenceItemUiState) {
         EventDetailActivity.startActivity(requireContext(), event.id)
     }
 

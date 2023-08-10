@@ -14,8 +14,8 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceItemUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
-import com.emmsale.presentation.ui.main.event.conference.uistate.EventsUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateOptionUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilteringOptionUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
@@ -24,8 +24,8 @@ import kotlinx.coroutines.launch
 class ConferenceViewModel(
     private val conferenceRepository: ConferenceRepository,
 ) : ViewModel() {
-    private val _events = NotNullMutableLiveData(EventsUiState())
-    val events: NotNullLiveData<EventsUiState> = _events
+    private val _conference = NotNullMutableLiveData(ConferenceUiState())
+    val conference: NotNullLiveData<ConferenceUiState> = _conference
 
     private val _selectedFilters = MutableLiveData<ConferenceFilterUiState>()
     val selectedFilters: LiveData<ConferenceFilterUiState> = _selectedFilters
@@ -41,7 +41,7 @@ class ConferenceViewModel(
         tags: List<String> = emptyList(),
     ) {
         viewModelScope.launch {
-            _events.value = _events.value.copy(isLoading = true)
+            _conference.value = _conference.value.copy(isLoading = true)
             when (
                 val eventsResult = conferenceRepository.getConferences(
                     category = EventCategory.CONFERENCE,
@@ -52,14 +52,14 @@ class ConferenceViewModel(
                 )
             ) {
                 is ApiSuccess ->
-                    _events.value = _events.value.copy(
-                        events = eventsResult.data.map(ConferenceUiState::from),
+                    _conference.value = _conference.value.copy(
+                        conferenceItems = eventsResult.data.map(ConferenceItemUiState::from),
                         isLoading = false,
                     )
 
                 is ApiError,
                 is ApiException,
-                -> _events.value = _events.value.copy(isError = true, isLoading = false)
+                -> _conference.value = _conference.value.copy(isError = true, isLoading = false)
             }
         }
     }

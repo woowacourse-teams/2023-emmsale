@@ -2,11 +2,11 @@ package com.emmsale.presentation.ui.main.event.conference.recyclerview
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceItemUiState
 
 class ConferenceRecyclerViewAdapter(
-    private val onClickConference: (ConferenceUiState) -> Unit,
-) : ListAdapter<ConferenceUiState, ConferenceViewHolder>(ConferenceDiffUtil) {
+    private val onClickConference: (ConferenceItemUiState) -> Unit,
+) : ListAdapter<ConferenceItemUiState, ConferenceViewHolder>(ConferenceDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConferenceViewHolder =
         ConferenceViewHolder(parent, onClickConference)
 

@@ -3,15 +3,15 @@ package com.emmsale.presentation.ui.main.event.conference.uistate
 import com.emmsale.data.conference.Conference
 import com.emmsale.data.conference.ConferenceStatus
 
-data class EventsUiState(
-    val events: List<ConferenceUiState> = emptyList(),
+data class ConferenceUiState(
+    val conferenceItems: List<ConferenceItemUiState> = emptyList(),
     val isLoading: Boolean = false,
     val isError: Boolean = false,
 ) {
-    val eventSize: Int = events.size
+    val conferenceSize: Int = conferenceItems.size
 }
 
-data class ConferenceUiState(
+data class ConferenceItemUiState(
     val id: Long,
     val name: String,
     val tags: List<String>,
@@ -19,7 +19,7 @@ data class ConferenceUiState(
     val posterUrl: String?,
 ) {
     companion object {
-        fun from(conference: Conference): ConferenceUiState = ConferenceUiState(
+        fun from(conference: Conference): ConferenceItemUiState = ConferenceItemUiState(
             id = conference.id,
             name = conference.name,
             tags = conference.tags,
