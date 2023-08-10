@@ -52,13 +52,11 @@ class EventDetailActivity : AppCompatActivity() {
         TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
             when (position) {
                 INFORMATION_TAB_POSITION ->
-                    tab.text =
-                    getString(R.string.eventdetail_tab_infromation)
+                    tab.text = getString(R.string.eventdetail_tab_infromation)
 
                 COMMENT_TAB_POSITION -> tab.text = getString(R.string.eventdetail_tab_comment)
                 RECRUITMENT_TAB_POSITION ->
-                    tab.text =
-                        getString(R.string.eventdetail_tab_recruitment)
+                    tab.text = getString(R.string.eventdetail_tab_recruitment)
             }
         }.attach()
         binding.vpEventdetail.isUserInputEnabled = false

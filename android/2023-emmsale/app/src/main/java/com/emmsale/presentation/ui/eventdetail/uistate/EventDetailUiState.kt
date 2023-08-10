@@ -13,7 +13,7 @@ data class EventDetailUiState(
     val endDate: String = "",
     val informationUrl: String = "",
     val tags: List<String> = listOf(),
-    val imageUrl: String? = "",
+    val imageUrl: String = "",
     val isError: Boolean = false,
     val isLoading: Boolean = false,
 ) {
@@ -31,7 +31,7 @@ data class EventDetailUiState(
                     endDate = getGeneralDateFormat(endDate),
                     informationUrl = informationUrl,
                     tags = tags,
-                    imageUrl = imageUrl,
+                    imageUrl = imageUrl ?: "",
                     isError = false,
                     isLoading = false,
                 )
