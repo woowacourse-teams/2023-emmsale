@@ -14,6 +14,8 @@ import com.emmsale.data.notification.Notification
 import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.common.livedata.NotNullLiveData
+import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.notificationBox.uistate.NotificationBodyUiState
 import com.emmsale.presentation.ui.notificationBox.uistate.NotificationHeaderUiState
 import com.emmsale.presentation.ui.notificationBox.uistate.NotificationMemberUiState
@@ -28,8 +30,8 @@ class NotificationBoxViewModel(
     private val eventDetailRepository: EventDetailRepository,
     private val notificationRepository: NotificationRepository,
 ) : ViewModel() {
-    private val _notifications = MutableLiveData(NotificationsUiState())
-    val notifications: LiveData<NotificationsUiState> = _notifications
+    private val _notifications = NotNullMutableLiveData(NotificationsUiState())
+    val notifications: NotNullLiveData<NotificationsUiState> = _notifications
 
     init {
         fetchNotifications()
@@ -37,13 +39,15 @@ class NotificationBoxViewModel(
 
     private fun fetchNotifications() {
         viewModelScope.launch {
-            _notifications.postValue(_notifications.value?.copy(isLoading = true))
+            _notifications.postValue(_notifications.value.copy(isLoading = true))
 
             when (val notificationsResult = notificationRepository.getNotifications()) {
                 is ApiSuccess -> updateNotifications(notificationsResult)
-                is ApiException,
-                is ApiError,
-                -> _notifications.postValue(NotificationsUiState(isError = true))
+                is ApiException, is ApiError -> _notifications.postValue(
+                    NotificationsUiState(
+                        isError = true
+                    )
+                )
             }
         }
     }
@@ -81,9 +85,7 @@ class NotificationBoxViewModel(
         viewModelScope.async {
             when (val member = memberRepository.getMember(userId)) {
                 is ApiSuccess -> NotificationMemberUiState(member.data.name, member.data.imageUrl)
-                is ApiException,
-                is ApiError,
-                -> null
+                is ApiException, is ApiError -> null
             }
         }
 
@@ -91,14 +93,12 @@ class NotificationBoxViewModel(
         viewModelScope.async {
             when (val conference = eventDetailRepository.fetchEventDetail(conferenceId)) {
                 is ApiSuccess -> conference.data.name
-                is ApiException,
-                is ApiError,
-                -> null
+                is ApiException, is ApiError -> null
             }
         }
 
     fun toggleExpand(eventId: Long) {
-        _notifications.postValue(_notifications.value?.toggleNotificationExpanded(eventId))
+        _notifications.postValue(_notifications.value.toggleNotificationExpanded(eventId))
     }
 
     // TODO: 4차 스프린트 구현 예정
