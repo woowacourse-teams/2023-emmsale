@@ -63,7 +63,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         viewModel.events.observe(viewLifecycleOwner) { eventsResult ->
             when {
                 eventsResult.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
-                !eventsResult.isError -> {
+                !eventsResult.isLoading -> {
                     eventAdapter.submitList(eventsResult.events)
                     binding.tvEventsCount.text =
                         getString(R.string.event_count_format, eventsResult.eventSize)
