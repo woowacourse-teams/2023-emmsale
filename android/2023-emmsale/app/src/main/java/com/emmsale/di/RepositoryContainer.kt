@@ -6,6 +6,8 @@ import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.comment.CommentRepositoryImpl
 import com.emmsale.data.conference.ConferenceRepository
 import com.emmsale.data.conference.ConferenceRepositoryImpl
+import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
+import com.emmsale.data.conferenceStatus.ConferenceStatusRepositoryImpl
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.data.eventTag.EventTagRepositoryImpl
 import com.emmsale.data.eventdetail.EventDetailRepository
@@ -52,6 +54,7 @@ class RepositoryContainer(
             commentService = serviceContainer.commentService,
         )
     }
+    val conferenceStatusRepository: ConferenceStatusRepository by lazy { ConferenceStatusRepositoryImpl() }
     val eventTagRepository: EventTagRepository by lazy {
         EventTagRepositoryImpl(eventTagService = serviceContainer.eventTagService)
     }

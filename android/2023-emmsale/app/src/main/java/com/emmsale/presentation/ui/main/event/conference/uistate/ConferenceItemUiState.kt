@@ -1,15 +1,7 @@
 package com.emmsale.presentation.ui.main.event.conference.uistate
 
 import com.emmsale.data.conference.Conference
-import com.emmsale.data.conference.ConferenceStatus
-
-data class ConferenceUiState(
-    val conferenceItems: List<ConferenceItemUiState> = emptyList(),
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
-) {
-    val conferenceSize: Int = conferenceItems.size
-}
+import com.emmsale.data.conferenceStatus.ConferenceStatus
 
 data class ConferenceItemUiState(
     val id: Long,

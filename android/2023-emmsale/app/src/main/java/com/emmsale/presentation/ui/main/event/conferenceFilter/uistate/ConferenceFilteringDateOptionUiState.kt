@@ -4,26 +4,24 @@ import android.content.Context
 import android.os.Parcelable
 import com.emmsale.R
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 
-@Parcelize
-data class ConferenceFilterDateOptionUiState(
-    val year: Int,
-    val month: Int,
-    val day: Int,
-) : Parcelable {
+data class ConferenceFilteringDateOptionUiState(
+    val date: LocalDate,
+) {
     fun transformToDateString(context: Context, isLast: Boolean = false): String = when (isLast) {
         true -> context.getString(
             R.string.conferencefilter_duration_date_last_format,
-            year % 1000,
-            month,
-            day,
+            date.year % 1000,
+            date.monthValue,
+            date.dayOfMonth,
         )
 
         false -> context.getString(
             R.string.conferencefilter_duration_date_format,
-            year % 1000,
-            month,
-            day,
+            date.year % 1000,
+            date.monthValue,
+            date.dayOfMonth,
         )
     }
 }
