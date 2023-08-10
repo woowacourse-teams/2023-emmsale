@@ -20,6 +20,9 @@ class ChildCommentViewModel(
     private val commentRepository: CommentRepository,
 ) : ViewModel() {
 
+    private val _isLogin = NotNullMutableLiveData(true)
+    val isLogin: NotNullLiveData<Boolean> = _isLogin
+
     private val _childCommentsUiState = NotNullMutableLiveData(ChildCommentsUiState.Loading)
     val childCommentsUiState: NotNullLiveData<ChildCommentsUiState> = _childCommentsUiState
 
@@ -65,7 +68,7 @@ class ChildCommentViewModel(
     }
 
     private fun changeNotLoginState() {
-        _childCommentsUiState.value = _childCommentsUiState.value.copy(isNotLogin = true)
+        _isLogin.value = false
     }
 
     private fun changeCommentFetchingErrorState() {

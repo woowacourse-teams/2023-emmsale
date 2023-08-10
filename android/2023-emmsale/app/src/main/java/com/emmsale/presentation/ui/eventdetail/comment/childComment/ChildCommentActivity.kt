@@ -62,10 +62,12 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private fun setUpUiLogic() {
+        viewModel.isLogin.observe(this) {
+            handleNotLogin(it)
+        }
         viewModel.childCommentsUiState.observe(this) {
             handleParentComment(it)
             handleError(it)
-            handleNotLogin(it)
             handleChildComments(it)
             handleEditComment()
             handleUpButton()
@@ -117,8 +119,8 @@ class ChildCommentActivity : AppCompatActivity() {
         handleCommentDeletionError(childCommentsUiState)
     }
 
-    private fun handleNotLogin(childCommentsUiState: ChildCommentsUiState) {
-        if (childCommentsUiState.isNotLogin) {
+    private fun handleNotLogin(isLogin: Boolean) {
+        if (!isLogin) {
             LoginActivity.startActivity(this)
             finish()
         }

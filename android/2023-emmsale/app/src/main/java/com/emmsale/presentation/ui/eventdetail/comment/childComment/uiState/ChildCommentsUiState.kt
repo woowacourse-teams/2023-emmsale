@@ -3,7 +3,6 @@ package com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState
 import com.emmsale.data.comment.Comment
 
 data class ChildCommentsUiState(
-    val isNotLogin: Boolean,
     val isLoading: Boolean,
     val isCommentsFetchingError: Boolean,
     val isCommentPostingError: Boolean,
@@ -13,7 +12,6 @@ data class ChildCommentsUiState(
 ) {
     companion object {
         val Loading = ChildCommentsUiState(
-            isNotLogin = false,
             isLoading = true,
             isCommentsFetchingError = false,
             isCommentPostingError = false,
@@ -32,7 +30,6 @@ data class ChildCommentsUiState(
         )
 
         fun create(comment: Comment, loginMemberId: Long) = ChildCommentsUiState(
-            isNotLogin = false,
             isLoading = false,
             isCommentsFetchingError = false,
             isCommentPostingError = false,
