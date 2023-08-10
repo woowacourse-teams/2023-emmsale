@@ -44,9 +44,9 @@ public class Event extends BaseEntity {
   @Column(nullable = false)
   private LocalDateTime endDate;
   @Column(nullable = false)
-  private LocalDateTime subscriptionStartDate;
+  private LocalDateTime applyStartDate;
   @Column(nullable = false)
-  private LocalDateTime subscriptionEndDate;
+  private LocalDateTime applyEndDate;
   @Column(nullable = false)
   private String informationUrl;
   @Enumerated(EnumType.STRING)
@@ -65,21 +65,21 @@ public class Event extends BaseEntity {
       final String location,
       final LocalDateTime startDate,
       final LocalDateTime endDate,
-      final LocalDateTime subscriptionStartDate,
-      final LocalDateTime subscriptionEndDate,
+      final LocalDateTime applyStartDate,
+      final LocalDateTime applyEndDate,
       final String informationUrl,
       final EventType eventType,
       final String imageUrl
   ) {
     validateStartBeforeOrEqualEndDateTime(startDate, endDate);
-    validateSubscriptionDateTimes(subscriptionStartDate, subscriptionEndDate, startDate, endDate);
+    validateApplyDateTimes(applyStartDate, applyEndDate, startDate, endDate);
 
     this.name = name;
     this.location = location;
     this.startDate = startDate;
     this.endDate = endDate;
-    this.subscriptionStartDate = subscriptionStartDate;
-    this.subscriptionEndDate = subscriptionEndDate;
+    this.applyStartDate = applyStartDate;
+    this.applyEndDate = applyEndDate;
     this.informationUrl = informationUrl;
     this.type = eventType;
     this.imageUrl = imageUrl;
@@ -119,11 +119,11 @@ public class Event extends BaseEntity {
     return EventStatus.IN_PROGRESS;
   }
 
-  public EventStatus calculateEventSubscriptionStatus(final LocalDate now) {
-    if (now.isBefore(subscriptionStartDate.toLocalDate())) {
+  public EventStatus calculateEventApplyStatus(final LocalDate now) {
+    if (now.isBefore(applyStartDate.toLocalDate())) {
       return EventStatus.UPCOMING;
     }
-    if (now.isAfter(subscriptionEndDate.toLocalDate())) {
+    if (now.isAfter(applyEndDate.toLocalDate())) {
       return EventStatus.ENDED;
     }
     return EventStatus.IN_PROGRESS;
@@ -134,20 +134,20 @@ public class Event extends BaseEntity {
       final String location,
       final LocalDateTime startDate,
       final LocalDateTime endDate,
-      final LocalDateTime subscriptionStartDate,
-      final LocalDateTime subscriptionEndDate,
+      final LocalDateTime applyStartDate,
+      final LocalDateTime applyEndDate,
       final String informationUrl,
       final List<Tag> tags
   ) {
     validateStartBeforeOrEqualEndDateTime(startDate, endDate);
-    validateSubscriptionDateTimes(subscriptionStartDate, subscriptionEndDate, startDate, endDate);
+    validateApplyDateTimes(applyStartDate, applyEndDate, startDate, endDate);
 
     this.name = name;
     this.location = location;
     this.startDate = startDate;
     this.endDate = endDate;
-    this.subscriptionStartDate = subscriptionStartDate;
-    this.subscriptionEndDate = subscriptionEndDate;
+    this.applyStartDate = applyStartDate;
+    this.applyEndDate = applyEndDate;
     this.informationUrl = informationUrl;
     this.tags = new ArrayList<>();
 
@@ -163,16 +163,16 @@ public class Event extends BaseEntity {
     }
   }
 
-  private void validateSubscriptionDateTimes(final LocalDateTime subscriptionStartDateTime,
-      final LocalDateTime subscriptionEndDateTime, final LocalDateTime startDateTime,
+  private void validateApplyDateTimes(final LocalDateTime applyStartDateTime,
+      final LocalDateTime applyEndDateTime, final LocalDateTime startDateTime,
       final LocalDateTime endDateTime) {
-    if (subscriptionStartDateTime.isAfter(subscriptionEndDateTime)) {
+    if (applyStartDateTime.isAfter(applyEndDateTime)) {
       throw new EventException(EventExceptionType.SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END);
     }
-    if (subscriptionEndDateTime.isAfter(endDateTime)) {
+    if (applyEndDateTime.isAfter(endDateTime)) {
       throw new EventException(EventExceptionType.SUBSCRIPTION_END_AFTER_EVENT_END);
     }
-    if (subscriptionStartDateTime.isAfter(startDateTime)) {
+    if (applyStartDateTime.isAfter(startDateTime)) {
       throw new EventException(EventExceptionType.SUBSCRIPTION_START_AFTER_EVENT_START);
     }
   }

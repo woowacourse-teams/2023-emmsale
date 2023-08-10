@@ -323,7 +323,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -340,7 +340,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -357,7 +357,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -374,7 +374,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -391,7 +391,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -408,7 +408,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -425,7 +425,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -536,7 +536,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -554,7 +554,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -585,7 +585,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -603,7 +603,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -621,7 +621,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "subscriptionStatus")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
   }

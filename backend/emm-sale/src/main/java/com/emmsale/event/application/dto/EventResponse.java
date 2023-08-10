@@ -28,12 +28,12 @@ public class EventResponse {
   @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime endDate;
   @JsonFormat(pattern = DATE_TIME_FORMAT)
-  private final LocalDateTime subscriptionStartDate;
+  private final LocalDateTime applyStartDate;
   @JsonFormat(pattern = DATE_TIME_FORMAT)
-  private final LocalDateTime subscriptionEndDate;
+  private final LocalDateTime applyEndDate;
   private final List<String> tags;
   private final String status;
-  private final String subscriptionStatus;
+  private final String applyStatus;
   private final String imageUrl;
   private final int remainingDays;
 
@@ -59,8 +59,8 @@ public class EventResponse {
       final Event event) {
     return
         new EventResponse(event.getId(), event.getName(), event.getStartDate(), event.getEndDate(),
-            event.getSubscriptionStartDate(), event.getSubscriptionEndDate(), event.extractTags(),
-            status.name(), event.calculateEventSubscriptionStatus(today).name(),
+            event.getApplyStartDate(), event.getApplyEndDate(), event.extractTags(),
+            status.name(), event.calculateEventApplyStatus(today).name(),
             event.getImageUrl(), event.calculateRemainingDays(today));
   }
 

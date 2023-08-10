@@ -238,8 +238,8 @@ public class EventService {
         request.getLocation(),
         request.getStartDateTime(),
         request.getEndDateTime(),
-        request.getSubscriptionStartDateTime(),
-        request.getSubscriptionEndDateTime(),
+        request.getApplyStartDateTime(),
+        request.getApplyEndDateTime(),
         request.getInformationUrl(),
         tags
     );

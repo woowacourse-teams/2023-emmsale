@@ -67,13 +67,13 @@ class EventApiTest extends MockMvcTestHelper {
       fieldWithPath("informationUrl").type(JsonFieldType.STRING).description("상세정보 url"),
       fieldWithPath("startDate").type(JsonFieldType.STRING).description("시작일자"),
       fieldWithPath("endDate").type(JsonFieldType.STRING).description("종료일자"),
-      fieldWithPath("subscriptionStartDate").type(JsonFieldType.STRING)
+      fieldWithPath("applyStartDate").type(JsonFieldType.STRING)
           .description("신청 시작일자(nullable)"),
-      fieldWithPath("subscriptionEndDate").type(JsonFieldType.STRING)
+      fieldWithPath("applyEndDate").type(JsonFieldType.STRING)
           .description("신청 종료일자(nullable)"),
       fieldWithPath("location").type(JsonFieldType.STRING).description("장소"),
       fieldWithPath("status").type(JsonFieldType.STRING).description("진행상태"),
-      fieldWithPath("subscriptionStatus").type(JsonFieldType.STRING).description("행사 신청 기간의 진행 상황"),
+      fieldWithPath("applyStatus").type(JsonFieldType.STRING).description("행사 신청 기간의 진행 상황"),
       fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("태그들"),
       fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("이미지 Url(포스터)"),
       fieldWithPath("remainingDays").type(JsonFieldType.NUMBER).description("시작일로 부터 D-day"),
@@ -174,15 +174,15 @@ class EventApiTest extends MockMvcTestHelper {
             .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
         fieldWithPath("[].endDate").type(JsonFieldType.STRING)
             .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
-        fieldWithPath("[].subscriptionStartDate").type(JsonFieldType.STRING)
+        fieldWithPath("[].applyStartDate").type(JsonFieldType.STRING)
             .description("행사 신청 시작일(yyyy:MM:dd:HH:mm:ss)(nullable)"),
-        fieldWithPath("[].subscriptionEndDate").type(JsonFieldType.STRING)
+        fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
             .description("행사 신청 마감일(yyyy:MM:dd:HH:mm:ss)(nullable)"),
         fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
             .description("행사 태그 목록"),
         fieldWithPath("[].status").type(JsonFieldType.STRING)
             .description("행사 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
-        fieldWithPath("[].subscriptionStatus").type(JsonFieldType.STRING)
+        fieldWithPath("[].applyStatus").type(JsonFieldType.STRING)
             .description("행사 신청 기간의 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
         fieldWithPath("[].remainingDays").type(JsonFieldType.NUMBER).description("행사 시작일까지 남은 일 수"),
         fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("행사 이미지 URL")
@@ -293,12 +293,12 @@ class EventApiTest extends MockMvcTestHelper {
 
     final EventDetailRequest request = new EventDetailRequest(event.getName(), event.getLocation(),
         event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
-        event.getSubscriptionStartDate(), event.getSubscriptionEndDate(), tags,
+        event.getApplyStartDate(), event.getApplyEndDate(), tags,
         event.getImageUrl(), event.getType());
 
     final EventDetailResponse response = new EventDetailResponse(eventId, request.getName(),
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
-        request.getSubscriptionStartDateTime(), request.getSubscriptionEndDateTime(),
+        request.getApplyStartDateTime(), request.getApplyEndDateTime(),
         request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()), request.getImageUrl(),
         10, request.getType().toString());
@@ -310,9 +310,9 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
         fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
         fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
-        fieldWithPath("subscriptionStartDateTime").type(JsonFieldType.STRING)
+        fieldWithPath("applyStartDateTime").type(JsonFieldType.STRING)
             .description("행사(Event) 신청시작일시"),
-        fieldWithPath("subscriptionEndDateTime").type(JsonFieldType.STRING)
+        fieldWithPath("applyEndDateTime").type(JsonFieldType.STRING)
             .description("행사(Event) 신청종료일시"),
         fieldWithPath("informationUrl").type(JsonFieldType.STRING)
             .description("행사(Event) 상세 정보 URL"),
@@ -377,12 +377,12 @@ class EventApiTest extends MockMvcTestHelper {
 
       final EventDetailRequest request = new EventDetailRequest(event.getName(),
           event.getLocation(), event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
-          event.getSubscriptionStartDate(), event.getSubscriptionEndDate(),
+          event.getApplyStartDate(), event.getApplyEndDate(),
           tags, event.getImageUrl(), event.getType());
 
       final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
-          request.getSubscriptionStartDateTime(), request.getSubscriptionEndDateTime(),
+          request.getApplyStartDateTime(), request.getApplyEndDateTime(),
           request.getLocation(), EventStatus.IN_PROGRESS.name(),
           EventStatus.ENDED.name(),
           tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
@@ -395,9 +395,9 @@ class EventApiTest extends MockMvcTestHelper {
           fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
           fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
           fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
-          fieldWithPath("subscriptionStartDateTime").type(JsonFieldType.STRING)
+          fieldWithPath("applyStartDateTime").type(JsonFieldType.STRING)
               .description("행사(Event) 신청시작일시"),
-          fieldWithPath("subscriptionEndDateTime").type(JsonFieldType.STRING)
+          fieldWithPath("applyEndDateTime").type(JsonFieldType.STRING)
               .description("행사(Event) 신청종료일시"),
           fieldWithPath("informationUrl").type(JsonFieldType.STRING)
               .description("행사(Event) 상세 정보 URL"),
@@ -428,7 +428,7 @@ class EventApiTest extends MockMvcTestHelper {
 
       final EventDetailRequest request = new EventDetailRequest(eventName, event.getLocation(),
           event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
-          event.getSubscriptionStartDate(), event.getSubscriptionEndDate(), tags, null,
+          event.getApplyStartDate(), event.getApplyEndDate(), tags, null,
           EventType.COMPETITION);
 
       //when
@@ -453,7 +453,7 @@ class EventApiTest extends MockMvcTestHelper {
 
       final EventDetailRequest request = new EventDetailRequest(event.getName(), eventLocation,
           event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
-          event.getSubscriptionStartDate(), event.getSubscriptionEndDate(), tags,
+          event.getApplyStartDate(), event.getApplyEndDate(), tags,
           event.getImageUrl(), event.getType());
 
       //when
@@ -479,7 +479,7 @@ class EventApiTest extends MockMvcTestHelper {
 
       final EventDetailRequest request = new EventDetailRequest(event.getName(),
           event.getLocation(), informationUrl, event.getStartDate(), event.getEndDate(),
-          event.getSubscriptionStartDate(), event.getSubscriptionEndDate(), tags,
+          event.getApplyStartDate(), event.getApplyEndDate(), tags,
           event.getImageUrl(), event.getType());
 
       //when

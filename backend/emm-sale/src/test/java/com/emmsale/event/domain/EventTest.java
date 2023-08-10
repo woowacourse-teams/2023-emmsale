@@ -60,7 +60,7 @@ class EventTest {
   }
 
   @Test
-  @DisplayName("Event 생성시 subscriptionStartDate가 subscriptionEndDate 이후일 경우 EventException이 발생한다.")
+  @DisplayName("Event 생성시 applyStartDate가 applyEndDate 이후일 경우 EventException이 발생한다.")
   void newEvent_fail_SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END() {
     //given
     final String name = "이름";
@@ -80,7 +80,7 @@ class EventTest {
   }
 
   @Test
-  @DisplayName("Event 생성시 subscriptionEndDate가 endDate 이후일 경우 EventException이 발생한다.")
+  @DisplayName("Event 생성시 applyEndDate가 endDate 이후일 경우 EventException이 발생한다.")
   void newEvent_fail_SUBSCRIPTION_END_AFTER_EVENT_END() {
     //given
     final String name = "이름";
@@ -99,7 +99,7 @@ class EventTest {
   }
 
   @Test
-  @DisplayName("Event 생성시 subscriptionStartDate가 startDate 이후일 경우 EventException이 발생한다.")
+  @DisplayName("Event 생성시 applyStartDate가 startDate 이후일 경우 EventException이 발생한다.")
   void newEvent_fail_SUBSCRIPTION_START_AFTER_EVENT_START() {
     //given
     final String name = "이름";
@@ -176,7 +176,7 @@ class EventTest {
   }
 
   @Test
-  @DisplayName("Event 수정 시 subscriptionStartDate가 subscriptionEndDate 이후일 경우 EventException이 발생한다.")
+  @DisplayName("Event 수정 시 applyStartDate가 applyEndDate 이후일 경우 EventException이 발생한다.")
   void updateEvent_fail_SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END() {
     //given
     final String newName = "새로운 이름";
@@ -198,7 +198,7 @@ class EventTest {
   }
 
   @Test
-  @DisplayName("Event 수정 시 subscriptionEndDate가 endDate 이후일 경우 EventException이 발생한다.")
+  @DisplayName("Event 수정 시 applyEndDate가 endDate 이후일 경우 EventException이 발생한다.")
   void updateEvent_fail_SUBSCRIPTION_END_AFTER_EVENT_END() {
     //given
     final String newName = "새로운 이름";
@@ -219,7 +219,7 @@ class EventTest {
   }
 
   @Test
-  @DisplayName("Event 수정 시 subscriptionStartDate가 startDate 이후일 경우 EventException이 발생한다.")
+  @DisplayName("Event 수정 시 applyStartDate가 startDate 이후일 경우 EventException이 발생한다.")
   void updateEvent_fail_SUBSCRIPTION_START_AFTER_EVENT_START() {
     //given
     final String newName = "새로운 이름";

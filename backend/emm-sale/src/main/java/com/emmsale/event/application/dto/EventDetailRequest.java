@@ -34,9 +34,9 @@ public class EventDetailRequest {
   private final LocalDateTime endDateTime;
 
   @DateTimeFormat(pattern = DATE_TIME_FORMAT)
-  private final LocalDateTime subscriptionStartDateTime;
+  private final LocalDateTime applyStartDateTime;
   @DateTimeFormat(pattern = DATE_TIME_FORMAT)
-  private final LocalDateTime subscriptionEndDateTime;
+  private final LocalDateTime applyEndDateTime;
 
   private final List<TagRequest> tags;
 
@@ -49,8 +49,8 @@ public class EventDetailRequest {
         location,
         startDateTime,
         endDateTime,
-        subscriptionStartDateTime,
-        subscriptionEndDateTime,
+        applyStartDateTime,
+        applyEndDateTime,
         informationUrl,
         type,
         imageUrl
