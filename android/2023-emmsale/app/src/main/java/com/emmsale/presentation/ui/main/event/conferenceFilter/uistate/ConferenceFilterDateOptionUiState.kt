@@ -6,7 +6,7 @@ import com.emmsale.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ConferenceFilterDateUiState(
+data class ConferenceFilterDateOptionUiState(
     val year: Int,
     val month: Int,
     val day: Int,

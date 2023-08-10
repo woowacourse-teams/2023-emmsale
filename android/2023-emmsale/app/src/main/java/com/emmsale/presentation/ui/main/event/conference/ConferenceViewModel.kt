@@ -16,9 +16,9 @@ import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.EventsUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateOptionUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilteringOptionUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
 import kotlinx.coroutines.launch
 
 class ConferenceViewModel(
@@ -27,8 +27,8 @@ class ConferenceViewModel(
     private val _events = NotNullMutableLiveData(EventsUiState())
     val events: NotNullLiveData<EventsUiState> = _events
 
-    private val _selectedFilters = MutableLiveData<ConferenceFiltersUiState>()
-    val selectedFilters: LiveData<ConferenceFiltersUiState> = _selectedFilters
+    private val _selectedFilters = MutableLiveData<ConferenceFilterUiState>()
+    val selectedFilters: LiveData<ConferenceFilterUiState> = _selectedFilters
 
     init {
         fetchConferences()
@@ -64,28 +64,28 @@ class ConferenceViewModel(
         }
     }
 
-    fun updateConferenceFilter(conferenceFilter: ConferenceFiltersUiState) {
+    fun updateConferenceFilter(conferenceFilter: ConferenceFilterUiState) {
         _selectedFilters.postValue(conferenceFilter)
         fetchConferences(
             startDate = conferenceFilter.selectedStartDate?.toDateString(),
             endDate = conferenceFilter.selectedEndDate?.toDateString(),
-            statuses = conferenceFilter.conferenceStatusFilters
+            statuses = conferenceFilter.conferenceStatusFilteringOptions
                 .filter { it.isSelected }
                 .map { it.toStatus() },
-            tags = conferenceFilter.conferenceTagFilters
+            tags = conferenceFilter.conferenceTagFilteringOptions
                 .filter { it.isSelected }
                 .map { it.name },
         )
     }
 
-    private fun ConferenceFilterDateUiState.toDateString(): String {
+    private fun ConferenceFilterDateOptionUiState.toDateString(): String {
         val year = year.toString().padStart(2, '0')
         val month = month.toString().padStart(2, '0')
         val day = day.toString().padStart(2, '0')
         return "$year-$month-$day"
     }
 
-    private fun ConferenceFilterUiState.toStatus(): ConferenceStatus = when (id) {
+    private fun ConferenceFilteringOptionUiState.toStatus(): ConferenceStatus = when (id) {
         1000L -> ConferenceStatus.IN_PROGRESS
         1001L -> ConferenceStatus.SCHEDULED
         1002L -> ConferenceStatus.ENDED

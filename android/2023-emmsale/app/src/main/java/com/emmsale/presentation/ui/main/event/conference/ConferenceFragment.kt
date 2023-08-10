@@ -17,9 +17,9 @@ import com.emmsale.presentation.ui.main.event.conference.recyclerview.Conference
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewDivider
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateOptionUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilteringOptionUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
 
 class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     override val layoutResId: Int = R.layout.fragment_conference
@@ -30,7 +30,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private val filterActivityLauncher =
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
-            val filters: ConferenceFiltersUiState = result.data?.getParcelableExtraCompat(
+            val filters: ConferenceFilterUiState = result.data?.getParcelableExtraCompat(
                 ConferenceFilterActivity.FILTERS_KEY,
             ) ?: return@registerForActivityResult
 
@@ -75,7 +75,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private fun setupFiltersObserver() {
         viewModel.selectedFilters.observe(viewLifecycleOwner) { filters ->
             clearFilterViews()
-            addFilterViews(filters.conferenceTagFilters + filters.conferenceStatusFilters)
+            addFilterViews(filters.conferenceTagFilteringOptions + filters.conferenceStatusFilteringOptions)
             addDurationFilter(filters.selectedStartDate, filters.selectedEndDate)
         }
     }
@@ -84,15 +84,15 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         binding.layoutConferenceFilters.removeAllViews()
     }
 
-    private fun addFilterViews(filters: List<ConferenceFilterUiState>) {
+    private fun addFilterViews(filters: List<ConferenceFilteringOptionUiState>) {
         filters
             .filter { it.isSelected }
             .forEach { binding.layoutConferenceFilters.addView(createFilterTag(it.name)) }
     }
 
     private fun addDurationFilter(
-        startDate: ConferenceFilterDateUiState?,
-        endDate: ConferenceFilterDateUiState?,
+        startDate: ConferenceFilterDateOptionUiState?,
+        endDate: ConferenceFilterDateOptionUiState?,
     ) {
         val startDateString = startDate?.transformToDateString(requireContext())
         val endDateString = endDate?.transformToDateString(requireContext(), true) ?: ""
