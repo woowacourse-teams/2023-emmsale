@@ -30,34 +30,34 @@ class ChildCommentViewModel(
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
-                changeNotLoginState()
+                changeToNotLoginState()
                 return@launch
             }
 
             when (val result = commentRepository.getComment(commentId)) {
-                is ApiError, is ApiException -> changeCommentFetchingErrorState()
+                is ApiError, is ApiException -> changeToCommentFetchingErrorState()
                 is ApiSuccess -> setChildCommentsState(result.data, token.uid)
             }
         }
     }
 
     fun saveChildComment(content: String, parentCommentId: Long, eventId: Long) {
-        changeLoadingState()
+        changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId, parentCommentId)) {
-                is ApiError -> changeCommentPostingErrorState()
-                is ApiException -> changeCommentPostingErrorState()
+                is ApiError -> changeToCommentPostingErrorState()
+                is ApiException -> changeToCommentPostingErrorState()
                 is ApiSuccess -> fetchComment(parentCommentId)
             }
         }
     }
 
     fun deleteComment(commentId: Long, parentCommentId: Long) {
-        changeLoadingState()
+        changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
-                is ApiError -> changeCommentDeletionErrorState()
-                is ApiException -> changeCommentDeletionErrorState()
+                is ApiError -> changeToCommentDeletionErrorState()
+                is ApiException -> changeToCommentDeletionErrorState()
                 is ApiSuccess -> fetchComment(parentCommentId)
             }
         }
@@ -67,11 +67,11 @@ class ChildCommentViewModel(
         _childCommentsUiState.value = ChildCommentsUiState.create(comment, loginMemberId)
     }
 
-    private fun changeNotLoginState() {
+    private fun changeToNotLoginState() {
         _isLogin.value = false
     }
 
-    private fun changeCommentFetchingErrorState() {
+    private fun changeToCommentFetchingErrorState() {
         _childCommentsUiState.value = childCommentsUiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = true,
@@ -80,7 +80,7 @@ class ChildCommentViewModel(
         )
     }
 
-    private fun changeCommentPostingErrorState() {
+    private fun changeToCommentPostingErrorState() {
         _childCommentsUiState.value = childCommentsUiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = false,
@@ -89,7 +89,7 @@ class ChildCommentViewModel(
         )
     }
 
-    private fun changeCommentDeletionErrorState() {
+    private fun changeToCommentDeletionErrorState() {
         _childCommentsUiState.value = childCommentsUiState.value.copy(
             isLoading = false,
             isCommentsFetchingError = false,
@@ -98,7 +98,7 @@ class ChildCommentViewModel(
         )
     }
 
-    private fun changeLoadingState() {
+    private fun changeToLoadingState() {
         _childCommentsUiState.value = childCommentsUiState.value.copy(
             isLoading = true,
             isCommentsFetchingError = false,
