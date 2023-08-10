@@ -248,8 +248,9 @@ public class EventService {
   }
 
   public void deleteEvent(final Long eventId) {
-    eventRepository.findById(eventId)
-        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
+    if (!eventRepository.existsById(eventId)) {
+      throw new EventException(NOT_FOUND_EVENT);
+    }
 
     eventRepository.deleteById(eventId);
   }
