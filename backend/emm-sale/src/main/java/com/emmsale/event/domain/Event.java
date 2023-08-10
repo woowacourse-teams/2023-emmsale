@@ -184,4 +184,10 @@ public class Event extends BaseEntity {
   public boolean isDiffer(final Long eventId) {
     return !this.getId().equals(eventId);
   }
+
+  public List<String> extractTags() {
+    return tags.stream()
+        .map(tag -> tag.getTag().getName())
+        .collect(Collectors.toList());
+  }
 }

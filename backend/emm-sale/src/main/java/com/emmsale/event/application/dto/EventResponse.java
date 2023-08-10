@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -38,14 +37,15 @@ public class EventResponse {
   private final String imageUrl;
   private final int remainingDays;
 
-  public static List<EventResponse> makeEventResponsesByStatus(LocalDate today, EventStatus status,
-      List<Event> events) {
+  public static List<EventResponse> makeEventResponsesByStatus(final LocalDate today,
+      final EventStatus status,
+      final List<Event> events) {
     return events.stream()
         .map(event -> EventResponse.from(today, status, event))
         .collect(toList());
   }
 
-  public static List<EventResponse> mergeEventResponses(LocalDate today,
+  public static List<EventResponse> mergeEventResponses(final LocalDate today,
       final Map<EventStatus, List<Event>> groupByEventStatus) {
     return groupByEventStatus.entrySet().stream()
         .map(entry -> makeEventResponsesByStatus(today, entry.getKey(), entry.getValue()))
@@ -55,16 +55,13 @@ public class EventResponse {
         });
   }
 
-  private static EventResponse from(LocalDate today, EventStatus status, Event event) {
+  private static EventResponse from(final LocalDate today, final EventStatus status,
+      final Event event) {
     return
         new EventResponse(event.getId(), event.getName(), event.getStartDate(), event.getEndDate(),
-            event.getSubscriptionStartDate(), event.getSubscriptionEndDate(),
-            event.getTags()
-                .stream()
-                .map(tag -> tag.getTag().getName())
-                .collect(Collectors.toList()), status.name(),
-            event.calculateEventSubscriptionStatus(today).name(), event.getImageUrl(),
-            event.calculateRemainingDays(today));
+            event.getSubscriptionStartDate(), event.getSubscriptionEndDate(), event.extractTags(),
+            status.name(), event.calculateEventSubscriptionStatus(today).name(),
+            event.getImageUrl(), event.calculateRemainingDays(today));
   }
 
 }

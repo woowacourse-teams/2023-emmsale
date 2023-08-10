@@ -111,12 +111,12 @@ public class EventService {
     }
 
     if (isExistFilterDate(startDate, endDate)) {
-      LocalDateTime startDateTime = validateStartDate(startDate);
-      LocalDateTime endDateTime = validateEndDate(endDate);
+      final LocalDateTime startDateTime = validateStartDate(startDate);
+      final LocalDateTime endDateTime = validateEndDate(endDate);
       validateEndDateAfterDateStart(startDateTime, endDateTime);
       spec = spec.and(EventSpecification.filterByPeriod(startDateTime, endDateTime));
     }
-    List<Event> events = eventRepository.findAll(spec);
+    final List<Event> events = eventRepository.findAll(spec);
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events);
 
@@ -170,7 +170,8 @@ public class EventService {
     }
   }
 
-  private void validateEndDateAfterDateStart(LocalDateTime startDate, LocalDateTime endDate) {
+  private void validateEndDateAfterDateStart(final LocalDateTime startDate,
+      final LocalDateTime endDate) {
     if (endDate.isBefore(startDate)) {
       throw new EventException(EventExceptionType.START_DATE_AFTER_END_DATE);
     }
@@ -186,7 +187,7 @@ public class EventService {
         );
   }
 
-  private List<EventResponse> filterByStatuses(LocalDate today,
+  private List<EventResponse> filterByStatuses(final LocalDate today,
       final List<EventStatus> statuses,
       final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
     if (isExistStatusName(statuses)) {
