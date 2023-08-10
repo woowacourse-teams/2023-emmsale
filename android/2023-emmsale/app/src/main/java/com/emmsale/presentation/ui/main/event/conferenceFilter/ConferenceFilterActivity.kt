@@ -115,12 +115,12 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun updateFilterViews(eventFilters: ConferenceFiltersUiState) {
-        updateConferenceStatuses(eventFilters.conferenceStatusFilters)
-        updateConferenceTags(eventFilters.conferenceTagFilters)
+        updateStatusFilters(eventFilters.conferenceStatusFilters)
+        updateTagFilters(eventFilters.conferenceTagFilters)
         updateConferenceDurations(eventFilters.selectedStartDate, eventFilters.selectedEndDate)
     }
 
-    private fun updateConferenceStatuses(eventStatuses: List<ConferenceFilterUiState>) {
+    private fun updateStatusFilters(eventStatuses: List<ConferenceFilterUiState>) {
         removeFilterStatuses()
         eventStatuses.forEach { filter ->
             addTagFilter(eventStatusBinding.cgConferenceStatusChips, filter) {
@@ -129,7 +129,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateConferenceTags(eventTags: List<ConferenceFilterUiState>) {
+    private fun updateTagFilters(eventTags: List<ConferenceFilterUiState>) {
         removeTagFiltersExcludingAllTag()
         eventTags.forEach { filter ->
             addTagFilter(eventTagBinding.cgConferenceTagChips, filter) {
