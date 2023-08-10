@@ -61,6 +61,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -647,8 +648,14 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(eventInformationUrl, savedEvent.getInformationUrl()),
           () -> assertEquals(beforeDateTime, savedEvent.getStartDate()),
           () -> assertEquals(afterDateTime, savedEvent.getEndDate())
-          // TODO: 2023/08/10 태그가 업데이트 되었는지 검증하는 로직 추가
       );
+
+      assertThat(response.getTags())
+          .containsAll(
+              tagRequests.stream()
+                  .map(TagRequest::getName)
+                  .collect(Collectors.toList())
+          );
     }
 
     @Test
@@ -744,7 +751,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Long eventId = event.getId();
 
       //when
-      eventService.updateEvent(eventId, updateRequest, now);
+      final EventDetailResponse response = eventService.updateEvent(eventId, updateRequest, now);
       final Event updatedEvent = eventRepository.findById(eventId).get();
 
       //then
@@ -754,8 +761,14 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
           () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
           () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl())
-          // TODO: 2023/08/10 태그가 업데이트 되었는지 검증하는 로직 추가
       );
+
+      assertThat(response.getTags())
+          .containsAll(
+              newTagRequests.stream()
+                  .map(TagRequest::getName)
+                  .collect(Collectors.toList())
+          );
     }
 
     @Test
