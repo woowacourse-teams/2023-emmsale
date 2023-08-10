@@ -10,6 +10,7 @@ drop table if exists kerdy.event_member;
 drop table if exists kerdy.notification;
 drop table if exists kerdy.fcm_token;
 drop table if exists kerdy.block;
+drop table if exists kerdy.scrap;
 
 create table activity
 (
@@ -129,3 +130,14 @@ create table block
     created_at        datetime(6) null,
     updated_at        datetime(6) null
 );
+
+-- 2023-08-10 12:50
+create table scrap
+(
+    id         bigint auto_increment primary key,
+    member_id  bigint not null,
+    event_id   bigint not null,
+    created_at datetime(6),
+    updated_at datetime(6)
+);
+
