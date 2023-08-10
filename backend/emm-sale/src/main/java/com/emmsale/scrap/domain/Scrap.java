@@ -30,4 +30,9 @@ public class Scrap extends BaseEntity {
   @JoinColumn(nullable = false)
   private Event event;
 
+  public Scrap(final Long memberId, final Event event) {
+    this.memberId = memberId;
+    this.event = event;
+  }
+
 }

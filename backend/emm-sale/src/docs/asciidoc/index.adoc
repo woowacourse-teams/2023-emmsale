@@ -384,3 +384,15 @@ include::{snippets}/register-block/http-request.adoc[]
 .HTTP response
 include::{snippets}/register-block/http-response.adoc[]
 
+== 스크랩
+
+=== `POST` : 스크랩 추가
+
+.HTTP request 설명
+include::{snippets}/append-scrap/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/append-scrap/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/append-scrap/http-response.adoc[]
