@@ -66,15 +66,22 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun askFilterClear() {
         showDialog {
-            title(getString(R.string.eventfilter_clear_title))
-            message(getString(R.string.eventfilter_clear_message))
+            title(getString(R.string.conferencefilter_clear_title))
+            message(getString(R.string.conferencefilter_clear_message))
             positiveButton(getString(R.string.all_okay)) { viewModel.clearFilters() }
             negativeButton(getString(R.string.all_cancel))
         }
     }
 
     private fun initEventFilterApplyButtonClickListener() {
-        binding.btnFilterApply.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding.btnFilterApply.setOnClickListener { finishWithSendingSelectedFilters() }
+    }
+
+    private fun finishWithSendingSelectedFilters() {
+        val intent = Intent()
+        intent.putExtra(FILTERS_KEY, viewModel.eventFilters.value)
+        setResult(RESULT_OK, intent)
+        finish()
     }
 
     private fun initTagAllFilterButtonClickListener() {
@@ -89,15 +96,11 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun initDurationButtonClickListener() {
         eventDurationBinding.btnFilterStartDuration.setOnClickListener {
-            showDatePickerDialog { date ->
-                viewModel.updateStartDate(date)
-            }
+            showDatePickerDialog(viewModel::updateStartDate)
         }
 
         eventDurationBinding.btnFilterEndDuration.setOnClickListener {
-            showDatePickerDialog { date ->
-                viewModel.updateEndDate(date)
-            }
+            showDatePickerDialog(viewModel::updateEndDate)
         }
     }
 
@@ -109,7 +112,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         viewModel.eventFilters.observe(this) { eventFilters ->
             when {
                 eventFilters.isError -> showToast(getString(R.string.all_data_loading_failed_message))
-                !eventFilters.isLoading && !eventFilters.isError -> updateFilterViews(eventFilters)
+                !eventFilters.isLoading -> updateFilterViews(eventFilters)
             }
         }
     }
@@ -210,10 +213,16 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     inner class ConferenceFilterOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val intent = Intent()
-            intent.putExtra(FILTERS_KEY, viewModel.eventFilters.value)
-            setResult(RESULT_OK, intent)
-            finish()
+            showBackPressDialog()
+        }
+
+        private fun showBackPressDialog() {
+            showDialog {
+                title(getString(R.string.conferencefilter_backpress_dialog_title))
+                message(getString(R.string.conferencefilter_backpress_dialog_message))
+                positiveButton { finish() }
+                negativeButton { }
+            }
         }
     }
 }

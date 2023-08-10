@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
             android:layout_marginTop="20dp"
-            android:text="@string/eventfilter_conference_event_tag_title"
+            android:text="@string/conferencefilter_conference_event_tag_title"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -32,7 +32,7 @@
                 android:id="@+id/tag_all_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/eventfilter_all_tag_name" />
+                android:text="@string/conferencefilter_all_tag_name" />
 
         </com.google.android.material.chip.ChipGroup>
 
