@@ -16,10 +16,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
+import com.emmsale.member.application.InterestTagService;
 import com.emmsale.member.application.MemberActivityService;
 import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.member.application.dto.DescriptionRequest;
+import com.emmsale.member.application.dto.InterestTagRequest;
+import com.emmsale.member.application.dto.InterestTagResponse;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
@@ -48,6 +51,10 @@ class MemberApiTest extends MockMvcTestHelper {
       fieldWithPath("[].memberActivityResponses[].name").type(JsonFieldType.STRING)
           .description("activity 이름")
   );
+  private static final ResponseFieldsSnippet INTEREST_TAG_RESPONSE_FIELDS = responseFields(
+      fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("태그 ID"),
+      fieldWithPath("[].name").type(JsonFieldType.STRING).description("태그명")
+  );
 
   private static final ResponseFieldsSnippet MEMBER_PROFILE_RESPONSE_FIELDS = responseFields(
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
@@ -56,11 +63,15 @@ class MemberApiTest extends MockMvcTestHelper {
       fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url")
   );
 
-  private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+  private static final RequestFieldsSnippet MEMBER_ACTIVITY_REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
+  private static final RequestFieldsSnippet INTEREST_TAG_REQUEST_FIELDS = requestFields(
+      fieldWithPath("tagIds").description("태그 id들"));
 
   @MockBean
   private MemberActivityService memberActivityService;
+  @MockBean
+  private InterestTagService interestTagService;
   @MockBean
   private MemberUpdateService memberUpdateService;
   @MockBean
@@ -127,7 +138,8 @@ class MemberApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
-        .andDo(document("add-activity", REQUEST_FIELDS, MEMBER_ACTIVITY_RESPONSE_FIELDS));
+        .andDo(document("add-activity", MEMBER_ACTIVITY_REQUEST_FIELDS,
+            MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
@@ -153,7 +165,8 @@ class MemberApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("delete-activity", REQUEST_FIELDS, MEMBER_ACTIVITY_RESPONSE_FIELDS));
+        .andDo(document("delete-activity", MEMBER_ACTIVITY_REQUEST_FIELDS,
+            MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
@@ -191,6 +204,84 @@ class MemberApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-activity", MEMBER_ACTIVITY_RESPONSE_FIELDS));
+  }
+
+  @Test
+  @DisplayName("행사 관심 태그들을 성공적으로 추가하면, 201 Created를 반환해줄 수 있다.")
+  void addInterestTag() throws Exception {
+    //given
+    final String accessToken = "Bearer accessToken";
+    final List<Long> tagIds = List.of(4L, 5L);
+    final InterestTagRequest request = new InterestTagRequest(tagIds);
+
+    final List<InterestTagResponse> interestTagResponse = List.of(
+        new InterestTagResponse(1L, "백엔드"),
+        new InterestTagResponse(2L, "프론트엔드"),
+        new InterestTagResponse(4L, "IOS"),
+        new InterestTagResponse(5L, "AI")
+    );
+
+    when(interestTagService.addInterestTag(any(), any()))
+        .thenReturn(interestTagResponse);
+
+    //when & then
+    mockMvc.perform(post("/members/interest-tags")
+            .header("Authorization", accessToken)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isCreated())
+        .andDo(print())
+        .andDo(document("add-interest-tag", INTEREST_TAG_REQUEST_FIELDS,
+            INTEREST_TAG_RESPONSE_FIELDS));
+  }
+
+  @Test
+  @DisplayName("행사 관심 태그들을 성공적으로 삭제하면, 200 OK를 반환해줄 수 있다.")
+  void test_deleteInterestTag() throws Exception {
+    //given
+    final String accessToken = "Bearer accessToken";
+    final List<Long> tagIds = List.of(1L);
+    final InterestTagRequest request = new InterestTagRequest(tagIds);
+
+    final List<InterestTagResponse> interestTagResponse = List.of(
+        new InterestTagResponse(2L, "프론트엔드"),
+        new InterestTagResponse(4L, "IOS"),
+        new InterestTagResponse(5L, "AI")
+    );
+
+    when(interestTagService.deleteInterestTag(any(), any()))
+        .thenReturn(interestTagResponse);
+
+    //when & then
+    mockMvc.perform(delete("/members/interest-tags")
+            .header("Authorization", accessToken)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("delete-interest-tag", INTEREST_TAG_REQUEST_FIELDS,
+            INTEREST_TAG_RESPONSE_FIELDS));
+  }
+
+  @Test
+  @DisplayName("내 행사 관심 태그들을 조회할 수 있다.")
+  void test_findInterestTags() throws Exception {
+    //given
+    final List<InterestTagResponse> interestTagResponse = List.of(
+        new InterestTagResponse(1L, "백엔드"),
+        new InterestTagResponse(2L, "프론트엔드")
+    );
+
+    //when
+    when(interestTagService.findInterestTags(any()))
+        .thenReturn(interestTagResponse);
+
+    //then
+    mockMvc.perform(get("/members/1/interest-tags")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("find-interest-tags", INTEREST_TAG_RESPONSE_FIELDS));
   }
 
   @Test
