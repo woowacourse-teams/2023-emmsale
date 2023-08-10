@@ -1,6 +1,7 @@
 package com.emmsale.scrap.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,18 +35,18 @@ class ScrapCommandServiceTest extends ServiceIntegrationTestHelper {
   @Autowired
   private MemberRepository memberRepository;
 
+  private Member member;
+  private Event event;
+
+  @BeforeEach
+  void setUp() {
+    member = memberRepository.findById(1L).get();
+    event = eventRepository.save(EventFixture.구름톤());
+  }
+
   @Nested
   @DisplayName("스크랩을 추가하는 테스트")
   class AppendScrap {
-
-    private Member member;
-    private Event event;
-
-    @BeforeEach
-    void setUp() {
-      member = memberRepository.findById(1L).get();
-      event = eventRepository.save(EventFixture.구름톤());
-    }
 
     @Test
     @DisplayName("스크랩을 정상적으로 추가한다.")
@@ -92,6 +93,58 @@ class ScrapCommandServiceTest extends ServiceIntegrationTestHelper {
       //when
       final EventException actualException = assertThrowsExactly(EventException.class,
           () -> scrapCommandService.append(member, request));
+
+      //then
+      assertEquals(expectExceptionType, actualException.exceptionType());
+    }
+
+  }
+
+  @Nested
+  @DisplayName("스크랩을 삭제하는 테스트")
+  class DeleteScrap {
+
+    @Test
+    @DisplayName("스크랩을 정상적으로 삭제한다.")
+    void append() {
+      //given
+      final Scrap scrap = scrapRepository.save(new Scrap(member.getId(), event));
+
+      //when
+      scrapCommandService.deleteScrap(member, scrap.getId());
+
+      //then
+      assertFalse(scrapRepository.findById(scrap.getId()).isPresent());
+    }
+
+    @Test
+    @DisplayName("스크랩이 존재하지 않을 경우 NOT_FOUND_SCRAP 타입의 ScrapException이 발생한다.")
+    void appendWithNotExistEvent() {
+      //given
+      final long 존재하지_않는_스크랩_id = 0L;
+
+      final ScrapExceptionType expectExceptionType = ScrapExceptionType.NOT_FOUND_SCRAP;
+
+      //when
+      final ScrapException actualException = assertThrowsExactly(ScrapException.class,
+          () -> scrapCommandService.deleteScrap(member, 존재하지_않는_스크랩_id));
+
+      //then
+      assertEquals(expectExceptionType, actualException.exceptionType());
+    }
+
+    @Test
+    @DisplayName("자신의 스크랩이 아닐 경우 FORBIDDEN_NOT_OWNER 타입의 ScrapException이 발생한다.")
+    void appendWithAlreadyScraped() {
+      //given
+      final long 다른_멤버_id = 2L;
+      final Scrap scrap = scrapRepository.save(new Scrap(다른_멤버_id, event));
+
+      final ScrapExceptionType expectExceptionType = ScrapExceptionType.FORBIDDEN_NOT_OWNER;
+
+      //when
+      final ScrapException actualException = assertThrowsExactly(ScrapException.class,
+          () -> scrapCommandService.deleteScrap(member, scrap.getId()));
 
       //then
       assertEquals(expectExceptionType, actualException.exceptionType());

@@ -34,9 +34,24 @@ public class ScrapCommandService {
     scrapRepository.save(new Scrap(memberId, event));
   }
 
+  public void deleteScrap(final Member member, final Long scrapId) {
+    final Scrap scrap = scrapRepository.findById(scrapId)
+        .orElseThrow(() -> new ScrapException(ScrapExceptionType.NOT_FOUND_SCRAP));
+
+    validateScrapOwner(member, scrap);
+
+    scrapRepository.delete(scrap);
+  }
+
   private void validateAlreadyScraped(final Long memberId, final Long eventId) {
     if (scrapRepository.existsByMemberIdAndEventId(memberId, eventId)) {
       throw new ScrapException(ScrapExceptionType.ALREADY_EXIST_SCRAP);
+    }
+  }
+
+  private void validateScrapOwner(final Member member, final Scrap scrap) {
+    if (scrap.isNotOwner(member.getId())) {
+      throw new ScrapException(ScrapExceptionType.FORBIDDEN_NOT_OWNER);
     }
   }
 }

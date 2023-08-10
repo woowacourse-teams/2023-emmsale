@@ -5,6 +5,8 @@ import com.emmsale.scrap.application.ScrapCommandService;
 import com.emmsale.scrap.application.dto.ScrapRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,12 @@ public class ScrapApi {
   @ResponseStatus(HttpStatus.CREATED)
   public void append(final Member member, @RequestBody final ScrapRequest scrapRequest) {
     scrapCommandService.append(member, scrapRequest);
+  }
+
+  @DeleteMapping("/{scrapId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void delete(final Member member, @PathVariable final Long scrapId) {
+    scrapCommandService.deleteScrap(member, scrapId);
   }
 
 }

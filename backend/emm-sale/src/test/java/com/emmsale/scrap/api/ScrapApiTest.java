@@ -3,6 +3,7 @@ package com.emmsale.scrap.api;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -26,7 +27,7 @@ class ScrapApiTest extends MockMvcTestHelper {
   private ScrapCommandService scrapCommandService;
 
   @Test
-  @DisplayName("스크랩을 추가한다.")
+  @DisplayName("스크랩을 성공적으로 추가하면 201 CREATED를 반환한다.")
   void append() throws Exception {
     //given
     final long eventId = 1L;
@@ -47,5 +48,21 @@ class ScrapApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(document("append-scrap", requestFields));
+  }
+
+  @Test
+  @DisplayName("스크랩을 성공적으로 삭제하면 204 NO_CONTENT를 반환한다.")
+  void deleteScrap() throws Exception {
+    //given
+    final long scrapId = 1L;
+
+    //when
+    doNothing().when(scrapCommandService).deleteScrap(any(), any());
+
+    //then
+    mockMvc.perform(delete("/scraps/{scrapId}", scrapId)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
+        .andExpect(status().isNoContent())
+        .andDo(document("delete-scrap"));
   }
 }
