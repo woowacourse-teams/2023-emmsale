@@ -125,4 +125,8 @@
     <string name="notification_header_expand_view">화면을 팽창 시킵니다.</string>
 
     <string name="conference_default_people_count">0</string>
+    <string name="eventdetail_fetch_eventdetail_error_message">이벤트를 불러올 수 없어요</string>
+    <string name="eventdetail_tab_infromation">상세 정보</string>
+    <string name="eventdetail_tab_comment">댓글</string>
+    <string name="eventdetail_tab_recruitment">같이가요</string>
 </resources>

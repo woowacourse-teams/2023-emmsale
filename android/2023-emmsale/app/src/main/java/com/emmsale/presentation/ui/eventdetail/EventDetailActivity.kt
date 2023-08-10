@@ -1,16 +1,13 @@
-package com.emmsale.presentation.eventdetail
+package com.emmsale.presentation.ui.eventdetail
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.emmsale.R
 import com.emmsale.databinding.ActivityEventDetailBinding
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.eventdetail.EventDetailFragmentStateAdpater
-import com.emmsale.presentation.ui.eventdetail.EventDetailViewModel
-import com.emmsale.presentation.ui.eventdetail.EventTag
-import com.emmsale.presentation.ui.eventdetail.uistate.EventDetailUiState
 import com.google.android.material.tabs.TabLayoutMediator
 
 class EventDetailActivity : AppCompatActivity() {
@@ -24,28 +21,27 @@ class EventDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setUpBinding()
         setUpEventDetail()
-        setBackPress()
+        onBackPressButtonClick()
         viewModel.fetchEventDetail(eventId)
     }
 
     private fun setUpBinding() {
         binding = ActivityEventDetailBinding.inflate(layoutInflater)
+        binding.lifecycleOwner = this
+        binding.vm = viewModel
         setContentView(binding.root)
     }
 
     private fun setUpEventDetail() {
         viewModel.eventDetail.observe(this) { eventDetailUiState ->
-            when (eventDetailUiState) {
-                is EventDetailUiState.Success -> {
-                    binding.eventDetail = eventDetailUiState
-                    addTag(eventDetailUiState.tags)
-                    initFragmentStateAdapter(
-                        eventDetailUiState.informationUrl,
-                        eventDetailUiState.imageUrl,
-                    )
-                }
-
-                else -> showToast("행사 받아오기 실패")
+            if (eventDetailUiState.isError) {
+                showToast(getString(R.string.eventdetail_fetch_eventdetail_error_message))
+            } else {
+                addTag(eventDetailUiState.tags)
+                initFragmentStateAdapter(
+                    eventDetailUiState.informationUrl,
+                    eventDetailUiState.imageUrl,
+                )
             }
         }
     }
@@ -55,9 +51,14 @@ class EventDetailActivity : AppCompatActivity() {
             EventDetailFragmentStateAdpater(this, eventId, informationUrl, imageUrl)
         TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
             when (position) {
-                INFORMATION_TAB_POSITION -> tab.text = "상세 정보"
-                COMMENT_TAB_POSITION -> tab.text = "댓글"
-                RECRUITMENT_TAB_POSITION -> tab.text = "같이가요"
+                INFORMATION_TAB_POSITION ->
+                    tab.text =
+                    getString(R.string.eventdetail_tab_infromation)
+
+                COMMENT_TAB_POSITION -> tab.text = getString(R.string.eventdetail_tab_comment)
+                RECRUITMENT_TAB_POSITION ->
+                    tab.text =
+                        getString(R.string.eventdetail_tab_recruitment)
             }
         }.attach()
         binding.vpEventdetail.isUserInputEnabled = false
@@ -71,7 +72,7 @@ class EventDetailActivity : AppCompatActivity() {
         text = tag
     }
 
-    private fun setBackPress() {
+    private fun onBackPressButtonClick() {
         binding.ivEventdetailBackpress.setOnClickListener {
             finish()
         }
