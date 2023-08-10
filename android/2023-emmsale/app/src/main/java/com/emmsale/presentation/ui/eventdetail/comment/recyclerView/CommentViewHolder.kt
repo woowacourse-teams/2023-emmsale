@@ -16,10 +16,8 @@ class CommentViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.tvCommentChildcommentscount.setOnClickListener {
-            onChildCommentsView(
-                binding.comment?.commentId ?: return@setOnClickListener,
-            )
+        binding.root.setOnClickListener {
+            onChildCommentsView(binding.comment?.commentId ?: return@setOnClickListener)
         }
         binding.ivCommentDeletebutton.setOnClickListener { onDeleteButtonClick() }
     }
