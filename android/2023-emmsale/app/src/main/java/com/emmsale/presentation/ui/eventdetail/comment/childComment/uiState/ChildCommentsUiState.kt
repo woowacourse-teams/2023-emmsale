@@ -1,22 +1,21 @@
 package com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState
 
 import com.emmsale.data.comment.Comment
-import com.emmsale.data.member.Member
 
-data class ChildCommentsScreenUiState(
-    val isNotLogin: Boolean,
+data class ChildCommentsUiState(
     val isLoading: Boolean,
-    val isError: Boolean,
-    val errorMessage: String,
+    val isFetchingError: Boolean,
+    val isPostingError: Boolean,
+    val isDeletionError: Boolean,
     val parentComment: CommentUiState,
     val childComments: List<CommentUiState>,
 ) {
     companion object {
-        val Loading = ChildCommentsScreenUiState(
-            isNotLogin = false,
+        val Loading = ChildCommentsUiState(
             isLoading = true,
-            isError = false,
-            errorMessage = "",
+            isFetchingError = false,
+            isPostingError = false,
+            isDeletionError = false,
             parentComment = CommentUiState(
                 authorName = "",
                 lastModifiedDate = "",
@@ -30,13 +29,13 @@ data class ChildCommentsScreenUiState(
             childComments = listOf(),
         )
 
-        fun create(comment: Comment, loginMember: Member) = ChildCommentsScreenUiState(
-            isNotLogin = false,
+        fun create(comment: Comment, loginMemberId: Long) = ChildCommentsUiState(
             isLoading = false,
-            isError = false,
-            errorMessage = "",
-            parentComment = CommentUiState.create(comment, loginMember),
-            childComments = comment.childComments.map { CommentUiState.create(it, loginMember) },
+            isFetchingError = false,
+            isPostingError = false,
+            isDeletionError = false,
+            parentComment = CommentUiState.create(comment, loginMemberId),
+            childComments = comment.childComments.map { CommentUiState.create(it, loginMemberId) },
         )
     }
 }

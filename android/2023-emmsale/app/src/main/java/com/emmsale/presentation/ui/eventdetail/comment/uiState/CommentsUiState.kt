@@ -1,34 +1,35 @@
 package com.emmsale.presentation.ui.eventdetail.comment.uiState
 
 import com.emmsale.data.comment.Comment
-import com.emmsale.data.member.Member
 
 data class CommentsUiState(
-    val isNotLogin: Boolean = false,
     val isLoading: Boolean,
-    val isError: Boolean,
-    val errorMessage: String,
+    val isFetchingError: Boolean,
+    val isPostingError: Boolean,
+    val isDeletionError: Boolean,
     val comments: List<CommentUiState>,
 ) {
     companion object {
         val Loading = CommentsUiState(
             isLoading = true,
-            isError = false,
-            errorMessage = "",
+            isFetchingError = false,
+            isPostingError = false,
+            isDeletionError = false,
             comments = listOf(),
         )
 
         fun create(
             comments: List<Comment>,
-            loginMember: Member,
+            loginMemberId: Long,
         ) = CommentsUiState(
             isLoading = false,
-            isError = false,
-            errorMessage = "",
+            isFetchingError = false,
+            isPostingError = false,
+            isDeletionError = false,
             comments = comments.map {
                 CommentUiState.create(
                     comment = it,
-                    loginMember = loginMember,
+                    loginMemberId = loginMemberId,
                 )
             },
         )
