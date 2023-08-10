@@ -31,10 +31,10 @@ class ConferenceViewModel(
     val selectedFilters: LiveData<ConferenceFiltersUiState> = _selectedFilters
 
     init {
-        fetchConference()
+        fetchConferences()
     }
 
-    private fun fetchConference(
+    private fun fetchConferences(
         startDate: String? = null,
         endDate: String? = null,
         statuses: List<ConferenceStatus> = emptyList(),
@@ -66,7 +66,7 @@ class ConferenceViewModel(
 
     fun updateConferenceFilter(conferenceFilter: ConferenceFiltersUiState) {
         _selectedFilters.postValue(conferenceFilter)
-        fetchConference(
+        fetchConferences(
             startDate = conferenceFilter.selectedStartDate?.toDateString(),
             endDate = conferenceFilter.selectedEndDate?.toDateString(),
             statuses = conferenceFilter.conferenceStatusFilters
