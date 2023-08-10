@@ -79,7 +79,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun finishWithSendingSelectedFilters() {
         val intent = Intent()
-        intent.putExtra(FILTERS_KEY, viewModel.eventFilters.value)
+        intent.putExtra(FILTERS_KEY, viewModel.conferenceFilters.value)
         setResult(RESULT_OK, intent)
         finish()
     }
@@ -109,7 +109,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun setupEventFilters() {
-        viewModel.eventFilters.observe(this) { eventFilters ->
+        viewModel.conferenceFilters.observe(this) { eventFilters ->
             when {
                 eventFilters.isError -> showToast(getString(R.string.all_data_loading_failed_message))
                 !eventFilters.isLoading -> updateFilterViews(eventFilters)
