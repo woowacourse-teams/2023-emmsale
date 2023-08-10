@@ -21,7 +21,7 @@ class EventDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setUpBinding()
         setUpEventDetail()
-        onBackPressButtonClick()
+        initBackPressButtonClickListener()
         viewModel.fetchEventDetail(eventId)
     }
 
@@ -70,7 +70,7 @@ class EventDetailActivity : AppCompatActivity() {
         text = tag
     }
 
-    private fun onBackPressButtonClick() {
+    private fun initBackPressButtonClickListener() {
         binding.ivEventdetailBackpress.setOnClickListener {
             finish()
         }
