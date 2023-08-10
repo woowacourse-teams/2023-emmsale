@@ -27,11 +27,11 @@ class CommentViewModel(
     val comments: NotNullLiveData<CommentsUiState> = _comments
 
     fun fetchComments(eventId: Long) {
-        changeLoadingState()
+        changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
-                changeNotLoginState()
+                changeToNotLoginState()
                 return@launch
             }
 
@@ -43,22 +43,22 @@ class CommentViewModel(
     }
 
     fun saveComment(content: String, eventId: Long) {
-        changeLoadingState()
+        changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId)) {
-                is ApiError -> changeCommentPostingErrorState()
-                is ApiException -> changeCommentPostingErrorState()
+                is ApiError -> changeToCommentPostingErrorState()
+                is ApiException -> changeToCommentPostingErrorState()
                 is ApiSuccess -> fetchComments(eventId)
             }
         }
     }
 
     fun deleteComment(commentId: Long, eventId: Long) {
-        changeLoadingState()
+        changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
-                is ApiError -> changeCommentDeletionErrorState()
-                is ApiException -> changeCommentDeletionErrorState()
+                is ApiError -> changeToCommentDeletionErrorState()
+                is ApiException -> changeToCommentDeletionErrorState()
                 is ApiSuccess -> fetchComments(eventId)
             }
         }
@@ -68,11 +68,11 @@ class CommentViewModel(
         _comments.value = CommentsUiState.create(comments, loginMemberId)
     }
 
-    private fun changeNotLoginState() {
+    private fun changeToNotLoginState() {
         _isLogin.value = false
     }
 
-    private fun changeLoadingState() {
+    private fun changeToLoadingState() {
         _comments.value = comments.value.copy(
             isLoading = true,
             isFetchingError = false,
@@ -90,7 +90,7 @@ class CommentViewModel(
         )
     }
 
-    private fun changeCommentPostingErrorState() {
+    private fun changeToCommentPostingErrorState() {
         _comments.value = comments.value.copy(
             isLoading = false,
             isFetchingError = false,
@@ -99,7 +99,7 @@ class CommentViewModel(
         )
     }
 
-    private fun changeCommentDeletionErrorState() {
+    private fun changeToCommentDeletionErrorState() {
         _comments.value = comments.value.copy(
             isLoading = false,
             isFetchingError = false,
