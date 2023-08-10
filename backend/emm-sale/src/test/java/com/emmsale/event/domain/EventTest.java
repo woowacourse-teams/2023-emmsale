@@ -255,6 +255,21 @@ class EventTest {
         .isEqualTo(5);
   }
 
+  @Test
+  @DisplayName("현재날짜로부터 신청 시작일까지 남은 날짜를 계산할 수 있다.")
+  void calculateApplyRemainingDay() {
+    //given
+    final Event 인프콘 = eventFixture();
+    final LocalDate today = LocalDate.of(2023, 8, 10);
+
+    //when
+    final int actual = 인프콘.getEventPeriod().calculateApplyRemainingDays(today);
+
+    //then
+    assertThat(actual)
+        .isEqualTo(5);
+  }
+
   @Nested
   class addParticipant {
 

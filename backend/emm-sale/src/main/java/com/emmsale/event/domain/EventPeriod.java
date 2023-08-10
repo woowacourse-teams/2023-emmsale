@@ -79,4 +79,8 @@ public class EventPeriod {
     }
     return EventStatus.IN_PROGRESS;
   }
+
+  public int calculateApplyRemainingDays(final LocalDate today) {
+    return java.time.Period.between(today, applyStartDate.toLocalDate()).getDays();
+  }
 }

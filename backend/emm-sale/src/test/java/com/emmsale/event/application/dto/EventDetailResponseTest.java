@@ -31,7 +31,7 @@ class EventDetailResponseTest {
         EventStatus.UPCOMING.name(),
         Collections.emptyList(),
         구름톤.getImageUrl(),
-        2,
+        2, 2,
         구름톤.getType().toString()
     );
 

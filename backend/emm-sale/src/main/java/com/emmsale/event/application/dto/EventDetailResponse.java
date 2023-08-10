@@ -35,6 +35,7 @@ public class EventDetailResponse {
   private final List<String> tags;
   private final String imageUrl;
   private final Integer remainingDays;
+  private final Integer applyRemainingDays;
   private final String type;
 
   public static EventDetailResponse from(final Event event, final LocalDate today) {
@@ -57,6 +58,7 @@ public class EventDetailResponse {
         tagNames,
         event.getImageUrl(),
         event.getEventPeriod().calculateRemainingDays(today),
+        event.getEventPeriod().calculateApplyRemainingDays(today),
         event.getType().toString()
     );
   }

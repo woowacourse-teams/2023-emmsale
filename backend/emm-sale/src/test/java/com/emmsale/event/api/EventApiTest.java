@@ -77,6 +77,8 @@ class EventApiTest extends MockMvcTestHelper {
       fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("태그들"),
       fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("이미지 Url(포스터)"),
       fieldWithPath("remainingDays").type(JsonFieldType.NUMBER).description("시작일로 부터 D-day"),
+      fieldWithPath("applyRemainingDays").type(JsonFieldType.NUMBER)
+          .description("행사 신청 시작일까지 남은 일 수"),
       fieldWithPath("type").type(JsonFieldType.STRING).description("event의 타입"));
 
   @MockBean
@@ -89,11 +91,11 @@ class EventApiTest extends MockMvcTestHelper {
     final Long eventId = 1L;
     final EventDetailResponse eventDetailResponse = new EventDetailResponse(eventId, "인프콘 2023",
         "http://infcon.com", LocalDateTime.of(2023, 8, 15, 12, 0),
-        LocalDateTime.of(2023, 8, 15, 12, 0), LocalDateTime.of(2023, 5, 1, 12, 0),
+        LocalDateTime.of(2023, 8, 15, 12, 0), LocalDateTime.of(2023, 8, 1, 12, 0),
         LocalDateTime.of(2023, 8, 15, 12, 0), "코엑스",
         "UPCOMING",
         "ENDED", List.of("코틀린", "백엔드", "안드로이드"),
-        "https://www.image.com", 2, EventType.COMPETITION.toString());
+        "https://www.image.com", 2, -12, EventType.COMPETITION.toString());
 
     when(eventService.findEvent(anyLong(), any())).thenReturn(eventDetailResponse);
 
@@ -174,10 +176,6 @@ class EventApiTest extends MockMvcTestHelper {
             .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
         fieldWithPath("[].endDate").type(JsonFieldType.STRING)
             .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
-        fieldWithPath("[].applyStartDate").type(JsonFieldType.STRING)
-            .description("행사 신청 시작일(yyyy:MM:dd:HH:mm:ss)(nullable)"),
-        fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
-            .description("행사 신청 마감일(yyyy:MM:dd:HH:mm:ss)(nullable)"),
         fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
             .description("행사 태그 목록"),
         fieldWithPath("[].status").type(JsonFieldType.STRING)
@@ -185,28 +183,27 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("[].applyStatus").type(JsonFieldType.STRING)
             .description("행사 신청 기간의 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
         fieldWithPath("[].remainingDays").type(JsonFieldType.NUMBER).description("행사 시작일까지 남은 일 수"),
+        fieldWithPath("[].applyRemainingDays").type(JsonFieldType.NUMBER)
+            .description("행사 신청 시작일까지 남은 일 수"),
         fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("행사 이미지 URL")
     );
 
     final List<EventResponse> eventResponses = List.of(
         new EventResponse(1L, "인프콘 2023", LocalDateTime.parse("2023-06-03T12:00:00"),
-            LocalDateTime.parse("2023-09-03T12:00:00"), LocalDateTime.parse("2023-05-01T12:00:00"),
-            LocalDateTime.parse("2023-06-03T12:00:00"),
+            LocalDateTime.parse("2023-09-03T12:00:00"),
             List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"), "IN_PROGRESS", "ENDED",
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3),
+            3, -30),
         new EventResponse(5L, "웹 컨퍼런스", LocalDateTime.parse("2023-07-03T12:00:00"),
-            LocalDateTime.parse("2023-08-03T12:00:00"), LocalDateTime.parse("2023-07-03T12:00:00"),
             LocalDateTime.parse("2023-08-03T12:00:00"), List.of("백엔드", "프론트엔드"),
             "IN_PROGRESS", "IN_PROGRESS",
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3),
+            3, 3),
         new EventResponse(2L, "AI 컨퍼런스", LocalDateTime.parse("2023-07-22T12:00:00"),
-            LocalDateTime.parse("2023-07-30T12:00:00"), LocalDateTime.parse("2023-07-01T12:00:00"),
-            LocalDateTime.parse("2023-07-22T12:00:00"), List.of("AI"), "UPCOMING",
+            LocalDateTime.parse("2023-07-30T12:00:00"), List.of("AI"), "UPCOMING",
             "IN_PROGRESS",
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3)
+            3, -18)
 
     );
 
@@ -302,7 +299,7 @@ class EventApiTest extends MockMvcTestHelper {
         request.getApplyStartDateTime(), request.getApplyEndDateTime(),
         request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()), request.getImageUrl(),
-        10, request.getType().toString());
+        10, 10, request.getType().toString());
 
     when(eventService.updateEvent(any(), any(), any())).thenReturn(response);
 
@@ -337,7 +334,6 @@ class EventApiTest extends MockMvcTestHelper {
   void deleteEventTest() throws Exception {
     //given
     final long eventId = 1L;
-    final Event event = EventFixture.인프콘_2023();
 
     doNothing().when(eventService).deleteEvent(eventId);
     //when
@@ -385,10 +381,9 @@ class EventApiTest extends MockMvcTestHelper {
       final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
           request.getApplyStartDateTime(), request.getApplyEndDateTime(),
-          request.getLocation(), EventStatus.IN_PROGRESS.name(),
-          EventStatus.ENDED.name(),
+          request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
           tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
-          request.getImageUrl(), 10, request.getType().toString());
+          request.getImageUrl(), 10, 10, request.getType().toString());
 
       when(eventService.addEvent(any(), any())).thenReturn(response);
 
