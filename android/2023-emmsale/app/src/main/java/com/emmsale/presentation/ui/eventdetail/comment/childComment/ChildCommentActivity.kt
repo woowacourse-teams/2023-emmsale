@@ -98,19 +98,19 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun handleError(childCommentsUiState: ChildCommentsUiState) {
         fun handleCommentsFetchingError(childCommentsUiState: ChildCommentsUiState) {
-            if (childCommentsUiState.isCommentsFetchingError) {
+            if (childCommentsUiState.isFetchingError) {
                 showToast(getString(R.string.comments_comments_fetching_error_message))
             }
         }
 
         fun handleCommentPostingError(childCommentsUiState: ChildCommentsUiState) {
-            if (childCommentsUiState.isCommentPostingError) {
+            if (childCommentsUiState.isPostingError) {
                 showToast(getString(R.string.comments_comments_posting_error_message))
             }
         }
 
         fun handleCommentDeletionError(childCommentsUiState: ChildCommentsUiState) {
-            if (childCommentsUiState.isCommentDeletionError) {
+            if (childCommentsUiState.isDeletionError) {
                 showToast(getString(R.string.comments_comments_deletion_error_message))
             }
         }

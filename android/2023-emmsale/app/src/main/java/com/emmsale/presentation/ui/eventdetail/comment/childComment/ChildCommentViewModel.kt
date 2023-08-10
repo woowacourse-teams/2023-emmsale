@@ -74,36 +74,36 @@ class ChildCommentViewModel(
     private fun changeToCommentFetchingErrorState() {
         _childCommentsUiState.value = childCommentsUiState.value.copy(
             isLoading = false,
-            isCommentsFetchingError = true,
-            isCommentPostingError = false,
-            isCommentDeletionError = false,
+            isFetchingError = true,
+            isPostingError = false,
+            isDeletionError = false,
         )
     }
 
     private fun changeToCommentPostingErrorState() {
         _childCommentsUiState.value = childCommentsUiState.value.copy(
             isLoading = false,
-            isCommentsFetchingError = false,
-            isCommentPostingError = true,
-            isCommentDeletionError = false,
+            isFetchingError = false,
+            isPostingError = true,
+            isDeletionError = false,
         )
     }
 
     private fun changeToCommentDeletionErrorState() {
         _childCommentsUiState.value = childCommentsUiState.value.copy(
             isLoading = false,
-            isCommentsFetchingError = false,
-            isCommentPostingError = false,
-            isCommentDeletionError = true,
+            isFetchingError = false,
+            isPostingError = false,
+            isDeletionError = true,
         )
     }
 
     private fun changeToLoadingState() {
         _childCommentsUiState.value = childCommentsUiState.value.copy(
             isLoading = true,
-            isCommentsFetchingError = false,
-            isCommentPostingError = false,
-            isCommentDeletionError = false,
+            isFetchingError = false,
+            isPostingError = false,
+            isDeletionError = false,
         )
     }
 
