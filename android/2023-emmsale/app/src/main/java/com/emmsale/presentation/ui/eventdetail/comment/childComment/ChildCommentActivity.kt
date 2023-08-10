@@ -9,12 +9,12 @@ import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.databinding.DialogCommentDeleteBinding
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentAdapter
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentRecyclerViewDivider
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 
@@ -52,12 +52,7 @@ class ChildCommentActivity : AppCompatActivity() {
         binding.rvChildcommentsChildcomments.apply {
             adapter = ChildCommentAdapter(::onChildCommentDelete)
             itemAnimator = null
-            addItemDecoration(
-                DividerItemDecoration(
-                    this@ChildCommentActivity,
-                    DividerItemDecoration.VERTICAL,
-                ),
-            )
+            addItemDecoration(ChildCommentRecyclerViewDivider(this@ChildCommentActivity))
         }
     }
 
