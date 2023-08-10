@@ -15,8 +15,13 @@ import com.emmsale.presentation.ui.eventdetail.uistate.EventDetailUiState
 import kotlinx.coroutines.launch
 
 class EventDetailViewModel(
+    private val eventId: Long,
     private val eventDetailRepository: EventDetailRepository,
 ) : ViewModel() {
+
+    init {
+        fetchEventDetail(eventId)
+    }
 
     private val _eventDetail: NotNullMutableLiveData<EventDetailUiState> =
         NotNullMutableLiveData(EventDetailUiState())
@@ -50,8 +55,9 @@ class EventDetailViewModel(
     }
 
     companion object {
-        val factory = ViewModelFactory {
+        fun factory(eventId: Long) = ViewModelFactory {
             EventDetailViewModel(
+                eventId,
                 eventDetailRepository = KerdyApplication.repositoryContainer.eventDetailRepository,
             )
         }

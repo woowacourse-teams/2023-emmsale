@@ -12,17 +12,15 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class EventDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventDetailBinding
-    private val viewModel: EventDetailViewModel by viewModels { EventDetailViewModel.factory }
     private val eventId: Long by lazy {
         intent.getLongExtra(EVENT_ID_KEY, DEFAULT_EVENT_ID)
     }
-
+    private val viewModel: EventDetailViewModel by viewModels { EventDetailViewModel.factory(eventId) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpBinding()
         setUpEventDetail()
         initBackPressButtonClickListener()
-        viewModel.fetchEventDetail(eventId)
     }
 
     private fun setUpBinding() {
