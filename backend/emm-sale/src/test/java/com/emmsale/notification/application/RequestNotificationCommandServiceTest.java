@@ -1,5 +1,8 @@
 package com.emmsale.notification.application;
 
+import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
+import static com.emmsale.notification.exception.NotificationExceptionType.NOT_OWNER;
+import static com.emmsale.notification.exception.NotificationExceptionType.NO_CONTENT_BLOCKED_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,6 +12,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 
+import com.emmsale.block.domain.Block;
+import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -36,6 +41,8 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
   private RequestNotificationRepository requestNotificationRepository;
   @Autowired
   private MemberRepository memberRepository;
+  @Autowired
+  private BlockRepository blockRepository;
   private RequestNotificationCommandService mockingRequestNotificationCommandService;
   private FirebaseCloudMessageClient firebaseCloudMessageClient;
 
@@ -46,7 +53,8 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
     mockingRequestNotificationCommandService = new RequestNotificationCommandService(
         requestNotificationRepository,
         memberRepository,
-        firebaseCloudMessageClient
+        firebaseCloudMessageClient,
+        blockRepository
     );
   }
 
@@ -107,7 +115,7 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
     //when
     assertThatThrownBy(() -> requestNotificationCommandService.create(request))
         .isInstanceOf(NotificationException.class)
-        .hasMessage(NotificationExceptionType.BAD_REQUEST_MEMBER_ID.errorMessage());
+        .hasMessage(BAD_REQUEST_MEMBER_ID.errorMessage());
 
     //then
   }
@@ -200,7 +208,7 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
     );
     final Long notificationId = notification.getId();
 
-    final NotificationExceptionType expectExceptionType = NotificationExceptionType.NOT_OWNER;
+    final NotificationExceptionType expectExceptionType = NOT_OWNER;
 
     //when
     final NotificationException actualException = assertThrowsExactly(
@@ -210,5 +218,31 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
 
     //then
     assertEquals(expectExceptionType, actualException.exceptionType());
+  }
+
+  @Test
+  @DisplayName("차단된 사용자에게 알림을 보낼 경우 NO_CONTENT_BLOCKED_MEMBER 타입의 Exception이 발생한다.")
+  void createWithBlockedSender() {
+    //given
+    final long senderId = 1L;
+    final long receiverId = 2L;
+    final long eventId = 3L;
+    final String message = "알림 메시지야";
+
+    blockRepository.save(new Block(receiverId, senderId));
+
+    final RequestNotificationRequest request = new RequestNotificationRequest(
+        senderId,
+        receiverId,
+        message,
+        eventId
+    );
+
+    //when
+    final NotificationException actualException = assertThrowsExactly(NotificationException.class,
+        () -> requestNotificationCommandService.create(request));
+
+    //then
+    assertEquals(NO_CONTENT_BLOCKED_MEMBER, actualException.exceptionType());
   }
 }
