@@ -668,8 +668,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(eventName, savedEvent.getName()),
           () -> assertEquals(eventLocation, savedEvent.getLocation()),
           () -> assertEquals(eventInformationUrl, savedEvent.getInformationUrl()),
-          () -> assertEquals(beforeDateTime, savedEvent.getStartDate()),
-          () -> assertEquals(afterDateTime, savedEvent.getEndDate()),
+          () -> assertEquals(beforeDateTime, savedEvent.getEventPeriod().getStartDate()),
+          () -> assertEquals(afterDateTime, savedEvent.getEventPeriod().getEndDate()),
           () -> assertThat(savedEvent.getTags()).extracting("tag", Tag.class)
               .extracting("name", String.class)
               .containsAll(
@@ -786,8 +786,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       assertAll(
           () -> assertEquals(newName, updatedEvent.getName()),
           () -> assertEquals(newLocation, updatedEvent.getLocation()),
-          () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
-          () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
+          () -> assertEquals(newStartDateTime, updatedEvent.getEventPeriod().getStartDate()),
+          () -> assertEquals(newEndDateTime, updatedEvent.getEventPeriod().getEndDate()),
           () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
           () -> assertThat(updatedEvent.getTags())
               .extracting("tag", Tag.class)

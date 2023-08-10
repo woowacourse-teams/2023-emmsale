@@ -292,8 +292,9 @@ class EventApiTest extends MockMvcTestHelper {
         .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
     final EventDetailRequest request = new EventDetailRequest(event.getName(), event.getLocation(),
-        event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
-        event.getApplyStartDate(), event.getApplyEndDate(), tags,
+        event.getInformationUrl(), event.getEventPeriod().getStartDate(),
+        event.getEventPeriod().getEndDate(),
+        event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(), tags,
         event.getImageUrl(), event.getType());
 
     final EventDetailResponse response = new EventDetailResponse(eventId, request.getName(),
@@ -376,8 +377,9 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
       final EventDetailRequest request = new EventDetailRequest(event.getName(),
-          event.getLocation(), event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
-          event.getApplyStartDate(), event.getApplyEndDate(),
+          event.getLocation(), event.getInformationUrl(), event.getEventPeriod().getStartDate(),
+          event.getEventPeriod().getEndDate(),
+          event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
           tags, event.getImageUrl(), event.getType());
 
       final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
@@ -427,8 +429,10 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
       final EventDetailRequest request = new EventDetailRequest(eventName, event.getLocation(),
-          event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
-          event.getApplyStartDate(), event.getApplyEndDate(), tags, null,
+          event.getInformationUrl(), event.getEventPeriod().getStartDate(),
+          event.getEventPeriod().getEndDate(),
+          event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
+          tags, null,
           EventType.COMPETITION);
 
       //when
@@ -452,8 +456,10 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
       final EventDetailRequest request = new EventDetailRequest(event.getName(), eventLocation,
-          event.getInformationUrl(), event.getStartDate(), event.getEndDate(),
-          event.getApplyStartDate(), event.getApplyEndDate(), tags,
+          event.getInformationUrl(), event.getEventPeriod().getStartDate(),
+          event.getEventPeriod().getEndDate(),
+          event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
+          tags,
           event.getImageUrl(), event.getType());
 
       //when
@@ -478,8 +484,10 @@ class EventApiTest extends MockMvcTestHelper {
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
       final EventDetailRequest request = new EventDetailRequest(event.getName(),
-          event.getLocation(), informationUrl, event.getStartDate(), event.getEndDate(),
-          event.getApplyStartDate(), event.getApplyEndDate(), tags,
+          event.getLocation(), informationUrl, event.getEventPeriod().getStartDate(),
+          event.getEventPeriod().getEndDate(),
+          event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
+          tags,
           event.getImageUrl(), event.getType());
 
       //when

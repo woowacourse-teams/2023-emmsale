@@ -47,16 +47,16 @@ public class EventDetailResponse {
         event.getId(),
         event.getName(),
         event.getInformationUrl(),
-        event.getStartDate(),
-        event.getEndDate(),
-        event.getApplyStartDate(),
-        event.getApplyEndDate(),
+        event.getEventPeriod().getStartDate(),
+        event.getEventPeriod().getEndDate(),
+        event.getEventPeriod().getApplyStartDate(),
+        event.getEventPeriod().getApplyEndDate(),
         event.getLocation(),
-        event.calculateEventStatus(today).name(),
-        event.calculateEventApplyStatus(today).name(),
+        event.getEventPeriod().calculateEventStatus(today).name(),
+        event.getEventPeriod().calculateEventApplyStatus(today).name(),
         tagNames,
         event.getImageUrl(),
-        event.calculateRemainingDays(today),
+        event.getEventPeriod().calculateRemainingDays(today),
         event.getType().toString()
     );
   }

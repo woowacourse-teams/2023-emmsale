@@ -34,7 +34,7 @@ class EventTest {
   @DisplayName("현재 날짜가 주어지면 행사의 진행 상태를 계산한다.")
   void calculateEventStatus(LocalDate input, EventStatus expected) {
     // given, when
-    EventStatus actual = EventFixture.AI_컨퍼런스().calculateEventStatus(input);
+    EventStatus actual = EventFixture.AI_컨퍼런스().getEventPeriod().calculateEventStatus(input);
 
     // then
     assertThat(actual).isEqualTo(expected);
@@ -147,8 +147,8 @@ class EventTest {
     assertAll(
         () -> assertEquals(newName, updatedEvent.getName()),
         () -> assertEquals(newLocation, updatedEvent.getLocation()),
-        () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
-        () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
+        () -> assertEquals(newStartDateTime, updatedEvent.getEventPeriod().getStartDate()),
+        () -> assertEquals(newEndDateTime, updatedEvent.getEventPeriod().getEndDate()),
         () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
         () -> assertEquals(newTags.size(), event.getTags().size())
     );
@@ -248,7 +248,7 @@ class EventTest {
     final LocalDate today = LocalDate.of(2023, 8, 10);
 
     //when
-    final int actual = 인프콘.calculateRemainingDays(today);
+    final int actual = 인프콘.getEventPeriod().calculateRemainingDays(today);
 
     //then
     assertThat(actual)

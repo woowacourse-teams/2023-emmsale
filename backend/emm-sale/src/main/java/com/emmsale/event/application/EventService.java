@@ -180,9 +180,9 @@ public class EventService {
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
       final List<Event> events) {
     return events.stream()
-        .sorted(comparing(Event::getStartDate))
+        .sorted(comparing(event -> event.getEventPeriod().getStartDate()))
         .collect(
-            groupingBy(event -> event.calculateEventStatus(nowDate),
+            groupingBy(event -> event.getEventPeriod().calculateEventStatus(nowDate),
                 () -> new EnumMap<>(EventStatus.class), toList())
         );
   }

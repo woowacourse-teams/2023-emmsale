@@ -58,10 +58,19 @@ public class EventResponse {
   private static EventResponse from(final LocalDate today, final EventStatus status,
       final Event event) {
     return
-        new EventResponse(event.getId(), event.getName(), event.getStartDate(), event.getEndDate(),
-            event.getApplyStartDate(), event.getApplyEndDate(), event.extractTags(),
-            status.name(), event.calculateEventApplyStatus(today).name(),
-            event.getImageUrl(), event.calculateRemainingDays(today));
+        new EventResponse(
+            event.getId(),
+            event.getName(),
+            event.getEventPeriod().getStartDate(),
+            event.getEventPeriod().getEndDate(),
+            event.getEventPeriod().getApplyStartDate(),
+            event.getEventPeriod().getApplyEndDate(),
+            event.extractTags(),
+            status.name(),
+            event.getEventPeriod().calculateEventApplyStatus(today).name(),
+            event.getImageUrl(),
+            event.getEventPeriod().calculateRemainingDays(today)
+        );
   }
 
 }
