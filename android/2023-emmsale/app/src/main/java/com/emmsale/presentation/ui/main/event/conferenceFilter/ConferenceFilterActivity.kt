@@ -114,10 +114,10 @@ class ConferenceFilterActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateFilterViews(eventFilters: ConferenceFiltersUiState) {
-        updateStatusFilters(eventFilters.conferenceStatusFilters)
-        updateTagFilters(eventFilters.conferenceTagFilters)
-        updateConferenceDurations(eventFilters.selectedStartDate, eventFilters.selectedEndDate)
+    private fun updateFilterViews(conferenceFilters: ConferenceFiltersUiState) {
+        updateStatusFilters(conferenceFilters.conferenceStatusFilters)
+        updateTagFilters(conferenceFilters.conferenceTagFilters)
+        updateConferenceDurations(conferenceFilters.selectedStartDate, conferenceFilters.selectedEndDate)
     }
 
     private fun updateStatusFilters(eventStatuses: List<ConferenceFilterUiState>) {
