@@ -119,14 +119,14 @@ public class Event extends BaseEntity {
     return EventStatus.IN_PROGRESS;
   }
 
-  public EventSubscriptionStatus calculateEventSubscriptionStatus(final LocalDate now) {
+  public EventStatus calculateEventSubscriptionStatus(final LocalDate now) {
     if (now.isBefore(subscriptionStartDate.toLocalDate())) {
-      return EventSubscriptionStatus.UPCOMING;
+      return EventStatus.UPCOMING;
     }
     if (now.isAfter(subscriptionEndDate.toLocalDate())) {
-      return EventSubscriptionStatus.ENDED;
+      return EventStatus.ENDED;
     }
-    return EventSubscriptionStatus.IN_PROGRESS;
+    return EventStatus.IN_PROGRESS;
   }
 
   public Event updateEventContent(

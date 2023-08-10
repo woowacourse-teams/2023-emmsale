@@ -33,7 +33,6 @@ import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.event.application.dto.ParticipateUpdateRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
-import com.emmsale.event.domain.EventSubscriptionStatus;
 import com.emmsale.event.domain.EventType;
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.tag.TagFixture;
@@ -300,7 +299,7 @@ class EventApiTest extends MockMvcTestHelper {
     final EventDetailResponse response = new EventDetailResponse(eventId, request.getName(),
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
         request.getSubscriptionStartDateTime(), request.getSubscriptionEndDateTime(),
-        request.getLocation(), EventStatus.IN_PROGRESS.name(), EventSubscriptionStatus.ENDED.name(),
+        request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()), request.getImageUrl(),
         10, request.getType().toString());
 
@@ -385,7 +384,7 @@ class EventApiTest extends MockMvcTestHelper {
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
           request.getSubscriptionStartDateTime(), request.getSubscriptionEndDateTime(),
           request.getLocation(), EventStatus.IN_PROGRESS.name(),
-          EventSubscriptionStatus.ENDED.name(),
+          EventStatus.ENDED.name(),
           tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
           request.getImageUrl(), 10, request.getType().toString());
 

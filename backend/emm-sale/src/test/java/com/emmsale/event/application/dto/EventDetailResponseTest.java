@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
-import com.emmsale.event.domain.EventSubscriptionStatus;
 import java.time.LocalDate;
 import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +28,7 @@ class EventDetailResponseTest {
         구름톤.getSubscriptionEndDate(),
         구름톤.getLocation(),
         EventStatus.UPCOMING.name(),
-        EventSubscriptionStatus.UPCOMING.name(),
+        EventStatus.UPCOMING.name(),
         Collections.emptyList(),
         구름톤.getImageUrl(),
         2,

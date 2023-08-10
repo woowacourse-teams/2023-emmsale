@@ -16,20 +16,18 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class EventDetailResponse {
 
-  private static final String EXPECTED = "예정";
-  private static final String IN_PROGRESS = "진행 중";
-  private static final String END = "종료";
+  public static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
 
   private final Long id;
   private final String name;
   private final String informationUrl;
-  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime startDate;
-  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime endDate;
-  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime subscriptionStartDate;
-  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime subscriptionEndDate;
   private final String location;
   private final String status;
