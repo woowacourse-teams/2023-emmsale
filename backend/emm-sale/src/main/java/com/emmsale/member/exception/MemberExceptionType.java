@@ -29,6 +29,15 @@ public enum MemberExceptionType implements BaseExceptionType {
       HttpStatus.BAD_REQUEST,
       "요청에 중복된 활동 ID가 포함되어 있습니다."
   ),
+  ALREADY_EXIST_INTEREST_TAG(
+      HttpStatus.BAD_REQUEST,
+      "이미 관심 태그로 등록된 태그입니다."
+  ),
+
+  NOT_FOUND_INTEREST_TAG(
+      HttpStatus.BAD_REQUEST,
+      "관심 태그로 등록되지 않은 태그입니다."
+  ),
 
   NULL_DESCRIPTION(
       HttpStatus.BAD_REQUEST,

@@ -11,9 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member_tag")
 public class InterestTag extends BaseEntity {
@@ -27,4 +29,9 @@ public class InterestTag extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private Tag tag;
+
+  public InterestTag(final Member member, final Tag tag) {
+    this.member = member;
+    this.tag = tag;
+  }
 }
