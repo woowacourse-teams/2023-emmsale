@@ -9,6 +9,8 @@ public interface InterestTagRepository extends JpaRepository<InterestTag, Long> 
 
   List<InterestTag> findInterestTagsByMemberId(final Long memberId);
 
+  boolean existsByTagIdIn(List<Long> tagIds);
+
   @Query("select it from InterestTag it "
       + "where it.member = :member "
       + "and it.tag.id in :deleteTagId")

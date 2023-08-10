@@ -5,7 +5,12 @@ import com.emmsale.member.application.dto.InterestTagResponse;
 import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.member.exception.MemberExceptionType;
+import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
+import com.emmsale.tag.exception.TagException;
+import com.emmsale.tag.exception.TagExceptionType;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +33,10 @@ public class InterestTagService {
 
   public List<InterestTagResponse> addInterestTag(final Member member,
       final InterestTagRequest request) {
-    // TODO: 2023-08-10 유효성 검증
-    final List<InterestTag> interestTags = tagRepository.findAllById(request.getTagIds())
+    final List<Long> tagIds = request.getTagIds();
+    validateAllTagExist(tagIds);
+    validateAlreadyExist(tagIds);
+    final List<InterestTag> interestTags = tagRepository.findAllById(tagIds)
         .stream()
         .map(tag -> new InterestTag(member, tag))
         .collect(Collectors.toList());
@@ -40,12 +47,29 @@ public class InterestTagService {
         interestTagRepository.findInterestTagsByMemberId(member.getId()));
   }
 
+  private void validateAllTagExist(final List<Long> tagIds) {
+    final List<Tag> tags = tagRepository.findAllById(tagIds);
+    if (tags.size() != tagIds.size()) {
+      throw new TagException(TagExceptionType.NOT_FOUND_TAG);
+    }
+  }
+
+  private void validateAlreadyExist(final List<Long> tagIds) {
+    if (interestTagRepository.existsByTagIdIn(tagIds)) {
+      throw new MemberException(MemberExceptionType.ALREADY_EXIST_INTEREST_TAG);
+    }
+  }
+
+
   public List<InterestTagResponse> deleteInterestTag(final Member member,
       final InterestTagRequest request) {
+    final List<Long> tagIds = request.getTagIds();
+    final List<InterestTag> interestTags = interestTagRepository.findAllByMemberAndTagIds(member,
+        tagIds);
+    validateAllTagExist(tagIds);
+    validateAllInterestTagExist(tagIds, interestTags);
 
-    final List<Long> savedInterestTagIds = interestTagRepository.findAllByMemberAndTagIds(member,
-            request.getTagIds())
-        .stream()
+    final List<Long> savedInterestTagIds = interestTags.stream()
         .map(InterestTag::getId)
         .collect(Collectors.toList());
     interestTagRepository.deleteAllByIdInBatch(savedInterestTagIds);
@@ -53,5 +77,11 @@ public class InterestTagService {
         interestTagRepository.findInterestTagsByMemberId(member.getId()));
   }
 
+  private void validateAllInterestTagExist(final List<Long> tagIds,
+      final List<InterestTag> interestTags) {
+    if (interestTags.size() != tagIds.size()) {
+      throw new MemberException(MemberExceptionType.NOT_FOUND_INTEREST_TAG);
+    }
+  }
 
 }

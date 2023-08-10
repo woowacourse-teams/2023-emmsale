@@ -174,7 +174,7 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
 
     @Test
     @DisplayName("관심 태그로 등록되지 않은 태그가 포함되어 있으면 예외를 반환한다.")
-    void deleteInterestTag_fail_ALREADY_EXIST_INTEREST_TAG() {
+    void deleteInterestTag_fail_NOT_FOUND_INTEREST_TAG() {
       // given
       final List<Long> tagIds = List.of(1L, 4L);
       final InterestTagRequest request = new InterestTagRequest(tagIds);
