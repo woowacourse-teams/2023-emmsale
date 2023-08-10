@@ -9,9 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
-public class MemberTag extends BaseEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "member_tag")
+public class InterestTag extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
