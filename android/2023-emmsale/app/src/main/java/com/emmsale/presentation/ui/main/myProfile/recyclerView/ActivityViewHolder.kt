@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.myProfile.adapter
+package com.emmsale.presentation.ui.main.myProfile.recyclerView
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

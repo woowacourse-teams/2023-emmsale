@@ -1,7 +1,5 @@
 package com.emmsale.presentation.ui.main.myProfile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.activity.Activity
@@ -15,8 +13,10 @@ import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.common.livedata.NotNullLiveData
+import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState
-import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileScreenUiState
+import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
 import kotlinx.coroutines.launch
 
 class MyProfileViewModel(
@@ -25,56 +25,42 @@ class MyProfileViewModel(
     private val activityRepository: ActivityRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData(MyProfileScreenUiState.Loading)
-    val uiState: LiveData<MyProfileScreenUiState> = _uiState
+    private val _isLogin = NotNullMutableLiveData(true)
+    val isLogin: NotNullLiveData<Boolean> = _isLogin
+
+    private val _myProfile = NotNullMutableLiveData(MyProfileUiState.Loading)
+    val myProfile: NotNullLiveData<MyProfileUiState> = _myProfile
 
     fun fetchMember() {
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
-                _uiState.postValue(_uiState.value!!.copy(isNotLogin = true))
+                changeToNotLoginState()
                 return@launch
             }
             launch {
                 when (val result = memberRepository.getMember(token.uid)) {
-                    is ApiError -> changeErrorUiState(result.message.toString())
-                    is ApiException -> changeErrorUiState(result.e.message.toString())
-                    is ApiSuccess -> setMemberOnUi(result.data)
+                    is ApiError, is ApiException -> changeToProfileFetchingErrorState()
+                    is ApiSuccess -> setMemberState(result.data)
                 }
             }
             launch {
                 when (val result = activityRepository.getActivities(token.uid)) {
-                    is ApiError -> changeErrorUiState(result.message.toString())
-                    is ApiException -> changeErrorUiState(result.e.message.toString())
-                    is ApiSuccess -> setActivitiesOnUi(result.data)
+                    is ApiError, is ApiException -> changeToProfileFetchingErrorState()
+                    is ApiSuccess -> setActivitiesState(result.data)
                 }
             }
         }
     }
 
-    fun onErrorMessageViewed() {
-        _uiState.postValue(
-            uiState.value!!.copy(
-                isError = false,
-                errorMessage = "",
-            ),
-        )
+    private fun changeToNotLoginState() {
+        _isLogin.value = false
     }
 
-    private fun changeErrorUiState(errorMessage: String) {
-        _uiState.postValue(
-            uiState.value!!.copy(
-                isLoading = false,
-                isError = true,
-                errorMessage = errorMessage,
-            ),
-        )
-    }
-
-    private fun setMemberOnUi(member: Member) {
-        _uiState.value = _uiState.value!!.copy(
+    private fun setMemberState(member: Member) {
+        _myProfile.value = _myProfile.value.copy(
             isLoading = false,
-            isError = false,
+            isFetchingError = false,
             memberId = member.id,
             memberName = member.name,
             description = member.description,
@@ -82,10 +68,10 @@ class MyProfileViewModel(
         )
     }
 
-    private fun setActivitiesOnUi(activities: List<Activity>) {
-        _uiState.value = _uiState.value!!.copy(
+    private fun setActivitiesState(activities: List<Activity>) {
+        _myProfile.value = _myProfile.value.copy(
             isLoading = false,
-            isError = false,
+            isFetchingError = false,
             fields = activities.getActivityUiStatesOf(ActivityType.FIELD),
             educations = activities.getActivityUiStatesOf(ActivityType.EDUCATION),
             clubs = activities.getActivityUiStatesOf(ActivityType.CLUB),
@@ -95,6 +81,13 @@ class MyProfileViewModel(
     private fun List<Activity>.getActivityUiStatesOf(activityType: ActivityType): List<ActivityUiState> {
         return this.filter { it.activityType == activityType }
             .map { ActivityUiState.from(it) }
+    }
+
+    private fun changeToProfileFetchingErrorState() {
+        _myProfile.value = myProfile.value.copy(
+            isLoading = false,
+            isFetchingError = true,
+        )
     }
 
     companion object {

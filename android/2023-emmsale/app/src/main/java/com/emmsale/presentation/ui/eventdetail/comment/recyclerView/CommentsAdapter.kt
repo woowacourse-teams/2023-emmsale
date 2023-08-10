@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.eventdetail.comment.recyclerview
+package com.emmsale.presentation.ui.eventdetail.comment.recyclerView
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
