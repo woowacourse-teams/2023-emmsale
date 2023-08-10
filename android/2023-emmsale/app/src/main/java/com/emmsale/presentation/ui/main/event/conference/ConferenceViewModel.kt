@@ -14,7 +14,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.EventsUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
@@ -53,7 +53,7 @@ class ConferenceViewModel(
             ) {
                 is ApiSuccess ->
                     _events.value = _events.value.copy(
-                        events = eventsResult.data.map(ConferencesUiState::from),
+                        events = eventsResult.data.map(ConferenceUiState::from),
                         isLoading = false,
                     )
 

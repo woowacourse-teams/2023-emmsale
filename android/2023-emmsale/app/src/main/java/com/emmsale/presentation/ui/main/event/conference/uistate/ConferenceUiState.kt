@@ -4,14 +4,14 @@ import com.emmsale.data.conference.Conference
 import com.emmsale.data.conference.ConferenceStatus
 
 data class EventsUiState(
-    val events: List<ConferencesUiState> = emptyList(),
+    val events: List<ConferenceUiState> = emptyList(),
     val isLoading: Boolean = false,
     val isError: Boolean = false,
 ) {
     val eventSize: Int = events.size
 }
 
-data class ConferencesUiState(
+data class ConferenceUiState(
     val id: Long,
     val name: String,
     val tags: List<String>,
@@ -19,7 +19,7 @@ data class ConferencesUiState(
     val posterUrl: String?,
 ) {
     companion object {
-        fun from(conference: Conference): ConferencesUiState = ConferencesUiState(
+        fun from(conference: Conference): ConferenceUiState = ConferenceUiState(
             id = conference.id,
             name = conference.name,
             tags = conference.tags,

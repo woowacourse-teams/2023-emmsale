@@ -15,7 +15,7 @@ import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewAdapter
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewDivider
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
@@ -111,7 +111,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         binding.btnEventFilter.setOnClickListener { navigateToEventFilter() }
     }
 
-    private fun navigateToEventDetail(event: ConferencesUiState) {
+    private fun navigateToEventDetail(event: ConferenceUiState) {
         EventDetailActivity.startActivity(requireContext(), event.id)
     }
 

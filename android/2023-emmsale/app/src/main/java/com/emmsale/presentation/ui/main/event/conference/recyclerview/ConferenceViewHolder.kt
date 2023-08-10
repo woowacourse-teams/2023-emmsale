@@ -8,11 +8,11 @@ import com.emmsale.R
 import com.emmsale.databinding.ItemConferenceBinding
 import com.emmsale.presentation.common.views.EventTag
 import com.emmsale.presentation.common.views.eventChipOf
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
 
 class ConferenceViewHolder(
     parent: ViewGroup,
-    onClickConference: (ConferencesUiState) -> Unit,
+    onClickConference: (ConferenceUiState) -> Unit,
 ) : ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false),
 ) {
@@ -22,7 +22,7 @@ class ConferenceViewHolder(
         binding.onClickConference = onClickConference
     }
 
-    fun bind(event: ConferencesUiState) {
+    fun bind(event: ConferenceUiState) {
         binding.event = event
         binding.cgEventTags.removeAllViews()
         event.tags.forEach(::addEventChip)
