@@ -1,7 +1,6 @@
 package com.emmsale.presentation.ui.main.event.conferenceFilter
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
@@ -30,12 +29,10 @@ class ConferenceFilterViewModel(
     private val _eventFilters = NotNullMutableLiveData(ConferenceFiltersUiState())
     val eventFilters: NotNullLiveData<ConferenceFiltersUiState> = _eventFilters
 
-    private val _selectedTagFilterCount = MutableLiveData<Int>()
-    val isTagAllSelected: LiveData<Boolean> = _selectedTagFilterCount.map { count ->
-        when (count) {
-            _eventFilters.value.conferenceTagFilters.size -> true
-            else -> false
-        }
+    val isTagAllSelected: LiveData<Boolean> = _eventFilters.map { filter ->
+        val tagFilterSize = filter.conferenceTagFilters.size
+        val selectedTagFilterSize = filter.conferenceTagFilters.count { it.isSelected }
+        tagFilterSize == selectedTagFilterSize
     }
     val isStartDateSelected: LiveData<Boolean> = _eventFilters.map { filters ->
         when {
@@ -61,7 +58,6 @@ class ConferenceFilterViewModel(
                     isError = false,
                 ),
             )
-            _selectedTagFilterCount.postValue(tags.count { it.isSelected })
         }
     }
 
@@ -95,17 +91,8 @@ class ConferenceFilterViewModel(
         _eventFilters.value = _eventFilters.value.toggleFilterSelection(filter.id)
     }
 
-    fun addSelectedTagFilterCount(count: Int) {
-        _selectedTagFilterCount.value = (_selectedTagFilterCount.value ?: 0) + count
-    }
-
-    fun minusSelectedTagFilterCount(count: Int) {
-        _selectedTagFilterCount.value = (_selectedTagFilterCount.value ?: 0) - count
-    }
-
     fun updateFilters(filters: ConferenceFiltersUiState?) {
         filters?.let(_eventFilters::postValue) ?: fetchEventFilters()
-        _selectedTagFilterCount.postValue(filters?.conferenceTagFilters?.count { it.isSelected })
     }
 
     fun updateStartDate(startDate: LocalDate) {
@@ -139,15 +126,12 @@ class ConferenceFilterViewModel(
         val filterDate =
             ConferenceFilterDateUiState(endDate.year, endDate.monthValue, endDate.dayOfMonth)
         _eventFilters.postValue(
-            _eventFilters.value.copy(
-                selectedEndDate = filterDate,
-            ),
+            _eventFilters.value.copy(selectedEndDate = filterDate),
         )
     }
 
     fun clearFilters() {
         _eventFilters.postValue(_eventFilters.value.resetSelection())
-        _selectedTagFilterCount.postValue(0)
     }
 
     companion object {
