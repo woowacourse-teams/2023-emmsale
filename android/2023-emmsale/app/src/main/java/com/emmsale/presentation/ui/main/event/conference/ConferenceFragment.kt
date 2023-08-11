@@ -2,7 +2,6 @@ package com.emmsale.presentation.ui.main.event.conference
 
 import android.app.Activity.RESULT_OK
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
@@ -61,7 +60,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private fun initView() {
         initViewModel()
         initEventRecyclerView()
-        initClickListener()
+        initEventFilterButtonClickListener()
     }
 
     private fun initViewModel() {
@@ -115,7 +114,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         text = title
     }
 
-    private fun initClickListener() {
+    private fun initEventFilterButtonClickListener() {
         binding.btnEventFilter.setOnClickListener { navigateToEventFilter() }
     }
 
