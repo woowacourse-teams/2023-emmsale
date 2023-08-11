@@ -144,7 +144,7 @@ include::{snippets}/update-recruitment-post/http-request.adoc[]
 .HTTP response
 include::{snippets}/update-recruitment-post/http-response.adoc[]
 
-=== `DELETE` : 행사의 함꼐 해요 게시글 삭제
+=== `DELETE` : 행사의 함께 해요 게시글 삭제
 
 .HTTP request
 include::{snippets}/delete-recruitment-post/http-request.adoc[]
@@ -155,7 +155,7 @@ include::{snippets}/delete-recruitment-post/request-parameters.adoc[]
 .HTTP response
 include::{snippets}/delete-recruitment-post/http-response.adoc[]
 
-=== `GET`: 사용자가 해당 행사에 이미 함꼐 해요 게시글을 작성했는지 확인
+=== `GET`: 사용자가 해당 행사에 이미 함께 해요 게시글을 작성했는지 확인
 
 .HTTP request
 include::{snippets}/check-already-recruitment-post/http-request.adoc[]
