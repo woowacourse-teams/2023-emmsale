@@ -10,7 +10,7 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.ServiceFactory
 import com.emmsale.data.common.handleApi
 import com.emmsale.presentation.common.extension.showNotification
-import com.emmsale.presentation.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage

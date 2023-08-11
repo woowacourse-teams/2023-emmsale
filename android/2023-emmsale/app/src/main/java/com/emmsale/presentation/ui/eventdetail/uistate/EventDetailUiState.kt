@@ -31,7 +31,7 @@ data class EventDetailUiState(
                     endDate = getGeneralDateFormat(endDate),
                     informationUrl = informationUrl,
                     tags = tags,
-                    imageUrl = postImageUrl ?: "",
+                    imageUrl = imageUrl ?: "",
                     isError = false,
                     isLoading = false,
                 )
