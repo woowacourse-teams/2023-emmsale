@@ -8,14 +8,13 @@ import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
 import com.emmsale.tag.domain.Tag;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -39,10 +38,8 @@ public class Event extends BaseEntity {
   private String name;
   @Column(nullable = false)
   private String location;
-  @Column(nullable = false)
-  private LocalDateTime startDate;
-  @Column(nullable = false)
-  private LocalDateTime endDate;
+  @Embedded
+  private EventPeriod eventPeriod;
   @Column(nullable = false)
   private String informationUrl;
   @Enumerated(EnumType.STRING)
@@ -61,16 +58,16 @@ public class Event extends BaseEntity {
       final String location,
       final LocalDateTime startDate,
       final LocalDateTime endDate,
+      final LocalDateTime applyStartDate,
+      final LocalDateTime applyEndDate,
       final String informationUrl,
       final EventType eventType,
       final String imageUrl
   ) {
-    validateStartBeforeOrEqualEndDateTime(startDate, endDate);
 
     this.name = name;
     this.location = location;
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.eventPeriod = new EventPeriod(startDate, endDate, applyStartDate, applyEndDate);
     this.informationUrl = informationUrl;
     this.type = eventType;
     this.imageUrl = imageUrl;
@@ -100,30 +97,19 @@ public class Event extends BaseEntity {
         .anyMatch(participant -> participant.isSameMember(member));
   }
 
-  public EventStatus calculateEventStatus(final LocalDate now) {
-    if (now.isBefore(startDate.toLocalDate())) {
-      return EventStatus.UPCOMING;
-    }
-    if (now.isAfter(endDate.toLocalDate())) {
-      return EventStatus.ENDED;
-    }
-    return EventStatus.IN_PROGRESS;
-  }
-
   public Event updateEventContent(
       final String name,
       final String location,
       final LocalDateTime startDate,
       final LocalDateTime endDate,
+      final LocalDateTime applyStartDate,
+      final LocalDateTime applyEndDate,
       final String informationUrl,
       final List<Tag> tags
   ) {
-    validateStartBeforeOrEqualEndDateTime(startDate, endDate);
-
     this.name = name;
     this.location = location;
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.eventPeriod = new EventPeriod(startDate, endDate, applyStartDate, applyEndDate);
     this.informationUrl = informationUrl;
     this.tags = new ArrayList<>();
 
@@ -132,18 +118,13 @@ public class Event extends BaseEntity {
     return this;
   }
 
-  private void validateStartBeforeOrEqualEndDateTime(final LocalDateTime startDateTime,
-      final LocalDateTime endDateTime) {
-    if (startDateTime.isAfter(endDateTime)) {
-      throw new EventException(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME);
-    }
-  }
-
-  public int calculateRemainingDays(final LocalDate today) {
-    return Period.between(today, startDate.toLocalDate()).getDays();
-  }
-
   public boolean isDiffer(final Long eventId) {
     return !this.getId().equals(eventId);
+  }
+
+  public List<String> extractTags() {
+    return tags.stream()
+        .map(tag -> tag.getTag().getName())
+        .collect(Collectors.toList());
   }
 }

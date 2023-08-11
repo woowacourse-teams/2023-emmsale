@@ -129,3 +129,9 @@ create table block
     created_at        datetime(6) null,
     updated_at        datetime(6) null
 );
+
+-- 2023-08-08 23:00
+alter table event
+    add column apply_start_date datetime(6) not null;
+alter table event
+    add column apply_end_date datetime(6) not null;

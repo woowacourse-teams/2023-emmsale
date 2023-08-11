@@ -75,20 +75,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
-      List.of(), "진행 중", null, 0);
+      List.of(), "IN_PROGRESS", "ENDED", null, 0, 0);
   private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
-      List.of(), "진행 중", null, 0);
-  private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스", null, null,
-      List.of(), "종료된 행사", null, 0);
+      List.of(), "IN_PROGRESS", "IN_PROGRESS", null, 0, 0);
+  private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스",
+      null, null,
+      List.of(), "ENDED", "ENDED", null, 0, 0);
   private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null,
-      List.of(), "진행 예정", null, 0);
+      List.of(), "UPCOMING", "IN_PROGRESS", null, 0, 0);
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
-      List.of(), "진행 예정", null, 0);
+      List.of(), "UPCOMING", "UPCOMING", null, 0, 0);
   private static final EventResponse AI_아이디어_공모전 = new EventResponse(null, "AI 아이디어 공모전", null,
-      null,
-      List.of(), "종료된 행사", null, 0);
+      null, List.of(), "ENDED", "ENDED", null, 0, 0);
   private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null, null,
-      List.of(), "진행 중", null, 0);
+      List.of(), "IN_PROGRESS", "IN_PROGRESS", null, 0, 0);
 
 
   private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
@@ -315,7 +315,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           null, null, null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -330,7 +332,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           null, null, null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -345,7 +349,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-07-01", "2023-07-31", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -360,7 +366,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-08-01", "2023-08-31", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -375,7 +383,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-06-01", "2023-06-30", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -390,7 +400,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-07-17", null, null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -405,7 +417,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           null, "2023-07-31", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -516,7 +530,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -534,7 +548,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -565,7 +579,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -583,7 +597,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -601,7 +615,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
   }
@@ -632,6 +646,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           eventInformationUrl,
           beforeDateTime,
           afterDateTime,
+          beforeDateTime,
+          afterDateTime,
           tagRequests,
           imageUrl,
           type
@@ -646,10 +662,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(eventName, savedEvent.getName()),
           () -> assertEquals(eventLocation, savedEvent.getLocation()),
           () -> assertEquals(eventInformationUrl, savedEvent.getInformationUrl()),
-          () -> assertEquals(beforeDateTime, savedEvent.getStartDate()),
-          () -> assertEquals(afterDateTime, savedEvent.getEndDate())
+          () -> assertEquals(beforeDateTime, savedEvent.getEventPeriod().getStartDate()),
+          () -> assertEquals(afterDateTime, savedEvent.getEventPeriod().getEndDate())
       );
-
       assertThat(response.getTags())
           .containsAll(
               tagRequests.stream()
@@ -671,6 +686,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           eventInformationUrl,
           startDateTime,
           endDatetime,
+          beforeDateTime,
+          afterDateTime,
           tagRequests,
           imageUrl,
           type
@@ -698,6 +715,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           eventName,
           eventLocation,
           eventInformationUrl,
+          beforeDateTime,
+          afterDateTime,
           beforeDateTime,
           afterDateTime,
           tagRequests,
@@ -742,6 +761,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           beforeDateTime,
           afterDateTime,
+          beforeDateTime,
+          afterDateTime,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE
@@ -758,11 +779,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       assertAll(
           () -> assertEquals(newName, updatedEvent.getName()),
           () -> assertEquals(newLocation, updatedEvent.getLocation()),
-          () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
-          () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
+          () -> assertEquals(newStartDateTime, updatedEvent.getEventPeriod().getStartDate()),
+          () -> assertEquals(newEndDateTime, updatedEvent.getEventPeriod().getEndDate()),
           () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl())
       );
-
       assertThat(response.getTags())
           .containsAll(
               newTagRequests.stream()
@@ -781,6 +801,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newName,
           newLocation,
           newInformationUrl,
+          beforeDateTime,
+          afterDateTime,
           beforeDateTime,
           afterDateTime,
           newTagRequests,
@@ -808,6 +830,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           newStartDateTime,
           newEndDateTime,
+          beforeDateTime,
+          afterDateTime,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE
@@ -835,6 +859,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newName,
           newLocation,
           newInformationUrl,
+          beforeDateTime,
+          afterDateTime,
           beforeDateTime,
           afterDateTime,
           newTagRequests,
