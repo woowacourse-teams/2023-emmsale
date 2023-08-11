@@ -1,6 +1,5 @@
 package com.emmsale.presentation.ui.notificationBox
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
@@ -18,6 +17,7 @@ import com.emmsale.presentation.ui.notificationBox.uistate.NotificationBodyUiSta
 import com.emmsale.presentation.ui.notificationBox.uistate.NotificationHeaderUiState
 import com.emmsale.presentation.ui.notificationBox.uistate.NotificationMemberUiState
 import com.emmsale.presentation.ui.notificationBox.uistate.NotificationsUiState
+import com.emmsale.presentation.ui.notificationBox.uistate.RecruitingUiState
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -30,6 +30,9 @@ class NotificationBoxViewModel(
 ) : ViewModel() {
     private val _notifications = NotNullMutableLiveData(NotificationsUiState())
     val notifications: NotNullLiveData<NotificationsUiState> = _notifications
+
+    private val _recruitmentUiState = NotNullMutableLiveData(RecruitingUiState())
+    val recruitmentUiState: NotNullLiveData<RecruitingUiState> = _recruitmentUiState
 
     init {
         fetchNotifications()
@@ -99,16 +102,41 @@ class NotificationBoxViewModel(
         _notifications.postValue(_notifications.value.toggleNotificationExpanded(eventId))
     }
 
-    // TODO: 4차 스프린트 구현 예정
-    // TODO: 컨퍼런스 동행 수락
     fun acceptRecruit(notificationId: Long) {
-        Log.d("kerdy", notificationId.toString())
+        viewModelScope.launch {
+            _recruitmentUiState.value = recruitmentUiState.value.changeToLoadingState()
+
+            when (notificationRepository.updateRecruitmentAcceptedStatus(notificationId, true)) {
+                is ApiSuccess ->
+                    _recruitmentUiState.value = recruitmentUiState.value.changeToAcceptedState()
+
+                is ApiException, is ApiError ->
+                    _recruitmentUiState.value = recruitmentUiState.value.changeToErrorState()
+            }
+        }
     }
 
-    // TODO: 4차 스프린트 구현 예정
-    // TODO: 컨퍼런스 동행 거절
     fun rejectRecruit(notificationId: Long) {
-        Log.d("kerdy", notificationId.toString())
+        viewModelScope.launch {
+            _recruitmentUiState.value = recruitmentUiState.value.changeToLoadingState()
+
+            when (notificationRepository.updateRecruitmentAcceptedStatus(notificationId, false)) {
+                is ApiSuccess ->
+                    _recruitmentUiState.value = recruitmentUiState.value.changeToRejectedState()
+
+                is ApiException, is ApiError ->
+                    _recruitmentUiState.value = recruitmentUiState.value.changeToErrorState()
+            }
+        }
+    }
+
+    private fun updateNotificationReadStatus(notificationId: Long) {
+        viewModelScope.launch {
+            notificationRepository.updateNotificationReadStatus(
+                notificationId = notificationId,
+                isRead = true,
+            )
+        }
     }
 
     companion object {

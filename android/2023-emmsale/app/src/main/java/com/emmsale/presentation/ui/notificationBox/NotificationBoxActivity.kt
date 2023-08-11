@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationBoxBinding
+import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.notificationBox.recyclerview.body.NotificationBodyClickListener
 import com.emmsale.presentation.ui.notificationBox.recyclerview.header.NotificationBoxHeaderAdapter
@@ -30,16 +31,7 @@ class NotificationBoxActivity :
         setContentView(binding.root)
         initView()
         setupNotifications()
-    }
-
-    private fun setupNotifications() {
-        viewModel.notifications.observe(this) { uiState ->
-            when {
-                uiState.isError -> showToast(getString(R.string.all_data_loading_failed_message))
-                !uiState.isError && !uiState.isLoading ->
-                    notificationBoxHeaderAdapter.submitList(uiState.notifications)
-            }
-        }
+        setupRecruitment()
     }
 
     private fun initView() {
@@ -74,6 +66,34 @@ class NotificationBoxActivity :
 
     override fun onToggleClick(eventId: Long) {
         viewModel.toggleExpand(eventId)
+    }
+
+    private fun setupNotifications() {
+        viewModel.notifications.observe(this) { uiState ->
+            when {
+                uiState.isError -> showToast(getString(R.string.all_data_loading_failed_message))
+                !uiState.isError && !uiState.isLoading ->
+                    notificationBoxHeaderAdapter.submitList(uiState.notifications)
+            }
+        }
+    }
+
+    private fun setupRecruitment() {
+        viewModel.recruitmentUiState.observe(this) { uiState ->
+            when {
+                uiState.isError -> showToast(getString(R.string.notificationbox_recruitment_status_changing_failed))
+                uiState.isAccepted -> showRecruitmentAcceptedDialog()
+                uiState.isRejected -> showRecruitmentRejectedMessage()
+            }
+        }
+    }
+
+    private fun showRecruitmentAcceptedDialog() {
+
+    }
+
+    private fun showRecruitmentRejectedMessage() {
+        binding.root.showSnackbar(getString(R.string.notificationbox_recruitment_rejected_message))
     }
 
     companion object {
