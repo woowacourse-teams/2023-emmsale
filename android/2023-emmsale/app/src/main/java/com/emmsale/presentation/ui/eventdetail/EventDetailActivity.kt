@@ -89,5 +89,10 @@ class EventDetailActivity : AppCompatActivity() {
             intent.putExtra(EVENT_ID_KEY, eventId)
             context.startActivity(intent)
         }
+
+        fun getIntent(context: Context, eventId: Long): Intent =
+            Intent(context, EventDetailActivity::class.java).apply {
+                putExtra(EVENT_ID_KEY, eventId)
+            }
     }
 }
