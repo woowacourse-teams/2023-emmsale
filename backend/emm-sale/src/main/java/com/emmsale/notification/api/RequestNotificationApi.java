@@ -41,6 +41,15 @@ public class RequestNotificationApi {
     requestNotificationCommandService.modify(requestNotificationModifyRequest, notificationId);
   }
 
+  @PatchMapping("/request-notifications/{request-notification-id}/read")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void read(
+      @PathVariable("request-notification-id") final Long notificationId,
+      final Member member
+  ) {
+    requestNotificationCommandService.read(notificationId, member);
+  }
+
   @GetMapping("/request-notifications/{request-notification-id}")
   public RequestNotificationResponse find(
       @PathVariable("request-notification-id") final Long notificationId

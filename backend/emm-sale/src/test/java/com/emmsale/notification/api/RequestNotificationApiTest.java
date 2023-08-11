@@ -214,4 +214,24 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
         .andDo(print())
         .andDo(document("delete-request-notification", pathParameters));
   }
+
+  @Test
+  @DisplayName("read() : 알림의 읽음 상태가 성공적으로 읽은 상태가 되면 204 No Content를 반환할 수 있다.")
+  void test_read() throws Exception {
+    //given
+    final PathParametersSnippet pathParameters = pathParameters(
+        parameterWithName("request-notification-id").description("읽은 알림 ID")
+    );
+
+    final long notificationId = 1L;
+
+    doNothing().when(requestNotificationCommandService).read(anyLong(), any());
+
+    //when & then
+    mockMvc.perform(patch("/request-notifications/{request-notification-id}/read", notificationId)
+            .header("Authorization", "Bearer AccessToken"))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("read-request-notification", pathParameters));
+  }
 }

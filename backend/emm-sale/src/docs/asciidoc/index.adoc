@@ -339,6 +339,13 @@ include::{snippets}/modify-request-notification/http-request.adoc[]
 
 include::{snippets}/modify-request-notification/path-parameters.adoc[]
 
+=== 'PATCH' : 함께 가기 알림 읽음 상태 변경
+
+.HTTP request
+include::{snippets}/read-request-notification/http-request.adoc[]
+
+include::{snippets}/read-request-notification/path-parameters.adoc[]
+
 === `DELETE` : 함께 가기 알림 삭제
 
 .HTTP request

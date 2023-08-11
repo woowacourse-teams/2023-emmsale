@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -85,7 +86,7 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
   }
 
   @ParameterizedTest
-  @DisplayName("createToken() : sender나 receiver가 한명이라도 존재하지 않는다면 BAD_REQUEST_MEMBER_ID 를 반환할 수 있다.")
+  @DisplayName("create() : sender나 receiver가 한명이라도 존재하지 않는다면 BAD_REQUEST_MEMBER_ID 를 반환할 수 있다.")
   @CsvSource({
       "1,3",
       "3,1",
@@ -210,5 +211,34 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
 
     //then
     assertEquals(expectExceptionType, actualException.exceptionType());
+  }
+
+  @Test
+  @DisplayName("read() : 사용자가 자신의 알림을 읽었다면 isRead는 true가 될 수 있다.")
+  void test_read() throws Exception {
+    //given
+    final long senderId = 1L;
+    final long receiverId = 2L;
+    final Member member = memberRepository.findById(receiverId).get();
+    final long eventId = 3L;
+    final String message = "알림 메시지야";
+
+    final RequestNotification savedRequestNotification =
+        requestNotificationRepository.save(
+            new RequestNotification(
+                senderId,
+                receiverId,
+                eventId,
+                message)
+        );
+
+    //when
+    requestNotificationCommandService.read(savedRequestNotification.getId(), member);
+
+    //then
+    final RequestNotification readNotification = requestNotificationRepository.findById(
+        savedRequestNotification.getId()).get();
+
+    assertTrue(readNotification.isRead());
   }
 }
