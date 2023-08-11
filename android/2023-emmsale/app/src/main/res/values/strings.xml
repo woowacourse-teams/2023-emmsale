@@ -41,6 +41,12 @@
     <string name="kerdyfirebasemessaging_follow_notification_message_format">%s님께서 같이 가기를 요청하였어요!</string>
     <string name="kerdyfirebasemessaging_follow_notification_channel_name">같이 가기 알림 채널</string>
     <string name="kerdyfirebasemessaging_follow_notification_channel_description">같이 가기 요청을 받기 위한 알림 채널입니다.</string>
+    <string name="kerdyfirebasemessaging_child_comment_notification_title_format">댓글에 답글이 달렸어요.</string>
+    <string name="kerdyfirebasemessaging_child_comment_notification_channel_name">대댓글 작성 알림 채널</string>
+    <string name="kerdyfirebasemessaging_child_comment_notification_channel_description">대댓글 작성 알림을 받기 위한 알림 채널입니다.</string>
+    <string name="kerdyfirebasemessaging_interest_event_notification_title_format">관심 태그 행사가 업데이트 되었어요.</string>
+    <string name="kerdyfirebasemessaging_interest_event_notification_channel_name">관심 태그 행사 알림 채널</string>
+    <string name="kerdyfirebasemessaging_interest_event_notification_channel_description">관심 태그 행사 알림을 받기 위한 알림 채널입니다.</string>
 
     <string name="login_failed_message">로그인에 실패했어요 😥</string>
     <string name="login_logo">로그인 로고</string>

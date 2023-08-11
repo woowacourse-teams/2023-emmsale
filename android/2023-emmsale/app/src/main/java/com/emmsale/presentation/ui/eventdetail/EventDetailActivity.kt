@@ -52,8 +52,8 @@ class EventDetailActivity : AppCompatActivity() {
             getString(R.string.eventdetail_tab_comment),
             getString(R.string.eventdetail_tab_recruitment),
         )
-        TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { _, _ ->
-            tabNames
+        TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
+            tab.text = tabNames[position]
         }.attach()
         binding.vpEventdetail.isUserInputEnabled = false
     }
@@ -80,5 +80,10 @@ class EventDetailActivity : AppCompatActivity() {
             intent.putExtra(EVENT_ID_KEY, eventId)
             context.startActivity(intent)
         }
+
+        fun getIntent(context: Context, eventId: Long): Intent =
+            Intent(context, EventDetailActivity::class.java).apply {
+                putExtra(EVENT_ID_KEY, eventId)
+            }
     }
 }
