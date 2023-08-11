@@ -40,7 +40,7 @@ class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotifica
         binding.rvNotiBox.setHasFixedSize(true)
     }
 
-    override fun onClickBody(notificationId: Long, otherUid: Long) {
+    override fun onClickNotificationBody(notificationId: Long, otherUid: Long) {
         navigateToNotificationDetail(notificationId, otherUid)
     }
 
@@ -48,11 +48,11 @@ class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotifica
         Log.d("NotificationBoxActivity", "$notificationId, $otherUid")
     }
 
-    override fun onAccept(notificationId: Long) {
+    override fun onRecruitmentAccept(notificationId: Long) {
         viewModel.acceptRecruit(notificationId)
     }
 
-    override fun onReject(notificationId: Long) {
+    override fun onRecruitmentReject(notificationId: Long) {
         showRecruitmentRejectedConfirmDialog(notificationId)
     }
 
@@ -72,8 +72,9 @@ class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotifica
         ).show()
     }
 
-    override fun onToggleClick(eventId: Long) {
+    override fun onNotificationHeaderClick(eventId: Long) {
         viewModel.toggleExpand(eventId)
+        viewModel.updateNotificationsToReadStatusBy(eventId)
     }
 
     private fun setupNotifications() {
@@ -81,7 +82,7 @@ class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotifica
             when {
                 uiState.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
                 !uiState.isLoading ->
-                    recruitmentNotificationHeaderAdapter.submitList(uiState.notifications)
+                    recruitmentNotificationHeaderAdapter.submitList(uiState.notificationGroups)
             }
         }
     }

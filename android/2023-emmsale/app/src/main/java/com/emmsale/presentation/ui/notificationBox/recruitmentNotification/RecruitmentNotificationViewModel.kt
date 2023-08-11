@@ -43,11 +43,7 @@ class RecruitmentNotificationViewModel(
             _notifications.postValue(_notifications.value.copy(isLoading = true))
 
             when (val notificationsResult = notificationRepository.getRecruitmentNotifications()) {
-                is ApiSuccess -> {
-                    updateNotifications(notificationsResult)
-                    updateNotificationsToReadStatus()
-                }
-
+                is ApiSuccess -> updateNotifications(notificationsResult)
                 is ApiException, is ApiError -> _notifications.postValue(
                     RecruitmentNotificationsUiState(
                         isError = true,
@@ -66,11 +62,11 @@ class RecruitmentNotificationViewModel(
                 eventId = conferenceId,
                 conferenceName = notifications.first().conferenceName,
                 notifications = notifications,
-                isUnread = notifications.any { !it.isRead },
+                isRead = notifications.any { !it.isRead },
             )
         }
 
-        _notifications.value = _notifications.value.copy(notifications = notificationHeaders)
+        _notifications.value = _notifications.value.copy(notificationGroups = notificationHeaders)
     }
 
     private suspend fun getNotificationBody(
@@ -104,7 +100,7 @@ class RecruitmentNotificationViewModel(
         }
 
     fun toggleExpand(eventId: Long) {
-        _notifications.postValue(_notifications.value.toggleNotificationExpanded(eventId))
+        _notifications.value = _notifications.value.toggleNotificationExpanded(eventId)
     }
 
     fun acceptRecruit(notificationId: Long) {
@@ -139,20 +135,21 @@ class RecruitmentNotificationViewModel(
         }
     }
 
-    private fun updateNotificationsToReadStatus() {
+    fun updateNotificationsToReadStatusBy(eventId: Long) {
         viewModelScope.launch {
-            notifications.value.notifications
-                .flatMap { header -> header.notifications }
-                .filter { notification -> !notification.isRead }
-                .forEach { notification -> updateNotificationReadStatus(notification.id) }
+            _notifications.value = notifications.value.changeReadStateBy(eventId)
+            notifications.value.notificationGroups
+                .flatMap { group -> group.notifications }
+                .forEach { notification -> updateNotificationReadStatus(notification) }
         }
     }
 
-    private suspend fun updateNotificationReadStatus(notificationId: Long) {
-        notificationRepository.updateNotificationReadStatus(
-            notificationId = notificationId,
-            isRead = true,
-        )
+    private suspend fun updateNotificationReadStatus(
+        notification: RecruitmentNotificationBodyUiState
+    ) {
+        if (!notification.isRead) {
+            notificationRepository.updateNotificationReadStatus(notification.id, true)
+        }
     }
 
     companion object {

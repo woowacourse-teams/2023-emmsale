@@ -1,21 +1,26 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate
 
 data class RecruitmentNotificationsUiState(
-    val notifications: List<RecruitmentNotificationHeaderUiState> = emptyList(),
+    val notificationGroups: List<RecruitmentNotificationHeaderUiState> = emptyList(),
     val isLoading: Boolean = false,
     val isError: Boolean = false,
 ) {
     fun toggleNotificationExpanded(eventId: Long): RecruitmentNotificationsUiState =
-        copy(notifications = toggleExpanded(eventId))
+        copy(notificationGroups = toggleExpanded(eventId))
 
     fun changeAcceptStateBy(notificationId: Long): RecruitmentNotificationsUiState =
-        copy(notifications = notifications.map { it.changeToAcceptedStateBy(notificationId) })
+        copy(notificationGroups = notificationGroups.map { it.changeToAcceptedStateBy(notificationId) })
 
     fun changeRejectStateBy(notificationId: Long): RecruitmentNotificationsUiState =
-        copy(notifications = notifications.map { it.changeToRejectedStateBy(notificationId) })
+        copy(notificationGroups = notificationGroups.map { it.changeToRejectedStateBy(notificationId) })
+
+    fun changeReadStateBy(eventId: Long): RecruitmentNotificationsUiState =
+        copy(notificationGroups = notificationGroups.map {
+            if (it.eventId == eventId) it.changeToReadState() else it
+        })
 
     private fun toggleExpanded(eventId: Long): List<RecruitmentNotificationHeaderUiState> {
-        return notifications.map { header ->
+        return notificationGroups.map { header ->
             if (header.eventId == eventId) {
                 header.toggleExpanded()
             } else {

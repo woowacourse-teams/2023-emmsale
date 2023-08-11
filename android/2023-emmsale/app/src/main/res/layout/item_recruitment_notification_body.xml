@@ -23,7 +23,7 @@
         android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="@{() -> notificationBodyClickListener.onClickBody(notification.id, notification.otherUid)}"
+        android:onClick="@{() -> notificationBodyClickListener.onClickNotificationBody(notification.id, notification.otherUid)}"
         android:paddingHorizontal="17dp"
         android:paddingVertical="20dp">
 
@@ -103,7 +103,7 @@
             android:focusable="true"
             android:paddingVertical="12dp"
             android:gravity="center"
-            android:onClick="@{() -> notificationBodyClickListener.onReject(notification.id)}"
+            android:onClick="@{() -> notificationBodyClickListener.onRecruitmentReject(notification.id)}"
             android:text="@string/recruitmentnotification_reject"
             android:visibility="@{notification.rejected || notification.accepted ? View.GONE : View.VISIBLE}"
             android:textColor="@color/white"
@@ -122,7 +122,7 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:onClick="@{() -> notificationBodyClickListener.onAccept(notification.id)}"
+            android:onClick="@{() -> notificationBodyClickListener.onRecruitmentAccept(notification.id)}"
             android:text="@string/recruitmentnotification_accept"
             android:visibility="@{notification.rejected || notification.accepted ? View.GONE : View.VISIBLE}"
             android:textColor="@color/white"

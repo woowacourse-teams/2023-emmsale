@@ -28,6 +28,10 @@ data class RecruitmentNotificationBodyUiState(
         isRejected = true,
     )
 
+    fun changeToReadState(): RecruitmentNotificationBodyUiState = copy(
+        isRead = true,
+    )
+
     companion object {
         fun from(
             recruitmentNotification: RecruitmentNotification,
