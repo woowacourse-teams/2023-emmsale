@@ -19,7 +19,7 @@
             android:layout_marginHorizontal="18dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="14dp"
-            android:text="@string/eventfilter_conference_duration_title"
+            android:text="@string/conferencefilter_conference_duration_title"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:fontFamily="@font/nanum_square_regular"
-                android:text="@string/eventfilter_conference_duration_divider_mark" />
+                android:text="@string/conferencefilter_conference_duration_divider_mark" />
 
             <com.emmsale.presentation.common.views.IconTextButton
                 android:id="@+id/btn_filter_end_duration"

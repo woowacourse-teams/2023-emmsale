@@ -4,6 +4,6 @@
     <item
         android:id="@+id/filter_clear"
         android:icon="@drawable/ic_conference_filter_clear"
-        android:title="@string/eventfilter_clear"
+        android:title="@string/conferencefilter_clear"
         app:showAsAction="always" />
 </menu>

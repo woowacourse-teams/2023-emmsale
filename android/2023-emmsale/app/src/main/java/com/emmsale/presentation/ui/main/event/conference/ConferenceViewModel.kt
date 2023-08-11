@@ -1,95 +1,135 @@
 package com.emmsale.presentation.ui.main.event.conference
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
+import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.conference.ConferenceRepository
-import com.emmsale.data.conference.ConferenceStatus
+import com.emmsale.data.conference.Conference
 import com.emmsale.data.conference.EventCategory
+import com.emmsale.data.conference.EventRepository
+import com.emmsale.data.conferenceStatus.ConferenceStatus
+import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
+import com.emmsale.data.eventTag.EventTag
+import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
-import com.emmsale.presentation.ui.main.event.conference.uistate.EventsUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
+import com.emmsale.presentation.common.livedata.NotNullLiveData
+import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceItemUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringDateOptionUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringOptionUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class ConferenceViewModel(
-    private val conferenceRepository: ConferenceRepository,
+    private val eventRepository: EventRepository,
+    private val conferenceStatusRepository: ConferenceStatusRepository,
+    private val eventTagRepository: EventTagRepository,
 ) : ViewModel() {
-    private val _events = MutableLiveData<EventsUiState>()
-    val events: LiveData<EventsUiState> = _events
+    private val _conference = NotNullMutableLiveData(ConferenceUiState())
+    val conference: NotNullLiveData<ConferenceUiState> = _conference
 
-    private val _selectedFilters = MutableLiveData<ConferenceFiltersUiState.Success>()
-    val selectedFilters: LiveData<ConferenceFiltersUiState.Success> = _selectedFilters
+    private val _selectedFilter = NotNullMutableLiveData(ConferenceSelectedFilteringUiState())
+    val selectedFilter: NotNullLiveData<ConferenceSelectedFilteringUiState> = _selectedFilter
 
     init {
-        fetchConference()
+        fetchConferences()
     }
 
-    private fun fetchConference(
-        startDate: String? = null,
-        endDate: String? = null,
+    private fun fetchConferences(
         statuses: List<ConferenceStatus> = emptyList(),
-        tags: List<String> = emptyList(),
+        tags: List<EventTag> = emptyList(),
+        startDate: LocalDate? = null,
+        endDate: LocalDate? = null,
     ) {
         viewModelScope.launch {
-            _events.value = EventsUiState.Loading
-            when (
-                val eventsResult = conferenceRepository.getConferences(
-                    category = EventCategory.CONFERENCE,
-                    startDate = startDate,
-                    endDate = endDate,
-                    statuses = statuses,
-                    tags = tags,
-                )
-            ) {
+            _conference.value = _conference.value.copy(isLoading = true)
+            when (val eventsResult = getConferences(statuses, tags, startDate, endDate)) {
                 is ApiSuccess ->
-                    _events.value =
-                        EventsUiState.Success(eventsResult.data.map(ConferencesUiState::from))
+                    _conference.value = _conference.value.copy(
+                        conferenceItems = eventsResult.data.map(ConferenceItemUiState::from),
+                        isLoading = false,
+                    )
 
-                is ApiError -> _events.value = EventsUiState.Error
-                is ApiException -> _events.value = EventsUiState.Error
+                is ApiError, is ApiException ->
+                    _conference.value = _conference.value.copy(isError = true, isLoading = false)
             }
         }
     }
 
-    fun updateConferenceFilter(conferenceFilter: ConferenceFiltersUiState.Success) {
-        _selectedFilters.postValue(conferenceFilter)
-        fetchConference(
-            startDate = conferenceFilter.selectedStartDate?.toDateString(),
-            endDate = conferenceFilter.selectedEndDate?.toDateString(),
-            statuses = conferenceFilter.statuses
-                .filter { it.isSelected }
-                .map { it.toStatus() },
-            tags = conferenceFilter.tags
-                .filter { it.isSelected }
-                .map { it.name },
+    private suspend fun getConferences(
+        statuses: List<ConferenceStatus>,
+        tags: List<EventTag>,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+    ): ApiResult<List<Conference>> = eventRepository.getEvents(
+        category = EventCategory.CONFERENCE,
+        statuses = statuses,
+        tags = tags,
+        startDate = startDate,
+        endDate = endDate,
+    )
+
+    fun fetchFilteredConferences(
+        statusFilterIds: Array<Long>,
+        tagFilterIds: Array<Long>,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+    ) {
+        viewModelScope.launch {
+            val statusFilteringOptions = getConferenceStatusByIds(statusFilterIds)
+            val tagFilteringOptions = getEventTagByIds(tagFilterIds)
+
+            fetchConferences(
+                statuses = statusFilteringOptions,
+                tags = tagFilteringOptions,
+                startDate = startDate,
+                endDate = endDate,
+            )
+            updateSelectedFilter(statusFilteringOptions, tagFilteringOptions, startDate, endDate)
+        }
+    }
+
+    private fun updateSelectedFilter(
+        statusFilteringOptions: List<ConferenceStatus>,
+        tagFilteringOptions: List<EventTag>,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+    ) {
+        _selectedFilter.postValue(
+            _selectedFilter.value.copy(
+                conferenceStatusFilteringOptions = statusFilteringOptions.map(
+                    ConferenceSelectedFilteringOptionUiState::from,
+                ),
+                conferenceTagFilteringOptions = tagFilteringOptions.map(
+                    ConferenceSelectedFilteringOptionUiState::from,
+                ),
+                selectedStartDate = startDate?.let(ConferenceSelectedFilteringDateOptionUiState::from),
+                selectedEndDate = endDate?.let(ConferenceSelectedFilteringDateOptionUiState::from),
+            ),
         )
     }
 
-    private fun ConferenceFilterDateUiState.toDateString(): String {
-        val year = year.toString().padStart(2, '0')
-        val month = month.toString().padStart(2, '0')
-        val day = day.toString().padStart(2, '0')
-        return "$year-$month-$day"
-    }
+    private suspend fun getConferenceStatusByIds(tagFilterIds: Array<Long>): List<ConferenceStatus> =
+        conferenceStatusRepository.getConferenceStatusByIds(tagFilterIds)
 
-    private fun ConferenceFilterUiState.toStatus(): ConferenceStatus = when (id) {
-        0L -> ConferenceStatus.IN_PROGRESS
-        1L -> ConferenceStatus.SCHEDULED
-        2L -> ConferenceStatus.ENDED
-        else -> throw IllegalArgumentException("Unknown status id: $id")
-    }
+    private suspend fun getEventTagByIds(statusFilterIds: Array<Long>): List<EventTag> =
+        when (val eventTagResult = eventTagRepository.getEventTagByIds(statusFilterIds)) {
+            is ApiSuccess -> eventTagResult.data
+            is ApiError, is ApiException -> emptyList()
+        }
 
     companion object {
         val factory = ViewModelFactory {
-            ConferenceViewModel(conferenceRepository = KerdyApplication.repositoryContainer.conferenceRepository)
+            ConferenceViewModel(
+                conferenceStatusRepository = KerdyApplication.repositoryContainer.conferenceStatusRepository,
+                eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository,
+                eventRepository = KerdyApplication.repositoryContainer.eventRepository,
+            )
         }
     }
 }
