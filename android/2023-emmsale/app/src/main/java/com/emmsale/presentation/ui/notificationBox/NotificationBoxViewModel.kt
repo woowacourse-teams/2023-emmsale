@@ -43,7 +43,11 @@ class NotificationBoxViewModel(
             _notifications.postValue(_notifications.value.copy(isLoading = true))
 
             when (val notificationsResult = notificationRepository.getNotifications()) {
-                is ApiSuccess -> updateNotifications(notificationsResult)
+                is ApiSuccess -> {
+                    updateNotifications(notificationsResult)
+                    updateNotificationsToReadStatus()
+                }
+
                 is ApiException, is ApiError -> _notifications.postValue(
                     NotificationsUiState(
                         isError = true,
@@ -65,7 +69,7 @@ class NotificationBoxViewModel(
             )
         }
 
-        _notifications.postValue(NotificationsUiState(notifications = notificationHeaders))
+        _notifications.value = _notifications.value.copy(notifications = notificationHeaders)
     }
 
     private suspend fun getNotificationBody(
@@ -121,8 +125,10 @@ class NotificationBoxViewModel(
             _recruitmentUiState.value = recruitmentUiState.value.changeToLoadingState()
 
             when (notificationRepository.updateRecruitmentAcceptedStatus(notificationId, false)) {
-                is ApiSuccess ->
+                is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToRejectedState()
+                    _notifications.value = _notifications.value.deleteNotification(notificationId)
+                }
 
                 is ApiException, is ApiError ->
                     _recruitmentUiState.value = recruitmentUiState.value.changeToErrorState()
@@ -130,13 +136,20 @@ class NotificationBoxViewModel(
         }
     }
 
-    private fun updateNotificationReadStatus(notificationId: Long) {
+    private fun updateNotificationsToReadStatus() {
         viewModelScope.launch {
-            notificationRepository.updateNotificationReadStatus(
-                notificationId = notificationId,
-                isRead = true,
-            )
+            notifications.value.notifications
+                .flatMap { header -> header.notifications }
+                .filter { notification -> !notification.isRead }
+                .forEach { notification -> updateNotificationReadStatus(notification.id) }
         }
+    }
+
+    private suspend fun updateNotificationReadStatus(notificationId: Long) {
+        notificationRepository.updateNotificationReadStatus(
+            notificationId = notificationId,
+            isRead = true,
+        )
     }
 
     companion object {

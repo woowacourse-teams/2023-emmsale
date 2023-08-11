@@ -7,4 +7,7 @@ data class NotificationHeaderUiState(
     val notifications: List<NotificationBodyUiState>,
 ) {
     fun toggleExpanded(): NotificationHeaderUiState = copy(isExpanded = !isExpanded)
+
+    fun deleteNotification(notificationId: Long): NotificationHeaderUiState =
+        copy(notifications = notifications.filterNot { it.id != notificationId })
 }

@@ -11,6 +11,8 @@ data class NotificationBodyUiState(
     val message: String,
     val profileImageUrl: String,
     val notificationDate: String = "23.08.03",
+    val isAccepted: Boolean = false,
+    val isRead: Boolean = false,
 ) {
     companion object {
         fun from(

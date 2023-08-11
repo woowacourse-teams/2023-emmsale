@@ -56,4 +56,8 @@
         <item name="android:fontFamily">@font/nanum_square_bold</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="TranslucentStatusDialog" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
 </resources>

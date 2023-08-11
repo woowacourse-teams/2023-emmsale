@@ -10,6 +10,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationBoxBinding
 import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.ui.notificationBox.dialog.RecruitmentAcceptedDialog
 import com.emmsale.presentation.ui.notificationBox.recyclerview.body.NotificationBodyClickListener
 import com.emmsale.presentation.ui.notificationBox.recyclerview.header.NotificationBoxHeaderAdapter
 import com.emmsale.presentation.ui.notificationBox.recyclerview.header.NotificationHeaderClickListener
@@ -89,7 +90,7 @@ class NotificationBoxActivity :
     }
 
     private fun showRecruitmentAcceptedDialog() {
-
+        RecruitmentAcceptedDialog(this).show()
     }
 
     private fun showRecruitmentRejectedMessage() {
