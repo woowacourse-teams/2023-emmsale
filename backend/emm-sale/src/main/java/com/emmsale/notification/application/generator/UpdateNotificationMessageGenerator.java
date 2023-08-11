@@ -46,7 +46,7 @@ public class UpdateNotificationMessageGenerator implements NotificationMessageGe
   }
 
   private void validateIsExistedReceiver(final MemberRepository memberRepository, final Long receiverId) {
-    if (memberRepository.existsById(receiverId)) {
+    if (!memberRepository.existsById(receiverId)) {
       throw new NotificationException(BAD_REQUEST_MEMBER_ID);
     }
   }

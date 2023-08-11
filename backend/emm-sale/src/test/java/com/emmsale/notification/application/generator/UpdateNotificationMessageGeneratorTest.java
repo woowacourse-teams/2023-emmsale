@@ -59,6 +59,6 @@ class UpdateNotificationMessageGeneratorTest extends ServiceIntegrationTestHelpe
         expected, UpdateNotificationMessage.class
     );
 
-    assertEquals(type, expectedMessage.getMessage().getData().getNotificationType());
+    assertEquals(type.toString(), expectedMessage.getMessage().getData().getNotificationType());
   }
 }
