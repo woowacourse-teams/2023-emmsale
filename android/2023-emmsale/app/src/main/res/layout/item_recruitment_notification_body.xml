@@ -9,11 +9,11 @@
 
         <variable
             name="notificationBodyClickListener"
-            type="com.emmsale.presentation.ui.notificationBox.recyclerview.body.NotificationBodyClickListener" />
+            type="com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.body.RecruitmentNotificationBodyClickListener" />
 
         <variable
             name="notification"
-            type="com.emmsale.presentation.ui.notificationBox.uistate.NotificationBodyUiState" />
+            type="com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationBodyUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

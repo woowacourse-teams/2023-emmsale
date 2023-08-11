@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.notificationBox
+package com.emmsale.presentation.ui.notificationBox.recruitmentNotification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,26 +13,26 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.notificationBox.uistate.NotificationBodyUiState
-import com.emmsale.presentation.ui.notificationBox.uistate.NotificationHeaderUiState
-import com.emmsale.presentation.ui.notificationBox.uistate.NotificationMemberUiState
-import com.emmsale.presentation.ui.notificationBox.uistate.NotificationsUiState
-import com.emmsale.presentation.ui.notificationBox.uistate.RecruitingUiState
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationBodyUiState
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationHeaderUiState
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationMemberUiState
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationsUiState
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentUiState
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
-class NotificationBoxViewModel(
+class RecruitmentNotificationViewModel(
     private val memberRepository: MemberRepository,
     private val eventDetailRepository: EventDetailRepository,
     private val notificationRepository: NotificationRepository,
 ) : ViewModel() {
-    private val _notifications = NotNullMutableLiveData(NotificationsUiState())
-    val notifications: NotNullLiveData<NotificationsUiState> = _notifications
+    private val _notifications = NotNullMutableLiveData(RecruitmentNotificationsUiState())
+    val notifications: NotNullLiveData<RecruitmentNotificationsUiState> = _notifications
 
-    private val _recruitmentUiState = NotNullMutableLiveData(RecruitingUiState())
-    val recruitmentUiState: NotNullLiveData<RecruitingUiState> = _recruitmentUiState
+    private val _recruitmentUiState = NotNullMutableLiveData(RecruitmentUiState())
+    val recruitmentUiState: NotNullLiveData<RecruitmentUiState> = _recruitmentUiState
 
     init {
         fetchNotifications()
@@ -49,7 +49,7 @@ class NotificationBoxViewModel(
                 }
 
                 is ApiException, is ApiError -> _notifications.postValue(
-                    NotificationsUiState(
+                    RecruitmentNotificationsUiState(
                         isError = true,
                     ),
                 )
@@ -62,7 +62,7 @@ class NotificationBoxViewModel(
     ) {
         val notifications = getNotificationBody(notificationsResult).groupBy { it.conferenceId }
         val notificationHeaders = notifications.map { (conferenceId, notifications) ->
-            NotificationHeaderUiState(
+            RecruitmentNotificationHeaderUiState(
                 eventId = conferenceId,
                 conferenceName = notifications[0].conferenceName,
                 notifications = notifications,
@@ -74,22 +74,22 @@ class NotificationBoxViewModel(
 
     private suspend fun getNotificationBody(
         result: ApiSuccess<List<Notification>>,
-    ): List<NotificationBodyUiState> = result.data.map { notification ->
+    ): List<RecruitmentNotificationBodyUiState> = result.data.map { notification ->
         val notiMember = getNotificationMemberAsync(notification.otherUid)
         val conferenceName = getConferenceNameAsync(notification.eventId)
         awaitAll(notiMember, conferenceName).run {
-            NotificationBodyUiState.from(
+            RecruitmentNotificationBodyUiState.from(
                 notification = notification,
-                notificationMember = getOrNull(MEMBER_INDEX) as? NotificationMemberUiState,
+                notificationMember = getOrNull(MEMBER_INDEX) as? RecruitmentNotificationMemberUiState,
                 conferenceName = getOrNull(CONFERENCE_NAME_INDEX).toString(),
             )
         }
     }
 
-    private suspend fun getNotificationMemberAsync(userId: Long): Deferred<NotificationMemberUiState?> =
+    private suspend fun getNotificationMemberAsync(userId: Long): Deferred<RecruitmentNotificationMemberUiState?> =
         viewModelScope.async {
             when (val member = memberRepository.getMember(userId)) {
-                is ApiSuccess -> NotificationMemberUiState(member.data.name, member.data.imageUrl)
+                is ApiSuccess -> RecruitmentNotificationMemberUiState(member.data.name, member.data.imageUrl)
                 is ApiException, is ApiError -> null
             }
         }
@@ -157,7 +157,7 @@ class NotificationBoxViewModel(
         private const val CONFERENCE_NAME_INDEX = 1
 
         val factory = ViewModelFactory {
-            NotificationBoxViewModel(
+            RecruitmentNotificationViewModel(
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
                 eventDetailRepository = KerdyApplication.repositoryContainer.eventDetailRepository,
                 notificationRepository = KerdyApplication.repositoryContainer.notificationRepository,

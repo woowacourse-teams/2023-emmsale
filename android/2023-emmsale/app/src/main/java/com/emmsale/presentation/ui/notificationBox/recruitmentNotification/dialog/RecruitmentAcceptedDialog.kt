@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.notificationBox.dialog
+package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.dialog
 
 import android.app.Dialog
 import android.content.Context
@@ -9,14 +9,13 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import com.emmsale.R
-import com.emmsale.databinding.DialogRecruitmentRejectConfirmBinding
+import com.emmsale.databinding.DialogRecruitmentAcceptedBinding
 
-class RecruitmentRejectConfirmDialog(
+class RecruitmentAcceptedDialog(
     context: Context,
-    private val recruitmentRejectConfirmClickListener: RecruitmentRejectConfirmClickListener,
 ) : Dialog(context, R.style.TranslucentStatusDialog) {
-    private val binding: DialogRecruitmentRejectConfirmBinding by lazy {
-        DialogRecruitmentRejectConfirmBinding.inflate(layoutInflater)
+    private val binding: DialogRecruitmentAcceptedBinding by lazy {
+        DialogRecruitmentAcceptedBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +40,6 @@ class RecruitmentRejectConfirmDialog(
         initDialogSize()
         initDialogBackgroundSetting()
         initOkayClickListener()
-        initCancelClickListener()
     }
 
     private fun initDialogSize() {
@@ -58,23 +56,10 @@ class RecruitmentRejectConfirmDialog(
     }
 
     private fun initOkayClickListener() {
-        binding.btnOkay.setOnClickListener {
-            recruitmentRejectConfirmClickListener.onClickOkay(this)
-        }
-    }
-
-    private fun initCancelClickListener() {
-        binding.btnCancel.setOnClickListener {
-            recruitmentRejectConfirmClickListener.onClickCancel(this)
-        }
+        binding.btnOkay.setOnClickListener { dismiss() }
     }
 
     companion object {
         private const val DEVICE_WIDTH_RATIO = 0.8F
-    }
-
-    interface RecruitmentRejectConfirmClickListener {
-        fun onClickOkay(dialog: RecruitmentRejectConfirmDialog)
-        fun onClickCancel(dialog: RecruitmentRejectConfirmDialog)
     }
 }

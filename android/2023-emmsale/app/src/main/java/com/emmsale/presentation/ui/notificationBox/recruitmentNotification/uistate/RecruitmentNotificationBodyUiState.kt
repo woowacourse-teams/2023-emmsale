@@ -1,8 +1,8 @@
-package com.emmsale.presentation.ui.notificationBox.uistate
+package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate
 
 import com.emmsale.data.notification.Notification
 
-data class NotificationBodyUiState(
+data class RecruitmentNotificationBodyUiState(
     val id: Long,
     val otherName: String,
     val otherUid: Long,
@@ -17,9 +17,9 @@ data class NotificationBodyUiState(
     companion object {
         fun from(
             notification: Notification,
-            notificationMember: NotificationMemberUiState?,
+            notificationMember: RecruitmentNotificationMemberUiState?,
             conferenceName: String,
-        ): NotificationBodyUiState = NotificationBodyUiState(
+        ): RecruitmentNotificationBodyUiState = RecruitmentNotificationBodyUiState(
             id = notification.id,
             otherUid = notification.otherUid,
             otherName = notificationMember?.name ?: "",

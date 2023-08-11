@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name=".presentation.ui.notificationBox.NotificationBoxActivity"
+            android:name=".presentation.ui.notificationBox.recruitmentNotification.RecruitmentNotificationFragment"
             android:exported="true" />
         <activity
             android:name=".presentation.ui.eventdetail.comment.childComment.ChildCommentActivity"

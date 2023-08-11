@@ -11,11 +11,11 @@
 
         <variable
             name="notificationHeaderClickListener"
-            type="com.emmsale.presentation.ui.notificationBox.recyclerview.header.NotificationHeaderClickListener" />
+            type="com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderClickListener" />
 
         <variable
             name="header"
-            type="com.emmsale.presentation.ui.notificationBox.uistate.NotificationHeaderUiState" />
+            type="com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationHeaderUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -78,7 +78,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_header"
             tools:itemCount="2"
-            tools:listitem="@layout/item_notification_body" />
+            tools:listitem="@layout/item_recruitment_notification_body" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
