@@ -1,47 +1,63 @@
 package com.emmsale.presentation.ui.eventdetail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.eventdetail.EventDetail
 import com.emmsale.data.eventdetail.EventDetailRepository
-import com.emmsale.data.member.MemberRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.common.livedata.NotNullLiveData
+import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.eventdetail.uistate.EventDetailUiState
 import kotlinx.coroutines.launch
 
 class EventDetailViewModel(
+    private val eventId: Long,
     private val eventDetailRepository: EventDetailRepository,
-    private val memberRepository: MemberRepository,
 ) : ViewModel() {
 
-    private val _eventDetail: MutableLiveData<EventDetailUiState> =
-        MutableLiveData<EventDetailUiState>()
-    val eventDetail: LiveData<EventDetailUiState>
-        get() = _eventDetail
+    private val _eventDetail: NotNullMutableLiveData<EventDetailUiState> =
+        NotNullMutableLiveData(EventDetailUiState())
+    val eventDetail: NotNullLiveData<EventDetailUiState> = _eventDetail
 
-    fun fetchEventDetail(id: Long) {
+    init {
+        fetchEventDetail(eventId)
+    }
+
+    private fun fetchEventDetail(id: Long) {
+        setLoadingState(true)
         viewModelScope.launch {
-            when (val result = eventDetailRepository.fetchEventDetail(id)) {
-                is ApiSuccess -> _eventDetail.postValue(
-                    EventDetailUiState.from(result.data),
-                )
-
-                is ApiError -> _eventDetail.postValue(EventDetailUiState.Error)
-                is ApiException -> _eventDetail.postValue(EventDetailUiState.Error)
+            when (val result = eventDetailRepository.getEventDetail(id)) {
+                is ApiSuccess -> fetchSuccessEventDetail(result.data)
+                is ApiError -> changeToErrorState()
+                is ApiException -> changeToErrorState()
             }
         }
     }
 
+    private fun setLoadingState(state: Boolean) {
+        _eventDetail.value = _eventDetail.value.copy(isLoading = state)
+    }
+
+    private fun fetchSuccessEventDetail(eventDetail: EventDetail) {
+        _eventDetail.value = EventDetailUiState.from(eventDetail)
+    }
+
+    private fun changeToErrorState() {
+        _eventDetail.value = _eventDetail.value.copy(
+            isError = true,
+            isLoading = false,
+        )
+    }
+
     companion object {
-        val factory = ViewModelFactory {
+        fun factory(eventId: Long) = ViewModelFactory {
             EventDetailViewModel(
+                eventId,
                 eventDetailRepository = KerdyApplication.repositoryContainer.eventDetailRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
             )
         }
     }

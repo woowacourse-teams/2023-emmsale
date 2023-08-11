@@ -3,9 +3,9 @@ package com.emmsale.data.conference.mapper
 import com.emmsale.data.conferenceStatus.ConferenceStatus
 
 fun String.toData(): ConferenceStatus = when (this) {
-    "진행 중" -> ConferenceStatus.IN_PROGRESS
-    "진행 예정" -> ConferenceStatus.SCHEDULED
-    "종료된 행사" -> ConferenceStatus.ENDED
+    "IN_PROGRESS" -> ConferenceStatus.IN_PROGRESS
+    "UPCOMING" -> ConferenceStatus.SCHEDULED
+    "ENDED" -> ConferenceStatus.ENDED
     else -> throw IllegalArgumentException("Unknown conference status: $this")
 }
 

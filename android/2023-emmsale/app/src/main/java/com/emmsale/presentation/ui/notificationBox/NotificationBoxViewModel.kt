@@ -96,7 +96,7 @@ class NotificationBoxViewModel(
 
     private suspend fun getConferenceNameAsync(conferenceId: Long): Deferred<String?> =
         viewModelScope.async {
-            when (val conference = eventDetailRepository.fetchEventDetail(conferenceId)) {
+            when (val conference = eventDetailRepository.getEventDetail(conferenceId)) {
                 is ApiSuccess -> conference.data.name
                 is ApiException, is ApiError -> null
             }
