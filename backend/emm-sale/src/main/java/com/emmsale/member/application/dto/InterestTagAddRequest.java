@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class InterestTagRequest {
+public class InterestTagAddRequest {
 
   private final List<Long> tagIds;
 
-  private InterestTagRequest() {
+  private InterestTagAddRequest() {
     this(null);
   }
 }

@@ -13,11 +13,15 @@ public class InterestTagResponse {
   private final Long id;
   private final String name;
 
-  public static List<InterestTagResponse> from(final List<InterestTag> interestTags) {
+  public static List<InterestTagResponse> convertAllFrom(final List<InterestTag> interestTags) {
     return interestTags.stream()
-        .map(interestTag -> new InterestTagResponse(interestTag.getTag().getId(),
-            interestTag.getTag().getName()))
+        .map(InterestTagResponse::from)
         .collect(Collectors.toList());
+  }
+
+  public static InterestTagResponse from(final InterestTag interestTag) {
+    return new InterestTagResponse(interestTag.getTag().getId(),
+        interestTag.getTag().getName());
   }
 
 }

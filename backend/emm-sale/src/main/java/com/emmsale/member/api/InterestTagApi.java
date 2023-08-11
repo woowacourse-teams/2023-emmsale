@@ -1,7 +1,8 @@
 package com.emmsale.member.api;
 
 import com.emmsale.member.application.InterestTagService;
-import com.emmsale.member.application.dto.InterestTagRequest;
+import com.emmsale.member.application.dto.InterestTagAddRequest;
+import com.emmsale.member.application.dto.InterestTagDeleteRequest;
 import com.emmsale.member.application.dto.InterestTagResponse;
 import com.emmsale.member.domain.Member;
 import java.util.List;
@@ -25,19 +26,19 @@ public class InterestTagApi {
   @PostMapping("/interest-tags")
   public ResponseEntity<List<InterestTagResponse>> addInterestTag(
       final Member member,
-      @RequestBody final InterestTagRequest interestTagRequest
+      @RequestBody final InterestTagAddRequest interestTagAddRequest
   ) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(interestTagService.addInterestTag(member, interestTagRequest));
+        .body(interestTagService.addInterestTag(member, interestTagAddRequest));
   }
 
   @DeleteMapping("/interest-tags")
   public ResponseEntity<List<InterestTagResponse>> deleteInterestTag(
       final Member member,
-      @RequestBody final InterestTagRequest interestTagRequest
+      @RequestBody final InterestTagDeleteRequest interestTagDeleteRequest
   ) {
     return ResponseEntity.ok(
-        interestTagService.deleteInterestTag(member, interestTagRequest));
+        interestTagService.deleteInterestTag(member, interestTagDeleteRequest));
   }
 
   @GetMapping("/interest-tags")

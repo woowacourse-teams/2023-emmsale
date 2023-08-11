@@ -8,7 +8,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
-import com.emmsale.member.application.dto.InterestTagRequest;
+import com.emmsale.member.application.dto.InterestTagAddRequest;
+import com.emmsale.member.application.dto.InterestTagDeleteRequest;
 import com.emmsale.member.application.dto.InterestTagResponse;
 import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
@@ -62,7 +63,7 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("사용자 id를 입력으로 받으면 사용자의 관심 태그 리스트를 조회할 수 있다.")
   void findInterestTags() {
     // given
-    final List<InterestTagResponse> expected = InterestTagResponse.from(
+    final List<InterestTagResponse> expected = InterestTagResponse.convertAllFrom(
         List.of(new InterestTag(사용자, 백엔드), new InterestTag(사용자, 프론트엔드)));
 
     // when
@@ -84,9 +85,9 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
     void addInterestTag_success() {
       // given
       final List<Long> tagIds = List.of(3L, 4L);
-      final InterestTagRequest request = new InterestTagRequest(tagIds);
+      final InterestTagAddRequest request = new InterestTagAddRequest(tagIds);
 
-      final List<InterestTagResponse> expected = InterestTagResponse.from(
+      final List<InterestTagResponse> expected = InterestTagResponse.convertAllFrom(
           List.of(new InterestTag(사용자, 백엔드), new InterestTag(사용자, 프론트엔드),
               new InterestTag(사용자, 안드로이드), new InterestTag(사용자, IOS)));
 
@@ -104,7 +105,7 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
     void addInterestTag_fail_NOT_FOUND_TAG() {
       // given
       final List<Long> tagIds = List.of(3L, 4L, 99L);
-      final InterestTagRequest request = new InterestTagRequest(tagIds);
+      final InterestTagAddRequest request = new InterestTagAddRequest(tagIds);
 
       // when
       final ThrowingCallable actual = () -> interestTagService.addInterestTag(사용자, request);
@@ -120,7 +121,7 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
     void addInterestTag_fail_ALREADY_EXIST_INTEREST_TAG() {
       // given
       final List<Long> tagIds = List.of(3L, 4L, 1L);
-      final InterestTagRequest request = new InterestTagRequest(tagIds);
+      final InterestTagAddRequest request = new InterestTagAddRequest(tagIds);
 
       // when
       final ThrowingCallable actual = () -> interestTagService.addInterestTag(사용자, request);
@@ -142,9 +143,9 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
     void deleteInterestTag() {
       // given
       final List<Long> tagIds = List.of(2L);
-      final InterestTagRequest request = new InterestTagRequest(tagIds);
+      final InterestTagDeleteRequest request = new InterestTagDeleteRequest(tagIds);
 
-      final List<InterestTagResponse> expected = InterestTagResponse.from(
+      final List<InterestTagResponse> expected = InterestTagResponse.convertAllFrom(
           List.of(new InterestTag(사용자, 백엔드)));
 
       // when
@@ -161,7 +162,7 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
     void deleteInterestTag_fail_NOT_FOUND_TAG() {
       // given
       final List<Long> tagIds = List.of(1L, 99L);
-      final InterestTagRequest request = new InterestTagRequest(tagIds);
+      final InterestTagDeleteRequest request = new InterestTagDeleteRequest(tagIds);
 
       // when
       final ThrowingCallable actual = () -> interestTagService.deleteInterestTag(사용자, request);
@@ -177,7 +178,7 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
     void deleteInterestTag_fail_NOT_FOUND_INTEREST_TAG() {
       // given
       final List<Long> tagIds = List.of(1L, 4L);
-      final InterestTagRequest request = new InterestTagRequest(tagIds);
+      final InterestTagDeleteRequest request = new InterestTagDeleteRequest(tagIds);
 
       // when
       final ThrowingCallable actual = () -> interestTagService.deleteInterestTag(사용자, request);

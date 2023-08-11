@@ -1,6 +1,7 @@
 package com.emmsale.member.application;
 
-import com.emmsale.member.application.dto.InterestTagRequest;
+import com.emmsale.member.application.dto.InterestTagAddRequest;
+import com.emmsale.member.application.dto.InterestTagDeleteRequest;
 import com.emmsale.member.application.dto.InterestTagResponse;
 import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
@@ -28,11 +29,11 @@ public class InterestTagService {
   public List<InterestTagResponse> findInterestTags(final Long memberId) {
     final List<InterestTag> interestTags = interestTagRepository.findInterestTagsByMemberId(
         memberId);
-    return InterestTagResponse.from(interestTags);
+    return InterestTagResponse.convertAllFrom(interestTags);
   }
 
   public List<InterestTagResponse> addInterestTag(final Member member,
-      final InterestTagRequest request) {
+      final InterestTagAddRequest request) {
     final List<Long> tagIds = request.getTagIds();
     validateAllTagExist(tagIds);
     validateAlreadyExist(tagIds);
@@ -43,7 +44,7 @@ public class InterestTagService {
 
     interestTagRepository.saveAll(interestTags);
 
-    return InterestTagResponse.from(
+    return InterestTagResponse.convertAllFrom(
         interestTagRepository.findInterestTagsByMemberId(member.getId()));
   }
 
@@ -62,7 +63,7 @@ public class InterestTagService {
 
 
   public List<InterestTagResponse> deleteInterestTag(final Member member,
-      final InterestTagRequest request) {
+      final InterestTagDeleteRequest request) {
     final List<Long> tagIds = request.getTagIds();
     final List<InterestTag> interestTags = interestTagRepository.findAllByMemberAndTagIds(member,
         tagIds);
@@ -73,7 +74,7 @@ public class InterestTagService {
         .map(InterestTag::getId)
         .collect(Collectors.toList());
     interestTagRepository.deleteAllByIdInBatch(savedInterestTagIds);
-    return InterestTagResponse.from(
+    return InterestTagResponse.convertAllFrom(
         interestTagRepository.findInterestTagsByMemberId(member.getId()));
   }
 

@@ -14,7 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.member.application.InterestTagService;
-import com.emmsale.member.application.dto.InterestTagRequest;
+import com.emmsale.member.application.dto.InterestTagAddRequest;
+import com.emmsale.member.application.dto.InterestTagDeleteRequest;
 import com.emmsale.member.application.dto.InterestTagResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -46,7 +47,7 @@ class InterestTagApiTest extends MockMvcTestHelper {
     //given
     final String accessToken = "Bearer accessToken";
     final List<Long> tagIds = List.of(4L, 5L);
-    final InterestTagRequest request = new InterestTagRequest(tagIds);
+    final InterestTagAddRequest request = new InterestTagAddRequest(tagIds);
 
     final List<InterestTagResponse> interestTagResponse = List.of(
         new InterestTagResponse(1L, "백엔드"),
@@ -75,7 +76,7 @@ class InterestTagApiTest extends MockMvcTestHelper {
     //given
     final String accessToken = "Bearer accessToken";
     final List<Long> tagIds = List.of(1L);
-    final InterestTagRequest request = new InterestTagRequest(tagIds);
+    final InterestTagDeleteRequest request = new InterestTagDeleteRequest(tagIds);
 
     final List<InterestTagResponse> interestTagResponse = List.of(
         new InterestTagResponse(2L, "프론트엔드"),
