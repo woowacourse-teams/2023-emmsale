@@ -9,9 +9,11 @@ import com.emmsale.notification.domain.FcmToken;
 import com.emmsale.notification.domain.FcmTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FcmTokenRegisterService {
 
   private final FcmTokenRepository fcmTokenRepository;
