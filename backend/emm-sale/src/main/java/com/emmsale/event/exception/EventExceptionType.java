@@ -44,7 +44,7 @@ public enum EventExceptionType implements BaseExceptionType {
 
   FORBIDDEN_UPDATE_RECRUITMENT_POST(
       HttpStatus.FORBIDDEN,
-      "참가 게시글을 업데이트할 수 있는 권한이 없습니다."
+      "참가 게시글을 수정,삭제할 수 있는 권한이 없습니다."
   );
 
   private final HttpStatus httpStatus;

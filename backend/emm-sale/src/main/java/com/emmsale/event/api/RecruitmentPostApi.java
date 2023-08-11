@@ -59,7 +59,7 @@ public class RecruitmentPostApi {
   @DeleteMapping("/{eventId}/recruitment-post/{recruitment-post-id}")
   public ResponseEntity<String> deleteRecruitmentPost(
       @PathVariable final Long eventId,
-      @RequestParam(name = "recruitment-post-id") final Long postId,
+      @PathVariable(name = "recruitment-post-id") final Long postId,
       final Member member
   ) {
     postCommandService.deleteRecruitmentPost(eventId, postId, member);

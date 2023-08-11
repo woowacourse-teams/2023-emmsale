@@ -5,7 +5,6 @@ import static com.emmsale.event.EventFixture.eventFixture;
 import static com.emmsale.event.exception.EventExceptionType.ALREADY_CREATE_RECRUITMENT_POST;
 import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_CREATE_RECRUITMENT_POST;
 import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_UPDATE_RECRUITMENT_POST;
-import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_RECRUITMENT_POST;
 import static com.emmsale.event.exception.EventExceptionType.RECRUITMENT_POST_NOT_BELONG_EVENT;
 import static com.emmsale.member.MemberFixture.memberFixture;
@@ -13,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.emmsale.event.EventFixture;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.application.dto.RecruitmentPostUpdateRequest;
 import com.emmsale.event.domain.Event;
@@ -21,6 +21,7 @@ import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.RecruitmentPostRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.member.MemberFixture;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import java.util.Optional;
@@ -101,36 +102,17 @@ class RecruitmentPostCommandServiceTest extends ServiceIntegrationTestHelper {
       //given
       final Long memberId = 1L;
       final Member member = memberRepository.findById(memberId).get();
-      final Event 인프콘 = eventRepository.save(eventFixture());
+      final Event event = eventRepository.save(eventFixture());
 
-      final Long postId = postCommandService.createRecruitmentPost(인프콘.getId(),
+      final Long postId = postCommandService.createRecruitmentPost(event.getId(),
           createRecruitmentPostRequest(member), member);
 
       // when
-      postCommandService.deleteRecruitmentPost(인프콘.getId(), postId, member);
+      postCommandService.deleteRecruitmentPost(event.getId(), postId, member);
       final Optional<RecruitmentPost> actual = recruitmentPostRepository.findById(postId);
 
       // then
       assertThat(actual).isEmpty();
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 행사면 예외가 발생한다.")
-    void eventNotFound() {
-      // given
-      final Long memberId = 1L;
-      final Member member = memberRepository.findById(memberId).get();
-
-      final Long invalidEventId = 999L;
-
-      // when
-      final ThrowingCallable actual = () -> postCommandService.deleteRecruitmentPost(invalidEventId,
-          memberId,
-          member);
-
-      // then
-      assertThatThrownBy(actual).isInstanceOf(EventException.class)
-          .hasMessage(NOT_FOUND_EVENT.errorMessage());
     }
 
     @Test
@@ -139,17 +121,66 @@ class RecruitmentPostCommandServiceTest extends ServiceIntegrationTestHelper {
       // given
       final Long memberId = 1L;
       final Member member = memberRepository.findById(memberId).get();
+      final long invalidPostId = 0L;
 
       final Long eventId = eventRepository.save(eventFixture()).getId();
 
       // when
       final ThrowingCallable actual = () -> postCommandService.deleteRecruitmentPost(eventId,
-          memberId,
+          invalidPostId,
           member);
 
       // then
       assertThatThrownBy(actual).isInstanceOf(EventException.class)
           .hasMessage(NOT_FOUND_RECRUITMENT_POST.errorMessage());
+    }
+
+    @Test
+    @DisplayName("eventId가 유효하지 않으면 Exception을 발생한다.")
+    void invalidEventId() {
+      // given
+      final Long memberId = 1L;
+      final Member member = memberRepository.findById(memberId).get();
+      final Event event = eventRepository.save(eventFixture());
+      final Event otherEvent = eventRepository.save(EventFixture.모바일_컨퍼런스());
+
+      final Long postId = postCommandService.createRecruitmentPost(event.getId(),
+          createRecruitmentPostRequest(member), member);
+
+      // when
+      final ThrowingCallable actual = () -> postCommandService.deleteRecruitmentPost(
+          otherEvent.getId(),
+          postId,
+          member
+      );
+
+      // then
+      assertThatThrownBy(actual).isInstanceOf(EventException.class)
+          .hasMessage(RECRUITMENT_POST_NOT_BELONG_EVENT.errorMessage());
+    }
+
+    @Test
+    @DisplayName("참가 모집 게시글이")
+    void invalidOwner() {
+      final Long memberId = 1L;
+      final Member member = memberRepository.findById(memberId).get();
+      final Member otherMember = memberRepository.save(MemberFixture.memberFixture());
+      final Event event = eventRepository.save(eventFixture());
+
+      final Long postId = postCommandService.createRecruitmentPost(event.getId(),
+          createRecruitmentPostRequest(member), member);
+
+      // when
+      final ThrowingCallable actual = () -> postCommandService.deleteRecruitmentPost(
+          event.getId(),
+          postId,
+          otherMember
+      );
+
+      // then
+      assertThatThrownBy(actual)
+          .isInstanceOf(EventException.class)
+          .hasMessage(FORBIDDEN_UPDATE_RECRUITMENT_POST.errorMessage());
     }
   }
 
