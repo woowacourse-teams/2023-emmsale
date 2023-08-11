@@ -74,7 +74,7 @@ class ConferenceViewModel(
         endDate = endDate,
     )
 
-    fun updateConferenceFilter(
+    fun fetchFilteredConferences(
         statusFilterIds: Array<Long>,
         tagFilterIds: Array<Long>,
         startDate: LocalDate?,

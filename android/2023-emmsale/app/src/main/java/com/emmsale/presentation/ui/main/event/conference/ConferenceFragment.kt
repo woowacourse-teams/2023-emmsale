@@ -42,7 +42,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
             val selectedEndDate =
                 result.data?.getSerializableExtraCompat<LocalDate>(ConferenceFilterActivity.KEY_SELECTED_END_DATE)
 
-            viewModel.updateConferenceFilter(
+            viewModel.fetchFilteredConferences(
                 selectedStatusFilterIds,
                 selectedTagFilterIds,
                 selectedStartDate,
