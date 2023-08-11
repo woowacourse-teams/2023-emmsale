@@ -9,6 +9,7 @@ drop table if exists kerdy.member_tag;
 drop table if exists kerdy.event_member;
 drop table if exists kerdy.notification;
 drop table if exists kerdy.fcm_token;
+drop table if exists kerdy.block;
 
 create table activity
 (
@@ -111,10 +112,26 @@ create table fcm_token
     member_id bigint       not null unique
 );
 
--- 2023-08-08 02:40
+-- 2023-08-08 14:40
 alter table event_member
     add column content varchar(255) not null;
 alter table event_member
     add column created_at datetime(6);
 alter table event_member
     add column updated_at datetime(6);
+
+-- 2023-08-08 17:20
+create table block
+(
+    id                bigint auto_increment primary key,
+    block_member_id   bigint      not null,
+    request_member_id bigint      not null,
+    created_at        datetime(6) null,
+    updated_at        datetime(6) null
+);
+
+-- 2023-08-08 23:00
+alter table event
+    add column apply_start_date datetime(6) not null;
+alter table event
+    add column apply_end_date datetime(6) not null;

@@ -42,12 +42,16 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @BeforeEach
   void init() {
+    final LocalDateTime beforeDateTime = LocalDateTime.now();
+    final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     event = eventRepository.save(
         new Event(
             "event",
             "location",
-            LocalDateTime.now(),
-            LocalDateTime.now(),
+            beforeDateTime,
+            afterDateTime,
+            beforeDateTime,
+            afterDateTime,
             "url",
             EventType.CONFERENCE,
             "https://image.com"

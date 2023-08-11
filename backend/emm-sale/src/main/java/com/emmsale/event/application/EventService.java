@@ -74,12 +74,12 @@ public class EventService {
     }
 
     if (isExistFilterDate(startDate, endDate)) {
-      LocalDateTime startDateTime = validateStartDate(startDate);
-      LocalDateTime endDateTime = validateEndDate(endDate);
+      final LocalDateTime startDateTime = validateStartDate(startDate);
+      final LocalDateTime endDateTime = validateEndDate(endDate);
       validateEndDateAfterDateStart(startDateTime, endDateTime);
       spec = spec.and(EventSpecification.filterByPeriod(startDateTime, endDateTime));
     }
-    List<Event> events = eventRepository.findAll(spec);
+    final List<Event> events = eventRepository.findAll(spec);
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events);
 
@@ -123,7 +123,8 @@ public class EventService {
     }
   }
 
-  private void validateEndDateAfterDateStart(LocalDateTime startDate, LocalDateTime endDate) {
+  private void validateEndDateAfterDateStart(final LocalDateTime startDate,
+      final LocalDateTime endDate) {
     if (endDate.isBefore(startDate)) {
       throw new EventException(EventExceptionType.START_DATE_AFTER_END_DATE);
     }
@@ -132,14 +133,14 @@ public class EventService {
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
       final List<Event> events) {
     return events.stream()
-        .sorted(comparing(Event::getStartDate))
+        .sorted(comparing(event -> event.getEventPeriod().getStartDate()))
         .collect(
-            groupingBy(event -> event.calculateEventStatus(nowDate),
+            groupingBy(event -> event.getEventPeriod().calculateEventStatus(nowDate),
                 () -> new EnumMap<>(EventStatus.class), toList())
         );
   }
 
-  private List<EventResponse> filterByStatuses(LocalDate today,
+  private List<EventResponse> filterByStatuses(final LocalDate today,
       final List<EventStatus> statuses,
       final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
     if (isExistStatusName(statuses)) {
@@ -190,6 +191,8 @@ public class EventService {
         request.getLocation(),
         request.getStartDateTime(),
         request.getEndDateTime(),
+        request.getApplyStartDateTime(),
+        request.getApplyEndDateTime(),
         request.getInformationUrl(),
         tags
     );
@@ -198,8 +201,9 @@ public class EventService {
   }
 
   public void deleteEvent(final Long eventId) {
-    final Event event = eventRepository.findById(eventId)
-        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
+    if (!eventRepository.existsById(eventId)) {
+      throw new EventException(NOT_FOUND_EVENT);
+    }
 
     eventRepository.deleteById(eventId);
   }

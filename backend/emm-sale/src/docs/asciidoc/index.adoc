@@ -332,6 +332,13 @@ include::{snippets}/modify-notification/http-request.adoc[]
 
 include::{snippets}/modify-notification/path-parameters.adoc[]
 
+=== `DELETE` : 알림 삭제
+
+.HTTP request
+include::{snippets}/delete-notification/http-request.adoc[]
+
+include::{snippets}/delete-notification/path-parameters.adoc[]
+
 === `POST` : FcmToken 생성
 
 .HTTP request 설명
@@ -363,3 +370,17 @@ include::{snippets}/find-all-notifications/response-fields.adoc[]
 
 .HTTP response
 include::{snippets}/find-all-notifications/http-response.adoc[]
+
+== Block
+
+=== `POST` : 사용자 차단 등록
+
+.HTTP request 설명
+include::{snippets}/register-block/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/register-block/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/register-block/http-response.adoc[]
+

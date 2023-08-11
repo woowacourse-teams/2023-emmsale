@@ -22,13 +22,16 @@ class EventDetailResponseTest {
         구름톤.getId(),
         구름톤.getName(),
         구름톤.getInformationUrl(),
-        구름톤.getStartDate(),
-        구름톤.getEndDate(),
+        구름톤.getEventPeriod().getStartDate(),
+        구름톤.getEventPeriod().getEndDate(),
+        구름톤.getEventPeriod().getApplyStartDate(),
+        구름톤.getEventPeriod().getApplyEndDate(),
         구름톤.getLocation(),
-        EventStatus.UPCOMING.getValue(),
+        EventStatus.UPCOMING.name(),
+        EventStatus.UPCOMING.name(),
         Collections.emptyList(),
         구름톤.getImageUrl(),
-        2,
+        2, 2,
         구름톤.getType().toString()
     );
 

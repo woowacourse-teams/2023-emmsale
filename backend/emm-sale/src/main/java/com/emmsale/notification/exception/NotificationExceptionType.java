@@ -43,9 +43,11 @@ public enum NotificationExceptionType implements BaseExceptionType {
   ALREADY_EXIST_NOTIFICATION(
       HttpStatus.BAD_REQUEST,
       "이미 요청된 알림입니다."
-  )
-
-  ;
+  ),
+  NOT_OWNER(
+      HttpStatus.BAD_REQUEST,
+      "알림의 소유자가 아닙니다."
+  );
 
   private final HttpStatus httpStatus;
   private final String errorMessage;

@@ -3,6 +3,7 @@ package com.emmsale.comment.domain;
 import com.emmsale.base.BaseEntity;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.Member;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.persistence.Column;
@@ -23,6 +24,7 @@ import lombok.NoArgsConstructor;
 public class Comment extends BaseEntity {
 
   private static final String DELETED_COMMENT_MESSAGE = "삭제된 댓글입니다.";
+  private static final String BLOCKED_MEMBER_CONTENT = "차단된 사용자의 댓글입니다.";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,6 +90,13 @@ public class Comment extends BaseEntity {
 
   public Optional<Comment> getParent() {
     return Optional.ofNullable(parent);
+  }
+
+  public String getContentOrHideIfBlockedMember(final List<Long> blockedMemberIds) {
+    if (blockedMemberIds.contains(member.getId())) {
+      return BLOCKED_MEMBER_CONTENT;
+    }
+    return content;
   }
 
   @Override
