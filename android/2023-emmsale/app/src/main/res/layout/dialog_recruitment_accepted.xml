@@ -41,8 +41,9 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="26dp"
                 android:gravity="center"
+                android:textColor="@color/black"
                 android:text="@string/recruitmentaccepted_dialog_message"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_recruitment_accepted" />
@@ -50,7 +51,7 @@
             <View
                 android:id="@+id/view_divider"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_marginTop="26dp"
                 android:background="@color/light_gray"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +66,7 @@
                 android:paddingVertical="20dp"
                 android:text="@string/all_okay"
                 android:textColor="@color/primary_color"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
