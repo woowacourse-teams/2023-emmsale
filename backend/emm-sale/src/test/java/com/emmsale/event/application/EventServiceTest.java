@@ -663,15 +663,14 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(eventLocation, savedEvent.getLocation()),
           () -> assertEquals(eventInformationUrl, savedEvent.getInformationUrl()),
           () -> assertEquals(beforeDateTime, savedEvent.getEventPeriod().getStartDate()),
-          () -> assertEquals(afterDateTime, savedEvent.getEventPeriod().getEndDate()),
-          () -> assertThat(savedEvent.getTags()).extracting("tag", Tag.class)
-              .extracting("name", String.class)
-              .containsAll(
-                  tagRequests.stream()
-                      .map(TagRequest::getName)
-                      .collect(Collectors.toList())
-              )
+          () -> assertEquals(afterDateTime, savedEvent.getEventPeriod().getEndDate())
       );
+      assertThat(response.getTags())
+          .containsAll(
+              tagRequests.stream()
+                  .map(TagRequest::getName)
+                  .collect(Collectors.toList())
+          );
     }
 
     @Test
@@ -773,7 +772,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Long eventId = event.getId();
 
       //when
-      eventService.updateEvent(eventId, updateRequest, now);
+      final EventDetailResponse response = eventService.updateEvent(eventId, updateRequest, now);
       final Event updatedEvent = eventRepository.findById(eventId).get();
 
       //then
@@ -782,16 +781,14 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(newLocation, updatedEvent.getLocation()),
           () -> assertEquals(newStartDateTime, updatedEvent.getEventPeriod().getStartDate()),
           () -> assertEquals(newEndDateTime, updatedEvent.getEventPeriod().getEndDate()),
-          () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
-          () -> assertThat(updatedEvent.getTags())
-              .extracting("tag", Tag.class)
-              .extracting("name", String.class)
-              .containsAll(
-                  newTagRequests.stream()
-                      .map(TagRequest::getName)
-                      .collect(Collectors.toList())
-              )
+          () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl())
       );
+      assertThat(response.getTags())
+          .containsAll(
+              newTagRequests.stream()
+                  .map(TagRequest::getName)
+                  .collect(Collectors.toList())
+          );
     }
 
     @Test
