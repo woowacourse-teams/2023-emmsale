@@ -114,7 +114,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
     doNothing().when(requestNotificationCommandService).modify(request, 3L);
 
     //when & then
-    mockMvc.perform(patch("/request-notifications/{request-notification-id}", notificationId)
+    mockMvc.perform(patch("/request-notifications/{request-notification-id}/status", notificationId)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())

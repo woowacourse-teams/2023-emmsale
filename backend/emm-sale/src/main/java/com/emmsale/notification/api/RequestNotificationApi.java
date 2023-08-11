@@ -32,7 +32,7 @@ public class RequestNotificationApi {
     return requestNotificationCommandService.create(requestNotificationRequest);
   }
 
-  @PatchMapping("/request-notifications/{request-notification-id}")
+  @PatchMapping("/request-notifications/{request-notification-id}/status")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void modify(
       @RequestBody final RequestNotificationModifyRequest requestNotificationModifyRequest,
