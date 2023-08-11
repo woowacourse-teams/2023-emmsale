@@ -35,9 +35,10 @@ public class InterestTagService {
   public List<InterestTagResponse> addInterestTag(final Member member,
       final InterestTagAddRequest request) {
     final List<Long> tagIds = request.getTagIds();
-    validateAllTagExist(tagIds);
+    final List<Tag> tags = tagRepository.findAllById(tagIds);
+    validateAllTagExist(tags, tagIds);
     validateAlreadyExist(tagIds);
-    final List<InterestTag> interestTags = tagRepository.findAllById(tagIds)
+    final List<InterestTag> interestTags = tags
         .stream()
         .map(tag -> new InterestTag(member, tag))
         .collect(Collectors.toList());
@@ -48,8 +49,7 @@ public class InterestTagService {
         interestTagRepository.findInterestTagsByMemberId(member.getId()));
   }
 
-  private void validateAllTagExist(final List<Long> tagIds) {
-    final List<Tag> tags = tagRepository.findAllById(tagIds);
+  private void validateAllTagExist(final List<Tag> tags, final List<Long> tagIds) {
     if (tags.size() != tagIds.size()) {
       throw new TagException(TagExceptionType.NOT_FOUND_TAG);
     }
@@ -67,7 +67,8 @@ public class InterestTagService {
     final List<Long> tagIds = request.getTagIds();
     final List<InterestTag> interestTags = interestTagRepository.findAllByMemberAndTagIds(member,
         tagIds);
-    validateAllTagExist(tagIds);
+    final List<Tag> tags = tagRepository.findAllById(tagIds);
+    validateAllTagExist(tags, tagIds);
     validateAllInterestTagExist(tagIds, interestTags);
 
     final List<Long> savedInterestTagIds = interestTags.stream()
