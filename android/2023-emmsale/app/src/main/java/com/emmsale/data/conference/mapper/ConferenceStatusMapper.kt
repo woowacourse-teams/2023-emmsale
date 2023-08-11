@@ -1,6 +1,6 @@
 package com.emmsale.data.conference.mapper
 
-import com.emmsale.data.conference.ConferenceStatus
+import com.emmsale.data.conferenceStatus.ConferenceStatus
 
 fun String.toData(): ConferenceStatus = when (this) {
     "진행 중" -> ConferenceStatus.IN_PROGRESS

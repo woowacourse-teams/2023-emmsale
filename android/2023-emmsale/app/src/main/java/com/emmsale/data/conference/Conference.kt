@@ -1,5 +1,6 @@
 package com.emmsale.data.conference
 
+import com.emmsale.data.conferenceStatus.ConferenceStatus
 import java.time.LocalDateTime
 
 data class Conference(
