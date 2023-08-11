@@ -19,16 +19,16 @@ class EventDetailViewModel(
     private val eventDetailRepository: EventDetailRepository,
 ) : ViewModel() {
 
-    init {
-        fetchEventDetail(eventId)
-    }
-
     private val _eventDetail: NotNullMutableLiveData<EventDetailUiState> =
         NotNullMutableLiveData(EventDetailUiState())
     val eventDetail: NotNullLiveData<EventDetailUiState>
         get() = _eventDetail
 
-    fun fetchEventDetail(id: Long) {
+    init {
+        fetchEventDetail(eventId)
+    }
+
+    private fun fetchEventDetail(id: Long) {
         setLoadingState(true)
         viewModelScope.launch {
             when (val result = eventDetailRepository.getEventDetail(id)) {
