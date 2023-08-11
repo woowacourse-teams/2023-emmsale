@@ -49,9 +49,9 @@ class RecruitmentPostQueryServiceTest extends ServiceIntegrationTestHelper {
 
     final List<RecruitmentPostResponse> expected = List.of(
         new RecruitmentPostResponse(멤버1_참가글_ID, 멤버1.getId(), 멤버1.getName(), 멤버1.getImageUrl(),
-            멤버1.getDescription(), requestMember1.getContent(), LocalDate.now(), LocalDate.now()),
+            requestMember1.getContent(), LocalDate.now()),
         new RecruitmentPostResponse(멤버2_참가글_ID, 멤버2.getId(), 멤버2.getName(), 멤버2.getImageUrl(),
-            멤버2.getDescription(), requestMember2.getContent(), LocalDate.now(), LocalDate.now())
+            requestMember2.getContent(), LocalDate.now())
     );
 
     //when

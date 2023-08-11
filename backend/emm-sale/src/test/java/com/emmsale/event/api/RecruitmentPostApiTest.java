@@ -11,8 +11,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -34,7 +32,6 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
-import org.springframework.restdocs.request.RequestParametersSnippet;
 
 @WebMvcTest(RecruitmentPostApi.class)
 class RecruitmentPostApiTest extends MockMvcTestHelper {
@@ -79,19 +76,17 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
   void deleteRecruitmentPost() throws Exception {
     //given
     final Long eventId = 1L;
-    final Long memberId = 2L;
+    final Long recruitmentPostId = 2L;
     final String fakeAccessToken = "Bearer accessToken";
 
-    final RequestParametersSnippet requestParameters = requestParameters(
-        parameterWithName("member-id").description("멤버 식별자")
-    );
-
-    //when
-    mockMvc.perform(delete(format("/events/%s/recruitment-post?member-id=%s", eventId, memberId))
-            .header("Authorization", fakeAccessToken)
-            .contentType(MediaType.APPLICATION_JSON))
+    //when & then
+    mockMvc.perform(delete("/events/{event-id}/recruitment-post/{recruitment-post-id}",
+            eventId, recruitmentPostId)
+            .header("Authorization", fakeAccessToken))
         .andExpect(status().isNoContent())
-        .andDo(document("delete-recruitment-post", requestParameters));
+        .andDo(document("delete-recruitment-post"));
+
+    verify(postCommandService).deleteRecruitmentPost(any(), any(), any());
   }
 
   @Test
@@ -104,16 +99,14 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
         fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
         fieldWithPath("[].name").type(JsonFieldType.STRING).description("member 이름"),
         fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
-        fieldWithPath("[].description").type(JsonFieldType.STRING).description("한줄 자기 소개"),
         fieldWithPath("[].content").type(JsonFieldType.STRING).description("함께해요 게시글 내용"),
-        fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("함께해요 게시글 작성 날짜"),
         fieldWithPath("[].updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜")
     );
     final List<RecruitmentPostResponse> responses = List.of(
-        new RecruitmentPostResponse(1L, 1L, "스캇", "imageUrl", "토마토 던지는 사람", "저랑 같이 컨퍼런스 갈 사람",
-            LocalDate.of(2023, 7, 15), LocalDate.of(2023, 7, 15)),
-        new RecruitmentPostResponse(2L, 2L, "홍실", "imageUrl", "토마토 맞는 사람", "스캇 말고 저랑 갈 사람",
-            LocalDate.of(2023, 7, 22), LocalDate.of(2023, 7, 22))
+        new RecruitmentPostResponse(1L, 1L, "스캇", "imageUrl", "저랑 같이 컨퍼런스 갈 사람",
+            LocalDate.of(2023, 7, 15)),
+        new RecruitmentPostResponse(2L, 2L, "홍실", "imageUrl", "스캇 말고 저랑 갈 사람",
+            LocalDate.of(2023, 7, 22))
     );
 
     when(postQueryService.findRecruitmentPosts(eventId)).thenReturn(responses);

@@ -46,19 +46,12 @@ public class RecruitmentPostCommandService {
     return recruitmentPost.getId();
   }
 
-  public void deleteRecruitmentPost(final Long eventId, final Long memberId, final Member member) {
-    validateMemberNotAllowed(memberId, member);
-    if (!eventRepository.existsById(eventId)) {
-      throw new EventException(NOT_FOUND_EVENT);
-    }
-
-    recruitmentPostRepository
-        .findByMemberIdAndEventId(memberId, eventId)
-        .ifPresentOrElse(
-            post -> recruitmentPostRepository.deleteById(post.getId()),
-            () -> {
-              throw new EventException(NOT_FOUND_RECRUITMENT_POST);
-            });
+  public void deleteRecruitmentPost(final Long eventId, final Long postId, final Member member) {
+    final RecruitmentPost recruitmentPost = recruitmentPostRepository.findById(postId)
+        .orElseThrow(() -> new EventException(NOT_FOUND_RECRUITMENT_POST));
+    recruitmentPost.validateEvent(eventId);
+    recruitmentPost.validateOwner(member);
+    recruitmentPostRepository.deleteById(recruitmentPost.getId());
   }
 
   public void updateRecruitmentPost(
