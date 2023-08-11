@@ -8,7 +8,6 @@ import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentUi
 
 class RecruitmentViewHolder(
     private val binding: ItemRecruitmentBinding,
-    private val requestCompanion: (Long, String) -> Unit,
     private val showMemberProfile: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -22,7 +21,6 @@ class RecruitmentViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
-            requestCompanion: (Long, String) -> Unit,
             showMemberProfile: (Long) -> Unit,
         ): RecruitmentViewHolder {
             val binding = ItemRecruitmentBinding.inflate(
@@ -31,7 +29,7 @@ class RecruitmentViewHolder(
                 false,
             )
 
-            return RecruitmentViewHolder(binding, requestCompanion, showMemberProfile)
+            return RecruitmentViewHolder(binding, showMemberProfile)
         }
     }
 }

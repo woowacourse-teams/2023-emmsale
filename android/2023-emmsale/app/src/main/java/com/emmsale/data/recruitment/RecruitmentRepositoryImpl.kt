@@ -77,11 +77,11 @@ class RecruitmentRepositoryImpl(
         )
     }
 
-    override suspend fun checkParticipationStatus(eventId: Long): ApiResult<Boolean> {
+    override suspend fun checkHasWritingPermission(eventId: Long): ApiResult<Boolean> {
         val currentUid = getCurrentUid()
         return handleApi(
-            execute = { recruitmentService.checkIsRecruitmented(eventId, currentUid) },
-            mapToDomain = { true },
+            execute = { recruitmentService.checkHasWritingPermission(eventId, currentUid) },
+            mapToDomain = { it },
         )
     }
 

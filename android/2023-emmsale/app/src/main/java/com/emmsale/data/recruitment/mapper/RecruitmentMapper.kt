@@ -13,7 +13,7 @@ fun List<RecruitmentApiModel>.toData(): List<Recruitment> = map {
         imageUrl = it.imageUrl,
         description = it.description,
         content = it.content,
-        updatedAt = it.updatedAt.toLocalDate(),
+        updatedDate = it.updatedAt.toLocalDate(),
     )
 }
 

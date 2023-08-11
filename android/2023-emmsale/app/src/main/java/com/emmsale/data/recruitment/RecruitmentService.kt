@@ -39,8 +39,8 @@ interface RecruitmentService {
         @Query("post-id") recruitmentId: Long,
     ): Response<Unit>
 
-    @GET("events/{eventId}/participants/already-participate")
-    suspend fun checkIsRecruitmented(
+    @GET("events/{eventId}/recruitment-post/already-recruitment")
+    suspend fun checkHasWritingPermission(
         @Path("eventId") eventId: Long,
         @Query("member-id") memberId: Long,
     ): Response<Boolean>

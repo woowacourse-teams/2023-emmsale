@@ -41,7 +41,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/tv_eventrecruitment_membername" />
 
         <TextView
-            android:text="TextView"
+            android:text="@{recruitment.content}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"

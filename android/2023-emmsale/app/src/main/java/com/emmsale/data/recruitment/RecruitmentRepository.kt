@@ -30,5 +30,5 @@ interface RecruitmentRepository {
         message: String,
     ): ApiResult<Unit>
 
-    suspend fun checkParticipationStatus(eventId: Long): ApiResult<Boolean>
+    suspend fun checkHasWritingPermission(eventId: Long): ApiResult<Boolean>
 }

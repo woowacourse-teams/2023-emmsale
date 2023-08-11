@@ -8,7 +8,6 @@ import com.emmsale.databinding.ItemRecruitmentBinding
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentUiState
 
 class EventRecruitmentAdapter(
-    private val requestCompanion: (Long, String) -> Unit,
     private val showMemberProfile: (Long) -> Unit,
 ) : ListAdapter<RecruitmentUiState, RecruitmentViewHolder>(diffUtil) {
     private lateinit var binding: ItemRecruitmentBinding
@@ -19,7 +18,7 @@ class EventRecruitmentAdapter(
             parent,
             false,
         )
-        return RecruitmentViewHolder(binding, requestCompanion, showMemberProfile)
+        return RecruitmentViewHolder(binding, showMemberProfile)
     }
 
     override fun onBindViewHolder(holder: RecruitmentViewHolder, position: Int) {

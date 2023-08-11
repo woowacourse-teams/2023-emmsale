@@ -7,6 +7,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {

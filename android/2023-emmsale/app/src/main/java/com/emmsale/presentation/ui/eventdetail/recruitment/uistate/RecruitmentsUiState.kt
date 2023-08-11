@@ -2,15 +2,18 @@ package com.emmsale.presentation.ui.eventdetail.recruitment.uistate
 
 import com.emmsale.data.recruitment.Recruitment
 
-sealed class RecruitmentsUiState {
-    data class Success(
-        val value: List<RecruitmentUiState>,
-    ) : RecruitmentsUiState()
-
-    object Error : RecruitmentsUiState()
-
+data class RecruitmentsUiState(
+    val list: List<RecruitmentUiState> = listOf(),
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
+) {
     companion object {
-        fun from(recruitments: List<Recruitment>): Success =
-            Success(recruitments.map(RecruitmentUiState::from))
+        fun from(recruitments: List<Recruitment>): RecruitmentsUiState {
+            return RecruitmentsUiState(
+                list = recruitments.map { RecruitmentUiState.from(it) },
+                isLoading = false,
+                isError = false,
+            )
+        }
     }
 }

@@ -9,5 +9,5 @@ data class Recruitment(
     val imageUrl: String,
     val description: String?,
     val content: String?,
-    val updatedAt: LocalDate,
+    val updatedDate: LocalDate,
 )
