@@ -106,12 +106,7 @@ private fun Context.createNotification(
     .setContentText(message)
     .setContentIntent(
         intent?.let {
-            PendingIntent.getActivity(
-                this,
-                0,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE,
-            )
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         },
     )
     .setPriority(NotificationCompat.PRIORITY_HIGH)
