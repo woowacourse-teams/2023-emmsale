@@ -2,6 +2,7 @@ package com.emmsale.notification.application.generator;
 
 import static com.emmsale.notification.application.dto.UpdateNotificationMessage.Data;
 import static com.emmsale.notification.application.dto.UpdateNotificationMessage.Message;
+import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
 import static com.emmsale.notification.exception.NotificationExceptionType.CONVERTING_JSON_ERROR;
 
 import com.emmsale.member.domain.MemberRepository;
@@ -23,8 +24,12 @@ public class UpdateNotificationMessageGenerator implements NotificationMessageGe
       final ObjectMapper objectMapper,
       final MemberRepository memberRepository
   ) {
+    final Long receiverId = updateNotification.getReceiverId();
+
+    validateIsExistedReceiver(memberRepository, receiverId);
+
     final Data data = new Data(
-        updateNotification.getReceiverId().toString(),
+        receiverId.toString(),
         updateNotification.getRedirectId().toString(),
         updateNotification.getUpdateNotificationType().toString(),
         updateNotification.getCreatedAt().format(DATE_TIME_FORMATTER)
@@ -37,6 +42,12 @@ public class UpdateNotificationMessageGenerator implements NotificationMessageGe
       return objectMapper.writeValueAsString(updateNotificationMessage);
     } catch (JsonProcessingException e) {
       throw new NotificationException(CONVERTING_JSON_ERROR);
+    }
+  }
+
+  private void validateIsExistedReceiver(final MemberRepository memberRepository, final Long receiverId) {
+    if (memberRepository.existsById(receiverId)) {
+      throw new NotificationException(BAD_REQUEST_MEMBER_ID);
     }
   }
 }
