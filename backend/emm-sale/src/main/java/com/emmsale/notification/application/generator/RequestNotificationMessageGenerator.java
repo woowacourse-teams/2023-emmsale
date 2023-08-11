@@ -40,7 +40,8 @@ public class RequestNotificationMessageGenerator implements NotificationMessageG
     final Data messageData = new Data(
         sender.getName(), senderId.toString(),
         requestNotification.getReceiverId().toString(), requestNotification.getMessage(),
-        openProfileUrl, REQUEST_NOTIFICATION_TYPE, requestNotification.getCreatedAt()
+        openProfileUrl, REQUEST_NOTIFICATION_TYPE,
+        requestNotification.getCreatedAt().format(DATE_TIME_FORMATTER)
     );
 
     final RequestNotificationMessage requestNotificationMessage = new RequestNotificationMessage(
