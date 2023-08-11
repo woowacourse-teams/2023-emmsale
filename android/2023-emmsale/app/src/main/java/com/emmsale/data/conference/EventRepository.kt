@@ -5,8 +5,8 @@ import com.emmsale.data.conferenceStatus.ConferenceStatus
 import com.emmsale.data.eventTag.EventTag
 import java.time.LocalDate
 
-interface ConferenceRepository {
-    suspend fun getConferences(
+interface EventRepository {
+    suspend fun getEvents(
         category: EventCategory,
         statuses: List<ConferenceStatus> = emptyList(),
         tags: List<EventTag> = emptyList(),

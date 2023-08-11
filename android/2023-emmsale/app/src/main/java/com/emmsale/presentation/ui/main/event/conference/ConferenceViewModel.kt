@@ -1,12 +1,13 @@
 package com.emmsale.presentation.ui.main.event.conference
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
+import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.conference.ConferenceRepository
+import com.emmsale.data.conference.Conference
+import com.emmsale.data.conference.EventRepository
 import com.emmsale.data.conferenceStatus.ConferenceStatus
 import com.emmsale.data.conference.EventCategory
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class ConferenceViewModel(
-    private val conferenceRepository: ConferenceRepository,
+    private val eventRepository: EventRepository,
     private val conferenceStatusRepository: ConferenceStatusRepository,
     private val eventTagRepository: EventTagRepository,
 ) : ViewModel() {
@@ -65,7 +66,7 @@ class ConferenceViewModel(
         tags: List<EventTag>,
         startDate: LocalDate?,
         endDate: LocalDate?
-    ) = conferenceRepository.getConferences(
+    ): ApiResult<List<Conference>> = eventRepository.getEvents(
         category = EventCategory.CONFERENCE,
         statuses = statuses,
         tags = tags,
@@ -127,7 +128,7 @@ class ConferenceViewModel(
             ConferenceViewModel(
                 conferenceStatusRepository = KerdyApplication.repositoryContainer.conferenceStatusRepository,
                 eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository,
-                conferenceRepository = KerdyApplication.repositoryContainer.conferenceRepository,
+                eventRepository = KerdyApplication.repositoryContainer.eventRepository,
             )
         }
     }

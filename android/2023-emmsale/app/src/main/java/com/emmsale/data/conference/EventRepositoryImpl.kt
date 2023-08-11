@@ -13,11 +13,11 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class ConferenceRepositoryImpl(
+class EventRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val conferenceService: ConferenceService,
-) : ConferenceRepository {
-    override suspend fun getConferences(
+) : EventRepository {
+    override suspend fun getEvents(
         category: EventCategory,
         statuses: List<ConferenceStatus>,
         tags: List<EventTag>,
