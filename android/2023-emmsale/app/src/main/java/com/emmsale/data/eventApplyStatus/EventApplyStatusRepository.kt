@@ -2,7 +2,7 @@ package com.emmsale.data.eventApplyStatus
 
 interface EventApplyStatusRepository {
 
-    suspend fun getApplyStatuses(): List<EventApplyStatus>
+    suspend fun getEventApplyStatuses(): List<EventApplyStatus>
 
-    suspend fun getApplyStatusesByIds(ids: List<Long>): List<EventApplyStatus>
+    suspend fun getEventApplyStatusesByIds(ids: List<Long>): List<EventApplyStatus>
 }

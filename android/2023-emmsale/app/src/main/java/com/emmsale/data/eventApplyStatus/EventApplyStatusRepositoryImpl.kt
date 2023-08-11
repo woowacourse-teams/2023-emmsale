@@ -8,11 +8,11 @@ class EventApplyStatusRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : EventApplyStatusRepository {
 
-    override suspend fun getApplyStatuses(): List<EventApplyStatus> = withContext(dispatcher) {
+    override suspend fun getEventApplyStatuses(): List<EventApplyStatus> = withContext(dispatcher) {
         EventApplyStatus.values().toList()
     }
 
-    override suspend fun getApplyStatusesByIds(ids: List<Long>): List<EventApplyStatus> =
+    override suspend fun getEventApplyStatusesByIds(ids: List<Long>): List<EventApplyStatus> =
         withContext(dispatcher) {
             EventApplyStatus.values().filter { it.id in ids }
         }
