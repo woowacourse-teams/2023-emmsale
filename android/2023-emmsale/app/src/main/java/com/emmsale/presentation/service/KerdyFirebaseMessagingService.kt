@@ -21,15 +21,10 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        when {
-            message.data["notificationType"] == FOLLOW_NOTIFICATION_TYPE ->
-                showFollowNotification(message)
-
-            message.data["notificationType"] == CHILD_COMMENT_NOTIFICATION_TYPE ->
-                showChildCommentNotification(message)
-
-            message.data["notificationType"] == EVENT_NOTIFICATION_TYPE ->
-                showInterestEventNotification(message)
+        when (message.data["notificationType"]) {
+            FOLLOW_NOTIFICATION_TYPE -> showFollowNotification(message)
+            CHILD_COMMENT_NOTIFICATION_TYPE -> showChildCommentNotification(message)
+            EVENT_NOTIFICATION_TYPE -> showInterestEventNotification(message)
         }
     }
 
