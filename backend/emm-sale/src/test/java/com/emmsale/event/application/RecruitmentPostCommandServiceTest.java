@@ -107,7 +107,7 @@ class RecruitmentPostCommandServiceTest extends ServiceIntegrationTestHelper {
           createRecruitmentPostRequest(member), member);
 
       // when
-      postCommandService.deleteRecruitmentPost(인프콘.getId(), memberId, member);
+      postCommandService.deleteRecruitmentPost(인프콘.getId(), postId, member);
       final Optional<RecruitmentPost> actual = recruitmentPostRepository.findById(postId);
 
       // then

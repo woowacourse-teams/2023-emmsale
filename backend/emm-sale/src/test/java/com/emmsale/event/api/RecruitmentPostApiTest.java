@@ -11,8 +11,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -34,7 +32,6 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
-import org.springframework.restdocs.request.RequestParametersSnippet;
 
 @WebMvcTest(RecruitmentPostApi.class)
 class RecruitmentPostApiTest extends MockMvcTestHelper {
@@ -79,19 +76,16 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
   void deleteRecruitmentPost() throws Exception {
     //given
     final Long eventId = 1L;
-    final Long memberId = 2L;
+    final Long recruitmentPostId = 2L;
     final String fakeAccessToken = "Bearer accessToken";
 
-    final RequestParametersSnippet requestParameters = requestParameters(
-        parameterWithName("member-id").description("멤버 식별자")
-    );
-
     //when
-    mockMvc.perform(delete(format("/events/%s/recruitment-post?member-id=%s", eventId, memberId))
+    mockMvc.perform(delete("/events/{eventId}/recruitment-post/{recruitment-post-id}",
+            eventId, recruitmentPostId)
             .header("Authorization", fakeAccessToken)
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent())
-        .andDo(document("delete-recruitment-post", requestParameters));
+        .andDo(document("delete-recruitment-post"));
   }
 
   @Test

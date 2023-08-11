@@ -56,13 +56,13 @@ public class RecruitmentPostApi {
     return ResponseEntity.ok().build();
   }
 
-  @DeleteMapping("/{eventId}/recruitment-post")
+  @DeleteMapping("/{eventId}/recruitment-post/{recruitment-post-id}")
   public ResponseEntity<String> deleteRecruitmentPost(
       @PathVariable final Long eventId,
-      @RequestParam(name = "member-id") final Long memberId,
+      @RequestParam(name = "recruitment-post-id") final Long postId,
       final Member member
   ) {
-    postCommandService.deleteRecruitmentPost(eventId, memberId, member);
+    postCommandService.deleteRecruitmentPost(eventId, postId, member);
 
     return ResponseEntity.noContent().build();
   }
