@@ -139,7 +139,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             )
         }
 
-        return SimpleDateFormat("yyyyMMdd HH:mm", Locale.getDefault()).format(calendar)
+        return SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(calendar)
     }
 
     companion object {
