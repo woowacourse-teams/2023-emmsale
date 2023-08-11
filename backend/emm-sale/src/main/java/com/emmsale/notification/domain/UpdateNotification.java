@@ -27,7 +27,7 @@ public class UpdateNotification {
   @Column(nullable = false)
   private Long redirectId;
   @Enumerated(EnumType.STRING)
-  @Column(name = "type")
+  @Column(name = "type", nullable = false)
   private UpdateNotificationType updateNotificationType;
   private LocalDateTime createdAt;
 

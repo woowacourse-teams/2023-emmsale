@@ -31,6 +31,7 @@ public class RequestNotification extends BaseEntity {
   @Column(nullable = false)
   private String message;
   @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
   private RequestNotificationStatus status;
 
   public RequestNotification(
