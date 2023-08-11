@@ -1,8 +1,8 @@
 package com.emmsale.event.domain;
 
 import static com.emmsale.event.EventFixture.eventFixture;
-import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_UPDATE_PARTICIPATE;
-import static com.emmsale.event.exception.EventExceptionType.PARTICIPANT_NOT_BELONG_EVENT;
+import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_UPDATE_RECRUITMENT_POST;
+import static com.emmsale.event.exception.EventExceptionType.RECRUITMENT_POST_NOT_BELONG_EVENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class ParticipantTest {
+class RecruitmentPostTest {
 
   private Member member;
   private Event event;
@@ -32,14 +32,14 @@ class ParticipantTest {
   @DisplayName("content를 업데이트할 수 있다.")
   void updateContent() {
     //given
-    final Participant participant = new Participant(member, event, "변경 전");
+    final RecruitmentPost recruitmentPost = new RecruitmentPost(member, event, "변경 전");
     final String contentRequest = "변경 후";
 
     //when
-    participant.updateContent(contentRequest);
+    recruitmentPost.updateContent(contentRequest);
 
     //then
-    assertThat(participant.getContent())
+    assertThat(recruitmentPost.getContent())
         .isEqualTo(contentRequest);
   }
 
@@ -48,26 +48,26 @@ class ParticipantTest {
   class ValidateOwner {
 
     @Test
-    @DisplayName("입력 member와 participant의 member가 같은 경우")
+    @DisplayName("입력 member와 recruitmentPost의 member가 같은 경우")
     void success() {
       //given
-      final Participant participant = new Participant(member, event, "내용");
+      final RecruitmentPost recruitmentPost = new RecruitmentPost(member, event, "내용");
 
       //when && then
-      assertDoesNotThrow(() -> participant.validateOwner(member));
+      assertDoesNotThrow(() -> recruitmentPost.validateOwner(member));
     }
 
     @Test
-    @DisplayName("입력 member와 participant의 member가 다른 경우")
+    @DisplayName("입력 member와 recruitmentPost의 member가 다른 경우")
     void invalidMemberException() {
       //given
-      final Participant participant = new Participant(member, event, "content");
+      final RecruitmentPost recruitmentPost = new RecruitmentPost(member, event, "content");
       final Member member = new Member(2L, 3L, "이미지", "다른멤버");
 
       //when && then
-      assertThatThrownBy(() -> participant.validateOwner(member))
+      assertThatThrownBy(() -> recruitmentPost.validateOwner(member))
           .isInstanceOf(EventException.class)
-          .hasMessage(FORBIDDEN_UPDATE_PARTICIPATE.errorMessage());
+          .hasMessage(FORBIDDEN_UPDATE_RECRUITMENT_POST.errorMessage());
     }
   }
 
@@ -76,25 +76,25 @@ class ParticipantTest {
   class ValidateEvent {
 
     @Test
-    @DisplayName("participant의 eventId가 입력값과 같은 경우")
+    @DisplayName("recruitmentPost의 eventId가 입력값과 같은 경우")
     void success() {
       //given
-      final Participant participant = new Participant(member, event, "내용");
+      final RecruitmentPost recruitmentPost = new RecruitmentPost(member, event, "내용");
 
       //when && then
-      assertDoesNotThrow(() -> participant.validateEvent(event.getId()));
+      assertDoesNotThrow(() -> recruitmentPost.validateEvent(event.getId()));
     }
 
     @Test
-    @DisplayName("participant의 eventId가 입려값과 다른 경우")
+    @DisplayName("recruitmentPost의 eventId가 입려값과 다른 경우")
     void invalidEventIdException() {
       //given
-      final Participant participant = new Participant(member, event, "content");
+      final RecruitmentPost recruitmentPost = new RecruitmentPost(member, event, "content");
 
       //when && then
-      assertThatThrownBy(() -> participant.validateEvent(event.getId() + 1))
+      assertThatThrownBy(() -> recruitmentPost.validateEvent(event.getId() + 1))
           .isInstanceOf(EventException.class)
-          .hasMessage(PARTICIPANT_NOT_BELONG_EVENT.errorMessage());
+          .hasMessage(RECRUITMENT_POST_NOT_BELONG_EVENT.errorMessage());
     }
   }
 }
