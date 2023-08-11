@@ -37,7 +37,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="6dp"
             android:gravity="center"
-            android:text="@string/conference_default_people_count"
+            android:text="@{@string/event_count_format(viewModel.conference.conferenceSize)}"
             android:textColor="@color/primary_color"
             android:textSize="12sp"
             android:textStyle="bold"

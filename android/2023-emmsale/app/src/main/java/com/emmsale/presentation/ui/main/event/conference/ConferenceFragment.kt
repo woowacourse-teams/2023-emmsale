@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.main.event.conference
 
 import android.app.Activity.RESULT_OK
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
@@ -76,11 +77,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         viewModel.conference.observe(viewLifecycleOwner) { eventsResult ->
             when {
                 eventsResult.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
-                !eventsResult.isLoading -> {
-                    eventAdapter.submitList(eventsResult.conferenceItems)
-                    binding.tvEventsCount.text =
-                        getString(R.string.event_count_format, eventsResult.conferenceSize)
-                }
+                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferenceItems)
             }
         }
     }
