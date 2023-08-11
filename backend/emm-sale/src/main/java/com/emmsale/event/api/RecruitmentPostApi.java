@@ -3,7 +3,8 @@ package com.emmsale.event.api;
 import static java.lang.String.format;
 import static java.net.URI.create;
 
-import com.emmsale.event.application.EventService;
+import com.emmsale.event.application.RecruitmentPostCommandService;
+import com.emmsale.event.application.RecruitmentPostQueryService;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.application.dto.RecruitmentPostResponse;
 import com.emmsale.event.application.dto.RecruitmentPostUpdateRequest;
@@ -27,7 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RecruitmentPostApi {
 
-  private final EventService eventService;
+  private final RecruitmentPostCommandService postCommandService;
+  private final RecruitmentPostQueryService postQueryService;
 
   @PostMapping("/{eventId}/recruitment-post")
   public ResponseEntity<Void> createRecruitmentPost(
@@ -35,7 +37,8 @@ public class RecruitmentPostApi {
       @RequestBody @Valid final RecruitmentPostRequest request,
       final Member member
   ) {
-    final Long recruitmentPostId = eventService.createRecruitmentPost(eventId, request, member);
+    final Long recruitmentPostId = postCommandService.createRecruitmentPost(eventId, request,
+        member);
 
     return ResponseEntity
         .created(create(format("/events/%s/recruitment-post/%s", eventId, recruitmentPostId)))
@@ -49,7 +52,7 @@ public class RecruitmentPostApi {
       @RequestBody @Valid final RecruitmentPostUpdateRequest request,
       final Member member
   ) {
-    eventService.updateRecruitmentPost(eventId, recruitmentPostId, request, member);
+    postCommandService.updateRecruitmentPost(eventId, recruitmentPostId, request, member);
     return ResponseEntity.ok().build();
   }
 
@@ -59,7 +62,7 @@ public class RecruitmentPostApi {
       @RequestParam(name = "member-id") final Long memberId,
       final Member member
   ) {
-    eventService.deleteRecruitmentPost(eventId, memberId, member);
+    postCommandService.deleteRecruitmentPost(eventId, memberId, member);
 
     return ResponseEntity.noContent().build();
   }
@@ -67,7 +70,7 @@ public class RecruitmentPostApi {
   @GetMapping("/{id}/recruitment-post")
   public ResponseEntity<List<RecruitmentPostResponse>> findRecruitmentPosts(
       @PathVariable final Long id) {
-    final List<RecruitmentPostResponse> responses = eventService.findRecruitmentPosts(id);
+    final List<RecruitmentPostResponse> responses = postQueryService.findRecruitmentPosts(id);
     return ResponseEntity.ok(responses);
   }
 
@@ -76,6 +79,6 @@ public class RecruitmentPostApi {
       @PathVariable final Long eventId,
       @RequestParam(name = "member-id") final Long memberId
   ) {
-    return ResponseEntity.ok(eventService.isAlreadyRecruit(eventId, memberId));
+    return ResponseEntity.ok(postQueryService.isAlreadyRecruit(eventId, memberId));
   }
 }

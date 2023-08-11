@@ -18,7 +18,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.event.application.EventService;
+import com.emmsale.event.application.RecruitmentPostCommandService;
+import com.emmsale.event.application.RecruitmentPostQueryService;
 import com.emmsale.event.application.dto.RecruitmentPostDeleteRequest;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.application.dto.RecruitmentPostResponse;
@@ -40,7 +41,9 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 class RecruitmentPostApiTest extends MockMvcTestHelper {
 
   @MockBean
-  private EventService eventService;
+  private RecruitmentPostQueryService postQueryService;
+  @MockBean
+  private RecruitmentPostCommandService postCommandService;
 
   @Test
   @DisplayName("Event에 참여게시글을 추가할 수 있다.")
@@ -59,7 +62,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
             .description("함께 해요 게시글의 내용(공백 불가, 255자 최대)")
     );
 
-    when(eventService.createRecruitmentPost(any(), any(), any())).thenReturn(postId);
+    when(postCommandService.createRecruitmentPost(any(), any(), any())).thenReturn(postId);
 
     //when
     mockMvc.perform(
@@ -73,7 +76,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
   }
 
   @Test
-  @DisplayName("Event에 사용자를 참여자 목록에서 제거할 수 있다.")
+  @DisplayName("함께해요 게시글을 삭제할 수 있다.")
   void deleteRecruitmentPost() throws Exception {
     //given
     final Long eventId = 1L;
@@ -100,7 +103,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     //given
     final Long eventId = 1L;
     final ResponseFieldsSnippet responseFields = responseFields(
-        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("참여자 식별자"),
+        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("함꼐해요 게시글 식별자"),
         fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
         fieldWithPath("[].name").type(JsonFieldType.STRING).description("member 이름"),
         fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
@@ -116,7 +119,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
             LocalDate.of(2023, 7, 22), LocalDate.of(2023, 7, 22))
     );
 
-    when(eventService.findRecruitmentPosts(eventId)).thenReturn(responses);
+    when(postQueryService.findRecruitmentPosts(eventId)).thenReturn(responses);
 
     //when && then
     mockMvc.perform(get(format("/events/%s/recruitment-post", eventId)))
@@ -148,7 +151,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(document("update-recruitment-post", requestFields));
 
-    verify(eventService).updateRecruitmentPost(any(), any(), any(), any());
+    verify(postCommandService).updateRecruitmentPost(any(), any(), any(), any());
   }
 
   @Test
@@ -157,7 +160,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     //given
     final Long memberId = 2L;
     final Long eventId = 3L;
-    given(eventService.isAlreadyRecruit(eventId, memberId)).willReturn(true);
+    given(postQueryService.isAlreadyRecruit(eventId, memberId)).willReturn(true);
 
     //when && then
     mockMvc.perform(

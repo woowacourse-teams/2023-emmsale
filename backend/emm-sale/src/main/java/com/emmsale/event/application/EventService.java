@@ -3,23 +3,17 @@ package com.emmsale.event.application;
 import static com.emmsale.event.domain.repository.EventSpecification.filterByCategory;
 import static com.emmsale.event.domain.repository.EventSpecification.filterByTags;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
-import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_RECRUITMENT_POST;
 import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toUnmodifiableList;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
-import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.application.dto.EventResponse;
-import com.emmsale.event.application.dto.RecruitmentPostResponse;
-import com.emmsale.event.application.dto.RecruitmentPostUpdateRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
-import com.emmsale.event.domain.RecruitmentPost;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventSpecification;
 import com.emmsale.event.domain.repository.EventTagRepository;
@@ -68,37 +62,6 @@ public class EventService {
     return EventDetailResponse.from(event, today);
   }
 
-  public Long createRecruitmentPost(
-      final Long eventId,
-      final RecruitmentPostRequest request,
-      final Member member
-  ) {
-    final Long memberId = request.getMemberId();
-    final String content = request.getContent();
-    validateMemberNotAllowed(memberId, member);
-    final Event event = eventRepository.findById(eventId)
-        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
-
-    final RecruitmentPost recruitmentPost = event.createRecruitmentPost(member, content);
-    recruitmentPostRepository.save(recruitmentPost);
-    return recruitmentPost.getId();
-  }
-
-  public void deleteRecruitmentPost(final Long eventId, final Long memberId, final Member member) {
-    validateMemberNotAllowed(memberId, member);
-    if (!eventRepository.existsById(eventId)) {
-      throw new EventException(NOT_FOUND_EVENT);
-    }
-
-    recruitmentPostRepository
-        .findByMemberIdAndEventId(memberId, eventId)
-        .ifPresentOrElse(
-            post -> recruitmentPostRepository.deleteById(post.getId()),
-            () -> {
-              throw new EventException(NOT_FOUND_RECRUITMENT_POST);
-            });
-  }
-
   @Transactional(readOnly = true)
   public List<EventResponse> findEvents(final EventType category,
       final LocalDate nowDate, final String startDate, final String endDate,
@@ -121,16 +84,6 @@ public class EventService {
         = groupByEventStatus(nowDate, events);
 
     return filterByStatuses(nowDate, statuses, eventsForEventStatus);
-  }
-
-  @Transactional(readOnly = true)
-  public List<RecruitmentPostResponse> findRecruitmentPosts(final Long eventId) {
-    final Event event = eventRepository.findById(eventId)
-        .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
-    return event.getRecruitmentPosts().stream()
-        .sorted(comparing(RecruitmentPost::getId))
-        .map(RecruitmentPostResponse::from)
-        .collect(toUnmodifiableList());
   }
 
   private boolean isExistTagNames(final List<String> tagNames) {
@@ -260,23 +213,5 @@ public class EventService {
         .map(tag -> tagRepository.findByName(tag.getName())
             .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_TAG)))
         .collect(toList());
-  }
-
-  @Transactional(readOnly = true)
-  public Boolean isAlreadyRecruit(final Long eventId, final Long memberId) {
-    return recruitmentPostRepository.existsByEventIdAndMemberId(eventId, memberId);
-  }
-
-  public void updateRecruitmentPost(
-      final Long eventId,
-      final Long postId,
-      final RecruitmentPostUpdateRequest request,
-      final Member member
-  ) {
-    final RecruitmentPost recruitmentPost = recruitmentPostRepository.findById(postId)
-        .orElseThrow(() -> new EventException(NOT_FOUND_RECRUITMENT_POST));
-    recruitmentPost.validateEvent(eventId);
-    recruitmentPost.validateOwner(member);
-    recruitmentPost.updateContent(request.getContent());
   }
 }
