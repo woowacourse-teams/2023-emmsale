@@ -8,6 +8,10 @@ class FakeEventTagService : EventTagService {
         eventCategory: String,
     ): Response<List<EventTagApiModel>> = Response.success(provideConferenceTags())
 
+    override suspend fun getEventTagByIds(ids: Array<Long>): Response<List<EventTagApiModel>> {
+        return Response.success(provideConferenceTags().filter { ids.contains(it.id) })
+    }
+
     private fun provideConferenceTags(): List<EventTagApiModel> = listOf(
         EventTagApiModel(
             id = 1,

@@ -1,7 +1,6 @@
 package com.emmsale.presentation.ui.main.event.conferenceFilter
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
@@ -9,12 +8,15 @@ import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.conference.EventCategory
+import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
+import com.emmsale.presentation.common.livedata.NotNullLiveData
+import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilteringDateOptionUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilteringOptionUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,139 +24,120 @@ import java.time.LocalDate
 
 class ConferenceFilterViewModel(
     private val eventTagRepository: EventTagRepository,
-    private val selectedStartDate: ConferenceFilterDateUiState? = null,
-    private val selectedEndDate: ConferenceFilterDateUiState? = null,
+    private val conferenceStatusRepository: ConferenceStatusRepository,
+    private val selectedStartDate: ConferenceFilteringDateOptionUiState? = null,
+    private val selectedEndDate: ConferenceFilteringDateOptionUiState? = null,
 ) : ViewModel() {
-    private val _eventFilters = MutableLiveData<ConferenceFiltersUiState>()
-    val eventFilters: LiveData<ConferenceFiltersUiState> = _eventFilters
+    private val _conferenceFilter = NotNullMutableLiveData(ConferenceFilterUiState())
+    val conferenceFilter: NotNullLiveData<ConferenceFilterUiState> = _conferenceFilter
 
-    private val _selectedTagFilterCount = MutableLiveData<Int>()
-    val isTagAllSelected: LiveData<Boolean> = _selectedTagFilterCount.map { count ->
-        val filters = _eventFilters.value
-        when {
-            filters is ConferenceFiltersUiState.Success && count == filters.tags.size -> true
-            else -> false
-        }
+    val isTagAllSelected: LiveData<Boolean> = _conferenceFilter.map { filter ->
+        val tagFilterSize = filter.conferenceTagFilteringOptions.size
+        val selectedTagFilterSize = filter.conferenceTagFilteringOptions.count { it.isSelected }
+        tagFilterSize == selectedTagFilterSize
     }
-    val isStartDateSelected: LiveData<Boolean> = _eventFilters.map { filters ->
-        when {
-            filters is ConferenceFiltersUiState.Success && filters.selectedStartDate != null -> true
-            else -> false
-        }
+    val isStartDateSelected: LiveData<Boolean> = _conferenceFilter.map { filters ->
+        filters.selectedStartDate != null
     }
+    private var isAlreadyUpdatedFilterSelection = false
 
-    private fun fetchEventFilters() {
-        viewModelScope.launch {
-            _eventFilters.postValue(ConferenceFiltersUiState.Loading)
+    private suspend fun fetchEventFilters() {
+        _conferenceFilter.value = _conferenceFilter.value.copy(isLoading = true)
 
-            val statuses = fetchConferenceStatuses()
-            val tags = fetchConferenceTags()
+        val statuses = fetchConferenceStatuses()
+        val tags = fetchConferenceTags()
 
-            _eventFilters.postValue(
-                ConferenceFiltersUiState.Success(
-                    statuses = statuses,
-                    tags = tags,
-                    selectedStartDate = selectedStartDate,
-                    selectedEndDate = selectedEndDate,
-                ),
-            )
-            _selectedTagFilterCount.postValue(tags.count { it.isSelected })
-        }
+        _conferenceFilter.value = ConferenceFilterUiState(
+            conferenceStatusFilteringOptions = statuses,
+            conferenceTagFilteringOptions = tags,
+            selectedStartDate = selectedStartDate,
+            selectedEndDate = selectedEndDate,
+            isLoading = false,
+            isError = false,
+        )
     }
 
-    private fun fetchConferenceStatuses(): List<ConferenceFilterUiState> =
-        listOf("진행 중", "진행 예정", "마감").mapIndexed { index, conferenceName ->
-            ConferenceFilterUiState(index.toLong(), conferenceName)
-        }
-
-    private suspend fun fetchConferenceTags(): List<ConferenceFilterUiState> =
+    private suspend fun fetchConferenceTags(): List<ConferenceFilteringOptionUiState> =
         withContext(Dispatchers.IO) {
-            when (val eventTagResult = eventTagRepository.getEventTags(EventCategory.CONFERENCE)) {
-                is ApiSuccess -> eventTagResult.data.map { eventTag ->
-                    ConferenceFilterUiState(eventTag.id, eventTag.name)
-                }
-
-                is ApiError,
-                is ApiException,
-                -> {
-                    _eventFilters.postValue(ConferenceFiltersUiState.Error)
+            when (val conferenceTag = eventTagRepository.getEventTags(EventCategory.CONFERENCE)) {
+                is ApiSuccess -> conferenceTag.data.map(ConferenceFilteringOptionUiState::from)
+                is ApiError, is ApiException -> {
+                    _conferenceFilter.value = _conferenceFilter.value.copy(isError = true)
                     emptyList()
                 }
             }
         }
 
-    fun toggleFilterSelection(filter: ConferenceFilterUiState) {
-        filter.isSelected = !filter.isSelected
+    private suspend fun fetchConferenceStatuses(): List<ConferenceFilteringOptionUiState> =
+        conferenceStatusRepository.getConferenceStatuses()
+            .map(ConferenceFilteringOptionUiState::from)
+
+    fun toggleFilterSelection(filter: ConferenceFilteringOptionUiState) {
+        _conferenceFilter.value = _conferenceFilter.value.toggleSelectionBy(filter.id)
     }
 
-    fun addSelectedTagFilterCount(count: Int) {
-        _selectedTagFilterCount.value = (_selectedTagFilterCount.value ?: 0) + count
-    }
+    fun updateFilteringOptionsToSelectedState(
+        conferenceStatusFilteringOptionIds: Array<Long> = emptyArray(),
+        conferenceTagFilteringOptionIds: Array<Long> = emptyArray(),
+        conferenceStartDate: LocalDate?,
+        conferenceEndDate: LocalDate?,
+    ) {
+        viewModelScope.launch {
+            if (isAlreadyUpdatedFilterSelection) return@launch
+            isAlreadyUpdatedFilterSelection = true
 
-    fun minusSelectedTagFilterCount(count: Int) {
-        _selectedTagFilterCount.value = (_selectedTagFilterCount.value ?: 0) - count
-    }
+            fetchEventFilters()
 
-    fun updateFilters(filters: ConferenceFiltersUiState?) {
-        filters?.let(_eventFilters::postValue) ?: fetchEventFilters()
-
-        if (filters is ConferenceFiltersUiState.Success) {
-            _selectedTagFilterCount.postValue(filters.tags.count { it.isSelected })
+            val conferenceFilter = _conferenceFilter.value
+            val newConferenceFilter = conferenceFilter.copy(
+                conferenceStatusFilteringOptions = conferenceFilter.conferenceStatusFilteringOptions.map {
+                    it.copy(isSelected = conferenceStatusFilteringOptionIds.contains(it.id))
+                },
+                conferenceTagFilteringOptions = conferenceFilter.conferenceTagFilteringOptions.map {
+                    it.copy(isSelected = conferenceTagFilteringOptionIds.contains(it.id))
+                },
+                selectedStartDate = conferenceStartDate?.let {
+                    ConferenceFilteringDateOptionUiState(it)
+                },
+                selectedEndDate = conferenceEndDate?.let { ConferenceFilteringDateOptionUiState(it) },
+            )
+            _conferenceFilter.value = newConferenceFilter
         }
     }
 
     fun updateStartDate(startDate: LocalDate) {
-        val filterDate =
-            ConferenceFilterDateUiState(startDate.year, startDate.monthValue, startDate.dayOfMonth)
+        val filterDate = ConferenceFilteringDateOptionUiState(startDate)
+        val endDate = _conferenceFilter.value.selectedEndDate
+        val isAfterThanEndDate = endDate?.run { startDate.isAfter(date) } == true
 
-        if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedEndDate?.let {
-                val endDate = LocalDate.of(it.year, it.month, it.day)
-                startDate.isAfter(endDate)
-            } == true
-        ) {
-            _eventFilters.postValue(
-                (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
-                    selectedStartDate = filterDate,
-                    selectedEndDate = null,
-                ),
+        if (isAfterThanEndDate) {
+            _conferenceFilter.value = _conferenceFilter.value.copy(
+                selectedStartDate = filterDate,
+                selectedEndDate = null,
             )
             return
         }
 
-        _eventFilters.postValue(
-            (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
-                selectedStartDate = filterDate,
-            ),
-        )
+        _conferenceFilter.value = _conferenceFilter.value.copy(selectedStartDate = filterDate)
     }
 
     fun updateEndDate(endDate: LocalDate) {
-        if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedStartDate?.let {
-                val startDate = LocalDate.of(it.year, it.month, it.day)
-                endDate.isBefore(startDate) || (endDate.year == startDate.year && endDate.monthValue == startDate.monthValue && endDate.dayOfMonth == startDate.dayOfMonth)
-            } == true
-        ) {
-            return
-        }
+        val isEqualsOrBeforeThanStartDate =
+            selectedStartDate?.run { endDate.isEqual(date) || endDate.isBefore(date) } == true
+        if (isEqualsOrBeforeThanStartDate) return
 
-        val filterDate =
-            ConferenceFilterDateUiState(endDate.year, endDate.monthValue, endDate.dayOfMonth)
-        _eventFilters.postValue(
-            (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
-                selectedEndDate = filterDate,
-            ),
-        )
+        val filterDate = ConferenceFilteringDateOptionUiState(endDate)
+        _conferenceFilter.value = _conferenceFilter.value.copy(selectedEndDate = filterDate)
     }
 
     fun clearFilters() {
-        val conferenceFilters = _eventFilters.value as? ConferenceFiltersUiState.Success ?: return
-        _eventFilters.postValue(conferenceFilters.resetSelection())
-        _selectedTagFilterCount.postValue(0)
+        _conferenceFilter.value = _conferenceFilter.value.resetSelection()
     }
 
     companion object {
         val factory = ViewModelFactory {
             ConferenceFilterViewModel(
+                conferenceStatusRepository = KerdyApplication.repositoryContainer.conferenceStatusRepository,
                 eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository,
             )
         }

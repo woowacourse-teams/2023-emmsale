@@ -71,6 +71,8 @@
             android:layout_marginTop="36dp"
             android:background="@null"
             android:hint="@string/onboardingname_hint"
+            android:importantForAutofill="no"
+            android:inputType="text"
             android:maxLines="1"
             android:singleLine="true"
             android:text="@={viewModel.name}"
@@ -81,8 +83,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_name_setting_warning"
-            android:inputType="text"
-            android:importantForAutofill="no"
             app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <View

@@ -20,4 +20,13 @@ class EventTagRepositoryImpl(
                 mapToDomain = List<EventTagApiModel>::toData,
             )
         }
+
+    override suspend fun getEventTagByIds(ids: Array<Long>): ApiResult<List<EventTag>> {
+        return withContext(dispatcher) {
+            handleApi(
+                execute = { eventTagService.getEventTagByIds(ids) },
+                mapToDomain = List<EventTagApiModel>::toData,
+            )
+        }
+    }
 }
