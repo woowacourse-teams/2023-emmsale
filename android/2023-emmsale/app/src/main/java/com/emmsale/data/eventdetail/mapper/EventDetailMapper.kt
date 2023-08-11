@@ -2,15 +2,17 @@ package com.emmsale.data.eventdetail.mapper
 
 import com.emmsale.data.eventdetail.EventDetail
 import com.emmsale.data.eventdetail.dto.EventDetailApiModel
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 fun EventDetailApiModel.toData(): EventDetail = EventDetail(
     id = id,
     name = name,
     informationUrl = informationUrl,
-    startDate = startDate,
-    endDate = endDate,
-    applyStartDate = applyStartDate,
-    applyEndDate = applyEndDate,
+    startDate = startDate.toLocalDateTime(),
+    endDate = endDate.toLocalDateTime(),
+    applyStartDate = applyStartDate.toLocalDateTime(),
+    applyEndDate = applyEndDate.toLocalDateTime(),
     location = location,
     status = status.toKoreanStatus(),
     applyStatus = applyStatus.toKoreanApplyStatus(),
@@ -20,6 +22,11 @@ fun EventDetailApiModel.toData(): EventDetail = EventDetail(
     applyRemainingDays = applyRemainingDays,
     type = type,
 )
+
+private fun String.toLocalDateTime(): LocalDateTime {
+    val format = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")
+    return LocalDateTime.parse(this, format)
+}
 
 fun String.toKoreanStatus(): String = when (this) {
     "IN_PROGRESS" -> "진행 중"

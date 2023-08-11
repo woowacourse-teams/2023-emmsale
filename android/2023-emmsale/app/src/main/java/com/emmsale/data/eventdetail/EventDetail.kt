@@ -1,13 +1,15 @@
 package com.emmsale.data.eventdetail
 
+import java.time.LocalDateTime
+
 data class EventDetail(
     val id: Long,
     val name: String,
     val informationUrl: String,
-    val startDate: String,
-    val endDate: String,
-    val applyStartDate: String,
-    val applyEndDate: String,
+    val startDate: LocalDateTime,
+    val endDate: LocalDateTime,
+    val applyStartDate: LocalDateTime,
+    val applyEndDate: LocalDateTime,
     val location: String,
     val status: String,
     val applyStatus: String,

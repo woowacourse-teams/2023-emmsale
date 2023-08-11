@@ -4,10 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="eventDetail"
-            type="com.emmsale.presentation.ui.eventdetail.uistate.EventDetailUiState.Success" />
+        <import type="android.view.View" />
 
         <variable
             name="vm"
@@ -17,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.eventdetail.EventDetailActivity">
+        tools:context=".presentation.ui.eventdetail.EventDetailActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarlayout_eventdetail"
@@ -45,7 +42,7 @@
             android:ems="12"
             android:fontFamily="@font/nanum_square_bold"
             android:lineHeight="20dp"
-            android:text="@{eventDetail.name}"
+            android:text="@{vm.eventDetail.name}"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -62,7 +59,7 @@
             android:layout_marginEnd="17dp"
             app:layout_constraintEnd_toStartOf="@id/iv_eventdetail_poster"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_eventname"></com.google.android.material.chip.ChipGroup>
+            app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_eventname" />
 
         <View
             android:id="@+id/line_eventdetail_top"
@@ -79,7 +76,7 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="11dp"
             android:fontFamily="@font/nanum_square_bold"
-            android:text="@{eventDetail.status}"
+            android:text="@{vm.eventDetail.status}"
             android:textColor="@color/primary_color"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +92,7 @@
             android:drawableLeft="@drawable/ic_eventdetail_place"
             android:drawablePadding="12dp"
             android:fontFamily="@font/nanum_square_regular"
-            android:text="@{eventDetail.location}"
+            android:text="@{vm.eventDetail.location}"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +108,7 @@
             android:drawableLeft="@drawable/ic_eventdetail_date"
             android:drawablePadding="12dp"
             android:fontFamily="@font/nanum_square_regular"
-            android:text="@{@string/eventdetail_date_format(eventDetail.startDate,eventDetail.endDate)}"
+            android:text="@{@string/eventdetail_date_format(vm.eventDetail.startDate,vm.eventDetail.endDate)}"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -158,8 +155,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{eventDetail.imageUrl}"
+                app:imageUrl="@{vm.eventDetail.imageUrl}"
                 tools:srcCompat="@tools:sample/avatars" />
         </com.google.android.material.card.MaterialCardView>
+
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/appbarlayout_eventdetail"
+            android:visibility="@{vm.eventDetail.isLoading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
