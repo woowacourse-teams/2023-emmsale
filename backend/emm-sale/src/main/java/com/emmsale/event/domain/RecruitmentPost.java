@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "event_member")
-public class Participant extends BaseEntity {
+public class RecruitmentPost extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,8 +38,8 @@ public class Participant extends BaseEntity {
   @Column(nullable = false)
   private String content;
 
-  public Participant(final Member member, final Event event, final String content) {
-    event.validateAlreadyParticipate(member);
+  public RecruitmentPost(final Member member, final Event event, final String content) {
+    event.validateAlreadyCreateRecruitmentPost(member);
     this.member = member;
     this.event = event;
     this.content = content;
@@ -55,13 +55,13 @@ public class Participant extends BaseEntity {
 
   public void validateEvent(final Long eventId) {
     if (event.isDiffer(eventId)) {
-      throw new EventException(EventExceptionType.PARTICIPANT_NOT_BELONG_EVENT);
+      throw new EventException(EventExceptionType.RECRUITMENT_POST_NOT_BELONG_EVENT);
     }
   }
 
   public void validateOwner(final Member member) {
     if (this.member.isNotMe(member)) {
-      throw new EventException(EventExceptionType.FORBIDDEN_UPDATE_PARTICIPATE);
+      throw new EventException(EventExceptionType.FORBIDDEN_UPDATE_RECRUITMENT_POST);
     }
   }
 }
