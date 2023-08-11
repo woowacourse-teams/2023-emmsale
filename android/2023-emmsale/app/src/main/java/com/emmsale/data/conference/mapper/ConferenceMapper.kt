@@ -18,6 +18,8 @@ fun ConferenceApiModel.toData(): Conference = Conference(
     tags = tags,
     posterUrl = posterUrl,
     dDay = dDay,
+    applyStatus = applyStatus.mapToApplyStatus(),
+    applyRemainingDays = applyRemainingDays,
 )
 
 private fun parseDate(date: String): LocalDateTime {
