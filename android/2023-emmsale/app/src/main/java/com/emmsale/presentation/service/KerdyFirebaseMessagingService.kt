@@ -94,11 +94,11 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         if (eventId < 0) return
 
         baseContext.showNotification(
-            title = "댓글에 답글이 달렸어요.",
+            title = getString(R.string.kerdyfirebasemessaging_child_comment_notification_title_format),
             message = createdAt.toTimeMessage(),
             channelId = CHILD_COMMENT_POSTING_CHANNEL_ID,
-            channelName = "대댓글 작성 알림 채널",
-            channelDescription = "대댓글 작성 알림을 받기 위한 알림 채널입니다.",
+            channelName = getString(R.string.kerdyfirebasemessaging_child_comment_notification_channel_name),
+            channelDescription = getString(R.string.kerdyfirebasemessaging_child_comment_notification_channel_description),
             intent = ChildCommentActivity.getIntent(this, eventId, parentCommentId),
         )
     }
@@ -117,11 +117,11 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val createdAt = message.data["createdAt"] ?: return
 
         baseContext.showNotification(
-            title = "관심 태그 행사가 업데이트 되었어요.",
+            title = getString(R.string.kerdyfirebasemessaging_interest_event_notification_title_format),
             message = createdAt.toTimeMessage(),
             channelId = INTEREST_EVENT_CHANNEL_ID,
-            channelName = "관심 태그 행사 알림 채널",
-            channelDescription = "관심 태그 행사 알림을 받기 위한 알림 채널입니다.",
+            channelName = getString(R.string.kerdyfirebasemessaging_interest_event_notification_channel_name),
+            channelDescription = getString(R.string.kerdyfirebasemessaging_interest_event_notification_channel_description),
             intent = EventDetailActivity.getIntent(this, eventId),
         )
     }

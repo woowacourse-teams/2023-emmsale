@@ -136,4 +136,10 @@
     <string name="eventdetail_tab_infromation">상세 정보</string>
     <string name="eventdetail_tab_comment">댓글</string>
     <string name="eventdetail_tab_recruitment">같이가요</string>
+    <string name="kerdyfirebasemessaging_child_comment_notification_title_format">댓글에 답글이 달렸어요.</string>
+    <string name="kerdyfirebasemessaging_child_comment_notification_channel_name">대댓글 작성 알림 채널</string>
+    <string name="kerdyfirebasemessaging_child_comment_notification_channel_description">대댓글 작성 알림을 받기 위한 알림 채널입니다.</string>
+    <string name="kerdyfirebasemessaging_interest_event_notification_title_format">관심 태그 행사가 업데이트 되었어요.</string>
+    <string name="kerdyfirebasemessaging_interest_event_notification_channel_name">관심 태그 행사 알림 채널</string>
+    <string name="kerdyfirebasemessaging_interest_event_notification_channel_description">관심 태그 행사 알림을 받기 위한 알림 채널입니다.</string>
 </resources>
