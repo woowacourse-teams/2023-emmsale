@@ -25,7 +25,7 @@ class NotificationRepositoryImpl(
     ): ApiResult<Unit> = withContext(dispatcher) {
         handleApi(
             execute = {
-                val recruitingState = if (isAccepted) "ACCEPT" else "REJECT"
+                val recruitingState = if (isAccepted) ACCEPT else REJECT
                 notificationService.updateRecruitmentAcceptedStatus(notificationId, recruitingState)
             },
             mapToDomain = { },
@@ -40,5 +40,10 @@ class NotificationRepositoryImpl(
             execute = { notificationService.updateNotificationReadStatus(notificationId, isRead) },
             mapToDomain = { },
         )
+    }
+
+    companion object {
+        private const val ACCEPT = "ACCEPT"
+        private const val REJECT = "REJECT"
     }
 }
