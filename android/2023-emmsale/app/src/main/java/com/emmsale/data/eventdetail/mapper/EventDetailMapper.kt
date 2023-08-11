@@ -14,7 +14,7 @@ fun EventDetailApiModel.toData(): EventDetail = EventDetail(
     endDate = endDate.toLocalDateTime(),
     informationUrl = informationUrl,
     tags = tags,
-    imageUrl = imageUrl,
+    postImageUrl = imageUrl,
     remainingDays = remainingDays,
     type = type,
 )

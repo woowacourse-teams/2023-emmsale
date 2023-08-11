@@ -21,8 +21,7 @@ class EventDetailViewModel(
 
     private val _eventDetail: NotNullMutableLiveData<EventDetailUiState> =
         NotNullMutableLiveData(EventDetailUiState())
-    val eventDetail: NotNullLiveData<EventDetailUiState>
-        get() = _eventDetail
+    val eventDetail: NotNullLiveData<EventDetailUiState> = _eventDetail
 
     init {
         fetchEventDetail(eventId)

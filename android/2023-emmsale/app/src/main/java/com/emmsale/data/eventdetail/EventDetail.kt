@@ -11,7 +11,7 @@ data class EventDetail(
     val endDate: LocalDateTime,
     val informationUrl: String,
     val tags: List<String>,
-    val imageUrl: String?,
+    val postImageUrl: String?,
     val remainingDays: Int,
     val type: String,
 )

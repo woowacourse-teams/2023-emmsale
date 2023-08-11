@@ -25,9 +25,9 @@ class EventDetailActivity : AppCompatActivity() {
 
     private fun setUpBinding() {
         binding = ActivityEventDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         binding.lifecycleOwner = this
         binding.vm = viewModel
-        setContentView(binding.root)
     }
 
     private fun setUpEventDetail() {
@@ -35,7 +35,7 @@ class EventDetailActivity : AppCompatActivity() {
             if (eventDetailUiState.isError) {
                 showToast(getString(R.string.eventdetail_fetch_eventdetail_error_message))
             } else {
-                addTag(eventDetailUiState.tags)
+                addEventTag(eventDetailUiState.tags)
                 initFragmentStateAdapter(
                     eventDetailUiState.informationUrl,
                     eventDetailUiState.imageUrl,
@@ -47,24 +47,22 @@ class EventDetailActivity : AppCompatActivity() {
     private fun initFragmentStateAdapter(informationUrl: String, imageUrl: String?) {
         binding.vpEventdetail.adapter =
             EventDetailFragmentStateAdpater(this, eventId, informationUrl, imageUrl)
-        TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
-            when (position) {
-                INFORMATION_TAB_POSITION ->
-                    tab.text = getString(R.string.eventdetail_tab_infromation)
-
-                COMMENT_TAB_POSITION -> tab.text = getString(R.string.eventdetail_tab_comment)
-                RECRUITMENT_TAB_POSITION ->
-                    tab.text = getString(R.string.eventdetail_tab_recruitment)
-            }
+        val tabNames = listOf(
+            getString(R.string.eventdetail_tab_infromation),
+            getString(R.string.eventdetail_tab_comment),
+            getString(R.string.eventdetail_tab_recruitment),
+        )
+        TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { _, _ ->
+            tabNames
         }.attach()
         binding.vpEventdetail.isUserInputEnabled = false
     }
 
-    private fun addTag(tags: List<String>) {
-        tags.forEach { binding.chipgroupEvendetailTags.addView(createTag(it)) }
+    private fun addEventTag(tags: List<String>) {
+        tags.forEach { binding.chipgroupEvendetailTags.addView(createEventTag(it)) }
     }
 
-    private fun createTag(tag: String) = EventTag(this).apply {
+    private fun createEventTag(tag: String) = EventTag(this).apply {
         text = tag
     }
 
@@ -77,10 +75,6 @@ class EventDetailActivity : AppCompatActivity() {
     companion object {
         private const val EVENT_ID_KEY = "EVENT_ID_KEY"
         private const val DEFAULT_EVENT_ID = 1L
-        private const val INFORMATION_TAB_POSITION = 0
-        private const val COMMENT_TAB_POSITION = 1
-        private const val RECRUITMENT_TAB_POSITION = 2
-
         fun startActivity(context: Context, eventId: Long) {
             val intent = Intent(context, EventDetailActivity::class.java)
             intent.putExtra(EVENT_ID_KEY, eventId)
