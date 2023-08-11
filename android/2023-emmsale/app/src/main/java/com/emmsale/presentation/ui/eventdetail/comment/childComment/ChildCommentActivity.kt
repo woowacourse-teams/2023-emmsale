@@ -94,7 +94,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun handleChildComments(childCommentsUiState: ChildCommentsUiState) {
         (binding.rvChildcommentsChildcomments.adapter as ChildCommentAdapter).submitList(
-            childCommentsUiState.childComments,
+            listOf(childCommentsUiState.parentComment) + childCommentsUiState.childComments,
         )
     }
 
