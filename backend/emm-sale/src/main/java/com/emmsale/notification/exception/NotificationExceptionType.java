@@ -44,6 +44,12 @@ public enum NotificationExceptionType implements BaseExceptionType {
       HttpStatus.BAD_REQUEST,
       "이미 요청된 알림입니다."
   ),
+
+  NOT_FOUND_NOTIFICATION_TYPE(
+      HttpStatus.NOT_FOUND,
+      "해당 도메인에 대해 알림을 생성할 수 없습니다."
+  ),
+
   NOT_OWNER(
       HttpStatus.BAD_REQUEST,
       "알림의 소유자가 아닙니다."

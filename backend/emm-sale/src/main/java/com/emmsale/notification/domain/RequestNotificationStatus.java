@@ -1,6 +1,6 @@
 package com.emmsale.notification.domain;
 
-public enum NotificationStatus {
+public enum RequestNotificationStatus {
 
   ACCEPTED,
   REJECTED,

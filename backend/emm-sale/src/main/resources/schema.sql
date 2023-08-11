@@ -7,9 +7,10 @@ drop table if exists kerdy.tag;
 drop table if exists kerdy.event_tag;
 drop table if exists kerdy.member_tag;
 drop table if exists kerdy.event_member;
-drop table if exists kerdy.notification;
+drop table if exists kerdy.request_notification;
 drop table if exists kerdy.fcm_token;
 drop table if exists kerdy.block;
+drop table if exists kerdy.update_notification;
 
 create table activity
 (
@@ -23,11 +24,11 @@ create table event
     id              bigint auto_increment primary key,
     created_at      datetime(6),
     updated_at      datetime(6),
-    end_date        datetime(6)  not null,
+    end_date        datetime(6) not null,
     information_url varchar(255) not null,
     location        varchar(255) not null,
     name            varchar(255) not null,
-    start_date      datetime(6)  not null,
+    start_date      datetime(6) not null,
     image_url       varchar(255),
     type            varchar(20)  not null
 );
@@ -119,6 +120,18 @@ alter table event_member
     add column created_at datetime(6);
 alter table event_member
     add column updated_at datetime(6);
+
+-- 2023.08.08 17:04
+rename table notification TO request_notification;
+
+create table update_notification
+(
+    id          bigint auto_increment primary key,
+    receiver_id bigint       not null,
+    redirect_id bigint       not null,
+    type        varchar(255) not null,
+    created_at  datetime(6)
+);
 
 -- 2023-08-08 17:20
 create table block

@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class FcmMessage {
+public class UpdateNotificationMessage {
 
   @JsonProperty("validate_only")
   private final boolean validateOnly;
@@ -24,10 +24,9 @@ public class FcmMessage {
   @Getter
   public static class Data {
 
-    private final String senderName;
-    private final String senderId;
     private final String receiverId;
-    private final String message;
-    private final String openProfileUrl;
+    private final String redirectId;
+    private final String notificationType;
+    private final String createdAt;
   }
 }

@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Notification extends BaseEntity {
+@Table(name = "request_notification")
+public class RequestNotification extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +31,10 @@ public class Notification extends BaseEntity {
   @Column(nullable = false)
   private String message;
   @Enumerated(EnumType.STRING)
-  private NotificationStatus status;
+  @Column(nullable = false)
+  private RequestNotificationStatus status;
 
-  public Notification(
+  public RequestNotification(
       final Long senderId,
       final Long receiverId,
       final Long eventId,
@@ -41,10 +44,10 @@ public class Notification extends BaseEntity {
     this.receiverId = receiverId;
     this.eventId = eventId;
     this.message = message;
-    this.status = NotificationStatus.IN_PROGRESS;
+    this.status = RequestNotificationStatus.IN_PROGRESS;
   }
 
-  public void modifyStatus(final NotificationStatus status) {
+  public void modifyStatus(final RequestNotificationStatus status) {
     this.status = status;
   }
 

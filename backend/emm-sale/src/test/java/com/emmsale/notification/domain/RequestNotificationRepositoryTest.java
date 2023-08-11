@@ -15,17 +15,17 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Sql("/data-test.sql")
-class NotificationRepositoryTest {
+class RequestNotificationRepositoryTest {
 
   @Autowired
-  private NotificationRepository notificationRepository;
+  private RequestNotificationRepository requestNotificationRepository;
 
-  private Notification 알림1;
+  private RequestNotification 알림1;
 
   @BeforeEach
   void init() {
-    알림1 = new Notification(1L, 2L, 1L, "알림1");
-    notificationRepository.save(알림1);
+    알림1 = new RequestNotification(1L, 2L, 1L, "알림1");
+    requestNotificationRepository.save(알림1);
   }
 
   @ParameterizedTest
@@ -38,7 +38,7 @@ class NotificationRepositoryTest {
       final Long senderId, final Long receiverId, final Long eventId, final boolean result
   ) throws Exception {
     //when & then
-    assertEquals(notificationRepository.existsBySenderIdAndReceiverIdAndEventId(
+    assertEquals(requestNotificationRepository.existsBySenderIdAndReceiverIdAndEventId(
         senderId, receiverId, eventId), result);
   }
 }

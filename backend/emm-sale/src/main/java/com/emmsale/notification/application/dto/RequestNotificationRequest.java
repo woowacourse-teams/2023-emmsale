@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class NotificationRequest {
+public class RequestNotificationRequest {
 
   private final Long senderId;
   private final Long receiverId;

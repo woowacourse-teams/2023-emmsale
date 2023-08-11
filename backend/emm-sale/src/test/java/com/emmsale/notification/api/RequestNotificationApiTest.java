@@ -18,13 +18,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
-import com.emmsale.notification.application.NotificationCommandService;
-import com.emmsale.notification.application.NotificationQueryService;
-import com.emmsale.notification.application.dto.FcmTokenRequest;
-import com.emmsale.notification.application.dto.NotificationModifyRequest;
-import com.emmsale.notification.application.dto.NotificationRequest;
-import com.emmsale.notification.application.dto.NotificationResponse;
-import com.emmsale.notification.domain.NotificationStatus;
+import com.emmsale.notification.application.RequestNotificationCommandService;
+import com.emmsale.notification.application.RequestNotificationQueryService;
+import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
+import com.emmsale.notification.application.dto.RequestNotificationRequest;
+import com.emmsale.notification.application.dto.RequestNotificationResponse;
+import com.emmsale.notification.domain.RequestNotificationStatus;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,13 +34,13 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
 
-@WebMvcTest(NotificationApi.class)
-class NotificationApiTest extends MockMvcTestHelper {
+@WebMvcTest(RequestNotificationApi.class)
+class RequestNotificationApiTest extends MockMvcTestHelper {
 
   @MockBean
-  private NotificationCommandService notificationCommandService;
+  private RequestNotificationCommandService requestNotificationCommandService;
   @MockBean
-  private NotificationQueryService notificationQueryService;
+  private RequestNotificationQueryService requestNotificationQueryService;
 
   @Test
   @DisplayName("create() : 알림을 성공적으로 생성한다면 201 Created를 반환할 수 있다.")
@@ -68,7 +67,7 @@ class NotificationApiTest extends MockMvcTestHelper {
     final String message = "알림 메시지야";
     final long notificationId = 1L;
 
-    final NotificationResponse response = new NotificationResponse(
+    final RequestNotificationResponse response = new RequestNotificationResponse(
         notificationId,
         senderId,
         receiverId,
@@ -76,74 +75,51 @@ class NotificationApiTest extends MockMvcTestHelper {
         eventId
     );
 
-    final NotificationRequest request = new NotificationRequest(
+    final RequestNotificationRequest request = new RequestNotificationRequest(
         senderId,
         receiverId,
         message,
         eventId
     );
 
-    when(notificationCommandService.create(any()))
+    when(requestNotificationCommandService.create(any()))
         .thenReturn(response);
 
     //when & then
-    mockMvc.perform(post("/notifications")
+    mockMvc.perform(post("/request-notifications")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
-        .andDo(document("create-notification", requestFields, responseFields));
-  }
-
-  @Test
-  @DisplayName("createFcmToken() : FcmToken이 새로 생성되거나 잘 수정되면 200 OK를 반환할 수 있다.")
-  void test_createFcmToken() throws Exception {
-    //given
-    final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("token").description("FcmToken 주세요"),
-        fieldWithPath("memberId").description("FcmToken 주인의 ID")
-    );
-
-    final long memberId = 1L;
-    final String token = "FCM 토큰";
-
-    final FcmTokenRequest request = new FcmTokenRequest(token, memberId);
-
-    //when & then
-    mockMvc.perform(post("/notifications/token")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isOk())
-        .andDo(print())
-        .andDo(document("create-fcmToken", requestFields));
+        .andDo(document("create-request-notification", requestFields, responseFields));
   }
 
   @Test
   @DisplayName("modify() : 알림 상태를 성공적으로 변경되면 204 No Content를 반환할 수 있다.")
   void test_modify() throws Exception {
     //given
-    final NotificationModifyRequest request =
-        new NotificationModifyRequest(NotificationStatus.IN_PROGRESS);
+    final RequestNotificationModifyRequest request =
+        new RequestNotificationModifyRequest(RequestNotificationStatus.IN_PROGRESS);
 
     final RequestFieldsSnippet requestFields = requestFields(
         fieldWithPath("updatedStatus").description("변화시킬 상태(ACCEPTED 또는 REJECTED)")
     );
 
     final PathParametersSnippet pathParameters = pathParameters(
-        parameterWithName("notification-id").description("상태변화 시킬 알림 ID")
+        parameterWithName("request-notification-id").description("상태변화 시킬 알림 ID")
     );
 
     final long notificationId = 1L;
 
-    doNothing().when(notificationCommandService).modify(request, 3L);
+    doNothing().when(requestNotificationCommandService).modify(request, 3L);
 
     //when & then
-    mockMvc.perform(patch("/notifications/{notification-id}", notificationId)
+    mockMvc.perform(patch("/request-notifications/{request-notification-id}", notificationId)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
         .andDo(print())
-        .andDo(document("modify-notification", requestFields, pathParameters));
+        .andDo(document("modify-request-notification", requestFields, pathParameters));
   }
 
   @Test
@@ -151,7 +127,7 @@ class NotificationApiTest extends MockMvcTestHelper {
   void test_find() throws Exception {
     //given
     final PathParametersSnippet pathParameters = pathParameters(
-        parameterWithName("notification-id").description("상태변화 시킬 알림 ID")
+        parameterWithName("request-notification-id").description("상태변화 시킬 알림 ID")
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -168,7 +144,7 @@ class NotificationApiTest extends MockMvcTestHelper {
     final String message = "알림 메시지야";
     final long notificationId = 1L;
 
-    final NotificationResponse response = new NotificationResponse(
+    final RequestNotificationResponse response = new RequestNotificationResponse(
         notificationId,
         senderId,
         receiverId,
@@ -177,14 +153,14 @@ class NotificationApiTest extends MockMvcTestHelper {
     );
 
     //when
-    when(notificationQueryService.findNotificationBy(anyLong()))
+    when(requestNotificationQueryService.findNotificationBy(anyLong()))
         .thenReturn(response);
 
     //then
-    mockMvc.perform(get("/notifications/{notification-id}", notificationId))
+    mockMvc.perform(get("/request-notifications/{request-notification-id}", notificationId))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("find-notification", responseFields, pathParameters));
+        .andDo(document("find-request-notification", responseFields, pathParameters));
   }
 
   @Test
@@ -195,12 +171,12 @@ class NotificationApiTest extends MockMvcTestHelper {
 
     final long memberId = 1L;
 
-    final List<NotificationResponse> expectResponses = List.of(
-        new NotificationResponse(931L, 3342L, memberId, "같이 가요~", 312L),
-        new NotificationResponse(932L, 1345L, memberId, "소통해요~", 123L)
+    final List<RequestNotificationResponse> expectResponses = List.of(
+        new RequestNotificationResponse(931L, 3342L, memberId, "같이 가요~", 312L),
+        new RequestNotificationResponse(932L, 1345L, memberId, "소통해요~", 123L)
     );
 
-    when(notificationCommandService.findAllNotifications(any())).thenReturn(expectResponses);
+    when(requestNotificationCommandService.findAllNotifications(any())).thenReturn(expectResponses);
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].notificationId").description("저장된 알림 ID"),
@@ -211,11 +187,11 @@ class NotificationApiTest extends MockMvcTestHelper {
     );
 
     //when & then
-    mockMvc.perform(get("/notifications")
+    mockMvc.perform(get("/request-notifications")
             .header("Authorization", accessToken))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("find-all-notifications", responseFields));
+        .andDo(document("find-all-request-notification", responseFields));
   }
 
   @Test
@@ -223,19 +199,19 @@ class NotificationApiTest extends MockMvcTestHelper {
   void test_delete() throws Exception {
     //given
     final PathParametersSnippet pathParameters = pathParameters(
-        parameterWithName("notification-id").description("삭제할 알림 ID")
+        parameterWithName("request-notification-id").description("삭제할 알림 ID")
     );
 
     final long notificationId = 1L;
 
-    doNothing().when(notificationCommandService).delete(any(), any());
+    doNothing().when(requestNotificationCommandService).delete(any(), any());
 
     //when & then
-    mockMvc.perform(delete("/notifications/{notification-id}", notificationId)
+    mockMvc.perform(delete("/request-notifications/{request-notification-id}", notificationId)
             .header("Authorization", "Bearer AccessToken")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent())
         .andDo(print())
-        .andDo(document("delete-notification", pathParameters));
+        .andDo(document("delete-request-notification", pathParameters));
   }
 }

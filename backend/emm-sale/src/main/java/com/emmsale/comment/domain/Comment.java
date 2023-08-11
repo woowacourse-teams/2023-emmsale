@@ -88,6 +88,10 @@ public class Comment extends BaseEntity {
     return parent != null;
   }
 
+  public boolean isNotMyComment(final Long memberId) {
+    return this.member.isNotMe(memberId);
+  }
+
   public Optional<Comment> getParent() {
     return Optional.ofNullable(parent);
   }
@@ -97,6 +101,13 @@ public class Comment extends BaseEntity {
       return BLOCKED_MEMBER_CONTENT;
     }
     return content;
+  }
+
+  public Long getParentIdOrSelfId() {
+    if (parent == null) {
+      return id;
+    }
+    return parent.id;
   }
 
   @Override

@@ -1,23 +1,18 @@
 package com.emmsale.notification.application;
 
-import static com.emmsale.notification.exception.NotificationExceptionType.CONVERTING_JSON_ERROR;
 import static com.emmsale.notification.exception.NotificationExceptionType.FIREBASE_CONNECT_ERROR;
 import static com.emmsale.notification.exception.NotificationExceptionType.GOOGLE_REQUEST_TOKEN_ERROR;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_FCM_TOKEN;
-import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_OPEN_PROFILE_URL;
 
-import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.member.exception.MemberException;
-import com.emmsale.member.exception.MemberExceptionType;
-import com.emmsale.notification.application.dto.FcmMessage;
-import com.emmsale.notification.application.dto.FcmMessage.Data;
-import com.emmsale.notification.application.dto.FcmMessage.Message;
+import com.emmsale.notification.application.generator.NotificationMessageGenerator;
+import com.emmsale.notification.application.generator.RequestNotificationMessageGenerator;
+import com.emmsale.notification.application.generator.UpdateNotificationMessageGenerator;
 import com.emmsale.notification.domain.FcmToken;
 import com.emmsale.notification.domain.FcmTokenRepository;
-import com.emmsale.notification.domain.Notification;
+import com.emmsale.notification.domain.RequestNotification;
+import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.exception.NotificationException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import java.io.IOException;
@@ -43,7 +38,6 @@ public class FirebaseCloudMessageClient {
   private static final String PREFIX_FCM_REQUEST_URL = "https://fcm.googleapis.com/v1/projects/";
   private static final String POSTFIX_FCM_REQUEST_URL = "/messages:send";
   private static final String FIREBASE_KEY_PATH = "kerdy-submodule/firebase-kerdy.json";
-  private static final boolean DEFAULT_VALIDATE_ONLY = false;
   private static final String GOOGLE_AUTH_URL = "https://www.googleapis.com/auth/cloud-platform";
 
   private final ObjectMapper objectMapper;
@@ -54,12 +48,32 @@ public class FirebaseCloudMessageClient {
   @Value("${firebase.project.id}")
   private String projectId;
 
-  public void sendMessageTo(final Long receiverId, final Notification notification) {
+  public void sendMessageTo(final RequestNotification requestNotification) {
+    sendMessageTo(
+        requestNotification.getReceiverId(),
+        new RequestNotificationMessageGenerator(requestNotification)
+    );
+  }
 
+  public void sendMessageTo(final UpdateNotification updateNotification) {
+    sendMessageTo(
+        updateNotification.getReceiverId(),
+        new UpdateNotificationMessageGenerator(updateNotification)
+    );
+  }
+
+  private void sendMessageTo(
+      final Long receiverId,
+      final NotificationMessageGenerator messageGenerator
+  ) {
     final FcmToken fcmToken = fcmTokenRepository.findByMemberId(receiverId)
         .orElseThrow(() -> new NotificationException(NOT_FOUND_FCM_TOKEN));
 
-    final String message = makeMessage(fcmToken.getToken(), notification);
+    final String message = messageGenerator.makeMessage(
+        fcmToken.getToken(),
+        objectMapper,
+        memberRepository
+    );
 
     final HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
@@ -78,32 +92,6 @@ public class FirebaseCloudMessageClient {
 
     if (exchange.getStatusCode().isError()) {
       throw new NotificationException(FIREBASE_CONNECT_ERROR);
-    }
-  }
-
-  private String makeMessage(final String targetToken, final Notification notification) {
-
-    final Long senderId = notification.getSenderId();
-    final Member sender = memberRepository.findById(senderId)
-        .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
-
-    final String openProfileUrl = sender.getOptionalOpenProfileUrl()
-        .orElseThrow(() -> new NotificationException(NOT_FOUND_OPEN_PROFILE_URL));
-
-    final Data messageData = new Data(
-        sender.getName(), senderId.toString(),
-        notification.getReceiverId().toString(), notification.getMessage(),
-        openProfileUrl
-    );
-
-    final FcmMessage fcmMessage = new FcmMessage(
-        DEFAULT_VALIDATE_ONLY, new Message(messageData, targetToken)
-    );
-
-    try {
-      return objectMapper.writeValueAsString(fcmMessage);
-    } catch (JsonProcessingException e) {
-      throw new NotificationException(CONVERTING_JSON_ERROR);
     }
   }
 
