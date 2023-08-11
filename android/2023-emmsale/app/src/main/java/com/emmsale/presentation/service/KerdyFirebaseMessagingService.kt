@@ -22,24 +22,19 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         when {
-            message.isFollowNotificationMessage() -> showFollowNotification(message)
-            message.isChildCommentNotificationMessage() ->
+            message.data["notificationType"] == FOLLOW_NOTIFICATION_TYPE ->
+                showFollowNotification(message)
+
+            message.data["notificationType"] == CHILD_COMMENT_NOTIFICATION_TYPE ->
                 showChildCommentNotification(message)
 
-            message.isInterestEventNotificationMessage() -> showInterestEventNotification(message)
+            message.data["notificationType"] == EVENT_NOTIFICATION_TYPE ->
+                showInterestEventNotification(message)
         }
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-    }
-
-    private fun RemoteMessage.isFollowNotificationMessage(): Boolean {
-        return data["senderName"] != null &&
-            data["senderId"] != null &&
-            data["receiverId"] != null &&
-            data["openProfileUrl"] != null &&
-            data["message"] != null
     }
 
     private fun showFollowNotification(message: RemoteMessage) {
@@ -58,13 +53,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             channelName = getString(R.string.kerdyfirebasemessaging_follow_notification_channel_name),
             channelDescription = getString(R.string.kerdyfirebasemessaging_follow_notification_channel_description),
         )
-    }
-
-    private fun RemoteMessage.isChildCommentNotificationMessage(): Boolean {
-        return data["receiverId"] != null &&
-            data["redirectId"] != null &&
-            data["notificationType"] == "COMMENT" &&
-            data["createdAt"] != null
     }
 
     private fun showChildCommentNotification(message: RemoteMessage) {
@@ -100,13 +88,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         )
     }
 
-    private fun RemoteMessage.isInterestEventNotificationMessage(): Boolean {
-        return data["receiverId"] != null &&
-            data["redirectId"] != null &&
-            data["notificationType"] == "EVENT" &&
-            data["createdAt"] != null
-    }
-
     private fun showInterestEventNotification(message: RemoteMessage) {
         val memberId = message.data["receiverId"]?.toLong() ?: return
         val eventId = message.data["redirectId"]?.toLong() ?: return
@@ -129,6 +110,10 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
+        private const val FOLLOW_NOTIFICATION_TYPE = "REQUEST"
+        private const val CHILD_COMMENT_NOTIFICATION_TYPE = "COMMENT"
+        private const val EVENT_NOTIFICATION_TYPE = "EVENT"
+
         private const val FOLLOW_CHANNEL_ID = "follow_channel_id"
         private const val CHILD_COMMENT_POSTING_CHANNEL_ID = "child_comment_posting_channel_id"
         private const val INTEREST_EVENT_CHANNEL_ID = "interest_event_channel_id"
