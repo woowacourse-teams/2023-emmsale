@@ -8,7 +8,7 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentEventInformationBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 
-class EventInfoFragment() : BaseFragment<FragmentEventInformationBinding>() {
+class EventInfoFragment : BaseFragment<FragmentEventInformationBinding>() {
     override val layoutResId: Int = R.layout.fragment_event_information
 
     private val informationUrl: String? by lazy {

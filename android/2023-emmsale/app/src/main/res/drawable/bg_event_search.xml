@@ -5,5 +5,5 @@
     <corners android:radius="40dp" />
     <stroke
         android:width="1dp"
-        android:color="@color/event_search_stroke_color" />
+        android:color="@color/light_gray" />
 </shape>

@@ -46,7 +46,7 @@
             android:fontFamily="@font/nanum_square_bold"
             android:lineHeight="20dp"
             android:text="@{eventDetail.name}"
-            android:textColor="@color/text_color_black"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="15dp"
-            android:background="@color/text_color_white"
+            android:background="@color/light_gray"
             app:layout_constraintTop_toBottomOf="@id/chipgroup_evendetail_tags" />
 
         <TextView
@@ -80,7 +80,7 @@
             android:layout_marginTop="11dp"
             android:fontFamily="@font/nanum_square_bold"
             android:text="@{eventDetail.status}"
-            android:textColor="@color/text_color_green"
+            android:textColor="@color/primary_color"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appbarlayout_eventdetail"
@@ -96,7 +96,7 @@
             android:drawablePadding="12dp"
             android:fontFamily="@font/nanum_square_regular"
             android:text="@{eventDetail.location}"
-            android:textColor="@color/text_color_black"
+            android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_eventdate"
@@ -112,7 +112,7 @@
             android:drawablePadding="12dp"
             android:fontFamily="@font/nanum_square_regular"
             android:text="@{@string/eventdetail_date_format(eventDetail.startDate,eventDetail.endDate)}"
-            android:textColor="@color/text_color_black"
+            android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line_eventdetail_top"
@@ -126,13 +126,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventplace"
-            app:tabIndicatorColor="@color/text_color_green"
+            app:tabIndicatorColor="@color/primary_color"
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="2dp"
             app:tabSelectedTextAppearance="@style/EventDetail_SelectedTabStyle"
-            app:tabSelectedTextColor="@color/text_color_green"
+            app:tabSelectedTextColor="@color/primary_color"
             app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle"
-            app:tabTextColor="@color/text_color_black" />
+            app:tabTextColor="@color/black" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_eventdetail"

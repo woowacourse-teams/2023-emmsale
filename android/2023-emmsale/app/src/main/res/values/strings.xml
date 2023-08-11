@@ -1,79 +1,132 @@
+<!--
+    where_description
+    where: 띄어쓰기 안한다
+    description: 띄어쓰기 한다
+-->
+
 <resources>
-    <string name="app_name">Emmsale</string>
-    <string name="follow_notification_title_format">같이 가기 요청</string>
-    <string name="follow_notification_message_format">%s님께서 같이 가기를 요청하였어요!</string>
-    <string name="follow_notification_channel_name">같이 가기 알림 채널</string>
-    <string name="follow_notification_channel_description">같이 가기 요청을 받기 위한 알림 채널입니다.</string>
-    <string name="post_notification_permission_granted_message">푸시 알림 권한을 허용하였습니다.</string>
-    <string name="cancel">취소</string>
-    <string name="okay">확인</string>
-    <string name="post_notification_permission_needed_message">알림 권한이 필요해요!</string>
+    <string name="app_name">커디</string>
+
+    <string name="all_cancel">취소</string>
+    <string name="all_okay">확인</string>
+    <string name="all_go_back">뒤로 가기</string>
+    <string name="all_next">다음</string>
+    <string name="all_data_loading_failed_message">데이터를 정상적으로 불러오지 못했어요 😢</string>
+
+    <string name="onboarding_member_update_failed_message">회원정보 업데이트를 실패했어요!</string>
+
+    <string name="onboardingname_page">1/4</string>
+    <string name="onboardingname_title">이름 설정</string>
+    <string name="onboardingname_message">이름이 무엇인가요?</string>
+    <string name="onboardingname_sub_message">설정 시 변경이 불가합니다.</string>
+    <string name="onboardingname_hint">입력해주세요.</string>
+
+    <string name="onboardingfield_page">2/4</string>
+    <string name="onboardingfield_title">관심 분야</string>
+    <string name="onboardingfield_message">관심 있는 카테고리를 선택해 주세요.</string>
+    <string name="onboardingfield_sub_message">복수 선택이 최대 4개까지 가능합니다.</string>
+
+    <string name="eventdetail_date_format">%s ~ %s</string>
+    <string name="onboardingeducation_page">3/4</string>
+    <string name="onboardingeducation_title">교육 활동</string>
+    <string name="onboardingeducation_message">교육 이력이 있나요?</string>
+    <string name="onboardingeducation_sub_message">교육받은 활동이 있다면 추가해 주세요.</string>
+
+    <string name="onboardingeclub_page">4/4</string>
+    <string name="onboardingeclub_title">동아리 활동</string>
+    <string name="onboardingeclub_message">동아리 활동이 있나요?</string>
+    <string name="onboardingeclub_sub_message">동아리 활동을 했다면 추가해 주세요.</string>
+
+    <string name="kerdyfirebasemessaging_follow_notification_title_format">같이 가기 요청</string>
+    <string name="kerdyfirebasemessaging_follow_notification_message_format">%s님께서 같이 가기를 요청하였어요!</string>
+    <string name="kerdyfirebasemessaging_follow_notification_channel_name">같이 가기 알림 채널</string>
+    <string name="kerdyfirebasemessaging_follow_notification_channel_description">같이 가기 요청을 받기 위한 알림 채널입니다.</string>
+
+    <string name="login_failed_message">로그인에 실패했어요 😥</string>
+    <string name="login_logo">로그인 로고</string>
+    <string name="login_github_button_label">Github으로 로그인</string>
+    <string name="login_post_notification_permission_granted_message">푸시 알림 권한을 허용하였습니다.</string>
+    <string name="login_post_notification_permission_needed_message">알림 권한이 필요해요!</string>
+
     <string name="main_menuitemnameofprofile">프로필</string>
     <string name="main_menuitemnameofhome">홈</string>
     <string name="main_menuitemnameofsetting">설정</string>
+
     <string name="myprofile_memberimagedescription">회원의 사진</string>
     <string name="myprofile_greeting">Hello,</string>
     <string name="myprofile_educationslabel">교육 활동</string>
     <string name="myprofile_clubslabel">동아리 활동</string>
     <string name="myprofile_eventslabel">참여 행사</string>
-    <string name="event_start_duration_format">기간 : %s</string>
-    <string name="event_start_end_duration_format">기간 : %s - %s</string>
+    <string name="myprofile_no_description">소개말이 없습니다.</string>
+    <string name="myprofile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
+
     <string name="event_poster_description">event poster</string>
     <string name="event_filter">필터 설정</string>
     <string name="event_count_format">%,d</string>
-    <string name="test_image_url">https://ebook.pusan.ac.kr/images/bookimg/L_1386988.jpg</string>
     <string name="event_count_prefix">총</string>
     <string name="event_count_suffix">개</string>
-    <string name="d_day_format">D-%d</string>
-    <string name="comments_isupdated">수정됨</string>
-    <string name="comments_childcommentscountformat">답글 %d</string>
-    <string name="comment_menubutton">댓글의 메뉴 버튼</string>
-    <string name="comment_deletedCommentAuthorName">삭제</string>
-    <string name="comment_deletedCommentContent">삭제된 댓글입니다.</string>
-    <string name="comments_editcommenthint">댓글을 입력하세요.</string>
-    <string name="comments_commentsubmitbuttonlabel">입력</string>
-    <string name="comments_completeeditcomment">댓글이 수정되었습니다.</string>
-    <string name="comments_completedeletecomment">댓글이 삭제되었습니다.</string>
-    <string name="comments_completepostcomment">댓글을 게시했습니다.</string>
-    <string name="commentsmenudialog_editbuttonlabel">수정</string>
-    <string name="commentsmenudialog_deletebuttonlabel">삭제</string>
-    <string name="commentsmenudialog_reportbuttonlabel">신고하기</string>
-    <string name="comment_deletebutton">댓글의 삭제 버튼</string>
+
+    <string name="comment_menu_button">댓글의 메뉴 버튼</string>
+    <string name="comment_deleted_comment_author_name">삭제</string>
+    <string name="comment_deleted_comment_content">삭제된 댓글입니다.</string>
+    <string name="comment_delete_button">댓글의 삭제 버튼</string>
+
+    <string name="comments_is_updated">수정됨</string>
+    <string name="comments_child_comments_count_format">답글 %d</string>
+    <string name="comments_edit_comment_hint">댓글을 입력하세요.</string>
+    <string name="comments_comment_submit_button_label">입력</string>
+    <string name="comments_complete_edit_comment">댓글이 수정되었습니다.</string>
+    <string name="comments_complete_delete_comment">댓글이 삭제되었습니다.</string>
+    <string name="comments_complete_post_comment">댓글을 게시했습니다.</string>
+    <string name="comments_comments_fetching_error_message">댓글들을 불러오는 데 실패했어요 😥</string>
+    <string name="comments_comments_posting_error_message">댓글을 게시하는 데 실패했어요 😥</string>
+    <string name="comments_comments_deletion_error_message">댓글을 삭제하는 데 실패했어요 😥</string>
+
+    <string name="commentsmenudialog_edit_button_label">수정</string>
+    <string name="commentsmenudialog_delete_button_label">삭제</string>
+    <string name="commentsmenudialog_report_button_label">신고하기</string>
     <string name="commentdeletedialog_title">댓글 삭제</string>
     <string name="commentdeletedialog_message">해당 댓글을 삭제하시겠습니까?</string>
-    <string name="commentdeletedialog_positivebuttonlabel">삭제</string>
-    <string name="commentdeletedialog_negativebuttonlabel">취소</string>
-    <string name="childcomments_editchildcommenthint">답글을 입력하세요.</string>
-    <string name="childcomments_toolbartitle">답글</string>
-    <string name="all_goback">뒤로 가기</string>
+    <string name="commentdeletedialog_positive_button_label">삭제</string>
+    <string name="commentdeletedialog_negative_button_label">취소</string>
+    <string name="childcomments_edit_child_comment_hint">답글을 입력하세요.</string>
+    <string name="childcomments_toolbar_title">답글</string>
+
     <string name="event_view_notification_description">알림 목록 화면 조회</string>
     <string name="event_search_conference_description">컨퍼런스 검색 화면</string>
     <string name="event_competition">대회</string>
     <string name="event_conference">컨퍼런스</string>
-    <string name="event_filter_title">필터</string>
-    <string name="filter_conference_status_title">진행 상태</string>
-    <string name="filter_all_tag_name">전체</string>
-    <string name="filter_status_in_progress_tag_name">진행 중</string>
-    <string name="filter_status_scheduled_tag_name">진행 예정</string>
-    <string name="filter_status_ended_tag_name">마감</string>
-    <string name="filter_conference_event_tag_title">태그</string>
-    <string name="filter_conference_duration_title">기간</string>
-    <string name="event_filter_apply">적용하기</string>
-    <string name="filter_conference_duration_divider_mark">~</string>
-    <string name="all_data_loading_failed_message">데이터를 정상적으로 불러오지 못했어요 😢</string>
-    <string name="event_filter_duration_date_format">%02d.%02d</string>
-    <string name="event_filter_duration_date_last_format">&#160;- %02d.%02d</string>
+
+    <string name="eventfilter_title">필터</string>
+    <string name="eventfilter_conference_status_title">진행 상태</string>
+    <string name="eventfilter_all_tag_name">전체</string>
+    <string name="eventfilter_status_in_progress_tag_name">진행 중</string>
+    <string name="eventfilter_status_scheduled_tag_name">진행 예정</string>
+    <string name="eventfilter_status_ended_tag_name">마감</string>
+    <string name="eventfilter_conference_event_tag_title">태그</string>
+    <string name="eventfilter_conference_duration_title">기간</string>
+    <string name="eventfilter_apply">적용하기</string>
+    <string name="eventfilter_conference_duration_divider_mark">~</string>
+    <string name="eventfilter_duration_date_format">%02d.%02d.%02d</string>
+    <string name="eventfilter_duration_date_last_format">&#160;- %02d.%02d.%02d</string>
+    <string name="eventfilter_clear">초기화</string>
+    <string name="eventfilter_clear_title">필터 초기화</string>
+    <string name="eventfilter_clear_message">선택된 필터를 모두 초기화 할까요?</string>
+
     <string name="eventinformation_navigate_website">웹사이트로 이동</string>
-    <string name="fragmentdialog_participant_requestcomapanion">함께 하기 요청</string>
-    <string name="fragmentdialog_participant_message_format">%s께 함께하기 요청을\n보내시겠습니까?</string>
-    <string name="item_participant_requestcompanion">같이 가요</string>
-    <string name="notification_box_title">알림 보관함</string>
-    <string name="notification_box_delete_noti">알림 삭제</string>
+
+    <string name="recruitmentdialog_requestcomapanion">함께 하기 요청</string>
+    <string name="recruitmentdialog_message_format">%s께 함께하기 요청을\n보내시겠습니까?</string>
+
+    <string name="recruitment_request_companion">같이 가요</string>
+
+    <string name="notificationbox_title">알림 보관함</string>
+    <string name="notificationbox_delete_noti">알림 삭제</string>
+
     <string name="notification_member_profile">사용자 프로필</string>
     <string name="notification_reject">거절</string>
     <string name="notification_accept">수락</string>
     <string name="notification_header_expand_view">화면을 팽창 시킵니다.</string>
-    <string name="eventdetail_date_format">%s ~ %s</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="conference_default_people_count">0</string>
 </resources>

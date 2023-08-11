@@ -9,12 +9,12 @@ class ApiError<T : Any>(val code: Int, val message: String?) : ApiResult<T>
 class ApiException<T : Any>(val e: Throwable) : ApiResult<T>
 
 suspend inline fun <T : Any, reified V : Any> handleApi(
-    response: Response<T>,
+    execute: suspend () -> Response<T>,
     mapToDomain: suspend (T) -> V,
 ): ApiResult<V> {
     return try {
+        val response = execute()
         val body = response.body()
-
         when {
             response.isSuccessful && body == null && V::class == Unit::class -> ApiSuccess(Unit as V)
             response.isSuccessful && body != null -> ApiSuccess(mapToDomain(body))

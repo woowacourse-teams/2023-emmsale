@@ -61,7 +61,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="23dp"
-                        android:text="@{viewModel.uiState.memberName}"
+                        android:text="@{viewModel.myProfile.memberName}"
                         android:textSize="17sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@+id/tv_myprofile_hello"
@@ -74,7 +74,7 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="9dp"
                         android:layout_marginEnd="19dp"
-                        android:text="@{viewModel.uiState.description}"
+                        android:text="@{viewModel.myProfile.description.isBlank() ? @string/myprofile_no_description : viewModel.myProfile.description }"
                         android:textSize="13sp"
                         app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_memberimage"
                         app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
@@ -100,42 +100,28 @@
                         android:layout_marginBottom="7dp"
                         android:contentDescription="@string/myprofile_memberimagedescription"
                         android:scaleType="centerCrop"
-                        app:imageUrl="@{viewModel.uiState.memberImageUrl}"
+                        app:imageUrl="@{viewModel.myProfile.memberImageUrl}"
                         app:isCircle="@{true}"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_myprofile_imagedecoration"
                         app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_imagedecoration"
                         tools:src="@tools:sample/avatars" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_myprofile_jobs"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="29dp"
-                        android:orientation="horizontal"
-                        android:overScrollMode="never"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_memberimage"
-                        app:layout_constraintStart_toStartOf="@+id/tv_myprofile_hello"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_onelineintroduce"
-                        tools:itemCount="2"
-                        tools:listitem="@layout/item_myprofile_jobs" />
-
                     <View
                         android:id="@+id/view_myprofile_divider"
                         android:layout_width="0dp"
-                        android:layout_height="1dp"
+                        android:layout_height="0.5dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/edittext_underline"
+                        android:background="@color/light_gray"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/rv_myprofile_jobs" />
+                        app:layout_constraintTop_toBottomOf="@+id/cg_myprofile_fields" />
 
                     <View
                         android:id="@+id/view_myprofile_educationicontoclubicon"
-                        android:layout_width="2dp"
+                        android:layout_width="1.4dp"
                         android:layout_height="0dp"
-                        android:background="@color/edittext_underline"
-                        app:layout_constraintBottom_toTopOf="@+id/iv_myprofile_eventicon"
+                        android:background="@color/light_gray"
+                        app:layout_constraintBottom_toTopOf="@+id/iv_myprofile_clubicon"
                         app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_educationicon"
                         app:layout_constraintStart_toStartOf="@+id/iv_myprofile_educationicon"
                         app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_educationicon" />
@@ -208,51 +194,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="15dp"
-                        android:overScrollMode="never"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintStart_toEndOf="@+id/iv_myprofile_clubicon"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_clubicon"
-                        tools:itemCount="2"
-                        tools:listitem="@layout/item_myprofile_activities" />
-
-                    <ImageView
-                        android:id="@+id/iv_myprofile_eventicon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="32dp"
-                        android:background="@drawable/bg_myprofile_activityicon"
-                        android:importantForAccessibility="no"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_educationicon"
-                        app:layout_constraintStart_toStartOf="@+id/iv_myprofile_educationicon"
-                        app:layout_constraintTop_toBottomOf="@+id/rv_myprofile_clubs"
-                        app:srcCompat="@drawable/ic_myprofile_education" />
-
-                    <TextView
-                        android:id="@+id/tv_myprofile_eventslabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/myprofile_eventslabel"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_myprofile_eventicon"
-                        app:layout_constraintStart_toEndOf="@+id/iv_myprofile_eventicon"
-                        app:layout_constraintTop_toTopOf="@+id/iv_myprofile_eventicon"
-                        tools:text="참여 행사" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_myprofile_events"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="15dp"
                         android:layout_marginBottom="39dp"
                         android:overScrollMode="never"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/iv_myprofile_eventicon"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_eventicon"
-                        tools:itemCount="4"
+                        app:layout_constraintStart_toEndOf="@+id/iv_myprofile_clubicon"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_clubicon"
+                        tools:itemCount="2"
                         tools:listitem="@layout/item_myprofile_activities" />
 
                     <ImageView
@@ -277,16 +225,16 @@
                         app:layout_constraintTop_toTopOf="@+id/tv_myprofile_clubslabel"
                         app:srcCompat="@drawable/ic_myprofile_activitylabeldecorator" />
 
-                    <ImageView
-                        android:id="@+id/iv_myprofile_eventlabeldecorator"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_myprofile_fields"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:importantForAccessibility="no"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_myprofile_eventslabel"
-                        app:layout_constraintStart_toEndOf="@+id/tv_myprofile_eventslabel"
-                        app:layout_constraintTop_toTopOf="@+id/tv_myprofile_eventslabel"
-                        app:srcCompat="@drawable/ic_myprofile_activitylabeldecorator" />
+                        android:layout_marginTop="29dp"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_memberimage"
+                        app:layout_constraintStart_toStartOf="@+id/tv_myprofile_hello"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_onelineintroduce">
+
+                    </com.google.android.material.chip.ChipGroup>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.core.widget.NestedScrollView>
@@ -298,7 +246,7 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:visibility="@{viewModel.uiState.isLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.myProfile.isLoading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

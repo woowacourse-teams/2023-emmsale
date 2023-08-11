@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationBoxBinding
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.notificationBox.recyclerview.body.NotificationBodyClickListener
 import com.emmsale.presentation.ui.notificationBox.recyclerview.header.NotificationBoxHeaderAdapter
 import com.emmsale.presentation.ui.notificationBox.recyclerview.header.NotificationHeaderClickListener
@@ -31,9 +33,12 @@ class NotificationBoxActivity :
     }
 
     private fun setupNotifications() {
-        viewModel.fetchNotifications()
         viewModel.notifications.observe(this) { uiState ->
-            notificationBoxHeaderAdapter.submitList(uiState.notifications)
+            when {
+                uiState.isError -> showToast(getString(R.string.all_data_loading_failed_message))
+                !uiState.isError && !uiState.isLoading ->
+                    notificationBoxHeaderAdapter.submitList(uiState.notifications)
+            }
         }
     }
 
@@ -60,11 +65,11 @@ class NotificationBoxActivity :
     }
 
     override fun onAccept(notificationId: Long) {
-        viewModel.acceptCompanion(notificationId)
+        viewModel.acceptRecruit(notificationId)
     }
 
     override fun onReject(notificationId: Long) {
-        viewModel.rejectCompanion(notificationId)
+        viewModel.rejectRecruit(notificationId)
     }
 
     override fun onToggleClick(eventId: Long) {

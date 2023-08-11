@@ -104,12 +104,13 @@ class ConferenceFilterViewModel(
     }
 
     fun updateStartDate(startDate: LocalDate) {
-        val filterDate = ConferenceFilterDateUiState(startDate.year, startDate.monthValue)
+        val filterDate =
+            ConferenceFilterDateUiState(startDate.year, startDate.monthValue, startDate.dayOfMonth)
 
         if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedEndDate?.let {
-            val endDate = LocalDate.of(it.year, it.month, 1)
-            startDate.isAfter(endDate)
-        } == true
+                val endDate = LocalDate.of(it.year, it.month, it.day)
+                startDate.isAfter(endDate)
+            } == true
         ) {
             _eventFilters.postValue(
                 (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
@@ -129,19 +130,26 @@ class ConferenceFilterViewModel(
 
     fun updateEndDate(endDate: LocalDate) {
         if ((_eventFilters.value as? ConferenceFiltersUiState.Success)?.selectedStartDate?.let {
-            val startDate = LocalDate.of(it.year, it.month, 1)
-            endDate.isBefore(startDate) || (endDate.year == startDate.year && endDate.monthValue == startDate.monthValue)
-        } == true
+                val startDate = LocalDate.of(it.year, it.month, it.day)
+                endDate.isBefore(startDate) || (endDate.year == startDate.year && endDate.monthValue == startDate.monthValue && endDate.dayOfMonth == startDate.dayOfMonth)
+            } == true
         ) {
             return
         }
 
-        val filterDate = ConferenceFilterDateUiState(endDate.year, endDate.monthValue)
+        val filterDate =
+            ConferenceFilterDateUiState(endDate.year, endDate.monthValue, endDate.dayOfMonth)
         _eventFilters.postValue(
             (_eventFilters.value as? ConferenceFiltersUiState.Success)?.copy(
                 selectedEndDate = filterDate,
             ),
         )
+    }
+
+    fun clearFilters() {
+        val conferenceFilters = _eventFilters.value as? ConferenceFiltersUiState.Success ?: return
+        _eventFilters.postValue(conferenceFilters.resetSelection())
+        _selectedTagFilterCount.postValue(0)
     }
 
     companion object {

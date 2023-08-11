@@ -1,6 +1,5 @@
 package com.emmsale.data.fcmToken.dto
 
-import com.emmsale.data.fcmToken.FcmToken
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,11 +9,4 @@ data class FcmTokenApiModel(
     val uid: Long,
     @SerialName("token")
     val token: String,
-) {
-    companion object {
-        fun from(fcmToken: FcmToken): FcmTokenApiModel = FcmTokenApiModel(
-            uid = fcmToken.uid,
-            token = fcmToken.token,
-        )
-    }
-}
+)

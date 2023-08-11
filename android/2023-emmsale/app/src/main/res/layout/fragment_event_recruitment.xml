@@ -17,18 +17,18 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_participants"
+            android:id="@+id/rv_recruitment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="17dp"
+            android:paddingVertical="17dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_eventrecruitment_participate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/btn_eventparticipant_participate"
-            android:paddingVertical="17dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_eventparticipant_participate"
+            android:id="@+id/btn_eventrecruitment_participate"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginStart="17dp"

@@ -4,13 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.emmsale.R
 import com.emmsale.databinding.ActivityOnboardingBinding
+import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.ui.main.MainActivity
-import com.emmsale.presentation.ui.onboarding.uistate.MemberUiState
+import com.emmsale.presentation.ui.onboarding.uistate.MemberSavingUiState
 
 class OnboardingActivity : AppCompatActivity() {
     private val binding: ActivityOnboardingBinding by lazy {
@@ -26,15 +27,15 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(binding.root)
         initFragmentStateAdapter()
         initBackPressedDispatcher()
-        setupMemberUiState()
+        setupActivitiesUiState()
     }
 
-    private fun setupMemberUiState() {
-        viewModel.memberUiState.observe(this) { memberState ->
-            when (memberState) {
-                is MemberUiState.Success -> navigateToMain()
-                is MemberUiState.Failed -> showMemberUpdateFailed()
-                is MemberUiState.Loading -> binding.progressbarLoading.visibility = View.VISIBLE
+    private fun setupActivitiesUiState() {
+        viewModel.activities.observe(this) { activities ->
+            when (activities.memberSavingUiState) {
+                is MemberSavingUiState.None -> Unit
+                is MemberSavingUiState.Success -> navigateToMain()
+                is MemberSavingUiState.Failed -> showMemberUpdateFailed()
             }
         }
     }
@@ -54,7 +55,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun showMemberUpdateFailed() {
         binding.progressbarLoading.visibility = View.GONE
-        Toast.makeText(this, "회원정보 업데이트 실패", Toast.LENGTH_SHORT).show()
+        binding.root.showSnackbar(getString(R.string.onboarding_member_update_failed_message))
     }
 
     fun navigateToNextPage() {

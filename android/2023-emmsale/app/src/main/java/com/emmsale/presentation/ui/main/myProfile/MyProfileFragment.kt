@@ -6,11 +6,12 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
+import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
-import com.emmsale.presentation.ui.main.myProfile.adapter.ActivitiesAdapter
-import com.emmsale.presentation.ui.main.myProfile.adapter.JobsAdapter
-import com.emmsale.presentation.ui.main.myProfile.itemDecoration.ActivitiesAdapterDecoration
-import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileScreenUiState
+import com.emmsale.presentation.ui.main.myProfile.recyclerView.ActivitiesAdapter
+import com.emmsale.presentation.ui.main.myProfile.recyclerView.ActivitiesAdapterDecoration
+import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
 
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     override val layoutResId: Int = R.layout.fragment_my_profile
@@ -24,7 +25,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
         initDataBinding()
         setupUiLogic()
-        initRecyclerViews()
+        initActivitiesRecyclerView()
 
         viewModel.fetchMember()
     }
@@ -34,58 +35,51 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     private fun setupUiLogic() {
-        viewModel.uiState.observe(viewLifecycleOwner) {
-            handleError(it)
+        viewModel.isLogin.observe(viewLifecycleOwner) {
             handleNotLogin(it)
-            handleJobs(it)
+        }
+        viewModel.myProfile.observe(viewLifecycleOwner) {
+            handleError(it)
+            handleFields(it)
             handleActivities(it)
         }
     }
 
-    private fun handleError(myProfileScreenUiState: MyProfileScreenUiState) {
-        if (myProfileScreenUiState.isError) {
-//            context?.showToast(myProfileScreenUiState.errorMessage)
+    private fun handleError(myProfile: MyProfileUiState) {
+        if (myProfile.isFetchingError) {
+            context?.showToast(getString(R.string.myprofile_profile_fetching_error_message))
         }
     }
 
-    private fun handleNotLogin(myProfileScreenUiState: MyProfileScreenUiState) {
-        if (myProfileScreenUiState.isNotLogin) {
+    private fun handleNotLogin(isLogin: Boolean) {
+        if (!isLogin) {
             LoginActivity.startActivity(requireContext())
             activity?.finish()
         }
     }
 
-    private fun handleJobs(myProfileScreenUiState: MyProfileScreenUiState) {
-        (binding.rvMyprofileJobs.adapter as JobsAdapter).submitList(myProfileScreenUiState.jobs)
-    }
+    private fun handleFields(myProfile: MyProfileUiState) {
+        binding.cgMyprofileFields.removeAllViews()
 
-    private fun handleActivities(myProfileScreenUiState: MyProfileScreenUiState) {
-        (binding.rvMyprofileEducations.adapter as ActivitiesAdapter).submitList(
-            myProfileScreenUiState.educations,
-        )
-        (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfileScreenUiState.clubs)
-        (binding.rvMyprofileEvents.adapter as ActivitiesAdapter).submitList(myProfileScreenUiState.events)
-    }
-
-    private fun initRecyclerViews() {
-        initJobsRecyclerView()
-        initActivitiesRecyclerView()
-    }
-
-    private fun initJobsRecyclerView() {
-        binding.rvMyprofileJobs.apply {
-            adapter = JobsAdapter()
-            itemAnimator = null
+        myProfile.fields.forEach {
+            val tagView = CategoryTag(requireContext()).apply { text = it.name }
+            binding.cgMyprofileFields.addView(tagView)
         }
     }
 
+    private fun handleActivities(myProfile: MyProfileUiState) {
+        (binding.rvMyprofileEducations.adapter as ActivitiesAdapter).submitList(
+            myProfile.educations,
+        )
+        (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfile.clubs)
+    }
+
     private fun initActivitiesRecyclerView() {
+        val decoration = ActivitiesAdapterDecoration()
         listOf(
             binding.rvMyprofileEducations,
             binding.rvMyprofileClubs,
-            binding.rvMyprofileEvents,
         ).forEach {
-            val decoration = ActivitiesAdapterDecoration()
             it.apply {
                 adapter = ActivitiesAdapter()
                 itemAnimator = null

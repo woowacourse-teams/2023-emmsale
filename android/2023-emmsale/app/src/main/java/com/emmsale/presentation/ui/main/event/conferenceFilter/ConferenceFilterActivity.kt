@@ -12,15 +12,20 @@ import com.emmsale.databinding.ActivityConferenceFilterBinding
 import com.emmsale.databinding.LayoutFilterConferenceDurationBinding
 import com.emmsale.databinding.LayoutFilterConferenceEventTagBinding
 import com.emmsale.databinding.LayoutFilterConferenceStatusBinding
+import com.emmsale.presentation.common.extension.checkAll
 import com.emmsale.presentation.common.extension.getParcelableExtraCompat
+import com.emmsale.presentation.common.extension.message
+import com.emmsale.presentation.common.extension.negativeButton
+import com.emmsale.presentation.common.extension.positiveButton
 import com.emmsale.presentation.common.extension.showDatePickerDialog
+import com.emmsale.presentation.common.extension.showDialog
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.title
+import com.emmsale.presentation.common.extension.uncheckAll
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
-import com.emmsale.presentation.utils.extension.checkAll
-import com.emmsale.presentation.utils.extension.uncheckAll
 import com.google.android.material.chip.ChipGroup
 
 class ConferenceFilterActivity : AppCompatActivity() {
@@ -44,14 +49,29 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        initEventFilterToolbarNavClickListener()
+        initEventFilterToolbarClickListener()
         initEventFilterApplyButtonClickListener()
         initTagAllFilterButtonClickListener()
         initDurationButtonClickListener()
     }
 
-    private fun initEventFilterToolbarNavClickListener() {
+    private fun initEventFilterToolbarClickListener() {
         binding.tbEventFilter.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding.tbEventFilter.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.filter_clear -> askFilterClear()
+            }
+            true
+        }
+    }
+
+    private fun askFilterClear() {
+        showDialog {
+            title(getString(R.string.eventfilter_clear_title))
+            message(getString(R.string.eventfilter_clear_message))
+            positiveButton(getString(R.string.all_okay)) { viewModel.clearFilters() }
+            negativeButton(getString(R.string.all_cancel))
+        }
     }
 
     private fun initEventFilterApplyButtonClickListener() {

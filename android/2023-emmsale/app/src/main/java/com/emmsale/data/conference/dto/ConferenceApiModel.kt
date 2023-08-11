@@ -1,11 +1,7 @@
 package com.emmsale.data.conference.dto
 
-import com.emmsale.data.conference.Conference
-import com.emmsale.data.conference.ConferenceStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Serializable
 data class ConferenceApiModel(
@@ -25,26 +21,4 @@ data class ConferenceApiModel(
     val posterUrl: String? = null,
     @SerialName("remainingDays")
     val dDay: Int,
-) {
-    fun toData(): Conference = Conference(
-        id = id,
-        name = name,
-        startDate = parseDate(startDate),
-        endDate = parseDate(endDate),
-        status = ConferenceStatus.from(status),
-        tags = tags,
-        posterUrl = posterUrl,
-        dDay = dDay,
-    )
-
-    private fun parseDate(date: String): LocalDateTime {
-        val dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)
-        return LocalDateTime.parse(date, dateTimeFormatter)
-    }
-
-    companion object {
-        private const val DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss"
-    }
-}
-
-fun List<ConferenceApiModel>.toData(): List<Conference> = map { it.toData() }
+)

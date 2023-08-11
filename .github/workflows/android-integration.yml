@@ -37,7 +37,7 @@ jobs:
       run: ./android/2023-emmsale/gradlew -p android/2023-emmsale ktlintCheck
 
     - name: Run unit tests
-      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale testDebugUnitTest
+      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale test
 
     - name: Create android test report
       uses: asadmansr/android-test-report-action@v1.2.0

@@ -1,14 +1,13 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 
 plugins {
     id("org.jetbrains.kotlin.android")
     id("com.android.application") version "8.0.2"
-    id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "1.8.21"
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -43,11 +42,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            configure<CrashlyticsExtension> {
-                nativeSymbolUploadEnabled = true
-                strippedNativeLibsDir = "$buildDir/ndklibs/obj"
-                unstrippedNativeLibsDir = "$buildDir/ndklibs/libs"
-            }
             buildConfigField("String", "BASE_URL", "\"https://prod.kerdy.kro.kr\"")
         }
     }

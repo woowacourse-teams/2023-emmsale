@@ -21,8 +21,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_conference_filter"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/event_filter_title"
+            app:title="@string/eventfilter_title"
             app:titleCentered="true"
             app:titleTextAppearance="@style/EventFilterToolbarTitleFontStyle" />
 
@@ -69,7 +70,7 @@
                     android:background="@drawable/bg_event_filter_button"
                     android:gravity="center"
                     android:paddingVertical="21dp"
-                    android:text="@string/event_filter_apply"
+                    android:text="@string/eventfilter_apply"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 

@@ -9,7 +9,7 @@
 
         <variable
             name="comment"
-            type="com.emmsale.presentation.ui.childComments.uiState.CommentUiState" />
+            type="com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.CommentUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
-            android:text="@{comment.isDeleted ? @string/comment_deletedCommentAuthorName : comment.authorName}"
+            android:text="@{comment.isDeleted ? @string/comment_deleted_comment_author_name : comment.authorName}"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/iv_childcomment_arrowdecoration"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
             android:text="@{comment.lastModifiedDate}"
-            android:textColor="@color/decorator_color"
+            android:textColor="@color/gray"
             android:textSize="11sp"
             android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_childcomment_authorname"
@@ -48,8 +48,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text="@string/comments_isupdated"
-            android:textColor="@color/decorator_color"
+            android:text="@string/comments_is_updated"
+            android:textColor="@color/gray"
             android:textSize="11sp"
             android:visibility="@{(comment.isUpdated &amp;&amp; !comment.isDeleted)? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_childcomment_lastmodifieddate"
@@ -63,7 +63,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="17dp"
             android:layout_marginBottom="14dp"
-            android:text="@{comment.isDeleted ? @string/comment_deletedCommentContent : comment.content}"
+            android:text="@{comment.isDeleted ? @string/comment_deleted_comment_content : comment.content}"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="13dp"
-            android:contentDescription="@string/comment_deletebutton"
+            android:contentDescription="@string/comment_delete_button"
             android:padding="4dp"
             android:visibility="@{comment.isDeleted || !comment.isDeletable ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_childcomment_authorname"
@@ -90,10 +90,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginTop="17dp"
+            android:importantForAccessibility="no"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_childcomment_arrow"
-            android:importantForAccessibility="no" />
+            app:srcCompat="@drawable/ic_childcomment_arrow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

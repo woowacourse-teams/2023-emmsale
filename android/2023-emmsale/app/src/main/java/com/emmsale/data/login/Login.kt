@@ -1,7 +1,8 @@
 package com.emmsale.data.login
 
+import com.emmsale.data.token.Token
+
 data class Login(
-    val uid: Long,
-    val accessToken: String,
+    val token: Token,
     val isOnboarded: Boolean,
 )

@@ -1,39 +1,39 @@
 package com.emmsale.data.eventTag
 
-import com.emmsale.data.eventTag.dto.ConferenceTagApiModel
+import com.emmsale.data.eventTag.dto.EventTagApiModel
 import retrofit2.Response
 
 class FakeEventTagService : EventTagService {
-    override suspend fun getConferenceTags(
-        category: String,
-    ): Response<List<ConferenceTagApiModel>> = Response.success(provideConferenceTags())
+    override suspend fun getEventTags(
+        eventCategory: String,
+    ): Response<List<EventTagApiModel>> = Response.success(provideConferenceTags())
 
-    private fun provideConferenceTags(): List<ConferenceTagApiModel> = listOf(
-        ConferenceTagApiModel(
+    private fun provideConferenceTags(): List<EventTagApiModel> = listOf(
+        EventTagApiModel(
             id = 1,
             name = "백엔드",
         ),
-        ConferenceTagApiModel(
+        EventTagApiModel(
             id = 2,
             name = "프론트엔드",
         ),
-        ConferenceTagApiModel(
+        EventTagApiModel(
             id = 3,
             name = "안드로이드",
         ),
-        ConferenceTagApiModel(
+        EventTagApiModel(
             id = 4,
             name = "IOS",
         ),
-        ConferenceTagApiModel(
+        EventTagApiModel(
             id = 5,
             name = "AI",
         ),
-        ConferenceTagApiModel(
+        EventTagApiModel(
             id = 6,
             name = "알고리즘",
         ),
-        ConferenceTagApiModel(
+        EventTagApiModel(
             id = 7,
             name = "정보보안",
         ),

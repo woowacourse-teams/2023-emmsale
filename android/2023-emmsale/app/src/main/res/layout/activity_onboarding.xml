@@ -7,10 +7,6 @@
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.ui.onboarding.uistate.MemberUiState.Loading" />
-
-        <import type="com.emmsale.presentation.ui.onboarding.uistate.MemberUiState" />
-
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.onboarding.OnboardingViewModel" />
@@ -36,7 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:indeterminate="true"
-            android:visibility="gone"
+            android:visibility="@{viewModel.activities.loading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="0.15"
             app:layout_constraintEnd_toEndOf="parent"

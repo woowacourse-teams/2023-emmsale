@@ -27,7 +27,7 @@
             android:name=".presentation.ui.notificationBox.NotificationBoxActivity"
             android:exported="true" />
         <activity
-            android:name=".presentation.ui.childComments.ChildCommentsActivity"
+            android:name=".presentation.ui.eventdetail.comment.childComment.ChildCommentActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity"
@@ -50,6 +50,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

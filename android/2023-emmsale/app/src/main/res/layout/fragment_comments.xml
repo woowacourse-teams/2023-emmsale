@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.comment.CommentsViewModel" />
+            type="com.emmsale.presentation.ui.eventdetail.comment.CommentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +33,7 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:visibility="@{viewModel.uiState.isLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.comments.isLoading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
             android:id="@+id/layout_comments_postcomment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/background"
+            android:background="@color/white"
             android:paddingStart="17dp"
             android:paddingTop="8dp"
             android:paddingEnd="17dp"
@@ -69,14 +69,14 @@
                     android:layout_marginStart="1dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/nanum_square_regular"
-                    android:hint="@string/comments_editcommenthint"
+                    android:hint="@string/comments_edit_comment_hint"
                     android:importantForAutofill="no"
                     android:inputType="text|textMultiLine"
+                    android:maxLength="255"
                     android:maxLines="3"
                     android:padding="18dp"
                     android:textColor="@color/black"
                     android:textSize="14sp"
-                    android:maxLength="255"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/tv_comments_postcommentbutton"
                     app:layout_constraintStart_toStartOf="parent"
@@ -88,10 +88,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="1dp"
                     android:background="?attr/selectableItemBackground"
-                    android:enabled="@{viewModel.uiState.isLoading || etCommentsEditcommentcontent.text.toString().isBlank() ? false : true}"
+                    android:enabled="@{viewModel.comments.isLoading || etCommentsEditcommentcontent.text.toString().isBlank() ? false : true}"
                     android:padding="18dp"
-                    android:text="@string/comments_commentsubmitbuttonlabel"
-                    android:textColor="@color/main_color"
+                    android:text="@string/comments_comment_submit_button_label"
+                    android:textColor="@color/primary_color"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

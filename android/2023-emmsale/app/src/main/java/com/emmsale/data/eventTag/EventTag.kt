@@ -1,6 +1,6 @@
 package com.emmsale.data.eventTag
 
-sealed class EventTag(
+data class EventTag(
     val id: Long,
     val name: String,
 )

@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.eventdetail.recruitment.uistate
 
-import com.emmsale.data.participant.Participant
+import com.emmsale.data.recruitment.Recruitment
 
 sealed class RecruitmentsUiState {
     data class Success(
@@ -10,7 +10,7 @@ sealed class RecruitmentsUiState {
     object Error : RecruitmentsUiState()
 
     companion object {
-        fun from(participants: List<Participant>): Success =
-            Success(participants.map(RecruitmentUiState.Companion::from))
+        fun from(recruitments: List<Recruitment>): Success =
+            Success(recruitments.map(RecruitmentUiState::from))
     }
 }
