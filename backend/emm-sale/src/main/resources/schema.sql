@@ -150,6 +150,5 @@ alter table event
     add column apply_end_date datetime(6) not null;
 
 -- 2023-08-11 21:41
-
 alter table request_notification
     add column is_read bit not null;

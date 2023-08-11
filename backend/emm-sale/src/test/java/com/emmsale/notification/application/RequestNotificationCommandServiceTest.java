@@ -21,6 +21,7 @@ import com.emmsale.notification.domain.RequestNotificationRepository;
 import com.emmsale.notification.domain.RequestNotificationStatus;
 import com.emmsale.notification.exception.NotificationException;
 import com.emmsale.notification.exception.NotificationExceptionType;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -69,7 +70,11 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
     );
 
     final RequestNotificationResponse expected = new RequestNotificationResponse(
-        notificationId, senderId, receiverId, message, eventId
+        notificationId, senderId,
+        receiverId, message,
+        eventId, false,
+        RequestNotificationStatus.IN_PROGRESS,
+        LocalDateTime.now()
     );
 
     doNothing().when(firebaseCloudMessageClient).sendMessageTo((RequestNotification) any());
@@ -82,6 +87,7 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
     assertThat(actual)
         .usingRecursiveComparison()
         .ignoringCollectionOrder()
+        .ignoringFields("createdAt")
         .isEqualTo(expected);
   }
 
@@ -105,12 +111,10 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
         eventId
     );
 
-    //when
+    //when & then
     assertThatThrownBy(() -> requestNotificationCommandService.create(request))
         .isInstanceOf(NotificationException.class)
         .hasMessage(NotificationExceptionType.BAD_REQUEST_MEMBER_ID.errorMessage());
-
-    //then
   }
 
   @Test
