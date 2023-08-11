@@ -18,7 +18,7 @@ data class ConferenceFilterUiState(
         .map { it.id }
         .toTypedArray()
 
-    fun toggleFilterOptionSelection(filterId: Long): ConferenceFilterUiState = copy(
+    fun toggleSelectionBy(filterId: Long): ConferenceFilterUiState = copy(
         conferenceStatusFilteringOptions = conferenceStatusFilteringOptions.map { filter ->
             when (filter.id) {
                 filterId -> filter.toggleSelection()

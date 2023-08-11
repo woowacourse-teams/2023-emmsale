@@ -73,7 +73,7 @@ class ConferenceFilterViewModel(
             .map(ConferenceFilteringOptionUiState::from)
 
     fun toggleFilterSelection(filter: ConferenceFilteringOptionUiState) {
-        _conferenceFilter.value = _conferenceFilter.value.toggleFilterOptionSelection(filter.id)
+        _conferenceFilter.value = _conferenceFilter.value.toggleSelectionBy(filter.id)
     }
 
     fun updateFilteringOptionsToSelectedState(
