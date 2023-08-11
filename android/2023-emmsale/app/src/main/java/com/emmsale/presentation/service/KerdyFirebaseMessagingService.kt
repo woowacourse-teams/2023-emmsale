@@ -1,7 +1,5 @@
 package com.emmsale.presentation.service
 
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
 import com.emmsale.R
 import com.emmsale.data.comment.CommentService
 import com.emmsale.data.common.ApiError
@@ -17,7 +15,6 @@ import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 class KerdyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -128,18 +125,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun String.toTimeMessage(): String {
         val dateTime = LocalDateTime.parse(this, DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss"))
-
-        val calendar = Calendar.getInstance().apply {
-            set(
-                dateTime.year,
-                dateTime.monthValue,
-                dateTime.dayOfMonth,
-                dateTime.hour,
-                dateTime.minute,
-            )
-        }
-
-        return SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(calendar)
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(dateTime)
     }
 
     companion object {
