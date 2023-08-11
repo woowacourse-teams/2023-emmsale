@@ -20,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.event.application.RecruitmentPostCommandService;
 import com.emmsale.event.application.RecruitmentPostQueryService;
-import com.emmsale.event.application.dto.RecruitmentPostDeleteRequest;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.application.dto.RecruitmentPostResponse;
 import com.emmsale.event.application.dto.RecruitmentPostUpdateRequest;
@@ -81,7 +80,6 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     //given
     final Long eventId = 1L;
     final Long memberId = 2L;
-    final RecruitmentPostDeleteRequest request = new RecruitmentPostDeleteRequest(memberId);
     final String fakeAccessToken = "Bearer accessToken";
 
     final RequestParametersSnippet requestParameters = requestParameters(
@@ -91,8 +89,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     //when
     mockMvc.perform(delete(format("/events/%s/recruitment-post?member-id=%s", eventId, memberId))
             .header("Authorization", fakeAccessToken)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request)))
+            .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent())
         .andDo(document("delete-recruitment-post", requestParameters));
   }
@@ -103,7 +100,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     //given
     final Long eventId = 1L;
     final ResponseFieldsSnippet responseFields = responseFields(
-        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("함꼐해요 게시글 식별자"),
+        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("함께해요 게시글 식별자"),
         fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
         fieldWithPath("[].name").type(JsonFieldType.STRING).description("member 이름"),
         fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
