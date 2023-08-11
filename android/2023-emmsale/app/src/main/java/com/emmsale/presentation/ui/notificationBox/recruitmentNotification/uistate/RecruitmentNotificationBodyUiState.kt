@@ -18,6 +18,16 @@ data class RecruitmentNotificationBodyUiState(
     val isRejected: Boolean = false,
     val isRead: Boolean = false,
 ) {
+    fun changeToAcceptedState(): RecruitmentNotificationBodyUiState = copy(
+        isAccepted = true,
+        isRejected = false,
+    )
+
+    fun changeToRejectedState(): RecruitmentNotificationBodyUiState = copy(
+        isAccepted = false,
+        isRejected = true,
+    )
+
     companion object {
         fun from(
             recruitmentNotification: RecruitmentNotification,

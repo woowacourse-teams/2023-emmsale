@@ -112,8 +112,10 @@ class RecruitmentNotificationViewModel(
             _recruitmentUiState.value = recruitmentUiState.value.changeToLoadingState()
 
             when (notificationRepository.updateRecruitmentAcceptedStatus(notificationId, true)) {
-                is ApiSuccess ->
+                is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToAcceptedState()
+                    _notifications.value = _notifications.value.changeAcceptStateBy(notificationId)
+                }
 
                 is ApiException, is ApiError ->
                     _recruitmentUiState.value = recruitmentUiState.value.changeToErrorState()
@@ -128,7 +130,7 @@ class RecruitmentNotificationViewModel(
             when (notificationRepository.updateRecruitmentAcceptedStatus(notificationId, false)) {
                 is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToRejectedState()
-                    _notifications.value = _notifications.value.deleteNotification(notificationId)
+                    _notifications.value = _notifications.value.changeRejectStateBy(notificationId)
                 }
 
                 is ApiException, is ApiError ->

@@ -8,8 +8,11 @@ data class RecruitmentNotificationsUiState(
     fun toggleNotificationExpanded(eventId: Long): RecruitmentNotificationsUiState =
         copy(notifications = toggleExpanded(eventId))
 
-    fun deleteNotification(notificationId: Long): RecruitmentNotificationsUiState =
-        copy(notifications = notifications.map { it.deleteNotification(notificationId) })
+    fun changeAcceptStateBy(notificationId: Long): RecruitmentNotificationsUiState =
+        copy(notifications = notifications.map { it.changeToAcceptedStateBy(notificationId) })
+
+    fun changeRejectStateBy(notificationId: Long): RecruitmentNotificationsUiState =
+        copy(notifications = notifications.map { it.changeToRejectedStateBy(notificationId) })
 
     private fun toggleExpanded(eventId: Long): List<RecruitmentNotificationHeaderUiState> {
         return notifications.map { header ->
