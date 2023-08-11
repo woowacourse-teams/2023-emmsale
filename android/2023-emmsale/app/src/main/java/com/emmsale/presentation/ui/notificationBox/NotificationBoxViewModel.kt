@@ -1,8 +1,6 @@
 package com.emmsale.presentation.ui.notificationBox
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
@@ -45,8 +43,8 @@ class NotificationBoxViewModel(
                 is ApiSuccess -> updateNotifications(notificationsResult)
                 is ApiException, is ApiError -> _notifications.postValue(
                     NotificationsUiState(
-                        isError = true
-                    )
+                        isError = true,
+                    ),
                 )
             }
         }

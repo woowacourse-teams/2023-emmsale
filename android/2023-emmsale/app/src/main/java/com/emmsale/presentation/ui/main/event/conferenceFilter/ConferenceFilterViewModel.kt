@@ -113,7 +113,7 @@ class ConferenceFilterViewModel(
         if (isAfterThanEndDate) {
             _conferenceFilter.value = _conferenceFilter.value.copy(
                 selectedStartDate = filterDate,
-                selectedEndDate = null
+                selectedEndDate = null,
             )
             return
         }

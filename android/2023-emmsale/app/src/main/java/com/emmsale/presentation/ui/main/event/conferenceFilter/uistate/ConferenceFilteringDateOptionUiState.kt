@@ -1,9 +1,7 @@
 package com.emmsale.presentation.ui.main.event.conferenceFilter.uistate
 
 import android.content.Context
-import android.os.Parcelable
 import com.emmsale.R
-import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 
 data class ConferenceFilteringDateOptionUiState(

@@ -83,11 +83,11 @@ class ConferenceFilterActivity : AppCompatActivity() {
         val filterIdsIntent = Intent()
             .putExtra(
                 KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS,
-                conferenceFilter.selectedStatusFilteringOptionIds.toLongArray()
+                conferenceFilter.selectedStatusFilteringOptionIds.toLongArray(),
             )
             .putExtra(
                 KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS,
-                conferenceFilter.selectedTagFilteringOptionIds.toLongArray()
+                conferenceFilter.selectedTagFilteringOptionIds.toLongArray(),
             )
             .putExtra(KEY_SELECTED_START_DATE, conferenceFilter.selectedStartDate?.date)
             .putExtra(KEY_SELECTED_END_DATE, conferenceFilter.selectedEndDate?.date)
@@ -134,7 +134,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         updateTagFilters(conferenceFilters.conferenceTagFilteringOptions)
         updateConferenceDurations(
             conferenceFilters.selectedStartDate,
-            conferenceFilters.selectedEndDate
+            conferenceFilters.selectedEndDate,
         )
     }
 
@@ -218,7 +218,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
             selectedConferenceStatusFilterIds,
             selectedConferenceTagFilterIds,
             startDate,
-            endDate
+            endDate,
         )
     }
 
@@ -239,7 +239,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
             selectedStatusIds: Array<Long> = emptyArray(),
             selectedTagIds: Array<Long> = emptyArray(),
             selectedStartDate: LocalDate? = null,
-            selectedEndDate: LocalDate? = null
+            selectedEndDate: LocalDate? = null,
         ): Intent = Intent(context, ConferenceFilterActivity::class.java)
             .putExtra(KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS, selectedStatusIds.toLongArray())
             .putExtra(KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS, selectedTagIds.toLongArray())

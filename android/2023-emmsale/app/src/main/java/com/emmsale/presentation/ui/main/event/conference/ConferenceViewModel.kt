@@ -7,9 +7,9 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.conference.Conference
+import com.emmsale.data.conference.EventCategory
 import com.emmsale.data.conference.EventRepository
 import com.emmsale.data.conferenceStatus.ConferenceStatus
-import com.emmsale.data.conference.EventCategory
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
 import com.emmsale.data.eventTag.EventTag
 import com.emmsale.data.eventTag.EventTagRepository
@@ -65,7 +65,7 @@ class ConferenceViewModel(
         statuses: List<ConferenceStatus>,
         tags: List<EventTag>,
         startDate: LocalDate?,
-        endDate: LocalDate?
+        endDate: LocalDate?,
     ): ApiResult<List<Conference>> = eventRepository.getEvents(
         category = EventCategory.CONFERENCE,
         statuses = statuses,
@@ -98,19 +98,19 @@ class ConferenceViewModel(
         statusFilteringOptions: List<ConferenceStatus>,
         tagFilteringOptions: List<EventTag>,
         startDate: LocalDate?,
-        endDate: LocalDate?
+        endDate: LocalDate?,
     ) {
         _selectedFilter.postValue(
             _selectedFilter.value.copy(
                 conferenceStatusFilteringOptions = statusFilteringOptions.map(
-                    ConferenceSelectedFilteringOptionUiState::from
+                    ConferenceSelectedFilteringOptionUiState::from,
                 ),
                 conferenceTagFilteringOptions = tagFilteringOptions.map(
-                    ConferenceSelectedFilteringOptionUiState::from
+                    ConferenceSelectedFilteringOptionUiState::from,
                 ),
                 selectedStartDate = startDate?.let(ConferenceSelectedFilteringDateOptionUiState::from),
                 selectedEndDate = endDate?.let(ConferenceSelectedFilteringDateOptionUiState::from),
-            )
+            ),
         )
     }
 

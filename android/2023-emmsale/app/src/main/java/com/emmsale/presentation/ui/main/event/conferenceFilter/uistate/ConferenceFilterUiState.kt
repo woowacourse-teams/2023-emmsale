@@ -39,7 +39,7 @@ data class ConferenceFilterUiState(
         },
         conferenceTagFilteringOptions = conferenceTagFilteringOptions.map { tag ->
             tag.copy(
-                isSelected = false
+                isSelected = false,
             )
         },
         selectedStartDate = null,

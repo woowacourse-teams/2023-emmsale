@@ -46,7 +46,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
                 selectedStatusFilterIds,
                 selectedTagFilterIds,
                 selectedStartDate,
-                selectedEndDate
+                selectedEndDate,
             )
         }
 
