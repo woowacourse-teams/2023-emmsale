@@ -1,6 +1,6 @@
 ### 특정 사용자의 행사 관심 태그 조회
 
-GET http://localhost:8080/interest-tags/members/1
+GET http://localhost:8080/interest-tags?member_id=1
 Content-Type: application/json
 
 ### 사용자의 행사 관심 태그 추가

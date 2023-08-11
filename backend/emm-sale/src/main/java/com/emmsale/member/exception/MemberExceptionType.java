@@ -31,12 +31,12 @@ public enum MemberExceptionType implements BaseExceptionType {
   ),
   ALREADY_EXIST_INTEREST_TAG(
       HttpStatus.BAD_REQUEST,
-      "이미 관심 태그로 등록된 태그입니다."
+      "이미 관심 태그로 등록된 태그가 포함되어 있습니다."
   ),
 
   NOT_FOUND_INTEREST_TAG(
       HttpStatus.BAD_REQUEST,
-      "관심 태그로 등록되지 않은 태그입니다."
+      "관심 태그로 등록되지 않은 태그가 포함되어 있습니다."
   ),
 
   NULL_DESCRIPTION(

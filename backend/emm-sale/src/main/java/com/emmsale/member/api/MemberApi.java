@@ -1,12 +1,9 @@
 package com.emmsale.member.api;
 
-import com.emmsale.member.application.InterestTagService;
 import com.emmsale.member.application.MemberActivityService;
 import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.member.application.dto.DescriptionRequest;
-import com.emmsale.member.application.dto.InterestTagRequest;
-import com.emmsale.member.application.dto.InterestTagResponse;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
@@ -32,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberApi {
 
   private final MemberActivityService memberActivityService;
-  private final InterestTagService interestTagService;
   private final MemberUpdateService memberUpdateService;
   private final MemberQueryService memberQueryService;
 
@@ -67,30 +63,6 @@ public class MemberApi {
   public ResponseEntity<List<MemberActivityResponses>> findActivity(
       @PathVariable("member-id") final Long memberId) {
     return ResponseEntity.ok(memberActivityService.findActivities(memberId));
-  }
-
-  @PostMapping("/members/interest-tags")
-  public ResponseEntity<List<InterestTagResponse>> addInterestTag(
-      final Member member,
-      @RequestBody final InterestTagRequest interestTagRequest
-  ) {
-    return ResponseEntity.status(HttpStatus.CREATED)
-        .body(interestTagService.addInterestTag(member, interestTagRequest));
-  }
-
-  @DeleteMapping("/members/interest-tags")
-  public ResponseEntity<List<InterestTagResponse>> deleteInterestTag(
-      final Member member,
-      @RequestBody final InterestTagRequest interestTagRequest
-  ) {
-    return ResponseEntity.ok(
-        interestTagService.deleteInterestTag(member, interestTagRequest));
-  }
-
-  @GetMapping("/members/{member-id}/interest-tags")
-  public ResponseEntity<List<InterestTagResponse>> findInterestTags(
-      @PathVariable("member-id") final Long memberId) {
-    return ResponseEntity.ok(interestTagService.findInterestTags(memberId));
   }
 
   @PutMapping("/members/open-profile-url")
