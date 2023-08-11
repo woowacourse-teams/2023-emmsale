@@ -52,9 +52,9 @@ class ConferenceFilterViewModel(
             conferenceTagFilteringOptions = tags,
             selectedStartDate = selectedStartDate,
             selectedEndDate = selectedEndDate,
-                isLoading = false,
-                isError = false,
-            )
+            isLoading = false,
+            isError = false,
+        )
     }
 
     private suspend fun fetchConferenceTags(): List<ConferenceFilteringOptionUiState> =
@@ -108,7 +108,7 @@ class ConferenceFilterViewModel(
     fun updateStartDate(startDate: LocalDate) {
         val filterDate = ConferenceFilteringDateOptionUiState(startDate)
         val endDate = _conferenceFilter.value.selectedEndDate
-        val isAfterThanEndDate = endDate?.run { startDate.isAfter(endDate.date) } == true
+        val isAfterThanEndDate = endDate?.run { startDate.isAfter(date) } == true
 
         if (isAfterThanEndDate) {
             _conferenceFilter.value = _conferenceFilter.value.copy(
@@ -122,10 +122,8 @@ class ConferenceFilterViewModel(
     }
 
     fun updateEndDate(endDate: LocalDate) {
-        val startDate = _conferenceFilter.value.selectedStartDate?.date
-        val isEqualsOrBeforeThanStartDate = selectedStartDate?.run {
-            endDate.isEqual(startDate) || endDate.isBefore(startDate)
-        } == true
+        val isEqualsOrBeforeThanStartDate =
+            selectedStartDate?.run { endDate.isEqual(date) || endDate.isBefore(date) } == true
         if (isEqualsOrBeforeThanStartDate) return
 
         val filterDate = ConferenceFilteringDateOptionUiState(endDate)
