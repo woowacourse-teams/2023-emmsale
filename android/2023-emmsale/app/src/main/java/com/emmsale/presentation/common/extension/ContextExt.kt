@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.DatePickerDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -65,6 +66,7 @@ fun Context.showNotification(
     channelId: String,
     channelName: String,
     channelDescription: String,
+    intent: Intent? = null,
 ) {
     val notificationManager = NotificationManagerCompat.from(this)
 
@@ -75,7 +77,7 @@ fun Context.showNotification(
             channelName,
             channelDescription,
         )
-        val notification = createNotification(channelId, title, message)
+        val notification = createNotification(channelId, title, message, intent)
         notificationManager.notify(notificationId, notification)
     }
 }
@@ -97,10 +99,16 @@ private fun Context.createNotification(
     channelId: String,
     title: String,
     message: String,
+    intent: Intent? = null,
 ) = NotificationCompat.Builder(this, channelId)
     .setSmallIcon(R.drawable.ic_launcher_foreground)
     .setContentTitle(title)
     .setContentText(message)
+    .setContentIntent(
+        intent?.let {
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        },
+    )
     .setPriority(NotificationCompat.PRIORITY_HIGH)
     .setAutoCancel(true)
     .build()

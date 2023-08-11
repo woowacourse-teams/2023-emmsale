@@ -3,7 +3,6 @@ package com.emmsale.presentation.ui.main.event.conferenceFilter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,7 @@ import com.emmsale.databinding.LayoutFilterConferenceDurationBinding
 import com.emmsale.databinding.LayoutFilterConferenceEventTagBinding
 import com.emmsale.databinding.LayoutFilterConferenceStatusBinding
 import com.emmsale.presentation.common.extension.checkAll
-import com.emmsale.presentation.common.extension.getParcelableExtraCompat
+import com.emmsale.presentation.common.extension.getSerializableExtraCompat
 import com.emmsale.presentation.common.extension.message
 import com.emmsale.presentation.common.extension.negativeButton
 import com.emmsale.presentation.common.extension.positiveButton
@@ -23,10 +22,11 @@ import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.extension.title
 import com.emmsale.presentation.common.extension.uncheckAll
 import com.emmsale.presentation.common.views.activityChipOf
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterDateUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFiltersUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilteringDateOptionUiState
+import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilteringOptionUiState
 import com.google.android.material.chip.ChipGroup
+import java.time.LocalDate
 
 class ConferenceFilterActivity : AppCompatActivity() {
     private val viewModel: ConferenceFilterViewModel by viewModels { ConferenceFilterViewModel.factory }
@@ -44,7 +44,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         initBackPressedDispatcher()
         setupIsEventTagAllSelected()
         setupIsStartDateSelected()
-        setupEventFilters()
+        setupConferenceFilter()
         fetchFilters()
     }
 
@@ -67,15 +67,33 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun askFilterClear() {
         showDialog {
-            title(getString(R.string.eventfilter_clear_title))
-            message(getString(R.string.eventfilter_clear_message))
+            title(getString(R.string.conferencefilter_clear_title))
+            message(getString(R.string.conferencefilter_clear_message))
             positiveButton(getString(R.string.all_okay)) { viewModel.clearFilters() }
             negativeButton(getString(R.string.all_cancel))
         }
     }
 
     private fun initEventFilterApplyButtonClickListener() {
-        binding.btnFilterApply.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding.btnFilterApply.setOnClickListener { finishWithSendingSelectedFilterIds() }
+    }
+
+    private fun finishWithSendingSelectedFilterIds() {
+        val conferenceFilter = viewModel.conferenceFilter.value
+        val filterIdsIntent = Intent()
+            .putExtra(
+                KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS,
+                conferenceFilter.selectedStatusFilteringOptionIds.toLongArray(),
+            )
+            .putExtra(
+                KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS,
+                conferenceFilter.selectedTagFilteringOptionIds.toLongArray(),
+            )
+            .putExtra(KEY_SELECTED_START_DATE, conferenceFilter.selectedStartDate?.date)
+            .putExtra(KEY_SELECTED_END_DATE, conferenceFilter.selectedEndDate?.date)
+
+        setResult(RESULT_OK, filterIdsIntent)
+        finish()
     }
 
     private fun initTagAllFilterButtonClickListener() {
@@ -90,15 +108,11 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun initDurationButtonClickListener() {
         eventDurationBinding.btnFilterStartDuration.setOnClickListener {
-            showDatePickerDialog { date ->
-                viewModel.updateStartDate(date)
-            }
+            showDatePickerDialog(viewModel::updateStartDate)
         }
 
         eventDurationBinding.btnFilterEndDuration.setOnClickListener {
-            showDatePickerDialog { date ->
-                viewModel.updateEndDate(date)
-            }
+            showDatePickerDialog(viewModel::updateEndDate)
         }
     }
 
@@ -106,32 +120,25 @@ class ConferenceFilterActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, ConferenceFilterOnBackPressedCallback())
     }
 
-    private fun setupEventFilters() {
-        viewModel.eventFilters.observe(this) { eventFilters ->
-            when (eventFilters) {
-                is ConferenceFiltersUiState.Success -> {
-                    updateFilterViews(eventFilters)
-                    binding.progressbarLoading.visibility = View.GONE
-                }
-
-                is ConferenceFiltersUiState.Error -> {
-                    showToast(getString(R.string.all_data_loading_failed_message))
-                    binding.progressbarLoading.visibility = View.GONE
-                }
-
-                is ConferenceFiltersUiState.Loading ->
-                    binding.progressbarLoading.visibility = View.VISIBLE
+    private fun setupConferenceFilter() {
+        viewModel.conferenceFilter.observe(this) { eventFilters ->
+            when {
+                eventFilters.isError -> showToast(getString(R.string.all_data_loading_failed_message))
+                !eventFilters.isLoading -> updateFilterViews(eventFilters)
             }
         }
     }
 
-    private fun updateFilterViews(eventFilters: ConferenceFiltersUiState.Success) {
-        updateConferenceStatus(eventFilters.statuses)
-        updateConferenceTags(eventFilters.tags)
-        updateConferenceDurations(eventFilters.selectedStartDate, eventFilters.selectedEndDate)
+    private fun updateFilterViews(conferenceFilters: ConferenceFilterUiState) {
+        updateStatusFilters(conferenceFilters.conferenceStatusFilteringOptions)
+        updateTagFilters(conferenceFilters.conferenceTagFilteringOptions)
+        updateConferenceDurations(
+            conferenceFilters.selectedStartDate,
+            conferenceFilters.selectedEndDate,
+        )
     }
 
-    private fun updateConferenceStatus(eventStatuses: List<ConferenceFilterUiState>) {
+    private fun updateStatusFilters(eventStatuses: List<ConferenceFilteringOptionUiState>) {
         removeFilterStatuses()
         eventStatuses.forEach { filter ->
             addTagFilter(eventStatusBinding.cgConferenceStatusChips, filter) {
@@ -140,16 +147,11 @@ class ConferenceFilterActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateConferenceTags(eventTags: List<ConferenceFilterUiState>) {
-        removeFilterTagsExcludingAllTag()
+    private fun updateTagFilters(eventTags: List<ConferenceFilteringOptionUiState>) {
+        removeTagFiltersExcludingAllTag()
         eventTags.forEach { filter ->
             addTagFilter(eventTagBinding.cgConferenceTagChips, filter) {
                 viewModel.toggleFilterSelection(filter)
-                if (filter.isSelected) {
-                    viewModel.addSelectedTagFilterCount(1)
-                } else {
-                    viewModel.minusSelectedTagFilterCount(1)
-                }
             }
         }
     }
@@ -158,16 +160,18 @@ class ConferenceFilterActivity : AppCompatActivity() {
         eventStatusBinding.cgConferenceStatusChips.removeAllViews()
     }
 
-    private fun removeFilterTagsExcludingAllTag() {
+    private fun removeTagFiltersExcludingAllTag() {
+        val startTagWithoutAllTagPosition = 1
+
         eventTagBinding.cgConferenceTagChips.removeViews(
-            1,
+            startTagWithoutAllTagPosition,
             eventTagBinding.cgConferenceTagChips.childCount - 1,
         )
     }
 
     private fun addTagFilter(
         chipGroup: ChipGroup,
-        tag: ConferenceFilterUiState,
+        tag: ConferenceFilteringOptionUiState,
         block: () -> Unit,
     ) {
         chipGroup.addView(
@@ -180,8 +184,8 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun updateConferenceDurations(
-        startDate: ConferenceFilterDateUiState?,
-        endDate: ConferenceFilterDateUiState?,
+        startDate: ConferenceFilteringDateOptionUiState?,
+        endDate: ConferenceFilteringDateOptionUiState?,
     ) {
         eventDurationBinding.btnFilterStartDuration.text = startDate?.transformToDateString(this)
         eventDurationBinding.btnFilterEndDuration.text = endDate?.transformToDateString(this)
@@ -201,7 +205,21 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun fetchFilters() {
-        viewModel.updateFilters(intent.getParcelableExtraCompat(FILTERS_KEY))
+        val selectedConferenceStatusFilterIds = intent
+            ?.getLongArrayExtra(KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS)
+            ?.toTypedArray() ?: emptyArray()
+        val selectedConferenceTagFilterIds = intent
+            ?.getLongArrayExtra(KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS)
+            ?.toTypedArray() ?: emptyArray()
+        val startDate = intent.getSerializableExtraCompat<LocalDate>(KEY_SELECTED_START_DATE)
+        val endDate = intent.getSerializableExtraCompat<LocalDate>(KEY_SELECTED_END_DATE)
+
+        viewModel.updateFilteringOptionsToSelectedState(
+            selectedConferenceStatusFilterIds,
+            selectedConferenceTagFilterIds,
+            startDate,
+            endDate,
+        )
     }
 
     private fun setupIsStartDateSelected() {
@@ -211,24 +229,36 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val FILTERS_KEY = "filters_key"
+        const val KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS = "selected_conference_status_ids_key"
+        const val KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS = "selected_conference_tag_ids_key"
+        const val KEY_SELECTED_START_DATE = "selected_start_date_key"
+        const val KEY_SELECTED_END_DATE = "selected_end_date_key"
 
         fun createIntent(
             context: Context,
-            selectedFilters: ConferenceFiltersUiState.Success?,
+            selectedStatusIds: Array<Long> = emptyArray(),
+            selectedTagIds: Array<Long> = emptyArray(),
+            selectedStartDate: LocalDate? = null,
+            selectedEndDate: LocalDate? = null,
         ): Intent = Intent(context, ConferenceFilterActivity::class.java)
-            .putExtra(FILTERS_KEY, selectedFilters)
+            .putExtra(KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS, selectedStatusIds.toLongArray())
+            .putExtra(KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS, selectedTagIds.toLongArray())
+            .putExtra(KEY_SELECTED_START_DATE, selectedStartDate)
+            .putExtra(KEY_SELECTED_END_DATE, selectedEndDate)
     }
 
     inner class ConferenceFilterOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val filters = viewModel.eventFilters.value
-            if (filters is ConferenceFiltersUiState.Success) {
-                val intent = Intent()
-                intent.putExtra(FILTERS_KEY, filters)
-                setResult(RESULT_OK, intent)
+            showBackPressDialog()
+        }
+
+        private fun showBackPressDialog() {
+            showDialog {
+                title(getString(R.string.conferencefilter_backpress_dialog_title))
+                message(getString(R.string.conferencefilter_backpress_dialog_message))
+                positiveButton { finish() }
+                negativeButton { }
             }
-            finish()
         }
     }
 }
