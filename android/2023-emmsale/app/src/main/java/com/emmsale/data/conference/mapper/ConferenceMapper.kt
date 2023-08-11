@@ -18,7 +18,7 @@ fun ConferenceApiModel.toData(): Conference = Conference(
     tags = tags,
     posterUrl = posterUrl,
     dDay = dDay,
-    applyStatus = applyStatus.mapToApplyStatus(),
+    eventApplyStatus = applyStatus.mapToApplyStatus(),
     applyRemainingDays = applyRemainingDays,
 )
 
