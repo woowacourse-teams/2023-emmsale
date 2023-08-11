@@ -30,6 +30,8 @@ public class UpdateNotification {
   @Column(name = "type", nullable = false)
   private UpdateNotificationType updateNotificationType;
   private LocalDateTime createdAt;
+  @Column(nullable = false)
+  private boolean isRead;
 
   public UpdateNotification(
       final Long receiverId,
@@ -41,5 +43,6 @@ public class UpdateNotification {
     this.redirectId = redirectId;
     this.updateNotificationType = updateNotificationType;
     this.createdAt = createdAt;
+    this.isRead = false;
   }
 }
