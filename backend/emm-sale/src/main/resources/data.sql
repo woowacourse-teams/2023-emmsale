@@ -10,6 +10,7 @@ truncate table event_member;
 truncate table request_notification;
 truncate table fcm_token;
 truncate table update_notification;
+truncate table block;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');
