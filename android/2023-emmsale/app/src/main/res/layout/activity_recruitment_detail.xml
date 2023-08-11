@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".presentation.ui.eventdetail.recruitment.RecruitmentDetailActivity">
 
+    <TextView
+        android:id="@+id/btn_recruitmentdetail_request_companion2"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="17dp"
+        android:background="@drawable/bg_all_next"
+        android:layout_marginHorizontal="17dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="함께하기 요청"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="@font/nanum_square_bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarlayout_recruitmentdetail"
         android:layout_width="match_parent"
@@ -35,7 +52,7 @@
                 android:id="@+id/tv_recruitmentdetail_appbartitle"
                 android:textSize="14sp"
                 android:fontFamily="@font/nanum_square_bold"
-                android:textColor="@color/text_color_black"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -45,7 +62,7 @@
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/text_color_gray"
+                android:background="@color/gray"
                 app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -55,7 +72,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/nanum_square_bold"
         android:textSize="12sp"
-        android:textColor="@color/text_color_black"
+        android:textColor="@color/black"
         android:id="@+id/tv_recruitmentdetail_membername"
         tools:text="김커디"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,21 +86,28 @@
         android:id="@+id/tv_recruitmentdetail_date"
         android:fontFamily="@font/nanum_square_regular"
         android:textSize="11sp"
-        android:textColor="@color/text_color_gray"
+        android:textColor="@color/gray"
         app:layout_constraintStart_toEndOf="@+id/tv_recruitmentdetail_membername"
         app:layout_constraintTop_toTopOf="@+id/tv_recruitmentdetail_membername"
         android:layout_marginStart="7dp"
         tools:text="2023.08.03"
         app:layout_constraintBottom_toBottomOf="@+id/tv_recruitmentdetail_membername" />
 
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray"
+        app:layout_constraintTop_toBottomOf="@id/tv_recruitmentdetail_message"
+        android:layout_marginTop="16dp" />
+
     <TextView
-        android:text="TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
-        android:textColor="@color/text_color_black"
+        android:textColor="@color/black"
         android:textSize="13sp"
         android:fontFamily="@font/nanum_square_regular"
+        android:lineHeight="17.5dp"
         app:layout_constraintTop_toBottomOf="@+id/tv_recruitmentdetail_membername"
         android:id="@+id/tv_recruitmentdetail_message"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,25 +117,36 @@
         android:layout_marginStart="17dp" />
 
     <TextView
-        android:id="@+id/btn_next"
+        android:id="@+id/btn_recruitmentdetail_request_companion"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginBottom="17dp"
         android:background="@drawable/bg_all_next"
+        android:layout_marginHorizontal="17dp"
         android:clickable="true"
         android:gravity="center"
-        android:text="다음"
+        android:text="함께하기 요청"
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/nanum_square_bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/text_color_gray"
-        app:layout_constraintTop_toBottomOf="@id/tv_recruitmentdetail_message"
-        android:layout_marginTop="16dp" />
+    <TextView
+        android:id="@+id/btn_recruitmentdetail_show_profile"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@drawable/bg_all_next"
+        android:layout_marginHorizontal="17dp"
+        android:clickable="true"
+        android:gravity="center"
+        tools:text="김커디님의 명함조회"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="@font/nanum_square_bold"
+        android:layout_marginBottom="9dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_recruitmentdetail_request_companion" />
 </androidx.constraintlayout.widget.ConstraintLayout>

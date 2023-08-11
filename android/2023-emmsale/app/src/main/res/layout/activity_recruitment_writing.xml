@@ -41,7 +41,7 @@
                     android:id="@+id/tv_recruitmentwriting_appbartitle"
                     android:textSize="14sp"
                     android:fontFamily="@font/nanum_square_bold"
-                    android:textColor="@color/text_color_black"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +51,7 @@
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/text_color_gray"
+                    android:background="@color/gray"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
                 <TextView
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="17dp"
                     android:textSize="14sp"
-                    android:textColor="@color/text_color_green"
+                    android:textColor="@color/primary_color"
                     android:fontFamily="@font/nanum_square_bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -75,11 +75,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:inputType="text"
-            android:hint="모집글을 작성해주세요."
-            android:fontFamily="@font/nanum_square_regular"
-            android:textColorHint="@color/text_color_gray"
-            android:textColor="@color/text_color_black"
-            android:textSize="13sp"
+            android:hint="@string/recruitmetwriting_hint_message"
+            android:textColorHint="@color/gray"
+            android:textAppearance="@style/KerdyTextStyleBlackRegular13"
             android:background="@null"
             android:maxLength="250"
             android:layout_marginTop="16dp"

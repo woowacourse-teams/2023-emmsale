@@ -13,13 +13,6 @@ class RecruitmentViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.buttonRequestCompanion.setOnClickListener {
-            requestCompanion(
-                binding.recruitment!!.memberId,
-                binding.recruitment!!.name,
-            )
-        }
-        binding.ivRecruitmentImage.setOnClickListener { showMemberProfile(binding.recruitment!!.memberId) }
     }
 
     fun bind(recruitment: RecruitmentUiState) {

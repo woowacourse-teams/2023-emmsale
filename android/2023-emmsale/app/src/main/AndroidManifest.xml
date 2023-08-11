@@ -19,7 +19,7 @@
         tools:targetApi="33">
         <activity
             android:name=".presentation.ui.eventdetail.recruitment.RecruitmentDetailActivity"
-            android:exported="false" />
+            android:exported="true"></activity>
         <activity
             android:name=".presentation.ui.eventdetail.recruitment.RecruitmentWritingActivity"
             android:exported="false" />
@@ -50,7 +50,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

@@ -129,4 +129,6 @@
     <string name="notification_header_expand_view">화면을 팽창 시킵니다.</string>
 
     <string name="conference_default_people_count">0</string>
+
+    <string name="recruitmetwriting_hint_message">모집글을 작성해주세요.</string>
 </resources>
