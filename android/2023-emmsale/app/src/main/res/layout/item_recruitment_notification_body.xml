@@ -6,6 +6,7 @@
     <data>
 
         <import type="kotlin.Unit" />
+        <import type="android.view.View" />
 
         <variable
             name="notificationBodyClickListener"
@@ -30,7 +31,7 @@
             android:id="@+id/iv_member_profile"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="@string/notification_member_profile"
+            android:contentDescription="@string/recruitmentnotification_member_profile"
             app:imageUrl="@{notification.profileImageUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -49,10 +50,21 @@
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_more"
             app:layout_constraintStart_toEndOf="@+id/iv_member_profile"
             app:layout_constraintTop_toTopOf="@+id/iv_member_profile"
             tools:text="김커디" />
+
+        <ImageView
+            android:id="@+id/btn_more"
+            android:layout_width="23dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/recruitmentnotification_more_button"
+            android:src="@drawable/ic_all_more"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_member_name"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_member_name" />
 
         <TextView
             android:id="@+id/tv_noti_date"
@@ -72,9 +84,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:singleLine="true"
             android:text="@{notification.message}"
             android:textColor="@color/black"
             android:textSize="13sp"
@@ -92,10 +101,11 @@
             android:background="@drawable/bg_reject_btn"
             android:clickable="true"
             android:focusable="true"
+            android:paddingVertical="12dp"
             android:gravity="center"
             android:onClick="@{() -> notificationBodyClickListener.onReject(notification.id)}"
-            android:paddingVertical="10dp"
-            android:text="@string/notification_reject"
+            android:text="@string/recruitmentnotification_reject"
+            android:visibility="@{notification.rejected || notification.accepted ? View.GONE : View.VISIBLE}"
             android:textColor="@color/white"
             android:textSize="13sp"
             android:textStyle="bold"
@@ -113,7 +123,8 @@
             android:focusable="true"
             android:gravity="center"
             android:onClick="@{() -> notificationBodyClickListener.onAccept(notification.id)}"
-            android:text="@string/notification_accept"
+            android:text="@string/recruitmentnotification_accept"
+            android:visibility="@{notification.rejected || notification.accepted ? View.GONE : View.VISIBLE}"
             android:textColor="@color/white"
             android:textSize="13sp"
             android:textStyle="bold"
@@ -121,6 +132,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_reject"
             app:layout_constraintTop_toTopOf="@+id/btn_reject" />
+
+        <TextView
+            android:id="@+id/btn_open_chat"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/bg_accept_btn"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:paddingVertical="12dp"
+            android:text="@string/recruitmentnotification_open_chat"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:visibility="@{notification.accepted ? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_noti_message"
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

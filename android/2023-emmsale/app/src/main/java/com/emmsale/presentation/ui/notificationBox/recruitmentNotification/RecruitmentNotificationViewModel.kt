@@ -7,8 +7,8 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.eventdetail.EventDetailRepository
 import com.emmsale.data.member.MemberRepository
-import com.emmsale.data.notification.RecruitmentNotification
 import com.emmsale.data.notification.NotificationRepository
+import com.emmsale.data.notification.RecruitmentNotification
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -64,8 +64,9 @@ class RecruitmentNotificationViewModel(
         val notificationHeaders = notifications.map { (conferenceId, notifications) ->
             RecruitmentNotificationHeaderUiState(
                 eventId = conferenceId,
-                conferenceName = notifications[0].conferenceName,
+                conferenceName = notifications.first().conferenceName,
                 notifications = notifications,
+                isUnread = notifications.any { !it.isRead },
             )
         }
 

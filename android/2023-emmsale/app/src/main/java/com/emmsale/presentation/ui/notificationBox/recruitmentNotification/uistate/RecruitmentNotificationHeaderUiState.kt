@@ -5,6 +5,7 @@ data class RecruitmentNotificationHeaderUiState(
     val conferenceName: String,
     val isExpanded: Boolean = false,
     val notifications: List<RecruitmentNotificationBodyUiState>,
+    val isUnread: Boolean = false,
 ) {
     fun toggleExpanded(): RecruitmentNotificationHeaderUiState = copy(isExpanded = !isExpanded)
 

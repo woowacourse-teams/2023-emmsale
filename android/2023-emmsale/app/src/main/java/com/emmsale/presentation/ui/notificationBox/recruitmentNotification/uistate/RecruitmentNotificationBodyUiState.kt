@@ -1,6 +1,9 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate
 
 import com.emmsale.data.notification.RecruitmentNotification
+import com.emmsale.data.notification.RecruitmentNotificationStatus
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 data class RecruitmentNotificationBodyUiState(
     val id: Long,
@@ -10,8 +13,9 @@ data class RecruitmentNotificationBodyUiState(
     val conferenceName: String,
     val message: String,
     val profileImageUrl: String,
-    val notificationDate: String = "23.08.03",
+    val notificationDate: String,
     val isAccepted: Boolean = false,
+    val isRejected: Boolean = false,
     val isRead: Boolean = false,
 ) {
     companion object {
@@ -27,6 +31,13 @@ data class RecruitmentNotificationBodyUiState(
             conferenceName = conferenceName,
             message = recruitmentNotification.message,
             profileImageUrl = notificationMember?.profileImageUrl ?: "",
+            notificationDate = recruitmentNotification.notificationDate.toUiString(),
+            isAccepted = recruitmentNotification.status == RecruitmentNotificationStatus.ACCEPTED,
+            isRejected = recruitmentNotification.status == RecruitmentNotificationStatus.REJECTED,
+            isRead = recruitmentNotification.isRead,
         )
+
+        private fun LocalDateTime.toUiString(): String =
+            DateTimeFormatter.ofPattern("yyyy.MM.dd").format(this)
     }
 }

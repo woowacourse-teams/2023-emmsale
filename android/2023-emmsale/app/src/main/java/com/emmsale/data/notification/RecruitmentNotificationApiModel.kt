@@ -15,4 +15,10 @@ data class RecruitmentNotificationApiModel(
     val message: String,
     @SerialName("eventId")
     val eventId: Long,
+    @SerialName("status")
+    val status: String,
+    @SerialName("isRead")
+    val isRead: Boolean,
+    @SerialName("createdAt")
+    val createdAt: String,
 )
