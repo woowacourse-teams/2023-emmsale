@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.extension.showToast
@@ -59,30 +60,31 @@ class ChildCommentActivity : AppCompatActivity() {
             handleChildComments(it)
             handleEditComment()
             handleUpButton()
+            handleProgressBar(it)
         }
     }
 
-    private fun handleError(childCommentsUiState: ChildCommentsUiState) {
+    private fun handleError(childComments: ChildCommentsUiState) {
         fun handleCommentsFetchingError(childCommentsUiState: ChildCommentsUiState) {
             if (childCommentsUiState.isFetchingError) {
                 showToast(getString(R.string.comments_comments_fetching_error_message))
             }
         }
 
-        fun handleCommentPostingError(childCommentsUiState: ChildCommentsUiState) {
-            if (childCommentsUiState.isPostingError) {
+        fun handleCommentPostingError(childComments: ChildCommentsUiState) {
+            if (childComments.isPostingError) {
                 showToast(getString(R.string.comments_comments_posting_error_message))
             }
         }
 
-        fun handleCommentDeletionError(childCommentsUiState: ChildCommentsUiState) {
-            if (childCommentsUiState.isDeletionError) {
+        fun handleCommentDeletionError(childComments: ChildCommentsUiState) {
+            if (childComments.isDeletionError) {
                 showToast(getString(R.string.comments_comments_deletion_error_message))
             }
         }
-        handleCommentsFetchingError(childCommentsUiState)
-        handleCommentPostingError(childCommentsUiState)
-        handleCommentDeletionError(childCommentsUiState)
+        handleCommentsFetchingError(childComments)
+        handleCommentPostingError(childComments)
+        handleCommentDeletionError(childComments)
     }
 
     private fun handleNotLogin(isLogin: Boolean) {
@@ -92,9 +94,9 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleChildComments(childCommentsUiState: ChildCommentsUiState) {
+    private fun handleChildComments(childComments: ChildCommentsUiState) {
         (binding.rvChildcommentsChildcomments.adapter as ChildCommentAdapter).submitList(
-            listOf(childCommentsUiState.parentComment) + childCommentsUiState.childComments,
+            listOf(childComments.parentComment) + childComments.childComments,
         )
     }
 
@@ -108,6 +110,10 @@ class ChildCommentActivity : AppCompatActivity() {
         binding.ivChildcommentsUpbutton.setOnClickListener {
             finish()
         }
+    }
+
+    private fun handleProgressBar(childComments: ChildCommentsUiState) {
+        binding.progressBar.isVisible = childComments.isLoading
     }
 
     private fun onChildCommentSave() {
