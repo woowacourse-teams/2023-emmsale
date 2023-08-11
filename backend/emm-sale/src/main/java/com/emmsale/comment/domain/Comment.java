@@ -103,6 +103,13 @@ public class Comment extends BaseEntity {
     return content;
   }
 
+  public Long getParentIdOrSelfId() {
+    if (parent == null) {
+      return id;
+    }
+    return parent.id;
+  }
+
   @Override
   public boolean equals(final Object o) {
     if (this == o) {

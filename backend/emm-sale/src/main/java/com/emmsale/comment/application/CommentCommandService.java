@@ -71,7 +71,7 @@ public class CommentCommandService {
     notificationCandidates.stream()
         .map(it -> new UpdateNotificationEvent(
             it.getMember().getId(),
-            it.getId(),
+            it.getParentIdOrSelfId(),
             it.getClass().getName()))
         .forEach(eventPublisher::publish);
   }
