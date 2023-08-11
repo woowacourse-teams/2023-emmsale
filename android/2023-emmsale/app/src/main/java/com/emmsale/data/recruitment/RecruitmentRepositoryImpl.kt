@@ -6,7 +6,7 @@ import com.emmsale.data.recruitment.dto.CompanionRequestBody
 import com.emmsale.data.recruitment.dto.RecruitmentApiModel
 import com.emmsale.data.recruitment.dto.RecruitmentDeletionRequestBody
 import com.emmsale.data.recruitment.dto.RecruitmentPostingRequestBody
-import com.emmsale.data.recruitment.dto.toData
+import com.emmsale.data.recruitment.mapper.toData
 import com.emmsale.data.token.TokenRepository
 
 class RecruitmentRepositoryImpl(
