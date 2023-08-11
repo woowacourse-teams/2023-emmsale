@@ -1,6 +1,5 @@
 package com.emmsale.notification.application;
 
-import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 import static com.emmsale.notification.exception.NotificationExceptionType.ALREADY_EXIST_NOTIFICATION;
 import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
@@ -8,13 +7,9 @@ import static com.emmsale.notification.exception.NotificationExceptionType.NOT_O
 
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.member.exception.MemberException;
-import com.emmsale.notification.application.dto.FcmTokenRequest;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
-import com.emmsale.notification.domain.FcmToken;
-import com.emmsale.notification.domain.FcmTokenRepository;
 import com.emmsale.notification.domain.RequestNotification;
 import com.emmsale.notification.domain.RequestNotificationRepository;
 import com.emmsale.notification.exception.NotificationException;
@@ -30,12 +25,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class RequestNotificationCommandService {
 
   private final RequestNotificationRepository requestNotificationRepository;
-  private final FcmTokenRepository fcmTokenRepository;
   private final MemberRepository memberRepository;
   private final FirebaseCloudMessageClient firebaseCloudMessageClient;
 
   public RequestNotificationResponse create(
-      final RequestNotificationRequest requestNotificationRequest) {
+      final RequestNotificationRequest requestNotificationRequest
+  ) {
     final Long senderId = requestNotificationRequest.getSenderId();
     final Long receiverId = requestNotificationRequest.getReceiverId();
     final Long eventId = requestNotificationRequest.getEventId();
@@ -76,29 +71,6 @@ public class RequestNotificationCommandService {
 
   private boolean isNotExistedSenderOrReceiver(final List<Long> memberIds) {
     return memberIds.size() != memberRepository.countMembersById(memberIds);
-  }
-
-  public void registerFcmToken(final FcmTokenRequest fcmTokenRequest) {
-    final Long memberId = fcmTokenRequest.getMemberId();
-    final String token = fcmTokenRequest.getToken();
-
-    validateExistedMember(memberId);
-
-    fcmTokenRepository.findByMemberId(memberId)
-        .ifPresentOrElse(
-            it -> it.update(token),
-            () -> fcmTokenRepository.save(new FcmToken(token, memberId))
-        );
-  }
-
-  private void validateExistedMember(final Long memberId) {
-    if (isNotExisted(memberId)) {
-      throw new MemberException(NOT_FOUND_MEMBER);
-    }
-  }
-
-  private boolean isNotExisted(final Long memberId) {
-    return !memberRepository.existsById(memberId);
   }
 
   public void modify(

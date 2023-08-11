@@ -311,26 +311,26 @@ include::{snippets}/login-snippet/response-fields.adoc[]
 === `POST` : 알림 저장
 
 .HTTP request 설명
-include::{snippets}/create-requestNotification/request-fields.adoc[]
+include::{snippets}/create-request-notification/request-fields.adoc[]
 
 .HTTP request
-include::{snippets}/create-requestNotification/http-request.adoc[]
+include::{snippets}/create-request-notification/http-request.adoc[]
 
 .HTTP response 설명
-include::{snippets}/create-requestNotification/response-fields.adoc[]
+include::{snippets}/create-request-notification/response-fields.adoc[]
 
 .HTTP response
-include::{snippets}/create-requestNotification/http-response.adoc[]
+include::{snippets}/create-request-notification/http-response.adoc[]
 
 === `PATCH` : 알림 상태 변경
 
 .HTTP request 설명
-include::{snippets}/modify-requestNotification/request-fields.adoc[]
+include::{snippets}/modify-request-notification/request-fields.adoc[]
 
 .HTTP request
-include::{snippets}/modify-requestNotification/http-request.adoc[]
+include::{snippets}/modify-request-notification/http-request.adoc[]
 
-include::{snippets}/modify-requestNotification/path-parameters.adoc[]
+include::{snippets}/modify-request-notification/path-parameters.adoc[]
 
 === `DELETE` : 알림 삭제
 
@@ -350,26 +350,26 @@ include::{snippets}/create-fcmToken/http-request.adoc[]
 === `GET` : notification id로 알림 조회
 
 .HTTP request
-include::{snippets}/find-requestNotification/http-request.adoc[]
+include::{snippets}/find-request-notification/http-request.adoc[]
 
-include::{snippets}/find-requestNotification/path-parameters.adoc[]
+include::{snippets}/find-request-notification/path-parameters.adoc[]
 
 .HTTP response 설명
-include::{snippets}/find-requestNotification/response-fields.adoc[]
+include::{snippets}/find-request-notification/response-fields.adoc[]
 
 .HTTP response
-include::{snippets}/find-requestNotification/http-response.adoc[]
+include::{snippets}/find-request-notification/http-response.adoc[]
 
 === `GET` : 사용자가 받은 모든 알림 목록 조회
 
 .HTTP request
-include::{snippets}/find-all-requestNotification/http-request.adoc[]
+include::{snippets}/find-all-request-notification/http-request.adoc[]
 
 .HTTP response 설명
-include::{snippets}/find-all-requestNotification/response-fields.adoc[]
+include::{snippets}/find-all-request-notification/response-fields.adoc[]
 
 .HTTP response
-include::{snippets}/find-all-requestNotification/http-response.adoc[]
+include::{snippets}/find-all-request-notification/http-response.adoc[]
 
 == Block
 

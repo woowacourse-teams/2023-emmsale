@@ -2,10 +2,8 @@ package com.emmsale.notification.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -14,12 +12,9 @@ import static org.mockito.Mockito.mock;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.notification.application.dto.FcmTokenRequest;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
-import com.emmsale.notification.domain.FcmToken;
-import com.emmsale.notification.domain.FcmTokenRepository;
 import com.emmsale.notification.domain.RequestNotification;
 import com.emmsale.notification.domain.RequestNotificationRepository;
 import com.emmsale.notification.domain.RequestNotificationStatus;
@@ -38,8 +33,6 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
   @Autowired
   private RequestNotificationCommandService requestNotificationCommandService;
   @Autowired
-  private FcmTokenRepository fcmTokenRepository;
-  @Autowired
   private RequestNotificationRepository requestNotificationRepository;
   @Autowired
   private MemberRepository memberRepository;
@@ -52,7 +45,6 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
 
     mockingRequestNotificationCommandService = new RequestNotificationCommandService(
         requestNotificationRepository,
-        fcmTokenRepository,
         memberRepository,
         firebaseCloudMessageClient
     );
@@ -90,48 +82,6 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
         .usingRecursiveComparison()
         .ignoringCollectionOrder()
         .isEqualTo(expected);
-  }
-
-  @Test
-  @DisplayName("registerFcmToken() : 이미 FCM 토큰이 존재한다면 해당 멤버의 FCM 토큰을 변경할 수 있다.")
-  void test_registerFcmToken_alreadyHasToken() throws Exception {
-    //given
-    final long memberId = 1L;
-    final String token = "token";
-    final String updateToken = "updateToken";
-    fcmTokenRepository.save(new FcmToken(token, memberId));
-
-    final FcmTokenRequest request = new FcmTokenRequest(updateToken, memberId);
-
-    //when
-    requestNotificationCommandService.registerFcmToken(request);
-
-    //then
-    final FcmToken updatedFcmToken = fcmTokenRepository.findByMemberId(memberId).get();
-
-    assertEquals(updateToken, updatedFcmToken.getToken());
-  }
-
-  @Test
-  @DisplayName("registerFcmToken() : 해당 사용자의 FCM 토큰이 존재하지 않는다면 FCM 토큰을 저장한다.")
-  void test_registerFcmToken_noToken() throws Exception {
-    //given
-    final long memberId = 1L;
-    final String token = "token";
-
-    final FcmTokenRequest request = new FcmTokenRequest(token, memberId);
-
-    //when
-    requestNotificationCommandService.registerFcmToken(request);
-
-    //then
-    final FcmToken createdFcmToken = fcmTokenRepository.findByMemberId(memberId).get();
-
-    assertAll(
-        () -> assertEquals(token, createdFcmToken.getToken()),
-        () -> assertEquals(memberId, createdFcmToken.getMemberId()),
-        () -> assertNotNull(createdFcmToken.getId())
-    );
   }
 
   @ParameterizedTest

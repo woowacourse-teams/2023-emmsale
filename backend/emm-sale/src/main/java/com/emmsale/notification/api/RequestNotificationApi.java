@@ -3,7 +3,6 @@ package com.emmsale.notification.api;
 import com.emmsale.member.domain.Member;
 import com.emmsale.notification.application.RequestNotificationCommandService;
 import com.emmsale.notification.application.RequestNotificationQueryService;
-import com.emmsale.notification.application.dto.FcmTokenRequest;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
@@ -31,11 +30,6 @@ public class RequestNotificationApi {
   public RequestNotificationResponse create(
       @RequestBody final RequestNotificationRequest requestNotificationRequest) {
     return requestNotificationCommandService.create(requestNotificationRequest);
-  }
-
-  @PostMapping("/notifications/token")
-  public void createFcmToken(@RequestBody final FcmTokenRequest fcmTokenRequest) {
-    requestNotificationCommandService.registerFcmToken(fcmTokenRequest);
   }
 
   @PatchMapping("/request-notifications/{request-notification-id}")

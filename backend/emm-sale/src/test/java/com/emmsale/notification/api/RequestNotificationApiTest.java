@@ -20,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.notification.application.RequestNotificationCommandService;
 import com.emmsale.notification.application.RequestNotificationQueryService;
-import com.emmsale.notification.application.dto.FcmTokenRequest;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
@@ -92,30 +91,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
-        .andDo(document("create-requestNotification", requestFields, responseFields));
-  }
-
-  @Test
-  @DisplayName("createFcmToken() : FcmToken이 새로 생성되거나 잘 수정되면 200 OK를 반환할 수 있다.")
-  void test_createFcmToken() throws Exception {
-    //given
-    final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("token").description("FcmToken 주세요"),
-        fieldWithPath("memberId").description("FcmToken 주인의 ID")
-    );
-
-    final long memberId = 1L;
-    final String token = "FCM 토큰";
-
-    final FcmTokenRequest request = new FcmTokenRequest(token, memberId);
-
-    //when & then
-    mockMvc.perform(post("/notifications/token")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isOk())
-        .andDo(print())
-        .andDo(document("create-fcmToken", requestFields));
+        .andDo(document("create-request-notification", requestFields, responseFields));
   }
 
   @Test
@@ -143,7 +119,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
         .andDo(print())
-        .andDo(document("modify-requestNotification", requestFields, pathParameters));
+        .andDo(document("modify-request-notification", requestFields, pathParameters));
   }
 
   @Test
@@ -184,7 +160,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
     mockMvc.perform(get("/request-notifications/{request-notification-id}", notificationId))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("find-requestNotification", responseFields, pathParameters));
+        .andDo(document("find-request-notification", responseFields, pathParameters));
   }
 
   @Test
@@ -215,7 +191,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
             .header("Authorization", accessToken))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("find-all-requestNotification", responseFields));
+        .andDo(document("find-all-request-notification", responseFields));
   }
 
   @Test
