@@ -33,7 +33,7 @@
             android:name=".presentation.ui.onboarding.OnboardingActivity"
             android:exported="true" />
         <activity
-            android:name=".presentation.eventdetail.EventDetailActivity"
+            android:name=".presentation.ui.eventdetail.EventDetailActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.ui.login.LoginActivity"
