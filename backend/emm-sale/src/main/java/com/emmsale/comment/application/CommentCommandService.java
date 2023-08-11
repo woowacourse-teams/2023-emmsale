@@ -61,11 +61,7 @@ public class CommentCommandService {
 
   private void publishNotificationExceptMe(final Member member, final Comment savedComment) {
     final Set<Comment> notificationCandidates = savedComment.getParent()
-        .map(parent -> commentRepository.findParentAndChildrenByParentId(parent.getId())
-            .stream()
-            .filter(it -> it.isNotMyComment(member.getId()))
-            .collect(Collectors.toUnmodifiableSet())
-        )
+        .map(parent -> excludeMyComments(member, parent))
         .orElse(Collections.emptySet());
 
     notificationCandidates.stream()
@@ -74,6 +70,13 @@ public class CommentCommandService {
             it.getParentIdOrSelfId(),
             it.getClass().getName()))
         .forEach(eventPublisher::publish);
+  }
+
+  private Set<Comment> excludeMyComments(final Member member, final Comment parent) {
+    return commentRepository.findParentAndChildrenByParentId(parent.getId())
+        .stream()
+        .filter(it -> it.isNotMyComment(member.getId()))
+        .collect(Collectors.toUnmodifiableSet());
   }
 
   private Comment findSavedComment(final Long commentId) {
