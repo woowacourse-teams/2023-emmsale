@@ -130,6 +130,9 @@
 
     <string name="notificationbox_title">알림 보관함</string>
     <string name="notificationbox_delete_noti">알림 삭제</string>
+    <string name="notificationbox_primary">알림</string>
+    <string name="notificationbox_recruitment">요청</string>
+
     <string name="notificationbox_recruitment_status_changing_failed">서버와의 통신 오류로 같이가기에 실패했어요!</string>
     <string name="notificationbox_recruitment_rejected_message">같이 가기를 거절했어요!</string>
 

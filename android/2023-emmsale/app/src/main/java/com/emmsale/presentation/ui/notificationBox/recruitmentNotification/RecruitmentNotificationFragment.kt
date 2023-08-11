@@ -1,7 +1,5 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -35,16 +33,11 @@ class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotifica
 
     private fun initView() {
         initNotificationBoxRecyclerView()
-        initNavigationClickListener()
     }
 
     private fun initNotificationBoxRecyclerView() {
         binding.rvNotiBox.adapter = recruitmentNotificationHeaderAdapter
         binding.rvNotiBox.setHasFixedSize(true)
-    }
-
-    private fun initNavigationClickListener() {
-        binding.tbNotiBox.setNavigationOnClickListener { requireActivity().finish() }
     }
 
     override fun onClickBody(notificationId: Long, otherUid: Long) {
@@ -105,11 +98,5 @@ class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotifica
 
     private fun showRecruitmentAcceptedDialog() {
         RecruitmentAcceptedDialog(requireContext()).show()
-    }
-
-    companion object {
-        fun startActivity(context: Context) {
-            context.startActivity(Intent(context, RecruitmentNotificationFragment::class.java))
-        }
     }
 }

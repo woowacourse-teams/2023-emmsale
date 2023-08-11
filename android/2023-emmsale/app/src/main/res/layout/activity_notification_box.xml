@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.notificationBox.NotificationBoxActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_noti_box"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            android:background="@color/white"
+            android:keepScreenOn="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/notificationbox_title"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/EventFilterToolbarTitleFontStyle" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_notification_box"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_noti_box"
+            app:tabBackground="@drawable/bg_tablayout_indicator"
+            app:tabIndicatorColor="@color/color_tab_indicator"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorHeight="@dimen/tab_indicator_height"
+            app:tabSelectedTextColor="@color/primary_color"
+            app:tabTextAppearance="@style/KerdyTextStyleBlackBold14" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_notification_box"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tl_notification_box" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

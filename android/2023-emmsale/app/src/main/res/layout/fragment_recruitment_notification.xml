@@ -18,28 +18,16 @@
         android:background="@color/white"
         tools:context=".presentation.ui.notificationBox.recruitmentNotification.RecruitmentNotificationFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_noti_box"
-            android:layout_width="0dp"
-            android:layout_height="?actionBarSize"
-            android:keepScreenOn="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_back"
-            app:title="@string/notificationbox_title"
-            app:titleCentered="true"
-            app:titleTextAppearance="@style/EventFilterToolbarTitleFontStyle" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_noti_box"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@color/white"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_noti_box"
+            app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/item_recruitment_notification_body" />
 
         <ProgressBar

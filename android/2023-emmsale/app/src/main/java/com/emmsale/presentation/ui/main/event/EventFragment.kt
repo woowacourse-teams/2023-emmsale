@@ -5,6 +5,7 @@ import android.view.View
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.ui.notificationBox.NotificationBoxActivity
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.RecruitmentNotificationFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -56,7 +57,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
 
     private fun initNotificationButtonClickListener() {
         binding.btnNotifications.setOnClickListener {
-            RecruitmentNotificationFragment.startActivity(requireContext())
+            NotificationBoxActivity.startActivity(requireContext())
         }
     }
 
