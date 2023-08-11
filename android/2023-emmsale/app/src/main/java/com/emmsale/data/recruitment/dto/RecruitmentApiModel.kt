@@ -16,6 +16,12 @@ data class RecruitmentApiModel(
     val imageUrl: String,
     @SerialName("description")
     val description: String?,
+    @SerialName("content")
+    val content: String,
+    @SerialName("createdAt")
+    val createdAt: String,
+    @SerialName("updatedAt")
+    val updatedAt: String,
 )
 
 fun List<RecruitmentApiModel>.toData(): List<Recruitment> = map {

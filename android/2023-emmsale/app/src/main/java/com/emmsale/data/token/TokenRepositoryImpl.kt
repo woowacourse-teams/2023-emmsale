@@ -22,11 +22,10 @@ class TokenRepositoryImpl(
         if (accessToken == null || accessToken == DEFAULT_TOKEN_VALUE) return@withContext null
         Token(uid, accessToken)
     }
-
     companion object {
         private const val UID_KEY = "uid_key"
         private const val ACCESS_TOKEN_KEY = "access_token_key"
-        private const val DEFAULT_UID_VALUE = -1L
+        const val DEFAULT_UID_VALUE = -1L
         private const val DEFAULT_TOKEN_VALUE = "default"
     }
 }

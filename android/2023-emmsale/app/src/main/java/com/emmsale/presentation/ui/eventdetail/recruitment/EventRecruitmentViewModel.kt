@@ -48,7 +48,7 @@ class EventRecruitmentViewModel(
 
     fun saveRecruitment(eventId: Long) {
         viewModelScope.launch {
-            when (val response = recruitmentRepository.saveRecruitment(eventId)) {
+            when (val response = recruitmentRepository.postRecruitment(eventId,"")) {
                 is ApiSuccess -> _isRecruited.postValue(RecruitmentStatusUiState.Success(true))
                 else -> _isRecruited.postValue(RecruitmentStatusUiState.Error)
             }
@@ -57,7 +57,7 @@ class EventRecruitmentViewModel(
 
     fun deleteRecruitment(eventId: Long) {
         viewModelScope.launch {
-            when (recruitmentRepository.deleteRecruitment(eventId)) {
+            when (recruitmentRepository.deleteRecruitment(eventId,1L)) {
                 is ApiSuccess -> {
                     _isRecruited.postValue(RecruitmentStatusUiState.Success(false))
                     fetchRecruitments(eventId)

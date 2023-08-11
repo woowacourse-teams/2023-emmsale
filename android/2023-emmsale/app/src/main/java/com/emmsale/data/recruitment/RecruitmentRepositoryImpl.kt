@@ -4,38 +4,55 @@ import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.recruitment.dto.CompanionRequestBody
 import com.emmsale.data.recruitment.dto.RecruitmentApiModel
-import com.emmsale.data.recruitment.dto.RecruitmentRequestBody
+import com.emmsale.data.recruitment.dto.RecruitmentDeletionRequestBody
+import com.emmsale.data.recruitment.dto.RecruitmentPostingRequestBody
 import com.emmsale.data.recruitment.dto.toData
-import com.emmsale.data.uid.UidRepository
+import com.emmsale.data.token.TokenRepository
 
 class RecruitmentRepositoryImpl(
     private val recruitmentService: RecruitmentService,
-    uidRepository: UidRepository,
+    private val tokenRepository: TokenRepository,
 ) : RecruitmentRepository {
-
-    private val currentUid = uidRepository.getCurrentUid()
 
     override suspend fun fetchEventRecruitments(eventId: Long): ApiResult<List<Recruitment>> {
         return handleApi(
-            execute = { recruitmentService.getRecruitment(eventId) },
+            execute = { recruitmentService.getRecruitments(eventId) },
             mapToDomain = List<RecruitmentApiModel>::toData,
         )
     }
 
-    override suspend fun saveRecruitment(eventId: Long): ApiResult<Unit> {
-        val requestBody = RecruitmentRequestBody(currentUid)
+    override suspend fun postRecruitment(eventId: Long, content: String): ApiResult<Unit> {
+        val currentUid = getCurrentUid()
+        val requestBody = RecruitmentPostingRequestBody(memberId = currentUid, content = content)
         return handleApi(
-            execute = { recruitmentService.saveRecruitment(eventId, requestBody) },
+            execute = { recruitmentService.postRecruitment(eventId, requestBody) },
             mapToDomain = { },
         )
     }
 
-    override suspend fun deleteRecruitment(eventId: Long): ApiResult<Unit> {
+    override suspend fun deleteRecruitment(eventId: Long, recruitmentId: Long): ApiResult<Unit> {
         return handleApi(
             execute = {
                 recruitmentService.deleteRecruitment(
                     eventId,
-                    currentUid,
+                    recruitmentId,
+                )
+            },
+            mapToDomain = {},
+        )
+    }
+
+    override suspend fun editRecruitment(
+        eventId: Long,
+        recruitmentId: Long,
+        content: String,
+    ): ApiResult<Unit> {
+        return handleApi(
+            execute = {
+                recruitmentService.editRecruitment(
+                    eventId = eventId,
+                    recruitmentId = recruitmentId,
+                    recruitmentDeletionRequestBody = RecruitmentDeletionRequestBody(content),
                 )
             },
             mapToDomain = {},
@@ -47,6 +64,7 @@ class RecruitmentRepositoryImpl(
         memberId: Long,
         message: String,
     ): ApiResult<Unit> {
+        val currentUid = getCurrentUid()
         val requestBody = CompanionRequestBody(
             senderId = currentUid,
             receiverId = memberId,
@@ -60,9 +78,19 @@ class RecruitmentRepositoryImpl(
     }
 
     override suspend fun checkParticipationStatus(eventId: Long): ApiResult<Boolean> {
+        val currentUid = getCurrentUid()
         return handleApi(
             execute = { recruitmentService.checkIsRecruitmented(eventId, currentUid) },
             mapToDomain = { true },
         )
+    }
+
+    private suspend fun getCurrentUid(): Long =
+        tokenRepository.getToken()?.uid ?: throw IllegalStateException(
+            NOT_LOGIN_ERROR_MESSAGE,
+        )
+
+    companion object {
+        private const val NOT_LOGIN_ERROR_MESSAGE = "로그인 되지 않아서 같이가요 정보를 가져올 수 없어요"
     }
 }

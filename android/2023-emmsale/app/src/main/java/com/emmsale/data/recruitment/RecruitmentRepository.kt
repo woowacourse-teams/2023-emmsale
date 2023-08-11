@@ -8,8 +8,21 @@ interface RecruitmentRepository {
         eventId: Long,
     ): ApiResult<List<Recruitment>>
 
-    suspend fun saveRecruitment(eventId: Long): ApiResult<Unit>
-    suspend fun deleteRecruitment(eventId: Long): ApiResult<Unit>
+    suspend fun postRecruitment(
+        eventId: Long,
+        content: String,
+    ): ApiResult<Unit>
+
+    suspend fun editRecruitment(
+        eventId: Long,
+        recruitmentId: Long,
+        content: String,
+    ): ApiResult<Unit>
+
+    suspend fun deleteRecruitment(
+        eventId: Long,
+        recruitmentId: Long,
+    ): ApiResult<Unit>
 
     suspend fun requestCompanion(
         eventId: Long,
