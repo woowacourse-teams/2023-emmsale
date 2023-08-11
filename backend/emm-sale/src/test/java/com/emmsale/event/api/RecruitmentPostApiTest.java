@@ -62,12 +62,13 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
 
     //when
     mockMvc.perform(
-            post("/events/{eventId}/recruitment-post", eventId).header("Authorization", fakeAccessToken)
+            post("/events/{eventId}/recruitment-posts", eventId).header("Authorization",
+                    fakeAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andExpect(header().string("Location",
-            format("/events/%s/recruitment-post/%s", eventId, postId)))
+            format("/events/%s/recruitment-posts/%s", eventId, postId)))
         .andDo(document("create-recruitment-post", requestFields));
   }
 
@@ -80,7 +81,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     final String fakeAccessToken = "Bearer accessToken";
 
     //when & then
-    mockMvc.perform(delete("/events/{event-id}/recruitment-post/{recruitment-post-id}",
+    mockMvc.perform(delete("/events/{event-id}/recruitment-posts/{recruitment-post-id}",
             eventId, recruitmentPostId)
             .header("Authorization", fakeAccessToken))
         .andExpect(status().isNoContent())
@@ -112,7 +113,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     when(postQueryService.findRecruitmentPosts(eventId)).thenReturn(responses);
 
     //when && then
-    mockMvc.perform(get(format("/events/%s/recruitment-post", eventId)))
+    mockMvc.perform(get(format("/events/%s/recruitment-posts", eventId)))
         .andExpect(status().isOk())
         .andDo(document("find-recruitment-post", responseFields));
   }
@@ -134,7 +135,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
 
     //when
     mockMvc.perform(
-            put("/events/{eventId}/recruitment-post/{recruitment-post-id}", eventId, recruitmentPostId)
+            put("/events/{eventId}/recruitment-posts/{recruitment-post-id}", eventId, recruitmentPostId)
                 .header("Authorization", fakeAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -154,7 +155,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
 
     //when && then
     mockMvc.perform(
-            get("/events/{eventId}/recruitment-post/already-recruitment?member-id={memberId}"
+            get("/events/{eventId}/recruitment-posts/already-recruitment?member-id={memberId}"
                 , eventId, memberId)
         )
         .andExpect(status().isOk())

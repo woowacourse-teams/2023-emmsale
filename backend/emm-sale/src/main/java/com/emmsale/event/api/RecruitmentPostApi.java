@@ -31,7 +31,7 @@ public class RecruitmentPostApi {
   private final RecruitmentPostCommandService postCommandService;
   private final RecruitmentPostQueryService postQueryService;
 
-  @PostMapping("/{eventId}/recruitment-post")
+  @PostMapping("/{eventId}/recruitment-posts")
   public ResponseEntity<Void> createRecruitmentPost(
       @PathVariable final Long eventId,
       @RequestBody @Valid final RecruitmentPostRequest request,
@@ -41,22 +41,22 @@ public class RecruitmentPostApi {
         member);
 
     return ResponseEntity
-        .created(create(format("/events/%s/recruitment-post/%s", eventId, recruitmentPostId)))
+        .created(create(format("/events/%s/recruitment-posts/%s", eventId, recruitmentPostId)))
         .build();
   }
 
-  @PutMapping("/{eventId}/recruitment-post/{recruitmentPostId}")
+  @PutMapping("/{eventId}/recruitment-posts/{recruitment-post-Id}")
   public ResponseEntity<Void> updateRecruitmentPost(
       @PathVariable final Long eventId,
-      @PathVariable final Long recruitmentPostId,
+      @PathVariable(name = "recruitment-post-Id") final Long postId,
       @RequestBody @Valid final RecruitmentPostUpdateRequest request,
       final Member member
   ) {
-    postCommandService.updateRecruitmentPost(eventId, recruitmentPostId, request, member);
+    postCommandService.updateRecruitmentPost(eventId, postId, request, member);
     return ResponseEntity.ok().build();
   }
 
-  @DeleteMapping("/{eventId}/recruitment-post/{recruitment-post-id}")
+  @DeleteMapping("/{eventId}/recruitment-posts/{recruitment-post-id}")
   public ResponseEntity<String> deleteRecruitmentPost(
       @PathVariable final Long eventId,
       @PathVariable(name = "recruitment-post-id") final Long postId,
@@ -67,14 +67,14 @@ public class RecruitmentPostApi {
     return ResponseEntity.noContent().build();
   }
 
-  @GetMapping("/{id}/recruitment-post")
+  @GetMapping("/{id}/recruitment-posts")
   public ResponseEntity<List<RecruitmentPostResponse>> findRecruitmentPosts(
       @PathVariable final Long id) {
     final List<RecruitmentPostResponse> responses = postQueryService.findRecruitmentPosts(id);
     return ResponseEntity.ok(responses);
   }
 
-  @GetMapping("/{eventId}/recruitment-post/already-recruitment")
+  @GetMapping("/{eventId}/recruitment-posts/already-recruitment")
   public ResponseEntity<Boolean> isAlreadyRecruit(
       @PathVariable final Long eventId,
       @RequestParam(name = "member-id") final Long memberId
