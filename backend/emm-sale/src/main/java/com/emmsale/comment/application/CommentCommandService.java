@@ -60,15 +60,12 @@ public class CommentCommandService {
   }
 
   private void publishNotificationExceptMe(final Member member, final Comment savedComment) {
-    final Set<Comment> notificationCandidates = savedComment.getParent()
+    final Set<Comment> notificationCommentCandidates = savedComment.getParent()
         .map(parent -> excludeMyComments(member, parent))
         .orElse(Collections.emptySet());
 
-    notificationCandidates.stream()
-        .map(it -> new UpdateNotificationEvent(
-            it.getMember().getId(),
-            it.getParentIdOrSelfId(),
-            it.getClass().getName()))
+    notificationCommentCandidates.stream()
+        .map(UpdateNotificationEvent::from)
         .forEach(eventPublisher::publish);
   }
 

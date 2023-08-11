@@ -1,9 +1,12 @@
 package com.emmsale.comment.event;
 
+import com.emmsale.comment.domain.Comment;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class UpdateNotificationEvent {
 
   private final Long receiverId;
@@ -11,14 +14,12 @@ public class UpdateNotificationEvent {
   private final String updateNotificationType;
   private final LocalDateTime createdAt;
 
-  public UpdateNotificationEvent(
-      final Long receiverId,
-      final Long redirectId,
-      final String updateNotificationType
-  ) {
-    this.receiverId = receiverId;
-    this.redirectId = redirectId;
-    this.updateNotificationType = updateNotificationType;
-    this.createdAt = LocalDateTime.now();
+  public static UpdateNotificationEvent from(final Comment comment) {
+    return new UpdateNotificationEvent(
+        comment.getMember().getId(),
+        comment.getParentIdOrSelfId(),
+        comment.getClass().getName(),
+        LocalDateTime.now()
+    );
   }
 }

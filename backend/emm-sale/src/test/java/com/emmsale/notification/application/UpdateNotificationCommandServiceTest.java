@@ -12,6 +12,7 @@ import com.emmsale.comment.event.UpdateNotificationEvent;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,8 @@ class UpdateNotificationCommandServiceTest extends ServiceIntegrationTestHelper 
     final UpdateNotificationEvent event = new UpdateNotificationEvent(
         1L,
         2L,
-        Comment.class.getName()
+        Comment.class.getName(),
+        LocalDateTime.now()
     );
 
     //when
