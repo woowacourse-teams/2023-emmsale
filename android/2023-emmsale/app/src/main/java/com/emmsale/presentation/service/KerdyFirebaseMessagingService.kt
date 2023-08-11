@@ -58,8 +58,8 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
                     mapToDomain = { it.parentComment.eventId },
                 )
                 when (eventIdResult) {
-                    is ApiError -> -1
-                    is ApiException -> -1
+                    is ApiError -> ERROR_EVENT_ID
+                    is ApiException -> ERROR_EVENT_ID
                     is ApiSuccess -> eventIdResult.data
                 }
             }
@@ -71,7 +71,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val createdAt = message.data["createdAt"] ?: return
 
         val eventId = getEventId(parentCommentId)
-        if (eventId < 0) return
+        if (eventId == ERROR_EVENT_ID) return
 
         baseContext.showNotification(
             title = getString(R.string.kerdyfirebasemessaging_child_comment_notification_title_format),
@@ -105,6 +105,8 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
+        private const val ERROR_EVENT_ID = -1L
+
         private const val FOLLOW_NOTIFICATION_TYPE = "REQUEST"
         private const val CHILD_COMMENT_NOTIFICATION_TYPE = "COMMENT"
         private const val EVENT_NOTIFICATION_TYPE = "EVENT"
