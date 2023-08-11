@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface NotificationService {
     @GET("/request-notifications")
-    suspend fun getNotifications(): Response<List<NotificationApiModel>>
+    suspend fun getNotifications(): Response<List<RecruitmentNotificationApiModel>>
 
     @PATCH("/request-notifications/{request-notification-id}/status")
     suspend fun updateRecruitmentAcceptedStatus(

@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NotificationApiModel(
+data class RecruitmentNotificationApiModel(
     @SerialName("notificationId")
     val id: Long,
     @SerialName("senderId")

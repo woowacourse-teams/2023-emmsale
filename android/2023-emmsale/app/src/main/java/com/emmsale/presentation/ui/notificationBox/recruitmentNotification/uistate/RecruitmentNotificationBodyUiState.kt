@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate
 
-import com.emmsale.data.notification.Notification
+import com.emmsale.data.notification.RecruitmentNotification
 
 data class RecruitmentNotificationBodyUiState(
     val id: Long,
@@ -16,16 +16,16 @@ data class RecruitmentNotificationBodyUiState(
 ) {
     companion object {
         fun from(
-            notification: Notification,
+            recruitmentNotification: RecruitmentNotification,
             notificationMember: RecruitmentNotificationMemberUiState?,
             conferenceName: String,
         ): RecruitmentNotificationBodyUiState = RecruitmentNotificationBodyUiState(
-            id = notification.id,
-            otherUid = notification.otherUid,
+            id = recruitmentNotification.id,
+            otherUid = recruitmentNotification.otherUid,
             otherName = notificationMember?.name ?: "",
-            conferenceId = notification.eventId,
+            conferenceId = recruitmentNotification.eventId,
             conferenceName = conferenceName,
-            message = notification.message,
+            message = recruitmentNotification.message,
             profileImageUrl = notificationMember?.profileImageUrl ?: "",
         )
     }

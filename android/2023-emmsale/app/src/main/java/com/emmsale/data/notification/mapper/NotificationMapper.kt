@@ -1,9 +1,9 @@
 package com.emmsale.data.notification.mapper
 
-import com.emmsale.data.notification.Notification
-import com.emmsale.data.notification.NotificationApiModel
+import com.emmsale.data.notification.RecruitmentNotification
+import com.emmsale.data.notification.RecruitmentNotificationApiModel
 
-fun NotificationApiModel.toData(): Notification = Notification(
+fun RecruitmentNotificationApiModel.toData(): RecruitmentNotification = RecruitmentNotification(
     id = id,
     otherUid = otherUid,
     myUid = myUid,
@@ -11,4 +11,4 @@ fun NotificationApiModel.toData(): Notification = Notification(
     eventId = eventId,
 )
 
-fun List<NotificationApiModel>.toData(): List<Notification> = map { it.toData() }
+fun List<RecruitmentNotificationApiModel>.toData(): List<RecruitmentNotification> = map { it.toData() }

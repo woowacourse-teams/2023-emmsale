@@ -7,7 +7,7 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.eventdetail.EventDetailRepository
 import com.emmsale.data.member.MemberRepository
-import com.emmsale.data.notification.Notification
+import com.emmsale.data.notification.RecruitmentNotification
 import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
@@ -42,7 +42,7 @@ class RecruitmentNotificationViewModel(
         viewModelScope.launch {
             _notifications.postValue(_notifications.value.copy(isLoading = true))
 
-            when (val notificationsResult = notificationRepository.getNotifications()) {
+            when (val notificationsResult = notificationRepository.getRecruitmentNotifications()) {
                 is ApiSuccess -> {
                     updateNotifications(notificationsResult)
                     updateNotificationsToReadStatus()
@@ -58,7 +58,7 @@ class RecruitmentNotificationViewModel(
     }
 
     private suspend fun updateNotifications(
-        notificationsResult: ApiSuccess<List<Notification>>,
+        notificationsResult: ApiSuccess<List<RecruitmentNotification>>,
     ) {
         val notifications = getNotificationBody(notificationsResult).groupBy { it.conferenceId }
         val notificationHeaders = notifications.map { (conferenceId, notifications) ->
@@ -73,13 +73,13 @@ class RecruitmentNotificationViewModel(
     }
 
     private suspend fun getNotificationBody(
-        result: ApiSuccess<List<Notification>>,
+        result: ApiSuccess<List<RecruitmentNotification>>,
     ): List<RecruitmentNotificationBodyUiState> = result.data.map { notification ->
         val notiMember = getNotificationMemberAsync(notification.otherUid)
         val conferenceName = getConferenceNameAsync(notification.eventId)
         awaitAll(notiMember, conferenceName).run {
             RecruitmentNotificationBodyUiState.from(
-                notification = notification,
+                recruitmentNotification = notification,
                 notificationMember = getOrNull(MEMBER_INDEX) as? RecruitmentNotificationMemberUiState,
                 conferenceName = getOrNull(CONFERENCE_NAME_INDEX).toString(),
             )
