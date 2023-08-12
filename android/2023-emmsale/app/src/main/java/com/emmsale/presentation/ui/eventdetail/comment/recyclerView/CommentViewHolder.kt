@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ItemCommentsCommentsBinding
+import com.emmsale.presentation.common.views.BottomDialogMenuItem
+import com.emmsale.presentation.common.views.BottomMenuDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState
 
@@ -18,7 +20,29 @@ class CommentViewHolder(
         binding.root.setOnClickListener {
             onChildCommentsView(binding.comment?.commentId ?: return@setOnClickListener)
         }
-        binding.ivCommentDeletebutton.setOnClickListener { onDeleteButtonClick() }
+    }
+
+    fun bind(comment: CommentUiState) {
+        binding.comment = comment
+
+        initMenuButton(comment)
+    }
+
+    private fun initMenuButton(comment: CommentUiState) {
+        val bottomMenuDialog = BottomMenuDialog(binding.root.context)
+        if (comment.isUpdatable) bottomMenuDialog.addUpdateButton()
+        if (comment.isDeletable) bottomMenuDialog.addDeleteButton()
+        bottomMenuDialog.addReportButton()
+
+        binding.ivCommentMenubutton.setOnClickListener { bottomMenuDialog.show() }
+    }
+
+    private fun BottomMenuDialog.addUpdateButton() {
+        addMenuItemBelow(context.getString(R.string.all_updateButtonLabel)) { }
+    }
+
+    private fun BottomMenuDialog.addDeleteButton() {
+        addMenuItemBelow(context.getString(R.string.all_deleteButtonLabel)) { onDeleteButtonClick() }
     }
 
     private fun onDeleteButtonClick() {
@@ -35,8 +59,11 @@ class CommentViewHolder(
         ).show()
     }
 
-    fun bind(comment: CommentUiState) {
-        binding.comment = comment
+    private fun BottomMenuDialog.addReportButton() {
+        addMenuItemBelow(
+            context.getString(R.string.all_reportButtonLabel),
+            BottomDialogMenuItem.DANGER,
+        ) { }
     }
 
     companion object {

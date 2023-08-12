@@ -74,17 +74,18 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/iv_childcomments_parentcommentdeletebutton"
+            android:id="@+id/iv_childcomments_parentcommentmenubutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="13dp"
-            android:contentDescription="@string/comment_delete_button"
             android:padding="4dp"
-            android:visibility="@{comment.isDeleted || !comment.isDeletable ? View.GONE : View.VISIBLE}"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_childcomments_parentcommentauthorname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_childcomments_parentcommentauthorname"
-            app:srcCompat="@drawable/ic_comment_delete" />
+            app:srcCompat="@drawable/ic_comment_menubutton"
+            android:contentDescription="@string/comment_menu_button"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
