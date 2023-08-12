@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.eventdetail.recruitment.RecruitmentWritingActivity">
+        tools:context=".presentation.ui.eventdetail.recruitment.writing.RecruitmentWritingActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarlayout_recruitmentwriting"
@@ -74,7 +74,7 @@
         <EditText
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:hint="@string/recruitmetwriting_hint_message"
             android:textColorHint="@color/gray"
             android:textAppearance="@style/KerdyTextStyleBlackRegular13"

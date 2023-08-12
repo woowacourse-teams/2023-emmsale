@@ -15,12 +15,12 @@ import retrofit2.http.Query
 
 interface RecruitmentService {
 
-    @GET("events/{eventId}/recruitment-post")
+    @GET("events/{eventId}/recruitment-posts")
     suspend fun getRecruitments(
         @Path("eventId") eventId: Long,
     ): Response<List<RecruitmentApiModel>>
 
-    @POST("events/{eventId}/recruitment-post")
+    @POST("events/{eventId}/recruitment-posts")
     suspend fun postRecruitment(
         @Path("eventId") eventId: Long,
         @Body recruitmentPostingRequestBody: RecruitmentPostingRequestBody,
@@ -39,7 +39,7 @@ interface RecruitmentService {
         @Query("post-id") recruitmentId: Long,
     ): Response<Unit>
 
-    @GET("events/{eventId}/recruitment-post/already-recruitment")
+    @GET("events/{eventId}/recruitment-posts/already-recruitment")
     suspend fun checkHasWritingPermission(
         @Path("eventId") eventId: Long,
         @Query("member-id") memberId: Long,

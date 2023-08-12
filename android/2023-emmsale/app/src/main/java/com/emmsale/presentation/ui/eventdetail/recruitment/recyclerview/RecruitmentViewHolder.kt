@@ -12,6 +12,7 @@ class RecruitmentViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
+        itemView.setOnClickListener { showMemberProfile(binding.recruitment!!.memberId) }
     }
 
     fun bind(recruitment: RecruitmentUiState) {

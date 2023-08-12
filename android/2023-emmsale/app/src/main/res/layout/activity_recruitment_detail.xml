@@ -93,13 +93,6 @@
         tools:text="2023.08.03"
         app:layout_constraintBottom_toBottomOf="@+id/tv_recruitmentdetail_membername" />
 
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/gray"
-        app:layout_constraintTop_toBottomOf="@id/tv_recruitmentdetail_message"
-        android:layout_marginTop="16dp" />
-
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -133,20 +126,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/btn_recruitmentdetail_show_profile"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:background="@drawable/bg_all_next"
-        android:layout_marginHorizontal="17dp"
-        android:clickable="true"
-        android:gravity="center"
-        tools:text="김커디님의 명함조회"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:fontFamily="@font/nanum_square_bold"
-        android:layout_marginBottom="9dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_recruitmentdetail_request_companion" />
 </androidx.constraintlayout.widget.ConstraintLayout>

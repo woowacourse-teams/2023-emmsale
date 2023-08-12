@@ -7,8 +7,8 @@ import com.emmsale.databinding.FragmentEventRecruitmentBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.recruitment.EventRecruitmentViewModel
-import com.emmsale.presentation.ui.eventdetail.recruitment.RecruitmentWritingActivity
 import com.emmsale.presentation.ui.eventdetail.recruitment.recyclerview.EventRecruitmentAdapter
+import com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentWritingActivity
 
 class EventRecruitmentFragment : BaseFragment<FragmentEventRecruitmentBinding>() {
     override val layoutResId: Int = R.layout.fragment_event_recruitment
@@ -55,7 +55,7 @@ class EventRecruitmentFragment : BaseFragment<FragmentEventRecruitmentBinding>()
         binding.btnRecruitmentWriting.setOnClickListener {
             val hasPermission = viewModel.hasWritingPermission.value ?: return@setOnClickListener
             if (hasPermission) {
-                RecruitmentWritingActivity.startActivity(requireContext())
+                RecruitmentWritingActivity.startActivity(requireContext(), eventId)
             } else {
                 requireContext().showToast(getString(R.string.recruitment_has_not_permission_writing))
             }
