@@ -133,7 +133,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
 
     private fun navigateToEventFilter() {
         val selectedFilter = viewModel.selectedFilter.value
-        val filterActivityIntent = ConferenceFilterActivity.createIntent(
+        val filterActivityIntent = ConferenceFilterActivity.getIntent(
             context = requireContext(),
             selectedStatusIds = selectedFilter.selectedStatusFilteringOptionIds,
             selectedTagIds = selectedFilter.selectedTagFilteringOptionIds,
