@@ -139,6 +139,10 @@ class RecruitmentNotificationViewModel(
         }
     }
 
+    fun reportNotification(notificationId: Long) {
+        // TODO("신고 기능 추가 예정")
+    }
+
     fun updateNotificationsToReadStatusBy(eventId: Long) {
         viewModelScope.launch {
             _notifications.value = notifications.value.changeReadStateBy(eventId)

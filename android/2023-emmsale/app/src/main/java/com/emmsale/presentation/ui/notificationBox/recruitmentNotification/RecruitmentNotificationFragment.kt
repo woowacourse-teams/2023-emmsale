@@ -48,6 +48,10 @@ class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotifica
         showRecruitmentRejectedConfirmDialog(notificationId)
     }
 
+    override fun onClickMore(notificationId: Long) {
+        viewModel.reportNotification(notificationId)
+    }
+
     private fun showRecruitmentRejectedConfirmDialog(notificationId: Long) {
         RecruitmentRejectConfirmDialog(
             context = requireContext(),
