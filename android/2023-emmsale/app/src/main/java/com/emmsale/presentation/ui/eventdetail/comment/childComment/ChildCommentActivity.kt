@@ -33,14 +33,19 @@ class ChildCommentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initDataBinding()
+        initToolbar()
         initChildCommentsRecyclerView()
-        setUpUiLogic()
+        setupUiLogic()
 
         viewModel.fetchComment(parentCommentId)
     }
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
+    }
+
+    private fun initToolbar() {
+        binding.tbChildcommentsToolbar.setNavigationOnClickListener { finish() }
     }
 
     private fun initChildCommentsRecyclerView() {
@@ -51,7 +56,7 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpUiLogic() {
+    private fun setupUiLogic() {
         viewModel.isLogin.observe(this) {
             handleNotLogin(it)
         }
@@ -59,7 +64,6 @@ class ChildCommentActivity : AppCompatActivity() {
             handleError(it)
             handleChildComments(it)
             handleEditComment()
-            handleUpButton()
             handleProgressBar(it)
         }
     }
@@ -103,12 +107,6 @@ class ChildCommentActivity : AppCompatActivity() {
     private fun handleEditComment() {
         binding.tvChildcommentsPostchildcommentbutton.setOnClickListener {
             onChildCommentSave()
-        }
-    }
-
-    private fun handleUpButton() {
-        binding.ivChildcommentsUpbutton.setOnClickListener {
-            finish()
         }
     }
 
