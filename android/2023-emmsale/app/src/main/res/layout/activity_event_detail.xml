@@ -163,10 +163,10 @@
         <ProgressBar
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/appbarlayout_eventdetail"
             android:visibility="@{vm.eventDetail.isLoading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/appbarlayout_eventdetail"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

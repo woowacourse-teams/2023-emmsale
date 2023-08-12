@@ -7,7 +7,7 @@ import com.emmsale.presentation.ui.notificationBox.otherNotification.PrimaryNoti
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.RecruitmentNotificationFragment
 
 class NotificationBoxFragmentStateAdapter(
-    activity: FragmentActivity
+    activity: FragmentActivity,
 ) : FragmentStateAdapter(activity) {
     override fun getItemCount(): Int = NOTIFICATION_BOX_TAB_COUNT
 
