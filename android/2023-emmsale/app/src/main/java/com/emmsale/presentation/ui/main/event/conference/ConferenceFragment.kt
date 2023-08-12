@@ -76,7 +76,9 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         viewModel.conference.observe(viewLifecycleOwner) { eventsResult ->
             when {
                 eventsResult.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
-                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferenceItems)
+                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferenceItems) {
+                    binding.rvEvents.scrollToPosition(0)
+                }
             }
         }
     }
@@ -94,7 +96,11 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     }
 
     private fun addFilterViews(filters: List<ConferenceSelectedFilteringOptionUiState>) {
-        filters.forEach { binding.layoutConferenceFilters.addView(createFilterTag(it.name)) }
+        filters.forEach {
+            binding.layoutConferenceFilters.addView(createFilterTag(it.name) {
+                viewModel.removeFilteringOptionBy(it.id)
+            })
+        }
     }
 
     private fun addDurationFilter(
@@ -106,12 +112,15 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         val durationString = "$startDateString$endDateString"
 
         if (startDateString != null) {
-            binding.layoutConferenceFilters.addView(createFilterTag(durationString))
+            binding.layoutConferenceFilters.addView(createFilterTag(durationString) {
+                viewModel.removeDurationFilteringOption()
+            })
         }
     }
 
-    private fun createFilterTag(title: String): FilterTag = filterChipOf {
+    private fun createFilterTag(title: String, onClick: () -> Unit): FilterTag = filterChipOf {
         text = title
+        setOnClickListener { onClick() }
     }
 
     private fun initEventFilterButtonClickListener() {
@@ -128,8 +137,8 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
             context = requireContext(),
             selectedStatusIds = selectedFilter.selectedStatusFilteringOptionIds,
             selectedTagIds = selectedFilter.selectedTagFilteringOptionIds,
-            selectedStartDate = selectedFilter.selectedStartDate?.selectedDate,
-            selectedEndDate = selectedFilter.selectedEndDate?.selectedDate,
+            selectedStartDate = selectedFilter.selectedStartDate?.date,
+            selectedEndDate = selectedFilter.selectedEndDate?.date,
         )
         filterActivityLauncher.launch(filterActivityIntent)
     }

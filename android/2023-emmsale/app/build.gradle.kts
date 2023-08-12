@@ -8,7 +8,6 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services")
     id("kotlin-parcelize")
-    id("com.google.gms.google-services")
 }
 
 android {
