@@ -40,14 +40,6 @@ class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotifica
         binding.rvNotiBox.setHasFixedSize(true)
     }
 
-    override fun onClickNotificationBody(notificationId: Long, otherUid: Long) {
-        navigateToNotificationDetail(notificationId, otherUid)
-    }
-
-    private fun navigateToNotificationDetail(notificationId: Long, otherUid: Long) {
-        Log.d("NotificationBoxActivity", "$notificationId, $otherUid")
-    }
-
     override fun onRecruitmentAccept(notificationId: Long) {
         viewModel.acceptRecruit(notificationId)
     }

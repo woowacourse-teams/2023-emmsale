@@ -22,9 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="@{() -> notificationBodyClickListener.onClickNotificationBody(notification.id, notification.otherUid)}"
         android:paddingHorizontal="17dp"
         android:paddingVertical="20dp">
 
