@@ -7,7 +7,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ItemCommentsCommentsBinding
 import com.emmsale.presentation.common.views.BottomDialogMenuItem
 import com.emmsale.presentation.common.views.BottomMenuDialog
-import com.emmsale.presentation.common.views.WarningDialog
+import com.emmsale.presentation.common.views.DangerDialog
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState
 
 class CommentViewHolder(
@@ -47,14 +47,14 @@ class CommentViewHolder(
 
     private fun onDeleteButtonClick() {
         val context = binding.root.context
-        WarningDialog(
+        DangerDialog(
             context = context,
             title = context.getString(R.string.commentdeletedialog_title),
             message = context.getString(R.string.commentdeletedialog_message),
             positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
             negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
             onPositiveButtonClick = {
-                onCommentDelete(binding.comment?.commentId ?: return@WarningDialog)
+                onCommentDelete(binding.comment?.commentId ?: return@DangerDialog)
             },
         ).show()
     }
