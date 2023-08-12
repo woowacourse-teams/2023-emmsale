@@ -8,7 +8,9 @@ import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uista
 class RecruitmentNotificationHeaderAdapter(
     private val recruitmentNotificationHeaderClickListener: RecruitmentNotificationHeaderClickListener,
     private val recruitmentNotificationBodyClickListener: RecruitmentNotificationBodyClickListener,
-) : ListAdapter<RecruitmentNotificationHeaderUiState, RecruitmentNotificationHeaderViewHolder>(RecruitmentNotificationHeaderDiffUtil) {
+) : ListAdapter<RecruitmentNotificationHeaderUiState, RecruitmentNotificationHeaderViewHolder>(
+    RecruitmentNotificationHeaderDiffUtil
+) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
