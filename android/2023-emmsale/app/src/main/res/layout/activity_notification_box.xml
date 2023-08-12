@@ -29,7 +29,7 @@
             app:navigationIcon="@drawable/ic_back"
             app:title="@string/notificationbox_title"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/EventFilterToolbarTitleFontStyle" />
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_noti_box"
