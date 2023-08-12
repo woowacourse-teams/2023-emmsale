@@ -1,12 +1,11 @@
 package com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView
 
-import android.app.AlertDialog
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.databinding.DialogCommentDeleteBinding
+import com.emmsale.R
 import com.emmsale.databinding.ItemChildcommentsChildcommentBinding
+import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.CommentUiState
 
 class ChildCommentViewHolder(
@@ -19,26 +18,17 @@ class ChildCommentViewHolder(
     }
 
     private fun onDeleteButtonClick() {
-        val dialog = DialogCommentDeleteBinding.inflate(LayoutInflater.from(binding.root.context))
-
-        val alertDialog = AlertDialog.Builder(binding.root.context)
-            .setView(dialog.root)
-            .create()
-
-        dialog.tvCommentdeletedialogPositivebutton.setOnClickListener {
-            onCommentDelete(
-                binding.comment?.commentId ?: return@setOnClickListener,
-            )
-            alertDialog.cancel()
-        }
-
-        dialog.tvCommentdeletedialogNegativebutton.setOnClickListener {
-            alertDialog.cancel()
-        }
-
-        alertDialog?.window?.setBackgroundDrawable(ColorDrawable(0))
-
-        alertDialog.show()
+        val context = binding.root.context
+        WarningDialog(
+            context = context,
+            title = context.getString(R.string.commentdeletedialog_title),
+            message = context.getString(R.string.commentdeletedialog_message),
+            positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
+            negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
+            onPositiveButtonClick = {
+                onCommentDelete(binding.comment?.commentId ?: return@WarningDialog)
+            },
+        ).show()
     }
 
     fun bind(comment: CommentUiState) {
