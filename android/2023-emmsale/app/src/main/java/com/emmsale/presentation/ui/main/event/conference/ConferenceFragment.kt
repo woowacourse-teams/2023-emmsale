@@ -126,12 +126,12 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
 
     private fun navigateToEventFilter() {
         val selectedFilter = viewModel.selectedFilter.value
-        val filterActivityIntent = ConferenceFilterActivity.createIntent(
+        val filterActivityIntent = ConferenceFilterActivity.getIntent(
             context = requireContext(),
             selectedStatusIds = selectedFilter.selectedStatusFilteringOptionIds,
             selectedTagIds = selectedFilter.selectedTagFilteringOptionIds,
-            selectedStartDate = selectedFilter.selectedStartDate?.selectedDate,
-            selectedEndDate = selectedFilter.selectedEndDate?.selectedDate,
+            selectedStartDate = selectedFilter.selectedStartDate?.date,
+            selectedEndDate = selectedFilter.selectedEndDate?.date,
         )
         filterActivityLauncher.launch(filterActivityIntent)
     }
