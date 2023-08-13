@@ -44,20 +44,18 @@ class RecruitmentNotificationViewModel(
             _notifications.postValue(_notifications.value.copy(isLoading = true))
 
             when (val notificationsResult = notificationRepository.getRecruitmentNotifications()) {
-                is ApiSuccess -> updateNotifications(notificationsResult)
+                is ApiSuccess -> updateNotifications(notificationsResult.data)
                 is ApiException, is ApiError -> _notifications.postValue(
-                    _notifications.value.copy(
-                        isLoadingNotificationsFailed = true,
-                    ),
+                    _notifications.value.copy(isLoadingNotificationsFailed = true),
                 )
             }
         }
     }
 
     private suspend fun updateNotifications(
-        notificationsResult: ApiSuccess<List<RecruitmentNotification>>,
+        recruitmentNotifications: List<RecruitmentNotification>,
     ) {
-        val notifications = getNotificationBody(notificationsResult).groupBy { it.eventId }
+        val notifications = getNotificationBody(recruitmentNotifications).groupBy { it.eventId }
         val notificationHeaders = notifications.map { (conferenceId, notifications) ->
             RecruitmentNotificationHeaderUiState(
                 eventId = conferenceId,
@@ -71,8 +69,8 @@ class RecruitmentNotificationViewModel(
     }
 
     private suspend fun getNotificationBody(
-        result: ApiSuccess<List<RecruitmentNotification>>,
-    ): List<RecruitmentNotificationBodyUiState> = result.data.map { notification ->
+        recruitmentNotifications: List<RecruitmentNotification>,
+    ): List<RecruitmentNotificationBodyUiState> = recruitmentNotifications.map { notification ->
         val notiMember = getNotificationMemberAsync(notification.senderUid)
         val conferenceName = getConferenceNameAsync(notification.eventId)
         awaitAll(notiMember, conferenceName).run {
