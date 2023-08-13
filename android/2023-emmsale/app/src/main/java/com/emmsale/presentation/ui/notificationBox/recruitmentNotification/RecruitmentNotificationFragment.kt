@@ -48,8 +48,8 @@ class RecruitmentNotificationFragment :
         showRecruitmentRejectedConfirmDialog(notificationId)
     }
 
-    override fun onMoreButtonClick(memberUid: Long) {
-        viewModel.reportMember(memberUid)
+    override fun onMoreButtonClick(notificationId: Long) {
+        viewModel.reportRecruitmentNotification(notificationId)
     }
 
     private fun showRecruitmentRejectedConfirmDialog(notificationId: Long) {
