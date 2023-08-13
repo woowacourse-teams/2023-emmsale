@@ -151,7 +151,7 @@ class RecruitmentNotificationViewModel(
         }
     }
 
-    fun reportNotification(notificationId: Long) {
+    fun reportMember(uid: Long) {
         // TODO("신고 기능 추가 예정")
     }
 
