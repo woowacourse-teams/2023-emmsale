@@ -12,7 +12,7 @@ import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.Comm
 
 class ParentCommentViewHolder(
     private val binding: ItemChildcommentsParentcommentBinding,
-    private val onCommentDelete: (Long) -> Unit,
+    private val onCommentDelete: (commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val bottomMenuDialog = BottomMenuDialog(binding.root.context)
@@ -62,7 +62,7 @@ class ParentCommentViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup, onCommentDelete: (Long) -> Unit): ParentCommentViewHolder {
+        fun create(parent: ViewGroup, onCommentDelete: (commendId: Long) -> Unit): ParentCommentViewHolder {
             val binding = ItemChildcommentsParentcommentBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,

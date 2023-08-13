@@ -12,8 +12,8 @@ import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState
 
 class CommentViewHolder(
     private val binding: ItemCommentsCommentsBinding,
-    private val onChildCommentsView: (Long) -> Unit,
-    private val onCommentDelete: (Long) -> Unit,
+    private val onChildCommentsView: (childCommentId: Long) -> Unit,
+    private val onCommentDelete: (commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val bottomMenuDialog = BottomMenuDialog(binding.root.context)
@@ -71,8 +71,8 @@ class CommentViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
-            onChildCommentsView: (Long) -> Unit,
-            onCommentDelete: (Long) -> Unit,
+            onChildCommentsView: (childCommentId: Long) -> Unit,
+            onCommentDelete: (commentId: Long) -> Unit,
         ): CommentViewHolder {
             val binding = ItemCommentsCommentsBinding.inflate(
                 LayoutInflater.from(parent.context),

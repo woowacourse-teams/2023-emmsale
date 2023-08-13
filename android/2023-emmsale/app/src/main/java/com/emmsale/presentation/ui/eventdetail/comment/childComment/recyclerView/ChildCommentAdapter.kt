@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.CommentUiState
 
 class ChildCommentAdapter(
-    private val onCommentDelete: (Long) -> Unit,
+    private val onCommentDelete: (commentId: Long) -> Unit,
 ) : ListAdapter<CommentUiState, RecyclerView.ViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
