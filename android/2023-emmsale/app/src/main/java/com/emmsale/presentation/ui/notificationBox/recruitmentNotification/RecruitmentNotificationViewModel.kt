@@ -55,7 +55,8 @@ class RecruitmentNotificationViewModel(
     private suspend fun updateNotifications(
         recruitmentNotifications: List<RecruitmentNotification>,
     ) {
-        val notifications = getNotificationBody(recruitmentNotifications).groupBy { it.eventId }
+        val notifications =
+            convertToNotificationBodies(recruitmentNotifications).groupBy { it.eventId }
         val notificationHeaders = notifications.map { (conferenceId, notifications) ->
             RecruitmentNotificationHeaderUiState(
                 eventId = conferenceId,
@@ -68,18 +69,18 @@ class RecruitmentNotificationViewModel(
         _notifications.value = _notifications.value.copy(notificationGroups = notificationHeaders)
     }
 
-    private suspend fun getNotificationBody(
+    private suspend fun convertToNotificationBodies(
         recruitmentNotifications: List<RecruitmentNotification>,
     ): List<RecruitmentNotificationBodyUiState> = recruitmentNotifications.map { notification ->
-        val notiMember = getNotificationMemberAsync(notification.senderUid)
-        val conferenceName = getConferenceNameAsync(notification.eventId)
-        awaitAll(notiMember, conferenceName).run {
-            RecruitmentNotificationBodyUiState.from(
-                recruitmentNotification = notification,
-                notificationMember = getOrNull(MEMBER_INDEX) as? RecruitmentNotificationMemberUiState,
-                conferenceName = getOrNull(CONFERENCE_NAME_INDEX).toString(),
-            )
-        }
+        val notiMemberDeferred = getNotificationMemberAsync(notification.senderUid)
+        val conferenceNameDeferred = getConferenceNameAsync(notification.eventId)
+        val (notiMember, conferenceName) = awaitAll(notiMemberDeferred, conferenceNameDeferred)
+
+        RecruitmentNotificationBodyUiState.from(
+            recruitmentNotification = notification,
+            notificationMember = notiMember as? RecruitmentNotificationMemberUiState,
+            conferenceName = conferenceName.toString(),
+        )
     }
 
     private suspend fun getNotificationMemberAsync(userId: Long): Deferred<RecruitmentNotificationMemberUiState?> =
