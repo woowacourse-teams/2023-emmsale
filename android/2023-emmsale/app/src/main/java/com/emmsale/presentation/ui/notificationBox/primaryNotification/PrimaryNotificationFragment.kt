@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.notificationBox.otherNotification
+package com.emmsale.presentation.ui.notificationBox.primaryNotification
 
 import android.os.Bundle
 import android.view.View

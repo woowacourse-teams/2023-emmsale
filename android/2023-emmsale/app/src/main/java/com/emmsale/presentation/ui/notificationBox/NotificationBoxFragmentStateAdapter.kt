@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.notificationBox
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.emmsale.presentation.ui.notificationBox.otherNotification.PrimaryNotificationFragment
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.PrimaryNotificationFragment
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.RecruitmentNotificationFragment
 
 class NotificationBoxFragmentStateAdapter(
