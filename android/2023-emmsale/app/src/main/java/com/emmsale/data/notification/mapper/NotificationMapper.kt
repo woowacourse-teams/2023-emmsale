@@ -8,8 +8,8 @@ import java.time.format.DateTimeFormatter
 
 fun RecruitmentNotificationApiModel.toData(): RecruitmentNotification = RecruitmentNotification(
     id = id,
-    otherUid = otherUid,
-    myUid = myUid,
+    senderUid = senderUid,
+    receiverUid = receiverUid,
     message = message,
     eventId = eventId,
     status = status.convertToRecruitmentNotificationStatus(),

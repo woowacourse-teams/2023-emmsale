@@ -44,7 +44,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="@{notification.otherName}"
+            android:text="@{notification.senderName}"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"

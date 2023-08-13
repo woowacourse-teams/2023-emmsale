@@ -57,11 +57,11 @@ class RecruitmentNotificationViewModel(
     private suspend fun updateNotifications(
         notificationsResult: ApiSuccess<List<RecruitmentNotification>>,
     ) {
-        val notifications = getNotificationBody(notificationsResult).groupBy { it.conferenceId }
+        val notifications = getNotificationBody(notificationsResult).groupBy { it.eventId }
         val notificationHeaders = notifications.map { (conferenceId, notifications) ->
             RecruitmentNotificationHeaderUiState(
                 eventId = conferenceId,
-                conferenceName = notifications.first().conferenceName,
+                conferenceName = notifications.first().eventName,
                 notifications = notifications,
                 isRead = notifications.any { !it.isRead },
             )
@@ -73,7 +73,7 @@ class RecruitmentNotificationViewModel(
     private suspend fun getNotificationBody(
         result: ApiSuccess<List<RecruitmentNotification>>,
     ): List<RecruitmentNotificationBodyUiState> = result.data.map { notification ->
-        val notiMember = getNotificationMemberAsync(notification.otherUid)
+        val notiMember = getNotificationMemberAsync(notification.senderUid)
         val conferenceName = getConferenceNameAsync(notification.eventId)
         awaitAll(notiMember, conferenceName).run {
             RecruitmentNotificationBodyUiState.from(
