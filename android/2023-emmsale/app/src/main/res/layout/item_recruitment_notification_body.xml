@@ -6,6 +6,7 @@
     <data>
 
         <import type="kotlin.Unit" />
+
         <import type="android.view.View" />
 
         <variable

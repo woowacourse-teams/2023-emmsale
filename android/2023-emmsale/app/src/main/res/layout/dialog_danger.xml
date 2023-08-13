@@ -8,18 +8,23 @@
         <variable
             name="title"
             type="String" />
+
         <variable
             name="message"
             type="String" />
+
         <variable
             name="positiveButtonLabel"
             type="String" />
+
         <variable
             name="negativeButtonLabel"
             type="String" />
+
         <variable
             name="onPositiveButtonClick"
             type="kotlin.jvm.functions.Function0" />
+
         <variable
             name="onNegativeButtonClick"
             type="kotlin.jvm.functions.Function0" />

@@ -29,15 +29,17 @@ class NotificationBoxActivity : AppCompatActivity() {
     }
 
     private fun initNotificationBoxTabLayoutSelectedListener() {
-        binding.tlNotificationBox.addOnTabSelectedListener(object :
-            TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                binding.vpNotificationBox.currentItem = tab.position
-            }
+        binding.tlNotificationBox.addOnTabSelectedListener(
+            object :
+                TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    binding.vpNotificationBox.currentItem = tab.position
+                }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) {}
+            },
+        )
     }
 
     private fun initNotificationBoxTabMediator() {

@@ -6,7 +6,6 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentEventBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.ui.notificationBox.NotificationBoxActivity
-import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.RecruitmentNotificationFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 

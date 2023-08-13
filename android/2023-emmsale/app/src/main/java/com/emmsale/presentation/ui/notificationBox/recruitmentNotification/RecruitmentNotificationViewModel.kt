@@ -90,7 +90,11 @@ class RecruitmentNotificationViewModel(
     private suspend fun getNotificationMemberAsync(userId: Long): Deferred<RecruitmentNotificationMemberUiState?> =
         viewModelScope.async {
             when (val member = memberRepository.getMember(userId)) {
-                is ApiSuccess -> RecruitmentNotificationMemberUiState(member.data.name, member.data.imageUrl)
+                is ApiSuccess -> RecruitmentNotificationMemberUiState(
+                    member.data.name,
+                    member.data.imageUrl,
+                )
+
                 is ApiException, is ApiError -> null
             }
         }

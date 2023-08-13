@@ -3,7 +3,8 @@ package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recy
 import androidx.recyclerview.widget.DiffUtil
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationHeaderUiState
 
-object RecruitmentNotificationHeaderDiffUtil : DiffUtil.ItemCallback<RecruitmentNotificationHeaderUiState>() {
+object RecruitmentNotificationHeaderDiffUtil :
+    DiffUtil.ItemCallback<RecruitmentNotificationHeaderUiState>() {
     override fun areItemsTheSame(
         oldItem: RecruitmentNotificationHeaderUiState,
         newItem: RecruitmentNotificationHeaderUiState,
