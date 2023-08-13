@@ -11,9 +11,7 @@ import com.emmsale.databinding.DialogBottomMenuBinding
 import com.emmsale.presentation.common.views.VerticalDivider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class BottomMenuDialog(
-    context: Context,
-) : BottomSheetDialog(context) {
+class BottomMenuDialog(context: Context) : BottomSheetDialog(context) {
 
     private val binding: DialogBottomMenuBinding by lazy {
         DialogBottomMenuBinding.inflate(layoutInflater)
