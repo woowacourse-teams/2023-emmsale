@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityProfileBinding
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.views.BottomDialogMenuItem
+import com.emmsale.presentation.common.views.BottomMenuDialog
 import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
@@ -50,6 +52,22 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         binding.tbProfileToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding.tbProfileToolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.profile_more -> showMoreMenu()
+            }
+            true
+        }
+    }
+
+    private fun showMoreMenu() {
+        BottomMenuDialog(this).apply {
+            addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) {}
+            addMenuItemBelow(
+                getString(R.string.profilemenudialog_report_button_label),
+                BottomDialogMenuItem.DANGER,
+            ) {}
+        }.show()
     }
 
     private fun setupUiLogic() {
