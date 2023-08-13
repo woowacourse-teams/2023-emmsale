@@ -2,34 +2,34 @@ package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uist
 
 data class RecruitmentUiState(
     val isLoading: Boolean = false,
-    val isError: Boolean = false,
+    val isChangingRecruitmentStatusFailed: Boolean = false,
     val isAccepted: Boolean = false,
     val isRejected: Boolean = false,
 ) {
     fun changeToLoadingState(): RecruitmentUiState = copy(
         isLoading = true,
-        isError = false,
+        isChangingRecruitmentStatusFailed = false,
         isAccepted = false,
         isRejected = false,
     )
 
     fun changeToAcceptedState(): RecruitmentUiState = copy(
         isLoading = false,
-        isError = false,
+        isChangingRecruitmentStatusFailed = false,
         isAccepted = true,
         isRejected = false,
     )
 
     fun changeToRejectedState(): RecruitmentUiState = copy(
         isLoading = false,
-        isError = false,
+        isChangingRecruitmentStatusFailed = false,
         isAccepted = false,
         isRejected = true,
     )
 
-    fun changeToErrorState(): RecruitmentUiState = copy(
+    fun changeToUpdatingRecruitmentStatusErrorState(): RecruitmentUiState = copy(
         isLoading = false,
-        isError = true,
+        isChangingRecruitmentStatusFailed = true,
         isAccepted = false,
         isRejected = false,
     )

@@ -17,7 +17,7 @@ import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationBodyUiState
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationHeaderUiState
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationMemberUiState
-import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationsUiState
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentUiState
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -29,8 +29,8 @@ class RecruitmentNotificationViewModel(
     private val eventDetailRepository: EventDetailRepository,
     private val notificationRepository: NotificationRepository,
 ) : ViewModel() {
-    private val _notifications = NotNullMutableLiveData(RecruitmentNotificationsUiState())
-    val notifications: NotNullLiveData<RecruitmentNotificationsUiState> = _notifications
+    private val _notifications = NotNullMutableLiveData(RecruitmentNotificationUiState())
+    val notifications: NotNullLiveData<RecruitmentNotificationUiState> = _notifications
 
     private val _recruitmentUiState = NotNullMutableLiveData(RecruitmentUiState())
     val recruitmentUiState: NotNullLiveData<RecruitmentUiState> = _recruitmentUiState
@@ -46,8 +46,8 @@ class RecruitmentNotificationViewModel(
             when (val notificationsResult = notificationRepository.getRecruitmentNotifications()) {
                 is ApiSuccess -> updateNotifications(notificationsResult)
                 is ApiException, is ApiError -> _notifications.postValue(
-                    RecruitmentNotificationsUiState(
-                        isError = true,
+                    _notifications.value.copy(
+                        isLoadingNotificationsFailed = true,
                     ),
                 )
             }
@@ -124,7 +124,8 @@ class RecruitmentNotificationViewModel(
                 }
 
                 is ApiException, is ApiError ->
-                    _recruitmentUiState.value = recruitmentUiState.value.changeToErrorState()
+                    _recruitmentUiState.value =
+                        recruitmentUiState.value.changeToUpdatingRecruitmentStatusErrorState()
             }
         }
     }
@@ -145,7 +146,8 @@ class RecruitmentNotificationViewModel(
                 }
 
                 is ApiException, is ApiError ->
-                    _recruitmentUiState.value = recruitmentUiState.value.changeToErrorState()
+                    _recruitmentUiState.value =
+                        recruitmentUiState.value.changeToUpdatingRecruitmentStatusErrorState()
             }
         }
     }

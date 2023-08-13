@@ -75,7 +75,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private fun setupEventsObserver() {
         viewModel.conference.observe(viewLifecycleOwner) { eventsResult ->
             when {
-                eventsResult.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
+                eventsResult.isLoadingConferencesFailed -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
                 !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferenceItems)
             }
         }

@@ -14,7 +14,8 @@ import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyc
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderAdapter
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderClickListener
 
-class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotificationBinding>(),
+class RecruitmentNotificationFragment :
+    BaseFragment<FragmentRecruitmentNotificationBinding>(),
     RecruitmentNotificationHeaderClickListener,
     RecruitmentNotificationBodyClickListener {
     override val layoutResId: Int = R.layout.fragment_recruitment_notification
@@ -75,7 +76,9 @@ class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotifica
     private fun setupNotifications() {
         viewModel.notifications.observe(viewLifecycleOwner) { uiState ->
             when {
-                uiState.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
+                uiState.isLoadingNotificationsFailed ->
+                    requireContext().showToast(getString(R.string.all_data_loading_failed_message))
+
                 !uiState.isLoading ->
                     recruitmentNotificationHeaderAdapter.submitList(uiState.notificationGroups)
             }
@@ -85,7 +88,7 @@ class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotifica
     private fun setupRecruitment() {
         viewModel.recruitmentUiState.observe(viewLifecycleOwner) { uiState ->
             when {
-                uiState.isError -> requireContext().showToast(getString(R.string.notificationbox_recruitment_status_changing_failed))
+                uiState.isChangingRecruitmentStatusFailed -> requireContext().showToast(getString(R.string.notificationbox_recruitment_status_changing_failed))
                 uiState.isAccepted -> showRecruitmentAcceptedDialog()
                 uiState.isRejected -> binding.root.showSnackbar(getString(R.string.notificationbox_recruitment_rejected_message))
             }

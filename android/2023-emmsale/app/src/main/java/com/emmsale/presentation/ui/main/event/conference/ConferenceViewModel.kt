@@ -55,8 +55,10 @@ class ConferenceViewModel(
                         isLoading = false,
                     )
 
-                is ApiError, is ApiException ->
-                    _conference.value = _conference.value.copy(isError = true, isLoading = false)
+                is ApiError, is ApiException -> _conference.value = _conference.value.copy(
+                    isLoadingConferencesFailed = true,
+                    isLoading = false,
+                )
             }
         }
     }
