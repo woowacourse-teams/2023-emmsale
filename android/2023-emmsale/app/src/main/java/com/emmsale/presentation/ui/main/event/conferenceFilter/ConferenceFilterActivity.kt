@@ -234,7 +234,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         const val KEY_SELECTED_START_DATE = "selected_start_date_key"
         const val KEY_SELECTED_END_DATE = "selected_end_date_key"
 
-        fun createIntent(
+        fun getIntent(
             context: Context,
             selectedStatusIds: Array<Long> = emptyArray(),
             selectedTagIds: Array<Long> = emptyArray(),

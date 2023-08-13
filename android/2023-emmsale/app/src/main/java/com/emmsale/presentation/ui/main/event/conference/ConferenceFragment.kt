@@ -76,7 +76,9 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         viewModel.conference.observe(viewLifecycleOwner) { eventsResult ->
             when {
                 eventsResult.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
-                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferenceItems)
+                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferenceItems) {
+                    binding.rvEvents.scrollToPosition(0)
+                }
             }
         }
     }
@@ -94,24 +96,37 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     }
 
     private fun addFilterViews(filters: List<ConferenceSelectedFilteringOptionUiState>) {
-        filters.forEach { binding.layoutConferenceFilters.addView(createFilterTag(it.name)) }
-    }
-
-    private fun addDurationFilter(
-        startDate: ConferenceSelectedFilteringDateOptionUiState?,
-        endDate: ConferenceSelectedFilteringDateOptionUiState?,
-    ) {
-        val startDateString = startDate?.transformToDateString(requireContext())
-        val endDateString = endDate?.transformToDateString(requireContext(), true) ?: ""
-        val durationString = "$startDateString$endDateString"
-
-        if (startDateString != null) {
-            binding.layoutConferenceFilters.addView(createFilterTag(durationString))
+        filters.forEach {
+            binding.layoutConferenceFilters.addView(
+                createFilterTag(
+                    title = it.name,
+                    onClick = { viewModel.removeFilteringOptionBy(it.id) },
+                ),
+            )
         }
     }
 
-    private fun createFilterTag(title: String): FilterTag = filterChipOf {
+    private fun addDurationFilter(
+        conferenceStartDate: ConferenceSelectedFilteringDateOptionUiState?,
+        conferenceEndDate: ConferenceSelectedFilteringDateOptionUiState?,
+    ) {
+        val startDate = conferenceStartDate?.transformToDateString(requireContext())
+        val endDate = conferenceEndDate?.transformToDateString(requireContext(), true) ?: ""
+        val conferenceDuration = "$startDate$endDate"
+
+        if (startDate != null) {
+            binding.layoutConferenceFilters.addView(
+                createFilterTag(
+                    title = conferenceDuration,
+                    onClick = { viewModel.removeDurationFilteringOption() },
+                ),
+            )
+        }
+    }
+
+    private fun createFilterTag(title: String, onClick: () -> Unit): FilterTag = filterChipOf {
         text = title
+        setOnClickListener { onClick() }
     }
 
     private fun initEventFilterButtonClickListener() {
@@ -124,12 +139,12 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
 
     private fun navigateToEventFilter() {
         val selectedFilter = viewModel.selectedFilter.value
-        val filterActivityIntent = ConferenceFilterActivity.createIntent(
+        val filterActivityIntent = ConferenceFilterActivity.getIntent(
             context = requireContext(),
             selectedStatusIds = selectedFilter.selectedStatusFilteringOptionIds,
             selectedTagIds = selectedFilter.selectedTagFilteringOptionIds,
-            selectedStartDate = selectedFilter.selectedStartDate?.selectedDate,
-            selectedEndDate = selectedFilter.selectedEndDate?.selectedDate,
+            selectedStartDate = selectedFilter.selectedStartDate?.date,
+            selectedEndDate = selectedFilter.selectedEndDate?.date,
         )
         filterActivityLauncher.launch(filterActivityIntent)
     }
