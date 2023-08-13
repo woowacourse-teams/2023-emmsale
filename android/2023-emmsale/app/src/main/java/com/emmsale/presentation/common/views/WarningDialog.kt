@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.emmsale.databinding.DialogDangerBinding
 import com.emmsale.presentation.common.extension.dp
 
-class DangerDialog(
+class WarningDialog(
     context: Context,
     private val title: String,
     private val message: String,

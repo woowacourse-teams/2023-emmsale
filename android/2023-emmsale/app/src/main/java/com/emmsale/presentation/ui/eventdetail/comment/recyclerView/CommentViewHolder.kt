@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ItemCommentsCommentsBinding
-import com.emmsale.presentation.common.views.DangerDialog
+import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState
@@ -49,14 +49,14 @@ class CommentViewHolder(
 
     private fun onDeleteButtonClick() {
         val context = binding.root.context
-        DangerDialog(
+        WarningDialog(
             context = context,
             title = context.getString(R.string.commentdeletedialog_title),
             message = context.getString(R.string.commentdeletedialog_message),
             positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
             negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
             onPositiveButtonClick = {
-                onCommentDelete(binding.comment?.commentId ?: return@DangerDialog)
+                onCommentDelete(binding.comment?.commentId ?: return@WarningDialog)
             },
         ).show()
     }
