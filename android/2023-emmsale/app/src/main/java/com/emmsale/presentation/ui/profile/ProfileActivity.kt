@@ -75,9 +75,16 @@ class ProfileActivity : AppCompatActivity() {
             handleNotLogin(it)
         }
         viewModel.profile.observe(this) {
+            handleLoginMember(it)
             handleError(it)
             handleFields(it)
             handleActivities(it)
+        }
+    }
+
+    private fun handleLoginMember(profile: ProfileUiState) {
+        if (profile.isLoginMember) {
+            binding.tbProfileToolbar.menu.clear()
         }
     }
 

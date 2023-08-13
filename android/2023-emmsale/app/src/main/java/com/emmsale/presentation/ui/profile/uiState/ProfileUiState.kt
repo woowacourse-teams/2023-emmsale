@@ -16,7 +16,7 @@ data class ProfileUiState(
         val Loading = ProfileUiState(
             isLoading = true,
             isFetchingError = false,
-            isLoginMember = true,
+            isLoginMember = false,
             memberId = -1,
             memberName = "",
             description = "",
