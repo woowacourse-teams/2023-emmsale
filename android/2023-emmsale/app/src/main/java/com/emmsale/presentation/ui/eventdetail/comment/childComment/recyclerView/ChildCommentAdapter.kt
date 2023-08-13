@@ -19,11 +19,10 @@ class ChildCommentAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ParentCommentViewHolder) {
-            holder.bind(getItem(position))
-            return
+        when (holder) {
+            is ParentCommentViewHolder -> holder.bind(getItem(position))
+            is ChildCommentViewHolder -> holder.bind(getItem(position))
         }
-        (holder as ChildCommentViewHolder).bind(getItem(position))
     }
 
     override fun getItemViewType(position: Int): Int =
