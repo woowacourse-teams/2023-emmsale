@@ -12,4 +12,6 @@
         <attr name="inactiveBackground" format="reference" />
         <attr name="active" format="boolean" />
     </declare-styleable>
+
+    <attr name="FilterTagStyle" format="reference" />
 </resources>

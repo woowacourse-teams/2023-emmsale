@@ -76,6 +76,17 @@ class ConferenceViewModel(
         endDate = endDate,
     )
 
+    private fun fetchFilteredConferences(filterOption: ConferenceSelectedFilteringUiState) {
+        with(filterOption) {
+            fetchFilteredConferences(
+                selectedStatusFilteringOptionIds,
+                selectedTagFilteringOptionIds,
+                selectedStartDate?.date,
+                selectedEndDate?.date,
+            )
+        }
+    }
+
     fun fetchFilteredConferences(
         statusFilterIds: Array<Long>,
         tagFilterIds: Array<Long>,
@@ -124,6 +135,17 @@ class ConferenceViewModel(
             is ApiSuccess -> eventTagResult.data
             is ApiError, is ApiException -> emptyList()
         }
+
+    fun removeFilteringOptionBy(filterOptionId: Long) {
+        val newSelectedFilter = _selectedFilter.value.removeFilteringOptionBy(filterOptionId)
+        _selectedFilter.value = newSelectedFilter
+
+        fetchFilteredConferences(newSelectedFilter)
+    }
+
+    fun removeDurationFilteringOption() {
+        _selectedFilter.value = _selectedFilter.value.clearSelectedDate()
+    }
 
     companion object {
         val factory = ViewModelFactory {

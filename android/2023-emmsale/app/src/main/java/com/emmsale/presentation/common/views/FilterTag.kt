@@ -1,42 +1,33 @@
 package com.emmsale.presentation.common.views
 
 import android.content.Context
+import android.graphics.Canvas
 import android.util.AttributeSet
-import android.view.Gravity
-import android.view.ViewGroup
-import androidx.annotation.Dimension
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
+import android.view.ViewGroup.MarginLayoutParams
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import com.emmsale.R
 import com.emmsale.presentation.common.extension.dp
 
-class FilterTag : AppCompatTextView {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+class FilterTag : AppCompatButton {
+    constructor(context: Context) : super(context, null, R.attr.FilterTagStyle)
+    constructor(context: Context, attrs: AttributeSet?) : super(
+        context,
+        attrs,
+        R.attr.FilterTagStyle,
+    )
 
-    init {
-        initView()
-    }
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr,
+    )
 
-    private fun initView() {
-        setTextSize(Dimension.SP, 13F)
-        gravity = Gravity.CENTER
-        minimumHeight = 0
-        background = ContextCompat.getDrawable(context, R.drawable.bg_filter_tag)
-        setTextColor(ContextCompat.getColor(context, R.color.black))
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        setMarginEnd(5.dp)
-    }
-
-    private fun setMarginEnd(margin: Int) {
-        val margins = ViewGroup.MarginLayoutParams::class.java.cast(layoutParams)
-        layoutParams = margins?.apply {
-            marginEnd = margin
-        }
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        val marginLayoutParams = MarginLayoutParams::class.java.cast(layoutParams)
+        marginLayoutParams.marginEnd = 5.dp
+        layoutParams = marginLayoutParams
     }
 }
 

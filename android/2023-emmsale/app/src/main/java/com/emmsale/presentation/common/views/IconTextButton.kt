@@ -73,11 +73,11 @@ class IconTextButton : AppCompatButton {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        initIcon(context)
+        initIcon()
         updateActivationView()
     }
 
-    private fun initIcon(context: Context) {
+    private fun initIcon() {
         if (iconResId != null && iconResId != 0) {
             val icon = ContextCompat.getDrawable(context, iconResId!!)
             setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
