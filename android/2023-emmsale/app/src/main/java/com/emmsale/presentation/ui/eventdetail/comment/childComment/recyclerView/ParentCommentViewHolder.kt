@@ -57,7 +57,7 @@ class ParentCommentViewHolder(
     private fun BottomMenuDialog.addReportButton() {
         addMenuItemBelow(
             context.getString(R.string.all_reportButtonLabel),
-            MenuItemType.DANGER,
+            MenuItemType.RED,
         ) { }
     }
 

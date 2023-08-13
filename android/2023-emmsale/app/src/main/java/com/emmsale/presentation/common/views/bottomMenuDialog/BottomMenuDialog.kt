@@ -26,7 +26,7 @@ class BottomMenuDialog(context: Context) : BottomSheetDialog(context) {
 
     fun addMenuItemBelow(
         title: String,
-        menuItemType: MenuItemType = MenuItemType.NORMAL,
+        menuItemType: MenuItemType = MenuItemType.BLACK,
         onClick: () -> Unit,
     ) {
         if (binding.llBottommenudialogMenuitems.childCount > 0) {
@@ -53,8 +53,8 @@ class BottomMenuDialog(context: Context) : BottomSheetDialog(context) {
     }
 
     private fun getTitleTextColorOf(menuItemType: MenuItemType): Int = when (menuItemType) {
-        MenuItemType.NORMAL -> ContextCompat.getColor(context, R.color.black)
-        MenuItemType.DANGER -> ContextCompat.getColor(context, R.color.red)
+        MenuItemType.BLACK -> ContextCompat.getColor(context, R.color.black)
+        MenuItemType.RED -> ContextCompat.getColor(context, R.color.red)
     }
 
     private fun initDialogWindow() {
