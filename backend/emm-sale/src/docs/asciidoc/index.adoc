@@ -370,6 +370,18 @@ include::{snippets}/find-all-request-notification/response-fields.adoc[]
 .HTTP response
 include::{snippets}/find-all-request-notification/http-response.adoc[]
 
+== Update Notification(댓글 & 이벤트 알림)
+
+=== `GET` : 댓글 & 이벤트 알림들 조회
+
+.HTTP request 설명
+include::{snippets}/get-update-notifications/request-parameters.adoc[]
+
+include::{snippets}/get-update-notifications/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/get-update-notifications/http-response.adoc[]
+
 == Block
 
 === `POST` : 사용자 차단 등록

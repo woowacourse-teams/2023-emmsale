@@ -43,7 +43,14 @@ public enum MemberExceptionType implements BaseExceptionType {
   OVER_LENGTH_DESCRIPTION(
       HttpStatus.BAD_REQUEST,
       "한줄 자기소개에 입력 가능한 글자 수를 초과했습니다."
-  );
+  ),
+
+  NOT_MATCHING_TOKEN_AND_LOGIN(
+      HttpStatus.UNAUTHORIZED,
+      "로그인 한 사용자와 토큰의 주인이 일치하지 않습니다."
+  )
+
+  ;
 
   private final HttpStatus httpStatus;
   private final String errorMessage;

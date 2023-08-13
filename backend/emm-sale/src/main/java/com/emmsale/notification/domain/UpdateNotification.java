@@ -45,4 +45,12 @@ public class UpdateNotification {
     this.createdAt = createdAt;
     this.isRead = false;
   }
+
+  public boolean isCommentNotification() {
+    return updateNotificationType == UpdateNotificationType.COMMENT;
+  }
+
+  public boolean isEventNotification() {
+    return updateNotificationType == UpdateNotificationType.EVENT;
+  }
 }
