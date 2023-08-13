@@ -39,14 +39,12 @@ class BottomMenuDialog(context: Context) : BottomSheetDialog(context) {
         title: String,
         menuItemType: MenuItemType,
         onClick: () -> Unit,
-    ): BottomDialogMenuItem {
-        return BottomDialogMenuItem(context).apply {
-            text = title
-            setTextColor(getTitleTextColorOf(menuItemType))
-            setOnClickListener {
-                onClick()
-                dismiss()
-            }
+    ): BottomDialogMenuItem = BottomDialogMenuItem(context).apply {
+        text = title
+        setTextColor(getTitleTextColorOf(menuItemType))
+        setOnClickListener {
+            onClick()
+            dismiss()
         }
     }
 
