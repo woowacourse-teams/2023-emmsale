@@ -3,13 +3,107 @@ package com.emmsale.presentation.ui.profile
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
+import com.emmsale.databinding.ActivityProfileBinding
+import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.views.CategoryTag
+import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
+import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
+import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 
 class ProfileActivity : AppCompatActivity() {
+
+    private val binding: ActivityProfileBinding by lazy {
+        ActivityProfileBinding.inflate(layoutInflater)
+    }
+
+    private val viewModel: ProfileViewModel by viewModels {
+        ProfileViewModel.factory
+    }
+
+    private val memberId: Long by lazy {
+        intent.getLongExtra(KEY_MEMBER_ID, -1).run {
+            if (this == -1L) throw IllegalStateException("프로필을 조회할 회원의 아이디는 1 이상이어야 합니다. 로직을 다시 확인해주세요.")
+            this
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        setContentView(binding.root)
+
+        initDataBinding()
+        initToolbar()
+        setupUiLogic()
+        initActivitiesRecyclerView()
+
+        viewModel.fetchMember(memberId)
+    }
+
+    private fun initDataBinding() {
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+    }
+
+    private fun initToolbar() {
+        binding.tbProfileToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+    }
+
+    private fun setupUiLogic() {
+        viewModel.isLogin.observe(this) {
+            handleNotLogin(it)
+        }
+        viewModel.profile.observe(this) {
+            handleError(it)
+            handleFields(it)
+            handleActivities(it)
+        }
+    }
+
+    private fun handleError(profile: ProfileUiState) {
+        if (profile.isFetchingError) {
+            showToast(getString(R.string.profile_profile_fetching_error_message))
+        }
+    }
+
+    private fun handleNotLogin(isLogin: Boolean) {
+        if (!isLogin) {
+            LoginActivity.startActivity(this)
+            finish()
+        }
+    }
+
+    private fun handleFields(profile: ProfileUiState) {
+        binding.cgProfileFields.removeAllViews()
+
+        profile.fields.forEach {
+            val tagView = CategoryTag(this).apply { text = it.name }
+            binding.cgProfileFields.addView(tagView)
+        }
+    }
+
+    private fun handleActivities(profile: ProfileUiState) {
+        (binding.rvProfileEducations.adapter as ActivitiesAdapter).submitList(
+            profile.educations,
+        )
+        (binding.rvProfileClubs.adapter as ActivitiesAdapter).submitList(profile.clubs)
+    }
+
+    private fun initActivitiesRecyclerView() {
+        val decoration = ActivitiesAdapterDecoration()
+        listOf(
+            binding.rvProfileEducations,
+            binding.rvProfileClubs,
+        ).forEach {
+            it.apply {
+                adapter = ActivitiesAdapter()
+                itemAnimator = null
+                addItemDecoration(decoration)
+            }
+        }
     }
 
     companion object {

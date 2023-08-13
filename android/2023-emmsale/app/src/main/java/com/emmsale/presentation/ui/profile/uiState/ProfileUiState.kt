@@ -1,8 +1,6 @@
-package com.emmsale.presentation.ui.main.myProfile.uiState
+package com.emmsale.presentation.ui.profile.uiState
 
-import com.emmsale.presentation.ui.profile.uiState.ActivityUiState
-
-data class MyProfileUiState(
+data class ProfileUiState(
     val isLoading: Boolean,
     val isFetchingError: Boolean,
     val memberId: Long,
@@ -14,7 +12,7 @@ data class MyProfileUiState(
     val clubs: List<ActivityUiState>,
 ) {
     companion object {
-        val Loading = MyProfileUiState(
+        val Loading = ProfileUiState(
             isLoading = true,
             isFetchingError = false,
             memberId = -1,

@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.myProfile.recyclerView
+package com.emmsale.presentation.ui.profile.recyclerView
 
 import android.graphics.Rect
 import android.view.View

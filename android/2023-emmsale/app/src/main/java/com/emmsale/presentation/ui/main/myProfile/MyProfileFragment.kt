@@ -9,9 +9,9 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
-import com.emmsale.presentation.ui.main.myProfile.recyclerView.ActivitiesAdapter
-import com.emmsale.presentation.ui.main.myProfile.recyclerView.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
+import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
+import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
 
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     override val layoutResId: Int = R.layout.fragment_my_profile
@@ -89,6 +89,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     companion object {
-        const val TAG = "MyProfile"
+        const val TAG = "TAG_MY_PROFILE"
     }
 }

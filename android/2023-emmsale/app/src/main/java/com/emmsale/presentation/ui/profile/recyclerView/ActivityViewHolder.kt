@@ -1,10 +1,10 @@
-package com.emmsale.presentation.ui.main.myProfile.recyclerView
+package com.emmsale.presentation.ui.profile.recyclerView
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.ItemProfileActivitiesBinding
-import com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState
+import com.emmsale.presentation.ui.profile.uiState.ActivityUiState
 
 class ActivityViewHolder(
     private val binding: ItemProfileActivitiesBinding,
