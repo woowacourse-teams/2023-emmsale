@@ -40,11 +40,11 @@ class CommentViewHolder(
     }
 
     private fun BottomMenuDialog.addUpdateButton() {
-        addMenuItemBelow(context.getString(R.string.all_updateButtonLabel)) { }
+        addMenuItemBelow(context.getString(R.string.all_update_button_label)) { }
     }
 
     private fun BottomMenuDialog.addDeleteButton() {
-        addMenuItemBelow(context.getString(R.string.all_deleteButtonLabel)) { onDeleteButtonClick() }
+        addMenuItemBelow(context.getString(R.string.all_delete_button_label)) { onDeleteButtonClick() }
     }
 
     private fun onDeleteButtonClick() {
@@ -63,7 +63,7 @@ class CommentViewHolder(
 
     private fun BottomMenuDialog.addReportButton() {
         addMenuItemBelow(
-            context.getString(R.string.all_reportButtonLabel),
+            context.getString(R.string.all_report_button_label),
             MenuItemType.IMPORTANT,
         ) { }
     }
