@@ -33,10 +33,15 @@ class ProfileViewModel(
 
     fun fetchMember(memberId: Long) {
         viewModelScope.launch {
+            val token = tokenRepository.getToken()
+            if (token == null) {
+                changeToNotLoginState()
+                return@launch
+            }
             launch {
                 when (val result = memberRepository.getMember(memberId)) {
                     is ApiError, is ApiException -> changeToProfileFetchingErrorState()
-                    is ApiSuccess -> setMemberState(result.data)
+                    is ApiSuccess -> setMemberState(result.data, token.uid)
                 }
             }
             launch {
@@ -52,10 +57,11 @@ class ProfileViewModel(
         _isLogin.value = false
     }
 
-    private fun setMemberState(member: Member) {
+    private fun setMemberState(member: Member, loginMemberId: Long) {
         _profile.value = _profile.value.copy(
             isLoading = false,
             isFetchingError = false,
+            isLoginMember = member.id == loginMemberId,
             memberId = member.id,
             memberName = member.name,
             description = member.description,
