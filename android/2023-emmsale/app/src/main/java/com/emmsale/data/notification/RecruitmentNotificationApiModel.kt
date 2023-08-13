@@ -8,9 +8,9 @@ data class RecruitmentNotificationApiModel(
     @SerialName("notificationId")
     val id: Long,
     @SerialName("senderId")
-    val otherUid: Long,
+    val senderUid: Long,
     @SerialName("receiverId")
-    val myUid: Long,
+    val receiverUid: Long,
     @SerialName("message")
     val message: String,
     @SerialName("eventId")

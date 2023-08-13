@@ -123,10 +123,14 @@ class ConferenceFilterActivity : AppCompatActivity() {
     private fun setupConferenceFilter() {
         viewModel.conferenceFilter.observe(this) { eventFilters ->
             when {
-                eventFilters.isError -> showToast(getString(R.string.all_data_loading_failed_message))
+                eventFilters.isLoadingConferenceFilterFailed -> showLoadingConferenceFilterFailed()
                 !eventFilters.isLoading -> updateFilterViews(eventFilters)
             }
         }
+    }
+
+    private fun showLoadingConferenceFilterFailed() {
+        showToast(getString(R.string.all_data_loading_failed_message))
     }
 
     private fun updateFilterViews(conferenceFilters: ConferenceFilterUiState) {

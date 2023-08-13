@@ -8,9 +8,9 @@ interface NotificationRepository {
     // TODO: 4차 스프린트에서 알림 삭제 기능 구현 예정
     // fun deleteNotification(notificationId: Long)
 
-    suspend fun updateRecruitmentAcceptedStatus(
+    suspend fun updateRecruitmentStatus(
         notificationId: Long,
-        isAccepted: Boolean,
+        recruitmentStatus: RecruitmentStatus,
     ): ApiResult<Unit>
 
     suspend fun updateNotificationReadStatus(

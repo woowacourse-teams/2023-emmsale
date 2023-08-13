@@ -15,9 +15,9 @@ import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewAdapter
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewDivider
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceItemUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringOptionUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity
 import java.time.LocalDate
 
@@ -73,10 +73,10 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     }
 
     private fun setupEventsObserver() {
-        viewModel.conference.observe(viewLifecycleOwner) { eventsResult ->
+        viewModel.conferences.observe(viewLifecycleOwner) { eventsResult ->
             when {
-                eventsResult.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
-                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferenceItems) {
+                eventsResult.isLoadingConferencesFailed -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
+                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferences) {
                     binding.rvEvents.scrollToPosition(0)
                 }
             }
@@ -96,44 +96,31 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     }
 
     private fun addFilterViews(filters: List<ConferenceSelectedFilteringOptionUiState>) {
-        filters.forEach {
-            binding.layoutConferenceFilters.addView(
-                createFilterTag(
-                    title = it.name,
-                    onClick = { viewModel.removeFilteringOptionBy(it.id) },
-                ),
-            )
-        }
+        filters.forEach { binding.layoutConferenceFilters.addView(createFilterTag(it.name)) }
     }
 
     private fun addDurationFilter(
-        conferenceStartDate: ConferenceSelectedFilteringDateOptionUiState?,
-        conferenceEndDate: ConferenceSelectedFilteringDateOptionUiState?,
+        startDate: ConferenceSelectedFilteringDateOptionUiState?,
+        endDate: ConferenceSelectedFilteringDateOptionUiState?,
     ) {
-        val startDate = conferenceStartDate?.transformToDateString(requireContext())
-        val endDate = conferenceEndDate?.transformToDateString(requireContext(), true) ?: ""
-        val conferenceDuration = "$startDate$endDate"
+        val startDateString = startDate?.transformToDateString(requireContext())
+        val endDateString = endDate?.transformToDateString(requireContext(), true) ?: ""
+        val durationString = "$startDateString$endDateString"
 
-        if (startDate != null) {
-            binding.layoutConferenceFilters.addView(
-                createFilterTag(
-                    title = conferenceDuration,
-                    onClick = { viewModel.removeDurationFilteringOption() },
-                ),
-            )
+        if (startDateString != null) {
+            binding.layoutConferenceFilters.addView(createFilterTag(durationString))
         }
     }
 
-    private fun createFilterTag(title: String, onClick: () -> Unit): FilterTag = filterChipOf {
+    private fun createFilterTag(title: String): FilterTag = filterChipOf {
         text = title
-        setOnClickListener { onClick() }
     }
 
     private fun initEventFilterButtonClickListener() {
         binding.btnEventFilter.setOnClickListener { navigateToEventFilter() }
     }
 
-    private fun navigateToEventDetail(event: ConferenceItemUiState) {
+    private fun navigateToEventDetail(event: ConferenceUiState) {
         EventDetailActivity.startActivity(requireContext(), event.id)
     }
 

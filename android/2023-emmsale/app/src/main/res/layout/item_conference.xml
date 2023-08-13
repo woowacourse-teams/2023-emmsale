@@ -5,17 +5,17 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceItemUiState" />
+        <import type="com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState" />
 
         <import type="kotlin.Unit" />
 
         <variable
             name="event"
-            type="com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceItemUiState" />
+            type="com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState" />
 
         <variable
             name="onClickConference"
-            type="kotlin.jvm.functions.Function1&lt;ConferenceItemUiState, Unit>" />
+            type="kotlin.jvm.functions.Function1&lt;ConferenceUiState, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

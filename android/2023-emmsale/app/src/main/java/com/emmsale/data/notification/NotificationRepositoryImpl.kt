@@ -19,18 +19,24 @@ class NotificationRepositoryImpl(
             )
         }
 
-    override suspend fun updateRecruitmentAcceptedStatus(
+    override suspend fun updateRecruitmentStatus(
         notificationId: Long,
-        isAccepted: Boolean,
+        recruitmentStatus: RecruitmentStatus,
     ): ApiResult<Unit> = withContext(dispatcher) {
         handleApi(
             execute = {
-                val recruitingState = if (isAccepted) ACCEPT else REJECT
-                notificationService.updateRecruitmentAcceptedStatus(notificationId, recruitingState)
+                val recruitingState = convertRequestApiString(recruitmentStatus)
+                notificationService.updateRecruitmentStatus(notificationId, recruitingState)
             },
             mapToDomain = { },
         )
     }
+
+    private fun convertRequestApiString(recruitmentStatus: RecruitmentStatus) =
+        when (recruitmentStatus) {
+            RecruitmentStatus.ACCEPTED -> ACCEPT
+            RecruitmentStatus.REJECTED -> REJECT
+        }
 
     override suspend fun updateNotificationReadStatus(
         notificationId: Long,
