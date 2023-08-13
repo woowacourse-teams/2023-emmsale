@@ -19,7 +19,7 @@
         tools:targetApi="33">
         <activity
             android:name=".presentation.ui.notificationBox.NotificationBoxActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".presentation.ui.notificationBox.recruitmentNotification.RecruitmentNotificationFragment"
             android:exported="true" />

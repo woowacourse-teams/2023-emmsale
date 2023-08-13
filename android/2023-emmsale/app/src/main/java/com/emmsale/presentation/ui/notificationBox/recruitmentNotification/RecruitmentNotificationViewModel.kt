@@ -9,6 +9,7 @@ import com.emmsale.data.eventdetail.EventDetailRepository
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.data.notification.RecruitmentNotification
+import com.emmsale.data.notification.RecruitmentNotificationStatus
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -88,7 +89,7 @@ class RecruitmentNotificationViewModel(
             when (val member = memberRepository.getMember(userId)) {
                 is ApiSuccess -> RecruitmentNotificationMemberUiState(
                     member.data.name,
-                    member.data.imageUrl
+                    member.data.imageUrl,
                 )
 
                 is ApiException, is ApiError -> null
@@ -111,7 +112,12 @@ class RecruitmentNotificationViewModel(
         viewModelScope.launch {
             _recruitmentUiState.value = recruitmentUiState.value.changeToLoadingState()
 
-            when (notificationRepository.updateRecruitmentAcceptedStatus(notificationId, true)) {
+            when (
+                notificationRepository.updateRecruitmentAcceptedStatus(
+                    notificationId,
+                    RecruitmentNotificationStatus.ACCEPTED,
+                )
+            ) {
                 is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToAcceptedState()
                     _notifications.value = _notifications.value.changeAcceptStateBy(notificationId)
@@ -127,7 +133,12 @@ class RecruitmentNotificationViewModel(
         viewModelScope.launch {
             _recruitmentUiState.value = recruitmentUiState.value.changeToLoadingState()
 
-            when (notificationRepository.updateRecruitmentAcceptedStatus(notificationId, false)) {
+            when (
+                notificationRepository.updateRecruitmentAcceptedStatus(
+                    notificationId,
+                    RecruitmentNotificationStatus.REJECTED,
+                )
+            ) {
                 is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToRejectedState()
                     _notifications.value = _notifications.value.changeRejectStateBy(notificationId)
@@ -153,7 +164,7 @@ class RecruitmentNotificationViewModel(
     }
 
     private suspend fun updateNotificationReadStatus(
-        notification: RecruitmentNotificationBodyUiState
+        notification: RecruitmentNotificationBodyUiState,
     ) {
         if (!notification.isRead) {
             notificationRepository.updateNotificationReadStatus(notification.id, true)

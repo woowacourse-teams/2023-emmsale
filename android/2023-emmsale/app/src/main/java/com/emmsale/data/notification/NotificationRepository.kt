@@ -10,7 +10,7 @@ interface NotificationRepository {
 
     suspend fun updateRecruitmentAcceptedStatus(
         notificationId: Long,
-        isAccepted: Boolean,
+        recruitmentStatus: RecruitmentNotificationStatus,
     ): ApiResult<Unit>
 
     suspend fun updateNotificationReadStatus(

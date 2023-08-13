@@ -38,7 +38,7 @@ class RecruitmentRejectConfirmDialog(
     }
 
     private fun initDialog() {
-        initDialogSize()
+//        initDialogSize()
         initDialogBackgroundSetting()
         initOkayClickListener()
         initCancelClickListener()
