@@ -1,6 +1,7 @@
 package com.emmsale.event.application;
 
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
+import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_RECRUITMENT_POST;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
@@ -37,6 +38,9 @@ public class RecruitmentPostQueryService {
   }
 
   public RecruitmentPostResponse findRecruitmentPost(final Long eventId, final Long postId) {
-    return null;
+    final RecruitmentPost recruitmentPost = recruitmentPostRepository.findById(postId)
+        .orElseThrow(() -> new EventException(NOT_FOUND_RECRUITMENT_POST));
+    recruitmentPost.validateEvent(eventId);
+    return RecruitmentPostResponse.from(recruitmentPost);
   }
 }
