@@ -1,4 +1,4 @@
-package com.emmsale.presentation.common.views
+package com.emmsale.presentation.common.views.bottomMenuDialog
 
 import android.content.Context
 import android.graphics.Color
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.emmsale.R
 import com.emmsale.databinding.DialogBottomMenuBinding
+import com.emmsale.presentation.common.views.VerticalDivider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class BottomMenuDialog(
@@ -27,7 +28,7 @@ class BottomMenuDialog(
 
     fun addMenuItemBelow(
         title: String,
-        menuItemType: Int = BottomDialogMenuItem.NORMAL,
+        menuItemType: MenuItemType = MenuItemType.NORMAL,
         onClick: () -> Unit,
     ) {
         if (binding.llBottommenudialogMenuitems.childCount > 0) {
@@ -38,7 +39,7 @@ class BottomMenuDialog(
 
     private fun createMenuItem(
         title: String,
-        menuItemType: Int,
+        menuItemType: MenuItemType,
         onClick: () -> Unit,
     ): BottomDialogMenuItem {
         return BottomDialogMenuItem(context).apply {
@@ -51,10 +52,9 @@ class BottomMenuDialog(
         }
     }
 
-    private fun getTitleTextColorOf(menuItemType: Int): Int = when (menuItemType) {
-        BottomDialogMenuItem.NORMAL -> ContextCompat.getColor(context, R.color.black)
-        BottomDialogMenuItem.DANGER -> ContextCompat.getColor(context, R.color.red)
-        else -> throw IllegalArgumentException("${menuItemType}은 존재하지 않는 메뉴 아이템 타입입니다.")
+    private fun getTitleTextColorOf(menuItemType: MenuItemType): Int = when (menuItemType) {
+        MenuItemType.NORMAL -> ContextCompat.getColor(context, R.color.black)
+        MenuItemType.DANGER -> ContextCompat.getColor(context, R.color.red)
     }
 
     private fun initDialogWindow() {

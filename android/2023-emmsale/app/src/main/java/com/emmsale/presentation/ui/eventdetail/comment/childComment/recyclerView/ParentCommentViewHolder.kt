@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ItemChildcommentsParentcommentBinding
-import com.emmsale.presentation.common.views.BottomDialogMenuItem
-import com.emmsale.presentation.common.views.BottomMenuDialog
 import com.emmsale.presentation.common.views.DangerDialog
+import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
+import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.CommentUiState
 
 class ParentCommentViewHolder(
@@ -55,7 +55,7 @@ class ParentCommentViewHolder(
     private fun BottomMenuDialog.addReportButton() {
         addMenuItemBelow(
             context.getString(R.string.all_reportButtonLabel),
-            BottomDialogMenuItem.DANGER,
+            MenuItemType.DANGER,
         ) { }
     }
 

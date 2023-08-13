@@ -1,4 +1,4 @@
-package com.emmsale.presentation.common.views
+package com.emmsale.presentation.common.views.bottomMenuDialog
 
 import android.content.Context
 import android.graphics.Typeface
@@ -12,10 +12,5 @@ class BottomDialogMenuItem(context: Context) : AppCompatTextView(context) {
         setTypeface(null, Typeface.BOLD)
         setTextSize(Dimension.SP, 14F)
         setPadding(0, 21.dp, 0, 21.dp)
-    }
-
-    companion object {
-        const val NORMAL = 0
-        const val DANGER = 4444
     }
 }
