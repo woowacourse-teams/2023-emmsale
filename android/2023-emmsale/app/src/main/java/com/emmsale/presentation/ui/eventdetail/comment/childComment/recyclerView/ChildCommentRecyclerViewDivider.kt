@@ -24,7 +24,7 @@ class ChildCommentRecyclerViewDivider(context: Context) : RecyclerView.ItemDecor
             val params = child.layoutParams as RecyclerView.LayoutParams
 
             val top = child.bottom + params.bottomMargin
-            val bottom = top + (divider.intrinsicHeight)
+            val bottom = top + divider.intrinsicHeight
 
             divider.setBounds(left, top, right, bottom)
             divider.draw(c)
