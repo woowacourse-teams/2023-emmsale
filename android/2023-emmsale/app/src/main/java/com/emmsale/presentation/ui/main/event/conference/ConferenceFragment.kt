@@ -98,26 +98,28 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private fun addFilterViews(filters: List<ConferenceSelectedFilteringOptionUiState>) {
         filters.forEach {
             binding.layoutConferenceFilters.addView(
-                createFilterTag(it.name) {
-                    viewModel.removeFilteringOptionBy(it.id)
-                },
+                createFilterTag(
+                    title = it.name,
+                    onClick = { viewModel.removeFilteringOptionBy(it.id) },
+                ),
             )
         }
     }
 
     private fun addDurationFilter(
-        startDate: ConferenceSelectedFilteringDateOptionUiState?,
-        endDate: ConferenceSelectedFilteringDateOptionUiState?,
+        conferenceStartDate: ConferenceSelectedFilteringDateOptionUiState?,
+        conferenceEndDate: ConferenceSelectedFilteringDateOptionUiState?,
     ) {
-        val startDateString = startDate?.transformToDateString(requireContext())
-        val endDateString = endDate?.transformToDateString(requireContext(), true) ?: ""
-        val durationString = "$startDateString$endDateString"
+        val startDate = conferenceStartDate?.transformToDateString(requireContext())
+        val endDate = conferenceEndDate?.transformToDateString(requireContext(), true) ?: ""
+        val conferenceDuration = "$startDate$endDate"
 
-        if (startDateString != null) {
+        if (startDate != null) {
             binding.layoutConferenceFilters.addView(
-                createFilterTag(durationString) {
-                    viewModel.removeDurationFilteringOption()
-                },
+                createFilterTag(
+                    title = conferenceDuration,
+                    onClick = { viewModel.removeDurationFilteringOption() },
+                ),
             )
         }
     }
