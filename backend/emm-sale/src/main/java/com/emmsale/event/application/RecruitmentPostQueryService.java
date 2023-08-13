@@ -35,4 +35,8 @@ public class RecruitmentPostQueryService {
   public Boolean isAlreadyRecruit(final Long eventId, final Long memberId) {
     return recruitmentPostRepository.existsByEventIdAndMemberId(eventId, memberId);
   }
+
+  public RecruitmentPostResponse findRecruitmentPost(final Long eventId, final Long postId) {
+    return null;
+  }
 }

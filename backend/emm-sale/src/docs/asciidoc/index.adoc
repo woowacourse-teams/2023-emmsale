@@ -218,6 +218,17 @@ include::{snippets}/find-events/response-fields.adoc[]
 === `GET` : 함께 해요 게시글 목록 조회
 
 .HTTP request
+include::{snippets}/find-recruitment-posts/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-recruitment-posts/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-recruitment-posts/response-fields.adoc[]
+
+=== `GET` : 함께 해요 게시글 단건 조회
+
+.HTTP request
 include::{snippets}/find-recruitment-post/http-request.adoc[]
 
 .HTTP response
