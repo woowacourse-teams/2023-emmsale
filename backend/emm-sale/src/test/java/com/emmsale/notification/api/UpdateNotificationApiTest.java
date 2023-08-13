@@ -2,17 +2,21 @@ package com.emmsale.notification.api;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
+import com.emmsale.notification.application.UpdateNotificationCommandService;
 import com.emmsale.notification.application.UpdateNotificationQueryService;
 import com.emmsale.notification.application.dto.UpdateNotificationResponse;
 import com.emmsale.notification.application.dto.UpdateNotificationResponse.CommentTypeNotification;
@@ -24,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
 @WebMvcTest(UpdateNotificationApi.class)
@@ -31,6 +36,8 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
 
   @MockBean
   private UpdateNotificationQueryService updateNotificationQueryService;
+  @MockBean
+  private UpdateNotificationCommandService updateNotificationCommandService;
 
   @Test
   @DisplayName("find() : 현재 로그인 한 사용자가 받은 댓글 & 행사 알림들을 성공적으로 조회한다면 200 OK를 반환할 수 있다.")
@@ -48,12 +55,14 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
         fieldWithPath("[].createdAt").description("알림 생성 날짜"),
         fieldWithPath("[].type").description("알림 타입"),
         fieldWithPath("[].isRead").description("읽음 상태 유무"),
-        fieldWithPath("[].commentTypeNotification").description("행사 알림일 경우 null, 댓글 알림일 경우 내용 존재").optional(),
+        fieldWithPath("[].commentTypeNotification").description("행사 알림일 경우 null, 댓글 알림일 경우 내용 존재")
+            .optional(),
         fieldWithPath("[].commentTypeNotification.content").description("(댓글 알림일 경우) 댓글 내용")
             .optional(),
         fieldWithPath("[].commentTypeNotification.eventName").description("(댓글 알림일 경우)이벤트 이름")
             .optional(),
-        fieldWithPath("[].commentTypeNotification.commenterImageUrl").description("(댓글 알림일 경우) 댓글 작성자 이미지 Url")
+        fieldWithPath("[].commentTypeNotification.commenterImageUrl").description(
+                "(댓글 알림일 경우) 댓글 작성자 이미지 Url")
             .optional()
     );
 
@@ -88,5 +97,25 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("get-update-notifications", requestParam, responseFields));
+  }
+
+  @Test
+  @DisplayName("read() : 댓글 & 행사 알림의 읽음 상태를 성공적으로 변경시켰다면 204 No Content를 반환할 수 있다.")
+  void test_read() throws Exception {
+    //given
+    final PathParametersSnippet pathParams = pathParameters(
+        parameterWithName("update-notifications-id").description("읽음 상태 변경 시킬 알림 ID")
+    );
+    final String accessToken = "Bearer Token";
+
+    //when
+    doNothing().when(updateNotificationCommandService).read(any(), anyLong());
+
+    //then
+    mockMvc.perform(put("/update-notifications/{update-notifications-id}/read", 1L)
+            .header("Authorization", accessToken))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("put-update-notifications-read", pathParams));
   }
 }

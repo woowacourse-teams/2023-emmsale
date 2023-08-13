@@ -53,4 +53,8 @@ public class UpdateNotification {
   public boolean isEventNotification() {
     return updateNotificationType == UpdateNotificationType.EVENT;
   }
+
+  public void read() {
+    isRead = true;
+  }
 }

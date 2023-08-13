@@ -370,9 +370,9 @@ include::{snippets}/find-all-request-notification/response-fields.adoc[]
 .HTTP response
 include::{snippets}/find-all-request-notification/http-response.adoc[]
 
-== Update Notification(댓글 & 이벤트 알림)
+== Update Notification(댓글 & 행사 알림)
 
-=== `GET` : 댓글 & 이벤트 알림들 조회
+=== `GET` : 댓글 & 행사 알림들 조회
 
 .HTTP request 설명
 include::{snippets}/get-update-notifications/request-parameters.adoc[]
@@ -381,6 +381,16 @@ include::{snippets}/get-update-notifications/http-request.adoc[]
 
 .HTTP response
 include::{snippets}/get-update-notifications/http-response.adoc[]
+
+=== 'PUT' : 댓글 & 행사 알림 읽음 상태 변경
+
+.HTTP request 설명
+include::{snippets}/put-update-notifications-read/path-parameters.adoc[]
+
+include::{snippets}/put-update-notifications-read/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/put-update-notifications-read/http-response.adoc[]
 
 == Block
 
