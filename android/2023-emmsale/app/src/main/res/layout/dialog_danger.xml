@@ -94,7 +94,7 @@
             android:textStyle="bold"
             android:textSize="14sp"
             android:gravity="center"
-            android:textColor="@color/red" />
+            android:textColor="@color/important" />
 
         <TextView
             android:layout_width="0dp"
