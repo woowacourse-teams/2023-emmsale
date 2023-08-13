@@ -4,6 +4,7 @@ import static com.emmsale.comment.exception.CommentExceptionType.FORBIDDEN_DELET
 import static com.emmsale.comment.exception.CommentExceptionType.FORBIDDEN_MODIFY_COMMENT;
 import static com.emmsale.comment.exception.CommentExceptionType.FORBIDDEN_MODIFY_DELETED_COMMENT;
 import static com.emmsale.comment.exception.CommentExceptionType.NOT_FOUND_COMMENT;
+import static java.util.stream.Collectors.toMap;
 
 import com.emmsale.comment.application.dto.CommentAddRequest;
 import com.emmsale.comment.application.dto.CommentModifyRequest;
@@ -19,9 +20,11 @@ import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.member.domain.Member;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,10 +73,25 @@ public class CommentCommandService {
   }
 
   private Set<Comment> excludeMyComments(final Member member, final Comment parent) {
-    return commentRepository.findParentAndChildrenByParentId(parent.getId())
-        .stream()
-        .filter(it -> it.isNotMyComment(member.getId()))
-        .collect(Collectors.toUnmodifiableSet());
+
+    final List<Comment> comments =
+        commentRepository.findParentAndChildrenByParentId(parent.getId());
+
+    return new HashSet<>(removeDuplicatedCommentsWriter(member, comments));
+  }
+
+  private Collection<Comment> removeDuplicatedCommentsWriter(
+      final Member loginMember,
+      final List<Comment> comments
+  ) {
+    return comments.stream()
+        .filter(it -> it.isNotMyComment(loginMember))
+        .collect(toMap(
+            comment -> comment.getMember().getId(),
+            comment -> comment,
+            (existed, replaced) -> existed)
+        )
+        .values();
   }
 
   private Comment findSavedComment(final Long commentId) {
