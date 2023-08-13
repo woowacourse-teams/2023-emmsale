@@ -20,27 +20,33 @@ interface RecruitmentService {
         @Path("eventId") eventId: Long,
     ): Response<List<RecruitmentApiModel>>
 
+    @GET("events/{eventId}/recruitment-posts/{recruitment-post-id}")
+    suspend fun getRecruitment(
+        @Path("eventId") eventId: Long,
+        @Path("recruitment-post-id") recruitmentId: Long,
+    ): Response<RecruitmentApiModel>
+
     @POST("events/{eventId}/recruitment-posts")
     suspend fun postRecruitment(
         @Path("eventId") eventId: Long,
         @Body recruitmentPostingRequestBody: RecruitmentPostingRequestBody,
     ): Response<Unit>
 
-    @PUT("events/{eventId}/recruitment-post/{recruitment-post-id}")
+    @PUT("events/{eventId}/recruitment-posts/{recruitment-post-id}")
     suspend fun editRecruitment(
         @Path("eventId") eventId: Long,
         @Path("recruitment-post-id") recruitmentId: Long,
         @Body recruitmentDeletionRequestBody: RecruitmentDeletionRequestBody,
     ): Response<Unit>
 
-    @DELETE("events/{eventId}/recruitment-post")
+    @DELETE("events/{eventId}/recruitment-posts/{post-id}")
     suspend fun deleteRecruitment(
         @Path("eventId") eventId: Long,
-        @Query("post-id") recruitmentId: Long,
+        @Path("post-id") recruitmentId: Long,
     ): Response<Unit>
 
     @GET("events/{eventId}/recruitment-posts/already-recruitment")
-    suspend fun checkHasWritingPermission(
+    suspend fun isAlreadyPostRecruitment(
         @Path("eventId") eventId: Long,
         @Query("member-id") memberId: Long,
     ): Response<Boolean>

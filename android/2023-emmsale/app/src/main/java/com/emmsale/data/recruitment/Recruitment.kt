@@ -7,7 +7,6 @@ data class Recruitment(
     val memberId: Long,
     val name: String,
     val imageUrl: String,
-    val description: String?,
     val content: String?,
     val updatedDate: LocalDate,
 )

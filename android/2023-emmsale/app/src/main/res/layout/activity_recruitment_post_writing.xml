@@ -5,12 +5,17 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.eventdetail.recruitment.writing.RecruitmentWritingActivity">
+        tools:context=".presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarlayout_recruitmentwriting"
@@ -46,7 +51,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="글쓰기" />
+                    android:text="@string/recruitmentpostwriting_appbar_title_text" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -55,7 +60,7 @@
                     app:layout_constraintBottom_toBottomOf="parent" />
 
                 <TextView
-                    android:text="등록"
+                    android:text="@string/recruitmentpostwriting_register_button_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="17dp"
@@ -65,7 +70,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:id="@+id/tv_recruitmentwriting_register" />
+                    android:id="@+id/tv_recruitmentwriting_complete" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -75,7 +80,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:inputType="textMultiLine"
-            android:hint="@string/recruitmetwriting_hint_message"
+            android:hint="@string/recruitmetpostwriting_hint_message"
             android:textColorHint="@color/gray"
             android:textAppearance="@style/KerdyTextStyleBlackRegular13"
             android:background="@null"
@@ -89,5 +94,14 @@
             android:id="@+id/et_recruitmentwriting"
             android:gravity="start"
             app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ProgressBar
+            android:visibility="@{vm.recruitmentWriting.loading?View.VISIBLE:View.GONE}"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/appbarlayout_recruitmentwriting" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

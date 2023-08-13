@@ -4,18 +4,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.ItemRecruitmentBinding
-import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState
 
 class RecruitmentViewHolder(
     private val binding: ItemRecruitmentBinding,
     private val showMemberProfile: (Long) -> Unit,
+    private val navigateToDetail: (RecruitmentPostUiState) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        itemView.setOnClickListener { showMemberProfile(binding.recruitment!!.memberId) }
+        itemView.setOnClickListener { navigateToDetail(binding.recruitment!!) }
     }
-
-    fun bind(recruitment: RecruitmentUiState) {
+    fun bind(recruitment: RecruitmentPostUiState) {
         binding.recruitment = recruitment
     }
 
@@ -23,6 +23,7 @@ class RecruitmentViewHolder(
         fun create(
             parent: ViewGroup,
             showMemberProfile: (Long) -> Unit,
+            navigateToDetail: (RecruitmentPostUiState) -> Unit,
         ): RecruitmentViewHolder {
             val binding = ItemRecruitmentBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -30,7 +31,7 @@ class RecruitmentViewHolder(
                 false,
             )
 
-            return RecruitmentViewHolder(binding, showMemberProfile)
+            return RecruitmentViewHolder(binding, showMemberProfile, navigateToDetail)
         }
     }
 }

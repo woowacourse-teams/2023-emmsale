@@ -13,12 +13,8 @@ data class RecruitmentApiModel(
     val name: String,
     @SerialName("imageUrl")
     val imageUrl: String,
-    @SerialName("description")
-    val description: String?,
     @SerialName("content")
     val content: String,
-    @SerialName("createdAt")
-    val createdAt: String,
     @SerialName("updatedAt")
     val updatedAt: String,
 )

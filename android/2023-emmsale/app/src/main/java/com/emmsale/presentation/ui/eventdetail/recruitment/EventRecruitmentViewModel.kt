@@ -13,7 +13,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentsUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostsUiState
 import kotlinx.coroutines.launch
 
 class EventRecruitmentViewModel(
@@ -21,10 +21,11 @@ class EventRecruitmentViewModel(
     private val recruitmentRepository: RecruitmentRepository,
 ) : ViewModel() {
 
-    private val _recruitments: NotNullMutableLiveData<RecruitmentsUiState> = NotNullMutableLiveData(
-        RecruitmentsUiState(),
-    )
-    val recruitments: NotNullLiveData<RecruitmentsUiState> = _recruitments
+    private val _recruitments: NotNullMutableLiveData<RecruitmentPostsUiState> =
+        NotNullMutableLiveData(
+            RecruitmentPostsUiState(),
+        )
+    val recruitments: NotNullLiveData<RecruitmentPostsUiState> = _recruitments
 
     private val _hasWritingPermission: MutableLiveData<Boolean> = MutableLiveData()
     val hasWritingPermission: LiveData<Boolean> = _hasWritingPermission
@@ -35,35 +36,32 @@ class EventRecruitmentViewModel(
     }
 
     fun fetchRecruitments() {
-        setLoadingState(true)
+        changeRecruitmentsToLoadingState()
         viewModelScope.launch {
-            when (val response = recruitmentRepository.fetchEventRecruitments(eventId)) {
+            when (val response = recruitmentRepository.getEventRecruitments(eventId)) {
                 is ApiSuccess -> fetchSuccessRecruitments(response.data)
-                is ApiError -> changeToErrorState()
-                is ApiException -> changeToErrorState()
+                is ApiError, is ApiException -> changeRecruitmentsToErrorState()
             }
         }
     }
 
-    private fun setLoadingState(state: Boolean) {
-        _recruitments.postValue(_recruitments.value.copy(isLoading = state))
+    private fun changeRecruitmentsToLoadingState() {
+        _recruitments.postValue(_recruitments.value.changeToLoadingState())
+    }
+
+    private fun changeRecruitmentsToErrorState() {
+        _recruitments.postValue(_recruitments.value.changeToErrorState())
     }
 
     private fun fetchSuccessRecruitments(recruitments: List<Recruitment>) {
-        _recruitments.postValue(RecruitmentsUiState.from(recruitments))
+        _recruitments.postValue(RecruitmentPostsUiState.from(recruitments))
     }
 
-    private fun changeToErrorState() {
-        val value = _recruitments.value.copy(isError = true, isLoading = false)
-        _recruitments.postValue(value)
-    }
-
-    private fun fetchHasWritingPermission() {
+    fun fetchHasWritingPermission() {
         viewModelScope.launch {
-            when (val response = recruitmentRepository.checkHasWritingPermission(eventId)) {
-                is ApiSuccess -> setHasPermissionWritingState(response.data)
-                is ApiError -> setHasPermissionWritingState(false)
-                is ApiException -> setHasPermissionWritingState(false)
+            when (val response = recruitmentRepository.isAlreadyPostRecruitment(eventId)) {
+                is ApiSuccess -> setHasPermissionWritingState(!response.data)
+                is ApiError, is ApiException -> setHasPermissionWritingState(false)
             }
         }
     }

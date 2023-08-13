@@ -6,18 +6,19 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 fun List<RecruitmentApiModel>.toData(): List<Recruitment> = map {
-    Recruitment(
-        id = it.id,
-        memberId = it.memberId,
-        name = it.name,
-        imageUrl = it.imageUrl,
-        description = it.description,
-        content = it.content,
-        updatedDate = it.updatedAt.toLocalDate(),
-    )
+    it.toData()
 }
 
+fun RecruitmentApiModel.toData(): Recruitment = Recruitment(
+    id = id,
+    memberId = memberId,
+    name = name,
+    imageUrl = imageUrl,
+    content = content,
+    updatedDate = updatedAt.toLocalDate(),
+)
+
 private fun String.toLocalDate(): LocalDate {
-    val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     return LocalDate.parse(this, formatter)
 }

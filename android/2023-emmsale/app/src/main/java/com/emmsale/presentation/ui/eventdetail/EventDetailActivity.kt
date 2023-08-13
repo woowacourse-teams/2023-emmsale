@@ -11,7 +11,9 @@ import com.emmsale.presentation.common.extension.showToast
 import com.google.android.material.tabs.TabLayoutMediator
 
 class EventDetailActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityEventDetailBinding
+    private val binding: ActivityEventDetailBinding by lazy {
+        ActivityEventDetailBinding.inflate(layoutInflater)
+    }
     private val eventId: Long by lazy {
         intent.getLongExtra(EVENT_ID_KEY, DEFAULT_EVENT_ID)
     }
@@ -24,7 +26,6 @@ class EventDetailActivity : AppCompatActivity() {
     }
 
     private fun setUpBinding() {
-        binding = ActivityEventDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.lifecycleOwner = this
         binding.vm = viewModel
@@ -46,7 +47,7 @@ class EventDetailActivity : AppCompatActivity() {
 
     private fun initFragmentStateAdapter(informationUrl: String, imageUrl: String?) {
         binding.vpEventdetail.adapter =
-            EventDetailFragmentStateAdpater(this, eventId, informationUrl, imageUrl)
+            EventDetailFragmentStateAdapter(this, eventId, informationUrl, imageUrl)
         val tabNames = listOf(
             getString(R.string.eventdetail_tab_infromation),
             getString(R.string.eventdetail_tab_comment),

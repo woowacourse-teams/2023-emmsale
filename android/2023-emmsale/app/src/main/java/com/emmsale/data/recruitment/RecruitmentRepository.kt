@@ -4,14 +4,19 @@ import com.emmsale.data.common.ApiResult
 
 interface RecruitmentRepository {
 
-    suspend fun fetchEventRecruitments(
+    suspend fun getEventRecruitments(
         eventId: Long,
     ): ApiResult<List<Recruitment>>
+
+    suspend fun getEventRecruitment(
+        eventId: Long,
+        recruitmentId: Long,
+    ): ApiResult<Recruitment>
 
     suspend fun postRecruitment(
         eventId: Long,
         content: String,
-    ): ApiResult<Unit>
+    ): ApiResult<Long>
 
     suspend fun editRecruitment(
         eventId: Long,
@@ -30,5 +35,5 @@ interface RecruitmentRepository {
         message: String,
     ): ApiResult<Unit>
 
-    suspend fun checkHasWritingPermission(eventId: Long): ApiResult<Boolean>
+    suspend fun isAlreadyPostRecruitment(eventId: Long): ApiResult<Boolean>
 }

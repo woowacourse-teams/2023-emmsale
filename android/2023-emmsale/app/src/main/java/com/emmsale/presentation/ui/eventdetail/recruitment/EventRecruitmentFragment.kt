@@ -1,5 +1,7 @@
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.emmsale.R
@@ -7,8 +9,10 @@ import com.emmsale.databinding.FragmentEventRecruitmentBinding
 import com.emmsale.presentation.base.fragment.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.recruitment.EventRecruitmentViewModel
+import com.emmsale.presentation.ui.eventdetail.recruitment.detail.RecruitmentPostDetailActivity
 import com.emmsale.presentation.ui.eventdetail.recruitment.recyclerview.EventRecruitmentAdapter
-import com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentWritingActivity
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity
 
 class EventRecruitmentFragment : BaseFragment<FragmentEventRecruitmentBinding>() {
     override val layoutResId: Int = R.layout.fragment_event_recruitment
@@ -19,27 +23,43 @@ class EventRecruitmentFragment : BaseFragment<FragmentEventRecruitmentBinding>()
         )
     }
     private val eventId: Long by lazy {
-        arguments?.getLong(EVENT_ID_KEY) ?: throw IllegalArgumentException("아이디못가져옴")
+        arguments?.getLong(EVENT_ID_KEY) ?: throw IllegalArgumentException(EVENT_ID_NULL_ERROR)
     }
     private val recruitmentAdapter: EventRecruitmentAdapter by lazy {
-        EventRecruitmentAdapter(::showMemberProfile)
+        EventRecruitmentAdapter(::showMemberProfile, ::navigateToRecruitmentDetail)
     }
+
+    private val postingResultActivityLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result == null || result.resultCode != AppCompatActivity.RESULT_OK) return@registerForActivityResult
+            viewModel.fetchRecruitments()
+            viewModel.fetchHasWritingPermission()
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
         initRecyclerView()
-        initWritingButtonClickListener()
         setUpRecruitments()
+        initWritingButtonClickListener()
+    }
+
+    private fun showMemberProfile(memberId: Long) = requireContext().showToast("맴버 열람")
+    private fun navigateToRecruitmentDetail(recruitmentPostUiState: RecruitmentPostUiState) {
+        val intent = RecruitmentPostDetailActivity.getIntent(
+            requireContext(),
+            eventId,
+            recruitmentPostUiState.id,
+        )
+        postingResultActivityLauncher.launch(intent)
     }
 
     private fun initRecyclerView() {
-        binding.rvRecruitment.apply {
-            adapter = recruitmentAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
+        binding.rvRecruitment.adapter = recruitmentAdapter
+        binding.rvRecruitment.layoutManager = LinearLayoutManager(requireContext())
     }
-
-    private fun showMemberProfile(memberId: Long) = requireContext().showToast("맴버 보여주기")
 
     private fun setUpRecruitments() {
         viewModel.recruitments.observe(viewLifecycleOwner) { recruitmentsUiState ->
@@ -55,7 +75,9 @@ class EventRecruitmentFragment : BaseFragment<FragmentEventRecruitmentBinding>()
         binding.btnRecruitmentWriting.setOnClickListener {
             val hasPermission = viewModel.hasWritingPermission.value ?: return@setOnClickListener
             if (hasPermission) {
-                RecruitmentWritingActivity.startActivity(requireContext(), eventId)
+                val intent =
+                    RecruitmentPostWritingActivity.getPostModeIntent(requireContext(), eventId)
+                postingResultActivityLauncher.launch(intent)
             } else {
                 requireContext().showToast(getString(R.string.recruitment_has_not_permission_writing))
             }
@@ -64,6 +86,7 @@ class EventRecruitmentFragment : BaseFragment<FragmentEventRecruitmentBinding>()
 
     companion object {
         private const val EVENT_ID_KEY = "EVENT_ID_KEY"
+        private const val EVENT_ID_NULL_ERROR = "행사 아이디를 가져오지 못했어요"
 
         fun create(eventId: Long): EventRecruitmentFragment {
             val fragment = EventRecruitmentFragment()
