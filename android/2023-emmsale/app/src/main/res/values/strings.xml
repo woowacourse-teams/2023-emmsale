@@ -58,13 +58,15 @@
     <string name="main_menuitemnameofhome">홈</string>
     <string name="main_menuitemnameofsetting">설정</string>
 
-    <string name="myprofile_memberimagedescription">회원의 사진</string>
-    <string name="myprofile_greeting">Hello,</string>
-    <string name="myprofile_educationslabel">교육 활동</string>
-    <string name="myprofile_clubslabel">동아리 활동</string>
-    <string name="myprofile_eventslabel">참여 행사</string>
-    <string name="myprofile_no_description">소개말이 없습니다.</string>
-    <string name="myprofile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
+    <string name="profile_memberimagedescription">회원의 사진</string>
+    <string name="profile_greeting">Hello,</string>
+    <string name="profile_educationslabel">교육 활동</string>
+    <string name="profile_clubslabel">동아리 활동</string>
+    <string name="profile_eventslabel">참여 행사</string>
+    <string name="profile_no_description">소개말이 없습니다.</string>
+    <string name="profile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
+    <string name="profile_toolbar_title">프로필 조회</string>
+    <string name="profile_more_button_title">더보기</string>
 
     <string name="event_poster_description">event poster</string>
     <string name="event_filter">필터 설정</string>

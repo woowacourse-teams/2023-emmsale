@@ -47,7 +47,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     private fun handleError(myProfile: MyProfileUiState) {
         if (myProfile.isFetchingError) {
-            context?.showToast(getString(R.string.myprofile_profile_fetching_error_message))
+            context?.showToast(getString(R.string.profile_profile_fetching_error_message))
         }
     }
 
