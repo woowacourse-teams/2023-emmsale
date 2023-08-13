@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import com.emmsale.R
 import com.emmsale.databinding.DialogRecruitmentRejectConfirmBinding
@@ -33,12 +32,10 @@ class RecruitmentRejectConfirmDialog(
             it.height = ViewGroup.LayoutParams.MATCH_PARENT
         }
         window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window?.statusBarColor =
-            ContextCompat.getColor(context, R.color.dialog_window_background_color)
     }
 
     private fun initDialog() {
-//        initDialogSize()
+        initDialogSize()
         initDialogBackgroundSetting()
         initOkayClickListener()
         initCancelClickListener()
