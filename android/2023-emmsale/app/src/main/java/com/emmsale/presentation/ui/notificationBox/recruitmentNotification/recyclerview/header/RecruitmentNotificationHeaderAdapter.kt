@@ -9,7 +9,7 @@ class RecruitmentNotificationHeaderAdapter(
     private val recruitmentNotificationHeaderClickListener: RecruitmentNotificationHeaderClickListener,
     private val recruitmentNotificationBodyClickListener: RecruitmentNotificationBodyClickListener,
 ) : ListAdapter<RecruitmentNotificationHeaderUiState, RecruitmentNotificationHeaderViewHolder>(
-    RecruitmentNotificationHeaderDiffUtil
+    RecruitmentNotificationHeaderDiffUtil,
 ) {
     override fun onCreateViewHolder(
         parent: ViewGroup,

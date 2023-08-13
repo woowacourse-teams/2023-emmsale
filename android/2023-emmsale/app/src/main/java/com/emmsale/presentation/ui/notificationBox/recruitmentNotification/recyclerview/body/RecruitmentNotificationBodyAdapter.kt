@@ -7,11 +7,11 @@ import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uista
 class RecruitmentNotificationBodyAdapter(
     private val recruitmentNotificationBodyClickListener: RecruitmentNotificationBodyClickListener,
 ) : ListAdapter<RecruitmentNotificationBodyUiState, RecruitmentNotificationBodyViewHolder>(
-    RecruitmentNotificationBodyDiffUtil
+    RecruitmentNotificationBodyDiffUtil,
 ) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): RecruitmentNotificationBodyViewHolder =
         RecruitmentNotificationBodyViewHolder(parent, recruitmentNotificationBodyClickListener)
 

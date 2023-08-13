@@ -15,9 +15,11 @@ data class RecruitmentNotificationUiState(
         copy(notificationGroups = notificationGroups.map { it.changeToRejectedStateBy(notificationId) })
 
     fun changeReadStateBy(eventId: Long): RecruitmentNotificationUiState =
-        copy(notificationGroups = notificationGroups.map {
-            if (it.eventId == eventId) it.changeToReadState() else it
-        })
+        copy(
+            notificationGroups = notificationGroups.map {
+                if (it.eventId == eventId) it.changeToReadState() else it
+            },
+        )
 
     private fun toggleExpanded(eventId: Long): List<RecruitmentNotificationHeaderUiState> {
         return notificationGroups.map { header ->

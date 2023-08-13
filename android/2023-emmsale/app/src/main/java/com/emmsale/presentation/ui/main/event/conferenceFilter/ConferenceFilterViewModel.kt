@@ -62,7 +62,8 @@ class ConferenceFilterViewModel(
             when (val conferenceTag = eventTagRepository.getEventTags(EventCategory.CONFERENCE)) {
                 is ApiSuccess -> conferenceTag.data.map(ConferenceFilteringOptionUiState::from)
                 is ApiError, is ApiException -> {
-                    _conferenceFilter.value = _conferenceFilter.value.copy(isLoadingConferenceFilterFailed = true)
+                    _conferenceFilter.value =
+                        _conferenceFilter.value.copy(isLoadingConferenceFilterFailed = true)
                     emptyList()
                 }
             }
