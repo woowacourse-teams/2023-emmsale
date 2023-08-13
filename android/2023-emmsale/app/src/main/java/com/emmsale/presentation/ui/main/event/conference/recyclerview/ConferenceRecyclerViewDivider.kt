@@ -16,7 +16,7 @@ class ConferenceRecyclerViewDivider(context: Context) : RecyclerView.ItemDecorat
         super.onDraw(c, parent, state)
 
         val left = parent.paddingLeft
-        val right = parent.width - parent.paddingRight
+        val right = parent.width - parent.paddingEnd
         val childCount = parent.childCount
 
         for (i in 0 until childCount) {
