@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationBoxBinding
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 
 class NotificationBoxActivity : AppCompatActivity() {
@@ -29,8 +30,7 @@ class NotificationBoxActivity : AppCompatActivity() {
     }
 
     private fun initNotificationBoxTabLayoutSelectedListener() {
-        binding.tlNotificationBox.addOnTabSelectedListener(object :
-            TabLayout.OnTabSelectedListener {
+        binding.tlNotificationBox.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 binding.vpNotificationBox.currentItem = tab.position
             }

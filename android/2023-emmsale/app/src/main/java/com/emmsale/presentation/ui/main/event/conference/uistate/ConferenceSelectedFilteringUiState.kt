@@ -13,4 +13,18 @@ data class ConferenceSelectedFilteringUiState(
     val selectedTagFilteringOptionIds: Array<Long> = conferenceTagFilteringOptions
         .map { it.id }
         .toTypedArray()
+
+    fun removeFilteringOptionBy(filterId: Long): ConferenceSelectedFilteringUiState = copy(
+        conferenceStatusFilteringOptions = conferenceStatusFilteringOptions.filterNot { filterOption ->
+            filterOption.id == filterId
+        },
+        conferenceTagFilteringOptions = conferenceTagFilteringOptions.filterNot { filterOption ->
+            filterOption.id == filterId
+        },
+    )
+
+    fun clearSelectedDate(): ConferenceSelectedFilteringUiState = copy(
+        selectedStartDate = null,
+        selectedEndDate = null,
+    )
 }

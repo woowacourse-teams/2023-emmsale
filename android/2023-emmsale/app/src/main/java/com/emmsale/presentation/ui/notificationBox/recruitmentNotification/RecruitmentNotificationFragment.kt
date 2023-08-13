@@ -15,7 +15,8 @@ import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyc
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderAdapter
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderClickListener
 
-class RecruitmentNotificationFragment : BaseFragment<FragmentRecruitmentNotificationBinding>(),
+class RecruitmentNotificationFragment :
+    BaseFragment<FragmentRecruitmentNotificationBinding>(),
     RecruitmentNotificationHeaderClickListener,
     RecruitmentNotificationBodyClickListener {
     override val layoutResId: Int = R.layout.fragment_recruitment_notification
