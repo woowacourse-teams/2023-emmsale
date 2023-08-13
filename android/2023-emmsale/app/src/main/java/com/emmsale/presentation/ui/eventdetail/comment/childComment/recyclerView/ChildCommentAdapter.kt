@@ -7,10 +7,11 @@ import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.Comm
 
 class ChildCommentAdapter(
     private val onDelete: (Long) -> Unit,
+    private val onAuthorView: (Long) -> Unit,
 ) : ListAdapter<CommentUiState, ChildCommentViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildCommentViewHolder {
-        return ChildCommentViewHolder.create(parent, onDelete)
+        return ChildCommentViewHolder.create(parent, onDelete, onAuthorView)
     }
 
     override fun onBindViewHolder(holder: ChildCommentViewHolder, position: Int) {

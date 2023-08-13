@@ -12,10 +12,16 @@ import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.Comm
 class ChildCommentViewHolder(
     private val binding: ItemChildcommentsChildcommentBinding,
     private val onCommentDelete: (Long) -> Unit,
+    private val onAuthorView: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
         binding.ivChildcommentDeletebutton.setOnClickListener { onDeleteButtonClick() }
+        binding.root.setOnClickListener {
+            onAuthorView(
+                binding.comment?.authorId ?: return@setOnClickListener,
+            )
+        }
     }
 
     private fun onDeleteButtonClick() {
@@ -46,14 +52,18 @@ class ChildCommentViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup, onCommentDelete: (Long) -> Unit): ChildCommentViewHolder {
+        fun create(
+            parent: ViewGroup,
+            onCommentDelete: (Long) -> Unit,
+            onAuthorView: (Long) -> Unit,
+        ): ChildCommentViewHolder {
             val binding = ItemChildcommentsChildcommentBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
 
-            return ChildCommentViewHolder(binding, onCommentDelete)
+            return ChildCommentViewHolder(binding, onCommentDelete, onAuthorView)
         }
     }
 }

@@ -17,6 +17,7 @@ data class ChildCommentsUiState(
             isPostingError = false,
             isDeletionError = false,
             parentComment = CommentUiState(
+                authorId = -1,
                 authorName = "",
                 lastModifiedDate = "",
                 isUpdated = false,

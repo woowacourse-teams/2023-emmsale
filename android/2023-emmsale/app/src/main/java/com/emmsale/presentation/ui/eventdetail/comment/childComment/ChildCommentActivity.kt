@@ -17,6 +17,7 @@ import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.profile.ProfileActivity
 
 class ChildCommentActivity : AppCompatActivity() {
 
@@ -50,7 +51,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun initChildCommentsRecyclerView() {
         binding.rvChildcommentsChildcomments.apply {
-            adapter = ChildCommentAdapter(::onChildCommentDelete)
+            adapter = ChildCommentAdapter(::onChildCommentDelete, ::onAuthorView)
             itemAnimator = null
             addItemDecoration(
                 DividerItemDecoration(
@@ -59,6 +60,10 @@ class ChildCommentActivity : AppCompatActivity() {
                 ),
             )
         }
+    }
+
+    private fun onAuthorView(authorId: Long) {
+        ProfileActivity.startActivity(this, authorId)
     }
 
     private fun setUpUiLogic() {
