@@ -17,11 +17,11 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceItemUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferencesUiState
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -30,8 +30,8 @@ class ConferenceViewModel(
     private val conferenceStatusRepository: ConferenceStatusRepository,
     private val eventTagRepository: EventTagRepository,
 ) : ViewModel() {
-    private val _conference = NotNullMutableLiveData(ConferenceUiState())
-    val conference: NotNullLiveData<ConferenceUiState> = _conference
+    private val _conferences = NotNullMutableLiveData(ConferencesUiState())
+    val conferences: NotNullLiveData<ConferencesUiState> = _conferences
 
     private val _selectedFilter = NotNullMutableLiveData(ConferenceSelectedFilteringUiState())
     val selectedFilter: NotNullLiveData<ConferenceSelectedFilteringUiState> = _selectedFilter
@@ -47,16 +47,18 @@ class ConferenceViewModel(
         endDate: LocalDate? = null,
     ) {
         viewModelScope.launch {
-            _conference.value = _conference.value.copy(isLoading = true)
+            _conferences.value = _conferences.value.copy(isLoading = true)
             when (val eventsResult = getConferences(statuses, tags, startDate, endDate)) {
                 is ApiSuccess ->
-                    _conference.value = _conference.value.copy(
-                        conferenceItems = eventsResult.data.map(ConferenceItemUiState::from),
+                    _conferences.value = _conferences.value.copy(
+                        conferences = eventsResult.data.map(ConferenceUiState::from),
                         isLoading = false,
                     )
 
-                is ApiError, is ApiException ->
-                    _conference.value = _conference.value.copy(isError = true, isLoading = false)
+                is ApiError, is ApiException -> _conferences.value = _conferences.value.copy(
+                    isLoadingConferencesFailed = true,
+                    isLoading = false,
+                )
             }
         }
     }
@@ -73,6 +75,17 @@ class ConferenceViewModel(
         startDate = startDate,
         endDate = endDate,
     )
+
+    private fun fetchFilteredConferences(filterOption: ConferenceSelectedFilteringUiState) {
+        with(filterOption) {
+            fetchFilteredConferences(
+                selectedStatusFilteringOptionIds,
+                selectedTagFilteringOptionIds,
+                selectedStartDate?.date,
+                selectedEndDate?.date,
+            )
+        }
+    }
 
     fun fetchFilteredConferences(
         statusFilterIds: Array<Long>,
@@ -122,6 +135,17 @@ class ConferenceViewModel(
             is ApiSuccess -> eventTagResult.data
             is ApiError, is ApiException -> emptyList()
         }
+
+    fun removeFilteringOptionBy(filterOptionId: Long) {
+        val newSelectedFilter = _selectedFilter.value.removeFilteringOptionBy(filterOptionId)
+        _selectedFilter.value = newSelectedFilter
+
+        fetchFilteredConferences(newSelectedFilter)
+    }
+
+    fun removeDurationFilteringOption() {
+        _selectedFilter.value = _selectedFilter.value.clearSelectedDate()
+    }
 
     companion object {
         val factory = ViewModelFactory {

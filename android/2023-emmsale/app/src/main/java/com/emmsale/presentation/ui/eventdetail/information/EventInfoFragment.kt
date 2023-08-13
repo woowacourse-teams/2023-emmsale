@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventInformationBinding
-import com.emmsale.presentation.base.fragment.BaseFragment
+import com.emmsale.presentation.base.BaseFragment
 
 class EventInfoFragment : BaseFragment<FragmentEventInformationBinding>() {
     override val layoutResId: Int = R.layout.fragment_event_information

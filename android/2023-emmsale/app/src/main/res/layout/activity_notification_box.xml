@@ -5,23 +5,18 @@
 
     <data>
 
-        <import type="android.view.View" />
-
-        <variable
-            name="viewModel"
-            type="com.emmsale.presentation.ui.notificationBox.NotificationBoxViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         tools:context=".presentation.ui.notificationBox.NotificationBoxActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_noti_box"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
+            android:background="@color/white"
             android:keepScreenOn="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,28 +26,29 @@
             app:titleCentered="true"
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_noti_box"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_notification_box"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_noti_box"
-            tools:listitem="@layout/item_notification_body" />
+            app:layout_constraintTop_toBottomOf="@id/tb_noti_box"
+            app:tabBackground="@drawable/bg_tablayout_indicator"
+            app:tabIndicatorColor="@color/color_tab_indicator"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorHeight="@dimen/tab_indicator_height"
+            app:tabSelectedTextColor="@color/primary_color"
+            app:tabTextAppearance="@style/KerdyTextStyleBlackBold14" />
 
-        <ProgressBar
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_notification_box"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:indeterminate="true"
-            android:visibility="@{viewModel.notifications.loading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="0.15"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toBottomOf="@+id/tl_notification_box" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

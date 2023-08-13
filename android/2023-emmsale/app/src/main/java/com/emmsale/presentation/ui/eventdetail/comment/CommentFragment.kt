@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentCommentsBinding
-import com.emmsale.presentation.base.fragment.BaseFragment
+import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentRecyclerViewDivider

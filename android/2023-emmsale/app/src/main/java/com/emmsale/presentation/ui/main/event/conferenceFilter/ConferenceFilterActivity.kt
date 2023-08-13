@@ -123,10 +123,14 @@ class ConferenceFilterActivity : AppCompatActivity() {
     private fun setupConferenceFilter() {
         viewModel.conferenceFilter.observe(this) { eventFilters ->
             when {
-                eventFilters.isError -> showToast(getString(R.string.all_data_loading_failed_message))
+                eventFilters.isLoadingConferenceFilterFailed -> showLoadingConferenceFilterFailed()
                 !eventFilters.isLoading -> updateFilterViews(eventFilters)
             }
         }
+    }
+
+    private fun showLoadingConferenceFilterFailed() {
+        showToast(getString(R.string.all_data_loading_failed_message))
     }
 
     private fun updateFilterViews(conferenceFilters: ConferenceFilterUiState) {
@@ -234,7 +238,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         const val KEY_SELECTED_START_DATE = "selected_start_date_key"
         const val KEY_SELECTED_END_DATE = "selected_end_date_key"
 
-        fun createIntent(
+        fun getIntent(
             context: Context,
             selectedStatusIds: Array<Long> = emptyArray(),
             selectedTagIds: Array<Long> = emptyArray(),

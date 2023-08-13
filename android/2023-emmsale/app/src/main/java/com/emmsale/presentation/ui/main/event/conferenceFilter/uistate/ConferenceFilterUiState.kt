@@ -6,7 +6,7 @@ data class ConferenceFilterUiState(
     val selectedStartDate: ConferenceFilteringDateOptionUiState? = null,
     val selectedEndDate: ConferenceFilteringDateOptionUiState? = null,
     val isLoading: Boolean = false,
-    val isError: Boolean = false,
+    val isLoadingConferenceFilterFailed: Boolean = false,
 ) {
     val selectedStatusFilteringOptionIds: Array<Long> = conferenceStatusFilteringOptions
         .filter { it.isSelected }

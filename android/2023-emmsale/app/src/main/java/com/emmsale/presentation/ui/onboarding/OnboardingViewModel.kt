@@ -34,8 +34,8 @@ class OnboardingViewModel(
     private fun fetchActivities(): Job = viewModelScope.launch {
         when (val activitiesResult = activityRepository.getActivities()) {
             is ApiSuccess -> _activities.postValue(OnboardingUiState.from(activitiesResult.data))
-            is ApiError -> _activities.postValue(_activities.value.copy(isError = true))
-            is ApiException -> _activities.postValue(_activities.value.copy(isError = true))
+            is ApiError, is ApiException ->
+                _activities.postValue(_activities.value.copy(isLoadingActivitiesFailed = true))
         }
     }
 

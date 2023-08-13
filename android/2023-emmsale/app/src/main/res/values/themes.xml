@@ -12,5 +12,6 @@
             @style/ThemeOverlay.MaterialComponents.BottomSheetDialog
         </item>
         <item name="IconTextButtonStyle">@style/IconTextButtonStyle</item>
+        <item name="FilterTagStyle">@style/FilterTagStyle</item>
     </style>
 </resources>

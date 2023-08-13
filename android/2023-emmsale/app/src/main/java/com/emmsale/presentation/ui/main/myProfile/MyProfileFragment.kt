@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
-import com.emmsale.presentation.base.fragment.BaseFragment
+import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity

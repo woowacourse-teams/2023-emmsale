@@ -131,11 +131,24 @@
 
     <string name="notificationbox_title">알림 보관함</string>
     <string name="notificationbox_delete_noti">알림 삭제</string>
+    <string name="notificationbox_primary">알림</string>
+    <string name="notificationbox_recruitment">요청</string>
 
-    <string name="notification_member_profile">사용자 프로필</string>
-    <string name="notification_reject">거절</string>
-    <string name="notification_accept">수락</string>
-    <string name="notification_header_expand_view">화면을 팽창 시킵니다.</string>
+    <string name="notificationbox_recruitment_status_changing_failed">서버와의 통신 오류로 같이가기에 실패했어요!</string>
+    <string name="notificationbox_recruitment_rejected_message">같이 가기를 거절했어요!</string>
+
+    <string name="recruitmentaccepted_dialog_title">요청 수락</string>
+    <string name="recruitmentaccepted_dialog_message">오픈 채팅으로 연결이 가능합니다.\n상대방에게 인사를 건네보세요.</string>
+
+    <string name="recruitmentrejectconfirm_dialog_title">요청 거절</string>
+    <string name="recruitmentrejectconfirm_dialog_message">같이 가기를 거절하면\n상대방과 동행할 수 없어요.\n\n그래도 거절하시겠어요?</string>
+
+    <string name="recruitmentnotification_member_profile">사용자 프로필</string>
+    <string name="recruitmentnotification_reject">거절</string>
+    <string name="recruitmentnotification_accept">수락</string>
+    <string name="recruitmentnotification_open_chat">오픈 채팅으로 이동</string>
+    <string name="recruitmentnotification_more_button">더보기 버튼</string>
+    <string name="recruitmentnotification_header_expand_view">화면을 팽창 시킵니다.</string>
 
     <string name="conference_default_people_count">0</string>
 

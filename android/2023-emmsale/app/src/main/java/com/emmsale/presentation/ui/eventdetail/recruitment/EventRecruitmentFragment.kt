@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventRecruitmentBinding
-import com.emmsale.presentation.base.fragment.BaseFragment
+import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.eventdetail.recruitment.uistate.RecruitmentStatusUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.EventRecruitmentViewModel
 import com.emmsale.presentation.ui.eventdetail.recruitment.RecruitmentFragmentDialog

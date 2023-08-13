@@ -60,12 +60,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_search"
-            app:tabIndicatorColor="@color/color_event_tab_indicator"
+            app:tabBackground="@drawable/bg_tablayout_indicator"
+            app:tabIndicatorColor="@color/color_tab_indicator"
             app:tabIndicatorFullWidth="true"
-            app:tabIndicatorHeight="2dp"
+            app:tabIndicatorHeight="@dimen/tab_indicator_height"
             app:tabSelectedTextColor="@color/primary_color"
-            app:tabTextAppearance="@style/EventTabLayoutFontStyle"
-            app:tabTextColor="@color/black" />
+            app:tabTextAppearance="@style/KerdyTextStyleBlackBold14" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_event"
