@@ -40,15 +40,15 @@ class RecruitmentNotificationFragment :
         binding.rvNotiBox.setHasFixedSize(true)
     }
 
-    override fun onRecruitmentAccept(notificationId: Long) {
+    override fun onAcceptButtonClick(notificationId: Long) {
         viewModel.acceptRecruit(notificationId)
     }
 
-    override fun onRecruitmentReject(notificationId: Long) {
+    override fun onRejectButtonClick(notificationId: Long) {
         showRecruitmentRejectedConfirmDialog(notificationId)
     }
 
-    override fun onMoreButtonClicked(notificationId: Long) {
+    override fun onMoreButtonClick(notificationId: Long) {
         viewModel.reportNotification(notificationId)
     }
 
