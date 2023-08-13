@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate
 
 import com.emmsale.data.notification.RecruitmentNotification
-import com.emmsale.data.notification.RecruitmentNotificationStatus
+import com.emmsale.data.notification.RecruitmentStatus
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -46,8 +46,8 @@ data class RecruitmentNotificationBodyUiState(
             message = recruitmentNotification.message,
             profileImageUrl = notificationMember?.profileImageUrl ?: "",
             notificationDate = recruitmentNotification.notificationDate.toUiString(),
-            isAccepted = recruitmentNotification.status == RecruitmentNotificationStatus.ACCEPTED,
-            isRejected = recruitmentNotification.status == RecruitmentNotificationStatus.REJECTED,
+            isAccepted = recruitmentNotification.status == RecruitmentStatus.ACCEPTED,
+            isRejected = recruitmentNotification.status == RecruitmentStatus.REJECTED,
             isRead = recruitmentNotification.isRead,
         )
 

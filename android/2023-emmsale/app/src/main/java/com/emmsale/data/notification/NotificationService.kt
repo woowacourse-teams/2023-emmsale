@@ -10,7 +10,7 @@ interface NotificationService {
     suspend fun getNotifications(): Response<List<RecruitmentNotificationApiModel>>
 
     @PATCH("/request-notifications/{request-notification-id}/status")
-    suspend fun updateRecruitmentAcceptedStatus(
+    suspend fun updateRecruitmentStatus(
         @Path("request-notification-id") notificationId: Long,
         newStatus: String,
     ): Response<Unit>

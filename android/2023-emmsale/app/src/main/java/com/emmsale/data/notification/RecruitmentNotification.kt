@@ -8,7 +8,7 @@ data class RecruitmentNotification(
     val receiverUid: Long,
     val message: String,
     val eventId: Long,
-    val status: RecruitmentNotificationStatus,
+    val status: RecruitmentStatus,
     val isRead: Boolean,
     val notificationDate: LocalDateTime,
 )

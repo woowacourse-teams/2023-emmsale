@@ -9,7 +9,7 @@ import com.emmsale.data.eventdetail.EventDetailRepository
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.data.notification.RecruitmentNotification
-import com.emmsale.data.notification.RecruitmentNotificationStatus
+import com.emmsale.data.notification.RecruitmentStatus
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -112,9 +112,9 @@ class RecruitmentNotificationViewModel(
             _recruitmentUiState.value = recruitmentUiState.value.changeToLoadingState()
 
             when (
-                notificationRepository.updateRecruitmentAcceptedStatus(
+                notificationRepository.updateRecruitmentStatus(
                     notificationId,
-                    RecruitmentNotificationStatus.ACCEPTED,
+                    RecruitmentStatus.ACCEPTED,
                 )
             ) {
                 is ApiSuccess -> {
@@ -134,9 +134,9 @@ class RecruitmentNotificationViewModel(
             _recruitmentUiState.value = recruitmentUiState.value.changeToLoadingState()
 
             when (
-                notificationRepository.updateRecruitmentAcceptedStatus(
+                notificationRepository.updateRecruitmentStatus(
                     notificationId,
-                    RecruitmentNotificationStatus.REJECTED,
+                    RecruitmentStatus.REJECTED,
                 )
             ) {
                 is ApiSuccess -> {
