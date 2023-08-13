@@ -3,5 +3,5 @@ package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recy
 interface RecruitmentNotificationBodyClickListener {
     fun onRecruitmentAccept(notificationId: Long)
     fun onRecruitmentReject(notificationId: Long)
-    fun onClickMore(notificationId: Long)
+    fun onMoreButtonClicked(notificationId: Long)
 }

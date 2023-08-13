@@ -61,7 +61,7 @@
             android:clickable="true"
             android:contentDescription="@string/recruitmentnotification_more_button"
             android:focusable="true"
-            android:onClick="@{() -> notificationBodyClickListener.onClickMore(notification.id)}"
+            android:onClick="@{() -> notificationBodyClickListener.onMoreButtonClicked(notification.id)}"
             android:src="@drawable/ic_all_more"
             app:layout_constraintBottom_toBottomOf="@+id/tv_member_name"
             app:layout_constraintDimensionRatio="1"
