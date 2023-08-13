@@ -5,8 +5,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import com.emmsale.R
 import com.emmsale.databinding.DialogBottomMenuBinding
 import com.emmsale.presentation.common.views.VerticalDivider
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -45,16 +43,11 @@ class BottomMenuDialog(context: Context) : BottomSheetDialog(context) {
         onClick: () -> Unit,
     ): BottomDialogMenuItem = BottomDialogMenuItem(context).apply {
         text = title
-        setTextColor(getTitleTextColorOf(menuItemType))
+        setTextColor(menuItemType.getColor(context))
         setOnClickListener {
             onClick()
             dismiss()
         }
-    }
-
-    private fun getTitleTextColorOf(menuItemType: MenuItemType): Int = when (menuItemType) {
-        MenuItemType.BLACK -> ContextCompat.getColor(context, R.color.black)
-        MenuItemType.RED -> ContextCompat.getColor(context, R.color.red)
     }
 
     private fun initDialogWindow() {
