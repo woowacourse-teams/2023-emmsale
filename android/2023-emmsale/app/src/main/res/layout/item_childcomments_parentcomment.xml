@@ -85,7 +85,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_childcomments_parentcommentauthorname"
             app:srcCompat="@drawable/ic_comment_menubutton"
-            android:contentDescription="@string/comment_menu_button"/>
+            android:contentDescription="@string/comment_menu_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -62,7 +62,10 @@ class ChildCommentViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup, onCommentDelete: (commentId: Long) -> Unit): ChildCommentViewHolder {
+        fun create(
+            parent: ViewGroup,
+            onCommentDelete: (commentId: Long) -> Unit,
+        ): ChildCommentViewHolder {
             val binding = ItemChildcommentsChildcommentBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
