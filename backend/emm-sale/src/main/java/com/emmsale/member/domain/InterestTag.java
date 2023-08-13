@@ -9,9 +9,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-public class MemberTag extends BaseEntity {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "member_tag")
+public class InterestTag extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +29,9 @@ public class MemberTag extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private Tag tag;
+
+  public InterestTag(final Member member, final Tag tag) {
+    this.member = member;
+    this.tag = tag;
+  }
 }
