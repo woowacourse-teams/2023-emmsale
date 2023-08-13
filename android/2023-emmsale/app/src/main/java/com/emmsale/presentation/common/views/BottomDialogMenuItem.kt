@@ -3,11 +3,10 @@ package com.emmsale.presentation.common.views
 import android.content.Context
 import android.graphics.Typeface
 import androidx.annotation.Dimension
+import androidx.appcompat.widget.AppCompatTextView
 import com.emmsale.presentation.common.extension.dp
 
-class BottomDialogMenuItem(
-    context: Context,
-) : androidx.appcompat.widget.AppCompatTextView(context) {
+class BottomDialogMenuItem(context: Context) : AppCompatTextView(context) {
 
     init {
         setTypeface(null, Typeface.BOLD)
