@@ -10,14 +10,14 @@ import com.emmsale.R
 class CommentRecyclerViewDivider(context: Context) : RecyclerView.ItemDecoration() {
     private val divider: Drawable by lazy {
         ContextCompat.getDrawable(context, R.drawable.bg_all_vertical_divider)
-            ?: throw IllegalStateException("bg_all_divider 리소스를 찾을 수 없습니다. drawable 리소스를 확인해주세요.")
+            ?: throw IllegalStateException("bg_all_vertical_divider 리소스를 찾을 수 없습니다. drawable 리소스를 확인해주세요.")
     }
 
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDraw(c, parent, state)
 
         val left = parent.paddingStart
-        val right = parent.width - parent.paddingRight
+        val right = parent.width - parent.paddingEnd
 
         for (i in 0 until parent.childCount - 1) {
             val child = parent.getChildAt(i)
