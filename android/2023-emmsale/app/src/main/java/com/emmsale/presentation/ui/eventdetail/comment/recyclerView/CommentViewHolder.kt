@@ -16,6 +16,8 @@ class CommentViewHolder(
     private val onCommentDelete: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private val bottomMenuDialog = BottomMenuDialog(binding.root.context)
+
     init {
         binding.root.setOnClickListener {
             onChildCommentsView(binding.comment?.commentId ?: return@setOnClickListener)
@@ -29,7 +31,7 @@ class CommentViewHolder(
     }
 
     private fun initMenuButton(comment: CommentUiState) {
-        val bottomMenuDialog = BottomMenuDialog(binding.root.context)
+        bottomMenuDialog.resetMenu()
         if (comment.isUpdatable) bottomMenuDialog.addUpdateButton()
         if (comment.isDeletable) bottomMenuDialog.addDeleteButton()
         bottomMenuDialog.addReportButton()

@@ -35,6 +35,10 @@ class BottomMenuDialog(context: Context) : BottomSheetDialog(context) {
         binding.llBottommenudialogMenuitems.addView(createMenuItem(title, menuItemType, onClick))
     }
 
+    fun resetMenu() {
+        binding.llBottommenudialogMenuitems.removeAllViews()
+    }
+
     private fun createMenuItem(
         title: String,
         menuItemType: MenuItemType,
