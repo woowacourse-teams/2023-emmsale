@@ -69,13 +69,13 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
             handleNotLogin(it)
         }
         viewModel.comments.observe(viewLifecycleOwner) {
-            handleError(it)
+            handleErrors(it)
             handleComments(it)
             handleCommentEditing()
         }
     }
 
-    private fun handleError(comments: CommentsUiState) {
+    private fun handleErrors(comments: CommentsUiState) {
         fun handleCommentsFetchingError(comments: CommentsUiState) {
             if (comments.isFetchingError) {
                 context?.showToast(getString(R.string.comments_comments_fetching_error_message))

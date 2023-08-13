@@ -61,14 +61,14 @@ class ChildCommentActivity : AppCompatActivity() {
             handleNotLogin(it)
         }
         viewModel.comments.observe(this) {
-            handleError(it)
+            handleErrors(it)
             handleChildComments(it)
             handleEditComment()
             handleProgressBar(it)
         }
     }
 
-    private fun handleError(childComments: ChildCommentsUiState) {
+    private fun handleErrors(childComments: ChildCommentsUiState) {
         fun handleCommentsFetchingError(childCommentsUiState: ChildCommentsUiState) {
             if (childCommentsUiState.isFetchingError) {
                 showToast(getString(R.string.comments_comments_fetching_error_message))
