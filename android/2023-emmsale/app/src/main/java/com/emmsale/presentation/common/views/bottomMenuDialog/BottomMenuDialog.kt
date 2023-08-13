@@ -24,7 +24,7 @@ class BottomMenuDialog(context: Context) : BottomSheetDialog(context) {
 
     fun addMenuItemBelow(
         title: String,
-        menuItemType: MenuItemType = MenuItemType.BLACK,
+        menuItemType: MenuItemType = MenuItemType.NORMAL,
         onClick: () -> Unit,
     ) {
         if (binding.llBottommenudialogMenuitems.childCount > 0) {

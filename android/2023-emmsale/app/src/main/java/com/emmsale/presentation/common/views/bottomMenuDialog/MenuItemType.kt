@@ -5,11 +5,11 @@ import androidx.core.content.ContextCompat
 import com.emmsale.R
 
 enum class MenuItemType {
-    BLACK {
+    NORMAL {
         override fun getColor(context: Context): Int =
             ContextCompat.getColor(context, R.color.black)
     },
-    RED {
+    IMPORTANT {
         override fun getColor(context: Context): Int =
             ContextCompat.getColor(context, R.color.red)
     }, ;
