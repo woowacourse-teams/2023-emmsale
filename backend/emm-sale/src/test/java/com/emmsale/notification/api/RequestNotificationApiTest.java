@@ -278,7 +278,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
         parameterWithName("event-id").description("행사 id")
     );
 
-    when(requestNotificationCommandService.isAlreadyExisted(any(), any()))
+    when(requestNotificationQueryService.isAlreadyExisted(any(), any()))
         .thenReturn(true);
 
     //when & then

@@ -78,6 +78,6 @@ public class RequestNotificationApi {
       final Member member,
       final RequestNotificationExistedRequest existedRequest
   ) {
-    return requestNotificationCommandService.isAlreadyExisted(member, existedRequest);
+    return requestNotificationQueryService.isAlreadyExisted(member, existedRequest);
   }
 }
