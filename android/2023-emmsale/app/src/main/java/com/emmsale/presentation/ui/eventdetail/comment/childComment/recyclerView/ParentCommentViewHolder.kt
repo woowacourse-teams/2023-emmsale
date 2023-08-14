@@ -1,28 +1,21 @@
-package com.emmsale.presentation.ui.eventdetail.comment.recyclerView
+package com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
-import com.emmsale.databinding.ItemCommentsCommentsBinding
+import com.emmsale.databinding.ItemChildcommentsParentcommentBinding
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
-import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.CommentUiState
 
-class CommentViewHolder(
-    private val binding: ItemCommentsCommentsBinding,
-    private val onChildCommentsView: (childCommentId: Long) -> Unit,
+class ParentCommentViewHolder(
+    private val binding: ItemChildcommentsParentcommentBinding,
     private val onCommentDelete: (commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val bottomMenuDialog = BottomMenuDialog(binding.root.context)
-
-    init {
-        binding.root.setOnClickListener {
-            onChildCommentsView(binding.comment?.commentId ?: return@setOnClickListener)
-        }
-    }
 
     fun bind(comment: CommentUiState) {
         binding.comment = comment
@@ -36,7 +29,7 @@ class CommentViewHolder(
         if (comment.isDeletable) bottomMenuDialog.addDeleteButton()
         bottomMenuDialog.addReportButton()
 
-        binding.ivCommentMenubutton.setOnClickListener { bottomMenuDialog.show() }
+        binding.ivChildcommentsParentcommentmenubutton.setOnClickListener { bottomMenuDialog.show() }
     }
 
     private fun BottomMenuDialog.addUpdateButton() {
@@ -71,16 +64,15 @@ class CommentViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
-            onChildCommentsView: (childCommentId: Long) -> Unit,
-            onCommentDelete: (commentId: Long) -> Unit,
-        ): CommentViewHolder {
-            val binding = ItemCommentsCommentsBinding.inflate(
+            onCommentDelete: (commendId: Long) -> Unit,
+        ): ParentCommentViewHolder {
+            val binding = ItemChildcommentsParentcommentBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
 
-            return CommentViewHolder(binding, onChildCommentsView, onCommentDelete)
+            return ParentCommentViewHolder(binding, onCommentDelete)
         }
     }
 }

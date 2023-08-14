@@ -1,20 +1,16 @@
 package com.emmsale.presentation.ui.eventdetail.comment.childComment
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
-import com.emmsale.databinding.DialogCommentDeleteBinding
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentAdapter
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentRecyclerViewDivider
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 
@@ -37,86 +33,70 @@ class ChildCommentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initDataBinding()
+        initToolbar()
         initChildCommentsRecyclerView()
-        setUpUiLogic()
+        setupUiLogic()
 
         viewModel.fetchComment(parentCommentId)
     }
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
-        binding.ivChildcommentsParentcommentdeletebutton.setOnClickListener { onParentCommentDelete() }
+    }
+
+    private fun initToolbar() {
+        binding.tbChildcommentsToolbar.setNavigationOnClickListener { finish() }
     }
 
     private fun initChildCommentsRecyclerView() {
         binding.rvChildcommentsChildcomments.apply {
             adapter = ChildCommentAdapter(::onChildCommentDelete)
             itemAnimator = null
-            addItemDecoration(
-                DividerItemDecoration(
-                    this@ChildCommentActivity,
-                    DividerItemDecoration.VERTICAL,
-                ),
-            )
+            addItemDecoration(ChildCommentRecyclerViewDivider(this@ChildCommentActivity))
         }
     }
 
-    private fun setUpUiLogic() {
+    private fun setupUiLogic() {
+        setupLoginUiLogic()
+        setupCommentsUiLogic()
+    }
+
+    private fun setupLoginUiLogic() {
         viewModel.isLogin.observe(this) {
             handleNotLogin(it)
         }
-        viewModel.childCommentsUiState.observe(this) {
-            handleParentComment(it)
-            handleError(it)
+    }
+
+    private fun setupCommentsUiLogic() {
+        viewModel.comments.observe(this) {
+            handleErrors(it)
             handleChildComments(it)
             handleEditComment()
-            handleUpButton()
+            handleProgressBar(it)
         }
     }
 
-    private fun handleParentComment(childCommentsUiState: ChildCommentsUiState) {
-        binding.progressBar.isVisible = childCommentsUiState.isLoading
-        binding.tvChildcommentsParentcommentauthorname.text =
-            if (childCommentsUiState.parentComment.isDeleted.not()) {
-                childCommentsUiState.parentComment.authorName
-            } else {
-                getString(
-                    R.string.comment_deleted_comment_author_name,
-                )
-            }
-        binding.tvChildcommentsParentcommentcontent.text =
-            childCommentsUiState.parentComment.content
-        binding.tvChildcommentsParentcommentlastmodifieddate.text =
-            childCommentsUiState.parentComment.lastModifiedDate
-        binding.tvChildcommentsParentcommentlastmodifieddate.isVisible =
-            childCommentsUiState.parentComment.isDeleted.not()
-        binding.ivChildcommentsParentcommentdeletebutton.isVisible =
-            !childCommentsUiState.parentComment.isDeleted && childCommentsUiState.parentComment.isDeletable
-        binding.tvChildcommentsParentcommentisupdated.isVisible =
-            childCommentsUiState.parentComment.isUpdated && childCommentsUiState.parentComment.isDeleted.not()
-    }
-
-    private fun handleError(childCommentsUiState: ChildCommentsUiState) {
+    private fun handleErrors(childComments: ChildCommentsUiState) {
         fun handleCommentsFetchingError(childCommentsUiState: ChildCommentsUiState) {
             if (childCommentsUiState.isFetchingError) {
                 showToast(getString(R.string.comments_comments_fetching_error_message))
             }
         }
 
-        fun handleCommentPostingError(childCommentsUiState: ChildCommentsUiState) {
-            if (childCommentsUiState.isPostingError) {
+        fun handleCommentPostingError(childComments: ChildCommentsUiState) {
+            if (childComments.isPostingError) {
                 showToast(getString(R.string.comments_comments_posting_error_message))
             }
         }
 
-        fun handleCommentDeletionError(childCommentsUiState: ChildCommentsUiState) {
-            if (childCommentsUiState.isDeletionError) {
+        fun handleCommentDeletionError(childComments: ChildCommentsUiState) {
+            if (childComments.isDeletionError) {
                 showToast(getString(R.string.comments_comments_deletion_error_message))
             }
         }
-        handleCommentsFetchingError(childCommentsUiState)
-        handleCommentPostingError(childCommentsUiState)
-        handleCommentDeletionError(childCommentsUiState)
+        handleCommentsFetchingError(childComments)
+        handleCommentPostingError(childComments)
+        handleCommentDeletionError(childComments)
     }
 
     private fun handleNotLogin(isLogin: Boolean) {
@@ -126,9 +106,9 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleChildComments(childCommentsUiState: ChildCommentsUiState) {
+    private fun handleChildComments(childComments: ChildCommentsUiState) {
         (binding.rvChildcommentsChildcomments.adapter as ChildCommentAdapter).submitList(
-            childCommentsUiState.childComments,
+            listOf(childComments.parentComment) + childComments.childComments,
         )
     }
 
@@ -138,10 +118,8 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleUpButton() {
-        binding.ivChildcommentsUpbutton.setOnClickListener {
-            finish()
-        }
+    private fun handleProgressBar(childComments: ChildCommentsUiState) {
+        binding.progressBar.isVisible = childComments.isLoading
     }
 
     private fun onChildCommentSave() {
@@ -157,27 +135,6 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun onChildCommentDelete(commentId: Long) {
         viewModel.deleteComment(commentId, parentCommentId)
-    }
-
-    private fun onParentCommentDelete() {
-        val dialog = DialogCommentDeleteBinding.inflate(LayoutInflater.from(binding.root.context))
-
-        val alertDialog = AlertDialog.Builder(binding.root.context)
-            .setView(dialog.root)
-            .create()
-
-        dialog.tvCommentdeletedialogPositivebutton.setOnClickListener {
-            viewModel.deleteComment(parentCommentId, parentCommentId)
-            alertDialog.cancel()
-        }
-
-        dialog.tvCommentdeletedialogNegativebutton.setOnClickListener {
-            alertDialog.cancel()
-        }
-
-        alertDialog?.window?.setBackgroundDrawable(ColorDrawable(0))
-
-        alertDialog.show()
     }
 
     companion object {

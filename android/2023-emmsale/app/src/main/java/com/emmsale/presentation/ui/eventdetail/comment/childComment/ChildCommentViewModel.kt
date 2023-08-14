@@ -23,8 +23,8 @@ class ChildCommentViewModel(
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
 
-    private val _childCommentsUiState = NotNullMutableLiveData(ChildCommentsUiState.Loading)
-    val childCommentsUiState: NotNullLiveData<ChildCommentsUiState> = _childCommentsUiState
+    private val _comments = NotNullMutableLiveData(ChildCommentsUiState.Loading)
+    val comments: NotNullLiveData<ChildCommentsUiState> = _comments
 
     fun fetchComment(commentId: Long) {
         viewModelScope.launch {
@@ -64,7 +64,7 @@ class ChildCommentViewModel(
     }
 
     private fun setChildCommentsState(comment: Comment, loginMemberId: Long) {
-        _childCommentsUiState.value = ChildCommentsUiState.create(comment, loginMemberId)
+        _comments.value = ChildCommentsUiState.create(comment, loginMemberId)
     }
 
     private fun changeToNotLoginState() {
@@ -72,7 +72,7 @@ class ChildCommentViewModel(
     }
 
     private fun changeToCommentFetchingErrorState() {
-        _childCommentsUiState.value = childCommentsUiState.value.copy(
+        _comments.value = comments.value.copy(
             isLoading = false,
             isFetchingError = true,
             isPostingError = false,
@@ -81,7 +81,7 @@ class ChildCommentViewModel(
     }
 
     private fun changeToCommentPostingErrorState() {
-        _childCommentsUiState.value = childCommentsUiState.value.copy(
+        _comments.value = comments.value.copy(
             isLoading = false,
             isFetchingError = false,
             isPostingError = true,
@@ -90,7 +90,7 @@ class ChildCommentViewModel(
     }
 
     private fun changeToCommentDeletionErrorState() {
-        _childCommentsUiState.value = childCommentsUiState.value.copy(
+        _comments.value = comments.value.copy(
             isLoading = false,
             isFetchingError = false,
             isPostingError = false,
@@ -99,7 +99,7 @@ class ChildCommentViewModel(
     }
 
     private fun changeToLoadingState() {
-        _childCommentsUiState.value = childCommentsUiState.value.copy(
+        _comments.value = comments.value.copy(
             isLoading = true,
             isFetchingError = false,
             isPostingError = false,
