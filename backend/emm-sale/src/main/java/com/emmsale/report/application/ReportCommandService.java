@@ -1,5 +1,7 @@
 package com.emmsale.report.application;
 
+import com.emmsale.block.domain.Block;
+import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.domain.RecruitmentPost;
@@ -29,13 +31,15 @@ public class ReportCommandService {
   private final CommentRepository commentRepository;
   private final RecruitmentPostRepository recruitmentPostRepository;
   private final RequestNotificationRepository requestNotificationRepository;
+  private final BlockRepository blockRepository;
 
   public ReportResponse create(final ReportRequest reportRequest, final Member member) {
     validateReportRequest(reportRequest, member);
     final Report report = reportRequest.toReport();
-
+    blockReportedMember(reportRequest);
     return ReportResponse.of(reportRepository.save(report));
   }
+
 
   private void validateReportRequest(final ReportRequest reportRequest, final Member member) {
     validateReporterMismatch(reportRequest.getReporterId(), member);
@@ -85,7 +89,7 @@ public class ReportCommandService {
   private void validateComment(final ReportRequest reportRequest) {
     Comment comment = commentRepository.findById(reportRequest.getContentId())
         .orElseThrow(() -> new ReportException(ReportExceptionType.NOT_FOUND_CONTENT));
-    if (comment.getMember().getId().equals(reportRequest.getReportedId())) {
+    if (!comment.getMember().getId().equals(reportRequest.getReportedId())) {
       throw new ReportException(ReportExceptionType.REPORTED_MISMATCH_WRITER);
     }
   }
@@ -94,7 +98,7 @@ public class ReportCommandService {
     RecruitmentPost recruitmentPost = recruitmentPostRepository.findById(
             reportRequest.getContentId())
         .orElseThrow(() -> new ReportException(ReportExceptionType.NOT_FOUND_CONTENT));
-    if (recruitmentPost.getMember().getId().equals(reportRequest.getReportedId())) {
+    if (!recruitmentPost.getMember().getId().equals(reportRequest.getReportedId())) {
       throw new ReportException(ReportExceptionType.REPORTED_MISMATCH_WRITER);
     }
   }
@@ -103,8 +107,17 @@ public class ReportCommandService {
     RequestNotification requestNotification = requestNotificationRepository.findById(
             reportRequest.getContentId())
         .orElseThrow(() -> new ReportException(ReportExceptionType.NOT_FOUND_CONTENT));
-    if (requestNotification.getSenderId().equals(reportRequest.getReportedId())) {
+    if (!requestNotification.getSenderId().equals(reportRequest.getReportedId())) {
       throw new ReportException(ReportExceptionType.REPORTED_MISMATCH_WRITER);
+    }
+  }
+
+  private void blockReportedMember(final ReportRequest reportRequest) {
+    final Long reporterId = reportRequest.getReporterId();
+    final Long reportedId = reportRequest.getReportedId();
+    if (!blockRepository.existsByRequestMemberIdAndBlockMemberId(reporterId, reportedId)) {
+      final Block block = new Block(reporterId, reportedId);
+      blockRepository.save(block);
     }
   }
 }

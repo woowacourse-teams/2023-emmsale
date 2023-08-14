@@ -4,6 +4,7 @@ import static com.emmsale.event.EventFixture.eventFixture;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.domain.Event;
@@ -21,6 +22,7 @@ import com.emmsale.report.domain.ReportType;
 import com.emmsale.report.exception.ReportException;
 import com.emmsale.report.exception.ReportExceptionType;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -38,6 +40,8 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
   private MemberRepository memberRepository;
   @Autowired
   private EventRepository eventRepository;
+  @Autowired
+  private BlockRepository blockRepository;
   @Autowired
   private CommentRepository commentRepository;
   @Autowired
@@ -192,12 +196,18 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
 
         // when
         final ReportResponse actual = reportCommandService.create(request, reporter);
-        // TODO: 2023-08-09 신고 대상자가 차단되었는지 여부를 검증하는 로직 추가
+        final boolean isBlocked = blockRepository.existsByRequestMemberIdAndBlockMemberId(신고자_ID,
+            신고_대상자_ID);
+
         // then
-        assertThat(actual)
-            .usingRecursiveComparison()
-            .ignoringFields("id", "createdAt")
-            .isEqualTo(expected);
+        Assertions.assertAll(
+            () -> assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "createdAt")
+                .isEqualTo(expected),
+            () -> assertThat(isBlocked).isTrue()
+        );
+
       }
 
       @Test
@@ -214,12 +224,17 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
 
         // when
         final ReportResponse actual = reportCommandService.create(request, reporter);
-        // TODO: 2023-08-09 신고 대상자가 차단되었는지 여부를 검증하는 로직 추가
+        final boolean isBlocked = blockRepository.existsByRequestMemberIdAndBlockMemberId(신고자_ID,
+            신고_대상자_ID);
+
         // then
-        assertThat(actual)
-            .usingRecursiveComparison()
-            .ignoringFields("id", "createdAt")
-            .isEqualTo(expected);
+        Assertions.assertAll(
+            () -> assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "createdAt")
+                .isEqualTo(expected),
+            () -> assertThat(isBlocked).isTrue()
+        );
       }
 
       @Test
@@ -236,13 +251,19 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
 
         // when
         final ReportResponse actual = reportCommandService.create(request, reporter);
-        // TODO: 2023-08-09 신고 대상자가 차단되었는지 여부를 검증하는 로직 추가
+        final boolean isBlocked = blockRepository.existsByRequestMemberIdAndBlockMemberId(신고자_ID,
+            신고_대상자_ID);
+
         // then
-        assertThat(actual)
-            .usingRecursiveComparison()
-            .ignoringFields("id", "createdAt")
-            .isEqualTo(expected);
+        Assertions.assertAll(
+            () -> assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "createdAt")
+                .isEqualTo(expected),
+            () -> assertThat(isBlocked).isTrue()
+        );
       }
+
     }
 
   }

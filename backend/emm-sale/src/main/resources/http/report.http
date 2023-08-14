@@ -6,7 +6,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5L
 
 {
   "reporterId": 1,
-  "reportedId": 3,
+  "reportedId": 2,
   "type": "COMMENT",
   "contentId": 1
 }
