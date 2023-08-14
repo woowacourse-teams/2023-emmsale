@@ -39,13 +39,13 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             handleNotLogin(it)
         }
         viewModel.myProfile.observe(viewLifecycleOwner) {
-            handleError(it)
+            handleMyProfileFetchingError(it)
             handleFields(it)
             handleActivities(it)
         }
     }
 
-    private fun handleError(myProfile: MyProfileUiState) {
+    private fun handleMyProfileFetchingError(myProfile: MyProfileUiState) {
         if (myProfile.isFetchingError) {
             context?.showToast(getString(R.string.profile_profile_fetching_error_message))
         }
