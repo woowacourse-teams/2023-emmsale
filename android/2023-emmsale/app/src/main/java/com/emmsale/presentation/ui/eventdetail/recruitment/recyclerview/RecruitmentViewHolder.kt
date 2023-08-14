@@ -15,6 +15,7 @@ class RecruitmentViewHolder(
     init {
         itemView.setOnClickListener { navigateToDetail(binding.recruitment!!) }
     }
+
     fun bind(recruitment: RecruitmentPostUiState) {
         binding.recruitment = recruitment
     }

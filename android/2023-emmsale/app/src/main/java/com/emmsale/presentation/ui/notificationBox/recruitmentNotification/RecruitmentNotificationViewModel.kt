@@ -8,8 +8,9 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.eventdetail.EventDetailRepository
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.notification.NotificationRepository
-import com.emmsale.data.notification.RecruitmentNotification
-import com.emmsale.data.notification.RecruitmentStatus
+import com.emmsale.data.notification.recruitment.RecruitmentNotification
+import com.emmsale.data.notification.recruitment.RecruitmentStatus
+import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -25,6 +26,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class RecruitmentNotificationViewModel(
+    private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val eventDetailRepository: EventDetailRepository,
     private val notificationRepository: NotificationRepository,
@@ -36,17 +38,21 @@ class RecruitmentNotificationViewModel(
     val recruitmentUiState: NotNullLiveData<RecruitmentUiState> = _recruitmentUiState
 
     init {
-        fetchNotifications()
+        fetchRecruitmentNotifications()
     }
 
-    private fun fetchNotifications() {
+    private fun fetchRecruitmentNotifications() {
         viewModelScope.launch {
             _notifications.postValue(_notifications.value.copy(isLoading = true))
+            val uid = tokenRepository.getToken()?.uid ?: return@launch
 
-            when (val notificationsResult = notificationRepository.getRecruitmentNotifications()) {
-                is ApiSuccess -> updateNotifications(notificationsResult.data)
+            when (val result = notificationRepository.getRecruitmentNotifications(uid)) {
+                is ApiSuccess -> updateNotifications(result.data)
                 is ApiException, is ApiError -> _notifications.postValue(
-                    _notifications.value.copy(isLoadingNotificationsFailed = true),
+                    _notifications.value.copy(
+                        isLoading = false,
+                        isLoadingNotificationsFailed = true,
+                    ),
                 )
             }
         }
@@ -62,11 +68,13 @@ class RecruitmentNotificationViewModel(
                 eventId = conferenceId,
                 conferenceName = notifications.first().eventName,
                 notifications = notifications,
-                isRead = notifications.any { !it.isRead },
             )
         }
 
-        _notifications.value = _notifications.value.copy(notificationGroups = notificationHeaders)
+        _notifications.value = _notifications.value.copy(
+            isLoading = false,
+            notificationGroups = notificationHeaders,
+        )
     }
 
     private suspend fun convertToNotificationBodies(
@@ -104,7 +112,7 @@ class RecruitmentNotificationViewModel(
         }
 
     fun toggleExpand(eventId: Long) {
-        _notifications.value = _notifications.value.toggleNotificationExpanded(eventId)
+        _notifications.value = notifications.value.toggleNotificationExpanded(eventId)
     }
 
     fun acceptRecruit(notificationId: Long) {
@@ -119,7 +127,7 @@ class RecruitmentNotificationViewModel(
             ) {
                 is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToAcceptedState()
-                    _notifications.value = _notifications.value.changeAcceptStateBy(notificationId)
+                    _notifications.value = notifications.value.changeAcceptStateBy(notificationId)
                 }
 
                 is ApiException, is ApiError ->
@@ -141,7 +149,7 @@ class RecruitmentNotificationViewModel(
             ) {
                 is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToRejectedState()
-                    _notifications.value = _notifications.value.changeRejectStateBy(notificationId)
+                    _notifications.value = notifications.value.changeRejectStateBy(notificationId)
                 }
 
                 is ApiException, is ApiError ->
@@ -168,16 +176,14 @@ class RecruitmentNotificationViewModel(
         notification: RecruitmentNotificationBodyUiState,
     ) {
         if (!notification.isRead) {
-            notificationRepository.updateNotificationReadStatus(notification.id, true)
+            notificationRepository.updateNotificationReadStatus(notification.id)
         }
     }
 
     companion object {
-        private const val MEMBER_INDEX = 0
-        private const val CONFERENCE_NAME_INDEX = 1
-
         val factory = ViewModelFactory {
             RecruitmentNotificationViewModel(
+                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
                 eventDetailRepository = KerdyApplication.repositoryContainer.eventDetailRepository,
                 notificationRepository = KerdyApplication.repositoryContainer.notificationRepository,

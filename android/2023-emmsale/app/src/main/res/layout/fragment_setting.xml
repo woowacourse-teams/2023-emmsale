@@ -53,281 +53,281 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/iv_setting_member_image"
             android:layout_width="65dp"
             android:layout_height="65dp"
-            android:id="@+id/iv_setting_member_image"
-            app:layout_constraintTop_toBottomOf="@+id/tb_setting_toolbar"
-            android:layout_marginTop="2dp"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="17dp"
-            tools:srcCompat="@tools:sample/avatars"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@string/setting_member_image_description"
             app:imageUrl="@{viewModel.member.imageUrl}"
             app:isCircle="@{true}"
-            android:contentDescription="@string/setting_member_image_description" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_setting_toolbar"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
+            android:id="@+id/tv_setting_member_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_setting_member_name"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="13dp"
+            android:text="@{viewModel.member.name}"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/iv_setting_member_image"
             app:layout_constraintTop_toTopOf="@+id/iv_setting_member_image"
-            android:layout_marginTop="13dp"
-            android:layout_marginStart="12dp"
-            android:text="@{viewModel.member.name}"
-            tools:text="김커디"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+            tools:text="김커디" />
 
         <TextView
+            android:id="@+id/tv_setting_github_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_setting_github_id"
-            app:layout_constraintTop_toBottomOf="@+id/tv_setting_member_name"
-            app:layout_constraintStart_toStartOf="@+id/tv_setting_member_name"
             android:layout_marginTop="7dp"
-            android:textSize="12sp"
-            android:textColor="#8b8b8b"
             android:text="@{viewModel.member.githubId}"
+            android:textColor="#8b8b8b"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_setting_member_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_setting_member_name"
             tools:text="git1234567@github.com" />
 
         <TextView
+            android:id="@+id/tv_setting_writings_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_setting_writings_button"
-            android:paddingVertical="12dp"
-            app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="24dp"
             android:layout_marginStart="17dp"
-            android:textSize="11sp"
-            android:onClick="@{() -> showWritings.invoke()}"
-            app:layout_constraintEnd_toStartOf="@+id/tv_setting_written_comments_button"
-            android:gravity="center"
+            android:layout_marginTop="24dp"
             android:background="@drawable/bg_setting_button"
-            android:text="@string/setting_writings_button_label" />
+            android:gravity="center"
+            android:onClick="@{() -> showWritings.invoke()}"
+            android:paddingVertical="12dp"
+            android:text="@string/setting_writings_button_label"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_setting_written_comments_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image" />
 
         <TextView
+            android:id="@+id/tv_setting_written_comments_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_setting_written_comments_button"
-            android:paddingVertical="12dp"
-            app:layout_constraintStart_toEndOf="@+id/tv_setting_writings_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="17dp"
-            android:textSize="11sp"
-            android:onClick="@{() -> showWrittenComments.invoke()}"
-            app:layout_constraintTop_toTopOf="@+id/tv_setting_writings_button"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_setting_writings_button"
-            android:gravity="center"
             android:layout_marginStart="4dp"
+            android:layout_marginEnd="17dp"
             android:background="@drawable/bg_setting_button"
-            android:text="@string/setting_written_comments_button_label" />
+            android:gravity="center"
+            android:onClick="@{() -> showWrittenComments.invoke()}"
+            android:paddingVertical="12dp"
+            android:text="@string/setting_written_comments_button_label"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_setting_writings_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_setting_writings_button"
+            app:layout_constraintTop_toTopOf="@+id/tv_setting_writings_button" />
 
         <com.emmsale.presentation.common.views.VerticalDivider
+            android:id="@+id/verticaldivider_setting_vertical_divider"
             android:layout_width="0dp"
             android:layout_height="0.5dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_setting_writings_button"
             android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/verticaldivider_setting_vertical_divider" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_setting_writings_button" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginEnd="17dp"
-            android:layout_marginStart="17dp"
-            android:onClick="@{() -> showNotificationSetting.invoke()}"
-            app:layout_constraintTop_toBottomOf="@+id/verticaldivider_setting_vertical_divider"
             android:id="@+id/cl_setting_notification_setting_button"
-            android:layout_marginTop="14dp">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="17dp"
+            android:onClick="@{() -> showNotificationSetting.invoke()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/verticaldivider_setting_vertical_divider">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/tv_setting_notification_setting_button_label"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/setting_notification_setting_button_label" />
-
-            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_setting_button_decoration"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="@string/setting_notification_setting_button_label"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
                 android:id="@+id/iv_setting_notification_setting_button_decoration"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:importantForAccessibility="no" />
+                app:srcCompat="@drawable/ic_setting_button_decoration" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_setting_blocks_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginEnd="17dp"
             android:layout_marginStart="17dp"
+            android:layout_marginEnd="17dp"
             android:onClick="@{() -> showBlocks.invoke()}"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_notification_setting_button"
-            android:id="@+id/cl_setting_blocks_button">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_setting_notification_setting_button">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/tv_setting_blocks_button_label"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/setting_blocks_button_label" />
-
-            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_setting_button_decoration"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="@string/setting_blocks_button_label"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
                 android:id="@+id/iv_setting_blocks_button_decoration"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:importantForAccessibility="no" />
+                app:srcCompat="@drawable/ic_setting_button_decoration" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_setting_use_term_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="17dp"
+            android:onClick="@{() -> showUseTerm.invoke()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginEnd="17dp"
-            android:layout_marginStart="17dp"
-            android:onClick="@{() -> showUseTerm.invoke()}"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_blocks_button"
-            android:id="@+id/cl_setting_use_term_button">
+            app:layout_constraintTop_toBottomOf="@+id/cl_setting_blocks_button">
 
             <TextView
+                android:id="@+id/tv_setting_use_term_button_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_setting_use_term_button_label"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:text="@string/setting_use_term_button_label" />
+                android:text="@string/setting_use_term_button_label"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_setting_button_decoration"
                 android:id="@+id/iv_setting_use_term_button_decoration"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:importantForAccessibility="no" />
+                app:srcCompat="@drawable/ic_setting_button_decoration" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_setting_version_info_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="17dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginEnd="17dp"
-            android:layout_marginStart="17dp"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_use_term_button"
-            android:id="@+id/cl_setting_version_info_button">
+            app:layout_constraintTop_toBottomOf="@+id/cl_setting_use_term_button">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/tv_setting_version_info_button_label"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/setting_version_info_button_label" />
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="@string/setting_version_info_button_label"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/tv_setting_version_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.appVersion}"
+                android:textColor="#b1b1b1"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:text="@{viewModel.appVersion}"
-                tools:text="1.0"
-                android:textColor="#b1b1b1" />
+                tools:text="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_setting_account_delete_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginEnd="17dp"
             android:layout_marginStart="17dp"
+            android:layout_marginEnd="17dp"
             android:onClick="@{() -> deleteMember.invoke()}"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_version_info_button"
-            android:id="@+id/cl_setting_account_delete_button">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_setting_version_info_button">
 
             <TextView
+                android:id="@+id/tv_setting_account_delete_button_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_setting_account_delete_button_label"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:text="@string/setting_account_delete_button_label" />
+                android:text="@string/setting_account_delete_button_label"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_setting_logout_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="17dp"
+            android:onClick="@{() -> logout.invoke()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginEnd="17dp"
-            android:layout_marginStart="17dp"
-            android:onClick="@{() -> logout.invoke()}"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_account_delete_button"
-            android:id="@+id/cl_setting_logout_button">
+            app:layout_constraintTop_toBottomOf="@+id/cl_setting_account_delete_button">
 
             <TextView
+                android:id="@+id/tv_setting_logout_button_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_setting_logout_button_label"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
+                android:text="@string/setting_logout_button_label"
                 android:textColor="@color/important"
-                android:text="@string/setting_logout_button_label" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
+            android:id="@+id/pb_setting_progress_bar"
             style="?android:attr/progressBarStyle"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/pb_setting_progress_bar"
             android:visibility="@{viewModel.member.isLoading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

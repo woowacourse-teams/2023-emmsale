@@ -1,4 +1,4 @@
-package com.emmsale.data.notification
+package com.emmsale.data.notification.recruitment
 
 import java.time.LocalDateTime
 

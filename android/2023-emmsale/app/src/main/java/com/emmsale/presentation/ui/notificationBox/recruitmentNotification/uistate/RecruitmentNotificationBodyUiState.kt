@@ -1,7 +1,6 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate
 
-import com.emmsale.data.notification.RecruitmentNotification
-import com.emmsale.data.notification.RecruitmentStatus
+import com.emmsale.data.notification.recruitment.RecruitmentNotification
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -14,18 +13,15 @@ data class RecruitmentNotificationBodyUiState(
     val message: String,
     val profileImageUrl: String,
     val notificationDate: String,
-    val isAccepted: Boolean = false,
-    val isRejected: Boolean = false,
+    val recruitmentStatus: RecruitmentNotificationStatusUiState,
     val isRead: Boolean = false,
 ) {
     fun changeToAcceptedState(): RecruitmentNotificationBodyUiState = copy(
-        isAccepted = true,
-        isRejected = false,
+        recruitmentStatus = RecruitmentNotificationStatusUiState.ACCEPTED,
     )
 
     fun changeToRejectedState(): RecruitmentNotificationBodyUiState = copy(
-        isAccepted = false,
-        isRejected = true,
+        recruitmentStatus = RecruitmentNotificationStatusUiState.REJECTED,
     )
 
     fun changeToReadState(): RecruitmentNotificationBodyUiState = copy(
@@ -46,8 +42,7 @@ data class RecruitmentNotificationBodyUiState(
             message = recruitmentNotification.message,
             profileImageUrl = notificationMember?.profileImageUrl ?: "",
             notificationDate = recruitmentNotification.notificationDate.toUiString(),
-            isAccepted = recruitmentNotification.status == RecruitmentStatus.ACCEPTED,
-            isRejected = recruitmentNotification.status == RecruitmentStatus.REJECTED,
+            recruitmentStatus = RecruitmentNotificationStatusUiState.from(recruitmentNotification.status),
             isRead = recruitmentNotification.isRead,
         )
 

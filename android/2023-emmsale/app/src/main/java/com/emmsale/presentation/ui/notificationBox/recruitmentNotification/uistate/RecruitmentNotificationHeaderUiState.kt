@@ -5,8 +5,10 @@ data class RecruitmentNotificationHeaderUiState(
     val conferenceName: String,
     val isExpanded: Boolean = false,
     val notifications: List<RecruitmentNotificationBodyUiState>,
-    val isRead: Boolean = false,
 ) {
+    val isRead: Boolean
+        get() = notifications.all { it.isRead }
+
     fun toggleExpanded(): RecruitmentNotificationHeaderUiState = copy(isExpanded = !isExpanded)
 
     fun changeToAcceptedStateBy(notificationId: Long): RecruitmentNotificationHeaderUiState =
@@ -24,7 +26,6 @@ data class RecruitmentNotificationHeaderUiState(
         )
 
     fun changeToReadState(): RecruitmentNotificationHeaderUiState = copy(
-        isRead = true,
         notifications = notifications.map { it.changeToReadState() },
     )
 }

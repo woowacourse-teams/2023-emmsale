@@ -18,10 +18,8 @@ suspend inline fun <T : Any, reified V : Any> handleApi(
         val body = response.body()
         val headers = response.headers()
         when {
-            response.isSuccessful && body == null && V::class == Unit::class -> ApiSuccess(
-                Unit as V,
-                headers,
-            )
+            response.isSuccessful && body == null && V::class == Unit::class ->
+                ApiSuccess(Unit as V, headers)
 
             response.isSuccessful && body != null -> ApiSuccess(mapToDomain(body), headers)
             else -> ApiError(code = response.code(), message = response.message())
