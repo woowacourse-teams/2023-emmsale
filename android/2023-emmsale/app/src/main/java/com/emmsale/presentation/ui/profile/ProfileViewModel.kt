@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.myProfile
+package com.emmsale.presentation.ui.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,10 +12,10 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
+import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 import kotlinx.coroutines.launch
 
-class MyProfileViewModel(
+class ProfileViewModel(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val activityRepository: ActivityRepository,
@@ -24,11 +24,11 @@ class MyProfileViewModel(
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
 
-    private val _myProfile = NotNullMutableLiveData(MyProfileUiState.FIRST_LOADING)
-    val myProfile: NotNullLiveData<MyProfileUiState> = _myProfile
+    private val _profile = NotNullMutableLiveData(ProfileUiState.FIRST_LOADING)
+    val profile: NotNullLiveData<ProfileUiState> = _profile
 
-    fun fetchMember() {
-        _myProfile.value = _myProfile.value.changeToLoadingState()
+    fun fetchMember(memberId: Long) {
+        _profile.value = _profile.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
@@ -36,21 +36,21 @@ class MyProfileViewModel(
                 return@launch
             }
             launch {
-                when (val result = memberRepository.getMember(token.uid)) {
+                when (val result = memberRepository.getMember(memberId)) {
                     is ApiError, is ApiException ->
-                        _myProfile.value = _myProfile.value.changeToFetchingErrorState()
+                        _profile.value = _profile.value.changeToFetchingErrorState()
 
                     is ApiSuccess ->
-                        _myProfile.value = _myProfile.value.changeMemberState(result.data)
+                        _profile.value = _profile.value.changeMemberState(result.data, token.uid)
                 }
             }
             launch {
-                when (val result = activityRepository.getActivities(token.uid)) {
+                when (val result = activityRepository.getActivities(memberId)) {
                     is ApiError, is ApiException ->
-                        _myProfile.value = _myProfile.value.changeToFetchingErrorState()
+                        _profile.value = _profile.value.changeToFetchingErrorState()
 
                     is ApiSuccess ->
-                        _myProfile.value = _myProfile.value.changeActivitiesState(result.data)
+                        _profile.value = _profile.value.changeActivityState(result.data)
                 }
             }
         }
@@ -58,7 +58,7 @@ class MyProfileViewModel(
 
     companion object {
         val factory = ViewModelFactory {
-            MyProfileViewModel(
+            ProfileViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
                 activityRepository = KerdyApplication.repositoryContainer.activityRepository,

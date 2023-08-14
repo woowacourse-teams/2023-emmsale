@@ -1,13 +1,13 @@
-package com.emmsale.presentation.ui.main.myProfile.recyclerView
+package com.emmsale.presentation.ui.profile.recyclerView
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.databinding.ItemMyprofileActivitiesBinding
-import com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState
+import com.emmsale.databinding.ItemProfileActivitiesBinding
+import com.emmsale.presentation.ui.profile.uiState.ActivityUiState
 
 class ActivityViewHolder(
-    private val binding: ItemMyprofileActivitiesBinding,
+    private val binding: ItemProfileActivitiesBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(activity: ActivityUiState) {
@@ -16,7 +16,7 @@ class ActivityViewHolder(
 
     companion object {
         fun create(parent: ViewGroup): ActivityViewHolder {
-            val binding = ItemMyprofileActivitiesBinding.inflate(
+            val binding = ItemProfileActivitiesBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,

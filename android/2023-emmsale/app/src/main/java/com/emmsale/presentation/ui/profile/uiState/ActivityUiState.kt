@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.myProfile.uiState
+package com.emmsale.presentation.ui.profile.uiState
 
 import com.emmsale.data.activity.Activity
 

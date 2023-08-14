@@ -12,10 +12,17 @@ import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.Comm
 
 class ChildCommentViewHolder(
     private val binding: ItemChildcommentsChildcommentBinding,
-    private val onCommentDelete: (commentId: Long) -> Unit,
+    private val deleteComment: (commentId: Long) -> Unit,
+    private val showProfile: (authorId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val bottomMenuDialog = BottomMenuDialog(binding.root.context)
+
+    init {
+        binding.root.setOnClickListener {
+            showProfile(binding.comment?.authorId ?: return@setOnClickListener)
+        }
+    }
 
     fun bind(comment: CommentUiState) {
         binding.comment = comment
@@ -49,7 +56,7 @@ class ChildCommentViewHolder(
             positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
             negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
             onPositiveButtonClick = {
-                onCommentDelete(binding.comment?.commentId ?: return@WarningDialog)
+                deleteComment(binding.comment?.commentId ?: return@WarningDialog)
             },
         ).show()
     }
@@ -64,15 +71,13 @@ class ChildCommentViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
-            onCommentDelete: (commentId: Long) -> Unit,
+            deleteComment: (commentId: Long) -> Unit,
+            showProfile: (authorId: Long) -> Unit,
         ): ChildCommentViewHolder {
-            val binding = ItemChildcommentsChildcommentBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-            )
+            val binding = ItemChildcommentsChildcommentBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
 
-            return ChildCommentViewHolder(binding, onCommentDelete)
+            return ChildCommentViewHolder(binding, deleteComment, showProfile)
         }
     }
 }

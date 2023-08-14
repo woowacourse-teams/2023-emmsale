@@ -9,9 +9,9 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
-import com.emmsale.presentation.ui.main.myProfile.recyclerView.ActivitiesAdapter
-import com.emmsale.presentation.ui.main.myProfile.recyclerView.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
+import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
+import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
 
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     override val layoutResId: Int = R.layout.fragment_my_profile
@@ -47,15 +47,15 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     private fun setupMyProfileUiLogic() {
         viewModel.myProfile.observe(viewLifecycleOwner) {
-            handleErrors(it)
+            handleMyProfileFetchingError(it)
             handleFields(it)
             handleActivities(it)
         }
     }
 
-    private fun handleErrors(myProfile: MyProfileUiState) {
+    private fun handleMyProfileFetchingError(myProfile: MyProfileUiState) {
         if (myProfile.isFetchingError) {
-            context?.showToast(getString(R.string.myprofile_profile_fetching_error_message))
+            context?.showToast(getString(R.string.profile_profile_fetching_error_message))
         }
     }
 
@@ -97,6 +97,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     companion object {
-        const val TAG = "MyProfile"
+        val TAG: String = MyProfileFragment::class.java.simpleName
     }
 }

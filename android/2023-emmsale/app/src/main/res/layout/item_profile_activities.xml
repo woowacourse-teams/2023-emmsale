@@ -7,7 +7,7 @@
 
         <variable
             name="activity"
-            type="com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState" />
+            type="com.emmsale.presentation.ui.profile.uiState.ActivityUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +19,7 @@
             android:layout_width="5dp"
             android:layout_height="5dp"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_myprofile_activitynamedecorator"
+            android:src="@drawable/ic_profile_activitynamedecorator"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

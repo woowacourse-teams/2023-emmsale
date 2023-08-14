@@ -1,9 +1,9 @@
-package com.emmsale.presentation.ui.main.myProfile.recyclerView
+package com.emmsale.presentation.ui.profile.recyclerView
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.presentation.ui.main.myProfile.uiState.ActivityUiState
+import com.emmsale.presentation.ui.profile.uiState.ActivityUiState
 
 class ActivitiesAdapter : ListAdapter<ActivityUiState, ActivityViewHolder>(diffUtil) {
 

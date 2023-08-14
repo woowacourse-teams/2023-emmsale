@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.extension.showToast
@@ -13,6 +12,7 @@ import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentRecyclerViewDivider
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.profile.ProfileActivity
 
 class ChildCommentActivity : AppCompatActivity() {
 
@@ -42,6 +42,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
+        binding.lifecycleOwner = this
     }
 
     private fun initToolbar() {
@@ -50,10 +51,14 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun initChildCommentsRecyclerView() {
         binding.rvChildcommentsChildcomments.apply {
-            adapter = ChildCommentAdapter(::onChildCommentDelete)
+            adapter = ChildCommentAdapter(::deleteComment, ::showProfile)
             itemAnimator = null
             addItemDecoration(ChildCommentRecyclerViewDivider(this@ChildCommentActivity))
         }
+    }
+
+    private fun showProfile(authorId: Long) {
+        ProfileActivity.startActivity(this, authorId)
     }
 
     private fun setupUiLogic() {
@@ -72,7 +77,6 @@ class ChildCommentActivity : AppCompatActivity() {
             handleErrors(it)
             handleChildComments(it)
             handleEditComment()
-            handleProgressBar(it)
         }
     }
 
@@ -118,10 +122,6 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleProgressBar(childComments: ChildCommentsUiState) {
-        binding.progressBar.isVisible = childComments.isLoading
-    }
-
     private fun onChildCommentSave() {
         viewModel.saveChildComment(
             content = binding.etChildcommentsEditchildcommentcontent.text.toString(),
@@ -133,7 +133,7 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun onChildCommentDelete(commentId: Long) {
+    private fun deleteComment(commentId: Long) {
         viewModel.deleteComment(commentId, parentCommentId)
     }
 

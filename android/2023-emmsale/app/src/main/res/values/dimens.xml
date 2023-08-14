@@ -2,6 +2,5 @@
 <resources>
     <dimen name="tab_indicator_height">2dp</dimen>
 
-    <dimen name="textsize_bottomdialogmenuitem_title">14sp</dimen>
     <dimen name="padding_bottommenudialog_menu_item_vertical">21dp</dimen>
 </resources>

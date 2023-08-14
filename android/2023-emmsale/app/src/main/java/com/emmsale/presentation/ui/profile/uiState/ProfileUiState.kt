@@ -1,13 +1,13 @@
-package com.emmsale.presentation.ui.main.myProfile.uiState
+package com.emmsale.presentation.ui.profile.uiState
 
 import com.emmsale.data.activity.Activity
 import com.emmsale.data.activity.ActivityType
 import com.emmsale.data.member.Member
-import com.emmsale.presentation.ui.profile.uiState.ActivityUiState
 
-data class MyProfileUiState(
+data class ProfileUiState(
     val isLoading: Boolean,
     val isFetchingError: Boolean,
+    val isLoginMember: Boolean,
     val memberId: Long,
     val memberName: String,
     val description: String,
@@ -17,26 +17,27 @@ data class MyProfileUiState(
     val clubs: List<ActivityUiState>,
 ) {
 
-    fun changeToLoadingState(): MyProfileUiState = copy(
+    fun changeToLoadingState(): ProfileUiState = copy(
         isLoading = true,
         isFetchingError = false,
     )
 
-    fun changeToFetchingErrorState(): MyProfileUiState = copy(
+    fun changeToFetchingErrorState(): ProfileUiState = copy(
         isLoading = false,
         isFetchingError = true,
     )
 
-    fun changeMemberState(member: Member): MyProfileUiState = copy(
+    fun changeMemberState(member: Member, loginMemberId: Long): ProfileUiState = copy(
         isLoading = false,
         isFetchingError = false,
+        isLoginMember = member.id == loginMemberId,
         memberId = member.id,
         memberName = member.name,
         description = member.description,
         memberImageUrl = member.imageUrl,
     )
 
-    fun changeActivitiesState(activities: List<Activity>): MyProfileUiState = copy(
+    fun changeActivityState(activities: List<Activity>): ProfileUiState = copy(
         isLoading = false,
         isFetchingError = false,
         fields = activities.getActivityUiStatesOf(ActivityType.FIELD),
@@ -50,9 +51,10 @@ data class MyProfileUiState(
     }
 
     companion object {
-        val FIRST_LOADING = MyProfileUiState(
+        val FIRST_LOADING = ProfileUiState(
             isLoading = true,
             isFetchingError = false,
+            isLoginMember = false,
             memberId = -1,
             memberName = "",
             description = "",

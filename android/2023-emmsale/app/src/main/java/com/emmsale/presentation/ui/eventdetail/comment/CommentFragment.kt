@@ -48,19 +48,19 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     private fun initCommentsRecyclerView() {
         binding.rvCommentsComments.apply {
             adapter = CommentsAdapter(
-                onChildCommentsView = ::onChildCommentsView,
-                onCommentDelete = ::onCommentDelete,
+                showChildComments = ::showChildComments,
+                deleteComment = ::deleteComment,
             )
             itemAnimator = null
             addItemDecoration(CommentRecyclerViewDivider(requireContext()))
         }
     }
 
-    private fun onChildCommentsView(commentId: Long) {
+    private fun showChildComments(commentId: Long) {
         ChildCommentActivity.startActivity(requireContext(), eventId, commentId)
     }
 
-    private fun onCommentDelete(commentId: Long) {
+    private fun deleteComment(commentId: Long) {
         viewModel.deleteComment(commentId, eventId)
     }
 
