@@ -46,7 +46,7 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
     final String accessToken = "Bearer Token";
 
     final RequestParametersSnippet requestParam = requestParameters(
-        parameterWithName("memberId").description("알림을 조회할 멤버 ID"));
+        parameterWithName("member-id").description("알림을 조회할 멤버 ID"));
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].updateNotificationId").description("알림 ID"),
@@ -92,7 +92,7 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
 
     //then
     mockMvc.perform(get("/update-notifications")
-            .queryParam("memberId", "1")
+            .queryParam("member-id", "1")
             .header("Authorization", accessToken))
         .andExpect(status().isOk())
         .andDo(print())
