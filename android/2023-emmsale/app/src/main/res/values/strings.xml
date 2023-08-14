@@ -162,4 +162,6 @@
     <string name="primarynotification_profile_image_desc">유저 프로필</string>
     <string name="primarynotification_past_notification_delete">지난 알림 삭제</string>
     <string name="primarynotification_interest_event_message">관심 태그 행사가 업데이트 되었어요.</string>
+    <string name="primarynotification_before_minute_format">%d분 전</string>
+    <string name="primarynotification_before_hour_format">%d시간 전</string>
 </resources>

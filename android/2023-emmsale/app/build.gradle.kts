@@ -106,6 +106,8 @@ dependencies {
     testImplementation("io.mockk:mockk-agent:1.13.5")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
+    implementation("androidx.recyclerview:recyclerview:1.3.1")
+
     // imageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
 }

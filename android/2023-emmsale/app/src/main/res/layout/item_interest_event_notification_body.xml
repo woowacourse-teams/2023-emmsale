@@ -5,6 +5,17 @@
 
     <data>
 
+        <import type="kotlin.Unit" />
+
+        <import type="com.emmsale.presentation.common.extension.LocalDateTimeExt" />
+
+        <variable
+            name="interestEventNotification"
+            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState" />
+
+        <variable
+            name="onDeleteClick"
+            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,22 +41,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
+            android:layout_marginEnd="12dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/primarynotification_interest_event_message"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tv_comment_date"
             app:layout_constraintEnd_toStartOf="@id/btn_delete"
             app:layout_constraintStart_toEndOf="@+id/iv_member_profile"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_comment_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{LocalDateTimeExt.compareToString(interestEventNotification.createdAt, context)}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -58,7 +69,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:contentDescription="@string/primarynotification_past_notification_delete"
+            android:onClick="@{() -> onDeleteClick.invoke(interestEventNotification.id)}"
             android:src="@drawable/ic_primarynotification_delete"
+            android:visibility="@{interestEventNotification.isRead}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_comment"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="parent"

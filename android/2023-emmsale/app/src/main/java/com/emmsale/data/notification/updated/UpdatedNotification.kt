@@ -7,5 +7,5 @@ abstract class UpdatedNotification(
     val receiverId: Int,
     val redirectId: Int,
     val createdAt: LocalDateTime,
-    val isRead: Boolean,
+    val isPast: Boolean,
 )
