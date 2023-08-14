@@ -3,6 +3,7 @@ package com.emmsale.data.notification
 import com.emmsale.data.notification.recruitment.dto.RecruitmentNotificationApiModel
 import com.emmsale.data.notification.recruitment.dto.RecruitmentStatusUpdateRequestModel
 import com.emmsale.data.notification.updated.dto.UpdatedNotificationApiModel
+import com.emmsale.data.notification.updated.dto.UpdatedNotificationDeleteRequestModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -41,6 +42,6 @@ interface NotificationService {
 
     @DELETE("/update-notifications")
     suspend fun deleteNotification(
-        @Body notificationIds: List<Long>,
+        @Body notificationIds: UpdatedNotificationDeleteRequestModel,
     ): Response<Unit>
 }

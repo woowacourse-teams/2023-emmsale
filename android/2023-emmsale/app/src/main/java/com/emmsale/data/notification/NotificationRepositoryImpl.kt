@@ -9,6 +9,7 @@ import com.emmsale.data.notification.recruitment.mapper.toData
 import com.emmsale.data.notification.recruitment.mapper.toRequestModel
 import com.emmsale.data.notification.updated.UpdatedNotification
 import com.emmsale.data.notification.updated.dto.UpdatedNotificationApiModel
+import com.emmsale.data.notification.updated.dto.UpdatedNotificationDeleteRequestModel
 import com.emmsale.data.notification.updated.mapper.toData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -71,15 +72,13 @@ class NotificationRepositoryImpl(
     override suspend fun deleteUpdatedNotifications(notificationIds: List<Long>): ApiResult<Unit> {
         return withContext(dispatcher) {
             handleApi(
-                execute = { notificationService.deleteNotification(notificationIds) },
+                execute = {
+                    notificationService.deleteNotification(
+                        UpdatedNotificationDeleteRequestModel(notificationIds),
+                    )
+                },
                 mapToDomain = { },
             )
         }
-    }
-
-    companion object {
-        private const val IN_PROGRESS = "IN_PROGRESS"
-        private const val ACCEPT = "ACCEPT"
-        private const val REJECT = "REJECT"
     }
 }
