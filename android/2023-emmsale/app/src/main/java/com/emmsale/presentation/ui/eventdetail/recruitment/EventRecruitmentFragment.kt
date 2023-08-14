@@ -79,7 +79,7 @@ class EventRecruitmentFragment : BaseFragment<FragmentEventRecruitmentBinding>()
                     RecruitmentPostWritingActivity.getPostModeIntent(requireContext(), eventId)
                 postingResultActivityLauncher.launch(intent)
             } else {
-                requireContext().showToast(getString(R.string.recruitment_has_not_permission_writing))
+                requireContext().showToast(getString(R.string.eventrecruitment_has_not_permission_writing))
             }
         }
     }
