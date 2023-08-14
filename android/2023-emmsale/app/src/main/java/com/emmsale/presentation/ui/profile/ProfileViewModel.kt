@@ -2,20 +2,16 @@ package com.emmsale.presentation.ui.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.activity.Activity
 import com.emmsale.data.activity.ActivityRepository
-import com.emmsale.data.activity.ActivityType
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.member.Member
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.profile.uiState.ActivityUiState
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 import kotlinx.coroutines.launch
 
@@ -28,67 +24,36 @@ class ProfileViewModel(
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
 
-    private val _profile = NotNullMutableLiveData(ProfileUiState.Loading)
+    private val _profile = NotNullMutableLiveData(ProfileUiState.FIRST_LOADING)
     val profile: NotNullLiveData<ProfileUiState> = _profile
 
     fun fetchMember(memberId: Long) {
+        _profile.value = _profile.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
-                changeToNotLoginState()
+                _isLogin.value = false
                 return@launch
             }
             launch {
                 when (val result = memberRepository.getMember(memberId)) {
-                    is ApiError, is ApiException -> changeToProfileFetchingErrorState()
-                    is ApiSuccess -> setMemberState(result.data, token.uid)
+                    is ApiError, is ApiException ->
+                        _profile.value = _profile.value.changeToFetchingErrorState()
+
+                    is ApiSuccess ->
+                        _profile.value = _profile.value.changeMemberState(result.data, token.uid)
                 }
             }
             launch {
                 when (val result = activityRepository.getActivities(memberId)) {
-                    is ApiError, is ApiException -> changeToProfileFetchingErrorState()
-                    is ApiSuccess -> setActivitiesState(result.data)
+                    is ApiError, is ApiException ->
+                        _profile.value = _profile.value.changeToFetchingErrorState()
+
+                    is ApiSuccess ->
+                        _profile.value = _profile.value.changeActivityState(result.data)
                 }
             }
         }
-    }
-
-    private fun changeToNotLoginState() {
-        _isLogin.value = false
-    }
-
-    private fun setMemberState(member: Member, loginMemberId: Long) {
-        _profile.value = _profile.value.copy(
-            isLoading = false,
-            isFetchingError = false,
-            isLoginMember = member.id == loginMemberId,
-            memberId = member.id,
-            memberName = member.name,
-            description = member.description,
-            memberImageUrl = member.imageUrl,
-        )
-    }
-
-    private fun setActivitiesState(activities: List<Activity>) {
-        _profile.value = _profile.value.copy(
-            isLoading = false,
-            isFetchingError = false,
-            fields = activities.getActivityUiStatesOf(ActivityType.FIELD),
-            educations = activities.getActivityUiStatesOf(ActivityType.EDUCATION),
-            clubs = activities.getActivityUiStatesOf(ActivityType.CLUB),
-        )
-    }
-
-    private fun List<Activity>.getActivityUiStatesOf(activityType: ActivityType): List<ActivityUiState> {
-        return this.filter { it.activityType == activityType }
-            .map { ActivityUiState.from(it) }
-    }
-
-    private fun changeToProfileFetchingErrorState() {
-        _profile.value = profile.value.copy(
-            isLoading = false,
-            isFetchingError = true,
-        )
     }
 
     companion object {

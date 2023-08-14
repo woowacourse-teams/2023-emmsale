@@ -10,8 +10,49 @@ data class ChildCommentsUiState(
     val parentComment: CommentUiState,
     val childComments: List<CommentUiState>,
 ) {
+
+    fun changeToLoadingState(): ChildCommentsUiState = copy(
+        isLoading = true,
+        isFetchingError = false,
+        isPostingError = false,
+        isDeletionError = false,
+    )
+
+    fun changeToFetchingErrorState(): ChildCommentsUiState = copy(
+        isLoading = false,
+        isFetchingError = true,
+        isPostingError = false,
+        isDeletionError = false,
+    )
+
+    fun changeToPostingErrorState(): ChildCommentsUiState = copy(
+        isLoading = false,
+        isFetchingError = false,
+        isPostingError = true,
+        isDeletionError = false,
+    )
+
+    fun changeToDeleteErrorState(): ChildCommentsUiState = copy(
+        isLoading = false,
+        isFetchingError = false,
+        isPostingError = false,
+        isDeletionError = true,
+    )
+
+    fun changeChildCommentsState(
+        comment: Comment,
+        loginMemberId: Long,
+    ): ChildCommentsUiState = copy(
+        isLoading = false,
+        isFetchingError = false,
+        isPostingError = false,
+        isDeletionError = false,
+        parentComment = CommentUiState.create(comment, loginMemberId),
+        childComments = comment.childComments.map { CommentUiState.create(it, loginMemberId) },
+    )
+
     companion object {
-        val Loading = ChildCommentsUiState(
+        val FIRST_LOADING = ChildCommentsUiState(
             isLoading = true,
             isFetchingError = false,
             isPostingError = false,
@@ -28,15 +69,6 @@ data class ChildCommentsUiState(
                 isDeleted = false,
             ),
             childComments = listOf(),
-        )
-
-        fun create(comment: Comment, loginMemberId: Long) = ChildCommentsUiState(
-            isLoading = false,
-            isFetchingError = false,
-            isPostingError = false,
-            isDeletionError = false,
-            parentComment = CommentUiState.create(comment, loginMemberId),
-            childComments = comment.childComments.map { CommentUiState.create(it, loginMemberId) },
         )
     }
 }
