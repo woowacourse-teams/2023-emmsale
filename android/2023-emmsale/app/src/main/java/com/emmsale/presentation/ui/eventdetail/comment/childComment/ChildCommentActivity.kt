@@ -51,7 +51,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun initChildCommentsRecyclerView() {
         binding.rvChildcommentsChildcomments.apply {
-            adapter = ChildCommentAdapter(::onChildCommentDelete, ::onAuthorView)
+            adapter = ChildCommentAdapter(::deleteComment, ::showProfile)
             itemAnimator = null
             addItemDecoration(
                 DividerItemDecoration(
@@ -62,7 +62,7 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun onAuthorView(authorId: Long) {
+    private fun showProfile(authorId: Long) {
         ProfileActivity.startActivity(this, authorId)
     }
 
@@ -160,7 +160,7 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun onChildCommentDelete(commentId: Long) {
+    private fun deleteComment(commentId: Long) {
         viewModel.deleteComment(commentId, parentCommentId)
     }
 
