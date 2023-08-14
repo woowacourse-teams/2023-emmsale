@@ -10,9 +10,10 @@ class TokenRepositoryImpl(
     private val preference: SharedPreferences,
 ) : TokenRepository {
 
+    private val preferenceEditor = preference.edit()
     override suspend fun saveToken(token: Token) = withContext(dispatcher) {
-        preference.edit().putLong(UID_KEY, token.uid).apply()
-        preference.edit().putString(ACCESS_TOKEN_KEY, token.accessToken).apply()
+        preferenceEditor.putLong(UID_KEY, token.uid).apply()
+        preferenceEditor.putString(ACCESS_TOKEN_KEY, token.accessToken).apply()
     }
 
     override suspend fun getToken(): Token? = withContext(dispatcher) {
@@ -21,6 +22,11 @@ class TokenRepositoryImpl(
         if (uid == DEFAULT_UID_VALUE) return@withContext null
         if (accessToken == null || accessToken == DEFAULT_TOKEN_VALUE) return@withContext null
         Token(uid, accessToken)
+    }
+    override fun getMyUid(): Long? {
+        val uid = preference.getLong(UID_KEY, DEFAULT_UID_VALUE)
+        if (uid == DEFAULT_UID_VALUE) return null
+        return uid
     }
 
     override suspend fun deleteToken() = withContext(dispatcher) {
@@ -33,7 +39,7 @@ class TokenRepositoryImpl(
     companion object {
         private const val UID_KEY = "uid_key"
         private const val ACCESS_TOKEN_KEY = "access_token_key"
-        private const val DEFAULT_UID_VALUE = -1L
+        const val DEFAULT_UID_VALUE = -1L
         private const val DEFAULT_TOKEN_VALUE = "default"
     }
 }

@@ -1,41 +1,88 @@
 package com.emmsale.data.recruitment
 
 import com.emmsale.data.common.ApiResult
+import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.recruitment.dto.CompanionRequestBody
 import com.emmsale.data.recruitment.dto.RecruitmentApiModel
-import com.emmsale.data.recruitment.dto.RecruitmentRequestBody
-import com.emmsale.data.recruitment.dto.toData
-import com.emmsale.data.uid.UidRepository
+import com.emmsale.data.recruitment.dto.RecruitmentDeletionRequestBody
+import com.emmsale.data.recruitment.dto.RecruitmentPostingRequestBody
+import com.emmsale.data.recruitment.mapper.toData
+import com.emmsale.data.token.TokenRepository
+import okhttp3.Headers
 
 class RecruitmentRepositoryImpl(
     private val recruitmentService: RecruitmentService,
-    uidRepository: UidRepository,
+    tokenRepository: TokenRepository,
 ) : RecruitmentRepository {
 
-    private val currentUid = uidRepository.getCurrentUid()
+    private val myUid =
+        tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR_MESSAGE)
 
-    override suspend fun fetchEventRecruitments(eventId: Long): ApiResult<List<Recruitment>> {
+    override suspend fun getEventRecruitments(eventId: Long): ApiResult<List<Recruitment>> {
         return handleApi(
-            execute = { recruitmentService.getRecruitment(eventId) },
+            execute = { recruitmentService.getRecruitments(eventId) },
             mapToDomain = List<RecruitmentApiModel>::toData,
         )
     }
 
-    override suspend fun saveRecruitment(eventId: Long): ApiResult<Unit> {
-        val requestBody = RecruitmentRequestBody(currentUid)
+    override suspend fun getEventRecruitment(
+        eventId: Long,
+        recruitmentId: Long,
+    ): ApiResult<Recruitment> {
         return handleApi(
-            execute = { recruitmentService.saveRecruitment(eventId, requestBody) },
-            mapToDomain = { },
+            execute = { recruitmentService.getRecruitment(eventId, recruitmentId) },
+            mapToDomain = RecruitmentApiModel::toData,
         )
     }
 
-    override suspend fun deleteRecruitment(eventId: Long): ApiResult<Unit> {
+    override suspend fun postRecruitment(eventId: Long, content: String): ApiResult<Long> {
+        val requestBody = RecruitmentPostingRequestBody(memberId = myUid, content = content)
+        val response = handleApi(
+            execute = { recruitmentService.postRecruitment(eventId, requestBody) },
+            mapToDomain = { },
+        )
+        return when (response) {
+            is ApiSuccess -> {
+                val recruitmentId = getRecruitmentIdFromHeaderLocation(response)
+                ApiSuccess(recruitmentId, Headers.headersOf())
+            }
+
+            else -> response as ApiResult<Long>
+        }
+    }
+
+    private fun getRecruitmentIdFromHeaderLocation(result: ApiSuccess<Unit>): Long {
+        val locationHeader = result.header[HEADER_LOCATION] as CharSequence
+        val regex = "/(\\d+)$".toRegex()
+        val matchResult = regex.find(locationHeader)
+        val extractedNumber = matchResult?.groups?.get(1)?.value?.toLongOrNull()
+        return extractedNumber ?: throw IllegalStateException(LOCATION_HEADER_NOT_VALID)
+    }
+
+    override suspend fun deleteRecruitment(eventId: Long, recruitmentId: Long): ApiResult<Unit> {
         return handleApi(
             execute = {
                 recruitmentService.deleteRecruitment(
                     eventId,
-                    currentUid,
+                    recruitmentId,
+                )
+            },
+            mapToDomain = {},
+        )
+    }
+
+    override suspend fun editRecruitment(
+        eventId: Long,
+        recruitmentId: Long,
+        content: String,
+    ): ApiResult<Unit> {
+        return handleApi(
+            execute = {
+                recruitmentService.editRecruitment(
+                    eventId = eventId,
+                    recruitmentId = recruitmentId,
+                    recruitmentDeletionRequestBody = RecruitmentDeletionRequestBody(content),
                 )
             },
             mapToDomain = {},
@@ -48,7 +95,7 @@ class RecruitmentRepositoryImpl(
         message: String,
     ): ApiResult<Unit> {
         val requestBody = CompanionRequestBody(
-            senderId = currentUid,
+            senderId = myUid,
             receiverId = memberId,
             eventId = eventId,
             message = message,
@@ -59,10 +106,33 @@ class RecruitmentRepositoryImpl(
         )
     }
 
-    override suspend fun checkParticipationStatus(eventId: Long): ApiResult<Boolean> {
+    override suspend fun checkIsAlreadyRequestCompanion(
+        eventId: Long,
+        senderId: Long,
+        receiverId: Long,
+    ): ApiResult<Boolean> {
         return handleApi(
-            execute = { recruitmentService.checkIsRecruitmented(eventId, currentUid) },
-            mapToDomain = { true },
+            execute = {
+                recruitmentService.checkIsAlreadyRequestCompanion(
+                    eventId = eventId,
+                    senderId = senderId,
+                    receiverId = receiverId,
+                )
+            },
+            mapToDomain = { it },
         )
+    }
+
+    override suspend fun checkIsAlreadyPostRecruitment(eventId: Long): ApiResult<Boolean> {
+        return handleApi(
+            execute = { recruitmentService.checkIsAlreadyPostRecruitment(eventId, myUid) },
+            mapToDomain = { it },
+        )
+    }
+
+    companion object {
+        private const val HEADER_LOCATION = "Location"
+        private const val NOT_LOGIN_ERROR_MESSAGE = "로그인 되지 않아서 같이가요 정보를 가져올 수 없어요"
+        private const val LOCATION_HEADER_NOT_VALID = "헤더 값이 제대로 오지 않았어요!! 서버와 명세를 맞춰보세요"
     }
 }

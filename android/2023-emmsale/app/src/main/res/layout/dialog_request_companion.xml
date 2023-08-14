@@ -5,15 +5,11 @@
 
     <data>
 
-        <variable
-            name="name"
-            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -26,7 +22,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="280dp"
-                android:layout_height="300dp"
+                android:layout_height="324dp"
                 android:backgroundTint="@color/white"
                 app:cardCornerRadius="15dp">
 
@@ -35,63 +31,51 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/tv_fragmentdialog_recruitment_title"
+                        android:id="@+id/tv_requestcompanion_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="29dp"
                         android:fontFamily="@font/nanum_square_bold"
-                        android:text="@string/recruitmentdialog_requestcomapanion"
+                        android:text="@string/requestcompanion_dialog_title"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_fragmentdialog_recruitment_description"
+                        android:id="@+id/tv_requestcompanion_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
                         android:fontFamily="@font/nanum_square_bold"
                         android:gravity="center"
-                        android:text="@{@string/recruitmentdialog_message_format(name)}"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_fragmentdialog_recruitment_title"
-                        tools:text="김커디님께 함께하기 요청을\n보내시겠습니까?" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_requestcompanion_title"
+                        tools:text="김커디님께 함께 하기 요청을\n보내시겠습니까?" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/outlinedTextField"
+                    <EditText
+                        android:autofillHints="username"
+                        android:id="@+id/et_requestcompanion_message"
+                        android:background="@drawable/bg_requestcompanion_et"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="116dp"
+                        android:inputType="textMultiLine"
                         android:layout_marginStart="17dp"
                         android:layout_marginTop="13dp"
                         android:layout_marginEnd="17dp"
-                        android:layout_marginBottom="14dp"
-                        app:boxCornerRadiusBottomEnd="15dp"
-                        app:boxCornerRadiusBottomStart="15dp"
-                        app:boxCornerRadiusTopEnd="15dp"
-                        app:boxCornerRadiusTopStart="15dp"
-                        app:boxStrokeColor="@color/light_gray"
-                        app:boxStrokeWidth="0.5dp"
-                        app:layout_constraintBottom_toTopOf="@id/materialDivider_reqeustcompanion"
+                        android:hint="@string/requestcompanion_dialog_message_hint"
+                        android:padding="12dp"
+                        android:textColorHint="@color/gray"
+                        android:gravity="start"
+                        android:fontFamily="@font/nanum_square_regular"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_fragmentdialog_recruitment_description">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edittext_fragmentdialog_recruitment_message"
-                            android:layout_width="match_parent"
-                            android:layout_height="105dp"
-                            android:fontFamily="@font/nanum_square"
-                            android:gravity="start"
-                            android:hint="요청 메세지를 작성해주세요"
-                            android:textColorHint="@color/light_gray"
-                            android:textSize="13sp" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
+                        app:layout_constraintTop_toBottomOf="@+id/tv_requestcompanion_description" />
 
                     <com.google.android.material.divider.MaterialDivider
                         android:id="@+id/materialDivider_reqeustcompanion"
@@ -112,13 +96,13 @@
                         app:layout_constraintTop_toBottomOf="@id/materialDivider_reqeustcompanion" />
 
                     <Button
-                        android:id="@+id/btn_fragmentdialog_positive"
+                        android:id="@+id/btn_requestcompanion_positive"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginStart="1dp"
                         android:backgroundTint="@color/white"
                         android:fontFamily="@font/nanum_square_bold"
-                        android:text="요청"
+                        android:text="@string/requestcompanion_dialog_positive_button_text"
                         android:textColor="@color/primary_color"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -127,13 +111,13 @@
                         app:layout_constraintTop_toTopOf="@+id/materialDivider_reqeustcompanion_vertical" />
 
                     <Button
-                        android:id="@+id/btn_fragmentdialog_negative"
+                        android:id="@+id/btn_requestcompanion_negative"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginEnd="1dp"
                         android:backgroundTint="@color/white"
                         android:fontFamily="@font/nanum_square_bold"
-                        android:text="취소"
+                        android:text="@string/requestcompanion_dialog_negative_button_text"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -141,11 +125,22 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/materialDivider_reqeustcompanion_vertical" />
 
+                    <TextView
+                        android:text="@string/requestcompanion_dialog_warning_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_requestcompanion_warning"
+                        android:fontFamily="@font/nanum_square_regular"
+                        android:textSize="11sp"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintTop_toBottomOf="@id/et_requestcompanion_message"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
             </com.google.android.material.card.MaterialCardView>
-
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

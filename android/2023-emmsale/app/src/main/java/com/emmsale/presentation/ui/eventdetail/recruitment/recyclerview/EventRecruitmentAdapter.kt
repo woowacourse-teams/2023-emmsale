@@ -1,41 +1,31 @@
 package com.emmsale.presentation.ui.eventdetail.recruitment.recyclerview
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.databinding.ItemRecruitmentBinding
-import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState
 
 class EventRecruitmentAdapter(
-    private val requestCompanion: (Long, String) -> Unit,
     private val showMemberProfile: (Long) -> Unit,
-) : ListAdapter<RecruitmentUiState, RecruitmentViewHolder>(diffUtil) {
-    private lateinit var binding: ItemRecruitmentBinding
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecruitmentViewHolder {
-        binding = ItemRecruitmentBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false,
-        )
-        return RecruitmentViewHolder(binding, requestCompanion, showMemberProfile)
-    }
+    private val navigateToDetail: (RecruitmentPostUiState) -> Unit,
+) : ListAdapter<RecruitmentPostUiState, RecruitmentViewHolder>(diffUtil) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecruitmentViewHolder =
+        RecruitmentViewHolder.create(parent, showMemberProfile, navigateToDetail)
 
     override fun onBindViewHolder(holder: RecruitmentViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<RecruitmentUiState>() {
+        val diffUtil = object : DiffUtil.ItemCallback<RecruitmentPostUiState>() {
             override fun areItemsTheSame(
-                oldItem: RecruitmentUiState,
-                newItem: RecruitmentUiState,
+                oldItem: RecruitmentPostUiState,
+                newItem: RecruitmentPostUiState,
             ): Boolean = oldItem == newItem
 
             override fun areContentsTheSame(
-                oldItem: RecruitmentUiState,
-                newItem: RecruitmentUiState,
+                oldItem: RecruitmentPostUiState,
+                newItem: RecruitmentPostUiState,
             ): Boolean = oldItem.id == newItem.id
         }
     }
