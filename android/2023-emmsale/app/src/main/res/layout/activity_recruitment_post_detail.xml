@@ -119,7 +119,7 @@
 
         <TextView
             android:visibility="@{vm.recruitmentPost.isMyPost ? View.GONE : View.VISIBLE}"
-            android:enabled="@{!vm.companionRequest.isAlreadyRequest}"
+            android:enabled="@{!vm.isAlreadyRequest}"
             android:id="@+id/btn_recruitmentdetail_request_companion"
             android:layout_width="0dp"
             android:layout_height="60dp"
@@ -128,7 +128,7 @@
             android:layout_marginHorizontal="17dp"
             android:clickable="true"
             android:gravity="center"
-            android:text="@{vm.companionRequest.isAlreadyRequest ? @string/recruitmentpostdetail_request_button_complete_text : @string/recruitmentpostdetail_request_button_text}"
+            android:text="@{vm.isAlreadyRequest ? @string/recruitmentpostdetail_request_button_complete_text : @string/recruitmentpostdetail_request_button_text}"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:fontFamily="@font/nanum_square_bold"

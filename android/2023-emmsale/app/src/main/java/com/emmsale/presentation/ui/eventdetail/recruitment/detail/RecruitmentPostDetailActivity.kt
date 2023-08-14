@@ -95,14 +95,14 @@ class RecruitmentPostDetailActivity :
     private fun setUpCompanionRequest() {
         viewModel.companionRequest.observe(this) { companionRequest ->
             when {
-                companionRequest.isRequestSuccess -> showToast(getString(R.string.recruitmentpostdetail_success_request_message))
-                companionRequest.isRequestError -> showToast(getString(R.string.recruitmentpostdetail_fail_request_message))
+                companionRequest.isSuccess -> showToast(getString(R.string.recruitmentpostdetail_success_request_message))
+                companionRequest.isError -> showToast(getString(R.string.recruitmentpostdetail_fail_request_message))
             }
         }
     }
 
     private fun setUpIsPostDeleteSuccess() {
-        viewModel.isPostDeleteSuccess.observe(this) { isPostDeleteSuccess ->
+        viewModel.isDeletePostSuccess.observe(this) { isPostDeleteSuccess ->
             if (isPostDeleteSuccess) {
                 showToast(getString(R.string.recruitmentpostdetail_deletion_success_message))
                 onBackPressedDispatcher.onBackPressed()
