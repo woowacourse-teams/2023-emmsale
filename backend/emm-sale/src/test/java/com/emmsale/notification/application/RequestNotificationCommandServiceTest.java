@@ -1,5 +1,6 @@
 package com.emmsale.notification.application;
 
+import static com.emmsale.member.exception.MemberExceptionType.NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,6 +14,8 @@ import static org.mockito.Mockito.mock;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.notification.application.dto.RequestNotificationExistedRequest;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
@@ -244,5 +247,26 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
         savedRequestNotification.getId()).get();
 
     assertTrue(readNotification.isRead());
+  }
+
+  @Test
+  @DisplayName("isAlreadyExisted() : 토큰의 주인과 로그인 한 사용자가 다르면 NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER 가 발생한다.")
+  void test_isAlreadyExisted() throws Exception {
+    //given
+    final long senderId = 1L;
+    final Member member = memberRepository.findById(senderId).get();
+    final long eventId = 3L;
+    final long receiverId = 2L;
+    final RequestNotificationExistedRequest request =
+        new RequestNotificationExistedRequest(
+            receiverId,
+            4L,
+            eventId
+        );
+
+    //when & then
+    assertThatThrownBy(() -> requestNotificationCommandService.isAlreadyExisted(member, request))
+        .isInstanceOf(MemberException.class)
+        .hasMessage(NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER.errorMessage());
   }
 }

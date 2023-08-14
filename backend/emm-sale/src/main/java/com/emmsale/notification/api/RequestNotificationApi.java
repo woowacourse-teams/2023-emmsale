@@ -3,6 +3,7 @@ package com.emmsale.notification.api;
 import com.emmsale.member.domain.Member;
 import com.emmsale.notification.application.RequestNotificationCommandService;
 import com.emmsale.notification.application.RequestNotificationQueryService;
+import com.emmsale.notification.application.dto.RequestNotificationExistedRequest;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
@@ -70,5 +71,13 @@ public class RequestNotificationApi {
       @PathVariable("request-notification-id") final Long notificationId
   ) {
     requestNotificationCommandService.delete(member, notificationId);
+  }
+
+  @GetMapping("/request-notifications/existed")
+  public boolean isAlreadyExisted(
+      final Member member,
+      final RequestNotificationExistedRequest existedRequest
+  ) {
+    return requestNotificationCommandService.isAlreadyExisted(member, existedRequest);
   }
 }

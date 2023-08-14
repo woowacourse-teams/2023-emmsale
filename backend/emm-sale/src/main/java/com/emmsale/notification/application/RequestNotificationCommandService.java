@@ -1,5 +1,6 @@
 package com.emmsale.notification.application;
 
+import static com.emmsale.member.exception.MemberExceptionType.NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER;
 import static com.emmsale.notification.exception.NotificationExceptionType.ALREADY_EXIST_NOTIFICATION;
 import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
@@ -7,6 +8,8 @@ import static com.emmsale.notification.exception.NotificationExceptionType.NOT_O
 
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.notification.application.dto.RequestNotificationExistedRequest;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
@@ -118,5 +121,25 @@ public class RequestNotificationCommandService {
     validateNotificationOwner(notification, member);
 
     notification.read();
+  }
+
+  public boolean isAlreadyExisted(
+      final Member member,
+      final RequestNotificationExistedRequest existedRequest
+  ) {
+    final Long senderId = existedRequest.getSenderId();
+    validateSameSender(member, senderId);
+
+    return requestNotificationRepository.existsBySenderIdAndReceiverIdAndEventId(
+        senderId,
+        existedRequest.getReceiverId(),
+        existedRequest.getEventId()
+    );
+  }
+
+  private void validateSameSender(final Member member, final Long senderId) {
+    if (member.isNotMe(senderId)) {
+      throw new MemberException(NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER);
+    }
   }
 }

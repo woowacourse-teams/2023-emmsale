@@ -380,7 +380,7 @@ include::{snippets}/modify-request-notification/http-request.adoc[]
 
 include::{snippets}/modify-request-notification/path-parameters.adoc[]
 
-=== 'PATCH' : 함께 가기 알림 읽음 상태 변경
+=== `PATCH` : 함께 가기 알림 읽음 상태 변경
 
 .HTTP request
 include::{snippets}/read-request-notification/http-request.adoc[]
@@ -418,6 +418,15 @@ include::{snippets}/find-all-request-notification/response-fields.adoc[]
 .HTTP response
 include::{snippets}/find-all-request-notification/http-response.adoc[]
 
+=== `GET` : 사용자가 특정 행사에서 다른 사용자에게 함께 가기 알림을 보냈는지 확인
+
+.HTTP request
+include::{snippets}/already-existed-request-notification/http-request.adoc[]
+include::{snippets}/already-existed-request-notification/request-parameters.adoc[]
+
+.HTTP response 설명
+include::{snippets}/already-existed-request-notification/http-response.adoc[]
+
 == Update Notification(댓글 & 행사 알림)
 
 === `GET` : 댓글 & 행사 알림들 조회
@@ -430,7 +439,7 @@ include::{snippets}/get-update-notifications/http-request.adoc[]
 .HTTP response
 include::{snippets}/get-update-notifications/http-response.adoc[]
 
-=== 'PUT' : 댓글 & 행사 알림 읽음 상태 변경
+=== `PUT` : 댓글 & 행사 알림 읽음 상태 변경
 
 .HTTP request 설명
 include::{snippets}/put-update-notifications-read/path-parameters.adoc[]

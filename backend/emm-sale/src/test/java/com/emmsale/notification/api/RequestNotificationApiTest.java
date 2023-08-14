@@ -14,6 +14,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +35,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 
 @WebMvcTest(RequestNotificationApi.class)
 class RequestNotificationApiTest extends MockMvcTestHelper {
@@ -262,5 +264,31 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
         .andExpect(status().isNoContent())
         .andDo(print())
         .andDo(document("read-request-notification", pathParameters));
+  }
+
+  @Test
+  @DisplayName("isAlreadyExisted() : 현재 사용자가 행사에서 같이 가기 요청을 이미 보냈는지 제대로 확인할 수 있다면 200 OK 를 반환할 수 있다.")
+  void test_isAlreadyExisted() throws Exception {
+    //given
+    final String accessToken = "Bearer access_token";
+
+    final RequestParametersSnippet requestParam = requestParameters(
+        parameterWithName("receiver-id").description("알림 받을 사람 id"),
+        parameterWithName("sender-id").description("알림 보낸 사람 id"),
+        parameterWithName("event-id").description("행사 id")
+    );
+
+    when(requestNotificationCommandService.isAlreadyExisted(any(), any()))
+        .thenReturn(true);
+
+    //when & then
+    mockMvc.perform(get("/request-notifications/existed")
+            .queryParam("receiver-id", "1")
+            .queryParam("sender-id", "2")
+            .queryParam("event-id", "3")
+            .header("Authorization", accessToken))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("already-existed-request-notification", requestParam));
   }
 }
