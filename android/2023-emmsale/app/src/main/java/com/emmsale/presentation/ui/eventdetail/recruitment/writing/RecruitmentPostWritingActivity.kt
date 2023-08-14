@@ -9,6 +9,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostWritingBinding
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.RecruitmentPostDetailActivity
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostWritingUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.WritingModeUiState.EDIT
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.WritingModeUiState.POST
 
@@ -21,6 +22,9 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
     }
     private val recruitmentIdToEdit: Long? by lazy {
         receiveRecruitmentId()
+    }
+    private val recruitmentContentToEdit: String by lazy {
+        intent.getStringExtra(RECRUITMENT_CONTENT_KEY) ?: DEFAULT_CONTENT
     }
     private val viewModel: RecruitmentPostWritingViewModel by viewModels {
         RecruitmentPostWritingViewModel.factory(eventId, recruitmentIdToEdit)
@@ -42,32 +46,41 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
 
     private fun setUpRecruitmentWriting() {
         viewModel.recruitmentWriting.observe(this) { recruitmentWriting ->
-            when {
-                recruitmentWriting.isPostingSuccess -> {
-                    showPostingSuccessMessage()
-                    navigateToPostedPage()
-                    setResult(RESULT_OK)
-                    finish()
-                }
+            onWritingResultStateChange(recruitmentWriting)
+            onWritingModeStateChange(recruitmentWriting)
+        }
+    }
 
-                recruitmentWriting.isEditingSuccess -> {
-                    showEditingSuccessMessage()
-                    setResult(RESULT_OK)
-                    finish()
-                }
-
-                recruitmentWriting.isError -> showPostingErrorMessage()
+    private fun onWritingResultStateChange(recruitmentWriting: RecruitmentPostWritingUiState) {
+        when {
+            recruitmentWriting.isPostingSuccess -> {
+                showPostingSuccessMessage()
+                navigateToPostedPage()
+                setResult(RESULT_OK)
+                finish()
             }
-            when (recruitmentWriting.writingMode) {
-                POST -> {
-                    binding.tvRecruitmentwritingComplete.text =
-                        getString(R.string.recruitmentpostwriting_register_button_text)
-                }
 
-                EDIT -> {
-                    binding.tvRecruitmentwritingComplete.text =
-                        getString(R.string.recruitmentpostwriting_edit_button_text)
-                }
+            recruitmentWriting.isEditingSuccess -> {
+                showEditingSuccessMessage()
+                setResult(RESULT_OK)
+                finish()
+            }
+
+            recruitmentWriting.isError -> showPostingErrorMessage()
+        }
+    }
+
+    private fun onWritingModeStateChange(recruitmentWriting: RecruitmentPostWritingUiState) {
+        when (recruitmentWriting.writingMode) {
+            POST -> {
+                binding.tvRecruitmentwritingComplete.text =
+                    getString(R.string.recruitmentpostwriting_register_button_text)
+            }
+
+            EDIT -> {
+                binding.tvRecruitmentwritingComplete.text =
+                    getString(R.string.recruitmentpostwriting_edit_button_text)
+                binding.etRecruitmentwriting.setText(recruitmentContentToEdit)
             }
         }
     }
@@ -120,6 +133,8 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
     companion object {
         private const val EVENT_ID_KEY = "EVENT_ID_KEY"
         private const val RECRUITMENT_ID_KEY = "RECRUITMENT_ID_KEY"
+        private const val RECRUITMENT_CONTENT_KEY = "RECRUITMENT_CONTENT_KEY"
+        private const val DEFAULT_CONTENT = ""
         private const val DEFAULT_ID = -1L
 
         fun getPostModeIntent(context: Context, eventId: Long): Intent {
@@ -128,10 +143,16 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
             return intent
         }
 
-        fun getEditModeIntent(context: Context, eventId: Long, recruitmentId: Long): Intent {
+        fun getEditModeIntent(
+            context: Context,
+            eventId: Long,
+            recruitmentId: Long,
+            recruitmentContent: String,
+        ): Intent {
             val intent = Intent(context, RecruitmentPostWritingActivity::class.java)
             intent.putExtra(EVENT_ID_KEY, eventId)
             intent.putExtra(RECRUITMENT_ID_KEY, recruitmentId)
+            intent.putExtra(RECRUITMENT_CONTENT_KEY, recruitmentContent)
             return intent
         }
     }

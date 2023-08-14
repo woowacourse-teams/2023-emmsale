@@ -79,6 +79,7 @@ class RecruitmentPostDetailActivity :
 
     private fun initBinding() {
         setContentView(binding.root)
+        binding.lifecycleOwner = this
         binding.vm = viewModel
     }
 
@@ -118,7 +119,7 @@ class RecruitmentPostDetailActivity :
 
     private fun initOptionButtonClick() {
         binding.ivRecruitmentdetailOption.setOnClickListener {
-            if (viewModel.isMyPost) {
+            if (viewModel.recruitmentPost.value.isMyPost) {
                 postEditorDialog.show()
             } else {
                 postReportDialog.show()
@@ -158,6 +159,7 @@ class RecruitmentPostDetailActivity :
             this,
             eventId,
             recruitmentId,
+            viewModel.recruitmentPost.value.content,
         )
         postingResultActivityLauncher.launch(intent)
     }

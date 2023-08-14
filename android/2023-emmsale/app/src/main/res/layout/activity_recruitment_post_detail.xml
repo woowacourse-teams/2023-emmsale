@@ -8,10 +8,6 @@
         <import type="android.view.View" />
 
         <variable
-            name="recruitment"
-            type="com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState" />
-
-        <variable
             name="vm"
             type="com.emmsale.presentation.ui.eventdetail.recruitment.detail.RecruitmentPostDetailViewModel" />
     </data>
@@ -78,7 +74,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <TextView
-            android:text="@{recruitment.name}"
+            android:text="@{vm.recruitmentPost.name}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nanum_square_bold"
@@ -92,7 +88,7 @@
             android:layout_marginStart="9dp" />
 
         <TextView
-            android:text="@{@string/recruitmentpostdetail_update_date_format(recruitment.updatedAt)}"
+            android:text="@{@string/recruitmentpostdetail_update_date_format(vm.recruitmentPost.updatedAt)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_recruitmentdetail_date"
@@ -106,7 +102,7 @@
             android:layout_marginStart="9dp" />
 
         <TextView
-            android:text="@{recruitment.content}"
+            android:text="@{vm.recruitmentPost.content}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -122,7 +118,7 @@
             app:layout_constraintStart_toStartOf="@+id/iv_recruitmentdetail_profile_image" />
 
         <TextView
-            android:visibility="@{vm.isMyPost ? View.GONE : View.VISIBLE}"
+            android:visibility="@{vm.recruitmentPost.isMyPost ? View.GONE : View.VISIBLE}"
             android:enabled="@{!vm.companionRequest.isAlreadyRequest}"
             android:id="@+id/btn_recruitmentdetail_request_companion"
             android:layout_width="0dp"
@@ -141,7 +137,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            app:imageUrl="@{recruitment.profileImageUrl}"
+            app:imageUrl="@{vm.recruitmentPost.profileImageUrl}"
             app:isCircle="@{true}"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -153,7 +149,16 @@
             android:layout_marginTop="14dp" />
 
         <ProgressBar
-            android:visibility="@{(vm.recruitmentPost.loading||vm.companionRequest.isLoading)? View.VISIBLE:View.GONE}"
+            android:visibility="@{vm.recruitmentPost.loading? View.VISIBLE:View.GONE}"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:visibility="@{vm.companionRequest.isLoading? View.VISIBLE:View.GONE}"
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:layout_constraintStart_toStartOf="parent"

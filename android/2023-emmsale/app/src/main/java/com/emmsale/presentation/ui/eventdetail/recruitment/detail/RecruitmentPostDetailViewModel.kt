@@ -34,10 +34,6 @@ class RecruitmentPostDetailViewModel(
 
     private val _isPostDeleteSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val isPostDeleteSuccess: LiveData<Boolean> = _isPostDeleteSuccess
-
-    val isMyPost: Boolean
-        get() = (recruitmentPost.value.memberId == tokenRepository.getMyUid())
-
     init {
         fetchRecruitmentPost()
     }
@@ -47,7 +43,11 @@ class RecruitmentPostDetailViewModel(
         viewModelScope.launch {
             val response = recruitmentRepository.getEventRecruitment(eventId, recruitmentId)
             when (response) {
-                is ApiSuccess -> changeRecruitmentPostToSuccessState(response.data)
+                is ApiSuccess -> {
+                    changeRecruitmentPostToSuccessState(response.data)
+                    updateRecruitmentPostIsMyPostState()
+                }
+
                 is ApiError, is ApiException -> changeRecruitmentPostToErrorState()
             }
         }
@@ -77,23 +77,34 @@ class RecruitmentPostDetailViewModel(
         }
     }
 
-    private fun changeRecruitmentPostToLoadingState() =
-        _recruitmentPost.postValue(_recruitmentPost.value.changeToLoadingState())
+    private fun updateRecruitmentPostIsMyPostState() {
+        val isMyPost = (recruitmentPost.value.memberId == tokenRepository.getMyUid())
+        _recruitmentPost.value = (_recruitmentPost.value.copy(isMyPost = isMyPost))
+    }
 
-    private fun changeRecruitmentPostToSuccessState(recruitment: Recruitment) =
-        _recruitmentPost.postValue(RecruitmentPostUiState.from(recruitment))
+    private fun changeRecruitmentPostToLoadingState() {
+        _recruitmentPost.value = (_recruitmentPost.value.changeToLoadingState())
+    }
 
-    private fun changeRecruitmentPostToErrorState() =
-        _recruitmentPost.postValue(_recruitmentPost.value.changeToErrorState())
+    private fun changeRecruitmentPostToSuccessState(recruitment: Recruitment) {
+        _recruitmentPost.value = (RecruitmentPostUiState.from(recruitment))
+    }
 
-    private fun changeRequestCompanionToLoadingState(): Unit =
-        _companionRequest.postValue(_companionRequest.value.changeToLoadingState())
+    private fun changeRecruitmentPostToErrorState() {
+        _recruitmentPost.value = _recruitmentPost.value.changeToErrorState()
+    }
 
-    private fun changeRequestCompanionToSuccessState(): Unit =
-        _companionRequest.postValue(_companionRequest.value.changeToSuccessState())
+    private fun changeRequestCompanionToLoadingState() {
+        _companionRequest.value = _companionRequest.value.changeToLoadingState()
+    }
 
-    private fun changeRequestCompanionToErrorState(): Unit =
-        _companionRequest.postValue(_companionRequest.value.changeToErrorState())
+    private fun changeRequestCompanionToSuccessState() {
+        _companionRequest.value = _companionRequest.value.changeToSuccessState()
+    }
+
+    private fun changeRequestCompanionToErrorState() {
+        _companionRequest.value = _companionRequest.value.changeToErrorState()
+    }
 
     companion object {
         fun factory(

@@ -10,7 +10,6 @@ import com.emmsale.data.recruitment.dto.RecruitmentPostingRequestBody
 import com.emmsale.data.recruitment.mapper.toData
 import com.emmsale.data.token.TokenRepository
 import okhttp3.Headers
-import java.time.LocalDate
 
 class RecruitmentRepositoryImpl(
     private val recruitmentService: RecruitmentService,
@@ -31,20 +30,9 @@ class RecruitmentRepositoryImpl(
         eventId: Long,
         recruitmentId: Long,
     ): ApiResult<Recruitment> {
-        // return handleApi(
-        //     execute = { recruitmentService.getRecruitment(eventId, recruitmentId) },
-        //     mapToDomain = RecruitmentApiModel::toData,
-        // )
-        return ApiSuccess(
-            data = Recruitment(
-                id = 1L,
-                memberId = myUid,
-                name = "Jaime Duffy",
-                imageUrl = "https://duckduckgo.com/?q=mi",
-                content = null,
-                updatedDate = LocalDate.now(),
-            ),
-            header = Headers.headersOf("Authorization", "Bearer YourAccessToken"),
+        return handleApi(
+            execute = { recruitmentService.getRecruitment(eventId, recruitmentId) },
+            mapToDomain = RecruitmentApiModel::toData,
         )
     }
 

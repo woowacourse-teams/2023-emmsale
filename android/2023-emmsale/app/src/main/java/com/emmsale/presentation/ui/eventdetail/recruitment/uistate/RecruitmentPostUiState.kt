@@ -9,6 +9,7 @@ data class RecruitmentPostUiState(
     val profileImageUrl: String = "",
     val content: String = "",
     val updatedAt: String = "",
+    val isMyPost: Boolean = false,
     val isLoading: Boolean = false,
     val isError: Boolean = false,
 ) {
@@ -31,6 +32,9 @@ data class RecruitmentPostUiState(
             profileImageUrl = recruitment.imageUrl,
             content = recruitment.content ?: "",
             updatedAt = recruitment.updatedDate.toString(),
+            isMyPost = false,
+            isLoading = false,
+            isError = false,
         )
     }
 }
