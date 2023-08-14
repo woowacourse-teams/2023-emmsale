@@ -68,6 +68,7 @@ class RecruitmentPostDetailViewModel(
             when (response) {
                 is ApiSuccess -> {
                     changeRequestCompanionToSuccessState()
+                    setRequestCompanionIsAlreadyState(true)
                 }
 
                 is ApiError, is ApiException -> changeRequestCompanionToErrorState()
