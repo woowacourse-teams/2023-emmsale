@@ -453,3 +453,15 @@ include::{snippets}/register-block/http-request.adoc[]
 .HTTP response
 include::{snippets}/register-block/http-response.adoc[]
 
+== TAG
+
+=== 'GET' : 존재하는 모든 태그 조회
+
+.HTTP request
+include::{snippets}/find-tags/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-tags/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-tags/response-fields.adoc[]
