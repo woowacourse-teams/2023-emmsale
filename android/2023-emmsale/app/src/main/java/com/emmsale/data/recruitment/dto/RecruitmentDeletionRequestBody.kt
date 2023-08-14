@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RecruitmentRequestBody(
-    @SerialName("memberId")
-    val memberId: Long,
+data class RecruitmentDeletionRequestBody(
+    @SerialName("content")
+    val content: String,
 )

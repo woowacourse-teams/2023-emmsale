@@ -7,7 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.CommentFragment
 import com.emmsale.presentation.ui.eventdetail.information.EventInfoFragment
 
-class EventDetailFragmentStateAdpater(
+class EventDetailFragmentStateAdapter(
     fragmentActivity: FragmentActivity,
     private val eventId: Long,
     private val informationUrl: String,
@@ -21,11 +21,12 @@ class EventDetailFragmentStateAdpater(
             INFORMATION_TAB -> EventInfoFragment.create(informationUrl, imageUrl)
             COMMENT_TAB -> CommentFragment.create(eventId)
             RECRUITMENT_TAB -> EventRecruitmentFragment.create(eventId)
-            else -> throw IllegalArgumentException("알수없는 ViewPager 오류입니다.")
+            else -> throw IllegalArgumentException(VIEWPAGER_ERROR_MESSAGE)
         }
     }
 
     companion object {
+        private const val VIEWPAGER_ERROR_MESSAGE = "알수없는 ViewPager 오류입니다."
         private const val INFORMATION_TAB = 0
         private const val COMMENT_TAB = 1
         private const val RECRUITMENT_TAB = 2

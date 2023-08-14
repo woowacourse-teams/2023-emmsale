@@ -24,8 +24,6 @@ import com.emmsale.data.recruitment.RecruitmentRepository
 import com.emmsale.data.recruitment.RecruitmentRepositoryImpl
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.data.token.TokenRepositoryImpl
-import com.emmsale.data.uid.UidRepository
-import com.emmsale.data.uid.UidRepositoryImpl
 
 class RepositoryContainer(
     serviceContainer: ServiceContainer,
@@ -61,12 +59,9 @@ class RepositoryContainer(
     val eventDetailRepository: EventDetailRepository by lazy {
         EventDetailRepositoryImpl(eventDetailService = serviceContainer.eventDetailService)
     }
-    val uidRepository: UidRepository by lazy {
-        UidRepositoryImpl(preferenceContainer.preference)
-    }
     val recruitmentRepository: RecruitmentRepository by lazy {
         RecruitmentRepositoryImpl(
-            uidRepository = uidRepository,
+            tokenRepository = tokenRepository,
             recruitmentService = serviceContainer.recruitmentService,
         )
     }

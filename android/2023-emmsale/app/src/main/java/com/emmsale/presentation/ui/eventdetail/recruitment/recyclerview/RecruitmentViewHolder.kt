@@ -4,33 +4,26 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.ItemRecruitmentBinding
-import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState
 
 class RecruitmentViewHolder(
     private val binding: ItemRecruitmentBinding,
-    private val requestCompanion: (Long, String) -> Unit,
     private val showMemberProfile: (Long) -> Unit,
+    private val navigateToDetail: (RecruitmentPostUiState) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.buttonRequestCompanion.setOnClickListener {
-            requestCompanion(
-                binding.recruitment!!.memberId,
-                binding.recruitment!!.name,
-            )
-        }
-        binding.ivRecruitmentImage.setOnClickListener { showMemberProfile(binding.recruitment!!.memberId) }
+        itemView.setOnClickListener { navigateToDetail(binding.recruitment!!) }
     }
-
-    fun bind(recruitment: RecruitmentUiState) {
+    fun bind(recruitment: RecruitmentPostUiState) {
         binding.recruitment = recruitment
     }
 
     companion object {
         fun create(
             parent: ViewGroup,
-            requestCompanion: (Long, String) -> Unit,
             showMemberProfile: (Long) -> Unit,
+            navigateToDetail: (RecruitmentPostUiState) -> Unit,
         ): RecruitmentViewHolder {
             val binding = ItemRecruitmentBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -38,7 +31,7 @@ class RecruitmentViewHolder(
                 false,
             )
 
-            return RecruitmentViewHolder(binding, requestCompanion, showMemberProfile)
+            return RecruitmentViewHolder(binding, showMemberProfile, navigateToDetail)
         }
     }
 }

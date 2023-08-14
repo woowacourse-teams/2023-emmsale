@@ -90,7 +90,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="21dp"
             android:layout_marginTop="13dp"
-            android:drawableLeft="@drawable/ic_eventdetail_place"
             android:drawablePadding="12dp"
             android:fontFamily="@font/nanum_square_regular"
             android:text="@{vm.eventDetail.location}"
@@ -98,7 +97,8 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_eventdate"
-            tools:text="삼성동 코엑스 몰 2층 101" />
+            tools:text="삼성동 코엑스 몰 2층 101"
+            app:drawableLeftCompat="@drawable/ic_eventdetail_place" />
 
         <TextView
             android:id="@+id/tv_eventdetail_eventdate"
@@ -106,7 +106,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="21dp"
             android:layout_marginTop="17dp"
-            android:drawableLeft="@drawable/ic_eventdetail_date"
             android:drawablePadding="12dp"
             android:fontFamily="@font/nanum_square_regular"
             android:text="@{@string/eventdetail_date_format(vm.eventDetail.startDate,vm.eventDetail.endDate)}"
@@ -114,10 +113,12 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line_eventdetail_top"
-            tools:text="2023.8.15 12:00 " />
+            tools:text="2023.8.15 12:00 "
+            app:drawableLeftCompat="@drawable/ic_eventdetail_date" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tablayout_eventdetail"
+            android:contentDescription="@string/eventdetail_tablayout_content_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

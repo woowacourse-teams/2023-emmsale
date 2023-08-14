@@ -132,11 +132,6 @@
 
     <string name="eventinformation_navigate_website">웹사이트로 이동</string>
 
-    <string name="recruitmentdialog_requestcomapanion">함께 하기 요청</string>
-    <string name="recruitmentdialog_message_format">%s께 함께하기 요청을\n보내시겠습니까?</string>
-
-    <string name="recruitment_request_companion">같이 가요</string>
-
     <string name="notificationbox_title">알림 보관함</string>
     <string name="notificationbox_delete_noti">알림 삭제</string>
     <string name="notificationbox_primary">알림</string>
@@ -164,6 +159,37 @@
     <string name="eventdetail_tab_infromation">상세 정보</string>
     <string name="eventdetail_tab_comment">댓글</string>
     <string name="eventdetail_tab_recruitment">같이가요</string>
+    <string name="eventdetail_tablayout_content_description">상세정보 보기 탭</string>
+
+    <string name="eventrecruitment_fetch_recruitments_error_message">글을 불러올 수 없습니다. 관리자에게 문의하세요.</string>
+    <string name="eventrecruitment_has_not_permission_writing">모집글은 한번만 작성이 가능합니다!!</string>
+
+    <string name="recruitmentpostwriting_no_content_error_message">내용이 없으면 모집글을 올릴 수 없어요</string>
+    <string name="recruitmentpostwriting_register_success_message">글을 등록하였습니다</string>
+    <string name="recruitmentpostwriting_register_error_message">등록에 실패하였습니다! 인터넷을 확인하시고, 관리자에게 문의해주세요</string>
+    <string name="recruitmentpostwriting_appbar_title_text">글쓰기</string>
+    <string name="recruitmentpostwriting_register_button_text">등록</string>
+    <string name="recruitmentpostwriting_hint_message">모집글을 작성해주세요.</string>
+    <string name="recruitmentpostwriting_edit_success_message">수정에 성공하였습니다</string>
+    <string name="recruitmentpostwriting_edit_button_text">수정</string>
+
+    <string name="requestcompanion_dialog_message_hint">요청 메세지를 작성해주세요.</string>
+    <string name="requestcompanion_dialog_positive_button_text">요청</string>
+    <string name="requestcompanion_dialog_negative_button_text">취소</string>
+    <string name="requestcompanion_dialog_warning_message">요청을 보내면 취소할 수 없습니다.</string>
+    <string name="requestcompanion_dialog_title">함께 하기 요청</string>
+    <string name="requestcompanion_dialog_message_format">%s님께 함께하기 요청을\n보내시겠습니까?</string>
+
+    <string name="recruitmentpostdetail_request_button_text">함께하기 요청</string>
+    <string name="recruitmentpostdetail_request_button_complete_text">요청 완료</string>
+    <string name="recruitmentpostdetail_success_request_message">요청에 성공했어요</string>
+    <string name="recruitmentpostdetail_fail_request_message">요청에 실패했어요</string>
+    <string name="recruitmentpostdetail_update_date_format">%s 수정됨</string>
+    <string name="recruitmentpostdetail_deletion_success_message">글을 삭제했어요!</string>
+    <string name="recruitmentpostdetail_deletion_fail_message">삭제에 실패했어요. 네트워크 연결 확인 후 관리자에 문의해주세요</string>
+    <string name="recruitmentpostdetail_dialog_editing_text">수정</string>
+    <string name="recruitmentpostdetail_dialog_deletion_text">삭제</string>
+    <string name="recruitmentpostdetail_dialog_report_text">신고하기</string>
 
     <string name="setting_member_image_description">회원의 사진</string>
     <string name="setting_notification_setting_button_label">알림 설정</string>
