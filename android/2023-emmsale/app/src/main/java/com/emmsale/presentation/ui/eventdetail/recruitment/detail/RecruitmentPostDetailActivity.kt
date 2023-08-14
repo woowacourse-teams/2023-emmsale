@@ -94,8 +94,8 @@ class RecruitmentPostDetailActivity :
     private fun setUpCompanionRequest() {
         viewModel.companionRequest.observe(this) { companionRequest ->
             when {
-                companionRequest.isSuccess -> showToast(getString(R.string.recruitmentpostdetail_success_request_message))
-                companionRequest.isError -> showToast(getString(R.string.recruitmentpostdetail_fail_request_message))
+                companionRequest.isRequestSuccess -> showToast(getString(R.string.recruitmentpostdetail_success_request_message))
+                companionRequest.isRequestError -> showToast(getString(R.string.recruitmentpostdetail_fail_request_message))
             }
         }
     }

@@ -22,7 +22,7 @@ class RecruitmentPostDetailViewModel(
     private val eventId: Long,
     private val recruitmentId: Long,
     private val recruitmentRepository: RecruitmentRepository,
-    private val tokenRepository: TokenRepository,
+    tokenRepository: TokenRepository,
 ) : ViewModel() {
     private val _recruitmentPost: NotNullMutableLiveData<RecruitmentPostUiState> =
         NotNullMutableLiveData(RecruitmentPostUiState())
@@ -34,6 +34,9 @@ class RecruitmentPostDetailViewModel(
 
     private val _isPostDeleteSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val isPostDeleteSuccess: LiveData<Boolean> = _isPostDeleteSuccess
+
+    private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
+
     init {
         fetchRecruitmentPost()
     }
@@ -46,6 +49,7 @@ class RecruitmentPostDetailViewModel(
                 is ApiSuccess -> {
                     changeRecruitmentPostToSuccessState(response.data)
                     updateRecruitmentPostIsMyPostState()
+                    checkIsAlreadyRequestCompanion()
                 }
 
                 is ApiError, is ApiException -> changeRecruitmentPostToErrorState()
@@ -62,7 +66,10 @@ class RecruitmentPostDetailViewModel(
                 message = message,
             )
             when (response) {
-                is ApiSuccess -> changeRequestCompanionToSuccessState()
+                is ApiSuccess -> {
+                    changeRequestCompanionToSuccessState()
+                }
+
                 is ApiError, is ApiException -> changeRequestCompanionToErrorState()
             }
         }
@@ -77,8 +84,22 @@ class RecruitmentPostDetailViewModel(
         }
     }
 
+    private fun checkIsAlreadyRequestCompanion() {
+        viewModelScope.launch {
+            val response = recruitmentRepository.checkIsAlreadyRequestCompanion(
+                eventId = eventId,
+                senderId = myUid,
+                receiverId = recruitmentPost.value.memberId,
+            )
+            when (response) {
+                is ApiSuccess -> setRequestCompanionIsAlreadyState(response.data)
+                is ApiError, is ApiException -> {}
+            }
+        }
+    }
+
     private fun updateRecruitmentPostIsMyPostState() {
-        val isMyPost = (recruitmentPost.value.memberId == tokenRepository.getMyUid())
+        val isMyPost = (recruitmentPost.value.memberId == myUid)
         _recruitmentPost.value = (_recruitmentPost.value.copy(isMyPost = isMyPost))
     }
 
@@ -106,7 +127,12 @@ class RecruitmentPostDetailViewModel(
         _companionRequest.value = _companionRequest.value.changeToErrorState()
     }
 
+    private fun setRequestCompanionIsAlreadyState(state: Boolean) {
+        _companionRequest.value = _companionRequest.value.setIsAlreadyRequestState(state)
+    }
+
     companion object {
+        private const val NOT_LOGIN_ERROR = "로그인되지 않은 사용자는 이용할 수 없어요!!"
         fun factory(
             eventId: Long,
             recruitmentId: Long,

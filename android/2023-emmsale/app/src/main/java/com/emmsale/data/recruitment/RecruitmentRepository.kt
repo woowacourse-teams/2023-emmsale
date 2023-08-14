@@ -35,5 +35,11 @@ interface RecruitmentRepository {
         message: String,
     ): ApiResult<Unit>
 
-    suspend fun isAlreadyPostRecruitment(eventId: Long): ApiResult<Boolean>
+    suspend fun checkIsAlreadyRequestCompanion(
+        eventId: Long,
+        senderId: Long,
+        receiverId: Long,
+    ): ApiResult<Boolean>
+
+    suspend fun checkIsAlreadyPostRecruitment(eventId: Long): ApiResult<Boolean>
 }

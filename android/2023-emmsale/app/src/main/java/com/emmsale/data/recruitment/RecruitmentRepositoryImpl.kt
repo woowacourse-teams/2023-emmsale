@@ -106,12 +106,30 @@ class RecruitmentRepositoryImpl(
         )
     }
 
-    override suspend fun isAlreadyPostRecruitment(eventId: Long): ApiResult<Boolean> {
+    override suspend fun checkIsAlreadyRequestCompanion(
+        eventId: Long,
+        senderId: Long,
+        receiverId: Long,
+    ): ApiResult<Boolean> {
         return handleApi(
-            execute = { recruitmentService.isAlreadyPostRecruitment(eventId, myUid) },
+            execute = {
+                recruitmentService.checkIsAlreadyRequestCompanion(
+                    eventId = eventId,
+                    senderId = senderId,
+                    receiverId = receiverId,
+                )
+            },
             mapToDomain = { it },
         )
     }
+
+    override suspend fun checkIsAlreadyPostRecruitment(eventId: Long): ApiResult<Boolean> {
+        return handleApi(
+            execute = { recruitmentService.checkIsAlreadyPostRecruitment(eventId, myUid) },
+            mapToDomain = { it },
+        )
+    }
+
     companion object {
         private const val HEADER_LOCATION = "Location"
         private const val NOT_LOGIN_ERROR_MESSAGE = "로그인 되지 않아서 같이가요 정보를 가져올 수 없어요"

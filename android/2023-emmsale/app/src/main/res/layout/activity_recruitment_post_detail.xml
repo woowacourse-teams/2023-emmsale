@@ -128,7 +128,7 @@
             android:layout_marginHorizontal="17dp"
             android:clickable="true"
             android:gravity="center"
-            android:text="@string/recruitmentpostdetail_request_button_text"
+            android:text="@{vm.companionRequest.isAlreadyRequest ? @string/recruitmentpostdetail_request_button_complete_text : @string/recruitmentpostdetail_request_button_text}"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:fontFamily="@font/nanum_square_bold"

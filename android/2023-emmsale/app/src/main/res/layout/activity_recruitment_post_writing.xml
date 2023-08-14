@@ -80,7 +80,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:inputType="textMultiLine"
-            android:hint="@string/recruitmetpostwriting_hint_message"
+            android:hint="@string/recruitmentpostwriting_hint_message"
             android:textColorHint="@color/gray"
             android:textAppearance="@style/KerdyTextStyleBlackRegular13"
             android:background="@null"

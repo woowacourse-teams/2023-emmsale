@@ -46,13 +46,20 @@ interface RecruitmentService {
     ): Response<Unit>
 
     @GET("events/{eventId}/recruitment-posts/already-recruitment")
-    suspend fun isAlreadyPostRecruitment(
+    suspend fun checkIsAlreadyPostRecruitment(
         @Path("eventId") eventId: Long,
         @Query("member-id") memberId: Long,
     ): Response<Boolean>
 
-    @POST("notifications")
+    @POST("request-notifications")
     suspend fun postCompanion(
         @Body companionRequestBody: CompanionRequestBody,
     ): Response<Unit>
+
+    @GET("request-notifications/existed")
+    suspend fun checkIsAlreadyRequestCompanion(
+        @Query("receiverId") receiverId: Long,
+        @Query("eventId") eventId: Long,
+        @Query("senderId") senderId: Long,
+    ): Response<Boolean>
 }

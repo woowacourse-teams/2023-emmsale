@@ -2,26 +2,26 @@ package com.emmsale.presentation.ui.eventdetail.recruitment.uistate
 
 data class CompanionRequestUiState(
     val isLoading: Boolean = false,
-    val isError: Boolean = false,
-    val isSuccess: Boolean = false,
+    val isRequestError: Boolean = false,
+    val isRequestSuccess: Boolean = false,
     val isAlreadyRequest: Boolean = false,
 ) {
     fun changeToLoadingState() = copy(
         isLoading = true,
-        isError = false,
-        isSuccess = false,
+        isRequestError = false,
+        isRequestSuccess = false,
     )
 
     fun changeToErrorState() = copy(
         isLoading = false,
-        isError = true,
-        isSuccess = false,
+        isRequestError = true,
+        isRequestSuccess = false,
     )
 
     fun changeToSuccessState() = copy(
         isLoading = false,
-        isError = false,
-        isSuccess = true,
+        isRequestError = false,
+        isRequestSuccess = true,
     )
 
     fun setIsAlreadyRequestState(state: Boolean) = copy(

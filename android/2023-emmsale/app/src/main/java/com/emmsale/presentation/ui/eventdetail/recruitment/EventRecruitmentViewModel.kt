@@ -59,7 +59,7 @@ class EventRecruitmentViewModel(
 
     fun fetchHasWritingPermission() {
         viewModelScope.launch {
-            when (val response = recruitmentRepository.isAlreadyPostRecruitment(eventId)) {
+            when (val response = recruitmentRepository.checkIsAlreadyPostRecruitment(eventId)) {
                 is ApiSuccess -> setHasPermissionWritingState(!response.data)
                 is ApiError, is ApiException -> setHasPermissionWritingState(false)
             }
