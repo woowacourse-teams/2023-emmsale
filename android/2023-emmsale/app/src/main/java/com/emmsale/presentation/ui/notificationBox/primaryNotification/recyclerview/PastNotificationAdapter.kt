@@ -10,18 +10,28 @@ import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.C
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 
-class PastNotificationAdapter :
-    ListAdapter<PrimaryNotificationUiState, RecentNotificationViewHolder>(
-        PrimaryNotificationDiffUtil,
-    ) {
+class PastNotificationAdapter(
+    private val onNotificationClick: (notification: PrimaryNotificationUiState) -> Unit,
+    private val onDeleteClick: (notificationId: Long) -> Unit,
+    private val onDeleteAllClick: () -> Unit,
+) : ListAdapter<PrimaryNotificationUiState, RecentNotificationViewHolder>(
+    PrimaryNotificationDiffUtil,
+) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): RecentNotificationViewHolder = when (PrimaryNotificationViewType.of(viewType)) {
-        PrimaryNotificationViewType.HEADER -> PastNotificationHeaderViewHolder(parent)
-        PrimaryNotificationViewType.COMMENT -> CommentNotificationViewHolder(parent)
-        PrimaryNotificationViewType.INTEREST_EVENT -> InterestEventNotificationViewHolder(parent)
+        PrimaryNotificationViewType.HEADER -> PastNotificationHeaderViewHolder(
+            parent,
+            onDeleteAllClick,
+        )
+
+        PrimaryNotificationViewType.COMMENT ->
+            CommentNotificationViewHolder(parent, onNotificationClick, onDeleteClick)
+
+        PrimaryNotificationViewType.INTEREST_EVENT ->
+            InterestEventNotificationViewHolder(parent, onNotificationClick, onDeleteClick)
     }
 
     override fun onBindViewHolder(holder: RecentNotificationViewHolder, position: Int) {

@@ -5,9 +5,9 @@ import com.emmsale.data.notification.updated.UpdatedNotification
 import java.time.LocalDateTime
 
 class CommentNotificationUiState(
-    id: Int,
-    receiverId: Int,
-    redirectId: Int,
+    id: Long,
+    receiverId: Long,
+    redirectId: Long,
     createdAt: LocalDateTime,
     isRead: Boolean,
     val commentContent: String,

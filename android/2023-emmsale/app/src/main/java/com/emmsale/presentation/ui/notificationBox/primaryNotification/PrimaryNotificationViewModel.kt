@@ -55,6 +55,15 @@ class PrimaryNotificationViewModel(
         _pastNotifications.value = PrimaryNotificationsUiState.from(notifications)
     }
 
+    fun changeToRead(notificationId: Long) {
+    }
+
+    fun deleteNotification(notificationId: Long) {
+    }
+
+    fun deleteAllPastNotifications() {
+    }
+
     companion object {
         val factory: ViewModelFactory<PrimaryNotificationViewModel> = ViewModelFactory {
             PrimaryNotificationViewModel(

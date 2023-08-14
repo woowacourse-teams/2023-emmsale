@@ -9,6 +9,9 @@ import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PastNotificationAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.RecentNotificationAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.CommentNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 
 class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBinding>() {
     override val layoutResId: Int = R.layout.fragment_primary_notification
@@ -17,7 +20,16 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     }
 
     private val recentNotificationAdapter by lazy { RecentNotificationAdapter() }
-    private val pastNotificationAdapter by lazy { PastNotificationAdapter() }
+    private val pastNotificationAdapter by lazy {
+        PastNotificationAdapter(
+            onNotificationClick = { notification ->
+                viewModel.changeToRead(notification.id)
+                navigateToDetail(notification)
+            },
+            onDeleteClick = { notificationId -> viewModel.deleteNotification(notificationId) },
+            onDeleteAllClick = { viewModel.deleteAllPastNotifications() },
+        )
+    }
     private val primaryNotificationAdapter: ConcatAdapter by lazy {
         val config = ConcatAdapter.Config.Builder()
             .setIsolateViewTypes(false)
@@ -57,5 +69,18 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         viewModel.pastNotifications.observe(viewLifecycleOwner) { notifications ->
             pastNotificationAdapter.submitList(notifications.notifications)
         }
+    }
+
+    private fun navigateToDetail(notification: PrimaryNotificationUiState) {
+        when (notification) {
+            is InterestEventNotificationUiState -> navigateToEventScreen()
+            is CommentNotificationUiState -> navigateToCommentScreen()
+        }
+    }
+
+    private fun navigateToCommentScreen() {
+    }
+
+    private fun navigateToEventScreen() {
     }
 }

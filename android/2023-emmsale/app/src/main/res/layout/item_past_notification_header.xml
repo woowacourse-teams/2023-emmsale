@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="onDeleteAllClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,6 +37,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="@{() -> onDeleteAllClick.invoke()}"
             android:gravity="center"
             android:text="@string/primarynotification_past_notification_delete_all"
             android:textAppearance="@style/KerdyTextStyleGrayBold12"

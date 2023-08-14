@@ -6,9 +6,9 @@ import com.emmsale.data.notification.updated.UpdatedNotification
 import java.time.LocalDateTime
 
 abstract class PrimaryNotificationUiState(
-    val id: Int,
-    val receiverId: Int,
-    val redirectId: Int,
+    val id: Long,
+    val receiverId: Long,
+    val redirectId: Long,
     val createdAt: LocalDateTime,
     val isRead: Boolean,
 ) {
@@ -31,7 +31,7 @@ abstract class PrimaryNotificationUiState(
         result = 31 * result + redirectId
         result = 31 * result + createdAt.hashCode()
         result = 31 * result + isRead.hashCode()
-        return result
+        return result.toInt()
     }
 
     companion object {

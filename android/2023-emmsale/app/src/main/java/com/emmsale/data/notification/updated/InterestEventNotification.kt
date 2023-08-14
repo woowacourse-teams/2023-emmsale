@@ -3,9 +3,9 @@ package com.emmsale.data.notification.updated
 import java.time.LocalDateTime
 
 class InterestEventNotification(
-    id: Int,
-    receiverId: Int,
-    redirectId: Int,
+    id: Long,
+    receiverId: Long,
+    redirectId: Long,
     createdAt: LocalDateTime,
     isRead: Boolean,
 ) : UpdatedNotification(

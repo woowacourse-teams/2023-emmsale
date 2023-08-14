@@ -37,12 +37,13 @@ fun ImageView.setRoundedImageUrl(
         .into(this)
 }
 
-@BindingAdapter("app:imageUrl", "app:isCircle")
-fun ImageView.setCircleImage(imageUrl: String, isCircle: Boolean) {
+@BindingAdapter("app:imageUrl", "app:isCircle", requireAll = false)
+fun ImageView.setCircleImage(imageUrl: String? = null, isCircle: Boolean) {
     if (!isCircle) {
         setImage(imageUrl)
         return
     }
+
     Glide.with(this)
         .load(imageUrl)
         .placeholder(R.drawable.img_all_error)
