@@ -11,7 +11,9 @@ import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.C
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 
-class RecentNotificationAdapter :
+class RecentNotificationAdapter(
+    private val onNotificationClick: (notification: PrimaryNotificationUiState) -> Unit,
+) :
     ListAdapter<PrimaryNotificationUiState, RecentNotificationViewHolder>(
         PrimaryNotificationDiffUtil,
     ) {
@@ -22,8 +24,15 @@ class RecentNotificationAdapter :
     ): RecentNotificationViewHolder = when (PrimaryNotificationViewType.of(viewType)) {
         PrimaryNotificationViewType.RECENT_HEADER -> RecentNotificationHeaderViewHolder(parent)
         PrimaryNotificationViewType.PAST_HEADER -> PastNotificationHeaderViewHolder(parent)
-        PrimaryNotificationViewType.COMMENT -> CommentNotificationViewHolder(parent)
-        PrimaryNotificationViewType.INTEREST_EVENT -> InterestEventNotificationViewHolder(parent)
+        PrimaryNotificationViewType.COMMENT -> CommentNotificationViewHolder(
+            parent,
+            onNotificationClick,
+        )
+
+        PrimaryNotificationViewType.INTEREST_EVENT -> InterestEventNotificationViewHolder(
+            parent,
+            onNotificationClick,
+        )
     }
 
     override fun onBindViewHolder(holder: RecentNotificationViewHolder, position: Int) {

@@ -57,6 +57,9 @@ class PrimaryNotificationViewModel(
     }
 
     fun changeToRead(notificationId: Long) {
+        viewModelScope.launch {
+            notificationRepository.updateUpdatedNotificationReadStatus(notificationId)
+        }
     }
 
     fun deleteNotification(notificationId: Long) {

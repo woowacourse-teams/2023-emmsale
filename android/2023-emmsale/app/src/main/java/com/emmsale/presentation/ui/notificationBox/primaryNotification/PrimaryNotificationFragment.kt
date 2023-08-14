@@ -20,13 +20,17 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         PrimaryNotificationViewModel.factory
     }
 
-    private val recentNotificationAdapter by lazy { RecentNotificationAdapter() }
-    private val pastNotificationAdapter by lazy {
-        PastNotificationAdapter(
+    private val recentNotificationAdapter by lazy {
+        RecentNotificationAdapter(
             onNotificationClick = { notification ->
                 viewModel.changeToRead(notification.id)
                 navigateToDetail(notification)
             },
+        )
+    }
+    private val pastNotificationAdapter by lazy {
+        PastNotificationAdapter(
+            onNotificationClick = ::navigateToDetail,
             onDeleteClick = { notificationId -> viewModel.deleteNotification(notificationId) },
             onDeleteAllClick = { viewModel.deleteAllPastNotifications() },
         )

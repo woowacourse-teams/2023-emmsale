@@ -59,6 +59,15 @@ class NotificationRepositoryImpl(
         }
     }
 
+    override suspend fun updateUpdatedNotificationReadStatus(notificationId: Long): ApiResult<Unit> {
+        return withContext(dispatcher) {
+            handleApi(
+                execute = { notificationService.updateUpdatedNotificationReadStatus(notificationId) },
+                mapToDomain = { },
+            )
+        }
+    }
+
     companion object {
         private const val IN_PROGRESS = "IN_PROGRESS"
         private const val ACCEPT = "ACCEPT"
