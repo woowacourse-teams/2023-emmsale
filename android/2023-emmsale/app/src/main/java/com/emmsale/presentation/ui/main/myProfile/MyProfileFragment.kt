@@ -9,6 +9,7 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.main.myProfile.editMyProfile.EditMyProfileActivity
 import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
@@ -25,6 +26,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
         initDataBinding()
         setupUiLogic()
+        initToolbar()
         initActivitiesRecyclerView()
 
         viewModel.fetchMember()
@@ -80,6 +82,15 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             myProfile.educations,
         )
         (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfile.clubs)
+    }
+
+    private fun initToolbar() {
+        binding.tbMyprofileToolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.myprofile_edit_mode -> EditMyProfileActivity.startActivity(requireContext())
+            }
+            true
+        }
     }
 
     private fun initActivitiesRecyclerView() {

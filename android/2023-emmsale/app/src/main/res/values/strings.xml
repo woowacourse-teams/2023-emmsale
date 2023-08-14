@@ -186,4 +186,6 @@
     <string name="logoutdialog_message">정말로 로그아웃 하시겠습니까?</string>
     <string name="logoutdialog_positive_button_label">로그아웃</string>
     <string name="logoutdialog_negative_button_label">취소</string>
+
+    <string name="myprofile_profile_edit">프로필 수정</string>
 </resources>
