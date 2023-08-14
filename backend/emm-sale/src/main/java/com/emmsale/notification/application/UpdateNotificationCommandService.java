@@ -5,6 +5,7 @@ import static com.emmsale.notification.exception.NotificationExceptionType.NOT_F
 
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.exception.MemberException;
+import com.emmsale.notification.application.dto.UpdateNotificationDeleteRequest;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
 import com.emmsale.notification.exception.NotificationException;
@@ -37,19 +38,23 @@ public class UpdateNotificationCommandService {
     }
   }
 
-  public void deleteBatch(final Member authMember, final List<Long> deleteIds) {
+  public void deleteBatch(
+      final Member authMember,
+      final UpdateNotificationDeleteRequest updateNotificationDeleteRequest
+  ) {
+    final List<Long> deleteIds = updateNotificationDeleteRequest.getDeleteIds();
 
-    final List<Long> deletedIds = updateNotificationRepository.findAllByIdIn(deleteIds)
+    final List<Long> deleteIdsOwnMember = updateNotificationRepository.findAllByIdIn(deleteIds)
         .stream()
         .filter(it -> it.isOwnUpdateNotification(authMember.getId()))
         .map(UpdateNotification::getId)
         .collect(Collectors.toList());
 
-    if (hasNoNotificationToDeleteBy(deleteIds)) {
+    if (hasNoNotificationToDeleteBy(deleteIdsOwnMember)) {
       return;
     }
 
-    updateNotificationRepository.deleteAllByIdInBatch(deletedIds);
+    updateNotificationRepository.deleteAllByIdInBatch(deleteIdsOwnMember);
   }
 
   private static boolean hasNoNotificationToDeleteBy(final List<Long> deleteIds) {

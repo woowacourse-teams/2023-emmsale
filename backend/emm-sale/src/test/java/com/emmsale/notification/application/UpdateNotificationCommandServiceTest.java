@@ -14,6 +14,7 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
+import com.emmsale.notification.application.dto.UpdateNotificationDeleteRequest;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
 import com.emmsale.notification.domain.UpdateNotificationType;
@@ -102,20 +103,24 @@ class UpdateNotificationCommandServiceTest extends ServiceIntegrationTestHelper 
     );
     updateNotificationRepository.saveAll(List.of(notification1, notification2, notification3));
 
-    final List<Long> deleteIds = List.of(
-        notification1.getId(),
-        notification2.getId(),
-        notification3.getId()
-    );
+    final UpdateNotificationDeleteRequest request =
+        new UpdateNotificationDeleteRequest(
+            List.of(
+                notification1.getId(),
+                notification2.getId(),
+                notification3.getId()
+            )
+        );
 
     final List<UpdateNotification> expected = List.of(notification3);
 
+
     //when
-    updateNotificationCommandService.deleteBatch(member, deleteIds);
+    updateNotificationCommandService.deleteBatch(member, request);
 
     //then
     final List<UpdateNotification> actual =
-        updateNotificationRepository.findAllByIdIn(deleteIds);
+        updateNotificationRepository.findAllByIdIn(request.getDeleteIds());
 
     assertThat(actual)
         .usingRecursiveComparison()

@@ -3,6 +3,7 @@ package com.emmsale.notification.api;
 import com.emmsale.member.domain.Member;
 import com.emmsale.notification.application.UpdateNotificationCommandService;
 import com.emmsale.notification.application.UpdateNotificationQueryService;
+import com.emmsale.notification.application.dto.UpdateNotificationDeleteRequest;
 import com.emmsale.notification.application.dto.UpdateNotificationResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,8 +45,9 @@ public class UpdateNotificationApi {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteBatch(
       final Member authMember,
-      @RequestParam("delete-ids") final List<Long> deleteIds
+      @RequestBody final UpdateNotificationDeleteRequest updateNotificationDeleteRequest
   ) {
-    updateNotificationCommandService.deleteBatch(authMember, deleteIds);
+
+    updateNotificationCommandService.deleteBatch(authMember, updateNotificationDeleteRequest);
   }
 }
