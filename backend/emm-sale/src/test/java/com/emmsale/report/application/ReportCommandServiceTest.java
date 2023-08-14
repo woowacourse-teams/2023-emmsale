@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
 
-  private static final Long 신고자_ID = 1L;
+  private static Long 신고자_ID;
   private static Long 신고_대상자_ID;
 
   @Autowired
@@ -37,9 +37,9 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
   @Autowired
   private MemberRepository memberRepository;
   @Autowired
-  private CommentRepository commentRepository;
-  @Autowired
   private EventRepository eventRepository;
+  @Autowired
+  private CommentRepository commentRepository;
   @Autowired
   private RecruitmentPostRepository recruitmentPostRepository;
   @Autowired
@@ -48,9 +48,12 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
   @BeforeEach
   void init() {
     final Event event = eventRepository.save(eventFixture());
+    final Member 신고자 = memberRepository.findById(1L).get();
     final Member 신고_대상자 = memberRepository.findById(2L).get();
+    신고자_ID = 신고자.getId();
     신고_대상자_ID = 신고_대상자.getId();
     commentRepository.save(Comment.createRoot(event, 신고_대상자, "상대방에게 불쾌감을 줄 수 있는 내용"));
+    commentRepository.save(Comment.createRoot(event, 신고자, "그냥 댓글"));
     recruitmentPostRepository.save(new RecruitmentPost(신고_대상자, event, "사회적 논란을 불러일으킬 수 있는 내용"));
     requestNotificationRepository.save(
         new RequestNotification(신고_대상자_ID, 신고자_ID, event.getId(), "모욕감을 줄 수 있는 내용"));
