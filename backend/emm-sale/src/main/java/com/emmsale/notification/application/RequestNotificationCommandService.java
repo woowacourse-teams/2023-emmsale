@@ -110,4 +110,13 @@ public class RequestNotificationCommandService {
       throw new NotificationException(NOT_OWNER);
     }
   }
+
+  public void read(final Long notificationId, final Member member) {
+    final RequestNotification notification = requestNotificationRepository.findById(notificationId)
+        .orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
+
+    validateNotificationOwner(notification, member);
+
+    notification.read();
+  }
 }

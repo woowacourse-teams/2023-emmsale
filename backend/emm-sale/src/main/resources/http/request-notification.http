@@ -10,26 +10,6 @@ Content-Type: application/json
   "eventId" : 1
 }
 
-### FCM 토큰 저장 API (새롭게 저장)
-
-POST http://localhost:8080/request-notifications/token
-Content-Type: application/json
-
-{
-  "token" : "토큰이다",
-  "memberId" : 1
-}
-
-### FCM 토큰 저장 API (기존에 있던 것 수정)
-
-POST http://localhost:8080/request-notifications/token
-Content-Type: application/json
-
-{
-  "token" : "수정된 토큰이다",
-  "memberId" : 1
-}
-
 ### 알림 상태를 변경하는 API
 
 PATCH http://localhost:8080/request-notifications/2
@@ -42,3 +22,8 @@ Content-Type: application/json
 ### id로 알림 조회하는 API
 
 GET http://localhost:8080/request-notifications/1
+
+### 알림 읽음 상태를 변경하는 API
+
+PATCH http://localhost:8080/request-notifications/1/read
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
