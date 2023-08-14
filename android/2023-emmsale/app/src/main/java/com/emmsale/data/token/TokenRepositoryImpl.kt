@@ -23,6 +23,13 @@ class TokenRepositoryImpl(
         Token(uid, accessToken)
     }
 
+    override suspend fun deleteToken() = withContext(dispatcher) {
+        preference.edit()
+            .remove(UID_KEY)
+            .remove(ACCESS_TOKEN_KEY)
+            .apply()
+    }
+
     companion object {
         private const val UID_KEY = "uid_key"
         private const val ACCESS_TOKEN_KEY = "access_token_key"

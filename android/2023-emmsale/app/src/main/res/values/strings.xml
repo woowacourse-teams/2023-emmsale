@@ -164,4 +164,26 @@
     <string name="eventdetail_tab_infromation">상세 정보</string>
     <string name="eventdetail_tab_comment">댓글</string>
     <string name="eventdetail_tab_recruitment">같이가요</string>
+
+    <string name="setting_member_image_description">회원의 사진</string>
+    <string name="setting_notification_setting_button_label">알림 설정</string>
+    <string name="setting_use_term_button_label">이용 약관</string>
+    <string name="setting_version_info_button_label">버전 정보</string>
+    <string name="setting_account_delete_button_label">계정 삭제</string>
+    <string name="setting_logout_button_label">로그아웃</string>
+    <string name="setting_blocks_button_label">차단 목록</string>
+    <string name="setting_writings_button_label">작성한 글</string>
+    <string name="setting_written_comments_button_label">작성한 댓글</string>
+    <string name="setting_member_fetching_error_message">회원 정보를 불러오는 데 실패했어요 😥</string>
+    <string name="setting_member_delete_error_message">회원 탈퇴하는 데 실패했어요 😥</string>
+
+    <string name="memberdeletedialog_title">계정 삭제</string>
+    <string name="memberdeletedialog_message">정말로 계정을 삭제 하시겠습니까?\n계정 삭제 시 복구가 불가합니다.</string>
+    <string name="memberdeletedialog_positive_button_label">삭제</string>
+    <string name="memberdeletedialog_negative_button_label">취소</string>
+
+    <string name="logoutdialog_title">로그아웃</string>
+    <string name="logoutdialog_message">정말로 로그아웃 하시겠습니까?</string>
+    <string name="logoutdialog_positive_button_label">로그아웃</string>
+    <string name="logoutdialog_negative_button_label">취소</string>
 </resources>

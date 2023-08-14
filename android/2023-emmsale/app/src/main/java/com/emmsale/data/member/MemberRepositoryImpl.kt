@@ -36,4 +36,11 @@ class MemberRepositoryImpl(
             mapToDomain = { },
         )
     }
+
+    override suspend fun deleteMember(memberId: Long): ApiResult<Unit> = withContext(dispatcher) {
+        handleApi(
+            execute = { memberService.deleteMember(memberId) },
+            mapToDomain = {},
+        )
+    }
 }
