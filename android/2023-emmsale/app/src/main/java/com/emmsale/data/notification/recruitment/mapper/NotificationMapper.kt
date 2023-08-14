@@ -1,8 +1,8 @@
-package com.emmsale.data.notification.mapper
+package com.emmsale.data.notification.recruitment.mapper
 
-import com.emmsale.data.notification.RecruitmentNotification
-import com.emmsale.data.notification.RecruitmentNotificationApiModel
-import com.emmsale.data.notification.RecruitmentStatus
+import com.emmsale.data.notification.recruitment.RecruitmentNotification
+import com.emmsale.data.notification.recruitment.RecruitmentStatus
+import com.emmsale.data.notification.recruitment.dto.RecruitmentNotificationApiModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

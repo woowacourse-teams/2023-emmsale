@@ -2,7 +2,13 @@ package com.emmsale.data.notification
 
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
-import com.emmsale.data.notification.mapper.toData
+import com.emmsale.data.notification.recruitment.RecruitmentNotification
+import com.emmsale.data.notification.recruitment.RecruitmentStatus
+import com.emmsale.data.notification.recruitment.dto.RecruitmentNotificationApiModel
+import com.emmsale.data.notification.recruitment.mapper.toData
+import com.emmsale.data.notification.updated.UpdatedNotification
+import com.emmsale.data.notification.updated.dto.UpdatedNotificationApiModel
+import com.emmsale.data.notification.updated.mapper.toData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,7 +20,7 @@ class NotificationRepositoryImpl(
     override suspend fun getRecruitmentNotifications(): ApiResult<List<RecruitmentNotification>> =
         withContext(dispatcher) {
             handleApi(
-                execute = { notificationService.getNotifications() },
+                execute = { notificationService.getRecruitmentNotifications() },
                 mapToDomain = List<RecruitmentNotificationApiModel>::toData,
             )
         }
@@ -46,6 +52,15 @@ class NotificationRepositoryImpl(
             execute = { notificationService.updateNotificationReadStatus(notificationId, isRead) },
             mapToDomain = { },
         )
+    }
+
+    override suspend fun getUpdatedNotifications(memberId: Long): ApiResult<List<UpdatedNotification>> {
+        return withContext(dispatcher) {
+            handleApi(
+                execute = { notificationService.getUpdatedNotifications(memberId) },
+                mapToDomain = List<UpdatedNotificationApiModel>::toData,
+            )
+        }
     }
 
     companion object {

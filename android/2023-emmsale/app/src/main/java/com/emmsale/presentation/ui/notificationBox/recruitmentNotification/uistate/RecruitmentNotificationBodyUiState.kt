@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate
 
-import com.emmsale.data.notification.RecruitmentNotification
-import com.emmsale.data.notification.RecruitmentStatus
+import com.emmsale.data.notification.recruitment.RecruitmentNotification
+import com.emmsale.data.notification.recruitment.RecruitmentStatus
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

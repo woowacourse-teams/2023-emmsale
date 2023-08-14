@@ -8,8 +8,8 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.eventdetail.EventDetailRepository
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.notification.NotificationRepository
-import com.emmsale.data.notification.RecruitmentNotification
-import com.emmsale.data.notification.RecruitmentStatus
+import com.emmsale.data.notification.recruitment.RecruitmentNotification
+import com.emmsale.data.notification.recruitment.RecruitmentStatus
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData

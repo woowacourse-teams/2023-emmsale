@@ -1,6 +1,9 @@
 package com.emmsale.data.notification
 
 import com.emmsale.data.common.ApiResult
+import com.emmsale.data.notification.recruitment.RecruitmentNotification
+import com.emmsale.data.notification.recruitment.RecruitmentStatus
+import com.emmsale.data.notification.updated.UpdatedNotification
 
 interface NotificationRepository {
     suspend fun getRecruitmentNotifications(): ApiResult<List<RecruitmentNotification>>
@@ -17,4 +20,6 @@ interface NotificationRepository {
         notificationId: Long,
         isRead: Boolean,
     ): ApiResult<Unit>
+
+    suspend fun getUpdatedNotifications(memberId: Long): ApiResult<List<UpdatedNotification>>
 }
