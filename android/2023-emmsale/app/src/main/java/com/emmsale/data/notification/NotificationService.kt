@@ -25,7 +25,6 @@ interface NotificationService {
     @PATCH("/request-notifications/{request-notification-id}/read")
     suspend fun updateNotificationReadStatus(
         @Path("request-notification-id") notificationId: Long,
-        @Body isRead: Boolean,
     ): Response<Unit>
 
     @GET("/update-notifications")

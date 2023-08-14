@@ -18,7 +18,6 @@ interface NotificationRepository {
 
     suspend fun updateNotificationReadStatus(
         notificationId: Long,
-        isRead: Boolean,
     ): ApiResult<Unit>
 
     suspend fun getUpdatedNotifications(memberId: Long): ApiResult<List<UpdatedNotification>>

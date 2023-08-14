@@ -68,7 +68,6 @@ class RecruitmentNotificationViewModel(
                 eventId = conferenceId,
                 conferenceName = notifications.first().eventName,
                 notifications = notifications,
-                isRead = notifications.any { !it.isRead },
             )
         }
 
@@ -177,7 +176,7 @@ class RecruitmentNotificationViewModel(
         notification: RecruitmentNotificationBodyUiState,
     ) {
         if (!notification.isRead) {
-            notificationRepository.updateNotificationReadStatus(notification.id, true)
+            notificationRepository.updateNotificationReadStatus(notification.id)
         }
     }
 

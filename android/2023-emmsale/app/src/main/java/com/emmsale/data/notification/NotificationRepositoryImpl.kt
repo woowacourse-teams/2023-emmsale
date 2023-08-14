@@ -43,10 +43,9 @@ class NotificationRepositoryImpl(
 
     override suspend fun updateNotificationReadStatus(
         notificationId: Long,
-        isRead: Boolean,
     ): ApiResult<Unit> = withContext(dispatcher) {
         handleApi(
-            execute = { notificationService.updateNotificationReadStatus(notificationId, isRead) },
+            execute = { notificationService.updateNotificationReadStatus(notificationId) },
             mapToDomain = { },
         )
     }
