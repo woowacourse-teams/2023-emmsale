@@ -370,7 +370,7 @@ include::{snippets}/create-request-notification/response-fields.adoc[]
 .HTTP response
 include::{snippets}/create-request-notification/http-response.adoc[]
 
-=== `POST` : 차단된 사용자에게 알림 전송
+==== `POST` : 차단된 사용자에게 알림 전송
 
 .HTTP request 설명
 include::{snippets}/create-blocked-member-requestNotification/request-fields.adoc[]
