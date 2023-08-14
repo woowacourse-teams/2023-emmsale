@@ -283,9 +283,9 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(get("/request-notifications/existed")
-            .queryParam("receiver-id", "1")
-            .queryParam("sender-id", "2")
-            .queryParam("event-id", "3")
+            .queryParam("receiverId", "1")
+            .queryParam("senderId", "2")
+            .queryParam("eventId", "3")
             .header("Authorization", accessToken))
         .andExpect(status().isOk())
         .andDo(print())

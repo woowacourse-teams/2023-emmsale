@@ -92,7 +92,7 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
 
     //then
     mockMvc.perform(get("/update-notifications")
-            .queryParam("member-id", "1")
+            .queryParam("memberId", "1")
             .header("Authorization", accessToken))
         .andExpect(status().isOk())
         .andDo(print())
