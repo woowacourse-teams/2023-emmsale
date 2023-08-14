@@ -5,4 +5,6 @@ interface TokenRepository {
     suspend fun getToken(): Token?
 
     fun getMyUid(): Long?
+
+    suspend fun deleteToken()
 }
