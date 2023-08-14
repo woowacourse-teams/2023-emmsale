@@ -13,8 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.report.application.ReportCommandService;
 import com.emmsale.report.application.ReportQueryService;
-import com.emmsale.report.application.dto.ReportRequest;
-import com.emmsale.report.application.dto.ReportResponse;
+import com.emmsale.report.application.dto.ReportCreateRequest;
+import com.emmsale.report.application.dto.ReportCreateResponse;
+import com.emmsale.report.application.dto.ReportFindResponse;
 import com.emmsale.report.domain.ReportType;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -58,13 +59,15 @@ class ReportApiTest extends MockMvcTestHelper {
         fieldWithPath("createdAt").type(JsonFieldType.STRING)
             .description("신고 일자(yyyy:MM:dd:HH:mm:ss)")
     );
-    final ReportRequest reportRequest = new ReportRequest(1L, 2L, ReportType.COMMENT, 1L);
+    final ReportCreateRequest reportRequest = new ReportCreateRequest(1L, 2L, ReportType.COMMENT,
+        1L);
 
-    final ReportResponse reportResponse = new ReportResponse(1L, reportRequest.getReporterId(),
+    final ReportCreateResponse reportCreateResponse = new ReportCreateResponse(1L,
+        reportRequest.getReporterId(),
         reportRequest.getReportedId(), reportRequest.getType(), reportRequest.getContentId(),
         LocalDateTime.parse("2023-08-09T13:25:00"));
 
-    when(reportCommandService.create(any(), any())).thenReturn(reportResponse);
+    when(reportCommandService.create(any(), any())).thenReturn(reportCreateResponse);
 
     // when & then
     mockMvc.perform(post("/reports")
@@ -92,19 +95,19 @@ class ReportApiTest extends MockMvcTestHelper {
             .description("신고 일자(yyyy:MM:dd:HH:mm:ss)")
     );
 
-    final List<ReportResponse> reportResponses = List.of(
-        new ReportResponse(1L, 1L, 2L, ReportType.COMMENT, 3L,
+    final List<ReportFindResponse> reportFindResponse = List.of(
+        new ReportFindResponse(1L, 1L, 2L, ReportType.COMMENT, 3L,
             LocalDateTime.parse("2023-08-09T13:25:00")),
-        new ReportResponse(2L, 2L, 1L, ReportType.RECRUITMENT_POST, 1L,
+        new ReportFindResponse(2L, 2L, 1L, ReportType.RECRUITMENT_POST, 1L,
             LocalDateTime.parse("2023-08-11T13:25:00")),
-        new ReportResponse(3L, 1L, 3L, ReportType.REQUEST_NOTIFICATION, 5L,
+        new ReportFindResponse(3L, 1L, 3L, ReportType.REQUEST_NOTIFICATION, 5L,
             LocalDateTime.parse("2023-08-11T13:50:00")),
-        new ReportResponse(4L, 4L, 1L, ReportType.COMMENT, 2L,
+        new ReportFindResponse(4L, 4L, 1L, ReportType.COMMENT, 2L,
             LocalDateTime.parse("2023-08-12T13:25:00"))
 
     );
 
-    when(reportQueryService.findReports()).thenReturn(reportResponses);
+    when(reportQueryService.findReports()).thenReturn(reportFindResponse);
 
     // when & then
     mockMvc.perform(get("/reports"))

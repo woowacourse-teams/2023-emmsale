@@ -10,8 +10,8 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.notification.domain.RequestNotification;
 import com.emmsale.notification.domain.RequestNotificationRepository;
-import com.emmsale.report.application.dto.ReportRequest;
-import com.emmsale.report.application.dto.ReportResponse;
+import com.emmsale.report.application.dto.ReportCreateRequest;
+import com.emmsale.report.application.dto.ReportCreateResponse;
 import com.emmsale.report.domain.Report;
 import com.emmsale.report.domain.ReportType;
 import com.emmsale.report.domain.repository.ReportRepository;
@@ -33,15 +33,15 @@ public class ReportCommandService {
   private final RequestNotificationRepository requestNotificationRepository;
   private final BlockRepository blockRepository;
 
-  public ReportResponse create(final ReportRequest reportRequest, final Member member) {
+  public ReportCreateResponse create(final ReportCreateRequest reportRequest, final Member member) {
     validateReportRequest(reportRequest, member);
     final Report report = reportRequest.toReport();
     blockReportedMember(reportRequest);
-    return ReportResponse.of(reportRepository.save(report));
+    return ReportCreateResponse.from(reportRepository.save(report));
   }
 
 
-  private void validateReportRequest(final ReportRequest reportRequest, final Member member) {
+  private void validateReportRequest(final ReportCreateRequest reportRequest, final Member member) {
     validateReporterMismatch(reportRequest.getReporterId(), member);
     validateReportMySelf(reportRequest.getReportedId(), member);
     validateExistReportedMember(reportRequest.getReportedId());
@@ -67,14 +67,14 @@ public class ReportCommandService {
     }
   }
 
-  private void validateAlreadyExistReport(final ReportRequest reportRequest) {
+  private void validateAlreadyExistReport(final ReportCreateRequest reportRequest) {
     if (reportRepository.existsReportByReporterIdAndReportedId(
         reportRequest.getReporterId(), reportRequest.getReportedId())) {
       throw new ReportException(ReportExceptionType.ALREADY_EXIST_REPORT);
     }
   }
 
-  private void validateContent(final ReportRequest reportRequest) {
+  private void validateContent(final ReportCreateRequest reportRequest) {
     if (reportRequest.getType() == ReportType.COMMENT) {
       validateComment(reportRequest);
     }
@@ -86,35 +86,35 @@ public class ReportCommandService {
     }
   }
 
-  private void validateComment(final ReportRequest reportRequest) {
+  private void validateComment(final ReportCreateRequest reportRequest) {
     Comment comment = commentRepository.findById(reportRequest.getContentId())
         .orElseThrow(() -> new ReportException(ReportExceptionType.NOT_FOUND_CONTENT));
-    if (!comment.getMember().getId().equals(reportRequest.getReportedId())) {
+    if (comment.isNotOwner(reportRequest.getReportedId())) {
       throw new ReportException(ReportExceptionType.REPORTED_MISMATCH_WRITER);
     }
   }
 
-  private void validateRecruitmentPost(final ReportRequest reportRequest) {
+  private void validateRecruitmentPost(final ReportCreateRequest reportRequest) {
     RecruitmentPost recruitmentPost = recruitmentPostRepository.findById(
             reportRequest.getContentId())
         .orElseThrow(() -> new ReportException(ReportExceptionType.NOT_FOUND_CONTENT));
-    if (!recruitmentPost.getMember().getId().equals(reportRequest.getReportedId())) {
+    if (recruitmentPost.isNotOwner(reportRequest.getReportedId())) {
       throw new ReportException(ReportExceptionType.REPORTED_MISMATCH_WRITER);
     }
   }
 
-  private void validateRequestNotification(final ReportRequest reportRequest) {
+  private void validateRequestNotification(final ReportCreateRequest reportCreateRequest) {
     RequestNotification requestNotification = requestNotificationRepository.findById(
-            reportRequest.getContentId())
+            reportCreateRequest.getContentId())
         .orElseThrow(() -> new ReportException(ReportExceptionType.NOT_FOUND_CONTENT));
-    if (!requestNotification.getSenderId().equals(reportRequest.getReportedId())) {
+    if (requestNotification.isNotSender(reportCreateRequest.getReportedId())) {
       throw new ReportException(ReportExceptionType.REPORTED_MISMATCH_WRITER);
     }
   }
 
-  private void blockReportedMember(final ReportRequest reportRequest) {
-    final Long reporterId = reportRequest.getReporterId();
-    final Long reportedId = reportRequest.getReportedId();
+  private void blockReportedMember(final ReportCreateRequest reportCreateRequest) {
+    final Long reporterId = reportCreateRequest.getReporterId();
+    final Long reportedId = reportCreateRequest.getReportedId();
     if (!blockRepository.existsByRequestMemberIdAndBlockMemberId(reporterId, reportedId)) {
       final Block block = new Block(reporterId, reportedId);
       blockRepository.save(block);

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ReportRequest {
+public class ReportCreateRequest {
 
   private final Long reporterId;
   private final Long reportedId;

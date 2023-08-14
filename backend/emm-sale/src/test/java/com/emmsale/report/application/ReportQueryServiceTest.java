@@ -10,8 +10,9 @@ import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.report.application.dto.ReportRequest;
-import com.emmsale.report.application.dto.ReportResponse;
+import com.emmsale.report.application.dto.ReportCreateRequest;
+import com.emmsale.report.application.dto.ReportCreateResponse;
+import com.emmsale.report.application.dto.ReportFindResponse;
 import com.emmsale.report.domain.ReportType;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -52,12 +53,16 @@ class ReportQueryServiceTest extends ServiceIntegrationTestHelper {
     // given
     final Long abusingContentId = 1L;
     final Member reporter = memberRepository.findById(신고자_ID).get();
-    final ReportRequest request = new ReportRequest(신고자_ID, 신고_대상자_ID, ReportType.COMMENT,
+    final ReportCreateRequest request = new ReportCreateRequest(신고자_ID, 신고_대상자_ID,
+        ReportType.COMMENT,
         abusingContentId);
-    final List<ReportResponse> expected = List.of(reportCommandService.create(request, reporter));
+    final ReportCreateResponse report = reportCommandService.create(request, reporter);
+    final List<ReportFindResponse> expected = List.of(
+        new ReportFindResponse(report.getId(), report.getReporterId(), report.getReportedId(),
+            report.getType(), report.getContentId(), report.getCreatedAt()));
 
     // when
-    List<ReportResponse> actual = reportQueryService.findReports();
+    List<ReportFindResponse> actual = reportQueryService.findReports();
 
     // then
     Assertions.assertThat(actual)

@@ -16,8 +16,8 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.notification.domain.RequestNotification;
 import com.emmsale.notification.domain.RequestNotificationRepository;
-import com.emmsale.report.application.dto.ReportRequest;
-import com.emmsale.report.application.dto.ReportResponse;
+import com.emmsale.report.application.dto.ReportCreateRequest;
+import com.emmsale.report.application.dto.ReportCreateResponse;
 import com.emmsale.report.domain.ReportType;
 import com.emmsale.report.exception.ReportException;
 import com.emmsale.report.exception.ReportExceptionType;
@@ -74,7 +74,8 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       final Long wrongReportedId = 9999L;
       final Long abusingContentId = 1L;
       final Member reporter = memberRepository.findById(신고자_ID).get();
-      final ReportRequest request = new ReportRequest(신고자_ID, wrongReportedId, ReportType.COMMENT,
+      final ReportCreateRequest request = new ReportCreateRequest(신고자_ID, wrongReportedId,
+          ReportType.COMMENT,
           abusingContentId);
 
       // when
@@ -92,7 +93,8 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       // given
       final Long abusingContentId = 1L;
       final Member reporter = memberRepository.findById(신고자_ID).get();
-      final ReportRequest request = new ReportRequest(신고자_ID, 신고자_ID, ReportType.COMMENT,
+      final ReportCreateRequest request = new ReportCreateRequest(신고자_ID, 신고자_ID,
+          ReportType.COMMENT,
           abusingContentId);
 
       // when
@@ -112,7 +114,8 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       final Long reportedId = 1L;
       final Long abusingContentId = 1L;
       final Member reporter = memberRepository.findById(신고자_ID).get();
-      final ReportRequest request = new ReportRequest(otherMemberId, reportedId, ReportType.COMMENT,
+      final ReportCreateRequest request = new ReportCreateRequest(otherMemberId, reportedId,
+          ReportType.COMMENT,
           abusingContentId);
 
       // when
@@ -130,7 +133,8 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       // given
       final Long abusingContentId = 1L;
       final Member reporter = memberRepository.findById(신고자_ID).get();
-      final ReportRequest request = new ReportRequest(신고자_ID, 신고_대상자_ID, ReportType.COMMENT,
+      final ReportCreateRequest request = new ReportCreateRequest(신고자_ID, 신고_대상자_ID,
+          ReportType.COMMENT,
           abusingContentId);
       reportCommandService.create(request, reporter);
 
@@ -149,7 +153,8 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       // given
       final Long abusingContentId = 9999L;
       final Member reporter = memberRepository.findById(신고자_ID).get();
-      final ReportRequest request = new ReportRequest(신고자_ID, 신고_대상자_ID, ReportType.COMMENT,
+      final ReportCreateRequest request = new ReportCreateRequest(신고자_ID, 신고_대상자_ID,
+          ReportType.COMMENT,
           abusingContentId);
 
       // when
@@ -167,7 +172,8 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       // given
       final Long abusingContentId = 2L;
       final Member reporter = memberRepository.findById(신고자_ID).get();
-      final ReportRequest request = new ReportRequest(신고자_ID, 신고_대상자_ID, ReportType.COMMENT,
+      final ReportCreateRequest request = new ReportCreateRequest(신고자_ID, 신고_대상자_ID,
+          ReportType.COMMENT,
           abusingContentId);
 
       // when
@@ -189,13 +195,14 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
         // given
         final Long abusingContentId = 1L;
         final Member reporter = memberRepository.findById(신고자_ID).get();
-        final ReportRequest request = new ReportRequest(신고자_ID, 신고_대상자_ID, ReportType.COMMENT,
+        final ReportCreateRequest request = new ReportCreateRequest(신고자_ID, 신고_대상자_ID,
+            ReportType.COMMENT,
             abusingContentId);
-        final ReportResponse expected = new ReportResponse(1L, 신고자_ID, 신고_대상자_ID,
+        final ReportCreateResponse expected = new ReportCreateResponse(1L, 신고자_ID, 신고_대상자_ID,
             ReportType.COMMENT, abusingContentId, null);
 
         // when
-        final ReportResponse actual = reportCommandService.create(request, reporter);
+        final ReportCreateResponse actual = reportCommandService.create(request, reporter);
         final boolean isBlocked = blockRepository.existsByRequestMemberIdAndBlockMemberId(신고자_ID,
             신고_대상자_ID);
 
@@ -216,14 +223,14 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
         // given
         final Long abusingContentId = 1L;
         final Member reporter = memberRepository.findById(신고자_ID).get();
-        final ReportRequest request = new ReportRequest(신고자_ID, 신고_대상자_ID,
+        final ReportCreateRequest request = new ReportCreateRequest(신고자_ID, 신고_대상자_ID,
             ReportType.RECRUITMENT_POST,
             abusingContentId);
-        final ReportResponse expected = new ReportResponse(1L, 신고자_ID, 신고_대상자_ID,
+        final ReportCreateResponse expected = new ReportCreateResponse(1L, 신고자_ID, 신고_대상자_ID,
             ReportType.RECRUITMENT_POST, abusingContentId, null);
 
         // when
-        final ReportResponse actual = reportCommandService.create(request, reporter);
+        final ReportCreateResponse actual = reportCommandService.create(request, reporter);
         final boolean isBlocked = blockRepository.existsByRequestMemberIdAndBlockMemberId(신고자_ID,
             신고_대상자_ID);
 
@@ -243,14 +250,14 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
         // given
         final Long abusingContentId = 1L;
         final Member reporter = memberRepository.findById(신고자_ID).get();
-        final ReportRequest request = new ReportRequest(신고자_ID, 신고_대상자_ID,
+        final ReportCreateRequest request = new ReportCreateRequest(신고자_ID, 신고_대상자_ID,
             ReportType.REQUEST_NOTIFICATION,
             abusingContentId);
-        final ReportResponse expected = new ReportResponse(1L, 신고자_ID, 신고_대상자_ID,
+        final ReportCreateResponse expected = new ReportCreateResponse(1L, 신고자_ID, 신고_대상자_ID,
             ReportType.REQUEST_NOTIFICATION, abusingContentId, null);
 
         // when
-        final ReportResponse actual = reportCommandService.create(request, reporter);
+        final ReportCreateResponse actual = reportCommandService.create(request, reporter);
         final boolean isBlocked = blockRepository.existsByRequestMemberIdAndBlockMemberId(신고자_ID,
             신고_대상자_ID);
 

@@ -3,8 +3,9 @@ package com.emmsale.report.api;
 import com.emmsale.member.domain.Member;
 import com.emmsale.report.application.ReportCommandService;
 import com.emmsale.report.application.ReportQueryService;
-import com.emmsale.report.application.dto.ReportRequest;
-import com.emmsale.report.application.dto.ReportResponse;
+import com.emmsale.report.application.dto.ReportCreateRequest;
+import com.emmsale.report.application.dto.ReportCreateResponse;
+import com.emmsale.report.application.dto.ReportFindResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,12 +24,13 @@ public class ReportApi {
 
   @PostMapping("/reports")
   @ResponseStatus(HttpStatus.CREATED)
-  public ReportResponse create(@RequestBody final ReportRequest reportRequest, Member member) {
+  public ReportCreateResponse create(@RequestBody final ReportCreateRequest reportRequest,
+      final Member member) {
     return reportCommandService.create(reportRequest, member);
   }
 
   @GetMapping("/reports")
-  public List<ReportResponse> findReports() {
+  public List<ReportFindResponse> findReports() {
     return reportQueryService.findReports();
   }
 }

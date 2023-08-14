@@ -49,6 +49,10 @@ public class RecruitmentPost extends BaseEntity {
     return this.member.isMe(member);
   }
 
+  public boolean isNotOwner(final Long memberId) {
+    return member.isNotMe(memberId);
+  }
+
   public void updateContent(final String content) {
     this.content = content;
   }

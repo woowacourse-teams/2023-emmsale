@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ReportResponse {
+public class ReportFindResponse {
 
   private final Long id;
   private final Long reporterId;
@@ -21,15 +21,15 @@ public class ReportResponse {
   @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
   private final LocalDateTime createdAt;
 
-  public static ReportResponse of(Report report) {
-    return new ReportResponse(report.getId(), report.getReporterId(),
-        report.getReportedId(), report.getType(), report.getContentId(),
-        report.getCreatedAt());
+  public static List<ReportFindResponse> from(final List<Report> reports) {
+    return reports.stream()
+        .map(ReportFindResponse::from)
+        .collect(Collectors.toList());
   }
 
-  public static List<ReportResponse> of(List<Report> reports) {
-    return reports.stream()
-        .map(ReportResponse::of)
-        .collect(Collectors.toList());
+  private static ReportFindResponse from(final Report report) {
+    return new ReportFindResponse(report.getId(), report.getReporterId(),
+        report.getReportedId(), report.getType(), report.getContentId(),
+        report.getCreatedAt());
   }
 }
