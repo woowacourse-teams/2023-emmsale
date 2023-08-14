@@ -27,3 +27,7 @@ GET http://localhost:8080/request-notifications/1
 
 PATCH http://localhost:8080/request-notifications/1/read
 Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
+
+### 함께 가기 요청 알림을 보냈는지 확인하는 API
+PATCH http://localhost:8080/request-notifications/existed?receiver-id=1&sender-id=2&event-id=3
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
