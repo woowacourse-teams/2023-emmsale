@@ -37,7 +37,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_header_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 app:layout_constrainedWidth="true"
