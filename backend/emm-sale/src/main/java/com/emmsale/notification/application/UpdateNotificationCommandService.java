@@ -45,6 +45,14 @@ public class UpdateNotificationCommandService {
         .map(UpdateNotification::getId)
         .collect(Collectors.toList());
 
+    if (hasNoNotificationToDeleteBy(deleteIds)) {
+      return;
+    }
+
     updateNotificationRepository.deleteAllByIdInBatch(deletedIds);
+  }
+
+  private static boolean hasNoNotificationToDeleteBy(final List<Long> deleteIds) {
+    return deleteIds.isEmpty();
   }
 }
