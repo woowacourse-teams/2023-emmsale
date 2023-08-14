@@ -3,12 +3,12 @@ package com.emmsale.presentation.ui.eventdetail.comment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.emmsale.R
 import com.emmsale.databinding.FragmentCommentsBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
+import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentRecyclerViewDivider
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
@@ -52,12 +52,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
                 deleteComment = ::deleteComment,
             )
             itemAnimator = null
-            addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    DividerItemDecoration.VERTICAL,
-                ),
-            )
+            addItemDecoration(CommentRecyclerViewDivider(requireContext()))
         }
     }
 
@@ -70,17 +65,25 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     }
 
     private fun setupUiLogic() {
+        setupLoginUiLogic()
+        setupCommentsUiLogic()
+    }
+
+    private fun setupLoginUiLogic() {
         viewModel.isLogin.observe(viewLifecycleOwner) {
             handleNotLogin(it)
         }
+    }
+
+    private fun setupCommentsUiLogic() {
         viewModel.comments.observe(viewLifecycleOwner) {
-            handleError(it)
+            handleErrors(it)
             handleComments(it)
             handleCommentEditing()
         }
     }
 
-    private fun handleError(comments: CommentsUiState) {
+    private fun handleErrors(comments: CommentsUiState) {
         fun handleCommentsFetchingError(comments: CommentsUiState) {
             if (comments.isFetchingError) {
                 context?.showToast(getString(R.string.comments_comments_fetching_error_message))

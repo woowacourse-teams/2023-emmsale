@@ -1,7 +1,6 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
@@ -41,20 +40,16 @@ class RecruitmentNotificationFragment :
         binding.rvNotiBox.setHasFixedSize(true)
     }
 
-    override fun onClickBody(notificationId: Long, otherUid: Long) {
-        navigateToNotificationDetail(notificationId, otherUid)
-    }
-
-    private fun navigateToNotificationDetail(notificationId: Long, otherUid: Long) {
-        Log.d("NotificationBoxActivity", "$notificationId, $otherUid")
-    }
-
-    override fun onAccept(notificationId: Long) {
+    override fun onAcceptButtonClick(notificationId: Long) {
         viewModel.acceptRecruit(notificationId)
     }
 
-    override fun onReject(notificationId: Long) {
+    override fun onRejectButtonClick(notificationId: Long) {
         showRecruitmentRejectedConfirmDialog(notificationId)
+    }
+
+    override fun onMoreButtonClick(notificationId: Long) {
+        viewModel.reportRecruitmentNotification(notificationId)
     }
 
     private fun showRecruitmentRejectedConfirmDialog(notificationId: Long) {
@@ -73,16 +68,19 @@ class RecruitmentNotificationFragment :
         ).show()
     }
 
-    override fun onToggleClick(eventId: Long) {
+    override fun onNotificationHeaderClick(eventId: Long) {
         viewModel.toggleExpand(eventId)
+        viewModel.updateNotificationsToReadStatusBy(eventId)
     }
 
     private fun setupNotifications() {
         viewModel.notifications.observe(viewLifecycleOwner) { uiState ->
             when {
-                uiState.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
+                uiState.isLoadingNotificationsFailed ->
+                    requireContext().showToast(getString(R.string.all_data_loading_failed_message))
+
                 !uiState.isLoading ->
-                    recruitmentNotificationHeaderAdapter.submitList(uiState.notifications)
+                    recruitmentNotificationHeaderAdapter.submitList(uiState.notificationGroups)
             }
         }
     }
@@ -90,7 +88,7 @@ class RecruitmentNotificationFragment :
     private fun setupRecruitment() {
         viewModel.recruitmentUiState.observe(viewLifecycleOwner) { uiState ->
             when {
-                uiState.isError -> requireContext().showToast(getString(R.string.notificationbox_recruitment_status_changing_failed))
+                uiState.isChangingRecruitmentStatusFailed -> requireContext().showToast(getString(R.string.notificationbox_recruitment_status_changing_failed))
                 uiState.isAccepted -> showRecruitmentAcceptedDialog()
                 uiState.isRejected -> binding.root.showSnackbar(getString(R.string.notificationbox_recruitment_rejected_message))
             }

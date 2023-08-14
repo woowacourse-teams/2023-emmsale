@@ -20,7 +20,7 @@ class NotificationBoxActivity : AppCompatActivity() {
 
     private fun initView() {
         initNotificationBoxTabLayout()
-        initNavigationClickListener()
+        initBackPressNavigationClickListener()
     }
 
     private fun initNotificationBoxTabLayout() {
@@ -54,7 +54,7 @@ class NotificationBoxActivity : AppCompatActivity() {
         }.attach()
     }
 
-    private fun initNavigationClickListener() {
+    private fun initBackPressNavigationClickListener() {
         binding.tbNotiBox.setNavigationOnClickListener { finish() }
     }
 

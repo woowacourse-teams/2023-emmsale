@@ -17,20 +17,20 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_childcomment_authorname"
+            android:id="@+id/tv_childcomments_parentcommentauthorname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="17dp"
             android:layout_marginTop="20dp"
             android:text="@{comment.isDeleted ? @string/comment_deleted_comment_author_name : comment.authorName}"
             android:textSize="12sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/iv_childcomment_arrowdecoration"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="김커디" />
 
         <TextView
-            android:id="@+id/tv_childcomment_lastmodifieddate"
+            android:id="@+id/tv_childcomments_parentcommentlastmodifieddate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
@@ -38,13 +38,13 @@
             android:textColor="@color/gray"
             android:textSize="11sp"
             android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_childcomment_authorname"
-            app:layout_constraintStart_toEndOf="@+id/tv_childcomment_authorname"
-            app:layout_constraintTop_toTopOf="@+id/tv_childcomment_authorname"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_childcomments_parentcommentauthorname"
+            app:layout_constraintStart_toEndOf="@+id/tv_childcomments_parentcommentauthorname"
+            app:layout_constraintTop_toTopOf="@+id/tv_childcomments_parentcommentauthorname"
             tools:text="2023.08.03" />
 
         <TextView
-            android:id="@+id/tv_childcomment_isupdated"
+            android:id="@+id/tv_childcomments_parentcommentisupdated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
@@ -52,49 +52,40 @@
             android:textColor="@color/gray"
             android:textSize="11sp"
             android:visibility="@{(comment.isUpdated &amp;&amp; !comment.isDeleted)? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_childcomment_lastmodifieddate"
-            app:layout_constraintStart_toEndOf="@+id/tv_childcomment_lastmodifieddate"
-            app:layout_constraintTop_toTopOf="@+id/tv_childcomment_lastmodifieddate" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_childcomments_parentcommentlastmodifieddate"
+            app:layout_constraintStart_toEndOf="@+id/tv_childcomments_parentcommentlastmodifieddate"
+            app:layout_constraintTop_toTopOf="@+id/tv_childcomments_parentcommentlastmodifieddate" />
 
         <TextView
-            android:id="@+id/tv_childcomment_content"
+            android:id="@+id/tv_childcomments_parentcommentcontent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="17dp"
-            android:layout_marginBottom="14dp"
             android:text="@{comment.isDeleted ? @string/comment_deleted_comment_content : comment.content}"
             android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_childcomment_authorname"
-            app:layout_constraintTop_toBottomOf="@+id/tv_childcomment_authorname"
-            tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하" />
+            app:layout_constraintStart_toStartOf="@+id/tv_childcomments_parentcommentauthorname"
+            app:layout_constraintTop_toBottomOf="@+id/tv_childcomments_parentcommentauthorname"
+            tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="14dp"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/iv_childcomment_menubutton"
+            android:id="@+id/iv_childcomments_parentcommentmenubutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="13dp"
             android:padding="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_childcomment_authorname"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_childcomments_parentcommentauthorname"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_childcomment_authorname"
+            app:layout_constraintTop_toTopOf="@+id/tv_childcomments_parentcommentauthorname"
             app:srcCompat="@drawable/ic_comment_menubutton"
             android:contentDescription="@string/comment_menu_button" />
-
-        <ImageView
-            android:id="@+id/iv_childcomment_arrowdecoration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="17dp"
-            android:importantForAccessibility="no"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_childcomment_arrow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

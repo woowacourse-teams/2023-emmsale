@@ -14,7 +14,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground">
 
         <TextView
             android:id="@+id/tv_comment_authorname"
@@ -86,17 +87,18 @@
             tools:text="답글 0" />
 
         <ImageView
-            android:id="@+id/iv_comment_deletebutton"
+            android:id="@+id/iv_comment_menubutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="13dp"
-            android:contentDescription="@string/comment_delete_button"
+            android:contentDescription="@string/comment_menu_button"
             android:padding="4dp"
-            android:visibility="@{comment.isDeleted || !comment.isDeletable ? View.GONE : View.VISIBLE}"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_comment_authorname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_comment_authorname"
-            app:srcCompat="@drawable/ic_comment_delete" />
+            app:srcCompat="@drawable/ic_comment_menubutton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

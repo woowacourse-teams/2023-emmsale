@@ -3,22 +3,36 @@ package com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerVie
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.CommentUiState
 
 class ChildCommentAdapter(
     private val deleteComment: (commentId: Long) -> Unit,
     private val showProfile: (authorId: Long) -> Unit,
-) : ListAdapter<CommentUiState, ChildCommentViewHolder>(diffUtil) {
+) : ListAdapter<CommentUiState, RecyclerView.ViewHolder>(diffUtil) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildCommentViewHolder {
-        return ChildCommentViewHolder.create(parent, deleteComment, showProfile)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == PARENT_COMMENT_VIEW_TYPE) {
+            ParentCommentViewHolder.create(parent, deleteComment)
+        } else {
+            ChildCommentViewHolder.create(parent, deleteComment, showProfile)
+        }
     }
 
-    override fun onBindViewHolder(holder: ChildCommentViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is ParentCommentViewHolder -> holder.bind(getItem(position))
+            is ChildCommentViewHolder -> holder.bind(getItem(position))
+        }
     }
+
+    override fun getItemViewType(position: Int): Int =
+        if (position == 0) PARENT_COMMENT_VIEW_TYPE else CHILD_COMMENT_VIEW_TYPE
 
     companion object {
+        private const val PARENT_COMMENT_VIEW_TYPE = 1
+        private const val CHILD_COMMENT_VIEW_TYPE = 2
+
         private val diffUtil = object : DiffUtil.ItemCallback<CommentUiState>() {
             override fun areItemsTheSame(
                 oldItem: CommentUiState,

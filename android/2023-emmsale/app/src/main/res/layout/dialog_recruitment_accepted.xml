@@ -62,6 +62,7 @@
                 android:id="@+id/btn_okay"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:paddingVertical="20dp"
                 android:text="@string/all_okay"

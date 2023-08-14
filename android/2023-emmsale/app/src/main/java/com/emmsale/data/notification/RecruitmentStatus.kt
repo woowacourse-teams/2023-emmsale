@@ -1,6 +1,6 @@
 package com.emmsale.data.notification
 
-enum class RecruitmentNotificationStatus {
+enum class RecruitmentStatus {
     ACCEPTED,
     REJECTED,
 }

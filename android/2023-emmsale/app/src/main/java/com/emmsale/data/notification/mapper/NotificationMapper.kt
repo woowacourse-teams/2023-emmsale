@@ -2,14 +2,14 @@ package com.emmsale.data.notification.mapper
 
 import com.emmsale.data.notification.RecruitmentNotification
 import com.emmsale.data.notification.RecruitmentNotificationApiModel
-import com.emmsale.data.notification.RecruitmentNotificationStatus
+import com.emmsale.data.notification.RecruitmentStatus
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 fun RecruitmentNotificationApiModel.toData(): RecruitmentNotification = RecruitmentNotification(
     id = id,
-    otherUid = otherUid,
-    myUid = myUid,
+    senderUid = senderUid,
+    receiverUid = receiverUid,
     message = message,
     eventId = eventId,
     status = status.convertToRecruitmentNotificationStatus(),
@@ -17,10 +17,10 @@ fun RecruitmentNotificationApiModel.toData(): RecruitmentNotification = Recruitm
     notificationDate = createdAt.toLocalDateTime(),
 )
 
-private fun String.convertToRecruitmentNotificationStatus(): RecruitmentNotificationStatus =
+private fun String.convertToRecruitmentNotificationStatus(): RecruitmentStatus =
     when (this) {
-        "ACCEPTED" -> RecruitmentNotificationStatus.ACCEPTED
-        "REJECTED" -> RecruitmentNotificationStatus.REJECTED
+        "ACCEPTED" -> RecruitmentStatus.ACCEPTED
+        "REJECTED" -> RecruitmentStatus.REJECTED
         else -> throw IllegalArgumentException("Unknown status: $this")
     }
 
