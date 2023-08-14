@@ -57,9 +57,17 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private fun setupUiLogic() {
+        setupLoginUiLogic()
+        setupCommentsUiLogic()
+    }
+
+    private fun setupLoginUiLogic() {
         viewModel.isLogin.observe(this) {
             handleNotLogin(it)
         }
+    }
+
+    private fun setupCommentsUiLogic() {
         viewModel.comments.observe(this) {
             handleErrors(it)
             handleChildComments(it)

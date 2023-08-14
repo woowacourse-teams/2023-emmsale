@@ -35,9 +35,17 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     private fun setupUiLogic() {
+        setupLoginUiLogic()
+        setupMyProfileUiLogic()
+    }
+
+    private fun setupLoginUiLogic() {
         viewModel.isLogin.observe(viewLifecycleOwner) {
             handleNotLogin(it)
         }
+    }
+
+    private fun setupMyProfileUiLogic() {
         viewModel.myProfile.observe(viewLifecycleOwner) {
             handleErrors(it)
             handleFields(it)
