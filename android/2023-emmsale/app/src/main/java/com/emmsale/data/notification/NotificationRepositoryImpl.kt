@@ -68,6 +68,15 @@ class NotificationRepositoryImpl(
         }
     }
 
+    override suspend fun deleteUpdatedNotifications(notificationIds: List<Long>): ApiResult<Unit> {
+        return withContext(dispatcher) {
+            handleApi(
+                execute = { notificationService.deleteNotification(notificationIds) },
+                mapToDomain = { },
+            )
+        }
+    }
+
     companion object {
         private const val IN_PROGRESS = "IN_PROGRESS"
         private const val ACCEPT = "ACCEPT"

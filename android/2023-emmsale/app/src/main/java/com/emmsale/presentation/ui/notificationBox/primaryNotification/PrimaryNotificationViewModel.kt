@@ -63,9 +63,29 @@ class PrimaryNotificationViewModel(
     }
 
     fun deleteNotification(notificationId: Long) {
+        viewModelScope.launch {
+            when (notificationRepository.deleteUpdatedNotifications(listOf(notificationId))) {
+                is ApiSuccess ->
+                    _pastNotifications.value =
+                        pastNotifications.value.deleteNotificationById(notificationId)
+
+                is ApiError, is ApiException ->
+                    _pastNotifications.value =
+                        pastNotifications.value.copy(isDeleteNotificationError = true)
+            }
+        }
     }
 
     fun deleteAllPastNotifications() {
+        val pastNotificationIds = pastNotifications.value.notificationIds
+        viewModelScope.launch {
+            when (notificationRepository.deleteUpdatedNotifications(pastNotificationIds)) {
+                is ApiSuccess -> _pastNotifications.value = PrimaryNotificationsUiState.EMPTY
+                is ApiError, is ApiException ->
+                    _pastNotifications.value =
+                        pastNotifications.value.copy(isDeleteNotificationError = true)
+            }
+        }
     }
 
     companion object {

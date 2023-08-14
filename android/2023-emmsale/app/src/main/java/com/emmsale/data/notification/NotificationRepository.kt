@@ -25,4 +25,8 @@ interface NotificationRepository {
     suspend fun updateUpdatedNotificationReadStatus(
         notificationId: Long,
     ): ApiResult<Unit>
+
+    suspend fun deleteUpdatedNotifications(
+        notificationIds: List<Long>,
+    ): ApiResult<Unit>
 }

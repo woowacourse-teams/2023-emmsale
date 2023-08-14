@@ -5,6 +5,7 @@ import com.emmsale.data.notification.recruitment.dto.RecruitmentStatusUpdateRequ
 import com.emmsale.data.notification.updated.dto.UpdatedNotificationApiModel
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.PUT
@@ -36,5 +37,10 @@ interface NotificationService {
     @PUT("/update-notifications/{update-notification-id}/read")
     suspend fun updateUpdatedNotificationReadStatus(
         @Path("update-notification-id") notificationId: Long,
+    ): Response<Unit>
+
+    @DELETE("/update-notifications")
+    suspend fun deleteNotification(
+        @Query("delete-ids") notificationIds: List<Long>,
     ): Response<Unit>
 }
