@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.ViewGroup
-import com.emmsale.databinding.DialogDangerBinding
+import com.emmsale.databinding.DialogWarningBinding
 import com.emmsale.presentation.common.extension.dp
 
 class WarningDialog(
@@ -19,8 +19,8 @@ class WarningDialog(
     private val onNegativeButtonClick: () -> Unit = {},
 ) : Dialog(context) {
 
-    private val binding: DialogDangerBinding by lazy {
-        DialogDangerBinding.inflate(layoutInflater)
+    private val binding: DialogWarningBinding by lazy {
+        DialogWarningBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
