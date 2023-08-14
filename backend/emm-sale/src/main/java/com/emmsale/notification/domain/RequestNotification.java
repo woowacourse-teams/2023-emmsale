@@ -33,6 +33,8 @@ public class RequestNotification extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private RequestNotificationStatus status;
+  @Column(nullable = false)
+  private boolean isRead;
 
   public RequestNotification(
       final Long senderId,
@@ -45,13 +47,18 @@ public class RequestNotification extends BaseEntity {
     this.eventId = eventId;
     this.message = message;
     this.status = RequestNotificationStatus.IN_PROGRESS;
+    this.isRead = false;
+  }
+
+  public boolean isNotOwner(final Long memberId) {
+    return !receiverId.equals(memberId);
   }
 
   public void modifyStatus(final RequestNotificationStatus status) {
     this.status = status;
   }
 
-  public boolean isNotOwner(final Long memberId) {
-    return !receiverId.equals(memberId);
+  public void read() {
+    isRead = true;
   }
 }

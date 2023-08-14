@@ -24,6 +24,7 @@ import com.emmsale.notification.application.dto.RequestNotificationModifyRequest
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
 import com.emmsale.notification.domain.RequestNotificationStatus;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,10 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
         fieldWithPath("senderId").description("보내는 사람 ID"),
         fieldWithPath("receiverId").description("받는 사람 ID"),
         fieldWithPath("message").description("알림 보낼 때 메시지"),
-        fieldWithPath("eventId").description("행사 ID")
+        fieldWithPath("eventId").description("행사 ID"),
+        fieldWithPath("isRead").description("읽은 상태"),
+        fieldWithPath("status").description("ACCEPTED/REJECTED/IN_PROGRESS 상태"),
+        fieldWithPath("createdAt").description("알림 생성 시간")
     );
 
     final RequestFieldsSnippet requestFields = requestFields(
@@ -72,7 +76,10 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
         senderId,
         receiverId,
         message,
-        eventId
+        eventId,
+        false,
+        RequestNotificationStatus.IN_PROGRESS,
+        LocalDateTime.now()
     );
 
     final RequestNotificationRequest request = new RequestNotificationRequest(
@@ -114,7 +121,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
     doNothing().when(requestNotificationCommandService).modify(request, 3L);
 
     //when & then
-    mockMvc.perform(patch("/request-notifications/{request-notification-id}", notificationId)
+    mockMvc.perform(patch("/request-notifications/{request-notification-id}/status", notificationId)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
@@ -135,7 +142,10 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
         fieldWithPath("senderId").description("보내는 사람 ID"),
         fieldWithPath("receiverId").description("받는 사람 ID"),
         fieldWithPath("message").description("알림 보낼 때 메시지"),
-        fieldWithPath("eventId").description("행사 ID")
+        fieldWithPath("eventId").description("행사 ID"),
+        fieldWithPath("isRead").description("읽은 상태"),
+        fieldWithPath("status").description("ACCEPTED/REJECTED/IN_PROGRESS 상태"),
+        fieldWithPath("createdAt").description("알림 생성 시간")
     );
 
     final long senderId = 1L;
@@ -149,7 +159,10 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
         senderId,
         receiverId,
         message,
-        eventId
+        eventId,
+        true,
+        RequestNotificationStatus.IN_PROGRESS,
+        LocalDateTime.now()
     );
 
     //when
@@ -172,18 +185,34 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
     final long memberId = 1L;
 
     final List<RequestNotificationResponse> expectResponses = List.of(
-        new RequestNotificationResponse(931L, 3342L, memberId, "같이 가요~", 312L),
-        new RequestNotificationResponse(932L, 1345L, memberId, "소통해요~", 123L)
+        new RequestNotificationResponse(
+            931L, 3342L,
+            memberId, "같이 가요~",
+            312L, false,
+            RequestNotificationStatus.REJECTED,
+            LocalDateTime.now()
+        ),
+        new RequestNotificationResponse(
+            932L, 1345L,
+            memberId, "소통해요~",
+            123L, true,
+            RequestNotificationStatus.ACCEPTED,
+            LocalDateTime.now()
+        )
     );
 
-    when(requestNotificationCommandService.findAllNotifications(any())).thenReturn(expectResponses);
+    when(requestNotificationCommandService.findAllNotifications(any()))
+        .thenReturn(expectResponses);
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].notificationId").description("저장된 알림 ID"),
         fieldWithPath("[].senderId").description("보내는 사람 ID"),
         fieldWithPath("[].receiverId").description("받는 사람 ID"),
         fieldWithPath("[].message").description("알림 보낼 때 메시지"),
-        fieldWithPath("[].eventId").description("행사 ID")
+        fieldWithPath("[].eventId").description("행사 ID"),
+        fieldWithPath("[].isRead").description("읽은 상태"),
+        fieldWithPath("[].status").description("ACCEPTED/REJECTED/IN_PROGRESS 상태"),
+        fieldWithPath("[].createdAt").description("알림 생성 시간")
     );
 
     //when & then
@@ -213,5 +242,25 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
         .andExpect(status().isNoContent())
         .andDo(print())
         .andDo(document("delete-request-notification", pathParameters));
+  }
+
+  @Test
+  @DisplayName("read() : 알림의 읽음 상태가 성공적으로 읽은 상태가 되면 204 No Content를 반환할 수 있다.")
+  void test_read() throws Exception {
+    //given
+    final PathParametersSnippet pathParameters = pathParameters(
+        parameterWithName("request-notification-id").description("읽은 알림 ID")
+    );
+
+    final long notificationId = 1L;
+
+    doNothing().when(requestNotificationCommandService).read(anyLong(), any());
+
+    //when & then
+    mockMvc.perform(patch("/request-notifications/{request-notification-id}/read", notificationId)
+            .header("Authorization", "Bearer AccessToken"))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("read-request-notification", pathParameters));
   }
 }

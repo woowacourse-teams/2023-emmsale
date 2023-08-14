@@ -112,6 +112,47 @@ include::{snippets}/delete-member/http-request.adoc[]
 .HTTP response
 include::{snippets}/delete-member/http-response.adoc[]
 
+== InterestTag
+
+=== `GET` : 사용자의 관심 태그 조회
+
+.HTTP request
+include::{snippets}/find-interest-tags/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-interest-tags/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-interest-tags/response-fields.adoc[]
+
+=== `POST` : 사용자의 관심 태그 추가
+
+.HTTP request
+include::{snippets}/add-interest-tag/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/add-interest-tag/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/add-interest-tag/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-interest-tag/response-fields.adoc[]
+
+=== `DELETE` : 사용자의 관심 태그 삭제
+
+.HTTP request
+include::{snippets}/delete-interest-tag/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/delete-interest-tag/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/delete-interest-tag/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/delete-interest-tag/response-fields.adoc[]
+
 == Event
 
 === `GET` : 행사 상세정보 조회
@@ -338,6 +379,13 @@ include::{snippets}/modify-request-notification/request-fields.adoc[]
 include::{snippets}/modify-request-notification/http-request.adoc[]
 
 include::{snippets}/modify-request-notification/path-parameters.adoc[]
+
+=== 'PATCH' : 함께 가기 알림 읽음 상태 변경
+
+.HTTP request
+include::{snippets}/read-request-notification/http-request.adoc[]
+
+include::{snippets}/read-request-notification/path-parameters.adoc[]
 
 === `DELETE` : 함께 가기 알림 삭제
 
