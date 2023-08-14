@@ -47,7 +47,6 @@
             android:contentDescription="@string/primarynotification_profile_image_desc"
             android:scaleType="centerCrop"
             android:src="@mipmap/ic_launcher"
-            app:isCircle="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

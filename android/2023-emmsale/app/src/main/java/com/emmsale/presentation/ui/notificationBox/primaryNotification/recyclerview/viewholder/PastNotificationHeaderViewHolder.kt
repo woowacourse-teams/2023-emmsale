@@ -8,7 +8,7 @@ import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.P
 
 class PastNotificationHeaderViewHolder(
     parent: ViewGroup,
-    onDeleteAllClick: () -> Unit,
+    onDeleteAllClick: () -> Unit = {},
 ) : RecentNotificationViewHolder(
     LayoutInflater.from(parent.context).inflate(
         R.layout.item_past_notification_header,
