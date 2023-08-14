@@ -1,4 +1,4 @@
-package com.emmsale.presentation.base.fragment
+package com.emmsale.presentation.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

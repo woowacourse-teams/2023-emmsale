@@ -11,11 +11,45 @@ class NotificationRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val notificationService: NotificationService,
 ) : NotificationRepository {
-    override suspend fun getNotifications(): ApiResult<List<Notification>> =
+    override suspend fun getRecruitmentNotifications(): ApiResult<List<RecruitmentNotification>> =
         withContext(dispatcher) {
             handleApi(
                 execute = { notificationService.getNotifications() },
-                mapToDomain = List<NotificationApiModel>::toData,
+                mapToDomain = List<RecruitmentNotificationApiModel>::toData,
             )
         }
+
+    override suspend fun updateRecruitmentStatus(
+        notificationId: Long,
+        recruitmentStatus: RecruitmentStatus,
+    ): ApiResult<Unit> = withContext(dispatcher) {
+        handleApi(
+            execute = {
+                val recruitingState = convertRequestApiString(recruitmentStatus)
+                notificationService.updateRecruitmentStatus(notificationId, recruitingState)
+            },
+            mapToDomain = { },
+        )
+    }
+
+    private fun convertRequestApiString(recruitmentStatus: RecruitmentStatus) =
+        when (recruitmentStatus) {
+            RecruitmentStatus.ACCEPTED -> ACCEPT
+            RecruitmentStatus.REJECTED -> REJECT
+        }
+
+    override suspend fun updateNotificationReadStatus(
+        notificationId: Long,
+        isRead: Boolean,
+    ): ApiResult<Unit> = withContext(dispatcher) {
+        handleApi(
+            execute = { notificationService.updateNotificationReadStatus(notificationId, isRead) },
+            mapToDomain = { },
+        )
+    }
+
+    companion object {
+        private const val ACCEPT = "ACCEPT"
+        private const val REJECT = "REJECT"
+    }
 }

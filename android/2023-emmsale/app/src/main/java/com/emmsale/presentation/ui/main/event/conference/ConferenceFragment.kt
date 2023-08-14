@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentConferenceBinding
-import com.emmsale.presentation.base.fragment.BaseFragment
+import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.FilterTag
@@ -15,9 +15,9 @@ import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewAdapter
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewDivider
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceItemUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringOptionUiState
+import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
 import com.emmsale.presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity
 import java.time.LocalDate
 
@@ -73,10 +73,12 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     }
 
     private fun setupEventsObserver() {
-        viewModel.conference.observe(viewLifecycleOwner) { eventsResult ->
+        viewModel.conferences.observe(viewLifecycleOwner) { eventsResult ->
             when {
-                eventsResult.isError -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
-                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferenceItems)
+                eventsResult.isLoadingConferencesFailed -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
+                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferences) {
+                    binding.rvEvents.scrollToPosition(0)
+                }
             }
         }
     }
@@ -118,18 +120,18 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         binding.btnEventFilter.setOnClickListener { navigateToEventFilter() }
     }
 
-    private fun navigateToEventDetail(event: ConferenceItemUiState) {
+    private fun navigateToEventDetail(event: ConferenceUiState) {
         EventDetailActivity.startActivity(requireContext(), event.id)
     }
 
     private fun navigateToEventFilter() {
         val selectedFilter = viewModel.selectedFilter.value
-        val filterActivityIntent = ConferenceFilterActivity.createIntent(
+        val filterActivityIntent = ConferenceFilterActivity.getIntent(
             context = requireContext(),
             selectedStatusIds = selectedFilter.selectedStatusFilteringOptionIds,
             selectedTagIds = selectedFilter.selectedTagFilteringOptionIds,
-            selectedStartDate = selectedFilter.selectedStartDate?.selectedDate,
-            selectedEndDate = selectedFilter.selectedEndDate?.selectedDate,
+            selectedStartDate = selectedFilter.selectedStartDate?.date,
+            selectedEndDate = selectedFilter.selectedEndDate?.date,
         )
         filterActivityLauncher.launch(filterActivityIntent)
     }

@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="17dp"
                         android:layout_marginTop="22dp"
-                        android:text="@string/myprofile_greeting"
+                        android:text="@string/profile_greeting"
                         android:textSize="34sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,7 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="9dp"
                         android:layout_marginEnd="19dp"
-                        android:text="@{viewModel.myProfile.description.isBlank() ? @string/myprofile_no_description : viewModel.myProfile.description }"
+                        android:text="@{viewModel.myProfile.description.isBlank() ? @string/profile_no_description : viewModel.myProfile.description }"
                         android:textSize="13sp"
                         app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_memberimage"
                         app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
@@ -90,7 +90,7 @@
                         android:importantForAccessibility="no"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/bg_myprofile_imagedecoration" />
+                        app:srcCompat="@drawable/bg_profile_imagedecoration" />
 
                     <ImageView
                         android:id="@+id/iv_myprofile_memberimage"
@@ -98,7 +98,7 @@
                         android:layout_height="82dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="7dp"
-                        android:contentDescription="@string/myprofile_memberimagedescription"
+                        android:contentDescription="@string/profile_memberimagedescription"
                         android:scaleType="centerCrop"
                         app:imageUrl="@{viewModel.myProfile.memberImageUrl}"
                         app:isCircle="@{true}"
@@ -132,18 +132,18 @@
                         android:layout_height="30dp"
                         android:layout_marginStart="17dp"
                         android:layout_marginTop="29dp"
-                        android:background="@drawable/bg_myprofile_activityicon"
+                        android:background="@drawable/bg_profile_activityicon"
                         android:importantForAccessibility="no"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/view_myprofile_divider"
-                        app:srcCompat="@drawable/ic_myprofile_education" />
+                        app:srcCompat="@drawable/ic_profile_education" />
 
                     <TextView
                         android:id="@+id/tv_myprofile_educationslabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="@string/myprofile_educationslabel"
+                        android:text="@string/profile_educationslabel"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_myprofile_educationicon"
@@ -162,25 +162,25 @@
                         app:layout_constraintStart_toEndOf="@+id/iv_myprofile_educationicon"
                         app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_educationicon"
                         tools:itemCount="3"
-                        tools:listitem="@layout/item_myprofile_activities" />
+                        tools:listitem="@layout/item_profile_activities" />
 
                     <ImageView
                         android:id="@+id/iv_myprofile_clubicon"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="32dp"
-                        android:background="@drawable/bg_myprofile_activityicon"
+                        android:background="@drawable/bg_profile_activityicon"
                         android:importantForAccessibility="no"
                         app:layout_constraintStart_toStartOf="@+id/iv_myprofile_educationicon"
                         app:layout_constraintTop_toBottomOf="@+id/rv_myprofile_educations"
-                        app:srcCompat="@drawable/ic_myprofile_education" />
+                        app:srcCompat="@drawable/ic_profile_education" />
 
                     <TextView
                         android:id="@+id/tv_myprofile_clubslabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="@string/myprofile_clubslabel"
+                        android:text="@string/profile_clubslabel"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_myprofile_clubicon"
@@ -201,7 +201,7 @@
                         app:layout_constraintStart_toEndOf="@+id/iv_myprofile_clubicon"
                         app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_clubicon"
                         tools:itemCount="2"
-                        tools:listitem="@layout/item_myprofile_activities" />
+                        tools:listitem="@layout/item_profile_activities" />
 
                     <ImageView
                         android:id="@+id/iv_myprofile_educationlabeldecorator"
@@ -212,7 +212,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/tv_myprofile_educationslabel"
                         app:layout_constraintStart_toEndOf="@+id/tv_myprofile_educationslabel"
                         app:layout_constraintTop_toTopOf="@+id/tv_myprofile_educationslabel"
-                        app:srcCompat="@drawable/ic_myprofile_activitylabeldecorator" />
+                        app:srcCompat="@drawable/ic_profile_activitylabeldecorator" />
 
                     <ImageView
                         android:id="@+id/iv_myprofile_clublabeldecorator"
@@ -223,7 +223,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/tv_myprofile_clubslabel"
                         app:layout_constraintStart_toEndOf="@+id/tv_myprofile_clubslabel"
                         app:layout_constraintTop_toTopOf="@+id/tv_myprofile_clubslabel"
-                        app:srcCompat="@drawable/ic_myprofile_activitylabeldecorator" />
+                        app:srcCompat="@drawable/ic_profile_activitylabeldecorator" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/cg_myprofile_fields"

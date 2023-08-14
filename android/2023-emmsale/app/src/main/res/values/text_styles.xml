@@ -271,7 +271,7 @@
     </style>
 
     <style name="KerdyTextStyleBold14" parent="KerdyTextStyle14">
-        <item name="android:fontWeight">700</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="KerdyTextStyleBold15" parent="KerdyTextStyle15">

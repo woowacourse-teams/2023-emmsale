@@ -18,7 +18,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="EventFilterToolbarTitleFontStyle">
+    <style name="ToolbarTitleFontStyle">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/black</item>
@@ -46,7 +46,6 @@
         <item name="android:textColor">@color/date_picker_bottom_button_color</item>
     </style>
 
-
     <style name="EventDetail_NotSelectedTabStyle">
         <item name="android:fontFamily">@font/nanum_square_bold</item>
         <item name="android:textSize">14sp</item>
@@ -55,5 +54,21 @@
     <style name="EventDetail_SelectedTabStyle">
         <item name="android:fontFamily">@font/nanum_square_bold</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TranslucentStatusDialog" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="FilterTagStyle" parent="Widget.AppCompat.Button">
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:drawablePadding">12dp</item>
+        <item name="android:drawableEnd">@drawable/ic_conference_filtering_option_remove_12</item>
+        <item name="android:drawableTint">@color/light_gray</item>
+        <item name="android:background">@drawable/bg_filter_tag</item>
     </style>
 </resources>

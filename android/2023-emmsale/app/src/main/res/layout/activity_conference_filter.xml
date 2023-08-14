@@ -25,7 +25,7 @@
             app:navigationIcon="@drawable/ic_back"
             app:title="@string/conferencefilter_title"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/EventFilterToolbarTitleFontStyle" />
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
         <ScrollView
             android:layout_width="0dp"
