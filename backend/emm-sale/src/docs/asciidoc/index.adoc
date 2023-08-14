@@ -460,6 +460,16 @@ include::{snippets}/put-update-notifications-read/http-request.adoc[]
 .HTTP response
 include::{snippets}/put-update-notifications-read/http-response.adoc[]
 
+=== `DELETE` : 댓글 & 행사 알림 삭제 (단건 & 다건 가능)
+
+.HTTP request 설명
+include::{snippets}/delete-update-notifications/request-parameters.adoc[]
+
+include::{snippets}/delete-update-notifications/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/delete-update-notifications/http-response.adoc[]
+
 == Block
 
 === `POST` : 사용자 차단 등록
@@ -475,7 +485,7 @@ include::{snippets}/register-block/http-response.adoc[]
 
 == TAG
 
-=== 'GET' : 존재하는 모든 태그 조회
+=== `GET` : 존재하는 모든 태그 조회
 
 .HTTP request
 include::{snippets}/find-tags/http-request.adoc[]

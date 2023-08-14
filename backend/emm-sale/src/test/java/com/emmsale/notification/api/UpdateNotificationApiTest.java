@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -117,5 +118,27 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
         .andExpect(status().isNoContent())
         .andDo(print())
         .andDo(document("put-update-notifications-read", pathParams));
+  }
+
+  @Test
+  @DisplayName("deleteBatch() : 댓글 & 행사 알림을 성공적으로 삭제했다면 204 No Content 를 반환할 수 있다.")
+  void test_deleteBatch() throws Exception {
+    //given
+    final RequestParametersSnippet requestParam = requestParameters(
+        parameterWithName("delete-ids").description("삭제할 댓글 & 행사 알림 ID들")
+    );
+
+    final String accessToken = "Bearer Token";
+
+    //when
+    doNothing().when(updateNotificationCommandService).deleteBatch(any(), any());
+
+    //then
+    mockMvc.perform(delete("/update-notifications")
+            .queryParam("delete-ids", "1,2,3,4,5")
+            .header("Authorization", accessToken))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("delete-update-notifications", requestParam));
   }
 }

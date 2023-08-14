@@ -8,6 +8,8 @@ import com.emmsale.member.exception.MemberException;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
 import com.emmsale.notification.exception.NotificationException;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,5 +35,16 @@ public class UpdateNotificationCommandService {
     if (authMember.isNotMe(loginMemberId)) {
       throw new MemberException(NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER);
     }
+  }
+
+  public void deleteBatch(final Member authMember, final List<Long> deleteIds) {
+
+    final List<Long> deletedIds = updateNotificationRepository.findAllByIdIn(deleteIds)
+        .stream()
+        .filter(it -> it.isOwnUpdateNotification(authMember.getId()))
+        .map(UpdateNotification::getId)
+        .collect(Collectors.toList());
+
+    updateNotificationRepository.deleteAllByIdInBatch(deletedIds);
   }
 }
