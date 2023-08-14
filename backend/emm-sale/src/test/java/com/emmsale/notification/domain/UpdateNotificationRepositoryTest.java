@@ -1,9 +1,11 @@
 package com.emmsale.notification.domain;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +43,26 @@ class UpdateNotificationRepositoryTest {
         )
     ));
 
+    final List<UpdateNotification> expected = List.of(
+        new UpdateNotification(
+            receiverId, 2L,
+            UpdateNotificationType.COMMENT, LocalDateTime.now()
+        ),
+        new UpdateNotification(
+            receiverId, 3L,
+            UpdateNotificationType.EVENT, LocalDateTime.now()
+        )
+    );
+
     //when
-    final List<UpdateNotification> result =
+    final List<UpdateNotification> actual =
         updateNotificationRepository.findAllByReceiverId(receiverId);
 
     //then
-    assertEquals(2, result.size());
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .ignoringCollectionOrder()
+        .ignoringFields("createdAt", "id")
+        .isEqualTo(expected);
   }
 }
