@@ -80,7 +80,7 @@ class ProfileActivity : AppCompatActivity() {
         }
         viewModel.profile.observe(this) {
             handleLoginMember(it)
-            handleError(it)
+            handleProfileFetchingError(it)
             handleFields(it)
             handleActivities(it)
         }
@@ -92,7 +92,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleError(profile: ProfileUiState) {
+    private fun handleProfileFetchingError(profile: ProfileUiState) {
         if (profile.isFetchingError) {
             showToast(getString(R.string.profile_profile_fetching_error_message))
         }
