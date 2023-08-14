@@ -11,7 +11,9 @@ import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.emmsale.presentation.ui.onboarding.OnboardingViewModel
 import com.emmsale.presentation.ui.onboarding.uistate.ActivityUiState
 
-class OnboardingFieldFragment : BaseFragment<FragmentOnboardingFieldBinding>() {
+class OnboardingFieldFragment :
+    BaseFragment<FragmentOnboardingFieldBinding>(),
+    View.OnClickListener {
     val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }
     override val layoutResId: Int = R.layout.fragment_onboarding_field
 
@@ -23,9 +25,8 @@ class OnboardingFieldFragment : BaseFragment<FragmentOnboardingFieldBinding>() {
     }
 
     private fun initClickListener() {
-        binding.btnNext.setOnClickListener {
-            (requireActivity() as OnboardingActivity).navigateToNextPage()
-        }
+        binding.btnNext.setOnClickListener(this)
+        binding.btnBack.setOnClickListener(this)
     }
 
     private fun setupFields() {
@@ -44,6 +45,13 @@ class OnboardingFieldFragment : BaseFragment<FragmentOnboardingFieldBinding>() {
         isChecked = activity.isSelected
         setOnCheckedChangeListener { _, isChecked ->
             viewModel.updateSelection(activity.id, isChecked)
+        }
+    }
+
+    override fun onClick(view: View) {
+        when (view.id) {
+            R.id.btn_next -> (requireActivity() as OnboardingActivity).navigateToNextPage()
+            R.id.btn_back -> (requireActivity() as OnboardingActivity).navigateToPrevPage()
         }
     }
 }
