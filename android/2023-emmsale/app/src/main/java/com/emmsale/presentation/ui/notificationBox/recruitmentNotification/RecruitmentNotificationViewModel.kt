@@ -112,7 +112,7 @@ class RecruitmentNotificationViewModel(
         }
 
     fun toggleExpand(eventId: Long) {
-        _notifications.value = _notifications.value.toggleNotificationExpanded(eventId)
+        _notifications.value = notifications.value.toggleNotificationExpanded(eventId)
     }
 
     fun acceptRecruit(notificationId: Long) {
@@ -127,7 +127,7 @@ class RecruitmentNotificationViewModel(
             ) {
                 is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToAcceptedState()
-                    _notifications.value = _notifications.value.changeAcceptStateBy(notificationId)
+                    _notifications.value = notifications.value.changeAcceptStateBy(notificationId)
                 }
 
                 is ApiException, is ApiError ->
@@ -149,7 +149,7 @@ class RecruitmentNotificationViewModel(
             ) {
                 is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToRejectedState()
-                    _notifications.value = _notifications.value.changeRejectStateBy(notificationId)
+                    _notifications.value = notifications.value.changeRejectStateBy(notificationId)
                 }
 
                 is ApiException, is ApiError ->
