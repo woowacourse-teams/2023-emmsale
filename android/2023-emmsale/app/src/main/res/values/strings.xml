@@ -17,6 +17,7 @@
     <string name="all_report_button_label">신고하기</string>
 
     <string name="onboarding_member_update_failed_message">회원정보 업데이트를 실패했어요!</string>
+    <string name="onboarding_back_press_desc">온보딩 화면 뒤로가기</string>
 
     <string name="onboardingname_page">1/4</string>
     <string name="onboardingname_title">이름 설정</string>
