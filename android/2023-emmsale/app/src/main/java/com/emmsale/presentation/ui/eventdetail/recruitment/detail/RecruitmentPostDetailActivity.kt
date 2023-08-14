@@ -60,7 +60,7 @@ class RecruitmentPostDetailActivity :
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
         ) { result ->
-            if (result == null || result.resultCode != AppCompatActivity.RESULT_OK) return@registerForActivityResult
+            if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
             viewModel.fetchRecruitmentPost()
         }
 
@@ -87,6 +87,7 @@ class RecruitmentPostDetailActivity :
         initRequestCompanionButtonClick()
         initBackPressButtonClick()
         initBackPressIconClick()
+        initProfileClick()
     }
 
     private fun setUpCompanionRequest() {
@@ -134,6 +135,12 @@ class RecruitmentPostDetailActivity :
     private fun initBackPressIconClick() {
         binding.ivRecruitmentdetailBackpress.setOnClickListener {
             finishWithResult()
+        }
+    }
+
+    private fun initProfileClick() {
+        binding.ivRecruitmentdetailProfileImage.setOnClickListener {
+            // 프로필 조회
         }
     }
 

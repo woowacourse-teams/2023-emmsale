@@ -19,11 +19,11 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
     private val eventId: Long by lazy {
         intent.getLongExtra(EVENT_ID_KEY, DEFAULT_ID)
     }
-    private val recruitmentId: Long? by lazy {
+    private val recruitmentIdToEdit: Long? by lazy {
         receiveRecruitmentId()
     }
     private val viewModel: RecruitmentPostWritingViewModel by viewModels {
-        RecruitmentPostWritingViewModel.factory(eventId, recruitmentId)
+        RecruitmentPostWritingViewModel.factory(eventId, recruitmentIdToEdit)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

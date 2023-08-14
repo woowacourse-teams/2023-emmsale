@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class RecruitmentPostWritingViewModel(
     private val eventId: Long,
-    private val recruitmentId: Long?,
+    private val recruitmentIdToEdit: Long?,
     private val recruitmentRepository: RecruitmentRepository,
 ) : ViewModel() {
     private val _recruitmentWriting: NotNullMutableLiveData<RecruitmentPostWritingUiState> =
@@ -30,10 +30,10 @@ class RecruitmentPostWritingViewModel(
     val postedRecruitmentId: NotNullLiveData<Long> = _postedRecruitmentId
 
     init {
-        if (recruitmentId == null) {
-            changeToPostMode()
-        } else {
+        if (recruitmentIdToEdit != null) {
             changeToEditMode()
+        } else {
+           changeToPostMode()
         }
     }
 
@@ -65,12 +65,12 @@ class RecruitmentPostWritingViewModel(
 
     fun editRecruitment(content: String) {
         changeToLoadingState()
-        if (recruitmentId == null) {
+        if (recruitmentIdToEdit == null) {
             changeToErrorState()
             return
         }
         viewModelScope.launch {
-            when (recruitmentRepository.editRecruitment(eventId, recruitmentId, content)) {
+            when (recruitmentRepository.editRecruitment(eventId, recruitmentIdToEdit, content)) {
                 is ApiSuccess -> changeToEditSuccessState()
                 is ApiError, is ApiException -> changeToErrorState()
             }
