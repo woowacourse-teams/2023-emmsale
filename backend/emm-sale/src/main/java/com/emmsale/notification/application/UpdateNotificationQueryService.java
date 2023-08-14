@@ -49,7 +49,7 @@ public class UpdateNotificationQueryService {
 
   private UpdateNotificationResponse convertToResponse(final UpdateNotification notification) {
     if (notification.isCommentNotification()) {
-      final Comment savedComment = commentRepository.findById(notification.getReceiverId())
+      final Comment savedComment = commentRepository.findById(notification.getRedirectId())
           .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
 
       return UpdateNotificationResponse.convertCommentNotification(notification, savedComment);
