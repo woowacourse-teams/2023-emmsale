@@ -63,6 +63,32 @@ class RecruitmentPostQueryServiceTest extends ServiceIntegrationTestHelper {
         .containsExactlyInAnyOrderElementsOf(expected);
   }
 
+  @Test
+  @DisplayName("event의 id로 참가 게시글 목록을 조회할 수 있다.")
+  void findRecruitmentPost() {
+    // given
+    final Event 인프콘 = eventRepository.save(eventFixture());
+    final Member 멤버1 = memberRepository.save(new Member(123L, "image1.com"));
+
+    final RecruitmentPostRequest requestMember1 = createRecruitmentPostRequest(멤버1);
+
+    final Long 멤버1_참가글_ID = postCommandService
+        .createRecruitmentPost(인프콘.getId(), requestMember1, 멤버1);
+
+    final RecruitmentPostResponse expected =
+        new RecruitmentPostResponse(멤버1_참가글_ID, 멤버1.getId(), 멤버1.getName(), 멤버1.getImageUrl(),
+            requestMember1.getContent(), LocalDate.now());
+
+    //when
+    final RecruitmentPostResponse actual = postQueryService.findRecruitmentPost(
+        인프콘.getId(), 멤버1_참가글_ID);
+
+    //then
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .isEqualTo(expected);
+  }
+
   @Nested
   @DisplayName("이벤트에 이미 참가한 멤버인지 확인할 수 있다.")
   class isAlreadyRecruit {

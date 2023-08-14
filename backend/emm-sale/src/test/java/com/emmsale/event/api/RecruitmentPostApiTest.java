@@ -115,6 +115,32 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     //when && then
     mockMvc.perform(get(format("/events/%s/recruitment-posts", eventId)))
         .andExpect(status().isOk())
+        .andDo(document("find-recruitment-posts", responseFields));
+  }
+
+  @Test
+  @DisplayName("참여 게시글을 단건조회할 수 있다.")
+  void findRecruitmentPost() throws Exception {
+    //given
+    final Long eventId = 1L;
+    final Long postId = 2L;
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("id").type(JsonFieldType.NUMBER).description("함께해요 게시글 식별자"),
+        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
+        fieldWithPath("name").type(JsonFieldType.STRING).description("member 이름"),
+        fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
+        fieldWithPath("content").type(JsonFieldType.STRING).description("함께해요 게시글 내용"),
+        fieldWithPath("updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜")
+    );
+    final RecruitmentPostResponse response = new RecruitmentPostResponse(2L, 1L,
+        "스캇", "imageUrl", "저랑 같이 컨퍼런스 갈 사람",
+        LocalDate.of(2023, 7, 15));
+
+    when(postQueryService.findRecruitmentPost(eventId, postId)).thenReturn(response);
+
+    //when && then
+    mockMvc.perform(get(format("/events/%s/recruitment-posts/%s", eventId, postId)))
+        .andExpect(status().isOk())
         .andDo(document("find-recruitment-post", responseFields));
   }
 
