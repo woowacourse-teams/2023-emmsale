@@ -57,7 +57,10 @@ class RepositoryContainer(
         EventTagRepositoryImpl(eventTagService = serviceContainer.eventTagService)
     }
     val eventDetailRepository: EventDetailRepository by lazy {
-        EventDetailRepositoryImpl(eventDetailService = serviceContainer.eventDetailService)
+        EventDetailRepositoryImpl(
+            eventDetailService = serviceContainer.eventDetailService,
+            tokenRepository = tokenRepository,
+        )
     }
     val recruitmentRepository: RecruitmentRepository by lazy {
         RecruitmentRepositoryImpl(

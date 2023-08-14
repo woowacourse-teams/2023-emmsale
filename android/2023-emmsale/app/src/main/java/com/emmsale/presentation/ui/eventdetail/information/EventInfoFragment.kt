@@ -22,12 +22,19 @@ class EventInfoFragment : BaseFragment<FragmentEventInformationBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         urlButtonClick()
+        scarpButtonClick()
         binding.imageUrl = imageUrl
     }
 
     private fun urlButtonClick() {
         binding.buttonEventinformationNavigatewebsite.setOnClickListener {
             navigateToUrl()
+        }
+    }
+
+    private fun scarpButtonClick() {
+        binding.ivEventInformationScrap.setOnClickListener {
+            binding.ivEventInformationScrap.setImageResource(R.drawable.ic_all_scrap_checked)
         }
     }
 

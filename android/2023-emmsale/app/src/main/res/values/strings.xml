@@ -136,7 +136,6 @@
     <string name="notificationbox_delete_noti">알림 삭제</string>
     <string name="notificationbox_primary">알림</string>
     <string name="notificationbox_recruitment">요청</string>
-
     <string name="notificationbox_recruitment_status_changing_failed">서버와의 통신 오류로 같이가기에 실패했어요!</string>
     <string name="notificationbox_recruitment_rejected_message">같이 가기를 거절했어요!</string>
 
@@ -215,4 +214,6 @@
     <string name="logoutdialog_message">정말로 로그아웃 하시겠습니까?</string>
     <string name="logoutdialog_positive_button_label">로그아웃</string>
     <string name="logoutdialog_negative_button_label">취소</string>
+    <string name="eventinfromation_scrap">스크랩</string>
+
 </resources>
