@@ -6,6 +6,7 @@ import com.emmsale.data.notification.recruitment.RecruitmentNotification
 import com.emmsale.data.notification.recruitment.RecruitmentStatus
 import com.emmsale.data.notification.recruitment.dto.RecruitmentNotificationApiModel
 import com.emmsale.data.notification.recruitment.mapper.toData
+import com.emmsale.data.notification.recruitment.mapper.toRequestModel
 import com.emmsale.data.notification.updated.UpdatedNotification
 import com.emmsale.data.notification.updated.dto.UpdatedNotificationApiModel
 import com.emmsale.data.notification.updated.mapper.toData
@@ -31,19 +32,14 @@ class NotificationRepositoryImpl(
     ): ApiResult<Unit> = withContext(dispatcher) {
         handleApi(
             execute = {
-                val recruitingStatus = convertRequestApiString(recruitmentStatus)
-                notificationService.updateRecruitmentStatus(notificationId, recruitingStatus)
+                notificationService.updateRecruitmentStatus(
+                    notificationId = notificationId,
+                    newStatus = recruitmentStatus.toRequestModel(),
+                )
             },
             mapToDomain = { },
         )
     }
-
-    private fun convertRequestApiString(recruitmentStatus: RecruitmentStatus) =
-        when (recruitmentStatus) {
-            RecruitmentStatus.PENDING -> IN_PROGRESS
-            RecruitmentStatus.ACCEPTED -> ACCEPT
-            RecruitmentStatus.REJECTED -> REJECT
-        }
 
     override suspend fun updateNotificationReadStatus(
         notificationId: Long,

@@ -1,7 +1,6 @@
 package com.emmsale.data.notification.recruitment.mapper
 
 import com.emmsale.data.notification.recruitment.RecruitmentNotification
-import com.emmsale.data.notification.recruitment.RecruitmentStatus
 import com.emmsale.data.notification.recruitment.dto.RecruitmentNotificationApiModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -12,18 +11,10 @@ fun RecruitmentNotificationApiModel.toData(): RecruitmentNotification = Recruitm
     receiverUid = receiverUid,
     message = message,
     eventId = eventId,
-    status = status.convertToRecruitmentNotificationStatus(),
+    status = status.toRecruitmentStatus(),
     isRead = isRead,
     notificationDate = createdAt.toLocalDateTime(),
 )
-
-private fun String.convertToRecruitmentNotificationStatus(): RecruitmentStatus =
-    when (this) {
-        "IN_PROGRESS" -> RecruitmentStatus.PENDING
-        "ACCEPTED" -> RecruitmentStatus.ACCEPTED
-        "REJECTED" -> RecruitmentStatus.REJECTED
-        else -> throw IllegalArgumentException("Unknown status: $this")
-    }
 
 private fun String.toLocalDateTime(): LocalDateTime {
     val formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")
