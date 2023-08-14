@@ -164,6 +164,9 @@
     <string name="eventdetail_tab_infromation">상세 정보</string>
     <string name="eventdetail_tab_comment">댓글</string>
     <string name="eventdetail_tab_recruitment">같이가요</string>
+    <string name="eventdetail_place">장소</string>
+    <string name="eventdetail_date">일시</string>
+    <string name="eventdetail_apply_date">접수기간</string>
 
     <string name="setting_member_image_description">회원의 사진</string>
     <string name="setting_notification_setting_button_label">알림 설정</string>
@@ -186,4 +189,5 @@
     <string name="logoutdialog_message">정말로 로그아웃 하시겠습니까?</string>
     <string name="logoutdialog_positive_button_label">로그아웃</string>
     <string name="logoutdialog_negative_button_label">취소</string>
+
 </resources>
