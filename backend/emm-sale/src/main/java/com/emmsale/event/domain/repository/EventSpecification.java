@@ -29,11 +29,13 @@ public class EventSpecification {
       final LocalDateTime endDate) {
     return (root, query, criteriaBuilder) ->
         criteriaBuilder.or(
-            criteriaBuilder.between(root.get("startDate"), startDate, endDate),
-            criteriaBuilder.between(root.get("endDate"), startDate, endDate),
+            criteriaBuilder.between(root.get("eventPeriod").get("startDate"), startDate, endDate),
+            criteriaBuilder.between(root.get("eventPeriod").get("endDate"), startDate, endDate),
             criteriaBuilder.and(
-                criteriaBuilder.lessThanOrEqualTo(root.get("startDate"), endDate),
-                criteriaBuilder.greaterThanOrEqualTo(root.get("endDate"), startDate))
+                criteriaBuilder.lessThanOrEqualTo(root.get("eventPeriod").get("startDate"),
+                    endDate),
+                criteriaBuilder.greaterThanOrEqualTo(root.get("eventPeriod").get("endDate"),
+                    startDate))
         );
   }
 }

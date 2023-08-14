@@ -1,0 +1,29 @@
+### 알림 저장
+
+POST http://localhost:8080/request-notifications
+Content-Type: application/json
+
+{
+  "senderId" : 1,
+  "receiverId" : 2,
+  "message" : "테스트 알람이다",
+  "eventId" : 1
+}
+
+### 알림 상태를 변경하는 API
+
+PATCH http://localhost:8080/request-notifications/2
+Content-Type: application/json
+
+{
+  "updatedStatus" : "ACCEPTED"
+}
+
+### id로 알림 조회하는 API
+
+GET http://localhost:8080/request-notifications/1
+
+### 알림 읽음 상태를 변경하는 API
+
+PATCH http://localhost:8080/request-notifications/1/read
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0

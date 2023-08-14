@@ -8,14 +8,13 @@ import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
 import com.emmsale.tag.domain.Tag;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -39,79 +38,63 @@ public class Event extends BaseEntity {
   private String name;
   @Column(nullable = false)
   private String location;
-  @Column(nullable = false)
-  private LocalDateTime startDate;
-  @Column(nullable = false)
-  private LocalDateTime endDate;
+  @Embedded
+  private EventPeriod eventPeriod;
   @Column(nullable = false)
   private String informationUrl;
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private EventType type;
   private String imageUrl;
-  @OneToMany(mappedBy = "event", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+  @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
   @OneToMany(mappedBy = "event")
   private List<Comment> comments;
   @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
-  private List<Participant> participants = new ArrayList<>();
+  private List<RecruitmentPost> recruitmentPosts = new ArrayList<>();
 
   public Event(
       final String name,
       final String location,
       final LocalDateTime startDate,
       final LocalDateTime endDate,
+      final LocalDateTime applyStartDate,
+      final LocalDateTime applyEndDate,
       final String informationUrl,
       final EventType eventType,
       final String imageUrl
   ) {
-    validateStartBeforeOrEqualEndDateTime(startDate, endDate);
 
     this.name = name;
     this.location = location;
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.eventPeriod = new EventPeriod(startDate, endDate, applyStartDate, applyEndDate);
     this.informationUrl = informationUrl;
     this.type = eventType;
     this.imageUrl = imageUrl;
   }
 
-  public Participant addParticipant(final Member member, final String content) {
-    final Participant participant = new Participant(member, this, content);
-    participants.add(participant);
-    return participant;
+  public RecruitmentPost createRecruitmentPost(final Member member, final String content) {
+    final RecruitmentPost recruitmentPost = new RecruitmentPost(member, this, content);
+    recruitmentPosts.add(recruitmentPost);
+    return recruitmentPost;
   }
 
-  // 요거 이전에 발견하지 못했었는데 나중에 반환값 void로 바꿔도 될까요? 반환하는 값을 쓰지 않는 것 같아서요.
-  public List<EventTag> addAllEventTags(final List<Tag> tags) {
+  public void addAllEventTags(final List<Tag> tags) {
     final List<EventTag> eventTags = tags.stream()
         .map(tag -> new EventTag(this, tag))
         .collect(Collectors.toList());
-
     this.tags.addAll(eventTags);
-
-    return eventTags;
   }
 
-  public void validateAlreadyParticipate(final Member member) {
-    if (isAlreadyParticipate(member)) {
-      throw new EventException(EventExceptionType.ALREADY_PARTICIPATED);
+  public void validateAlreadyCreateRecruitmentPost(final Member member) {
+    if (isAlreadyCreateRecruitmentPost(member)) {
+      throw new EventException(EventExceptionType.ALREADY_CREATE_RECRUITMENT_POST);
     }
   }
 
-  private boolean isAlreadyParticipate(final Member member) {
-    return participants.stream()
-        .anyMatch(participant -> participant.isSameMember(member));
-  }
-
-  public EventStatus calculateEventStatus(final LocalDate now) {
-    if (now.isBefore(startDate.toLocalDate())) {
-      return EventStatus.UPCOMING;
-    }
-    if (now.isAfter(endDate.toLocalDate())) {
-      return EventStatus.ENDED;
-    }
-    return EventStatus.IN_PROGRESS;
+  private boolean isAlreadyCreateRecruitmentPost(final Member member) {
+    return recruitmentPosts.stream()
+        .anyMatch(post -> post.isSameMember(member));
   }
 
   public Event updateEventContent(
@@ -119,15 +102,14 @@ public class Event extends BaseEntity {
       final String location,
       final LocalDateTime startDate,
       final LocalDateTime endDate,
+      final LocalDateTime applyStartDate,
+      final LocalDateTime applyEndDate,
       final String informationUrl,
       final List<Tag> tags
   ) {
-    validateStartBeforeOrEqualEndDateTime(startDate, endDate);
-
     this.name = name;
     this.location = location;
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.eventPeriod = new EventPeriod(startDate, endDate, applyStartDate, applyEndDate);
     this.informationUrl = informationUrl;
     this.tags = new ArrayList<>();
 
@@ -136,14 +118,13 @@ public class Event extends BaseEntity {
     return this;
   }
 
-  private void validateStartBeforeOrEqualEndDateTime(final LocalDateTime startDateTime,
-      final LocalDateTime endDateTime) {
-    if (startDateTime.isAfter(endDateTime)) {
-      throw new EventException(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME);
-    }
+  public boolean isDiffer(final Long eventId) {
+    return !this.getId().equals(eventId);
   }
 
-  public int calculateRemainingDays(final LocalDate today) {
-    return Period.between(today, startDate.toLocalDate()).getDays();
+  public List<String> extractTags() {
+    return tags.stream()
+        .map(tag -> tag.getTag().getName())
+        .collect(Collectors.toList());
   }
 }

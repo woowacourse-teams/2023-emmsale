@@ -112,6 +112,47 @@ include::{snippets}/delete-member/http-request.adoc[]
 .HTTP response
 include::{snippets}/delete-member/http-response.adoc[]
 
+== InterestTag
+
+=== `GET` : 사용자의 관심 태그 조회
+
+.HTTP request
+include::{snippets}/find-interest-tags/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-interest-tags/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-interest-tags/response-fields.adoc[]
+
+=== `POST` : 사용자의 관심 태그 추가
+
+.HTTP request
+include::{snippets}/add-interest-tag/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/add-interest-tag/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/add-interest-tag/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-interest-tag/response-fields.adoc[]
+
+=== `DELETE` : 사용자의 관심 태그 삭제
+
+.HTTP request
+include::{snippets}/delete-interest-tag/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/delete-interest-tag/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/delete-interest-tag/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/delete-interest-tag/response-fields.adoc[]
+
 == Event
 
 === `GET` : 행사 상세정보 조회
@@ -128,32 +169,37 @@ include::{snippets}/find-event/response-fields.adoc[]
 === `POST` : 행사의 함께 해요 목록에 게시글 추가
 
 .HTTP request 설명
-include::{snippets}/participate-event/request-fields.adoc[]
+include::{snippets}/create-recruitment-post/request-fields.adoc[]
 
 .HTTP request
-include::{snippets}/participate-event/http-request.adoc[]
+include::{snippets}/create-recruitment-post/http-request.adoc[]
 
 .HTTP response
-include::{snippets}/participate-event/http-response.adoc[]
+include::{snippets}/create-recruitment-post/http-response.adoc[]
 
-=== `DELETE` : 행사에 함께가기 요청 취소(행사에 함께 가는 멤버에서 삭제)
+=== `PUT` : 행사의 함께 해요 목록에 게시글 수정
 
 .HTTP request
-include::{snippets}/participate-event-cancel/http-request.adoc[]
-
-.HTTP request 설명
-include::{snippets}/participate-event-cancel/request-parameters.adoc[]
+include::{snippets}/update-recruitment-post/http-request.adoc[]
 
 .HTTP response
-include::{snippets}/participate-event-cancel/http-response.adoc[]
+include::{snippets}/update-recruitment-post/http-response.adoc[]
 
-=== `GET`: 행사에 이미 참여한 멤버인지 확인
+=== `DELETE` : 행사의 함께 해요 게시글 삭제
 
 .HTTP request
-include::{snippets}/check-already-participate/http-request.adoc[]
+include::{snippets}/delete-recruitment-post/http-request.adoc[]
 
 .HTTP response
-include::{snippets}/check-already-participate/http-response.adoc[]
+include::{snippets}/delete-recruitment-post/http-response.adoc[]
+
+=== `GET`: 사용자가 해당 행사에 이미 함께 해요 게시글을 작성했는지 확인
+
+.HTTP request
+include::{snippets}/check-already-recruitment-post/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/check-already-recruitment-post/http-response.adoc[]
 
 === `GET`: 행사 목록 조회
 
@@ -169,16 +215,27 @@ include::{snippets}/find-events/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-events/response-fields.adoc[]
 
-=== `GET` : 행사 참여자 목록 조회
+=== `GET` : 함께 해요 게시글 목록 조회
 
 .HTTP request
-include::{snippets}/find-participants/http-request.adoc[]
+include::{snippets}/find-recruitment-posts/http-request.adoc[]
 
 .HTTP response
-include::{snippets}/find-participants/http-response.adoc[]
+include::{snippets}/find-recruitment-posts/http-response.adoc[]
 
 .HTTP response 설명
-include::{snippets}/find-participants/response-fields.adoc[]
+include::{snippets}/find-recruitment-posts/response-fields.adoc[]
+
+=== `GET` : 함께 해요 게시글 단건 조회
+
+.HTTP request
+include::{snippets}/find-recruitment-post/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-recruitment-post/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-recruitment-post/response-fields.adoc[]
 
 === `POST` : 행사 생성
 
@@ -298,31 +355,7 @@ include::{snippets}/login-snippet/http-response.adoc[]
 .HTTP response
 include::{snippets}/login-snippet/response-fields.adoc[]
 
-== Notification(FCM)
-
-=== `POST` : 알림 저장
-
-.HTTP request 설명
-include::{snippets}/create-notification/request-fields.adoc[]
-
-.HTTP request
-include::{snippets}/create-notification/http-request.adoc[]
-
-.HTTP response 설명
-include::{snippets}/create-notification/response-fields.adoc[]
-
-.HTTP response
-include::{snippets}/create-notification/http-response.adoc[]
-
-=== `PATCH` : 알림 상태 변경
-
-.HTTP request 설명
-include::{snippets}/modify-notification/request-fields.adoc[]
-
-.HTTP request
-include::{snippets}/modify-notification/http-request.adoc[]
-
-include::{snippets}/modify-notification/path-parameters.adoc[]
+== FCM Token
 
 === `POST` : FcmToken 생성
 
@@ -332,29 +365,117 @@ include::{snippets}/create-fcmToken/request-fields.adoc[]
 .HTTP request
 include::{snippets}/create-fcmToken/http-request.adoc[]
 
-=== `GET` : notification id로 알림 조회
+== RequestNotification(함께 가기 알림)
+
+=== `POST` : 함께 가기 알림 저장
+
+.HTTP request 설명
+include::{snippets}/create-request-notification/request-fields.adoc[]
 
 .HTTP request
-include::{snippets}/find-notification/http-request.adoc[]
-
-include::{snippets}/find-notification/path-parameters.adoc[]
+include::{snippets}/create-request-notification/http-request.adoc[]
 
 .HTTP response 설명
-include::{snippets}/find-notification/response-fields.adoc[]
+include::{snippets}/create-request-notification/response-fields.adoc[]
 
 .HTTP response
-include::{snippets}/find-notification/http-response.adoc[]
+include::{snippets}/create-request-notification/http-response.adoc[]
 
-=== `GET` : 사용자가 받은 모든 알림 목록 조회
+=== `PATCH` : 함께 가기 알림 상태 변경
+
+.HTTP request 설명
+include::{snippets}/modify-request-notification/request-fields.adoc[]
 
 .HTTP request
-include::{snippets}/find-all-notifications/http-request.adoc[]
+include::{snippets}/modify-request-notification/http-request.adoc[]
+
+include::{snippets}/modify-request-notification/path-parameters.adoc[]
+
+=== 'PATCH' : 함께 가기 알림 읽음 상태 변경
+
+.HTTP request
+include::{snippets}/read-request-notification/http-request.adoc[]
+
+include::{snippets}/read-request-notification/path-parameters.adoc[]
+
+=== `DELETE` : 함께 가기 알림 삭제
+
+.HTTP request
+include::{snippets}/delete-request-notification/http-request.adoc[]
+
+include::{snippets}/delete-request-notification/path-parameters.adoc[]
+
+=== `GET` : request notification id로 함께 가기 알림 조회
+
+.HTTP request
+include::{snippets}/find-request-notification/http-request.adoc[]
+
+include::{snippets}/find-request-notification/path-parameters.adoc[]
 
 .HTTP response 설명
-include::{snippets}/find-all-notifications/response-fields.adoc[]
+include::{snippets}/find-request-notification/response-fields.adoc[]
 
 .HTTP response
-include::{snippets}/find-all-notifications/http-response.adoc[]
+include::{snippets}/find-request-notification/http-response.adoc[]
+
+=== `GET` : 사용자가 받은 모든 함께 가기 알림 목록 조회
+
+.HTTP request
+include::{snippets}/find-all-request-notification/http-request.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-all-request-notification/response-fields.adoc[]
+
+.HTTP response
+include::{snippets}/find-all-request-notification/http-response.adoc[]
+
+== Update Notification(댓글 & 행사 알림)
+
+=== `GET` : 댓글 & 행사 알림들 조회
+
+.HTTP request 설명
+include::{snippets}/get-update-notifications/request-parameters.adoc[]
+
+include::{snippets}/get-update-notifications/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/get-update-notifications/http-response.adoc[]
+
+=== 'PUT' : 댓글 & 행사 알림 읽음 상태 변경
+
+.HTTP request 설명
+include::{snippets}/put-update-notifications-read/path-parameters.adoc[]
+
+include::{snippets}/put-update-notifications-read/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/put-update-notifications-read/http-response.adoc[]
+
+== Block
+
+=== `POST` : 사용자 차단 등록
+
+.HTTP request 설명
+include::{snippets}/register-block/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/register-block/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/register-block/http-response.adoc[]
+
+== TAG
+
+=== 'GET' : 존재하는 모든 태그 조회
+
+.HTTP request
+include::{snippets}/find-tags/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-tags/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-tags/response-fields.adoc[]
 
 == Report
 

@@ -2,7 +2,6 @@ package com.emmsale.event.application;
 
 import static com.emmsale.event.EventFixture.AI_아이디어_공모전;
 import static com.emmsale.event.EventFixture.AI_컨퍼런스;
-import static com.emmsale.event.EventFixture.createEventParticipateRequest;
 import static com.emmsale.event.EventFixture.eventFixture;
 import static com.emmsale.event.EventFixture.구름톤;
 import static com.emmsale.event.EventFixture.날짜_8월_10일;
@@ -11,15 +10,11 @@ import static com.emmsale.event.EventFixture.안드로이드_컨퍼런스;
 import static com.emmsale.event.EventFixture.웹_컨퍼런스;
 import static com.emmsale.event.EventFixture.인프콘_2023;
 import static com.emmsale.event.domain.EventStatus.IN_PROGRESS;
-import static com.emmsale.event.exception.EventExceptionType.ALREADY_PARTICIPATED;
-import static com.emmsale.event.exception.EventExceptionType.FORBIDDEN_PARTICIPATE_EVENT;
 import static com.emmsale.event.exception.EventExceptionType.INVALID_DATE_FORMAT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
-import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_TAG;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_AFTER_END_DATE;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME;
-import static com.emmsale.member.MemberFixture.memberFixture;
 import static com.emmsale.tag.TagFixture.AI;
 import static com.emmsale.tag.TagFixture.IOS;
 import static com.emmsale.tag.TagFixture.백엔드;
@@ -34,21 +29,15 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
-import com.emmsale.event.application.dto.EventParticipateRequest;
 import com.emmsale.event.application.dto.EventResponse;
-import com.emmsale.event.application.dto.ParticipantResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.event.domain.EventType;
-import com.emmsale.event.domain.Participant;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
-import com.emmsale.event.domain.repository.ParticipantRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
-import com.emmsale.member.domain.Member;
-import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
@@ -57,7 +46,6 @@ import com.emmsale.tag.exception.TagExceptionType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,33 +60,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
-      List.of(), "진행 중", null, 0);
+      List.of(), "IN_PROGRESS", "ENDED", null, 0, 0);
   private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
-      List.of(), "진행 중", null, 0);
-  private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스", null, null,
-      List.of(), "종료된 행사", null, 0);
+      List.of(), "IN_PROGRESS", "IN_PROGRESS", null, 0, 0);
+  private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스",
+      null, null,
+      List.of(), "ENDED", "ENDED", null, 0, 0);
   private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null,
-      List.of(), "진행 예정", null, 0);
+      List.of(), "UPCOMING", "IN_PROGRESS", null, 0, 0);
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
-      List.of(), "진행 예정", null, 0);
+      List.of(), "UPCOMING", "UPCOMING", null, 0, 0);
   private static final EventResponse AI_아이디어_공모전 = new EventResponse(null, "AI 아이디어 공모전", null,
-      null,
-      List.of(), "종료된 행사", null, 0);
+      null, List.of(), "ENDED", "ENDED", null, 0, 0);
   private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null, null,
-      List.of(), "진행 중", null, 0);
+      List.of(), "IN_PROGRESS", "IN_PROGRESS", null, 0, 0);
 
 
   private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
-  @Autowired
-  private MemberRepository memberRepository;
   @Autowired
   private EventService eventService;
   @Autowired
   private EventRepository eventRepository;
   @Autowired
   private EventTagRepository eventTagRepository;
-  @Autowired
-  private ParticipantRepository participantRepository;
   @Autowired
   private TagRepository tagRepository;
 
@@ -124,36 +108,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
         new EventTag(모바일_컨퍼런스, 안드로이드), new EventTag(모바일_컨퍼런스, IOS), new EventTag(안드로이드_컨퍼런스, 안드로이드),
         new EventTag(웹_컨퍼런스, 백엔드), new EventTag(웹_컨퍼런스, 프론트엔드))
     );
-  }
-
-  @Test
-  @DisplayName("event의 id로 참가 게시글 목록을 조회할 수 있다.")
-  void findParticipants() {
-    // given
-    final Event 인프콘 = eventRepository.save(eventFixture());
-    final Member 멤버1 = memberRepository.save(new Member(123L, "image1.com"));
-    final Member 멤버2 = memberRepository.save(new Member(124L, "image2.com"));
-
-    final EventParticipateRequest requestMember1 = createEventParticipateRequest(멤버1);
-    final EventParticipateRequest requestMember2 = createEventParticipateRequest(멤버2);
-
-    final Long 멤버1_참가글_ID = eventService.participate(인프콘.getId(), requestMember1, 멤버1);
-    final Long 멤버2_참가글_ID = eventService.participate(인프콘.getId(), requestMember2, 멤버2);
-
-    final List<ParticipantResponse> expected = List.of(
-        new ParticipantResponse(멤버1_참가글_ID, 멤버1.getId(), 멤버1.getName(), 멤버1.getImageUrl(),
-            멤버1.getDescription(), requestMember1.getContent(), LocalDate.now(), LocalDate.now()),
-        new ParticipantResponse(멤버2_참가글_ID, 멤버2.getId(), 멤버2.getName(), 멤버2.getImageUrl(),
-            멤버2.getDescription(), requestMember2.getContent(), LocalDate.now(), LocalDate.now())
-    );
-
-    //when
-    final List<ParticipantResponse> actual = eventService.findParticipants(인프콘.getId());
-
-    //then
-    assertThat(actual)
-        .usingRecursiveFieldByFieldElementComparator()
-        .containsExactlyInAnyOrderElementsOf(expected);
   }
 
   @Nested
@@ -190,113 +144,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   }
 
   @Nested
-  @DisplayName("event 참가자 목록에 멤버를 추가할 수 있다.")
-  class Participate {
-
-    @Test
-    @DisplayName("정상적으로 멤버를 추가한다.")
-    void success() {
-      final Long memberId = 1L;
-      final Member member = memberRepository.findById(memberId).get();
-      final Event 인프콘 = eventRepository.save(eventFixture());
-
-      final Long participantId = eventService.participate(인프콘.getId(),
-          createEventParticipateRequest(member), member);
-
-      assertThat(participantId)
-          .isNotNull();
-    }
-
-    @Test
-    @DisplayName("memberId와 Member가 다르면 Exception이 발생한다.")
-    void fail_forbidden() {
-      final Long memberId = 1L;
-      final Long otherMemberId = 2L;
-      final Member member = memberRepository.findById(memberId).get();
-      final EventParticipateRequest request = new EventParticipateRequest(otherMemberId, "빈 게시글");
-      final Event 인프콘 = eventRepository.save(eventFixture());
-
-      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), request, member))
-          .isInstanceOf(EventException.class)
-          .hasMessage(FORBIDDEN_PARTICIPATE_EVENT.errorMessage());
-    }
-
-    @Test
-    @DisplayName("이미 참가한 멤버면 Exception이 발생한다.")
-    void fail_alreadyParticipate() {
-      final Long memberId = 1L;
-      final Member member = memberRepository.findById(memberId).get();
-      final Event 인프콘 = eventRepository.save(eventFixture());
-      final EventParticipateRequest request = createEventParticipateRequest(member);
-      eventService.participate(인프콘.getId(), request, member);
-
-      assertThatThrownBy(() -> eventService.participate(인프콘.getId(), request, member))
-          .isInstanceOf(EventException.class)
-          .hasMessage(ALREADY_PARTICIPATED.errorMessage());
-    }
-  }
-
-  @Nested
-  @DisplayName("event 참가자 목록에서 멤버를 삭제할 수 있다.")
-  class CancelParticipate {
-
-    @Test
-    @DisplayName("정상적으로 멤버를 삭제한다.")
-    void cancelParticipate_success() {
-      //given
-      final Long memberId = 1L;
-      final Member member = memberRepository.findById(memberId).get();
-      final Event 인프콘 = eventRepository.save(eventFixture());
-
-      final Long participantId = eventService.participate(인프콘.getId(),
-          createEventParticipateRequest(member), member);
-
-      // when
-      eventService.cancelParticipate(인프콘.getId(), memberId, member);
-      final Optional<Participant> actual = participantRepository.findById(participantId);
-
-      // then
-      assertThat(actual).isEmpty();
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 행사면 예외가 발생한다.")
-    void cancelParticipate_not_found_event() {
-      // given
-      final Long memberId = 1L;
-      final Member member = memberRepository.findById(memberId).get();
-
-      final Long invalidEventId = 999L;
-
-      // when
-      final ThrowingCallable actual = () -> eventService.cancelParticipate(invalidEventId, memberId,
-          member);
-
-      // then
-      assertThatThrownBy(actual).isInstanceOf(EventException.class)
-          .hasMessage(NOT_FOUND_EVENT.errorMessage());
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 참여자면 예외가 발생한다.")
-    void cancelParticipate_not_found_participant() {
-      // given
-      final Long memberId = 1L;
-      final Member member = memberRepository.findById(memberId).get();
-
-      final Long eventId = eventRepository.save(eventFixture()).getId();
-
-      // when
-      final ThrowingCallable actual = () -> eventService.cancelParticipate(eventId, memberId,
-          member);
-
-      // then
-      assertThatThrownBy(actual).isInstanceOf(EventException.class)
-          .hasMessage(NOT_FOUND_PARTICIPANT.errorMessage());
-    }
-  }
-
-  @Nested
   @DisplayName("findEvents() : 행사 목록 조회")
   class findEvents {
 
@@ -312,7 +159,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           null, null, null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -327,7 +176,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           null, null, null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -342,7 +193,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-07-01", "2023-07-31", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -357,7 +210,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-08-01", "2023-08-31", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -372,7 +227,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-06-01", "2023-06-30", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -387,7 +244,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           "2023-07-17", null, null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -402,10 +261,11 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           null, "2023-07-31", null, null);
 
       // then
-      assertThat(actualEvents).usingRecursiveComparison().comparingOnlyFields("name", "status")
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
-
 
     @ParameterizedTest
     @NullSource
@@ -514,7 +374,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -532,7 +392,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -563,7 +423,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -581,7 +441,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -599,7 +459,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
   }
@@ -630,6 +490,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           eventInformationUrl,
           beforeDateTime,
           afterDateTime,
+          beforeDateTime,
+          afterDateTime,
           tagRequests,
           imageUrl,
           type
@@ -644,16 +506,15 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(eventName, savedEvent.getName()),
           () -> assertEquals(eventLocation, savedEvent.getLocation()),
           () -> assertEquals(eventInformationUrl, savedEvent.getInformationUrl()),
-          () -> assertEquals(beforeDateTime, savedEvent.getStartDate()),
-          () -> assertEquals(afterDateTime, savedEvent.getEndDate()),
-          () -> assertThat(savedEvent.getTags()).extracting("tag", Tag.class)
-              .extracting("name", String.class)
-              .containsAll(
-                  tagRequests.stream()
-                      .map(TagRequest::getName)
-                      .collect(Collectors.toList())
-              )
+          () -> assertEquals(beforeDateTime, savedEvent.getEventPeriod().getStartDate()),
+          () -> assertEquals(afterDateTime, savedEvent.getEventPeriod().getEndDate())
       );
+      assertThat(response.getTags())
+          .containsAll(
+              tagRequests.stream()
+                  .map(TagRequest::getName)
+                  .collect(Collectors.toList())
+          );
     }
 
     @Test
@@ -669,6 +530,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           eventInformationUrl,
           startDateTime,
           endDatetime,
+          beforeDateTime,
+          afterDateTime,
           tagRequests,
           imageUrl,
           type
@@ -696,6 +559,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           eventName,
           eventLocation,
           eventInformationUrl,
+          beforeDateTime,
+          afterDateTime,
           beforeDateTime,
           afterDateTime,
           tagRequests,
@@ -740,6 +605,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           beforeDateTime,
           afterDateTime,
+          beforeDateTime,
+          afterDateTime,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE
@@ -749,25 +616,23 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Long eventId = event.getId();
 
       //when
-      eventService.updateEvent(eventId, updateRequest, now);
+      final EventDetailResponse response = eventService.updateEvent(eventId, updateRequest, now);
       final Event updatedEvent = eventRepository.findById(eventId).get();
 
       //then
       assertAll(
           () -> assertEquals(newName, updatedEvent.getName()),
           () -> assertEquals(newLocation, updatedEvent.getLocation()),
-          () -> assertEquals(newStartDateTime, updatedEvent.getStartDate()),
-          () -> assertEquals(newEndDateTime, updatedEvent.getEndDate()),
-          () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl()),
-          () -> assertThat(updatedEvent.getTags())
-              .extracting("tag", Tag.class)
-              .extracting("name", String.class)
-              .containsAll(
-                  newTagRequests.stream()
-                      .map(TagRequest::getName)
-                      .collect(Collectors.toList())
-              )
+          () -> assertEquals(newStartDateTime, updatedEvent.getEventPeriod().getStartDate()),
+          () -> assertEquals(newEndDateTime, updatedEvent.getEventPeriod().getEndDate()),
+          () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl())
       );
+      assertThat(response.getTags())
+          .containsAll(
+              newTagRequests.stream()
+                  .map(TagRequest::getName)
+                  .collect(Collectors.toList())
+          );
     }
 
     @Test
@@ -780,6 +645,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newName,
           newLocation,
           newInformationUrl,
+          beforeDateTime,
+          afterDateTime,
           beforeDateTime,
           afterDateTime,
           newTagRequests,
@@ -807,6 +674,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newInformationUrl,
           newStartDateTime,
           newEndDateTime,
+          beforeDateTime,
+          afterDateTime,
           newTagRequests,
           imageUrl,
           EventType.CONFERENCE
@@ -834,6 +703,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           newName,
           newLocation,
           newInformationUrl,
+          beforeDateTime,
+          afterDateTime,
           beforeDateTime,
           afterDateTime,
           newTagRequests,
@@ -882,39 +753,4 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       assertEquals(exception.exceptionType(), NOT_FOUND_EVENT);
     }
   }
-
-  @Nested
-  @DisplayName("이벤트에 이미 참가한 멤버인지 확인할 수 있다.")
-  class isAlreadyParticipate {
-
-    @Test
-    @DisplayName("이벤트에 이미 참가한 경우 true를 반환한다.")
-    void alreadyParticipateThenTrue() {
-      //given
-      final Event 인프콘 = eventRepository.save(인프콘_2023());
-      final Member 멤버 = memberRepository.save(memberFixture());
-      eventService.participate(인프콘.getId(), createEventParticipateRequest(멤버), 멤버);
-
-      //when
-      final Boolean actual = eventService.isAlreadyParticipate(인프콘.getId(), 멤버.getId());
-
-      //then
-      assertThat(actual).isTrue();
-    }
-
-    @Test
-    @DisplayName("이벤트에 참가히자 않은 경우 false를 반환한다.")
-    void isNotAlreadyParticipateThenFalse() {
-      //given
-      final Event 인프콘 = eventRepository.save(인프콘_2023());
-      final Member 멤버 = memberRepository.save(memberFixture());
-
-      //when
-      final Boolean actual = eventService.isAlreadyParticipate(인프콘.getId(), 멤버.getId());
-
-      //then
-      assertThat(actual).isFalse();
-    }
-  }
 }
-
