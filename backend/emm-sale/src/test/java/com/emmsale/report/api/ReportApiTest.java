@@ -95,7 +95,7 @@ class ReportApiTest extends MockMvcTestHelper {
     final List<ReportResponse> reportResponses = List.of(
         new ReportResponse(1L, 1L, 2L, ReportType.COMMENT, 3L,
             LocalDateTime.parse("2023-08-09T13:25:00")),
-        new ReportResponse(2L, 2L, 1L, ReportType.PARTICIPANT, 1L,
+        new ReportResponse(2L, 2L, 1L, ReportType.RECRUITMENT_POST, 1L,
             LocalDateTime.parse("2023-08-11T13:25:00")),
         new ReportResponse(3L, 1L, 3L, ReportType.REQUEST_NOTIFICATION, 5L,
             LocalDateTime.parse("2023-08-11T13:50:00")),

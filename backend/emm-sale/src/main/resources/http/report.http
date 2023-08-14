@@ -1,0 +1,19 @@
+### 게시물 신고
+
+POST http://localhost:8080/reports
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
+
+{
+  "reporterId": 1,
+  "reportedId": 3,
+  "type": "COMMENT",
+  "contentId": 1
+}
+
+### 게시물 신고 목록 조회
+
+GET http://localhost:8080/reports
+Content-Type: application/json
+
+
