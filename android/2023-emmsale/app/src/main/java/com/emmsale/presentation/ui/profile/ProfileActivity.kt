@@ -75,9 +75,17 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupUiLogic() {
+        setupLoginUiLogic()
+        setupProfileUiLogic()
+    }
+
+    private fun setupLoginUiLogic() {
         viewModel.isLogin.observe(this) {
             handleNotLogin(it)
         }
+    }
+
+    private fun setupProfileUiLogic() {
         viewModel.profile.observe(this) {
             handleLoginMember(it)
             handleProfileFetchingError(it)
