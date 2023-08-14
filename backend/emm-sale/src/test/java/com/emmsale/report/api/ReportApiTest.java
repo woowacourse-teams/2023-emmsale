@@ -15,7 +15,6 @@ import com.emmsale.report.application.ReportCommandService;
 import com.emmsale.report.application.ReportQueryService;
 import com.emmsale.report.application.dto.ReportRequest;
 import com.emmsale.report.application.dto.ReportResponse;
-import com.emmsale.report.domain.ReportReasonType;
 import com.emmsale.report.domain.ReportType;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,31 +43,25 @@ class ReportApiTest extends MockMvcTestHelper {
     final RequestFieldsSnippet requestFields = requestFields(
         fieldWithPath("reporterId").type(JsonFieldType.NUMBER).description("신고자의 Id"),
         fieldWithPath("reportedId").type(JsonFieldType.NUMBER).description("신고 대상자의 Id(당하는 사람)"),
-        fieldWithPath("content").type(JsonFieldType.STRING).description("신고 게시글의 내용"),
-        fieldWithPath("reasonType").type(JsonFieldType.STRING).description(
-            "신고 게시글의 신고 사유(ABUSE)"),
         fieldWithPath("type").type(JsonFieldType.STRING).description(
-            "신고 게시글의 유형(COMMENT, PARTICIPANT, REQUEST_NOTIFICATION)")
+            "신고 게시글의 유형(COMMENT, PARTICIPANT, REQUEST_NOTIFICATION)"),
+        fieldWithPath("contentId").type(JsonFieldType.NUMBER).description("신고 게시물의 Id")
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("id").type(JsonFieldType.NUMBER).description("신고 id"),
         fieldWithPath("reporterId").type(JsonFieldType.NUMBER).description("신고자의 Id"),
         fieldWithPath("reportedId").type(JsonFieldType.NUMBER).description("신고 대상자의 Id)"),
-        fieldWithPath("content").type(JsonFieldType.STRING).description("신고 게시글의 내용"),
-        fieldWithPath("reasonType").type(JsonFieldType.STRING)
-            .description("신고 게시글의 신고 사유(ABUSE)"),
         fieldWithPath("type").type(JsonFieldType.STRING)
             .description("신고 게시글의 유형(COMMENT, PARTICIPANT, REQUEST_NOTIFICATION)"),
+        fieldWithPath("contentId").type(JsonFieldType.NUMBER).description("신고 게시물의 Id"),
         fieldWithPath("createdAt").type(JsonFieldType.STRING)
             .description("신고 일자(yyyy:MM:dd:HH:mm:ss)")
     );
-    final ReportRequest reportRequest = new ReportRequest(1L, 2L, "메롱메롱", ReportReasonType.ABUSE,
-        ReportType.COMMENT);
+    final ReportRequest reportRequest = new ReportRequest(1L, 2L, ReportType.COMMENT, 1L);
 
     final ReportResponse reportResponse = new ReportResponse(1L, reportRequest.getReporterId(),
-        reportRequest.getReportedId(),
-        reportRequest.getContent(), reportRequest.getReasonType(), reportRequest.getType(),
+        reportRequest.getReportedId(), reportRequest.getType(), reportRequest.getContentId(),
         LocalDateTime.parse("2023-08-09T13:25:00"));
 
     when(reportCommandService.create(any(), any())).thenReturn(reportResponse);
@@ -92,24 +85,21 @@ class ReportApiTest extends MockMvcTestHelper {
         fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("신고 id"),
         fieldWithPath("[].reporterId").type(JsonFieldType.NUMBER).description("신고자의 Id"),
         fieldWithPath("[].reportedId").type(JsonFieldType.NUMBER).description("신고 대상자의 Id)"),
-        fieldWithPath("[].content").type(JsonFieldType.STRING).description("신고 게시글의 내용"),
-        fieldWithPath("[].reasonType").type(JsonFieldType.STRING)
-            .description("신고 게시글의 신고 사유(ABUSE)"),
         fieldWithPath("[].type").type(JsonFieldType.STRING)
             .description("신고 게시글의 유형(COMMENT, PARTICIPANT, REQUEST_NOTIFICATION)"),
+        fieldWithPath("[].contentId").type(JsonFieldType.NUMBER).description("신고 게시물의 Id)"),
         fieldWithPath("[].createdAt").type(JsonFieldType.STRING)
             .description("신고 일자(yyyy:MM:dd:HH:mm:ss)")
     );
 
     final List<ReportResponse> reportResponses = List.of(
-        new ReportResponse(1L, 1L, 2L, "메롱메롱", ReportReasonType.ABUSE, ReportType.COMMENT,
+        new ReportResponse(1L, 1L, 2L, ReportType.COMMENT, 3L,
             LocalDateTime.parse("2023-08-09T13:25:00")),
-        new ReportResponse(2L, 2L, 1L, "☆★ 특가 세일 ★☆", ReportReasonType.SPAM, ReportType.PARTICIPANT,
+        new ReportResponse(2L, 2L, 1L, ReportType.PARTICIPANT, 1L,
             LocalDateTime.parse("2023-08-11T13:25:00")),
-        new ReportResponse(3L, 1L, 3L, "저는 스티브잡스입니다.", ReportReasonType.IMPERSONATION,
-            ReportType.REQUEST_NOTIFICATION,
+        new ReportResponse(3L, 1L, 3L, ReportType.REQUEST_NOTIFICATION, 5L,
             LocalDateTime.parse("2023-08-11T13:50:00")),
-        new ReportResponse(4L, 4L, 1L, "도배글", ReportReasonType.SPAM, ReportType.COMMENT,
+        new ReportResponse(4L, 4L, 1L, ReportType.COMMENT, 2L,
             LocalDateTime.parse("2023-08-12T13:25:00"))
 
     );

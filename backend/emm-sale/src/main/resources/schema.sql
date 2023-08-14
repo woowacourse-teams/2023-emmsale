@@ -23,11 +23,11 @@ create table event
     id              bigint auto_increment primary key,
     created_at      datetime(6),
     updated_at      datetime(6),
-    end_date        datetime(6) not null,
+    end_date        datetime(6)  not null,
     information_url varchar(255) not null,
     location        varchar(255) not null,
     name            varchar(255) not null,
-    start_date      datetime(6) not null,
+    start_date      datetime(6)  not null,
     image_url       varchar(255),
     type            varchar(20)  not null
 );
@@ -53,7 +53,7 @@ create table comment
     is_deleted bit          not null,
     event_id   bigint       not null,
     member_id  bigint       not null,
-    parent_id  bigint null
+    parent_id  bigint       null
 );
 
 create table member_activity
@@ -120,15 +120,14 @@ alter table event_member
 alter table event_member
     add column updated_at datetime(6);
 
--- 2023-08-09 13:10
+-- 2023-08-14 13:10
 create table report
 (
     id          bigint auto_increment primary key,
-    reporter_id bigint       not null,
-    reported_id bigint       not null,
-    content     varchar(255) not null,
-    reason_type varchar(20)  not null,
-    type        varchar(20)  not null,
+    reporter_id bigint      not null,
+    reported_id bigint      not null,
+    type        varchar(20) not null,
+    content_id  bigint      not null,
     created_at  datetime(6),
     updated_at  datetime(6)
 );

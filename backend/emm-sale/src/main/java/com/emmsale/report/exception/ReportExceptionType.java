@@ -9,6 +9,14 @@ public enum ReportExceptionType implements BaseExceptionType {
       HttpStatus.NOT_FOUND,
       "존재하지 않는 사용자입니다."
   ),
+  NOT_FOUND_CONTENT(
+      HttpStatus.NOT_FOUND,
+      "존재하지 않는 게시물입니다."
+  ),
+  REPORTED_MISMATCH_WRITER(
+      HttpStatus.BAD_REQUEST,
+      "신고한 게시물이 신고 대상자의 게시물이 아닙니다."
+  ),
   REPORT_MYSELF(
       HttpStatus.BAD_REQUEST,
       "자기 자신은 신고할 수 없습니다."

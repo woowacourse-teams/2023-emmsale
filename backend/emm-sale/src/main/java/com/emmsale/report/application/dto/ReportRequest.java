@@ -1,7 +1,6 @@
 package com.emmsale.report.application.dto;
 
 import com.emmsale.report.domain.Report;
-import com.emmsale.report.domain.ReportReasonType;
 import com.emmsale.report.domain.ReportType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +11,10 @@ public class ReportRequest {
 
   private final Long reporterId;
   private final Long reportedId;
-  private final String content;
-  private final ReportReasonType reasonType;
   private final ReportType type;
+  private final Long contentId;
 
   public Report toReport() {
-    return new Report(reporterId, reportedId, content, reasonType, type);
+    return new Report(reporterId, reportedId, type, contentId);
   }
 }

@@ -6,7 +6,6 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.report.application.dto.ReportRequest;
 import com.emmsale.report.application.dto.ReportResponse;
-import com.emmsale.report.domain.ReportReasonType;
 import com.emmsale.report.domain.ReportType;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -29,10 +28,10 @@ class ReportQueryServiceTest extends ServiceIntegrationTestHelper {
     // given
     final Long reporterId = 1L;
     final Long reportedId = 2L;
-    final String abusingContent = "메롱메롱";
+    final Long abusingContentId = 1L;
     final Member reporter = memberRepository.findById(reporterId).get();
-    final ReportRequest request = new ReportRequest(reporterId, reportedId, abusingContent,
-        ReportReasonType.ABUSE, ReportType.COMMENT);
+    final ReportRequest request = new ReportRequest(reporterId, reportedId, ReportType.COMMENT,
+        abusingContentId);
     final List<ReportResponse> expected = List.of(reportCommandService.create(request, reporter));
 
     // when

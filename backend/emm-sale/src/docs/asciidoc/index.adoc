@@ -356,7 +356,7 @@ include::{snippets}/find-all-notifications/response-fields.adoc[]
 .HTTP response
 include::{snippets}/find-all-notifications/http-response.adoc[]
 
-== Report(신고)
+== Report
 
 === `POST` : 특정 사용자의 게시물 신고
 

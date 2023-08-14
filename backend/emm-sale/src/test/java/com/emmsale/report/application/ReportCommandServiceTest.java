@@ -8,7 +8,6 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.report.application.dto.ReportRequest;
 import com.emmsale.report.application.dto.ReportResponse;
-import com.emmsale.report.domain.ReportReasonType;
 import com.emmsale.report.domain.ReportType;
 import com.emmsale.report.domain.repository.ReportRepository;
 import com.emmsale.report.exception.ReportException;
@@ -38,12 +37,12 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       // given
       final Long reporterId = 1L;
       final Long reportedId = 2L;
-      final String abusingContent = "메롱메롱";
+      final Long abusingContentId = 1L;
       final Member reporter = memberRepository.findById(reporterId).get();
-      final ReportRequest request = new ReportRequest(reporterId, reportedId, abusingContent,
-          ReportReasonType.ABUSE, ReportType.COMMENT);
-      final ReportResponse expected = new ReportResponse(1L, reporterId, reportedId, abusingContent,
-          ReportReasonType.ABUSE, ReportType.COMMENT, null);
+      final ReportRequest request = new ReportRequest(reporterId, reportedId, ReportType.COMMENT,
+          abusingContentId);
+      final ReportResponse expected = new ReportResponse(1L, reporterId, reportedId,
+          ReportType.COMMENT, abusingContentId, null);
 
       // when
       final ReportResponse actual = reportCommandService.create(request, reporter);
@@ -61,10 +60,10 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       // given
       final Long reporterId = 1L;
       final Long reportedId = 9999L;
-      final String abusingContent = "메롱메롱";
+      final Long abusingContentId = 1L;
       final Member reporter = memberRepository.findById(reporterId).get();
-      final ReportRequest request = new ReportRequest(reporterId, reportedId, abusingContent,
-          ReportReasonType.ABUSE, ReportType.COMMENT);
+      final ReportRequest request = new ReportRequest(reporterId, reportedId, ReportType.COMMENT,
+          abusingContentId);
 
       // when
       final ThrowingCallable actual = () -> reportCommandService.create(request, reporter);
@@ -80,10 +79,10 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
     void create_fail_report_self() {
       // given
       final Long reporterId = 1L;
-      final String abusingContent = "메롱메롱";
+      final Long abusingContentId = 1L;
       final Member reporter = memberRepository.findById(reporterId).get();
-      final ReportRequest request = new ReportRequest(reporterId, reporterId, abusingContent,
-          ReportReasonType.ABUSE, ReportType.COMMENT);
+      final ReportRequest request = new ReportRequest(reporterId, reporterId, ReportType.COMMENT,
+          abusingContentId);
 
       // when
       final ThrowingCallable actual = () -> reportCommandService.create(request, reporter);
@@ -101,10 +100,10 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       final Long reporterId = 1L;
       final Long otherMemberId = 2L;
       final Long reportedId = 1L;
-      final String abusingContent = "메롱메롱";
+      final Long abusingContentId = 1L;
       final Member reporter = memberRepository.findById(reporterId).get();
-      final ReportRequest request = new ReportRequest(otherMemberId, reportedId, abusingContent,
-          ReportReasonType.ABUSE, ReportType.COMMENT);
+      final ReportRequest request = new ReportRequest(otherMemberId, reportedId, ReportType.COMMENT,
+          abusingContentId);
 
       // when
       final ThrowingCallable actual = () -> reportCommandService.create(request, reporter);
@@ -121,10 +120,10 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       // given
       final Long reporterId = 1L;
       final Long reportedId = 2L;
-      final String abusingContent = "메롱메롱";
+      final Long abusingContentId = 1L;
       final Member reporter = memberRepository.findById(reporterId).get();
-      final ReportRequest request = new ReportRequest(reporterId, reportedId, abusingContent,
-          ReportReasonType.ABUSE, ReportType.COMMENT);
+      final ReportRequest request = new ReportRequest(reporterId, reportedId, ReportType.COMMENT,
+          abusingContentId);
       reportCommandService.create(request, reporter);
 
       // when

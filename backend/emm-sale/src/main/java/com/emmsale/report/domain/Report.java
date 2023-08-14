@@ -25,20 +25,16 @@ public class Report extends BaseEntity {
   @Column(nullable = false)
   private Long reportedId;
   @Column(nullable = false)
-  private String content;
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private ReportReasonType reasonType;
-  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private ReportType type;
+  @Column(nullable = false)
+  private Long contentId;
 
-  public Report(final Long reporterId, final Long reportedId, final String content,
-      final ReportReasonType reasonType, final ReportType type) {
+  public Report(final Long reporterId, final Long reportedId, final ReportType type,
+      final Long contentId) {
     this.reporterId = reporterId;
     this.reportedId = reportedId;
-    this.content = content;
-    this.reasonType = reasonType;
     this.type = type;
+    this.contentId = contentId;
   }
 }
