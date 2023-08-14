@@ -23,8 +23,6 @@ class TokenRepositoryImpl(
         if (accessToken == null || accessToken == DEFAULT_TOKEN_VALUE) return@withContext null
         Token(uid, accessToken)
     }
-
-
     override fun getMyUid(): Long? {
         val uid = preference.getLong(UID_KEY, DEFAULT_UID_VALUE)
         if (uid == DEFAULT_UID_VALUE) return null

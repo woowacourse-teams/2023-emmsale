@@ -33,10 +33,9 @@ class RecruitmentPostWritingViewModel(
         if (recruitmentIdToEdit != null) {
             changeToEditMode()
         } else {
-           changeToPostMode()
+            changeToPostMode()
         }
     }
-
     private fun changeToPostMode() {
         _recruitmentWriting.value = _recruitmentWriting.value.setWritingMode(
             POST,
