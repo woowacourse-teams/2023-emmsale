@@ -95,10 +95,10 @@
             android:text="@{vm.eventDetail.location}"
             android:textColor="@color/black"
             android:textSize="12sp"
+            app:drawableLeftCompat="@drawable/ic_eventdetail_place"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_eventdate"
-            tools:text="삼성동 코엑스 몰 2층 101"
-            app:drawableLeftCompat="@drawable/ic_eventdetail_place" />
+            tools:text="삼성동 코엑스 몰 2층 101" />
 
         <TextView
             android:id="@+id/tv_eventdetail_eventdate"
@@ -111,17 +111,17 @@
             android:text="@{@string/eventdetail_date_format(vm.eventDetail.startDate,vm.eventDetail.endDate)}"
             android:textColor="@color/black"
             android:textSize="12sp"
+            app:drawableLeftCompat="@drawable/ic_eventdetail_date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line_eventdetail_top"
-            tools:text="2023.8.15 12:00 "
-            app:drawableLeftCompat="@drawable/ic_eventdetail_date" />
+            tools:text="2023.8.15 12:00 " />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tablayout_eventdetail"
-            android:contentDescription="@string/eventdetail_tablayout_content_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:contentDescription="@string/eventdetail_tablayout_content_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventplace"

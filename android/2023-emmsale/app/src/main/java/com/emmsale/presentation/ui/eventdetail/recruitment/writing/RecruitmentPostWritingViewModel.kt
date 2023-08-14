@@ -36,6 +36,7 @@ class RecruitmentPostWritingViewModel(
             changeToPostMode()
         }
     }
+
     private fun changeToPostMode() {
         _recruitmentWriting.value = _recruitmentWriting.value.setWritingMode(
             POST,
