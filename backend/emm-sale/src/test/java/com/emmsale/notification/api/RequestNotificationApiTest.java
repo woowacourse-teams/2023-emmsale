@@ -273,9 +273,9 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
     final String accessToken = "Bearer access_token";
 
     final RequestParametersSnippet requestParam = requestParameters(
-        parameterWithName("receiver-id").description("알림 받을 사람 id"),
-        parameterWithName("sender-id").description("알림 보낸 사람 id"),
-        parameterWithName("event-id").description("행사 id")
+        parameterWithName("receiverId").description("알림 받을 사람 id"),
+        parameterWithName("senderId").description("알림 보낸 사람 id"),
+        parameterWithName("eventId").description("행사 id")
     );
 
     when(requestNotificationQueryService.isAlreadyExisted(any(), any()))
