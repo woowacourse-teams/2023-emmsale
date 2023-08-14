@@ -52,6 +52,7 @@ public class Comment extends BaseEntity {
     this.parent = parent;
     this.member = member;
     this.content = content;
+    this.isDeleted = false;
   }
 
   public static Comment createRoot(
@@ -90,6 +91,10 @@ public class Comment extends BaseEntity {
 
   public boolean isNotMyComment(final Member member) {
     return this.member.isNotMe(member);
+  }
+
+  public boolean isNotDeleted() {
+    return !isDeleted || !content.equals(DELETED_COMMENT_MESSAGE);
   }
 
   public Optional<Comment> getParent() {
