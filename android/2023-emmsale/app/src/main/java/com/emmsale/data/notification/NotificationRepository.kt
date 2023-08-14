@@ -6,7 +6,7 @@ import com.emmsale.data.notification.recruitment.RecruitmentStatus
 import com.emmsale.data.notification.updated.UpdatedNotification
 
 interface NotificationRepository {
-    suspend fun getRecruitmentNotifications(): ApiResult<List<RecruitmentNotification>>
+    suspend fun getRecruitmentNotifications(memberId: Long): ApiResult<List<RecruitmentNotification>>
 
     // TODO: 4차 스프린트에서 알림 삭제 기능 구현 예정
     // fun deleteNotification(notificationId: Long)

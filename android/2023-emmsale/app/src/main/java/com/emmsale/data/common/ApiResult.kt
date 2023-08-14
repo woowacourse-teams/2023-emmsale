@@ -15,6 +15,7 @@ suspend inline fun <T : Any, reified V : Any> handleApi(
     return try {
         val response = execute()
         val body = response.body()
+
         when {
             response.isSuccessful && body == null && V::class == Unit::class -> ApiSuccess(Unit as V)
             response.isSuccessful && body != null -> ApiSuccess(mapToDomain(body))

@@ -17,10 +17,10 @@ class NotificationRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val notificationService: NotificationService,
 ) : NotificationRepository {
-    override suspend fun getRecruitmentNotifications(): ApiResult<List<RecruitmentNotification>> =
+    override suspend fun getRecruitmentNotifications(memberId: Long): ApiResult<List<RecruitmentNotification>> =
         withContext(dispatcher) {
             handleApi(
-                execute = { notificationService.getRecruitmentNotifications() },
+                execute = { notificationService.getRecruitmentNotifications(memberId) },
                 mapToDomain = List<RecruitmentNotificationApiModel>::toData,
             )
         }

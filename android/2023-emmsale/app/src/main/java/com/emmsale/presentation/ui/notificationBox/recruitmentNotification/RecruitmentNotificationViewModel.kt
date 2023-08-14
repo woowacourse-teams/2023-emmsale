@@ -10,6 +10,7 @@ import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.data.notification.recruitment.RecruitmentNotification
 import com.emmsale.data.notification.recruitment.RecruitmentStatus
+import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -25,6 +26,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class RecruitmentNotificationViewModel(
+    private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val eventDetailRepository: EventDetailRepository,
     private val notificationRepository: NotificationRepository,
@@ -42,9 +44,10 @@ class RecruitmentNotificationViewModel(
     private fun fetchNotifications() {
         viewModelScope.launch {
             _notifications.postValue(_notifications.value.copy(isLoading = true))
+            val uid = tokenRepository.getToken()?.uid ?: return@launch
 
-            when (val notificationsResult = notificationRepository.getRecruitmentNotifications()) {
-                is ApiSuccess -> updateNotifications(notificationsResult.data)
+            when (val result = notificationRepository.getRecruitmentNotifications(uid)) {
+                is ApiSuccess -> updateNotifications(result.data)
                 is ApiException, is ApiError -> _notifications.postValue(
                     _notifications.value.copy(isLoadingNotificationsFailed = true),
                 )
@@ -173,11 +176,9 @@ class RecruitmentNotificationViewModel(
     }
 
     companion object {
-        private const val MEMBER_INDEX = 0
-        private const val CONFERENCE_NAME_INDEX = 1
-
         val factory = ViewModelFactory {
             RecruitmentNotificationViewModel(
+                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
                 eventDetailRepository = KerdyApplication.repositoryContainer.eventDetailRepository,
                 notificationRepository = KerdyApplication.repositoryContainer.notificationRepository,

@@ -10,7 +10,9 @@ import retrofit2.http.Query
 
 interface NotificationService {
     @GET("/request-notifications")
-    suspend fun getRecruitmentNotifications(): Response<List<RecruitmentNotificationApiModel>>
+    suspend fun getRecruitmentNotifications(
+        @Query("member-id") memberId: Long,
+    ): Response<List<RecruitmentNotificationApiModel>>
 
     @PATCH("/request-notifications/{request-notification-id}/status")
     suspend fun updateRecruitmentStatus(
