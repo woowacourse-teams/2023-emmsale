@@ -97,6 +97,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     companion object {
-        const val TAG = "TAG_MY_PROFILE"
+        val TAG: String = MyProfileFragment::class.java.simpleName
     }
 }
