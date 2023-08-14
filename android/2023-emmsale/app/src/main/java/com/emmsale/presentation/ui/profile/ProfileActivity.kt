@@ -33,6 +33,16 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    private val menuDialog: BottomMenuDialog by lazy {
+        BottomMenuDialog(this).apply {
+            addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) {}
+            addMenuItemBelow(
+                getString(R.string.profilemenudialog_report_button_label),
+                MenuItemType.IMPORTANT,
+            ) {}
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -61,13 +71,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun showMoreMenu() {
-        BottomMenuDialog(this).apply {
-            addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) {}
-            addMenuItemBelow(
-                getString(R.string.profilemenudialog_report_button_label),
-                MenuItemType.IMPORTANT,
-            ) {}
-        }.show()
+        menuDialog.show()
     }
 
     private fun setupUiLogic() {
