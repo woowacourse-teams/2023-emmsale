@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentOnboardingFieldBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.emmsale.presentation.ui.onboarding.OnboardingViewModel
@@ -44,6 +45,12 @@ class OnboardingFieldFragment :
         text = activity.name
         isChecked = activity.isSelected
         setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked && viewModel.isExceedFieldLimit) {
+                showToast(R.string.onboarding_field_selection_limit_exceed)
+                setChecked(false)
+                return@setOnCheckedChangeListener
+            }
+
             viewModel.updateSelection(activity.id, isChecked)
         }
     }
