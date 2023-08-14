@@ -56,7 +56,7 @@ class MemberApiTest extends MockMvcTestHelper {
       fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url")
   );
 
-  private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+  private static final RequestFieldsSnippet MEMBER_ACTIVITY_REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
 
   @MockBean
@@ -127,7 +127,8 @@ class MemberApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
-        .andDo(document("add-activity", REQUEST_FIELDS, MEMBER_ACTIVITY_RESPONSE_FIELDS));
+        .andDo(document("add-activity", MEMBER_ACTIVITY_REQUEST_FIELDS,
+            MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
@@ -153,7 +154,8 @@ class MemberApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("delete-activity", REQUEST_FIELDS, MEMBER_ACTIVITY_RESPONSE_FIELDS));
+        .andDo(document("delete-activity", MEMBER_ACTIVITY_REQUEST_FIELDS,
+            MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test

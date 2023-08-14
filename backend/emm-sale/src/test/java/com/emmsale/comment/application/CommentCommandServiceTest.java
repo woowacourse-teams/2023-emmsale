@@ -150,9 +150,13 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   }
 
   /**
-   * 1 ㄴ2  (1에게 알림) ㄴ3  (1,2에게 알림)
+   * 1
+   * ㄴ2  (1에게 알림)
+   * ㄴ3  (1,2에게 알림)
    * <p>
-   * 새로운 대댓글 ㄴ2  (1,3에게 알림)
+   *
+   * 새로운 대댓글
+   * ㄴ2  (1,3에게 알림)
    */
   @Test
   @DisplayName("create() : 자신이 작성한 댓글, 대댓글들 중에서 다른 사람이 댓글을 작성할 경우 알림이 온다.")
