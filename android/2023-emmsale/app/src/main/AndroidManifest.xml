@@ -17,6 +17,10 @@
         android:theme="@style/Theme.Emmsale"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
+        <activity android:name=".presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity"
+            android:exported="true"/>
+        <activity android:name=".presentation.ui.eventdetail.recruitment.detail.RecruitmentPostDetailActivity"
+            android:exported="true"/>
         <activity
             android:name=".presentation.ui.profile.ProfileActivity"
             android:exported="false" />

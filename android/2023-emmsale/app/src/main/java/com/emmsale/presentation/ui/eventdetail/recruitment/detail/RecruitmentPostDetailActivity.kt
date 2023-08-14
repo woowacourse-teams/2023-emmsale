@@ -13,6 +13,7 @@ import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.BottomDialogMenuItem
 import com.emmsale.presentation.common.views.BottomMenuDialog
 import com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity
+import com.emmsale.presentation.ui.profile.ProfileActivity
 
 class RecruitmentPostDetailActivity :
     AppCompatActivity(),
@@ -141,7 +142,7 @@ class RecruitmentPostDetailActivity :
 
     private fun initProfileClick() {
         binding.ivRecruitmentdetailProfileImage.setOnClickListener {
-            // 프로필 조회
+            ProfileActivity.startActivity(this, viewModel.recruitmentPost.value.memberId)
         }
     }
 

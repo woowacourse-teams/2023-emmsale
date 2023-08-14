@@ -52,7 +52,7 @@ class BottomMenuDialog(
 
     private fun getTitleTextColorOf(menuItemType: Int): Int = when (menuItemType) {
         BottomDialogMenuItem.NORMAL -> ContextCompat.getColor(context, R.color.black)
-        BottomDialogMenuItem.DANGER -> ContextCompat.getColor(context, R.color.red)
+        BottomDialogMenuItem.DANGER -> ContextCompat.getColor(context, R.color.important)
         else -> throw IllegalArgumentException("${menuItemType}은 존재하지 않는 메뉴 아이템 타입입니다.")
     }
 
