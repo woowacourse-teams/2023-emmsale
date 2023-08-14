@@ -44,8 +44,8 @@ class NotificationBoxActivity : AppCompatActivity() {
 
     private fun initNotificationBoxTabMediator() {
         val notificationBoxTabNames = listOf(
-            getString(R.string.notificationbox_recruitment),
             getString(R.string.notificationbox_primary),
+            getString(R.string.notificationbox_recruitment),
         )
 
         binding.vpNotificationBox.adapter = NotificationBoxFragmentStateAdapter(this)
