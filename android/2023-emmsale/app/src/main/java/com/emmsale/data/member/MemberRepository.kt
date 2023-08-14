@@ -7,4 +7,6 @@ interface MemberRepository {
     suspend fun getMember(memberId: Long): ApiResult<Member>
 
     suspend fun updateMember(name: String, activityIds: List<Long>): ApiResult<Unit>
+
+    suspend fun deleteMember(memberId: Long): ApiResult<Unit>
 }

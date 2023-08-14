@@ -24,10 +24,18 @@ class TokenRepositoryImpl(
         Token(uid, accessToken)
     }
 
+
     override fun getMyUid(): Long? {
         val uid = preference.getLong(UID_KEY, DEFAULT_UID_VALUE)
         if (uid == DEFAULT_UID_VALUE) return null
         return uid
+    }
+
+    override suspend fun deleteToken() = withContext(dispatcher) {
+        preference.edit()
+            .remove(UID_KEY)
+            .remove(ACCESS_TOKEN_KEY)
+            .apply()
     }
 
     companion object {
