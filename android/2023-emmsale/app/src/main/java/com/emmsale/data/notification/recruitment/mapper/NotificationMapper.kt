@@ -26,7 +26,7 @@ private fun String.convertToRecruitmentNotificationStatus(): RecruitmentStatus =
     }
 
 private fun String.toLocalDateTime(): LocalDateTime {
-    val formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:SS")
+    val formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")
     return LocalDateTime.parse(this, formatter)
 }
 
