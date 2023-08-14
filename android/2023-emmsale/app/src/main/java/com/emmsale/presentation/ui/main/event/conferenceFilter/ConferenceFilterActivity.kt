@@ -50,6 +50,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun initView() {
         initEventFilterToolbarClickListener()
+        initAllFilteringOptionsClearButtonClickListener()
         initEventFilterApplyButtonClickListener()
         initTagAllFilterButtonClickListener()
         initDurationButtonClickListener()
@@ -57,12 +58,10 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun initEventFilterToolbarClickListener() {
         binding.tbEventFilter.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
-        binding.tbEventFilter.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.filter_clear -> askFilterClear()
-            }
-            true
-        }
+    }
+
+    private fun initAllFilteringOptionsClearButtonClickListener() {
+        binding.btnAllFilteringOptionsClear.setOnClickListener { askFilterClear() }
     }
 
     private fun askFilterClear() {
