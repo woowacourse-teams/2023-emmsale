@@ -1,7 +1,9 @@
 package com.emmsale.data.member
 
 import com.emmsale.data.common.ApiResult
+import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
+import com.emmsale.data.member.dto.MemberDescriptionUpdateRequestBody
 import com.emmsale.data.member.dto.MemberUpdateRequestBody
 import com.emmsale.data.member.mapper.toData
 import kotlinx.coroutines.CoroutineDispatcher
@@ -35,6 +37,22 @@ class MemberRepositoryImpl(
             },
             mapToDomain = { },
         )
+    }
+
+    override suspend fun updateMemberDescription(description: String): ApiResult<Unit> =
+        withContext(dispatcher) {
+            handleApi(
+                execute = {
+                    memberService.updateMemberDescription(
+                        MemberDescriptionUpdateRequestBody(description),
+                    )
+                },
+                mapToDomain = {},
+            )
+        }
+
+    override suspend fun updateMemberActivities(activities: List<Long>): ApiResult<Unit> {
+        return ApiSuccess(Unit)
     }
 
     override suspend fun deleteMember(memberId: Long): ApiResult<Unit> = withContext(dispatcher) {
