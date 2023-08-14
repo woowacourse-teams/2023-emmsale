@@ -149,7 +149,6 @@ class ProfileActivity : AppCompatActivity() {
         fun startActivity(context: Context, memberId: Long) {
             val intent = Intent(context, ProfileActivity::class.java).apply {
                 putExtra(KEY_MEMBER_ID, memberId)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
 
             context.startActivity(intent)
