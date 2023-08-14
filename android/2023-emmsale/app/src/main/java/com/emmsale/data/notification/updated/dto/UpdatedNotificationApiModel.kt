@@ -1,7 +1,9 @@
 package com.emmsale.data.notification.updated.dto
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class UpdatedNotificationApiModel(
     @SerialName("updateNotificationId")
     val id: Long,

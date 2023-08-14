@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PastNotificationAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.RecentNotificationAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.CommentNotificationUiState
@@ -67,7 +68,8 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     private fun setupRecentNotificationsObserver() {
         viewModel.recentNotifications.observe(viewLifecycleOwner) { recentNotifications ->
             when {
-                !recentNotifications.isFetchingError && !recentNotifications.isLoading ->
+                recentNotifications.isFetchingError -> showToast(getString(R.string.all_data_loading_failed_message))
+                !recentNotifications.isLoading ->
                     recentNotificationAdapter.submitList(recentNotifications.notifications)
             }
         }
