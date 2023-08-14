@@ -7,12 +7,8 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.message
-import com.emmsale.presentation.common.extension.negativeButton
-import com.emmsale.presentation.common.extension.positiveButton
-import com.emmsale.presentation.common.extension.showDialog
 import com.emmsale.presentation.common.extension.showSnackbar
-import com.emmsale.presentation.common.extension.title
+import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PastNotificationAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.RecentNotificationAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.CommentNotificationUiState
@@ -121,11 +117,13 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     }
 
     private fun showNotificationDeleteConfirmDialog() {
-        requireContext().showDialog {
-            title(getString(R.string.primarynotification_delete_notification_confirm_title))
-            message(getString(R.string.primarynotification_delete_notification_confirm_message))
-            positiveButton(getString(R.string.all_okay)) { viewModel.deleteAllPastNotifications() }
-            negativeButton(getString(R.string.all_cancel))
-        }
+        WarningDialog(
+            context = context ?: return,
+            title = getString(R.string.primarynotification_delete_notification_confirm_title),
+            message = getString(R.string.primarynotification_delete_notification_confirm_message),
+            positiveButtonLabel = getString(R.string.all_okay),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { viewModel.deleteAllPastNotifications() },
+        ).show()
     }
 }
