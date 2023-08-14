@@ -2,7 +2,6 @@ package com.emmsale.presentation.ui.eventdetail.comment.childComment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.comment.Comment
 import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
@@ -23,88 +22,51 @@ class ChildCommentViewModel(
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
 
-    private val _childCommentsUiState = NotNullMutableLiveData(ChildCommentsUiState.Loading)
-    val childCommentsUiState: NotNullLiveData<ChildCommentsUiState> = _childCommentsUiState
+    private val _comments = NotNullMutableLiveData(ChildCommentsUiState.FIRST_LOADING)
+    val comments: NotNullLiveData<ChildCommentsUiState> = _comments
 
     fun fetchComment(commentId: Long) {
+        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
-                changeToNotLoginState()
+                _isLogin.value = false
                 return@launch
             }
 
             when (val result = commentRepository.getComment(commentId)) {
-                is ApiError, is ApiException -> changeToCommentFetchingErrorState()
-                is ApiSuccess -> setChildCommentsState(result.data, token.uid)
+                is ApiError, is ApiException ->
+                    _comments.value = _comments.value.changeToFetchingErrorState()
+
+                is ApiSuccess ->
+                    _comments.value =
+                        _comments.value.changeChildCommentsState(result.data, token.uid)
             }
         }
     }
 
     fun saveChildComment(content: String, parentCommentId: Long, eventId: Long) {
-        changeToLoadingState()
+        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId, parentCommentId)) {
-                is ApiError -> changeToCommentPostingErrorState()
-                is ApiException -> changeToCommentPostingErrorState()
+                is ApiError, is ApiException ->
+                    _comments.value = _comments.value.changeToPostingErrorState()
+
                 is ApiSuccess -> fetchComment(parentCommentId)
             }
         }
     }
 
     fun deleteComment(commentId: Long, parentCommentId: Long) {
-        changeToLoadingState()
+        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
-                is ApiError -> changeToCommentDeletionErrorState()
-                is ApiException -> changeToCommentDeletionErrorState()
+                is ApiError, is ApiException ->
+                    _comments.value = _comments.value.changeToDeleteErrorState()
+
                 is ApiSuccess -> fetchComment(parentCommentId)
             }
         }
-    }
-
-    private fun setChildCommentsState(comment: Comment, loginMemberId: Long) {
-        _childCommentsUiState.value = ChildCommentsUiState.create(comment, loginMemberId)
-    }
-
-    private fun changeToNotLoginState() {
-        _isLogin.value = false
-    }
-
-    private fun changeToCommentFetchingErrorState() {
-        _childCommentsUiState.value = childCommentsUiState.value.copy(
-            isLoading = false,
-            isFetchingError = true,
-            isPostingError = false,
-            isDeletionError = false,
-        )
-    }
-
-    private fun changeToCommentPostingErrorState() {
-        _childCommentsUiState.value = childCommentsUiState.value.copy(
-            isLoading = false,
-            isFetchingError = false,
-            isPostingError = true,
-            isDeletionError = false,
-        )
-    }
-
-    private fun changeToCommentDeletionErrorState() {
-        _childCommentsUiState.value = childCommentsUiState.value.copy(
-            isLoading = false,
-            isFetchingError = false,
-            isPostingError = false,
-            isDeletionError = true,
-        )
-    }
-
-    private fun changeToLoadingState() {
-        _childCommentsUiState.value = childCommentsUiState.value.copy(
-            isLoading = true,
-            isFetchingError = false,
-            isPostingError = false,
-            isDeletionError = false,
-        )
     }
 
     companion object {

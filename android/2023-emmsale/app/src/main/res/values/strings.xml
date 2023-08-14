@@ -12,6 +12,9 @@
     <string name="all_go_back">뒤로 가기</string>
     <string name="all_next">다음</string>
     <string name="all_data_loading_failed_message">데이터를 정상적으로 불러오지 못했어요 😢</string>
+    <string name="all_update_button_label">수정</string>
+    <string name="all_delete_button_label">삭제</string>
+    <string name="all_report_button_label">신고하기</string>
 
     <string name="onboarding_member_update_failed_message">회원정보 업데이트를 실패했어요!</string>
 
@@ -54,17 +57,22 @@
     <string name="login_post_notification_permission_granted_message">푸시 알림 권한을 허용하였습니다.</string>
     <string name="login_post_notification_permission_needed_message">알림 권한이 필요해요!</string>
 
-    <string name="main_menuitemnameofprofile">프로필</string>
-    <string name="main_menuitemnameofhome">홈</string>
-    <string name="main_menuitemnameofsetting">설정</string>
+    <string name="main_menu_item_name_of_profile">프로필</string>
+    <string name="main_menu_item_name_of_home">홈</string>
+    <string name="main_menu_item_name_of_setting">설정</string>
 
-    <string name="myprofile_memberimagedescription">회원의 사진</string>
-    <string name="myprofile_greeting">Hello,</string>
-    <string name="myprofile_educationslabel">교육 활동</string>
-    <string name="myprofile_clubslabel">동아리 활동</string>
-    <string name="myprofile_eventslabel">참여 행사</string>
-    <string name="myprofile_no_description">소개말이 없습니다.</string>
-    <string name="myprofile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
+    <string name="profile_memberimagedescription">회원의 사진</string>
+    <string name="profile_greeting">Hello,</string>
+    <string name="profile_educationslabel">교육 활동</string>
+    <string name="profile_clubslabel">동아리 활동</string>
+    <string name="profile_eventslabel">참여 행사</string>
+    <string name="profile_no_description">소개말이 없습니다.</string>
+    <string name="profile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
+    <string name="profile_toolbar_title">프로필 조회</string>
+    <string name="profile_more_button_title">더보기</string>
+
+    <string name="profilemenudialog_block_button_label">차단하기</string>
+    <string name="profilemenudialog_report_button_label">신고하기</string>
 
     <string name="event_poster_description">event poster</string>
     <string name="event_filter">필터 설정</string>
@@ -75,7 +83,6 @@
     <string name="comment_menu_button">댓글의 메뉴 버튼</string>
     <string name="comment_deleted_comment_author_name">삭제</string>
     <string name="comment_deleted_comment_content">삭제된 댓글입니다.</string>
-    <string name="comment_delete_button">댓글의 삭제 버튼</string>
 
     <string name="comments_is_updated">수정됨</string>
     <string name="comments_child_comments_count_format">답글 %d</string>
@@ -91,10 +98,12 @@
     <string name="commentsmenudialog_edit_button_label">수정</string>
     <string name="commentsmenudialog_delete_button_label">삭제</string>
     <string name="commentsmenudialog_report_button_label">신고하기</string>
+
     <string name="commentdeletedialog_title">댓글 삭제</string>
     <string name="commentdeletedialog_message">해당 댓글을 삭제하시겠습니까?</string>
     <string name="commentdeletedialog_positive_button_label">삭제</string>
     <string name="commentdeletedialog_negative_button_label">취소</string>
+
     <string name="childcomments_edit_child_comment_hint">답글을 입력하세요.</string>
     <string name="childcomments_toolbar_title">답글</string>
 
@@ -122,11 +131,6 @@
     <string name="conferencefilter_backpress_dialog_title">필터 적용</string>
 
     <string name="eventinformation_navigate_website">웹사이트로 이동</string>
-
-    <string name="recruitmentdialog_requestcomapanion">함께 하기 요청</string>
-    <string name="recruitmentdialog_message_format">%s께 함께하기 요청을\n보내시겠습니까?</string>
-
-    <string name="recruitment_request_companion">같이 가요</string>
 
     <string name="notificationbox_title">알림 보관함</string>
     <string name="notificationbox_delete_noti">알림 삭제</string>
@@ -156,6 +160,59 @@
     <string name="eventdetail_tab_infromation">상세 정보</string>
     <string name="eventdetail_tab_comment">댓글</string>
     <string name="eventdetail_tab_recruitment">같이가요</string>
+    <string name="eventdetail_tablayout_content_description">상세정보 보기 탭</string>
+
+    <string name="eventrecruitment_fetch_recruitments_error_message">글을 불러올 수 없습니다. 관리자에게 문의하세요.</string>
+    <string name="eventrecruitment_has_not_permission_writing">모집글은 한번만 작성이 가능합니다!!</string>
+
+    <string name="recruitmentpostwriting_no_content_error_message">내용이 없으면 모집글을 올릴 수 없어요</string>
+    <string name="recruitmentpostwriting_register_success_message">글을 등록하였습니다</string>
+    <string name="recruitmentpostwriting_register_error_message">등록에 실패하였습니다! 인터넷을 확인하시고, 관리자에게 문의해주세요</string>
+    <string name="recruitmentpostwriting_appbar_title_text">글쓰기</string>
+    <string name="recruitmentpostwriting_register_button_text">등록</string>
+    <string name="recruitmentpostwriting_hint_message">모집글을 작성해주세요.</string>
+    <string name="recruitmentpostwriting_edit_success_message">수정에 성공하였습니다</string>
+    <string name="recruitmentpostwriting_edit_button_text">수정</string>
+
+    <string name="requestcompanion_dialog_message_hint">요청 메세지를 작성해주세요.</string>
+    <string name="requestcompanion_dialog_positive_button_text">요청</string>
+    <string name="requestcompanion_dialog_negative_button_text">취소</string>
+    <string name="requestcompanion_dialog_warning_message">요청을 보내면 취소할 수 없습니다.</string>
+    <string name="requestcompanion_dialog_title">함께 하기 요청</string>
+    <string name="requestcompanion_dialog_message_format">%s님께 함께하기 요청을\n보내시겠습니까?</string>
+
+    <string name="recruitmentpostdetail_request_button_text">함께하기 요청</string>
+    <string name="recruitmentpostdetail_request_button_complete_text">요청 완료</string>
+    <string name="recruitmentpostdetail_success_request_message">요청에 성공했어요</string>
+    <string name="recruitmentpostdetail_fail_request_message">요청에 실패했어요</string>
+    <string name="recruitmentpostdetail_update_date_format">%s 수정됨</string>
+    <string name="recruitmentpostdetail_deletion_success_message">글을 삭제했어요!</string>
+    <string name="recruitmentpostdetail_deletion_fail_message">삭제에 실패했어요. 네트워크 연결 확인 후 관리자에 문의해주세요</string>
+    <string name="recruitmentpostdetail_dialog_editing_text">수정</string>
+    <string name="recruitmentpostdetail_dialog_deletion_text">삭제</string>
+    <string name="recruitmentpostdetail_dialog_report_text">신고하기</string>
+
+    <string name="setting_member_image_description">회원의 사진</string>
+    <string name="setting_notification_setting_button_label">알림 설정</string>
+    <string name="setting_use_term_button_label">이용 약관</string>
+    <string name="setting_version_info_button_label">버전 정보</string>
+    <string name="setting_account_delete_button_label">계정 삭제</string>
+    <string name="setting_logout_button_label">로그아웃</string>
+    <string name="setting_blocks_button_label">차단 목록</string>
+    <string name="setting_writings_button_label">작성한 글</string>
+    <string name="setting_written_comments_button_label">작성한 댓글</string>
+    <string name="setting_member_fetching_error_message">회원 정보를 불러오는 데 실패했어요 😥</string>
+    <string name="setting_member_delete_error_message">회원 탈퇴하는 데 실패했어요 😥</string>
+
+    <string name="memberdeletedialog_title">계정 삭제</string>
+    <string name="memberdeletedialog_message">정말로 계정을 삭제 하시겠습니까?\n계정 삭제 시 복구가 불가합니다.</string>
+    <string name="memberdeletedialog_positive_button_label">삭제</string>
+    <string name="memberdeletedialog_negative_button_label">취소</string>
+
+    <string name="logoutdialog_title">로그아웃</string>
+    <string name="logoutdialog_message">정말로 로그아웃 하시겠습니까?</string>
+    <string name="logoutdialog_positive_button_label">로그아웃</string>
+    <string name="logoutdialog_negative_button_label">취소</string>
 
     <string name="primarynotification_new_notification_header_title">새로운 알림</string>
     <string name="primarynotification_past_notification_header_title">지난 알림</string>

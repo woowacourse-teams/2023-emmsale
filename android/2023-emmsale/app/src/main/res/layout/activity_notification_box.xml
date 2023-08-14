@@ -24,7 +24,7 @@
             app:navigationIcon="@drawable/ic_back"
             app:title="@string/notificationbox_title"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/EventFilterToolbarTitleFontStyle" />
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_notification_box"

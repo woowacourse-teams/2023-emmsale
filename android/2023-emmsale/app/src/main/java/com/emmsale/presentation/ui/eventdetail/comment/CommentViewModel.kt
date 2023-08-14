@@ -2,7 +2,6 @@ package com.emmsale.presentation.ui.eventdetail.comment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.comment.Comment
 import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
@@ -27,85 +26,46 @@ class CommentViewModel(
     val comments: NotNullLiveData<CommentsUiState> = _comments
 
     fun fetchComments(eventId: Long) {
-        changeToLoadingState()
+        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
-                changeToNotLoginState()
+                _isLogin.value = false
                 return@launch
             }
 
             when (val result = commentRepository.getComments(eventId)) {
-                is ApiError, is ApiException -> changeCommentFetchingErrorState()
-                is ApiSuccess -> setCommentsState(result.data, token.uid)
+                is ApiError, is ApiException ->
+                    _comments.value = _comments.value.changeToFetchingErrorState()
+
+                is ApiSuccess ->
+                    _comments.value = _comments.value.changeCommentsState(result.data, token.uid)
             }
         }
     }
 
     fun saveComment(content: String, eventId: Long) {
-        changeToLoadingState()
+        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId)) {
-                is ApiError -> changeToCommentPostingErrorState()
-                is ApiException -> changeToCommentPostingErrorState()
+                is ApiError, is ApiException ->
+                    _comments.value = _comments.value.changeToPostingErrorState()
+
                 is ApiSuccess -> fetchComments(eventId)
             }
         }
     }
 
     fun deleteComment(commentId: Long, eventId: Long) {
-        changeToLoadingState()
+        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
-                is ApiError -> changeToCommentDeletionErrorState()
-                is ApiException -> changeToCommentDeletionErrorState()
+                is ApiError, is ApiException ->
+                    _comments.value = _comments.value.changeToDeleteErrorState()
+
                 is ApiSuccess -> fetchComments(eventId)
             }
         }
-    }
-
-    private fun setCommentsState(comments: List<Comment>, loginMemberId: Long) {
-        _comments.value = CommentsUiState.create(comments, loginMemberId)
-    }
-
-    private fun changeToNotLoginState() {
-        _isLogin.value = false
-    }
-
-    private fun changeToLoadingState() {
-        _comments.value = comments.value.copy(
-            isLoading = true,
-            isFetchingError = false,
-            isPostingError = false,
-            isDeletionError = false,
-        )
-    }
-
-    private fun changeCommentFetchingErrorState() {
-        _comments.value = comments.value.copy(
-            isLoading = false,
-            isFetchingError = true,
-            isPostingError = false,
-            isDeletionError = false,
-        )
-    }
-
-    private fun changeToCommentPostingErrorState() {
-        _comments.value = comments.value.copy(
-            isLoading = false,
-            isFetchingError = false,
-            isPostingError = true,
-            isDeletionError = false,
-        )
-    }
-
-    private fun changeToCommentDeletionErrorState() {
-        _comments.value = comments.value.copy(
-            isLoading = false,
-            isFetchingError = false,
-            isPostingError = false,
-            isDeletionError = true,
-        )
     }
 
     companion object {

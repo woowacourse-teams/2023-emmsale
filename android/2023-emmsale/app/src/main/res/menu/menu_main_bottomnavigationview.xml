@@ -3,13 +3,13 @@
     <item
         android:id="@+id/mi_main_profile"
         android:icon="@drawable/ic_main_menuitemprofile"
-        android:title="@string/main_menuitemnameofprofile" />
+        android:title="@string/main_menu_item_name_of_profile" />
     <item
         android:id="@+id/mi_main_event"
         android:icon="@drawable/ic_main_menuitemhome"
-        android:title="@string/main_menuitemnameofhome" />
+        android:title="@string/main_menu_item_name_of_home" />
     <item
         android:id="@+id/mi_main_setting"
         android:icon="@drawable/ic_main_menuitemsetting"
-        android:title="@string/main_menuitemnameofsetting" />
+        android:title="@string/main_menu_item_name_of_setting" />
 </menu>

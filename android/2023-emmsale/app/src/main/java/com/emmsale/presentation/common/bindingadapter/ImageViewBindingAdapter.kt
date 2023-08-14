@@ -37,8 +37,8 @@ fun ImageView.setRoundedImageUrl(
         .into(this)
 }
 
-@BindingAdapter("app:imageUrl", "app:isCircle", requireAll = false)
-fun ImageView.setCircleImage(imageUrl: String? = null, isCircle: Boolean) {
+@BindingAdapter("app:imageUrl", "app:isCircle")
+fun ImageView.setCircleImage(imageUrl: String?, isCircle: Boolean) {
     if (!isCircle) {
         setImage(imageUrl)
         return

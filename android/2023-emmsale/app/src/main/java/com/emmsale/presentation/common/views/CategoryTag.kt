@@ -15,7 +15,7 @@ class CategoryTag(
     init {
         setTextSize(Dimension.SP, 13F)
         gravity = Gravity.CENTER
-        background = ContextCompat.getDrawable(context, R.drawable.bg_myprofile_categorytag)
+        background = ContextCompat.getDrawable(context, R.drawable.bg_profile_categorytag)
         setTextColor(ContextCompat.getColor(context, R.color.black))
     }
 }
