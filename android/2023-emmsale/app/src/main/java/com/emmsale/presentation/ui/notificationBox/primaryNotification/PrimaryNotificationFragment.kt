@@ -44,30 +44,41 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initPrimaryNotification()
+        initView()
         setupObservers()
     }
 
-    private fun initPrimaryNotification() {
+    private fun initView() {
+        binding.viewModel = viewModel
+        initPrimaryNotificationRecyclerView()
+    }
+
+    private fun initPrimaryNotificationRecyclerView() {
         binding.rvPrimaryNotification.adapter = primaryNotificationAdapter
         binding.rvPrimaryNotification.setHasFixedSize(true)
         binding.rvPrimaryNotification.itemAnimator = null
     }
 
     private fun setupObservers() {
-        setupRecentNotifications()
-        setupPastNotifications()
+        setupRecentNotificationsObserver()
+        setupPastNotificationsObserver()
     }
 
-    private fun setupRecentNotifications() {
-        viewModel.recentNotifications.observe(viewLifecycleOwner) { notifications ->
-            recentNotificationAdapter.submitList(notifications.notifications)
+    private fun setupRecentNotificationsObserver() {
+        viewModel.recentNotifications.observe(viewLifecycleOwner) { recentNotifications ->
+            when {
+                !recentNotifications.isFetchingError && !recentNotifications.isLoading ->
+                    recentNotificationAdapter.submitList(recentNotifications.notifications)
+            }
         }
     }
 
-    private fun setupPastNotifications() {
-        viewModel.pastNotifications.observe(viewLifecycleOwner) { notifications ->
-            pastNotificationAdapter.submitList(notifications.notifications)
+    private fun setupPastNotificationsObserver() {
+        viewModel.pastNotifications.observe(viewLifecycleOwner) { pastNotifications ->
+            when {
+                !pastNotifications.isFetchingError && !pastNotifications.isLoading ->
+                    pastNotificationAdapter.submitList(pastNotifications.notifications)
+            }
         }
     }
 

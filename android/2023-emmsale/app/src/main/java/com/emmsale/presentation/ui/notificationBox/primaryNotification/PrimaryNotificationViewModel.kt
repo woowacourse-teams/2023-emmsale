@@ -32,17 +32,18 @@ class PrimaryNotificationViewModel(
     private fun fetchPrimaryNotifications() {
         viewModelScope.launch {
             _recentNotifications.value = recentNotifications.value.copy(isLoading = true)
-
             val uid = tokenRepository.getToken()?.uid ?: return@launch
+
             when (val result = notificationRepository.getUpdatedNotifications(uid)) {
                 is ApiSuccess -> {
                     updatePastNotifications(result.data.filter { it.isPast })
                     updateNewNotifications(result.data.filterNot { it.isPast })
                 }
 
-                is ApiError, is ApiException ->
+                is ApiError, is ApiException -> {
                     _recentNotifications.value =
-                        recentNotifications.value.copy(isFetchingError = true)
+                        recentNotifications.value.copy(isLoading = false, isFetchingError = true)
+                }
             }
         }
     }

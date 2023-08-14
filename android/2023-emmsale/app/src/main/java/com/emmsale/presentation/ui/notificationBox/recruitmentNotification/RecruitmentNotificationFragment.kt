@@ -32,12 +32,13 @@ class RecruitmentNotificationFragment :
     }
 
     private fun initView() {
+        binding.viewModel = viewModel
         initNotificationBoxRecyclerView()
     }
 
     private fun initNotificationBoxRecyclerView() {
-        binding.rvNotiBox.adapter = recruitmentNotificationHeaderAdapter
-        binding.rvNotiBox.setHasFixedSize(true)
+        binding.rvRecruitmentNotification.adapter = recruitmentNotificationHeaderAdapter
+        binding.rvRecruitmentNotification.setHasFixedSize(true)
     }
 
     override fun onAcceptButtonClick(notificationId: Long) {

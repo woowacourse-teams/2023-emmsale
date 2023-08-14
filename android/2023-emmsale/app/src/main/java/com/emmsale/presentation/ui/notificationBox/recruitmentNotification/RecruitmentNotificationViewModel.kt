@@ -38,10 +38,10 @@ class RecruitmentNotificationViewModel(
     val recruitmentUiState: NotNullLiveData<RecruitmentUiState> = _recruitmentUiState
 
     init {
-        fetchNotifications()
+        fetchRecruitmentNotifications()
     }
 
-    private fun fetchNotifications() {
+    private fun fetchRecruitmentNotifications() {
         viewModelScope.launch {
             _notifications.postValue(_notifications.value.copy(isLoading = true))
             val uid = tokenRepository.getToken()?.uid ?: return@launch
@@ -49,7 +49,10 @@ class RecruitmentNotificationViewModel(
             when (val result = notificationRepository.getRecruitmentNotifications(uid)) {
                 is ApiSuccess -> updateNotifications(result.data)
                 is ApiException, is ApiError -> _notifications.postValue(
-                    _notifications.value.copy(isLoadingNotificationsFailed = true),
+                    _notifications.value.copy(
+                        isLoading = false,
+                        isLoadingNotificationsFailed = true,
+                    ),
                 )
             }
         }
@@ -69,7 +72,10 @@ class RecruitmentNotificationViewModel(
             )
         }
 
-        _notifications.value = _notifications.value.copy(notificationGroups = notificationHeaders)
+        _notifications.value = _notifications.value.copy(
+            isLoading = false,
+            notificationGroups = notificationHeaders,
+        )
     }
 
     private suspend fun convertToNotificationBodies(
