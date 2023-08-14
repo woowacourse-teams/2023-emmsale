@@ -31,8 +31,8 @@ class NotificationRepositoryImpl(
     ): ApiResult<Unit> = withContext(dispatcher) {
         handleApi(
             execute = {
-                val recruitingState = convertRequestApiString(recruitmentStatus)
-                notificationService.updateRecruitmentStatus(notificationId, recruitingState)
+                val recruitingStatus = convertRequestApiString(recruitmentStatus)
+                notificationService.updateRecruitmentStatus(notificationId, recruitingStatus)
             },
             mapToDomain = { },
         )
@@ -40,6 +40,7 @@ class NotificationRepositoryImpl(
 
     private fun convertRequestApiString(recruitmentStatus: RecruitmentStatus) =
         when (recruitmentStatus) {
+            RecruitmentStatus.IN_PROGRESS -> IN_PROGRESS
             RecruitmentStatus.ACCEPTED -> ACCEPT
             RecruitmentStatus.REJECTED -> REJECT
         }
@@ -64,6 +65,7 @@ class NotificationRepositoryImpl(
     }
 
     companion object {
+        private const val IN_PROGRESS = "IN_PROGRESS"
         private const val ACCEPT = "ACCEPT"
         private const val REJECT = "REJECT"
     }
