@@ -77,6 +77,6 @@ class UpdateNotificationCommandServiceTest extends ServiceIntegrationTestHelper 
     //when & then
     assertThatThrownBy(() -> updateNotificationCommandService.read(otherMember, 이벤트_알림.getId()))
         .isInstanceOf(MemberException.class)
-        .hasMessage(MemberExceptionType.NOT_MATCHING_TOKEN_AND_LOGIN.errorMessage());
+        .hasMessage(MemberExceptionType.NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER.errorMessage());
   }
 }

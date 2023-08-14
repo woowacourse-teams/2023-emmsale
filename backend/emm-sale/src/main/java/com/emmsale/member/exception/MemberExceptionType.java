@@ -54,9 +54,9 @@ public enum MemberExceptionType implements BaseExceptionType {
       "한줄 자기소개에 입력 가능한 글자 수를 초과했습니다."
   ),
 
-  NOT_MATCHING_TOKEN_AND_LOGIN(
+  NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER(
       HttpStatus.UNAUTHORIZED,
-      "로그인 한 사용자와 토큰의 주인이 일치하지 않습니다."
+      "사용자가 일치하지 않습니다."
   )
 
   ;

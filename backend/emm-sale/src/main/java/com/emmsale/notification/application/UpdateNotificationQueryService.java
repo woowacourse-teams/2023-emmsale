@@ -1,7 +1,7 @@
 package com.emmsale.notification.application;
 
 import static com.emmsale.comment.exception.CommentExceptionType.NOT_FOUND_COMMENT;
-import static com.emmsale.member.exception.MemberExceptionType.NOT_MATCHING_TOKEN_AND_LOGIN;
+import static com.emmsale.member.exception.MemberExceptionType.NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER;
 
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
@@ -43,7 +43,7 @@ public class UpdateNotificationQueryService {
 
   private void validateSameMember(final Member authMember, final Long loginMemberId) {
     if (authMember.isNotMe(loginMemberId)) {
-      throw new MemberException(NOT_MATCHING_TOKEN_AND_LOGIN);
+      throw new MemberException(NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER);
     }
   }
 

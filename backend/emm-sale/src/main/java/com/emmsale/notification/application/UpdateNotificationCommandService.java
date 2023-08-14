@@ -1,6 +1,6 @@
 package com.emmsale.notification.application;
 
-import static com.emmsale.member.exception.MemberExceptionType.NOT_MATCHING_TOKEN_AND_LOGIN;
+import static com.emmsale.member.exception.MemberExceptionType.NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
 
 import com.emmsale.member.domain.Member;
@@ -31,7 +31,7 @@ public class UpdateNotificationCommandService {
 
   private void validateSameMember(final Member authMember, final Long loginMemberId) {
     if (authMember.isNotMe(loginMemberId)) {
-      throw new MemberException(NOT_MATCHING_TOKEN_AND_LOGIN);
+      throw new MemberException(NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER);
     }
   }
 }
