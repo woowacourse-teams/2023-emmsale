@@ -41,6 +41,6 @@ interface NotificationService {
 
     @DELETE("/update-notifications")
     suspend fun deleteNotification(
-        @Query("delete-ids") notificationIds: List<Long>,
+        @Body notificationIds: List<Long>,
     ): Response<Unit>
 }
