@@ -19,7 +19,7 @@ fun RecruitmentNotificationApiModel.toData(): RecruitmentNotification = Recruitm
 
 private fun String.convertToRecruitmentNotificationStatus(): RecruitmentStatus =
     when (this) {
-        "IN_PROGRESS" -> RecruitmentStatus.IN_PROGRESS
+        "IN_PROGRESS" -> RecruitmentStatus.PENDING
         "ACCEPTED" -> RecruitmentStatus.ACCEPTED
         "REJECTED" -> RecruitmentStatus.REJECTED
         else -> throw IllegalArgumentException("Unknown status: $this")

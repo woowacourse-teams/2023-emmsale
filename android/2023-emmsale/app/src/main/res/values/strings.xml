@@ -146,6 +146,7 @@
     <string name="recruitmentnotification_reject">거절</string>
     <string name="recruitmentnotification_accept">수락</string>
     <string name="recruitmentnotification_open_chat">오픈 채팅으로 이동</string>
+    <string name="recruitmentnotification_reject_button_label">요청을 거절했습니다.</string>
     <string name="recruitmentnotification_more_button">더보기 버튼</string>
     <string name="recruitmentnotification_header_expand_view">화면을 팽창 시킵니다.</string>
 

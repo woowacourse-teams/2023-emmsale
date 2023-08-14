@@ -40,7 +40,7 @@ class NotificationRepositoryImpl(
 
     private fun convertRequestApiString(recruitmentStatus: RecruitmentStatus) =
         when (recruitmentStatus) {
-            RecruitmentStatus.IN_PROGRESS -> IN_PROGRESS
+            RecruitmentStatus.PENDING -> IN_PROGRESS
             RecruitmentStatus.ACCEPTED -> ACCEPT
             RecruitmentStatus.REJECTED -> REJECT
         }

@@ -8,7 +8,7 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.recruitment.RecruitmentRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
-import com.emmsale.presentation.eventdetail.recruitment.uistate.RecruitmentStatusUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentStatusUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentsUiState
 import kotlinx.coroutines.launch
 

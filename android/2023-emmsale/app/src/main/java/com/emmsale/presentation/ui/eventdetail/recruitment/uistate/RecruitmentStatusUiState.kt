@@ -1,4 +1,4 @@
-package com.emmsale.presentation.eventdetail.recruitment.uistate
+package com.emmsale.presentation.ui.eventdetail.recruitment.uistate
 
 sealed class RecruitmentStatusUiState {
     data class Success(val isParticipate: Boolean) : RecruitmentStatusUiState()
