@@ -19,7 +19,12 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     private val recentNotificationAdapter by lazy { RecentNotificationAdapter() }
     private val pastNotificationAdapter by lazy { PastNotificationAdapter() }
     private val primaryNotificationAdapter: ConcatAdapter by lazy {
+        val config = ConcatAdapter.Config.Builder()
+            .setIsolateViewTypes(false)
+            .build()
+
         ConcatAdapter(
+            config,
             recentNotificationAdapter,
             pastNotificationAdapter,
         )
