@@ -67,15 +67,22 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
     void findProfile_success() {
       //given
       final Long memberId = 1L;
-      final MemberProfileResponse expectResponse = new MemberProfileResponse(memberId, null,
-          "", "https://imageurl.com");
+      final MemberProfileResponse expectResponse = new MemberProfileResponse(
+          memberId,
+          null,
+          "",
+          "https://imageurl.com",
+          "https://openprofileurl.com",
+          1L
+      );
 
       //when
       final MemberProfileResponse actualResponse = memberQueryService.findProfile(memberId);
 
       //then
       assertThat(actualResponse)
-          .usingRecursiveComparison().ignoringFields("description")
+          .usingRecursiveComparison()
+          .ignoringFields("description")
           .isEqualTo(expectResponse);
     }
 
