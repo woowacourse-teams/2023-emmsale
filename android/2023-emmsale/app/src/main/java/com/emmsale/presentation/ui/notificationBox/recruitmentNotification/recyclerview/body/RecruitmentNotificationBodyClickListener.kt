@@ -4,4 +4,5 @@ interface RecruitmentNotificationBodyClickListener {
     fun onAcceptButtonClick(notificationId: Long)
     fun onRejectButtonClick(notificationId: Long)
     fun onMoreButtonClick(notificationId: Long)
+    fun onOpenChatButtonClick(openChatUrl: String)
 }

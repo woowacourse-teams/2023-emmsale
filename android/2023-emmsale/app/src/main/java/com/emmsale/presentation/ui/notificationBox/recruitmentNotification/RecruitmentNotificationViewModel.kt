@@ -95,8 +95,9 @@ class RecruitmentNotificationViewModel(
         viewModelScope.async {
             when (val member = memberRepository.getMember(userId)) {
                 is ApiSuccess -> RecruitmentNotificationMemberUiState(
-                    member.data.name,
-                    member.data.imageUrl,
+                    name = member.data.name,
+                    profileImageUrl = member.data.imageUrl,
+                    openProfileUrl = member.data.openProfileUrl,
                 )
 
                 is ApiException, is ApiError -> null
