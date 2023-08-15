@@ -28,6 +28,7 @@ class EditMyProfileActivity : AppCompatActivity() {
     private val viewModel: EditMyProfileViewModel by viewModels { EditMyProfileViewModel.factory }
 
     private val fieldsDialog by lazy { FieldsAddBottomDialogFragment() }
+    private val educationsDialog by lazy { EducationsAddBottomDialogFragment() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +48,23 @@ class EditMyProfileActivity : AppCompatActivity() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         binding.showFieldTags = ::showFieldTags
+        binding.showEducations = ::showEducations
+        binding.showClubs = ::showClubs
     }
 
     private fun showFieldTags() {
         if (!fieldsDialog.isAdded) {
             fieldsDialog.show(supportFragmentManager, FieldsAddBottomDialogFragment.TAG)
         }
+    }
+
+    private fun showEducations() {
+        if (!educationsDialog.isAdded) {
+            educationsDialog.show(supportFragmentManager, EducationsAddBottomDialogFragment.TAG)
+        }
+    }
+
+    private fun showClubs() {
     }
 
     private fun initToolbar() {

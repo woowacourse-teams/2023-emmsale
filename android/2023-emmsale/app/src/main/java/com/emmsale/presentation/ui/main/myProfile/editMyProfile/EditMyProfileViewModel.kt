@@ -99,50 +99,67 @@ class EditMyProfileViewModel(
     fun addSelectedFields() {
     }
 
-    fun fetchFields() {
-        if (_selectableFields.value.isNotEmpty()) return
-        viewModelScope.launch {
-            when (val result = activityRepository.getActivities()) {
-                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.FIELDS_FETCHING)
-                is ApiSuccess ->
-                    _selectableFields.value =
-                        result.data.toSelectableActivitiesWithoutProfile(ActivityType.FIELD)
-            }
-        }
+    fun addSelectedEducations() {
     }
 
-    private fun List<Activity>.toSelectableActivitiesWithoutProfile(activityType: ActivityType): List<SelectableActivityUiState> =
-        filter { activity -> activity.activityType == activityType && activity.id !in profile.value.fields.map { it.id } }
-            .map { SelectableActivityUiState.from(it) }
+    fun addSelectedClubs() {}
 
     fun setFieldSelection(activityId: Long, isSelected: Boolean) {
         _selectableFields.value =
             _selectableFields.value.map { if (it.id == activityId) it.copy(isSelected = isSelected) else it }
     }
 
+    fun setEducationSelection(activityId: Long, isSelected: Boolean) {
+        _selectableEducations.value =
+            _selectableEducations.value.map { if (it.id == activityId) it.copy(isSelected = isSelected) else it }
+    }
+
+    fun setClubSelection(activityId: Long, isSelected: Boolean) {
+        _selectableClubs.value =
+            _selectableClubs.value.map { if (it.id == activityId) it.copy(isSelected = isSelected) else it }
+    }
+
+    fun fetchFields() {
+        if (_selectableFields.value.isNotEmpty()) return
+        viewModelScope.launch {
+            when (val result = activityRepository.getActivities()) {
+                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.FIELDS_FETCHING)
+                is ApiSuccess -> _selectableFields.value = result.data.toSelectableFields()
+            }
+        }
+    }
+
+    private fun List<Activity>.toSelectableFields(): List<SelectableActivityUiState> =
+        filter { activity -> activity.activityType == ActivityType.FIELD && activity.id !in profile.value.fields.map { it.id } }
+            .map { SelectableActivityUiState.from(it) }
+
     fun fetchEducations() {
         if (_selectableEducations.value.isNotEmpty()) return
         viewModelScope.launch {
             when (val result = activityRepository.getActivities()) {
                 is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.EDUCATIONS_FETCHING)
-                is ApiSuccess ->
-                    _selectableEducations.value =
-                        result.data.toSelectableActivitiesWithoutProfile(ActivityType.EDUCATION)
+                is ApiSuccess -> _selectableEducations.value = result.data.toSelectableEducations()
             }
         }
     }
+
+    private fun List<Activity>.toSelectableEducations(): List<SelectableActivityUiState> =
+        filter { activity -> activity.activityType == ActivityType.EDUCATION && activity.id !in profile.value.educations.map { it.id } }
+            .map { SelectableActivityUiState.from(it) }
 
     fun fetchClubs() {
         if (_selectableClubs.value.isNotEmpty()) return
         viewModelScope.launch {
             when (val result = activityRepository.getActivities()) {
                 is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.CLUBS_FETCHING)
-                is ApiSuccess ->
-                    _selectableClubs.value =
-                        result.data.toSelectableActivitiesWithoutProfile(ActivityType.CLUB)
+                is ApiSuccess -> _selectableClubs.value = result.data.toSelectableClubs()
             }
         }
     }
+
+    private fun List<Activity>.toSelectableClubs(): List<SelectableActivityUiState> =
+        filter { activity -> activity.activityType == ActivityType.CLUB && activity.id !in profile.value.clubs.map { it.id } }
+            .map { SelectableActivityUiState.from(it) }
 
     companion object {
         private const val MAX_FIELDS_COUNT = 4

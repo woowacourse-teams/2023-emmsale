@@ -13,6 +13,12 @@
         <variable
             name="showFieldTags"
             type="kotlin.jvm.functions.Function0" />
+        <variable
+            name="showEducations"
+            type="kotlin.jvm.functions.Function0" />
+        <variable
+            name="showClubs"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -269,6 +275,7 @@
                     app:layout_constraintStart_toStartOf="@+id/rv_editmyprofile_clubs"
                     android:layout_marginTop="8dp"
                     android:textSize="11sp"
+                    android:onClick="@{() -> showClubs.invoke()}"
                     android:background="@drawable/bg_editmyprofile_activity_add_button"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginBottom="39dp" />
@@ -280,6 +287,7 @@
                     android:id="@+id/tv_editmyprofile_education_add_button"
                     app:layout_constraintTop_toBottomOf="@+id/rv_editmyprofile_educations"
                     android:layout_marginTop="8dp"
+                    android:onClick="@{() -> showEducations.invoke()}"
                     app:layout_constraintStart_toStartOf="@+id/rv_editmyprofile_educations"
                     android:textSize="11sp"
                     android:background="@drawable/bg_editmyprofile_activity_add_button" />
