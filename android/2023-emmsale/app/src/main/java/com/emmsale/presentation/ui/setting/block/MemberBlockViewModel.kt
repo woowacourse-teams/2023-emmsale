@@ -39,7 +39,7 @@ class MemberBlockViewModel(
         }
     }
 
-    fun unblockMember(memberId: Long) {
+    fun unblockMember(blockId: Long) {
 
     }
 

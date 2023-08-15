@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_block_member_button"
-            android:onClick="@{() -> onUnblockMemberClick.invoke(blockedMember.id)}"
+            android:onClick="@{() -> onUnblockMemberClick.invoke(blockedMember.blockId)}"
             android:paddingHorizontal="34dp"
             android:paddingVertical="10dp"
             android:text="@string/memberblock_block_button_label"

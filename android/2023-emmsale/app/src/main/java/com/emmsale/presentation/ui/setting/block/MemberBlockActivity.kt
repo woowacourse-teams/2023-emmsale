@@ -46,12 +46,12 @@ class MemberBlockActivity : AppCompatActivity() {
         binding.root.showSnackbar(R.string.memberblock_loading_blocked_members_failed_message)
     }
 
-    private fun showUnblockMemberDialog(memberId: Long) {
+    private fun showUnblockMemberDialog(blockId: Long) {
         ConfirmDialog(
             context = this,
             title = getString(R.string.memberblock_unblock_member_dialog_title),
             message = getString(R.string.memberblock_unblock_member_dialog_message),
-            onPositiveButtonClick = { viewModel.unblockMember(memberId) }
+            onPositiveButtonClick = { viewModel.unblockMember(blockId) }
         ).show()
     }
 }
