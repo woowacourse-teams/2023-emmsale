@@ -6,6 +6,15 @@
 
     <data>
 
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="blockedMember"
+            type="com.emmsale.presentation.ui.setting.block.uistate.BlockedMemberUiState" />
+
+        <variable
+            name="onUnblockMemberClick"
+            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,6 +27,8 @@
             android:id="@+id/iv_member_profile"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            app:imageUrl="@{blockedMember.profileImageUrl}"
+            app:isCircle="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -33,6 +44,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:singleLine="true"
+            android:text="@{blockedMember.name}"
             android:textAppearance="@style/KerdyTextStyleBlackBold15"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -46,9 +58,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_block_member_button"
+            android:onClick="@{() -> onUnblockMemberClick.invoke(blockedMember.id)}"
             android:paddingHorizontal="34dp"
             android:paddingVertical="10dp"
-            android:text="@string/blockmember_block_button_label"
+            android:text="@string/memberblock_block_button_label"
             android:textColor="@color/white"
             android:textSize="11sp"
             android:textStyle="bold"
