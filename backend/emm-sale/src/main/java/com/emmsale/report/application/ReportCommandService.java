@@ -51,7 +51,7 @@ public class ReportCommandService {
 
   private void validateReporterMismatch(final ReportCreateRequest reportRequest,
       final Member member) {
-    if (member.isNotMe(reportRequest.getReportedId())) {
+    if (member.isNotMe(reportRequest.getReporterId())) {
       throw new ReportException(ReportExceptionType.REPORTER_MISMATCH);
     }
   }
