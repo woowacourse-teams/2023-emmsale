@@ -26,8 +26,16 @@ class MemberBlockActivity : AppCompatActivity() {
     private fun initView() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+        initToolbar()
         initBlockedMemberRecyclerView()
         setupBlockedMembersObserver()
+    }
+
+    private fun initToolbar() {
+        binding.tbMemberBlock.setOnMenuItemClickListener { item ->
+            if (item.itemId == R.id.close) finish()
+            true
+        }
     }
 
     private fun initBlockedMemberRecyclerView() {
