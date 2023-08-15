@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMemberBlockBinding
 import com.emmsale.presentation.common.extension.showSnackbar
+import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.ui.setting.block.recyclerview.BlockedMemberAdapter
 
 class MemberBlockActivity : AppCompatActivity() {
@@ -46,6 +47,11 @@ class MemberBlockActivity : AppCompatActivity() {
     }
 
     private fun showUnblockMemberDialog(memberId: Long) {
-
+        ConfirmDialog(
+            context = this,
+            title = getString(R.string.memberblock_unblock_member_dialog_title),
+            message = getString(R.string.memberblock_unblock_member_dialog_message),
+            onPositiveButtonClick = { viewModel.unblockMember(memberId) }
+        ).show()
     }
 }

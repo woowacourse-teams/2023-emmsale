@@ -39,6 +39,10 @@ class MemberBlockViewModel(
         }
     }
 
+    fun unblockMember(memberId: Long) {
+
+    }
+
     companion object {
         val factory = ViewModelFactory {
             MemberBlockViewModel(
