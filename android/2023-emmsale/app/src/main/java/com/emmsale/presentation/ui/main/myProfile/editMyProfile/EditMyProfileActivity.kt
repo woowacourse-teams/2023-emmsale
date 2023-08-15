@@ -94,7 +94,11 @@ class EditMyProfileActivity : AppCompatActivity() {
     }
 
     private fun initFieldsRecyclerView() {
-        binding.rvEditmyprofileFields.adapter = FieldsAdapter()
+        binding.rvEditmyprofileFields.adapter = FieldsAdapter(::removeField)
+    }
+
+    private fun removeField(activityId: Long) {
+        viewModel.removeActivity(activityId)
     }
 
     private fun initActivitiesRecyclerViews() {

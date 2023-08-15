@@ -42,11 +42,10 @@
             app:srcCompat="@drawable/ic_editmyprofile_remove_button"
             android:id="@+id/iv_editmyprfileactivities_activity_remove_button"
             app:layout_constraintEnd_toEndOf="parent"
-            android:padding="5dp"
+            android:padding="7dp"
             app:layout_constraintStart_toEndOf="@+id/tv_editmyprofileactivities_activityname"
             app:layout_constraintTop_toTopOf="@+id/tv_editmyprofileactivities_activityname"
             app:layout_constraintBottom_toBottomOf="@+id/tv_editmyprofileactivities_activityname"
-            android:layout_marginStart="2dp"
             android:contentDescription="@string/editmyprofile_activity_remote_button_description" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

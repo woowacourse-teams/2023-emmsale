@@ -8,18 +8,25 @@ import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.Activity
 
 class FieldViewHolder(
     private val binding: ItemEditmyprofileFieldBinding,
+    private val removeField: (activityId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        binding.ivEditmyprofilefieldRemove.setOnClickListener {
+            removeField(binding.field?.id ?: return@setOnClickListener)
+        }
+    }
 
     fun bind(field: ActivityUiState) {
         binding.field = field
     }
 
     companion object {
-        fun create(parent: ViewGroup): FieldViewHolder {
+        fun create(parent: ViewGroup, removeField: (activityId: Long) -> Unit): FieldViewHolder {
             val binding = ItemEditmyprofileFieldBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
-            return FieldViewHolder(binding)
+            return FieldViewHolder(binding, removeField)
         }
     }
 }

@@ -242,7 +242,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/iv_editmyprofile_education_icon"
-                    android:layout_marginTop="9dp"
+                    android:layout_marginTop="5dp"
                     app:layout_constraintStart_toStartOf="@+id/tv_editmyprofile_educations_label"
                     tools:itemCount="2"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

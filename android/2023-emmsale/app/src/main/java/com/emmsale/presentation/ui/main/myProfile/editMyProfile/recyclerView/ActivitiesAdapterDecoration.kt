@@ -23,6 +23,6 @@ class ActivitiesAdapterDecoration : RecyclerView.ItemDecoration() {
     }
 
     companion object {
-        private val ACTIVITIES_INTERVAL = 10.dp
+        private val ACTIVITIES_INTERVAL = 2.dp
     }
 }

@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.ActivityUiState
 
-class FieldsAdapter : ListAdapter<ActivityUiState, FieldViewHolder>(diffUtil) {
+class FieldsAdapter(
+    private val removeField: (activityId: Long) -> Unit,
+) : ListAdapter<ActivityUiState, FieldViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FieldViewHolder {
-        return FieldViewHolder.create(parent)
+        return FieldViewHolder.create(parent, removeField)
     }
 
     override fun onBindViewHolder(holder: FieldViewHolder, position: Int) {

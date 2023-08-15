@@ -23,18 +23,18 @@
             android:id="@+id/tv_editmyprofilefield_name"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="Python" />
+            tools:text="Python"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:padding="6dp"
             app:srcCompat="@drawable/ic_editmyprofile_remove_button"
-            android:id="@+id/tv_editmyprofilefield_delete"
+            android:id="@+id/iv_editmyprofilefield_remove"
             app:layout_constraintBottom_toBottomOf="@+id/tv_editmyprofilefield_name"
             app:layout_constraintTop_toTopOf="@+id/tv_editmyprofilefield_name"
             app:layout_constraintStart_toEndOf="@+id/tv_editmyprofilefield_name"
-            android:layout_marginStart="2dp"
             android:contentDescription="@string/editmyprofile_field_delete_button_description" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
