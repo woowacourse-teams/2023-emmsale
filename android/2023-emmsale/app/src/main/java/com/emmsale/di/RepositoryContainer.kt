@@ -30,6 +30,10 @@ import com.emmsale.data.token.TokenRepositoryImpl
 class RepositoryContainer(
     serviceContainer: ServiceContainer,
     preferenceContainer: SharedPreferenceContainer,
+    localDataSourceContainer: LocalDataSourceContainer = LocalDataSourceContainer(),
+    remoteDataSourceContainer: RemoteDataSourceContainer = RemoteDataSourceContainer(
+        serviceContainer
+    ),
 ) {
     val loginRepository: LoginRepository by lazy {
         LoginRepositoryImpl(loginService = serviceContainer.loginService)
@@ -57,7 +61,10 @@ class RepositoryContainer(
     val conferenceStatusRepository: ConferenceStatusRepository by lazy { ConferenceStatusRepositoryImpl() }
     val competitionStatusRepository: CompetitionStatusRepository by lazy { CompetitionStatusRepositoryImpl() }
     val eventTagRepository: EventTagRepository by lazy {
-        EventTagRepositoryImpl(eventTagService = serviceContainer.eventTagService)
+        EventTagRepositoryImpl(
+            eventTagLocalDataSource = localDataSourceContainer.eventTagLocalDataSource,
+            eventTagRemoteDataSource = remoteDataSourceContainer.eventTagRemoteDataSource,
+        )
     }
     val eventDetailRepository: EventDetailRepository by lazy {
         EventDetailRepositoryImpl(eventDetailService = serviceContainer.eventDetailService)

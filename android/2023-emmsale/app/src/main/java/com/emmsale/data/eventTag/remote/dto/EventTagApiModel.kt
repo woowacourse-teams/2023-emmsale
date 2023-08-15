@@ -1,4 +1,4 @@
-package com.emmsale.data.eventTag.dto
+package com.emmsale.data.eventTag.remote.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
