@@ -238,4 +238,14 @@
     <string name="editmyprofile_field_label">관심 카테고리</string>
     <string name="editmyprofile_field_add_button">관심 카테고리 추가 버튼</string>
     <string name="editmyprofile_member_image">회원의 사진</string>
+    <string name="editmyprofile_field_delete_button_description">관심 카테고리 제거</string>
+    <string name="editmyprofile_activity_label">활동</string>
+    <string name="editmyprofile_choose_activity_message">활동했던 이력을 추가해보세요.</string>
+    <string name="editmyprofile_clubs_label">동아리 활동</string>
+    <string name="editmyprofile_educations_label">교육 활동</string>
+    <string name="editmyprofile_educations_all_remote_button_description">교육 활동 전체 삭제 버튼</string>
+    <string name="editmyprofile_clubs_all_remove_button_description">동아리 활동 전체 삭제 버튼</string>
+    <string name="editmyprofile_activity_type_add_button_description">활동 종류 추가 버튼</string>
+    <string name="editmyprofile_add">추가하기</string>
+    <string name="editmyprofile_activity_remote_button_description">활동 삭제 버튼</string>
 </resources>

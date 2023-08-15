@@ -69,6 +69,9 @@ class EditMyProfileViewModel(
         }
     }
 
+    fun removeActivity(activityId: Long) {
+    }
+
     companion object {
         val factory = ViewModelFactory {
             EditMyProfileViewModel(

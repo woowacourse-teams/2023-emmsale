@@ -121,7 +121,7 @@
 
                     <View
                         android:id="@+id/view_profile_educationicontoclubicon"
-                        android:layout_width="1.4dp"
+                        android:layout_width="1.3dp"
                         android:layout_height="0dp"
                         android:background="@color/light_gray"
                         app:layout_constraintBottom_toTopOf="@+id/iv_profile_clubicon"

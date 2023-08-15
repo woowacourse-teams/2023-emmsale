@@ -11,6 +11,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.emmsale.databinding.ActivityEditMyProfileBinding
+import com.emmsale.presentation.common.views.WarningDialog
+import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.ActivitiesAdapter
+import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.ActivitiesAdapterDecoration
+import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.FieldsAdapter
+import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileUiState
 
 class EditMyProfileActivity : AppCompatActivity() {
 
@@ -27,6 +33,9 @@ class EditMyProfileActivity : AppCompatActivity() {
         initDataBinding()
         initToolbar()
         initDescriptionEditText()
+        initActivitiesRecyclerViews()
+        initFieldsRecyclerView()
+        setupUiLogic()
 
         viewModel.fetchMember()
     }
@@ -82,6 +91,69 @@ class EditMyProfileActivity : AppCompatActivity() {
             }
             false
         }
+    }
+
+    private fun initFieldsRecyclerView() {
+        binding.rvEditmyprofileFields.adapter = FieldsAdapter()
+    }
+
+    private fun initActivitiesRecyclerViews() {
+        val decoration = ActivitiesAdapterDecoration()
+        listOf(
+            binding.rvEditmyprofileClubs,
+            binding.rvEditmyprofileEducations,
+        ).forEach {
+            it.apply {
+                adapter = ActivitiesAdapter(::removeActivity)
+                itemAnimator = null
+                addItemDecoration(decoration)
+            }
+        }
+    }
+
+    private fun removeActivity(activityId: Long) {
+        WarningDialog(
+            context = this,
+            title = "활동 삭제",
+            message = "해당 활동을 삭제하시겠습니까?",
+            positiveButtonLabel = "삭제",
+            negativeButtonLabel = "취소",
+            onPositiveButtonClick = { viewModel.removeActivity(activityId) },
+        ).show()
+    }
+
+    private fun setupUiLogic() {
+        setupLoginUiLogic()
+        setupProfileUiLogic()
+    }
+
+    private fun setupLoginUiLogic() {
+        viewModel.isLogin.observe(this) {
+            handleNotLogin(it)
+        }
+    }
+
+    private fun handleNotLogin(isLogin: Boolean) {
+        if (!isLogin) {
+            LoginActivity.startActivity(this)
+            finish()
+        }
+    }
+
+    private fun setupProfileUiLogic() {
+        viewModel.profile.observe(this) {
+            handleFields(it)
+            handleActivities(it)
+        }
+    }
+
+    private fun handleFields(profile: EditMyProfileUiState) {
+        (binding.rvEditmyprofileFields.adapter as FieldsAdapter).submitList(profile.fields)
+    }
+
+    private fun handleActivities(profile: EditMyProfileUiState) {
+        (binding.rvEditmyprofileClubs.adapter as ActivitiesAdapter).submitList(profile.clubs)
+        (binding.rvEditmyprofileEducations.adapter as ActivitiesAdapter).submitList(profile.educations)
     }
 
     companion object {

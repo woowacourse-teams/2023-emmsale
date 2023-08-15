@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="activity"
+            type="com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.ActivityUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_editmyprofileactivities_activitynamedecorator"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_profile_activitynamedecorator"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_editmyprofileactivities_activityname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:text="@{activity.name}"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_editmyprofileactivities_activitynamedecorator"
+            app:layout_constraintStart_toEndOf="@+id/iv_editmyprofileactivities_activitynamedecorator"
+            app:layout_constraintTop_toTopOf="@+id/iv_editmyprofileactivities_activitynamedecorator"
+            tools:text="멋쟁이사자처럼 5기" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_editmyprofile_remove_button"
+            android:id="@+id/iv_editmyprfileactivities_activity_remove_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="5dp"
+            app:layout_constraintStart_toEndOf="@+id/tv_editmyprofileactivities_activityname"
+            app:layout_constraintTop_toTopOf="@+id/tv_editmyprofileactivities_activityname"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_editmyprofileactivities_activityname"
+            android:layout_marginStart="2dp"
+            android:contentDescription="@string/editmyprofile_activity_remote_button_description" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
