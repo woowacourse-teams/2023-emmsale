@@ -57,9 +57,16 @@ class RecruitmentNotificationFragment :
     }
 
     override fun onOpenChatButtonClick(openChatUrl: String) {
-        if (openChatUrl.isEmpty()) return
+        if (openChatUrl.isEmpty()) {
+            showUnregisteredOpenChatUrlErrorMessage()
+            return
+        }
 
         navigateToChat(openChatUrl)
+    }
+
+    private fun showUnregisteredOpenChatUrlErrorMessage() {
+        binding.root.showSnackbar(R.string.recruitmentnotification_unregistered_sender_open_chat_url)
     }
 
     private fun navigateToChat(chatUrl: String) {

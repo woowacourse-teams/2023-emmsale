@@ -46,7 +46,7 @@ class OnboardingFieldFragment :
         isChecked = activity.isSelected
         setOnCheckedChangeListener { _, isChecked ->
             if (isChecked && viewModel.isExceedFieldLimit) {
-                showToast(R.string.onboarding_field_selection_limit_exceed)
+                showToast(R.string.onboardingfield_selection_limit_exceed)
                 setChecked(false)
                 return@setOnCheckedChangeListener
             }

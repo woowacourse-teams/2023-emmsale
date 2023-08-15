@@ -14,7 +14,7 @@ data class RecruitmentNotificationBodyUiState(
     val profileImageUrl: String,
     val notificationDate: String,
     val recruitmentStatus: RecruitmentNotificationStatusUiState,
-    val openProfileUrl: String,
+    val openChatUrl: String,
     val isRead: Boolean = false,
 ) {
     fun changeToAcceptedState(): RecruitmentNotificationBodyUiState = copy(
@@ -44,7 +44,7 @@ data class RecruitmentNotificationBodyUiState(
             profileImageUrl = notificationMember?.profileImageUrl ?: "",
             notificationDate = recruitmentNotification.notificationDate.toUiString(),
             recruitmentStatus = RecruitmentNotificationStatusUiState.from(recruitmentNotification.status),
-            openProfileUrl = notificationMember?.openProfileUrl ?: "",
+            openChatUrl = notificationMember?.openChatUrl ?: "",
             isRead = recruitmentNotification.isRead,
         )
 

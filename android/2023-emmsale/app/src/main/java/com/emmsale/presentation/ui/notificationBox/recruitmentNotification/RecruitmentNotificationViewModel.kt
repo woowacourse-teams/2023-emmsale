@@ -97,7 +97,7 @@ class RecruitmentNotificationViewModel(
                 is ApiSuccess -> RecruitmentNotificationMemberUiState(
                     name = member.data.name,
                     profileImageUrl = member.data.imageUrl,
-                    openProfileUrl = member.data.openProfileUrl,
+                    openChatUrl = member.data.openProfileUrl,
                 )
 
                 is ApiException, is ApiError -> null
