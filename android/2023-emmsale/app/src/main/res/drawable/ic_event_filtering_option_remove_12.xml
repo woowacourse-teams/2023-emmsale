@@ -3,5 +3,5 @@
     <item
         android:width="12dp"
         android:height="12dp"
-        android:drawable="@drawable/ic_conference_filtering_option_remove" />
+        android:drawable="@drawable/ic_event_filtering_option_remove" />
 </layer-list>
