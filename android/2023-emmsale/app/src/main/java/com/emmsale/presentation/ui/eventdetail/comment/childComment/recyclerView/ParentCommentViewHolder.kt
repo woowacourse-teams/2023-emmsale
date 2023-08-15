@@ -49,7 +49,7 @@ class ParentCommentViewHolder(
             positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
             negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
             onPositiveButtonClick = {
-                commentDelete(binding.comment?.commentId ?: return@WarningDialog)
+                commentDelete(binding.comment?.id ?: return@WarningDialog)
             },
         ).show()
     }

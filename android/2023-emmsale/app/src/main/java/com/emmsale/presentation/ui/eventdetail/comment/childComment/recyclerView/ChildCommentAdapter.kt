@@ -7,15 +7,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.CommentUiState
 
 class ChildCommentAdapter(
-    private val deleteComment: (commentId: Long) -> Unit,
     private val showProfile: (authorId: Long) -> Unit,
+    private val editComment: (commentId: Long) -> Unit,
+    private val deleteComment: (commentId: Long) -> Unit,
 ) : ListAdapter<CommentUiState, RecyclerView.ViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == PARENT_COMMENT_VIEW_TYPE) {
             ParentCommentViewHolder.create(parent, deleteComment)
         } else {
-            ChildCommentViewHolder.create(parent, deleteComment, showProfile)
+            ChildCommentViewHolder.create(parent, showProfile, editComment, deleteComment)
         }
     }
 
@@ -37,7 +38,7 @@ class ChildCommentAdapter(
             override fun areItemsTheSame(
                 oldItem: CommentUiState,
                 newItem: CommentUiState,
-            ): Boolean = oldItem.commentId == newItem.commentId
+            ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: CommentUiState,

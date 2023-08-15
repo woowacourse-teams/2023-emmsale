@@ -3,6 +3,7 @@ package com.emmsale.presentation.ui.eventdetail.comment.childComment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
@@ -43,6 +44,22 @@ class ChildCommentActivity : AppCompatActivity() {
     private fun initDataBinding() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+        binding.cancelUpdateComment = ::cancelUpdateComment
+        binding.updateComment = ::updateComment
+    }
+
+    private fun cancelUpdateComment() {
+        viewModel.setEditMode(false)
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.etChildcommentsCommentUpdate.windowToken, 0)
+    }
+
+    private fun updateComment() {
+        val commentId = viewModel.editingCommentId.value ?: return
+        val content = binding.etChildcommentsCommentUpdate.text.toString()
+        viewModel.updateComment(commentId, content, parentCommentId)
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.etChildcommentsCommentUpdate.windowToken, 0)
     }
 
     private fun initToolbar() {
@@ -51,7 +68,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun initChildCommentsRecyclerView() {
         binding.rvChildcommentsChildcomments.apply {
-            adapter = ChildCommentAdapter(::deleteComment, ::showProfile)
+            adapter = ChildCommentAdapter(::showProfile, ::editComment, ::deleteComment)
             itemAnimator = null
             addItemDecoration(ChildCommentRecyclerViewDivider(this@ChildCommentActivity))
         }
@@ -61,9 +78,22 @@ class ChildCommentActivity : AppCompatActivity() {
         ProfileActivity.startActivity(this, authorId)
     }
 
+    private fun editComment(commentId: Long) {
+        viewModel.setEditMode(true, commentId)
+        binding.etChildcommentsCommentUpdate.requestFocus()
+
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+    }
+
+    private fun deleteComment(commentId: Long) {
+        viewModel.deleteComment(commentId, parentCommentId)
+    }
+
     private fun setupUiLogic() {
         setupLoginUiLogic()
         setupCommentsUiLogic()
+        setupEditingCommentUiLogic()
     }
 
     private fun setupLoginUiLogic() {
@@ -77,6 +107,13 @@ class ChildCommentActivity : AppCompatActivity() {
             handleErrors(it)
             handleChildComments(it)
             handleEditComment()
+        }
+    }
+
+    private fun setupEditingCommentUiLogic() {
+        viewModel.editingCommentContent.observe(this) {
+            if (it == null) return@observe
+            binding.etChildcommentsCommentUpdate.setText(it)
         }
     }
 
@@ -131,10 +168,6 @@ class ChildCommentActivity : AppCompatActivity() {
         binding.etChildcommentsEditchildcommentcontent.apply {
             text.clear()
         }
-    }
-
-    private fun deleteComment(commentId: Long) {
-        viewModel.deleteComment(commentId, parentCommentId)
     }
 
     companion object {
