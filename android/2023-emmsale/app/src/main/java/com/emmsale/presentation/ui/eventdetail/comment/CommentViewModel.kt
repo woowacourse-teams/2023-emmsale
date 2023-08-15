@@ -1,6 +1,9 @@
 package com.emmsale.presentation.ui.eventdetail.comment
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.common.ApiError
@@ -24,6 +27,11 @@ class CommentViewModel(
 
     private val _comments = NotNullMutableLiveData(CommentsUiState.Loading)
     val comments: NotNullLiveData<CommentsUiState> = _comments
+
+    private val _editingCommentId = MutableLiveData<Long?>()
+    val editingCommentId: LiveData<Long?> = _editingCommentId
+    val editingCommentContent =
+        _editingCommentId.map { _comments.value.comments.find { comment -> comment.id == it }?.content }
 
     fun fetchComments(eventId: Long) {
         _comments.value = _comments.value.changeToLoadingState()
@@ -56,6 +64,20 @@ class CommentViewModel(
         }
     }
 
+    fun updateComment(commentId: Long, content: String, eventId: Long) {
+        viewModelScope.launch {
+            when (commentRepository.updateComment(commentId, content)) {
+                is ApiError, is ApiException ->
+                    _comments.value = _comments.value.changeToUpdateErrorState()
+
+                is ApiSuccess -> {
+                    _editingCommentId.value = null
+                    fetchComments(eventId)
+                }
+            }
+        }
+    }
+
     fun deleteComment(commentId: Long, eventId: Long) {
         _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
@@ -66,6 +88,14 @@ class CommentViewModel(
                 is ApiSuccess -> fetchComments(eventId)
             }
         }
+    }
+
+    fun setEditMode(isEditMode: Boolean, commentId: Long = -1) {
+        if (!isEditMode) {
+            _editingCommentId.value = null
+            return
+        }
+        _editingCommentId.value = commentId
     }
 
     companion object {
