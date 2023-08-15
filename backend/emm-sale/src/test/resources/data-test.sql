@@ -8,6 +8,7 @@ truncate table event_tag;
 truncate table member_tag;
 truncate table event_member;
 truncate table notification;
+truncate table scrap;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');
