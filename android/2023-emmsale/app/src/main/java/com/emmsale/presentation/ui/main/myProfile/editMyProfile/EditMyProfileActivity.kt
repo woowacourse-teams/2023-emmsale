@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
@@ -25,6 +26,8 @@ class EditMyProfileActivity : AppCompatActivity() {
     }
 
     private val viewModel: EditMyProfileViewModel by viewModels { EditMyProfileViewModel.factory }
+
+    private val fieldsDialog by lazy { FieldsAddBottomDialogFragment() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +50,9 @@ class EditMyProfileActivity : AppCompatActivity() {
     }
 
     private fun showFieldTags() {
-        // TODO("관심 카테고리 다이얼로그 띄우기")
+        if (!fieldsDialog.isAdded) {
+            fieldsDialog.show(supportFragmentManager, FieldsAddBottomDialogFragment.TAG)
+        }
     }
 
     private fun initToolbar() {
@@ -118,10 +123,10 @@ class EditMyProfileActivity : AppCompatActivity() {
     private fun removeActivity(activityId: Long) {
         WarningDialog(
             context = this,
-            title = "활동 삭제",
-            message = "해당 활동을 삭제하시겠습니까?",
-            positiveButtonLabel = "삭제",
-            negativeButtonLabel = "취소",
+            title = getString(R.string.editmyprofile_activity_remove_warning_title),
+            message = getString(R.string.editmyprofile_activity_remove_warning_message),
+            positiveButtonLabel = getString(R.string.all_delete_button_label),
+            negativeButtonLabel = getString(R.string.all_cancel),
             onPositiveButtonClick = { viewModel.removeActivity(activityId) },
         ).show()
     }

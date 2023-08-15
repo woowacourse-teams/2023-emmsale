@@ -1,8 +1,11 @@
 package com.emmsale.presentation.ui.main.myProfile.editMyProfile
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.emmsale.data.activity.Activity
 import com.emmsale.data.activity.ActivityRepository
+import com.emmsale.data.activity.ActivityType
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
@@ -16,6 +19,7 @@ import com.emmsale.presentation.common.livedata.error.ErrorPopLiveData
 import com.emmsale.presentation.common.livedata.error.ErrorSetLiveData
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileUiState
+import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.SelectableActivityUiState
 import kotlinx.coroutines.launch
 
 class EditMyProfileViewModel(
@@ -32,6 +36,26 @@ class EditMyProfileViewModel(
 
     private val _errorEvents = ErrorSetLiveData<EditMyProfileErrorEvent>()
     val errorEvents: ErrorPopLiveData<EditMyProfileErrorEvent> = _errorEvents
+
+    private val _selectableFields = NotNullMutableLiveData(listOf<SelectableActivityUiState>())
+    val selectableFields: NotNullLiveData<List<SelectableActivityUiState>> = _selectableFields
+
+    val selectedFieldsSize = _selectableFields.map { fields -> fields.count { it.isSelected } }
+
+    val selectableFieldsCount =
+        _selectableFields.map { maxOf(MAX_FIELDS_COUNT - profile.value.fields.size, 0) }
+
+    private val _selectableEducations = NotNullMutableLiveData(listOf<SelectableActivityUiState>())
+    val selectableEducations: NotNullLiveData<List<SelectableActivityUiState>> =
+        _selectableEducations
+
+    val selectedEducationsSize =
+        _selectableEducations.map { education -> education.count { it.isSelected } }
+
+    private val _selectableClubs = NotNullMutableLiveData(listOf<SelectableActivityUiState>())
+    val selectableClubs: NotNullLiveData<List<SelectableActivityUiState>> = _selectableClubs
+
+    val selectedClubsSize = _selectableClubs.map { club -> club.count { it.isSelected } }
 
     fun fetchMember() {
         viewModelScope.launch {
@@ -72,7 +96,57 @@ class EditMyProfileViewModel(
     fun removeActivity(activityId: Long) {
     }
 
+    fun addSelectedFields() {
+    }
+
+    fun fetchFields() {
+        if (_selectableFields.value.isNotEmpty()) return
+        viewModelScope.launch {
+            when (val result = activityRepository.getActivities()) {
+                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.FIELDS_FETCHING)
+                is ApiSuccess ->
+                    _selectableFields.value =
+                        result.data.toSelectableActivitiesWithoutProfile(ActivityType.FIELD)
+            }
+        }
+    }
+
+    private fun List<Activity>.toSelectableActivitiesWithoutProfile(activityType: ActivityType): List<SelectableActivityUiState> =
+        filter { activity -> activity.activityType == activityType && activity.id !in profile.value.fields.map { it.id } }
+            .map { SelectableActivityUiState.from(it) }
+
+    fun setFieldSelection(activityId: Long, isSelected: Boolean) {
+        _selectableFields.value =
+            _selectableFields.value.map { if (it.id == activityId) it.copy(isSelected = isSelected) else it }
+    }
+
+    fun fetchEducations() {
+        if (_selectableEducations.value.isNotEmpty()) return
+        viewModelScope.launch {
+            when (val result = activityRepository.getActivities()) {
+                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.EDUCATIONS_FETCHING)
+                is ApiSuccess ->
+                    _selectableEducations.value =
+                        result.data.toSelectableActivitiesWithoutProfile(ActivityType.EDUCATION)
+            }
+        }
+    }
+
+    fun fetchClubs() {
+        if (_selectableClubs.value.isNotEmpty()) return
+        viewModelScope.launch {
+            when (val result = activityRepository.getActivities()) {
+                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.CLUBS_FETCHING)
+                is ApiSuccess ->
+                    _selectableClubs.value =
+                        result.data.toSelectableActivitiesWithoutProfile(ActivityType.CLUB)
+            }
+        }
+    }
+
     companion object {
+        private const val MAX_FIELDS_COUNT = 4
+
         val factory = ViewModelFactory {
             EditMyProfileViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
