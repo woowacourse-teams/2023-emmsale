@@ -21,6 +21,7 @@ class ChildCommentViewHolder(
 
     init {
         binding.root.setOnClickListener {
+            if (binding.comment?.isDeleted == true) return@setOnClickListener
             showProfile(binding.comment?.authorId ?: return@setOnClickListener)
         }
     }

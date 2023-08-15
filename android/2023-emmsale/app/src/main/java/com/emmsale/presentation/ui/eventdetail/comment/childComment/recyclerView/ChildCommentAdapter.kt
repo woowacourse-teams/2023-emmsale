@@ -14,7 +14,7 @@ class ChildCommentAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == PARENT_COMMENT_VIEW_TYPE) {
-            ParentCommentViewHolder.create(parent, deleteComment)
+            ParentCommentViewHolder.create(parent, showProfile, editComment, deleteComment)
         } else {
             ChildCommentViewHolder.create(parent, showProfile, editComment, deleteComment)
         }
