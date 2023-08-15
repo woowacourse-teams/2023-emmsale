@@ -29,6 +29,7 @@
     <string name="onboardingfield_title">관심 분야</string>
     <string name="onboardingfield_message">관심 있는 카테고리를 선택해 주세요.</string>
     <string name="onboardingfield_sub_message">복수 선택이 최대 4개까지 가능합니다.</string>
+    <string name="onboardingfield_selection_limit_exceed">선택할 수 있는 개수를 초과했어요!</string>
 
     <string name="eventdetail_date_format">%s ~ %s</string>
     <string name="onboardingeducation_page">3/4</string>
@@ -155,6 +156,7 @@
     <string name="recruitmentnotification_reject_button_label">요청을 거절했습니다.</string>
     <string name="recruitmentnotification_more_button">더보기 버튼</string>
     <string name="recruitmentnotification_header_expand_view">화면을 팽창 시킵니다.</string>
+    <string name="recruitmentnotification_unregistered_sender_open_chat_url">상대방의 오픈 채팅이 등록되어 있지 않아요!</string>
 
     <string name="conference_default_people_count">0</string>
 
@@ -227,5 +229,4 @@
     <string name="primarynotification_delete_notification_failed_message">알림 삭제를 할 수 없어요!</string>
     <string name="primarynotification_delete_notification_confirm_message">지난 알림을 모두 삭제하시겠어요?</string>
     <string name="primarynotification_delete_notification_confirm_title">알림 삭제</string>
-    <string name="onboarding_field_selection_limit_exceed">선택할 수 있는 개수를 초과했어요!</string>
 </resources>

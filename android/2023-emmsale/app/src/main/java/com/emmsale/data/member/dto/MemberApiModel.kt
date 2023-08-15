@@ -7,10 +7,14 @@ import kotlinx.serialization.Serializable
 data class MemberApiModel(
     @SerialName("id")
     val id: Long,
+    @SerialName("githubId")
+    val githubId: String = "",
     @SerialName("name")
     val name: String,
     @SerialName("description")
     val description: String = "",
     @SerialName("imageUrl")
     val imageUrl: String,
+    @SerialName("openProfileUrl")
+    val openProfileUrl: String = "",
 )

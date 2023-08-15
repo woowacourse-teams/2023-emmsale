@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -18,6 +20,7 @@ class RecruitmentNotificationFragment :
     BaseFragment<FragmentRecruitmentNotificationBinding>(),
     RecruitmentNotificationHeaderClickListener,
     RecruitmentNotificationBodyClickListener {
+
     override val layoutResId: Int = R.layout.fragment_recruitment_notification
     private val viewModel: RecruitmentNotificationViewModel by viewModels { RecruitmentNotificationViewModel.factory }
     private val recruitmentNotificationHeaderAdapter: RecruitmentNotificationHeaderAdapter by lazy {
@@ -51,6 +54,24 @@ class RecruitmentNotificationFragment :
 
     override fun onMoreButtonClick(notificationId: Long) {
         viewModel.reportRecruitmentNotification(notificationId)
+    }
+
+    override fun onOpenChatButtonClick(openChatUrl: String) {
+        if (openChatUrl.isEmpty()) {
+            showUnregisteredOpenChatUrlErrorMessage()
+            return
+        }
+
+        navigateToChat(openChatUrl)
+    }
+
+    private fun showUnregisteredOpenChatUrlErrorMessage() {
+        binding.root.showSnackbar(R.string.recruitmentnotification_unregistered_sender_open_chat_url)
+    }
+
+    private fun navigateToChat(chatUrl: String) {
+        val profileIntent = Intent(Intent.ACTION_VIEW, Uri.parse(chatUrl))
+        startActivity(profileIntent)
     }
 
     private fun showRecruitmentRejectedConfirmDialog(notificationId: Long) {

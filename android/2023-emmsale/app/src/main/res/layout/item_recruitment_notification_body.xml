@@ -146,6 +146,7 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
+            android:onClick="@{() -> notificationBodyClickListener.onOpenChatButtonClick(notification.openChatUrl)}"
             android:paddingVertical="12dp"
             android:text="@string/recruitmentnotification_open_chat"
             android:textColor="@color/white"
