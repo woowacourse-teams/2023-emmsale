@@ -17,7 +17,7 @@ public enum ReportExceptionType implements BaseExceptionType {
       HttpStatus.BAD_REQUEST,
       "신고한 게시물이 신고 대상자의 게시물이 아닙니다."
   ),
-  REPORT_MYSELF(
+  FORBIDDEN_REPORT_MYSELF(
       HttpStatus.BAD_REQUEST,
       "자기 자신은 신고할 수 없습니다."
   ),

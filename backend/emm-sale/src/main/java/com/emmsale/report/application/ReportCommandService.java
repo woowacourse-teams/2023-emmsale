@@ -44,7 +44,7 @@ public class ReportCommandService {
   private void validateReportRequest(final ReportCreateRequest reportRequest, final Member member) {
     validateReporterMismatch(reportRequest.getReporterId(), member);
     validateReportMySelf(reportRequest.getReportedId(), member);
-    validateExistReportedMember(reportRequest.getReportedId());
+    validateNotFoundReportedMember(reportRequest.getReportedId());
     validateAlreadyExistReport(reportRequest);
     validateContent(reportRequest);
   }
@@ -57,11 +57,11 @@ public class ReportCommandService {
 
   private void validateReportMySelf(final Long reportedId, final Member member) {
     if (member.isMe(reportedId)) {
-      throw new ReportException(ReportExceptionType.REPORT_MYSELF);
+      throw new ReportException(ReportExceptionType.FORBIDDEN_REPORT_MYSELF);
     }
   }
 
-  private void validateExistReportedMember(final Long reportedId) {
+  private void validateNotFoundReportedMember(final Long reportedId) {
     if (!memberRepository.existsById(reportedId)) {
       throw new ReportException(ReportExceptionType.NOT_FOUND_MEMBER);
     }

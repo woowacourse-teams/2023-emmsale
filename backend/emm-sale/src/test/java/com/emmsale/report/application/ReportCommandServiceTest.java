@@ -103,7 +103,7 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThatThrownBy(actual)
           .isInstanceOf(ReportException.class)
-          .hasMessage(ReportExceptionType.REPORT_MYSELF.errorMessage());
+          .hasMessage(ReportExceptionType.FORBIDDEN_REPORT_MYSELF.errorMessage());
     }
 
     @Test
