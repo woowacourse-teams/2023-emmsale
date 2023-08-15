@@ -28,10 +28,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-    }
-
     private fun showFollowNotification(message: RemoteMessage) {
         val senderName = message.data["senderName"] ?: return
         val senderId = message.data["senderId"] ?: return

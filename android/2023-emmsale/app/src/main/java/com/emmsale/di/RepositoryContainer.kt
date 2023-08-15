@@ -2,6 +2,8 @@ package com.emmsale.di
 
 import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.activity.ActivityRepositoryImpl
+import com.emmsale.data.blockedMember.BlockedMemberRepository
+import com.emmsale.data.blockedMember.BlockedMemberRepositoryImpl
 import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.comment.CommentRepositoryImpl
 import com.emmsale.data.competitionStatus.CompetitionStatusRepository
@@ -70,5 +72,10 @@ class RepositoryContainer(
     }
     val notificationRepository: NotificationRepository by lazy {
         NotificationRepositoryImpl(notificationService = serviceContainer.notificationService)
+    }
+    val blockedMemberRepository: BlockedMemberRepository by lazy {
+        BlockedMemberRepositoryImpl(
+            blockedMemberService = serviceContainer.blockedMemberService,
+        )
     }
 }

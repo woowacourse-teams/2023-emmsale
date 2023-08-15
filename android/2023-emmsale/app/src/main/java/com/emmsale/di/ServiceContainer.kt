@@ -1,6 +1,7 @@
 package com.emmsale.di
 
 import com.emmsale.data.activity.ActivityService
+import com.emmsale.data.blockedMember.BlockedMemberService
 import com.emmsale.data.comment.CommentService
 import com.emmsale.data.common.ServiceFactory
 import com.emmsale.data.event.EventService
@@ -24,4 +25,7 @@ class ServiceContainer(serviceFactory: ServiceFactory) {
     val eventDetailService: EventDetailService by lazy { serviceFactory.create(EventDetailService::class.java) }
     val recruitmentService: RecruitmentService by lazy { serviceFactory.create(RecruitmentService::class.java) }
     val notificationService: NotificationService by lazy { serviceFactory.create(NotificationService::class.java) }
+    val blockedMemberService: BlockedMemberService by lazy {
+        serviceFactory.create(BlockedMemberService::class.java)
+    }
 }
