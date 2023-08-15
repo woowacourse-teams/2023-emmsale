@@ -20,4 +20,12 @@ class BlockedMemberRepositoryImpl(
                 mapToDomain = { blockedMembers -> blockedMembers.map(BlockedMemberApiModel::toData) },
             )
         }
+
+    override suspend fun deleteBlockedMember(blockId: Long): ApiResult<Unit> =
+        withContext(dispatcher) {
+            handleApi(
+                execute = { blockedMemberService.deleteBlockedMember(blockId) },
+                mapToDomain = { },
+            )
+        }
 }

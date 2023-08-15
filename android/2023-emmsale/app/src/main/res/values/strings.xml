@@ -253,6 +253,7 @@
     <string name="memberblock_block_button_label">차단 해제</string>
     <string name="memberblock_menu_close_title">종료</string>
     <string name="memberblock_loading_blocked_members_failed_message">차단 목록을 불러오는 데에 실패했어요!</string>
+    <string name="memberblock_unblock_member_failed_message">차단 해제를 실패했어요!</string>
     <string name="memberblock_unblock_member_dialog_title">차단 해제</string>
     <string name="memberblock_unblock_member_dialog_message">사용자를 차단 해제하시겠습니까?</string>
 </resources>

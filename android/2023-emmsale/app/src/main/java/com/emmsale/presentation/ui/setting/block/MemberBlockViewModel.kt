@@ -40,7 +40,17 @@ class MemberBlockViewModel(
     }
 
     fun unblockMember(blockId: Long) {
+        viewModelScope.launch {
+            when (blockedMemberRepository.deleteBlockedMember(blockId)) {
+                is ApiSuccess -> _blockedMembers.value =
+                    blockedMembers.value.deleteBlockedMember(blockId)
 
+                is ApiError, is ApiException -> _blockedMembers.value = blockedMembers.value.copy(
+                    isLoading = false,
+                    isDeletingBlockedMemberError = true
+                )
+            }
+        }
     }
 
     companion object {
