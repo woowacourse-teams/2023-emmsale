@@ -15,7 +15,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.livedata.error.ErrorPopLiveData
+import com.emmsale.presentation.common.livedata.error.ErrorClearLiveData
 import com.emmsale.presentation.common.livedata.error.ErrorSetLiveData
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileUiState
@@ -35,7 +35,7 @@ class EditMyProfileViewModel(
     val profile: NotNullLiveData<EditMyProfileUiState> = _profile
 
     private val _errorEvents = ErrorSetLiveData<EditMyProfileErrorEvent>()
-    val errorEvents: ErrorPopLiveData<EditMyProfileErrorEvent> = _errorEvents
+    val errorEvents: ErrorClearLiveData<EditMyProfileErrorEvent> = _errorEvents
 
     private val _selectableFields = NotNullMutableLiveData(listOf<SelectableActivityUiState>())
     val selectableFields: NotNullLiveData<List<SelectableActivityUiState>> = _selectableFields

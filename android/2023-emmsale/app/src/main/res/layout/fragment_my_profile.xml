@@ -233,15 +233,5 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <ProgressBar
-            android:id="@+id/pb_myprofile_loading"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:visibility="@{viewModel.myProfile.isLoading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

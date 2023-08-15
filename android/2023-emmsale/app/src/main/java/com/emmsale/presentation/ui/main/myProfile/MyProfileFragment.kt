@@ -6,10 +6,10 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.EditMyProfileActivity
+import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
@@ -40,6 +40,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     private fun setupUiLogic() {
         setupLoginUiLogic()
         setupMyProfileUiLogic()
+        setupErrorUiLogic()
     }
 
     private fun setupLoginUiLogic() {
@@ -50,15 +51,8 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     private fun setupMyProfileUiLogic() {
         viewModel.myProfile.observe(viewLifecycleOwner) {
-            handleMyProfileFetchingError(it)
             handleFields(it)
             handleActivities(it)
-        }
-    }
-
-    private fun handleMyProfileFetchingError(myProfile: MyProfileUiState) {
-        if (myProfile.isFetchingError) {
-            context?.showToast(getString(R.string.profile_profile_fetching_error_message))
         }
     }
 
@@ -67,6 +61,21 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             LoginActivity.startActivity(requireContext())
             activity?.finish()
         }
+    }
+
+    private fun setupErrorUiLogic() {
+        viewModel.errorEvents.observe(viewLifecycleOwner) {
+            handleErrors(it)
+        }
+    }
+
+    private fun handleErrors(errorEvents: List<MyProfileErrorEvent>) {
+        errorEvents.forEach {
+            when (it) {
+                MyProfileErrorEvent.PROFILE_FETCHING -> {}
+            }
+        }
+        viewModel.errorEvents.clear()
     }
 
     private fun handleFields(myProfile: MyProfileUiState) {

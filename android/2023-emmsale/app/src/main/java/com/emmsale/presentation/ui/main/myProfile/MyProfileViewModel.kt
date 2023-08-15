@@ -12,6 +12,9 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.livedata.error.ErrorClearLiveData
+import com.emmsale.presentation.common.livedata.error.ErrorSetLiveData
+import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
 import kotlinx.coroutines.launch
 
@@ -24,11 +27,13 @@ class MyProfileViewModel(
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
 
-    private val _myProfile = NotNullMutableLiveData(MyProfileUiState.FIRST_LOADING)
+    private val _myProfile = NotNullMutableLiveData(MyProfileUiState())
     val myProfile: NotNullLiveData<MyProfileUiState> = _myProfile
 
+    private val _errorEvents = ErrorSetLiveData<MyProfileErrorEvent>()
+    val errorEvents: ErrorClearLiveData<MyProfileErrorEvent> = _errorEvents
+
     fun fetchMember() {
-        _myProfile.value = _myProfile.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
@@ -37,18 +42,14 @@ class MyProfileViewModel(
             }
             launch {
                 when (val result = memberRepository.getMember(token.uid)) {
-                    is ApiError, is ApiException ->
-                        _myProfile.value = _myProfile.value.changeToFetchingErrorState()
-
+                    is ApiError, is ApiException -> _errorEvents.add(MyProfileErrorEvent.PROFILE_FETCHING)
                     is ApiSuccess ->
                         _myProfile.value = _myProfile.value.changeMemberState(result.data)
                 }
             }
             launch {
                 when (val result = activityRepository.getActivities(token.uid)) {
-                    is ApiError, is ApiException ->
-                        _myProfile.value = _myProfile.value.changeToFetchingErrorState()
-
+                    is ApiError, is ApiException -> _errorEvents.add(MyProfileErrorEvent.PROFILE_FETCHING)
                     is ApiSuccess ->
                         _myProfile.value = _myProfile.value.changeActivitiesState(result.data)
                 }

@@ -13,11 +13,13 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.FieldsAdapter
+import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileUiState
 import kotlinx.coroutines.launch
 
@@ -155,6 +157,7 @@ class EditMyProfileActivity : AppCompatActivity() {
     private fun setupUiLogic() {
         setupLoginUiLogic()
         setupProfileUiLogic()
+        setupErrorsUiLogic()
     }
 
     private fun setupLoginUiLogic() {
@@ -184,6 +187,23 @@ class EditMyProfileActivity : AppCompatActivity() {
     private fun handleActivities(profile: EditMyProfileUiState) {
         (binding.rvEditmyprofileClubs.adapter as ActivitiesAdapter).submitList(profile.clubs)
         (binding.rvEditmyprofileEducations.adapter as ActivitiesAdapter).submitList(profile.educations)
+    }
+
+    private fun setupErrorsUiLogic() {
+        viewModel.errorEvents.observe(this) {
+            handleErrors(it)
+        }
+    }
+
+    private fun handleErrors(errorEvents: List<EditMyProfileErrorEvent>) {
+        errorEvents.forEach {
+            when (it) {
+                EditMyProfileErrorEvent.MEMBER_FETCHING -> {}
+                EditMyProfileErrorEvent.DESCRIPTION_UPDATE -> showToast(getString(R.string.editmyprofile_update_description_error_message))
+                EditMyProfileErrorEvent.ACTIVITIES_FETCHING -> {}
+            }
+        }
+        viewModel.errorEvents.clear()
     }
 
     companion object {
