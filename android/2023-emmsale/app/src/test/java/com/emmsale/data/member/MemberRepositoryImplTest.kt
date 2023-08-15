@@ -1,8 +1,8 @@
 package com.emmsale.data.member
 
+import com.emmsale.data.blockedMember.mapper.toData
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.member.dto.MemberApiModel
-import com.emmsale.data.member.mapper.toData
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
