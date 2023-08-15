@@ -73,7 +73,7 @@
                     android:importantForAutofill="no"
                     android:inputType="text|textMultiLine"
                     android:maxLength="255"
-                    android:maxLines="3"
+                    android:maxLines="5"
                     android:padding="18dp"
                     android:textColor="@color/black"
                     android:textSize="14sp"
