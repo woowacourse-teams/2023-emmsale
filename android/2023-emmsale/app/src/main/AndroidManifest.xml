@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".presentation.ui.setting.block.MemberBlockActivity"
+            android:exported="true" />
+        <activity
             android:name=".presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity"
             android:exported="true" />
         <activity
@@ -40,6 +43,9 @@
             android:exported="false" />
         <activity
             android:name=".presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".presentation.ui.main.event.competitionFilter.CompetitionFilterActivity"
             android:exported="true" />
         <activity
             android:name=".presentation.ui.main.MainActivity"

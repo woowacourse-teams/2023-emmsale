@@ -1,4 +1,4 @@
-package com.emmsale.data.conference
+package com.emmsale.data.event.model
 
 import com.emmsale.data.conferenceStatus.ConferenceStatus
 import com.emmsale.data.eventApplyStatus.EventApplyStatus

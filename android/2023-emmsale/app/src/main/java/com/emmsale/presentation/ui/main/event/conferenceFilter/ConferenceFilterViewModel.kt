@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.conference.EventCategory
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
+import com.emmsale.data.event.EventCategory
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
@@ -32,8 +32,8 @@ class ConferenceFilterViewModel(
     val conferenceFilter: NotNullLiveData<ConferenceFilterUiState> = _conferenceFilter
 
     val isTagAllSelected: LiveData<Boolean> = _conferenceFilter.map { filter ->
-        val tagFilterSize = filter.conferenceTagFilteringOptions.size
-        val selectedTagFilterSize = filter.conferenceTagFilteringOptions.count { it.isSelected }
+        val tagFilterSize = filter.tagFilteringOptions.size
+        val selectedTagFilterSize = filter.tagFilteringOptions.count { it.isSelected }
         tagFilterSize == selectedTagFilterSize
     }
     val isStartDateSelected: LiveData<Boolean> = _conferenceFilter.map { filters ->
@@ -48,8 +48,8 @@ class ConferenceFilterViewModel(
         val tags = fetchConferenceTags()
 
         _conferenceFilter.value = ConferenceFilterUiState(
-            conferenceStatusFilteringOptions = statuses,
-            conferenceTagFilteringOptions = tags,
+            statusFilteringOptions = statuses,
+            tagFilteringOptions = tags,
             selectedStartDate = selectedStartDate,
             selectedEndDate = selectedEndDate,
             isLoading = false,
@@ -91,10 +91,10 @@ class ConferenceFilterViewModel(
 
             val conferenceFilter = _conferenceFilter.value
             val newConferenceFilter = conferenceFilter.copy(
-                conferenceStatusFilteringOptions = conferenceFilter.conferenceStatusFilteringOptions.map {
+                statusFilteringOptions = conferenceFilter.statusFilteringOptions.map {
                     it.copy(isSelected = conferenceStatusFilteringOptionIds.contains(it.id))
                 },
-                conferenceTagFilteringOptions = conferenceFilter.conferenceTagFilteringOptions.map {
+                tagFilteringOptions = conferenceFilter.tagFilteringOptions.map {
                     it.copy(isSelected = conferenceTagFilteringOptionIds.contains(it.id))
                 },
                 selectedStartDate = conferenceStartDate?.let {

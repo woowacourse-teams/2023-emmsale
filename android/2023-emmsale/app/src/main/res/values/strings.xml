@@ -133,6 +133,25 @@
     <string name="conferencefilter_backpress_dialog_title">필터 적용</string>
     <string name="conferencefilter_all_filtering_option_clear">전체 초기화</string>
 
+    <string name="competitionfilter_title">필터</string>
+    <string name="competitionfilter_competition_status_title">진행 상태</string>
+    <string name="competitionfilter_all_tag_name">전체</string>
+    <string name="competitionfilter_status_in_progress_tag_name">진행 중</string>
+    <string name="competitionfilter_status_scheduled_tag_name">진행 예정</string>
+    <string name="competitionfilter_status_ended_tag_name">마감</string>
+    <string name="competitionfilter_competition_event_tag_title">태그</string>
+    <string name="competitionfilter_competition_duration_title">기간</string>
+    <string name="competitionfilter_apply">적용하기</string>
+    <string name="competitionfilter_competition_duration_divider_mark">~</string>
+    <string name="competitionfilter_duration_date_format">%02d.%02d.%02d</string>
+    <string name="competitionfilter_duration_date_last_format">&#160;- %02d.%02d.%02d</string>
+    <string name="competitionfilter_clear">초기화</string>
+    <string name="competitionfilter_clear_title">필터 초기화</string>
+    <string name="competitionfilter_clear_message">선택된 필터를 모두 초기화 할까요?</string>
+    <string name="competitionfilter_backpress_dialog_message">뒤로 가기를 하면 변경사항이 적용되지 않아요!</string>
+    <string name="competitionfilter_backpress_dialog_title">필터 적용</string>
+    <string name="competitionfilter_all_filtering_option_clear">전체 초기화</string>
+
     <string name="eventinformation_navigate_website">웹사이트로 이동</string>
 
     <string name="notificationbox_title">알림 보관함</string>
@@ -255,4 +274,12 @@
     <string name="editmyprofile_all_activities_fetching_error_message">활동 정보를 불러오는 데 실패했어요 😥</string>
 
     <string name="editmyprofilebottomdialog_field_selection_guide">최대 %d개까지 선택 가능합니다.</string>
+
+    <string name="memberblock_block_description">차단된 사용자는 내 명함과 내가 쓴 글을 볼 수 없습니다.</string>
+    <string name="memberblock_block_button_label">차단 해제</string>
+    <string name="memberblock_menu_close_title">종료</string>
+    <string name="memberblock_loading_blocked_members_failed_message">차단 목록을 불러오는 데에 실패했어요!</string>
+    <string name="memberblock_unblock_member_failed_message">차단 해제를 실패했어요!</string>
+    <string name="memberblock_unblock_member_dialog_title">차단 해제</string>
+    <string name="memberblock_unblock_member_dialog_message">사용자를 차단 해제하시겠습니까?</string>
 </resources>

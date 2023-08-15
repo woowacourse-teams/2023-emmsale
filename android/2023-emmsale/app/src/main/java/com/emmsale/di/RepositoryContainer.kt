@@ -2,12 +2,16 @@ package com.emmsale.di
 
 import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.activity.ActivityRepositoryImpl
+import com.emmsale.data.blockedMember.BlockedMemberRepository
+import com.emmsale.data.blockedMember.BlockedMemberRepositoryImpl
 import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.comment.CommentRepositoryImpl
-import com.emmsale.data.conference.EventRepository
-import com.emmsale.data.conference.EventRepositoryImpl
+import com.emmsale.data.competitionStatus.CompetitionStatusRepository
+import com.emmsale.data.competitionStatus.CompetitionStatusRepositoryImpl
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepositoryImpl
+import com.emmsale.data.event.EventRepository
+import com.emmsale.data.event.EventRepositoryImpl
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.data.eventTag.EventTagRepositoryImpl
 import com.emmsale.data.eventdetail.EventDetailRepository
@@ -42,7 +46,7 @@ class RepositoryContainer(
         MemberRepositoryImpl(memberService = serviceContainer.memberService)
     }
     val eventRepository: EventRepository by lazy {
-        EventRepositoryImpl(conferenceService = serviceContainer.conferenceService)
+        EventRepositoryImpl(eventService = serviceContainer.eventService)
     }
     val fcmTokenRepository: FcmTokenRepository by lazy {
         FcmTokenRepositoryImpl(fcmTokenService = serviceContainer.fcmTokenService)
@@ -53,6 +57,7 @@ class RepositoryContainer(
         )
     }
     val conferenceStatusRepository: ConferenceStatusRepository by lazy { ConferenceStatusRepositoryImpl() }
+    val competitionStatusRepository: CompetitionStatusRepository by lazy { CompetitionStatusRepositoryImpl() }
     val eventTagRepository: EventTagRepository by lazy {
         EventTagRepositoryImpl(eventTagService = serviceContainer.eventTagService)
     }
@@ -67,5 +72,10 @@ class RepositoryContainer(
     }
     val notificationRepository: NotificationRepository by lazy {
         NotificationRepositoryImpl(notificationService = serviceContainer.notificationService)
+    }
+    val blockedMemberRepository: BlockedMemberRepository by lazy {
+        BlockedMemberRepositoryImpl(
+            blockedMemberService = serviceContainer.blockedMemberService,
+        )
     }
 }
