@@ -28,11 +28,7 @@ public class ScrapApi {
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
   public List<ScrapResponse> findAllScraps(final Member member) {
-    final List<ScrapResponse> allScraps = scrapQueryService.findAllScraps(member);
-    for (final ScrapResponse allScrap : allScraps) {
-      System.out.println(allScrap);
-    }
-    return allScraps;
+    return scrapQueryService.findAllScraps(member);
   }
 
   @PostMapping
