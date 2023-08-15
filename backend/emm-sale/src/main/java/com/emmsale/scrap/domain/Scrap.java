@@ -36,6 +36,6 @@ public class Scrap extends BaseEntity {
   }
 
   public boolean isNotOwner(final Long memberId) {
-    return !getMemberId().equals(memberId);
+    return !this.memberId.equals(memberId);
   }
 }
