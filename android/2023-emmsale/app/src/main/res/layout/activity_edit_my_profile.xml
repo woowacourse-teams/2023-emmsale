@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.main.myProfile.editMyProfile.EditMyProfileViewModel" />
+        <variable
+            name="showFieldTags"
+            type="kotlin.jvm.functions.Function0" />
+        <variable
+            name="showEducations"
+            type="kotlin.jvm.functions.Function0" />
+        <variable
+            name="showClubs"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_editmyprofile_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.main.myProfile.editMyProfile.EditMyProfileActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_editmyprofile_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/editmyprofile_edit_profile"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/tb_editmyprofile_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_editmyprofile_name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="90dp"
+                    android:layout_marginStart="17dp"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:text="@{viewModel.profile.name}"
+                    tools:text="김커디" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/et_editmyprofile_description"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_name"
+                    app:layout_constraintStart_toStartOf="@+id/tv_editmyprofile_name"
+                    android:layout_marginTop="9dp"
+                    app:layout_constraintWidth_max="260dp"
+                    android:hint="@string/editmyprofile_description_hint"
+                    android:drawableEnd="@drawable/ic_profile_education"
+                    android:text="@{viewModel.profile.description}"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor"
+                    android:maxLength="47"
+                    android:inputType="textMultiLine"
+                    android:textColorHint="@color/dark_gray"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/nanum_square_regular" />
+
+                <com.emmsale.presentation.common.views.VerticalDivider
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintTop_toBottomOf="@+id/et_editmyprofile_description"
+                    android:id="@+id/verticalDivider" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_editmyprofile_field_label"
+                    app:layout_constraintTop_toBottomOf="@+id/verticalDivider"
+                    app:layout_constraintStart_toStartOf="@+id/tv_editmyprofile_name"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/editmyprofile_field_label"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:text="@string/editmyprofile_choose_field_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_editmyprofile_choose_field_message"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_field_label"
+                    app:layout_constraintStart_toStartOf="@+id/tv_editmyprofile_field_label"
+                    android:layout_marginTop="8dp"
+                    android:textSize="11sp"
+                    android:textColor="@color/dark_gray" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/img_editmyprofile_activity_add_button"
+                    android:id="@+id/iv_editmyprofile_field_add_button"
+                    app:layout_constraintTop_toTopOf="@+id/tv_editmyprofile_field_label"
+                    android:layout_marginTop="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="17dp"
+                    android:onClick="@{() -> showFieldTags.invoke()}"
+                    android:contentDescription="@string/editmyprofile_field_add_button" />
+
+                <ImageView
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    tools:srcCompat="@tools:sample/avatars"
+                    android:id="@+id/iv_editmyprofile_member_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="17dp"
+                    app:imageUrl="@{viewModel.profile.imageUrl}"
+                    app:isCircle="@{true}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="30dp"
+                    android:contentDescription="@string/editmyprofile_member_image" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_editmyprofile_description_placeholder"
+                    android:id="@+id/iv_editmyprofile_description_placeholder_icon"
+                    app:layout_constraintTop_toTopOf="@+id/et_editmyprofile_description"
+                    app:layout_constraintBottom_toBottomOf="@+id/et_editmyprofile_description"
+                    app:layout_constraintStart_toEndOf="@+id/et_editmyprofile_description"
+                    android:layout_marginStart="5dp"
+                    android:importantForAccessibility="no" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rv_editmyprofile_fields"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_choose_field_message"
+                    android:layout_marginTop="23dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginEnd="17dp"
+                    tools:listitem="@layout/item_editmyprofile_field" />
+
+                <com.emmsale.presentation.common.views.VerticalDivider
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_editmyprofile_fields"
+                    android:id="@+id/verticalDivider2"
+                    android:layout_marginTop="24dp" />
+
+                <TextView
+                    android:text="@string/editmyprofile_activity_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_editmyprofile_activity_label"
+                    app:layout_constraintTop_toBottomOf="@+id/verticalDivider2"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintStart_toStartOf="@+id/tv_editmyprofile_name"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:text="@string/editmyprofile_choose_activity_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_editmyprofile_choose_activity_message"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_activity_label"
+                    app:layout_constraintStart_toStartOf="@+id/tv_editmyprofile_activity_label"
+                    android:layout_marginTop="8dp"
+                    android:textSize="11sp"
+                    android:textColor="@color/dark_gray" />
+
+                <TextView
+                    android:text="@string/editmyprofile_clubs_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_editmyprofile_clubs_label"
+                    android:textStyle="bold"
+                    android:textSize="13sp"
+                    app:layout_constraintTop_toTopOf="@+id/iv_editmyprofile_club_icon"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_editmyprofile_club_icon"
+                    app:layout_constraintStart_toEndOf="@+id/iv_editmyprofile_club_icon"
+                    android:layout_marginStart="10dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_editmyprofile_club_icon"
+                    android:layout_marginTop="9dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:overScrollMode="never"
+                    app:layout_constraintStart_toStartOf="@+id/tv_editmyprofile_clubs_label"
+                    android:id="@+id/rv_editmyprofile_clubs"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/item_editmyprofile_activity" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_profile_education"
+                    android:id="@+id/iv_editmyprofile_education_icon"
+                    android:background="@drawable/bg_profile_activityicon"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_choose_activity_message"
+                    app:layout_constraintStart_toStartOf="@+id/tv_editmyprofile_activity_label"
+                    android:importantForAccessibility="no"
+                    android:layout_marginTop="26dp" />
+
+                <TextView
+                    android:text="@string/editmyprofile_educations_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_editmyprofile_educations_label"
+                    app:layout_constraintStart_toEndOf="@+id/iv_editmyprofile_education_icon"
+                    app:layout_constraintTop_toTopOf="@+id/iv_editmyprofile_education_icon"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_editmyprofile_education_icon"
+                    android:layout_marginStart="10dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_editmyprofile_education_icon"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/tv_editmyprofile_educations_label"
+                    tools:itemCount="2"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:overScrollMode="never"
+                    android:id="@+id/rv_editmyprofile_educations"
+                    tools:listitem="@layout/item_editmyprofile_activity" />
+
+                <View
+                    android:layout_width="1.3dp"
+                    android:layout_height="0dp"
+                    android:id="@+id/view"
+                    android:background="@color/light_gray"
+                    app:layout_constraintBottom_toTopOf="@+id/iv_editmyprofile_club_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_editmyprofile_education_icon"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_editmyprofile_education_icon"
+                    app:layout_constraintStart_toStartOf="@+id/iv_editmyprofile_education_icon" />
+
+                <TextView
+                    android:text="@string/editmyprofile_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_editmyprofile_club_add_button"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_editmyprofile_clubs"
+                    app:layout_constraintStart_toStartOf="@+id/rv_editmyprofile_clubs"
+                    android:layout_marginTop="8dp"
+                    android:textSize="11sp"
+                    android:onClick="@{() -> showClubs.invoke()}"
+                    android:background="@drawable/bg_editmyprofile_activity_add_button"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="39dp" />
+
+                <TextView
+                    android:text="@string/editmyprofile_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_editmyprofile_education_add_button"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_editmyprofile_educations"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{() -> showEducations.invoke()}"
+                    app:layout_constraintStart_toStartOf="@+id/rv_editmyprofile_educations"
+                    android:textSize="11sp"
+                    android:background="@drawable/bg_editmyprofile_activity_add_button" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/iv_editmyprofile_club_icon"
+                    android:background="@drawable/bg_profile_activityicon"
+                    app:srcCompat="@drawable/ic_profile_education"
+                    android:importantForAccessibility="no"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_education_add_button"
+                    app:layout_constraintStart_toStartOf="@+id/iv_editmyprofile_education_icon"
+                    android:layout_marginTop="32dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

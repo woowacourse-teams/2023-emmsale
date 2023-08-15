@@ -120,7 +120,7 @@ class ConferenceViewModel(
                     ConferenceSelectedFilteringOptionUiState::from,
                 ),
                 startDateFilteringOption = startDate?.let(
-                    ConferenceSelectedFilteringDateOptionUiState::from
+                    ConferenceSelectedFilteringDateOptionUiState::from,
                 ),
                 endDateFilteringOption = endDate?.let(ConferenceSelectedFilteringDateOptionUiState::from),
             ),

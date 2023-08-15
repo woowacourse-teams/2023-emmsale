@@ -11,7 +11,7 @@ class BlockedMemberViewHolder(
     parent: ViewGroup,
     onUnblockMemberClick: (memberId: Long) -> Unit,
 ) : ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_block_member, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.item_block_member, parent, false),
 ) {
     private val binding: ItemBlockMemberBinding by lazy { ItemBlockMemberBinding.bind(itemView) }
 

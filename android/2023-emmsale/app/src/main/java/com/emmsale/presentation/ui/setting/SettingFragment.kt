@@ -9,6 +9,7 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.setting.block.MemberBlockActivity
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>() {
@@ -51,7 +52,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     }
 
     private fun showBlocks() {
-        // TODO("차단 목록 화면으로 이동")
+        MemberBlockActivity.startActivity(context ?: return)
     }
 
     private fun showUseTerm() {
