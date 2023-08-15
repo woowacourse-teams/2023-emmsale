@@ -96,7 +96,14 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     }
 
     private fun addFilterViews(filters: List<ConferenceSelectedFilteringOptionUiState>) {
-        filters.forEach { binding.layoutConferenceFilters.addView(createFilterTag(it.name)) }
+        filters.forEach {
+            binding.layoutConferenceFilters.addView(
+                createFilterTag(
+                    title = it.name,
+                    onClick = { viewModel.removeFilteringOptionBy(it.id) },
+                ),
+            )
+        }
     }
 
     private fun addDurationFilter(
@@ -108,12 +115,18 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         val durationString = "$startDateString$endDateString"
 
         if (startDateString != null) {
-            binding.layoutConferenceFilters.addView(createFilterTag(durationString))
+            binding.layoutConferenceFilters.addView(
+                createFilterTag(
+                    title = durationString,
+                    onClick = { viewModel.removeDurationFilteringOption() },
+                ),
+            )
         }
     }
 
-    private fun createFilterTag(title: String): FilterTag = filterChipOf {
+    private fun createFilterTag(title: String, onClick: () -> Unit): FilterTag = filterChipOf {
         text = title
+        setOnClickListener { onClick() }
     }
 
     private fun initEventFilterButtonClickListener() {
