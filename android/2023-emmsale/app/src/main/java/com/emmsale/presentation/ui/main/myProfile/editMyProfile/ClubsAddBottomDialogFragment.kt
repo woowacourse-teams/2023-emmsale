@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import com.emmsale.databinding.FragmentEditmyprofileEducationsAddBottomDialogBinding
+import com.emmsale.databinding.FragmentEditmyprofileClubsAddBottomDialogBinding
 import com.emmsale.presentation.common.views.activityChipOf
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
+class ClubsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
-    private var _binding: FragmentEditmyprofileEducationsAddBottomDialogBinding? = null
+    private var _binding: FragmentEditmyprofileClubsAddBottomDialogBinding? = null
     private val binding
-        get() = _binding ?: throw IllegalStateException("교육 활동 추가 다이얼로그가 보이지 않을 때 바인딩 객체에 접근했습니다.")
+        get() = _binding ?: throw IllegalStateException("동아리 활동 추가 다이얼로그가 보이지 않을 때 바인딩 객체에 접근했습니다.")
 
     private val viewModel: EditMyProfileViewModel by activityViewModels { EditMyProfileViewModel.factory }
 
@@ -22,7 +22,7 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentEditmyprofileEducationsAddBottomDialogBinding
+        _binding = FragmentEditmyprofileClubsAddBottomDialogBinding
             .inflate(layoutInflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
@@ -37,28 +37,28 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
-        binding.addEducations = ::addEducations
+        binding.addClubs = ::addClubs
     }
 
-    private fun addEducations() {
-        viewModel.addSelectedEducations()
+    private fun addClubs() {
+        viewModel.addSelectedClubs()
         dismiss()
     }
 
     private fun setupUiLogic() {
-        setupEducationsUiLogic()
+        setupClubsUiLogic()
     }
 
-    private fun setupEducationsUiLogic() {
-        viewModel.selectableEducations.observe(viewLifecycleOwner) {
-            binding.cgEditmyprofileeducationsdialogEducations.removeAllViews()
-            it.forEach { education ->
-                binding.cgEditmyprofileeducationsdialogEducations.addView(
+    private fun setupClubsUiLogic() {
+        viewModel.selectableClubs.observe(viewLifecycleOwner) {
+            binding.cgEditmyprofileclubsdialogClubs.removeAllViews()
+            it.forEach { club ->
+                binding.cgEditmyprofileclubsdialogClubs.addView(
                     activityChipOf {
-                        text = education.name
-                        isChecked = education.isSelected
+                        text = club.name
+                        isChecked = club.isSelected
                         setOnCheckedChangeListener { _, isChecked ->
-                            viewModel.setEducationSelection(education.id, isChecked)
+                            viewModel.setClubSelection(club.id, isChecked)
                         }
                     },
                 )
@@ -72,6 +72,6 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        val TAG: String = EducationsAddBottomDialogFragment::class.java.simpleName
+        val TAG: String = ClubsAddBottomDialogFragment::class.java.simpleName
     }
 }

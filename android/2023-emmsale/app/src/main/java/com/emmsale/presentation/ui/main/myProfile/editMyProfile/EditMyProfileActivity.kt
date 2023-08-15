@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
 import com.emmsale.presentation.common.views.WarningDialog
@@ -18,6 +19,7 @@ import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.Act
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.FieldsAdapter
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileUiState
+import kotlinx.coroutines.launch
 
 class EditMyProfileActivity : AppCompatActivity() {
 
@@ -29,6 +31,7 @@ class EditMyProfileActivity : AppCompatActivity() {
 
     private val fieldsDialog by lazy { FieldsAddBottomDialogFragment() }
     private val educationsDialog by lazy { EducationsAddBottomDialogFragment() }
+    private val clubsDialog by lazy { ClubsAddBottomDialogFragment() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +44,10 @@ class EditMyProfileActivity : AppCompatActivity() {
         initFieldsRecyclerView()
         setupUiLogic()
 
-        viewModel.fetchMember()
+        lifecycleScope.launch {
+            viewModel.fetchMember().join()
+            viewModel.fetchAllActivities()
+        }
     }
 
     private fun initDataBinding() {
@@ -65,6 +71,9 @@ class EditMyProfileActivity : AppCompatActivity() {
     }
 
     private fun showClubs() {
+        if (!clubsDialog.isAdded) {
+            clubsDialog.show(supportFragmentManager, ClubsAddBottomDialogFragment.TAG)
+        }
     }
 
     private fun initToolbar() {

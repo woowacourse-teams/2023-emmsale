@@ -50,33 +50,31 @@ class EditMyProfileViewModel(
         _selectableEducations
 
     val selectedEducationsSize =
-        _selectableEducations.map { education -> education.count { it.isSelected } }
+        _selectableEducations.map { educations -> educations.count { it.isSelected } }
 
     private val _selectableClubs = NotNullMutableLiveData(listOf<SelectableActivityUiState>())
     val selectableClubs: NotNullLiveData<List<SelectableActivityUiState>> = _selectableClubs
 
-    val selectedClubsSize = _selectableClubs.map { club -> club.count { it.isSelected } }
+    val selectedClubsSize = _selectableClubs.map { clubs -> clubs.count { it.isSelected } }
 
-    fun fetchMember() {
-        viewModelScope.launch {
-            val token = tokenRepository.getToken()
-            if (token == null) {
-                _isLogin.value = false
-                return@launch
-            }
-            launch {
-                when (val result = memberRepository.getMember(token.uid)) {
-                    is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.MEMBER_FETCHING)
-                    is ApiSuccess -> _profile.value = _profile.value.changeMemberState(result.data)
-                }
-            }
-            launch {
-                when (val result = activityRepository.getActivities(token.uid)) {
-                    is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.MEMBER_FETCHING)
-                    is ApiSuccess -> _profile.value = _profile.value.changeActivities(result.data)
-                }
+    fun fetchMember() = viewModelScope.launch {
+        val token = tokenRepository.getToken()
+        if (token == null) {
+            _isLogin.value = false
+            return@launch
+        }
+        launch {
+            when (val result = memberRepository.getMember(token.uid)) {
+                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.MEMBER_FETCHING)
+                is ApiSuccess -> _profile.value = _profile.value.changeMemberState(result.data)
             }
         }
+        launch {
+            when (val result = activityRepository.getActivities(token.uid)) {
+                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.MEMBER_FETCHING)
+                is ApiSuccess -> _profile.value = _profile.value.changeActivities(result.data)
+            }
+        }.join()
     }
 
     fun updateDescription(description: String) {
@@ -119,12 +117,15 @@ class EditMyProfileViewModel(
             _selectableClubs.value.map { if (it.id == activityId) it.copy(isSelected = isSelected) else it }
     }
 
-    fun fetchFields() {
-        if (_selectableFields.value.isNotEmpty()) return
+    fun fetchAllActivities() {
         viewModelScope.launch {
             when (val result = activityRepository.getActivities()) {
-                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.FIELDS_FETCHING)
-                is ApiSuccess -> _selectableFields.value = result.data.toSelectableFields()
+                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.ACTIVITIES_FETCHING)
+                is ApiSuccess -> {
+                    _selectableFields.value = result.data.toSelectableFields()
+                    _selectableEducations.value = result.data.toSelectableEducations()
+                    _selectableClubs.value = result.data.toSelectableClubs()
+                }
             }
         }
     }
@@ -133,29 +134,9 @@ class EditMyProfileViewModel(
         filter { activity -> activity.activityType == ActivityType.FIELD && activity.id !in profile.value.fields.map { it.id } }
             .map { SelectableActivityUiState.from(it) }
 
-    fun fetchEducations() {
-        if (_selectableEducations.value.isNotEmpty()) return
-        viewModelScope.launch {
-            when (val result = activityRepository.getActivities()) {
-                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.EDUCATIONS_FETCHING)
-                is ApiSuccess -> _selectableEducations.value = result.data.toSelectableEducations()
-            }
-        }
-    }
-
     private fun List<Activity>.toSelectableEducations(): List<SelectableActivityUiState> =
         filter { activity -> activity.activityType == ActivityType.EDUCATION && activity.id !in profile.value.educations.map { it.id } }
             .map { SelectableActivityUiState.from(it) }
-
-    fun fetchClubs() {
-        if (_selectableClubs.value.isNotEmpty()) return
-        viewModelScope.launch {
-            when (val result = activityRepository.getActivities()) {
-                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.CLUBS_FETCHING)
-                is ApiSuccess -> _selectableClubs.value = result.data.toSelectableClubs()
-            }
-        }
-    }
 
     private fun List<Activity>.toSelectableClubs(): List<SelectableActivityUiState> =
         filter { activity -> activity.activityType == ActivityType.CLUB && activity.id !in profile.value.clubs.map { it.id } }

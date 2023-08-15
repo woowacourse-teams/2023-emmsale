@@ -36,8 +36,6 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
         initDataBinding()
         setupUiLogic()
-
-        viewModel.fetchFields()
     }
 
     private fun initDataBinding() {
