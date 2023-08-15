@@ -2,7 +2,6 @@ package com.emmsale.notification.application;
 
 import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_OWNER;
-import static com.emmsale.notification.exception.NotificationExceptionType.NO_CONTENT_BLOCKED_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,6 +25,7 @@ import com.emmsale.notification.domain.RequestNotificationStatus;
 import com.emmsale.notification.exception.NotificationException;
 import com.emmsale.notification.exception.NotificationExceptionType;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,7 +83,7 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
 
     //when
     final RequestNotificationResponse actual = mockingRequestNotificationCommandService.create(
-        request);
+        request).get();
 
     //then
     assertThat(actual)
@@ -221,7 +221,7 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
   }
 
   @Test
-  @DisplayName("차단된 사용자에게 알림을 보낼 경우 NO_CONTENT_BLOCKED_MEMBER 타입의 Exception이 발생한다.")
+  @DisplayName("차단된 사용자에게 알림을 보낼 경우 Optional.empty()가 반환된다.")
   void createWithBlockedSender() {
     //given
     final long senderId = 1L;
@@ -239,10 +239,10 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
     );
 
     //when
-    final NotificationException actualException = assertThrowsExactly(NotificationException.class,
-        () -> requestNotificationCommandService.create(request));
+    final Optional<RequestNotificationResponse> response = requestNotificationCommandService.create(
+        request);
 
     //then
-    assertEquals(NO_CONTENT_BLOCKED_MEMBER, actualException.exceptionType());
+    assertFalse(response.isPresent());
   }
 }
