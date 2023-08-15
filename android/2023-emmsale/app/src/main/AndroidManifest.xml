@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".presentation.ui.setting.block.MemberBlockActivity"
+            android:exported="true" />
+        <activity
             android:name=".presentation.ui.setting.notificationConfig.NotificationConfigActivity"
             android:exported="false" />
         <activity
