@@ -1,10 +1,10 @@
-package com.emmsale.data.conference.dto
+package com.emmsale.data.event.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ConferenceApiModel(
+data class CompetitionApiModel(
     @SerialName("id")
     val id: Long,
     @SerialName("name")

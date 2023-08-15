@@ -133,6 +133,25 @@
     <string name="conferencefilter_backpress_dialog_title">필터 적용</string>
     <string name="conferencefilter_all_filtering_option_clear">전체 초기화</string>
 
+    <string name="competitionfilter_title">필터</string>
+    <string name="competitionfilter_competition_status_title">진행 상태</string>
+    <string name="competitionfilter_all_tag_name">전체</string>
+    <string name="competitionfilter_status_in_progress_tag_name">진행 중</string>
+    <string name="competitionfilter_status_scheduled_tag_name">진행 예정</string>
+    <string name="competitionfilter_status_ended_tag_name">마감</string>
+    <string name="competitionfilter_competition_event_tag_title">태그</string>
+    <string name="competitionfilter_competition_duration_title">기간</string>
+    <string name="competitionfilter_apply">적용하기</string>
+    <string name="competitionfilter_competition_duration_divider_mark">~</string>
+    <string name="competitionfilter_duration_date_format">%02d.%02d.%02d</string>
+    <string name="competitionfilter_duration_date_last_format">&#160;- %02d.%02d.%02d</string>
+    <string name="competitionfilter_clear">초기화</string>
+    <string name="competitionfilter_clear_title">필터 초기화</string>
+    <string name="competitionfilter_clear_message">선택된 필터를 모두 초기화 할까요?</string>
+    <string name="competitionfilter_backpress_dialog_message">뒤로 가기를 하면 변경사항이 적용되지 않아요!</string>
+    <string name="competitionfilter_backpress_dialog_title">필터 적용</string>
+    <string name="competitionfilter_all_filtering_option_clear">전체 초기화</string>
+
     <string name="eventinformation_navigate_website">웹사이트로 이동</string>
 
     <string name="notificationbox_title">알림 보관함</string>

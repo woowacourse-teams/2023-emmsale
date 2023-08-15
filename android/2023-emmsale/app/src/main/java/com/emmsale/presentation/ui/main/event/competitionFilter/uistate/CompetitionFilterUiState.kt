@@ -1,12 +1,12 @@
-package com.emmsale.presentation.ui.main.event.conferenceFilter.uistate
+package com.emmsale.presentation.ui.main.event.competitionFilter.uistate
 
-data class ConferenceFilterUiState(
-    val statusFilteringOptions: List<ConferenceFilteringOptionUiState> = emptyList(),
-    val tagFilteringOptions: List<ConferenceFilteringOptionUiState> = emptyList(),
-    val selectedStartDate: ConferenceFilteringDateOptionUiState? = null,
-    val selectedEndDate: ConferenceFilteringDateOptionUiState? = null,
+data class CompetitionFilterUiState(
+    val statusFilteringOptions: List<CompetitionFilteringOptionUiState> = emptyList(),
+    val tagFilteringOptions: List<CompetitionFilteringOptionUiState> = emptyList(),
+    val selectedStartDate: CompetitionFilteringDateOptionUiState? = null,
+    val selectedEndDate: CompetitionFilteringDateOptionUiState? = null,
     val isLoading: Boolean = false,
-    val isLoadingConferenceFilterFailed: Boolean = false,
+    val isLoadingCompetitionFilterFailed: Boolean = false,
 ) {
     val selectedStatusFilteringOptionIds: Array<Long> = statusFilteringOptions
         .filter { it.isSelected }
@@ -18,7 +18,7 @@ data class ConferenceFilterUiState(
         .map { it.id }
         .toTypedArray()
 
-    fun toggleSelectionBy(filterId: Long): ConferenceFilterUiState = copy(
+    fun toggleSelectionBy(filterId: Long): CompetitionFilterUiState = copy(
         statusFilteringOptions = statusFilteringOptions.map { filter ->
             when (filter.id) {
                 filterId -> filter.toggleSelection()
@@ -33,7 +33,7 @@ data class ConferenceFilterUiState(
         },
     )
 
-    fun resetSelection(): ConferenceFilterUiState = copy(
+    fun resetSelection(): CompetitionFilterUiState = copy(
         statusFilteringOptions = statusFilteringOptions.map { status ->
             status.copy(isSelected = false)
         },

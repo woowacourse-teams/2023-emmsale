@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.event.conference
+package com.emmsale.presentation.ui.main.event.competition
 
 import android.app.Activity.RESULT_OK
 import android.os.Bundle
@@ -6,43 +6,43 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
 import com.emmsale.R
-import com.emmsale.databinding.FragmentConferenceBinding
+import com.emmsale.databinding.FragmentCompetitionBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.FilterTag
 import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
-import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewAdapter
-import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewDivider
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringDateOptionUiState
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringOptionUiState
-import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity
+import com.emmsale.presentation.ui.main.event.competition.recyclerview.CompetitionRecyclerViewAdapter
+import com.emmsale.presentation.ui.main.event.competition.recyclerview.CompetitionRecyclerViewDivider
+import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringDateOptionUiState
+import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringOptionUiState
+import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionUiState
+import com.emmsale.presentation.ui.main.event.competitionFilter.CompetitionFilterActivity
 import java.time.LocalDate
 
-class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
-    override val layoutResId: Int = R.layout.fragment_conference
-    private val viewModel: ConferenceViewModel by viewModels { ConferenceViewModel.factory }
-    private val eventAdapter: ConferenceRecyclerViewAdapter by lazy {
-        ConferenceRecyclerViewAdapter(::navigateToEventDetail)
+class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
+    override val layoutResId: Int = R.layout.fragment_competition
+    private val viewModel: CompetitionViewModel by viewModels { CompetitionViewModel.factory }
+    private val eventAdapter: CompetitionRecyclerViewAdapter by lazy {
+        CompetitionRecyclerViewAdapter(::navigateToEventDetail)
     }
     private val filterActivityLauncher =
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
 
             val selectedStatusFilterIds = result.data
-                ?.getLongArrayExtra(ConferenceFilterActivity.KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS)
+                ?.getLongArrayExtra(CompetitionFilterActivity.KEY_SELECTED_COMPETITION_STATUS_FILTER_IDS)
                 ?.toTypedArray() ?: emptyArray()
             val selectedTagFilterIds: Array<Long> = result.data
-                ?.getLongArrayExtra(ConferenceFilterActivity.KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS)
+                ?.getLongArrayExtra(CompetitionFilterActivity.KEY_SELECTED_COMPETITION_TAG_FILTER_IDS)
                 ?.toTypedArray() ?: emptyArray()
             val selectedStartDate =
-                result.data?.getSerializableExtraCompat<LocalDate>(ConferenceFilterActivity.KEY_SELECTED_START_DATE)
+                result.data?.getSerializableExtraCompat<LocalDate>(CompetitionFilterActivity.KEY_SELECTED_START_DATE)
             val selectedEndDate =
-                result.data?.getSerializableExtraCompat<LocalDate>(ConferenceFilterActivity.KEY_SELECTED_END_DATE)
+                result.data?.getSerializableExtraCompat<LocalDate>(CompetitionFilterActivity.KEY_SELECTED_END_DATE)
 
-            viewModel.fetchFilteredConferences(
+            viewModel.fetchFilteredCompetitions(
                 selectedStatusFilterIds,
                 selectedTagFilterIds,
                 selectedStartDate,
@@ -69,14 +69,14 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
 
     private fun initEventRecyclerView() {
         binding.rvEvents.adapter = eventAdapter
-        binding.rvEvents.addItemDecoration(ConferenceRecyclerViewDivider(requireContext()))
+        binding.rvEvents.addItemDecoration(CompetitionRecyclerViewDivider(requireContext()))
     }
 
     private fun setupEventsObserver() {
-        viewModel.conferences.observe(viewLifecycleOwner) { eventsResult ->
+        viewModel.competitions.observe(viewLifecycleOwner) { eventsResult ->
             when {
-                eventsResult.isLoadingConferencesFailed -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
-                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferences) {
+                eventsResult.isLoadingCompetitionsFailed -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
+                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.competitions) {
                     binding.rvEvents.scrollToPosition(0)
                 }
             }
@@ -86,29 +86,29 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private fun setupFiltersObserver() {
         viewModel.selectedFilter.observe(viewLifecycleOwner) { filters ->
             clearFilterViews()
-            addFilterViews(filters.tagFilteringOptions + filters.statusFilteringOptions)
-            addDurationFilter(filters.startDateFilteringOption, filters.endDateFilteringOption)
+            addFilterViews(filters.competitionTagFilteringOptions + filters.competitionStatusFilteringOptions)
+            addDurationFilter(filters.selectedStartDate, filters.selectedEndDate)
         }
     }
 
     private fun clearFilterViews() {
-        binding.layoutConferenceFilters.removeAllViews()
+        binding.layoutCompetitionFilters.removeAllViews()
     }
 
-    private fun addFilterViews(filters: List<ConferenceSelectedFilteringOptionUiState>) {
-        filters.forEach { binding.layoutConferenceFilters.addView(createFilterTag(it.name)) }
+    private fun addFilterViews(filters: List<CompetitionSelectedFilteringOptionUiState>) {
+        filters.forEach { binding.layoutCompetitionFilters.addView(createFilterTag(it.name)) }
     }
 
     private fun addDurationFilter(
-        startDate: ConferenceSelectedFilteringDateOptionUiState?,
-        endDate: ConferenceSelectedFilteringDateOptionUiState?,
+        startDate: CompetitionSelectedFilteringDateOptionUiState?,
+        endDate: CompetitionSelectedFilteringDateOptionUiState?,
     ) {
         val startDateString = startDate?.transformToDateString(requireContext())
         val endDateString = endDate?.transformToDateString(requireContext(), true) ?: ""
         val durationString = "$startDateString$endDateString"
 
         if (startDateString != null) {
-            binding.layoutConferenceFilters.addView(createFilterTag(durationString))
+            binding.layoutCompetitionFilters.addView(createFilterTag(durationString))
         }
     }
 
@@ -120,18 +120,18 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         binding.btnEventFilter.setOnClickListener { navigateToEventFilter() }
     }
 
-    private fun navigateToEventDetail(event: ConferenceUiState) {
+    private fun navigateToEventDetail(event: CompetitionUiState) {
         EventDetailActivity.startActivity(requireContext(), event.id)
     }
 
     private fun navigateToEventFilter() {
         val selectedFilter = viewModel.selectedFilter.value
-        val filterActivityIntent = ConferenceFilterActivity.getIntent(
+        val filterActivityIntent = CompetitionFilterActivity.getIntent(
             context = requireContext(),
             selectedStatusIds = selectedFilter.selectedStatusFilteringOptionIds,
             selectedTagIds = selectedFilter.selectedTagFilteringOptionIds,
-            selectedStartDate = selectedFilter.startDateFilteringOption?.date,
-            selectedEndDate = selectedFilter.endDateFilteringOption?.date,
+            selectedStartDate = selectedFilter.selectedStartDate?.date,
+            selectedEndDate = selectedFilter.selectedEndDate?.date,
         )
         filterActivityLauncher.launch(filterActivityIntent)
     }
