@@ -62,30 +62,30 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="17dp"
+            android:layout_marginBottom="14dp"
             android:text="@{comment.isDeleted ? @string/comment_deleted_comment_content : comment.content}"
             android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/tv_childcomments_parentcommentauthorname"
             app:layout_constraintTop_toBottomOf="@+id/tv_childcomments_parentcommentauthorname"
-            tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="14dp"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하" />
 
         <ImageView
             android:id="@+id/iv_childcomments_parentcommentmenubutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="13dp"
-            android:padding="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/comment_menu_button"
+            android:padding="4dp"
             android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_childcomments_parentcommentauthorname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_childcomments_parentcommentauthorname"
-            app:srcCompat="@drawable/ic_comment_menubutton"
-            android:contentDescription="@string/comment_menu_button" />
+            app:srcCompat="@drawable/ic_comment_menubutton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

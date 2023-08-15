@@ -26,6 +26,9 @@ class OnboardingViewModel(
     private val _activities = NotNullMutableLiveData(OnboardingUiState())
     val activities: NotNullLiveData<OnboardingUiState> = _activities
 
+    val isExceedFieldLimit: Boolean
+        get() = activities.value.fields.count { it.isSelected } == MAXIMUM_FIELD_SELECTION
+
     init {
         _activities.value = _activities.value.copy(isLoading = true)
         fetchActivities()
@@ -73,6 +76,8 @@ class OnboardingViewModel(
     }
 
     companion object {
+        private const val MAXIMUM_FIELD_SELECTION = 4
+
         val factory = ViewModelFactory {
             OnboardingViewModel(
                 activityRepository = KerdyApplication.repositoryContainer.activityRepository,

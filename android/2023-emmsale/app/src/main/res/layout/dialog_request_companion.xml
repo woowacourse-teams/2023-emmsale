@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="280dp"
+                android:layout_height="324dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="15dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_requestcompanion_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="29dp"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:text="@string/requestcompanion_dialog_title"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_requestcompanion_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_requestcompanion_title"
+                        tools:text="김커디님께 함께 하기 요청을\n보내시겠습니까?" />
+
+                    <EditText
+                        android:id="@+id/et_requestcompanion_message"
+                        android:layout_width="0dp"
+                        android:layout_height="116dp"
+                        android:layout_marginStart="17dp"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginEnd="17dp"
+                        android:autofillHints="username"
+                        android:background="@drawable/bg_requestcompanion_et"
+                        android:fontFamily="@font/nanum_square_regular"
+                        android:gravity="start"
+                        android:hint="@string/requestcompanion_dialog_message_hint"
+                        android:inputType="textMultiLine"
+                        android:padding="12dp"
+                        android:textColorHint="@color/gray"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_requestcompanion_description" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/materialDivider_reqeustcompanion"
+                        android:layout_width="0dp"
+                        android:layout_height="0.5dp"
+                        android:layout_marginBottom="55dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/materialDivider_reqeustcompanion_vertical"
+                        android:layout_width="0.5dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/materialDivider_reqeustcompanion" />
+
+                    <Button
+                        android:id="@+id/btn_requestcompanion_positive"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="1dp"
+                        android:backgroundTint="@color/white"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:text="@string/requestcompanion_dialog_positive_button_text"
+                        android:textColor="@color/primary_color"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/materialDivider_reqeustcompanion_vertical"
+                        app:layout_constraintTop_toTopOf="@+id/materialDivider_reqeustcompanion_vertical" />
+
+                    <Button
+                        android:id="@+id/btn_requestcompanion_negative"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="1dp"
+                        android:backgroundTint="@color/white"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:text="@string/requestcompanion_dialog_negative_button_text"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/materialDivider_reqeustcompanion_vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/materialDivider_reqeustcompanion_vertical" />
+
+                    <TextView
+                        android:id="@+id/tv_requestcompanion_warning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/nanum_square_regular"
+                        android:text="@string/requestcompanion_dialog_warning_message"
+                        android:textColor="@color/gray"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/et_requestcompanion_message" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

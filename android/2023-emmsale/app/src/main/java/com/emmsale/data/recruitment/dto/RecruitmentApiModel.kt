@@ -1,6 +1,5 @@
 package com.emmsale.data.recruitment.dto
 
-import com.emmsale.data.recruitment.Recruitment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,16 +13,8 @@ data class RecruitmentApiModel(
     val name: String,
     @SerialName("imageUrl")
     val imageUrl: String,
-    @SerialName("description")
-    val description: String?,
+    @SerialName("content")
+    val content: String,
+    @SerialName("updatedAt")
+    val updatedAt: String,
 )
-
-fun List<RecruitmentApiModel>.toData(): List<Recruitment> = map {
-    Recruitment(
-        id = it.id,
-        memberId = it.memberId,
-        name = it.name,
-        imageUrl = it.imageUrl,
-        description = it.description,
-    )
-}

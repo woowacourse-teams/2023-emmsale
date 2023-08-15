@@ -4,12 +4,30 @@ import com.emmsale.data.common.ApiResult
 
 interface RecruitmentRepository {
 
-    suspend fun fetchEventRecruitments(
+    suspend fun getEventRecruitments(
         eventId: Long,
     ): ApiResult<List<Recruitment>>
 
-    suspend fun saveRecruitment(eventId: Long): ApiResult<Unit>
-    suspend fun deleteRecruitment(eventId: Long): ApiResult<Unit>
+    suspend fun getEventRecruitment(
+        eventId: Long,
+        recruitmentId: Long,
+    ): ApiResult<Recruitment>
+
+    suspend fun postRecruitment(
+        eventId: Long,
+        content: String,
+    ): ApiResult<Long>
+
+    suspend fun editRecruitment(
+        eventId: Long,
+        recruitmentId: Long,
+        content: String,
+    ): ApiResult<Unit>
+
+    suspend fun deleteRecruitment(
+        eventId: Long,
+        recruitmentId: Long,
+    ): ApiResult<Unit>
 
     suspend fun requestCompanion(
         eventId: Long,
@@ -17,5 +35,11 @@ interface RecruitmentRepository {
         message: String,
     ): ApiResult<Unit>
 
-    suspend fun checkParticipationStatus(eventId: Long): ApiResult<Boolean>
+    suspend fun checkIsAlreadyRequestCompanion(
+        eventId: Long,
+        senderId: Long,
+        receiverId: Long,
+    ): ApiResult<Boolean>
+
+    suspend fun checkIsAlreadyPostRecruitment(eventId: Long): ApiResult<Boolean>
 }

@@ -9,6 +9,7 @@ import com.emmsale.data.member.mapper.toData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.Headers
 
 class MemberRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -52,7 +53,7 @@ class MemberRepositoryImpl(
         }
 
     override suspend fun updateMemberActivities(activities: List<Long>): ApiResult<Unit> {
-        return ApiSuccess(Unit)
+        return ApiSuccess(Unit, Headers.headersOf())
     }
 
     override suspend fun deleteMember(memberId: Long): ApiResult<Unit> = withContext(dispatcher) {

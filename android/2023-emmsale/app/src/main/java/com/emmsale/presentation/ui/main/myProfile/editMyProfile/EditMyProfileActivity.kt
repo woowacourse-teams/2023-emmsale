@@ -46,6 +46,8 @@ class EditMyProfileActivity : AppCompatActivity() {
     }
 
     private fun initDescriptionEditText() {
+        binding.etEditmyprofileDescription.imeOptions = EditorInfo.IME_ACTION_DONE
+        binding.etEditmyprofileDescription.setRawInputType(InputType.TYPE_CLASS_TEXT)
         binding.etEditmyprofileDescription.addTextChangedListener(
             object : TextWatcher {
                 override fun beforeTextChanged(
@@ -71,13 +73,12 @@ class EditMyProfileActivity : AppCompatActivity() {
                 }
             },
         )
-        binding.etEditmyprofileDescription.imeOptions = EditorInfo.IME_ACTION_DONE
-        binding.etEditmyprofileDescription.setRawInputType(InputType.TYPE_CLASS_TEXT)
 
         binding.etEditmyprofileDescription.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val description = binding.etEditmyprofileDescription.text.toString()
                 viewModel.updateDescription(description)
+                binding.etEditmyprofileDescription.clearFocus()
             }
             false
         }

@@ -3,4 +3,5 @@ package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uist
 data class RecruitmentNotificationMemberUiState(
     val name: String,
     val profileImageUrl: String,
+    val openChatUrl: String,
 )
