@@ -28,8 +28,8 @@ class MemberBlockViewModel(
             _blockedMembers.value = _blockedMembers.value.copy(isLoading = true)
 
             when (val blockedMembersResult = blockedMemberRepository.getBlockedMembers()) {
-                is ApiSuccess -> _blockedMembers.value =
-                    BlockedMembersUiState.from(blockedMembersResult.data)
+                is ApiSuccess ->
+                    _blockedMembers.value = BlockedMembersUiState.from(blockedMembersResult.data)
 
                 is ApiError, is ApiException -> _blockedMembers.value = blockedMembers.value.copy(
                     isLoading = false,
@@ -42,8 +42,8 @@ class MemberBlockViewModel(
     fun unblockMember(blockId: Long) {
         viewModelScope.launch {
             when (blockedMemberRepository.deleteBlockedMember(blockId)) {
-                is ApiSuccess -> _blockedMembers.value =
-                    blockedMembers.value.deleteBlockedMember(blockId)
+                is ApiSuccess ->
+                    _blockedMembers.value = blockedMembers.value.deleteBlockedMember(blockId)
 
                 is ApiError, is ApiException -> _blockedMembers.value = blockedMembers.value.copy(
                     isLoading = false,
