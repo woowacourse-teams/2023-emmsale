@@ -26,7 +26,10 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         setupUiLogic()
         initToolbar()
         initActivitiesRecyclerView()
+    }
 
+    override fun onStart() {
+        super.onStart()
         viewModel.fetchMember()
     }
 
