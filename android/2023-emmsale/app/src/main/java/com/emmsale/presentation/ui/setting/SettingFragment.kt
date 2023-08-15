@@ -11,6 +11,7 @@ import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.setting.block.MemberBlockActivity
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
+import com.emmsale.presentation.ui.setting.writtenComments.WrittenCommentsActivity
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     override val layoutResId: Int = R.layout.fragment_setting
@@ -44,7 +45,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     }
 
     private fun showWrittenComments() {
-        // TODO("작성한 댓글 화면으로 이동")
+        WrittenCommentsActivity.startActivity(context ?: return)
     }
 
     private fun showNotificationSetting() {
