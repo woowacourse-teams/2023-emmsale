@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity">
+        tools:context=".presentation.ui.main.event.competitionFilter.CompetitionFilterActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_event_filter"
@@ -22,7 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/conferencefilter_title"
+            app:title="@string/competitionfilter_title"
             app:titleCentered="true"
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
@@ -56,7 +56,7 @@
                     <ImageView
                         android:layout_width="10dp"
                         android:layout_height="10dp"
-                        android:contentDescription="@string/conferencefilter_all_filtering_option_clear"
+                        android:contentDescription="@string/competitionfilter_all_filtering_option_clear"
                         android:src="@drawable/ic_event_filter_clear"
                         app:tint="@color/gray" />
 
@@ -64,7 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="@string/conferencefilter_all_filtering_option_clear"
+                        android:text="@string/competitionfilter_all_filtering_option_clear"
                         android:textColor="@color/gray"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -72,15 +72,15 @@
 
                 <include
                     android:id="@+id/layout_filter_status"
-                    layout="@layout/layout_filter_conference_status" />
+                    layout="@layout/layout_filter_competition_status" />
 
                 <include
                     android:id="@+id/layout_filter_tag"
-                    layout="@layout/layout_filter_conference_tag" />
+                    layout="@layout/layout_filter_competition_tag" />
 
                 <include
                     android:id="@+id/layout_filter_duration"
-                    layout="@layout/layout_filter_conference_duration" />
+                    layout="@layout/layout_filter_competition_duration" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -98,7 +98,7 @@
                     android:background="@drawable/bg_event_filter_button"
                     android:gravity="center"
                     android:paddingVertical="21dp"
-                    android:text="@string/conferencefilter_apply"
+                    android:text="@string/competitionfilter_apply"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 

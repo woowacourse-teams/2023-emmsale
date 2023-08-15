@@ -1,4 +1,4 @@
-package com.emmsale.data.conference
+package com.emmsale.data.event
 
 enum class EventCategory(val text: String) {
     CONFERENCE("CONFERENCE"),

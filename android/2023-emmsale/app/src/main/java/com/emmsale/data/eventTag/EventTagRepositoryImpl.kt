@@ -2,7 +2,7 @@ package com.emmsale.data.eventTag
 
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
-import com.emmsale.data.conference.EventCategory
+import com.emmsale.data.event.EventCategory
 import com.emmsale.data.eventTag.dto.EventTagApiModel
 import com.emmsale.data.eventTag.mapper.toData
 import kotlinx.coroutines.CoroutineDispatcher

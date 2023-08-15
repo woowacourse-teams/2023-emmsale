@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.main.event.conferenceFilter
+package com.emmsale.presentation.ui.main.event.competitionFilter
 
 import android.content.Context
 import android.content.Intent
@@ -7,10 +7,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
-import com.emmsale.databinding.ActivityConferenceFilterBinding
-import com.emmsale.databinding.LayoutFilterConferenceDurationBinding
-import com.emmsale.databinding.LayoutFilterConferenceStatusBinding
-import com.emmsale.databinding.LayoutFilterConferenceTagBinding
+import com.emmsale.databinding.ActivityCompetitionFilterBinding
+import com.emmsale.databinding.LayoutFilterCompetitionDurationBinding
+import com.emmsale.databinding.LayoutFilterCompetitionStatusBinding
+import com.emmsale.databinding.LayoutFilterCompetitionTagBinding
 import com.emmsale.presentation.common.extension.checkAll
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
 import com.emmsale.presentation.common.extension.message
@@ -22,20 +22,20 @@ import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.extension.title
 import com.emmsale.presentation.common.extension.uncheckAll
 import com.emmsale.presentation.common.views.activityChipOf
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilterUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilteringDateOptionUiState
-import com.emmsale.presentation.ui.main.event.conferenceFilter.uistate.ConferenceFilteringOptionUiState
+import com.emmsale.presentation.ui.main.event.competitionFilter.uistate.CompetitionFilterUiState
+import com.emmsale.presentation.ui.main.event.competitionFilter.uistate.CompetitionFilteringDateOptionUiState
+import com.emmsale.presentation.ui.main.event.competitionFilter.uistate.CompetitionFilteringOptionUiState
 import com.google.android.material.chip.ChipGroup
 import java.time.LocalDate
 
-class ConferenceFilterActivity : AppCompatActivity() {
-    private val viewModel: ConferenceFilterViewModel by viewModels { ConferenceFilterViewModel.factory }
-    private val binding: ActivityConferenceFilterBinding by lazy {
-        ActivityConferenceFilterBinding.inflate(layoutInflater)
+class CompetitionFilterActivity : AppCompatActivity() {
+    private val viewModel: CompetitionFilterViewModel by viewModels { CompetitionFilterViewModel.factory }
+    private val binding: ActivityCompetitionFilterBinding by lazy {
+        ActivityCompetitionFilterBinding.inflate(layoutInflater)
     }
-    private val statusFilterBinding: LayoutFilterConferenceStatusBinding by lazy { binding.layoutFilterStatus }
-    private val tagFilterBinding: LayoutFilterConferenceTagBinding by lazy { binding.layoutFilterTag }
-    private val durationFilterBinding: LayoutFilterConferenceDurationBinding by lazy { binding.layoutFilterDuration }
+    private val statusFilterBinding: LayoutFilterCompetitionStatusBinding by lazy { binding.layoutFilterStatus }
+    private val tagFilterBinding: LayoutFilterCompetitionTagBinding by lazy { binding.layoutFilterTag }
+    private val durationFilterBinding: LayoutFilterCompetitionDurationBinding by lazy { binding.layoutFilterDuration }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
         initBackPressedDispatcher()
         setupIsEventTagAllSelected()
         setupIsStartDateSelected()
-        setupConferenceFilter()
+        setupCompetitionFilter()
         fetchFilters()
     }
 
@@ -66,8 +66,8 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun askFilterClear() {
         showDialog {
-            title(getString(R.string.conferencefilter_clear_title))
-            message(getString(R.string.conferencefilter_clear_message))
+            title(getString(R.string.competitionfilter_clear_title))
+            message(getString(R.string.competitionfilter_clear_message))
             positiveButton(getString(R.string.all_okay)) { viewModel.clearFilters() }
             negativeButton(getString(R.string.all_cancel))
         }
@@ -78,18 +78,18 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun finishWithSendingSelectedFilterIds() {
-        val conferenceFilter = viewModel.conferenceFilter.value
+        val competitionFilter = viewModel.competitionFilter.value
         val filterIdsIntent = Intent()
             .putExtra(
-                KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS,
-                conferenceFilter.selectedStatusFilteringOptionIds.toLongArray(),
+                KEY_SELECTED_COMPETITION_STATUS_FILTER_IDS,
+                competitionFilter.selectedStatusFilteringOptionIds.toLongArray(),
             )
             .putExtra(
-                KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS,
-                conferenceFilter.selectedTagFilteringOptionIds.toLongArray(),
+                KEY_SELECTED_COMPETITION_TAG_FILTER_IDS,
+                competitionFilter.selectedTagFilteringOptionIds.toLongArray(),
             )
-            .putExtra(KEY_SELECTED_START_DATE, conferenceFilter.selectedStartDate?.date)
-            .putExtra(KEY_SELECTED_END_DATE, conferenceFilter.selectedEndDate?.date)
+            .putExtra(KEY_SELECTED_START_DATE, competitionFilter.selectedStartDate?.date)
+            .putExtra(KEY_SELECTED_END_DATE, competitionFilter.selectedEndDate?.date)
 
         setResult(RESULT_OK, filterIdsIntent)
         finish()
@@ -98,9 +98,9 @@ class ConferenceFilterActivity : AppCompatActivity() {
     private fun initTagAllFilterButtonClickListener() {
         tagFilterBinding.tagAllFilter.setOnClickListener {
             if (tagFilterBinding.tagAllFilter.isChecked) {
-                tagFilterBinding.cgConferenceTagChips.checkAll()
+                tagFilterBinding.cgCompetitionTagChips.checkAll()
             } else {
-                tagFilterBinding.cgConferenceTagChips.uncheckAll()
+                tagFilterBinding.cgCompetitionTagChips.uncheckAll()
             }
         }
     }
@@ -116,65 +116,65 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun initBackPressedDispatcher() {
-        onBackPressedDispatcher.addCallback(this, ConferenceFilterOnBackPressedCallback())
+        onBackPressedDispatcher.addCallback(this, CompetitionFilterOnBackPressedCallback())
     }
 
-    private fun setupConferenceFilter() {
-        viewModel.conferenceFilter.observe(this) { eventFilters ->
+    private fun setupCompetitionFilter() {
+        viewModel.competitionFilter.observe(this) { eventFilters ->
             when {
-                eventFilters.isLoadingConferenceFilterFailed -> showLoadingConferenceFilterFailed()
+                eventFilters.isLoadingCompetitionFilterFailed -> showLoadingCompetitionFilterFailed()
                 !eventFilters.isLoading -> updateFilterViews(eventFilters)
             }
         }
     }
 
-    private fun showLoadingConferenceFilterFailed() {
+    private fun showLoadingCompetitionFilterFailed() {
         showToast(getString(R.string.all_data_loading_failed_message))
     }
 
-    private fun updateFilterViews(conferenceFilters: ConferenceFilterUiState) {
-        updateStatusFilters(conferenceFilters.statusFilteringOptions)
-        updateTagFilters(conferenceFilters.tagFilteringOptions)
-        updateConferenceDurations(
-            conferenceFilters.selectedStartDate,
-            conferenceFilters.selectedEndDate,
+    private fun updateFilterViews(competitionFilters: CompetitionFilterUiState) {
+        updateStatusFilters(competitionFilters.statusFilteringOptions)
+        updateTagFilters(competitionFilters.tagFilteringOptions)
+        updateDurationsFilters(
+            competitionFilters.selectedStartDate,
+            competitionFilters.selectedEndDate,
         )
     }
 
-    private fun updateStatusFilters(eventStatuses: List<ConferenceFilteringOptionUiState>) {
+    private fun updateStatusFilters(eventStatuses: List<CompetitionFilteringOptionUiState>) {
         removeFilterStatuses()
         eventStatuses.forEach { filter ->
-            addTagFilter(statusFilterBinding.cgConferenceStatusChips, filter) {
+            addTagFilter(statusFilterBinding.cgCompetitionStatusChips, filter) {
                 viewModel.toggleFilterSelection(filter)
             }
         }
     }
 
-    private fun updateTagFilters(eventTags: List<ConferenceFilteringOptionUiState>) {
+    private fun updateTagFilters(eventTags: List<CompetitionFilteringOptionUiState>) {
         removeTagFiltersExcludingAllTag()
         eventTags.forEach { filter ->
-            addTagFilter(tagFilterBinding.cgConferenceTagChips, filter) {
+            addTagFilter(tagFilterBinding.cgCompetitionTagChips, filter) {
                 viewModel.toggleFilterSelection(filter)
             }
         }
     }
 
     private fun removeFilterStatuses() {
-        statusFilterBinding.cgConferenceStatusChips.removeAllViews()
+        statusFilterBinding.cgCompetitionStatusChips.removeAllViews()
     }
 
     private fun removeTagFiltersExcludingAllTag() {
         val startTagWithoutAllTagPosition = 1
 
-        tagFilterBinding.cgConferenceTagChips.removeViews(
+        tagFilterBinding.cgCompetitionTagChips.removeViews(
             startTagWithoutAllTagPosition,
-            tagFilterBinding.cgConferenceTagChips.childCount - 1,
+            tagFilterBinding.cgCompetitionTagChips.childCount - 1,
         )
     }
 
     private fun addTagFilter(
         chipGroup: ChipGroup,
-        tag: ConferenceFilteringOptionUiState,
+        tag: CompetitionFilteringOptionUiState,
         block: () -> Unit,
     ) {
         chipGroup.addView(
@@ -186,9 +186,9 @@ class ConferenceFilterActivity : AppCompatActivity() {
         )
     }
 
-    private fun updateConferenceDurations(
-        startDate: ConferenceFilteringDateOptionUiState?,
-        endDate: ConferenceFilteringDateOptionUiState?,
+    private fun updateDurationsFilters(
+        startDate: CompetitionFilteringDateOptionUiState?,
+        endDate: CompetitionFilteringDateOptionUiState?,
     ) {
         durationFilterBinding.btnFilterStartDuration.text = startDate?.transformToDateString(this)
         durationFilterBinding.btnFilterEndDuration.text = endDate?.transformToDateString(this)
@@ -208,18 +208,18 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun fetchFilters() {
-        val selectedConferenceStatusFilterIds = intent
-            ?.getLongArrayExtra(KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS)
+        val selectedCompetitionStatusFilterIds = intent
+            ?.getLongArrayExtra(KEY_SELECTED_COMPETITION_STATUS_FILTER_IDS)
             ?.toTypedArray() ?: emptyArray()
-        val selectedConferenceTagFilterIds = intent
-            ?.getLongArrayExtra(KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS)
+        val selectedCompetitionTagFilterIds = intent
+            ?.getLongArrayExtra(KEY_SELECTED_COMPETITION_TAG_FILTER_IDS)
             ?.toTypedArray() ?: emptyArray()
         val startDate = intent.getSerializableExtraCompat<LocalDate>(KEY_SELECTED_START_DATE)
         val endDate = intent.getSerializableExtraCompat<LocalDate>(KEY_SELECTED_END_DATE)
 
         viewModel.updateFilteringOptionsToSelectedState(
-            selectedConferenceStatusFilterIds,
-            selectedConferenceTagFilterIds,
+            selectedCompetitionStatusFilterIds,
+            selectedCompetitionTagFilterIds,
             startDate,
             endDate,
         )
@@ -232,8 +232,8 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS = "selected_conference_status_ids_key"
-        const val KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS = "selected_conference_tag_ids_key"
+        const val KEY_SELECTED_COMPETITION_STATUS_FILTER_IDS = "selected_competition_status_ids_key"
+        const val KEY_SELECTED_COMPETITION_TAG_FILTER_IDS = "selected_competition_tag_ids_key"
         const val KEY_SELECTED_START_DATE = "selected_start_date_key"
         const val KEY_SELECTED_END_DATE = "selected_end_date_key"
 
@@ -243,22 +243,22 @@ class ConferenceFilterActivity : AppCompatActivity() {
             selectedTagIds: Array<Long> = emptyArray(),
             selectedStartDate: LocalDate? = null,
             selectedEndDate: LocalDate? = null,
-        ): Intent = Intent(context, ConferenceFilterActivity::class.java)
-            .putExtra(KEY_SELECTED_CONFERENCE_STATUS_FILTER_IDS, selectedStatusIds.toLongArray())
-            .putExtra(KEY_SELECTED_CONFERENCE_TAG_FILTER_IDS, selectedTagIds.toLongArray())
+        ): Intent = Intent(context, CompetitionFilterActivity::class.java)
+            .putExtra(KEY_SELECTED_COMPETITION_STATUS_FILTER_IDS, selectedStatusIds.toLongArray())
+            .putExtra(KEY_SELECTED_COMPETITION_TAG_FILTER_IDS, selectedTagIds.toLongArray())
             .putExtra(KEY_SELECTED_START_DATE, selectedStartDate)
             .putExtra(KEY_SELECTED_END_DATE, selectedEndDate)
     }
 
-    inner class ConferenceFilterOnBackPressedCallback : OnBackPressedCallback(true) {
+    inner class CompetitionFilterOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             showBackPressDialog()
         }
 
         private fun showBackPressDialog() {
             showDialog {
-                title(getString(R.string.conferencefilter_backpress_dialog_title))
-                message(getString(R.string.conferencefilter_backpress_dialog_message))
+                title(getString(R.string.competitionfilter_backpress_dialog_title))
+                message(getString(R.string.competitionfilter_backpress_dialog_message))
                 positiveButton { finish() }
                 negativeButton { }
             }

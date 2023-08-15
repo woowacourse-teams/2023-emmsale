@@ -1,16 +1,17 @@
-package com.emmsale.data.conference.mapper
+package com.emmsale.data.event.mapper
 
-import com.emmsale.data.conference.Conference
-import com.emmsale.data.conference.dto.ConferenceApiModel
+import com.emmsale.data.competitionStatus.CompetitionStatus
+import com.emmsale.data.event.dto.CompetitionApiModel
+import com.emmsale.data.event.model.Competition
 import com.emmsale.data.eventApplyStatus.EventApplyStatus
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 private const val DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss"
 
-fun List<ConferenceApiModel>.toData(): List<Conference> = map { it.toData() }
+fun List<CompetitionApiModel>.toData(): List<Competition> = map { it.toData() }
 
-fun ConferenceApiModel.toData(): Conference = Conference(
+fun CompetitionApiModel.toData(): Competition = Competition(
     id = id,
     name = name,
     startDate = parseDate(startDate),
@@ -26,6 +27,13 @@ fun ConferenceApiModel.toData(): Conference = Conference(
 private fun parseDate(date: String): LocalDateTime {
     val dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)
     return LocalDateTime.parse(date, dateTimeFormatter)
+}
+
+private fun String.toData(): CompetitionStatus = when (this) {
+    "IN_PROGRESS" -> CompetitionStatus.IN_PROGRESS
+    "UPCOMING" -> CompetitionStatus.SCHEDULED
+    "ENDED" -> CompetitionStatus.ENDED
+    else -> throw IllegalArgumentException("Unknown conference status: $this")
 }
 
 private fun String.mapToApplyStatus(): EventApplyStatus = when (this) {

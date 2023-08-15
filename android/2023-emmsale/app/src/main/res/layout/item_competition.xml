@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionUiState" />
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="event"
+            type="com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionUiState" />
+
+        <variable
+            name="onClickCompetition"
+            type="kotlin.jvm.functions.Function1&lt;CompetitionUiState, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="180dp"
+        android:onClick="@{() -> onClickCompetition.invoke(event)}"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_event_tags"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/iv_event_poster"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_event_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@{event.name}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_event_status"
+            app:layout_constraintEnd_toEndOf="@id/cg_event_tags"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cg_event_tags"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            tools:text="2023 인프콘" />
+
+        <TextView
+            android:id="@+id/tv_event_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@{event.status}"
+            android:textColor="@{event.status == `마감` ? @color/gray : @color/primary_color}"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_event_poster"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            app:layout_goneMarginTop="9dp"
+            tools:text="D-21"
+            tools:textColor="@color/primary_color" />
+
+        <ImageView
+            android:id="@+id/iv_event_poster"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/event_poster_description"
+            app:imageUrl="@{event.posterUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="W,100:126"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:roundedImageRadius="@{15}"
+            tools:src="@drawable/img_all_error" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
