@@ -6,11 +6,10 @@ import androidx.recyclerview.widget.ListAdapter
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState
 
 class EventRecruitmentAdapter(
-    private val showMemberProfile: (Long) -> Unit,
     private val navigateToDetail: (RecruitmentPostUiState) -> Unit,
 ) : ListAdapter<RecruitmentPostUiState, RecruitmentViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecruitmentViewHolder =
-        RecruitmentViewHolder.create(parent, showMemberProfile, navigateToDetail)
+        RecruitmentViewHolder.create(parent, navigateToDetail)
 
     override fun onBindViewHolder(holder: RecruitmentViewHolder, position: Int) {
         holder.bind(getItem(position))
