@@ -97,7 +97,6 @@ class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
 
     private fun addFilterViews(filters: List<CompetitionSelectedFilteringOptionUiState>) {
         filters.forEach {
-
             binding.layoutCompetitionFilters.addView(
                 createFilterTag(
                     title = it.name,
@@ -120,7 +119,7 @@ class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
                 createFilterTag(
                     title = durationString,
                     onClick = { viewModel.removeDurationFilteringOption() },
-                )
+                ),
             )
         }
     }

@@ -33,7 +33,7 @@ class MemberBlockViewModel(
 
                 is ApiError, is ApiException -> _blockedMembers.value = blockedMembers.value.copy(
                     isLoading = false,
-                    isFetchingError = true
+                    isFetchingError = true,
                 )
             }
         }
@@ -47,7 +47,7 @@ class MemberBlockViewModel(
 
                 is ApiError, is ApiException -> _blockedMembers.value = blockedMembers.value.copy(
                     isLoading = false,
-                    isDeletingBlockedMemberError = true
+                    isDeletingBlockedMemberError = true,
                 )
             }
         }
