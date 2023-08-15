@@ -17,9 +17,7 @@ import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecorat
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     override val layoutResId: Int = R.layout.fragment_my_profile
 
-    private val viewModel: MyProfileViewModel by viewModels {
-        MyProfileViewModel.factory
-    }
+    private val viewModel: MyProfileViewModel by viewModels { MyProfileViewModel.factory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

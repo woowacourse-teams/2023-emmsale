@@ -71,4 +71,9 @@
         <item name="android:drawableTint">@color/light_gray</item>
         <item name="android:background">@drawable/bg_filter_tag</item>
     </style>
+
+    <style name="BottomDialogMenuItemStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:font">@font/nanum_square_bold</item>
+    </style>
 </resources>

@@ -19,6 +19,7 @@
         tools:targetApi="33">
         <activity
             android:name=".presentation.ui.main.myProfile.editMyProfile.EditMyProfileActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".presentation.ui.profile.ProfileActivity"
