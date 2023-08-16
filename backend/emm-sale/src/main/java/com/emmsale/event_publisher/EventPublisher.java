@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EventPublisher {
 
+  private static final String UPDATE_NOTIFICATION_EVENT_TYPE = "event";
+
   private final ApplicationEventPublisher applicationEventPublisher;
   private final InterestTagRepository interestTagRepository;
   private final MemberRepository memberRepository;
@@ -47,7 +49,7 @@ public class EventPublisher {
       final UpdateNotificationEvent updateNotificationEvent = new UpdateNotificationEvent(
           member.getId(),
           event.getId(),
-          UpdateNotificationType.from(event.getClass().getSimpleName()).toString(),
+          UpdateNotificationType.from(UPDATE_NOTIFICATION_EVENT_TYPE).toString(),
           LocalDateTime.now()
       );
 

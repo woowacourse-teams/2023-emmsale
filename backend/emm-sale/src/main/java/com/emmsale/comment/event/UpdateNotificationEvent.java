@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UpdateNotificationEvent {
 
+  private static final String UPDATE_NOTIFICATION_COMMENT_TYPE = "comment";
+
   private final Long receiverId;
   private final Long redirectId;
   private final String updateNotificationType;
@@ -18,7 +20,7 @@ public class UpdateNotificationEvent {
     return new UpdateNotificationEvent(
         comment.getMember().getId(),
         comment.getParentIdOrSelfId(),
-        comment.getClass().getSimpleName(),
+        UPDATE_NOTIFICATION_COMMENT_TYPE,
         LocalDateTime.now()
     );
   }
