@@ -11,6 +11,8 @@ fun List<CommentFamilyApiModel>.toData(): List<Comment> = map(CommentFamilyApiMo
 
 fun CommentFamilyApiModel.toData() = Comment(
     id = parentComment.commentId,
+    eventId = 1L,
+    eventName = "댓글 api model 매핑 로직 변경해야함",
     authorId = parentComment.memberId,
     authorName = parentComment.memberName,
     content = parentComment.content,
@@ -25,13 +27,15 @@ fun List<CommentApiModel>.toData(): List<Comment> = map(CommentApiModel::toData)
 
 fun CommentApiModel.toData() = Comment(
     id = commentId,
+    eventId = 1L,
+    eventName = "댓글 api model 매핑 로직 변경해야함",
     authorId = memberId,
     authorName = memberName,
     content = content,
     createdAt = LocalDateTime.parse(createdAt, dateTimeFormatter),
     updatedAt = LocalDateTime.parse(updatedAt, dateTimeFormatter),
     deleted = deleted,
-    listOf(),
+    childComments = listOf(),
 )
 
 private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")

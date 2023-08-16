@@ -282,4 +282,5 @@
     <string name="memberblock_unblock_member_failed_message">차단 해제를 실패했어요!</string>
     <string name="memberblock_unblock_member_dialog_title">차단 해제</string>
     <string name="memberblock_unblock_member_dialog_message">사용자를 차단 해제하시겠습니까?</string>
+    <string name="writtencomments_toolbar_title">작성한 댓글</string>
 </resources>
