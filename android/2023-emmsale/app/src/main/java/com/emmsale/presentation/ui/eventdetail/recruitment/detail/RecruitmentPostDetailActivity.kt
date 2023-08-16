@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.common.views.BottomDialogMenuItem
-import com.emmsale.presentation.common.views.BottomMenuDialog
+import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
+import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 
@@ -37,13 +37,11 @@ class RecruitmentPostDetailActivity :
         BottomMenuDialog(this).apply {
             addMenuItemBelow(
                 title = getString(R.string.recruitmentpostdetail_dialog_editing_text),
-                menuItemType = BottomDialogMenuItem.NORMAL,
                 onClick = { navigateToEditPage() },
             )
 
             addMenuItemBelow(
                 title = getString(R.string.recruitmentpostdetail_dialog_deletion_text),
-                menuItemType = BottomDialogMenuItem.NORMAL,
                 onClick = { viewModel.deleteRecruitmentPost() },
             )
         }
@@ -52,7 +50,7 @@ class RecruitmentPostDetailActivity :
         BottomMenuDialog(this).apply {
             addMenuItemBelow(
                 title = getString(R.string.recruitmentpostdetail_dialog_report_text),
-                menuItemType = BottomDialogMenuItem.DANGER,
+                menuItemType = MenuItemType.IMPORTANT,
                 onClick = { navigateToEditPage() },
             )
         }

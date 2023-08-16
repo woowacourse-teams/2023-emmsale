@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.main.myProfile.editMyProfile
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
@@ -15,8 +17,6 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.livedata.error.ErrorClearLiveData
-import com.emmsale.presentation.common.livedata.error.ErrorSetLiveData
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileUiState
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.SelectableActivityUiState
@@ -34,8 +34,8 @@ class EditMyProfileViewModel(
     private val _profile = NotNullMutableLiveData(EditMyProfileUiState.FIRST_LOADING)
     val profile: NotNullLiveData<EditMyProfileUiState> = _profile
 
-    private val _errorEvents = ErrorSetLiveData<EditMyProfileErrorEvent>()
-    val errorEvents: ErrorClearLiveData<EditMyProfileErrorEvent> = _errorEvents
+    private val _errorEvents = MutableLiveData<EditMyProfileErrorEvent?>(null)
+    val errorEvents: LiveData<EditMyProfileErrorEvent?> = _errorEvents
 
     private val _selectableFields = NotNullMutableLiveData(listOf<SelectableActivityUiState>())
     val selectableFields: NotNullLiveData<List<SelectableActivityUiState>> = _selectableFields
@@ -65,16 +65,16 @@ class EditMyProfileViewModel(
         }
         launch {
             when (val result = memberRepository.getMember(token.uid)) {
-                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.MEMBER_FETCHING)
+                is ApiError, is ApiException -> {}
                 is ApiSuccess -> _profile.value = _profile.value.changeMemberState(result.data)
             }
         }
         launch {
             when (val result = activityRepository.getActivities(token.uid)) {
-                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.MEMBER_FETCHING)
+                is ApiError, is ApiException -> {}
                 is ApiSuccess -> _profile.value = _profile.value.changeActivities(result.data)
             }
-        }.join()
+        }
     }
 
     fun updateDescription(description: String) {
@@ -85,22 +85,71 @@ class EditMyProfileViewModel(
                 return@launch
             }
             when (memberRepository.updateMemberDescription(description)) {
-                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.DESCRIPTION_UPDATE)
+                is ApiError, is ApiException ->
+                    _errorEvents.value =
+                        EditMyProfileErrorEvent.DESCRIPTION_UPDATE
+
                 is ApiSuccess -> _profile.value = _profile.value.changeDescription(description)
             }
         }
     }
 
     fun removeActivity(activityId: Long) {
+        viewModelScope.launch {
+            when (memberRepository.deleteMemberActivities(listOf(activityId))) {
+                is ApiError, is ApiException ->
+                    _errorEvents.value =
+                        EditMyProfileErrorEvent.ACTIVITY_REMOVE
+
+                is ApiSuccess -> fetchMember()
+            }
+        }
     }
 
     fun addSelectedFields() {
+        viewModelScope.launch {
+            val selectedFieldIds = _selectableFields.value.filter { it.isSelected }.map { it.id }
+            when (memberRepository.addMemberActivities(selectedFieldIds)) {
+                is ApiError, is ApiException ->
+                    _errorEvents.value =
+                        EditMyProfileErrorEvent.ACTIVITIES_ADD
+
+                is ApiSuccess -> refresh()
+            }
+        }
     }
 
     fun addSelectedEducations() {
+        viewModelScope.launch {
+            val selectedEducationIds =
+                _selectableEducations.value.filter { it.isSelected }.map { it.id }
+            when (memberRepository.addMemberActivities(selectedEducationIds)) {
+                is ApiError, is ApiException ->
+                    _errorEvents.value =
+                        EditMyProfileErrorEvent.ACTIVITIES_ADD
+
+                is ApiSuccess -> refresh()
+            }
+        }
     }
 
-    fun addSelectedClubs() {}
+    fun addSelectedClubs() {
+        viewModelScope.launch {
+            val selectedClubIds = _selectableClubs.value.filter { it.isSelected }.map { it.id }
+            when (memberRepository.addMemberActivities(selectedClubIds)) {
+                is ApiError, is ApiException ->
+                    _errorEvents.value =
+                        EditMyProfileErrorEvent.ACTIVITIES_ADD
+
+                is ApiSuccess -> refresh()
+            }
+        }
+    }
+
+    private suspend fun refresh() {
+        fetchMember().join()
+        fetchAllActivities()
+    }
 
     fun setFieldSelection(activityId: Long, isSelected: Boolean) {
         _selectableFields.value =
@@ -120,7 +169,7 @@ class EditMyProfileViewModel(
     fun fetchAllActivities() {
         viewModelScope.launch {
             when (val result = activityRepository.getActivities()) {
-                is ApiError, is ApiException -> _errorEvents.add(EditMyProfileErrorEvent.ACTIVITIES_FETCHING)
+                is ApiError, is ApiException -> {}
                 is ApiSuccess -> {
                     _selectableFields.value = result.data.toSelectableFields()
                     _selectableEducations.value = result.data.toSelectableEducations()
@@ -141,6 +190,10 @@ class EditMyProfileViewModel(
     private fun List<Activity>.toSelectableClubs(): List<SelectableActivityUiState> =
         filter { activity -> activity.activityType == ActivityType.CLUB && activity.id !in profile.value.clubs.map { it.id } }
             .map { SelectableActivityUiState.from(it) }
+
+    fun removeError() {
+        _errorEvents.value = null
+    }
 
     companion object {
         private const val MAX_FIELDS_COUNT = 4
