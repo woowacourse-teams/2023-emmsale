@@ -56,6 +56,7 @@
             android:paddingTop="8dp"
             android:paddingEnd="17dp"
             android:paddingBottom="8dp"
+            android:visibility="@{viewModel.editingCommentId == null ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -113,6 +114,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:clickable="@{layoutCommentsCommentUpdate.visibility == View.VISIBLE}"
             android:visibility="@{viewModel.editingCommentId == null ? View.GONE : View.VISIBLE}"
             android:paddingTop="8dp"
             android:elevation="5dp"
