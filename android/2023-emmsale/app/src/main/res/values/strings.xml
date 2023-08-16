@@ -85,6 +85,7 @@
     <string name="comment_menu_button">댓글의 메뉴 버튼</string>
     <string name="comment_deleted_comment_author_name">삭제</string>
     <string name="comment_deleted_comment_content">삭제된 댓글입니다.</string>
+    <string name="comment_author_image">댓글 작성자의 사진</string>
 
     <string name="comments_is_updated">수정됨</string>
     <string name="comments_child_comments_count_format">답글 %d</string>
@@ -292,4 +293,6 @@
     <string name="notificationconfig_notification_tag_title">태그 알림</string>
     <string name="notificationconfig_notification_tag_desc">태그 알림 설정 시 태그 관련 게시물 업로드 알림을 보내드립니다.</string>
     <string name="notificationconfig_add_notification_tag">알림 태그 추가</string>
+    <string name="childcomments_parent_comment_image_description">부모 댓글 작성자의 사진</string>
+    <string name="childcomments_child_comment_author_image_description">자식 댓글 작성자의 사진</string>
 </resources>

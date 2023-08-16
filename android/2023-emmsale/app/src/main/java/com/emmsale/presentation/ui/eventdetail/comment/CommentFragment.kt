@@ -14,6 +14,7 @@ import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentRecyc
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.profile.ProfileActivity
 
 class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     override val layoutResId: Int = R.layout.fragment_comments
@@ -66,6 +67,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     private fun initCommentsRecyclerView() {
         binding.rvCommentsComments.apply {
             adapter = CommentsAdapter(
+                showProfile = ::showProfile,
                 showChildComments = ::showChildComments,
                 editComment = ::editComment,
                 deleteComment = ::deleteComment,
@@ -73,6 +75,10 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
             itemAnimator = null
             addItemDecoration(CommentRecyclerViewDivider(requireContext()))
         }
+    }
+
+    private fun showProfile(authorId: Long) {
+        ProfileActivity.startActivity(context ?: return, authorId)
     }
 
     private fun showChildComments(commentId: Long) {

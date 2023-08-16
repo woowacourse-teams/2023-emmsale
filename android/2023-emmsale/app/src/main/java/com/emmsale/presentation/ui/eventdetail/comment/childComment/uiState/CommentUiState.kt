@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter
 data class CommentUiState(
     val authorId: Long,
     val authorName: String,
+    val authorImageUrl: String,
     val lastModifiedDate: String,
     val isUpdated: Boolean,
     val id: Long,
@@ -23,6 +24,7 @@ data class CommentUiState(
         ) = CommentUiState(
             authorId = comment.authorId,
             authorName = comment.authorName,
+            authorImageUrl = comment.authorImageUrl,
             lastModifiedDate = comment.updatedAt.format(dateTimeFormatter),
             isUpdated = comment.createdAt != comment.updatedAt,
             id = comment.id,
