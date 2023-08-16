@@ -182,7 +182,7 @@ class EventPublisherTest {
   }
 
   @Test
-  @DisplayName("publish(Event) : 행사 생성 이벤트가 발생했을 때, 사용자가 관심있어하는 태그가 행사에 없을 경우 알림이 가지 않는다.")
+  @DisplayName("publish(Event) : 행사 생성 이벤트가 발생했을 때, 사용자가 관심있어하는 태그가 없을 경우 알림이 가지 않는다.")
   void test_publish_event_no_notification_member_has_no_interest_tag() throws Exception {
     //given
     //member1 -> 태그 없음
