@@ -22,7 +22,7 @@
             android:exported="true" />
         <activity
             android:name=".presentation.ui.setting.notificationConfig.NotificationConfigActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity"
             android:exported="true" />

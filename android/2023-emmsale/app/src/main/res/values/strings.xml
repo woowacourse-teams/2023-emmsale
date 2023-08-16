@@ -256,4 +256,10 @@
     <string name="memberblock_unblock_member_failed_message">차단 해제를 실패했어요!</string>
     <string name="memberblock_unblock_member_dialog_title">차단 해제</string>
     <string name="memberblock_unblock_member_dialog_message">사용자를 차단 해제하시겠습니까?</string>
+
+    <string name="notificationconfig_toolbar_title">알림 설정</string>
+    <string name="notificationconfig_config_notification_label">알림 수신</string>
+    <string name="notificationconfig_notification_tag_title">태그 알림</string>
+    <string name="notificationconfig_notification_tag_desc">태그 알림 설정 시 태그 관련 게시물 업로드 알림을 보내드립니다.</string>
+    <string name="notificationconfig_add_notification_tag">알림 태그 추가</string>
 </resources>

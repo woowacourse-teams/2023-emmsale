@@ -8,6 +8,7 @@ import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.conferenceStatus.ConferenceStatus
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
+import com.emmsale.data.event.EventCategory
 import com.emmsale.data.event.EventRepository
 import com.emmsale.data.event.model.Conference
 import com.emmsale.data.eventTag.EventTag
@@ -131,7 +132,8 @@ class ConferenceViewModel(
         conferenceStatusRepository.getConferenceStatusByIds(tagFilterIds)
 
     private suspend fun getEventTagByIds(statusFilterIds: Array<Long>): List<EventTag> =
-        when (val eventTagResult = eventTagRepository.getEventTagByIds(statusFilterIds)) {
+        when (val eventTagResult =
+            eventTagRepository.getEventTagByIds(EventCategory.CONFERENCE, statusFilterIds)) {
             is ApiSuccess -> eventTagResult.data
             is ApiError, is ApiException -> emptyList()
         }
