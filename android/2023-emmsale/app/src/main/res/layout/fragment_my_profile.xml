@@ -20,18 +20,18 @@
             android:id="@+id/tb_myprofile_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/menu_myprofile_toolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_myprofile_toolbar" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/tb_myprofile_toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_myprofile_toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -70,10 +70,10 @@
                     android:text="@{viewModel.myProfile.description.isBlank() ? @string/profile_no_description : viewModel.myProfile.description }"
                     android:textSize="13sp"
                     app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_memberimage"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
                     app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_membername"
-                    tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차"
-                    app:layout_constraintHorizontal_bias="0.0" />
+                    tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차" />
 
                 <ImageView
                     android:id="@+id/iv_myprofile_imagedecoration"

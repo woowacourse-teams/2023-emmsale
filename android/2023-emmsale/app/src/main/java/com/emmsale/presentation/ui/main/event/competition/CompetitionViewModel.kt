@@ -8,6 +8,7 @@ import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.competitionStatus.CompetitionStatus
 import com.emmsale.data.competitionStatus.CompetitionStatusRepository
+import com.emmsale.data.event.EventCategory
 import com.emmsale.data.event.EventRepository
 import com.emmsale.data.event.model.Competition
 import com.emmsale.data.eventTag.EventTag
@@ -129,7 +130,10 @@ class CompetitionViewModel(
         competitionStatusRepository.getCompetitionStatusByIds(tagFilterIds)
 
     private suspend fun getEventTagByIds(statusFilterIds: Array<Long>): List<EventTag> =
-        when (val eventTagResult = eventTagRepository.getEventTagByIds(statusFilterIds)) {
+        when (
+            val eventTagResult =
+                eventTagRepository.getEventTagByIds(EventCategory.COMPETITION, statusFilterIds)
+        ) {
             is ApiSuccess -> eventTagResult.data
             is ApiError, is ApiException -> emptyList()
         }

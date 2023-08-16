@@ -1,7 +1,7 @@
 package com.emmsale.data.eventTag.mapper
 
 import com.emmsale.data.eventTag.EventTag
-import com.emmsale.data.eventTag.dto.EventTagApiModel
+import com.emmsale.data.eventTag.remote.dto.EventTagApiModel
 
 fun EventTagApiModel.toData(): EventTag = EventTag(
     id = id,

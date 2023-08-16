@@ -17,8 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_all_bottom_dialog"
-        android:paddingBottom="17dp"
-        android:paddingHorizontal="17dp">
+        android:paddingHorizontal="17dp"
+        android:paddingBottom="17dp">
 
         <ImageView
             android:id="@+id/iv_editmyprofilefieldsdialog_topdecoration"
@@ -32,55 +32,55 @@
             app:srcCompat="@drawable/img_bottomdialog_topdecoration" />
 
         <TextView
-            android:text="@string/editmyprofile_field_label"
+            android:id="@+id/tv_editmyprofilefieldsdialog_interest_tag_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_editmyprofilefieldsdialog_interest_tag_label"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="49dp"
+            android:text="@string/editmyprofile_field_label"
             android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:text="@{@string/editmyprofilebottomdialog_field_selection_guide(viewModel.selectableFieldsCount)}"
+            android:id="@+id/tv_editmyprofilefieldsdialog_field_selection_guide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_editmyprofilefieldsdialog_field_selection_guide"
-            app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofilefieldsdialog_interest_tag_label"
-            app:layout_constraintStart_toStartOf="@+id/tv_editmyprofilefieldsdialog_interest_tag_label"
             android:layout_marginTop="10dp"
+            android:text="@{@string/editmyprofilebottomdialog_field_selection_guide(viewModel.selectableFieldsCount)}"
+            android:textColor="@color/dark_gray"
             android:textSize="12sp"
-            android:textColor="@color/dark_gray" />
+            app:layout_constraintStart_toStartOf="@+id/tv_editmyprofilefieldsdialog_interest_tag_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofilefieldsdialog_interest_tag_label" />
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_editmyprofilefieldsdialog_fields"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofilefieldsdialog_field_selection_guide"
             android:layout_marginTop="25dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/cg_editmyprofilefieldsdialog_fields"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofilefieldsdialog_field_selection_guide">
 
         </com.google.android.material.chip.ChipGroup>
 
         <TextView
-            android:text="@string/editmyprofile_add"
+            android:id="@+id/tv_editmyprofilefieldsdialog_add_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_editmyprofilefieldsdialog_add_button"
-            app:layout_constraintTop_toBottomOf="@+id/cg_editmyprofilefieldsdialog_fields"
             android:layout_marginTop="32dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:paddingVertical="21dp"
-            android:textSize="16sp"
-            android:onClick="@{() -> addFields.invoke()}"
+            android:background="@drawable/bg_all_two_state_button"
             android:enabled="@{viewModel.selectedFieldsSize > 0 &amp;&amp; viewModel.selectedFieldsSize &lt;=viewModel.selectableFieldsCount}"
-            android:textColor="@color/white"
-            android:textStyle="bold"
             android:gravity="center"
-            android:background="@drawable/bg_all_two_state_button" />
+            android:onClick="@{() -> addFields.invoke()}"
+            android:paddingVertical="21dp"
+            android:text="@string/editmyprofile_add"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cg_editmyprofilefieldsdialog_fields" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

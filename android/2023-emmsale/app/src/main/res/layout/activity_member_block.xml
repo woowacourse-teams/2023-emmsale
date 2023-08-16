@@ -21,7 +21,6 @@
             android:id="@+id/tb_member_block"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
-            android:gravity="end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

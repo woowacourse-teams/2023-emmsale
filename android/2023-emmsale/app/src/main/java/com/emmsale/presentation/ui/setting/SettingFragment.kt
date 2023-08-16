@@ -11,6 +11,7 @@ import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.setting.block.MemberBlockActivity
 import com.emmsale.presentation.ui.setting.myComments.MyCommentsActivity
+import com.emmsale.presentation.ui.setting.notificationConfig.NotificationConfigActivity
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>() {
@@ -33,7 +34,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         binding.viewModel = viewModel
         binding.showWritings = ::showWritings
         binding.showWrittenComments = ::showWrittenComments
-        binding.showNotificationSetting = ::showNotificationSetting
+        binding.showNotificationSetting = ::navigateToNotificationConfig
         binding.showBlocks = ::showBlocks
         binding.showUseTerm = ::showUseTerm
         binding.deleteMember = ::deleteMember
@@ -48,8 +49,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         MyCommentsActivity.startActivity(context ?: return)
     }
 
-    private fun showNotificationSetting() {
-        // TODO("알림 설정 화면으로 이동")
+    private fun navigateToNotificationConfig() {
+        startActivity(NotificationConfigActivity.getIntent(requireContext()))
     }
 
     private fun showBlocks() {

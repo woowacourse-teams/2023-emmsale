@@ -37,7 +37,7 @@ android {
             buildConfigField("String", "BASE_URL", "\"https://kerdy.kro.kr\"")
         }
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
