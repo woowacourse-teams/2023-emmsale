@@ -17,12 +17,16 @@ import com.emmsale.databinding.ActivityLoginBinding
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
 import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
 import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.google.firebase.messaging.FirebaseMessaging
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity :
+    AppCompatActivity(),
+    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl(LoginActivity::javaClass.name) {
     private val viewModel: LoginViewModel by viewModels { LoginViewModel.factory }
     private val binding: ActivityLoginBinding by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         ActivityLoginBinding.inflate(layoutInflater)
@@ -37,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        registerScreen(this)
         binding.viewModel = viewModel
         setupClickListener()
         setupLoginState()
