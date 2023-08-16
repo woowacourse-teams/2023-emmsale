@@ -67,7 +67,7 @@ public class MemberActivityService {
   ) {
     final List<Long> activityIds = memberActivityAddRequest.getActivityIds();
     final List<MemberActivity> memberActivities = memberActivityRepository.findAllByMember(member);
-    if (hasDuplicateId(memberActivities, activityIds)) {
+    if (hasDuplicateId(activityIds)) {
       throw new MemberException(MemberExceptionType.DUPLICATE_ACTIVITY);
     }
     if (isAlreadyExistActivity(memberActivities, activityIds)) {
@@ -87,9 +87,8 @@ public class MemberActivityService {
         );
   }
 
-  private boolean hasDuplicateId(final List<MemberActivity> memberActivities,
-      final List<Long> activityIds) {
-    return new HashSet<>(activityIds).size() != memberActivities.size();
+  private boolean hasDuplicateId(final List<Long> activityIds) {
+    return new HashSet<>(activityIds).size() != activityIds.size();
   }
 
   public List<MemberActivityResponses> deleteActivity(
