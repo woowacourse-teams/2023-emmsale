@@ -5,7 +5,6 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.notification.domain.UpdateNotificationType;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +48,7 @@ public class EventPublisher {
       final UpdateNotificationEvent updateNotificationEvent = new UpdateNotificationEvent(
           member.getId(),
           event.getId(),
-          UpdateNotificationType.from(UPDATE_NOTIFICATION_EVENT_TYPE).toString(),
+          UPDATE_NOTIFICATION_EVENT_TYPE,
           LocalDateTime.now()
       );
 
