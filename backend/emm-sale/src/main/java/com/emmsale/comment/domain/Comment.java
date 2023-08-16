@@ -52,6 +52,7 @@ public class Comment extends BaseEntity {
     this.parent = parent;
     this.member = member;
     this.content = content;
+    this.isDeleted = false;
   }
 
   public static Comment createRoot(
@@ -88,6 +89,14 @@ public class Comment extends BaseEntity {
     return parent != null;
   }
 
+  public boolean isNotMyComment(final Member member) {
+    return this.member.isNotMe(member);
+  }
+
+  public boolean isNotDeleted() {
+    return !isDeleted || !content.equals(DELETED_COMMENT_MESSAGE);
+  }
+
   public Optional<Comment> getParent() {
     return Optional.ofNullable(parent);
   }
@@ -97,6 +106,17 @@ public class Comment extends BaseEntity {
       return BLOCKED_MEMBER_CONTENT;
     }
     return content;
+  }
+
+  public Long getParentIdOrSelfId() {
+    if (parent == null) {
+      return id;
+    }
+    return parent.id;
+  }
+
+  public boolean isNotOwner(final Long memberId) {
+    return member.isNotMe(memberId);
   }
 
   @Override

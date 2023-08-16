@@ -27,7 +27,7 @@ Content-Type: application/json
 GET http://localhost:8080/events/1
 
 ### 함께 해요 목록에 게시글 추가
-POST http://localhost:8080/events/1/participants
+POST http://localhost:8080/events/1/recruitment-posts
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
 
@@ -37,7 +37,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5L
 }
 
 ### 함께 해요 게시글 수정
-POST http://localhost:8080/events/1/participants/2
+POST http://localhost:8080/events/1/recruitment-posts/2
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
 
@@ -45,13 +45,16 @@ Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5L
   "content": "함께 해요 게시글의 내용"
 }
 
-### Event 참여자 목록에서 멤버 삭제
-DELETE http://localhost:8080/events/1/participants?member-id=1
+### 함께 해요 게시글 삭제
+DELETE http://localhost:8080/events/1/recruitment-posts?member-id=1
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
 
-### 행사 참여자 목록 조회
-GET http://localhost:8080/events/1/participants
+### 함께 해요 게시글 목록 조회
+GET http://localhost:8080/events/1/recruitment-posts
 
-### 멤버가 행사에 참여했는지 확인
-GET http://localhost:8080/events/1/participants/already-participate?member-id=1
+### 함께 해요 게시글 단건 조회
+GET http://localhost:8080/events/1/recruitment-posts/1
+
+### 사용자가 함께 해요 게시글 작성했는지 확인
+GET http://localhost:8080/events/1/recruitment-posts/already-recruitment?member-id=1

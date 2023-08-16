@@ -34,7 +34,7 @@ public class MemberQueryService {
   }
 
   public MemberProfileResponse findProfile(Long memberId) {
-    Member member = memberRepository.findById(memberId)
+    final Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 
     return MemberProfileResponse.from(member);

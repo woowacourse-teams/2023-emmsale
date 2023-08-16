@@ -23,7 +23,8 @@ public class ScrapResponse {
 
   public static ScrapResponse from(final Scrap scrap) {
     final Event event = scrap.getEvent();
-    final String eventStatus = event.calculateEventStatus(LocalDate.now()).toString();
+    final String eventStatus = event.getEventPeriod().calculateEventStatus(LocalDate.now())
+        .toString();
     final List<String> eventTags = event.getTags().stream()
         .map(eventTag -> eventTag.getTag().getName())
         .collect(Collectors.toList());
