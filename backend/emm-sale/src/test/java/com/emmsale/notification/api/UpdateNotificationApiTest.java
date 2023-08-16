@@ -5,9 +5,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -18,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.notification.application.UpdateNotificationCommandService;
 import com.emmsale.notification.application.UpdateNotificationQueryService;
+import com.emmsale.notification.application.dto.UpdateNotificationDeleteRequest;
 import com.emmsale.notification.application.dto.UpdateNotificationResponse;
 import com.emmsale.notification.application.dto.UpdateNotificationResponse.CommentTypeNotification;
 import com.emmsale.notification.domain.UpdateNotificationType;
@@ -27,6 +30,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
@@ -117,5 +122,31 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
         .andExpect(status().isNoContent())
         .andDo(print())
         .andDo(document("put-update-notifications-read", pathParams));
+  }
+
+  @Test
+  @DisplayName("deleteBatch() : 댓글 & 행사 알림을 성공적으로 삭제했다면 204 No Content 를 반환할 수 있다.")
+  void test_deleteBatch() throws Exception {
+    //given
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("deleteIds").description("삭제할 댓글 & 행사 알림 ID들")
+    );
+
+    final UpdateNotificationDeleteRequest request =
+        new UpdateNotificationDeleteRequest(List.of(1L, 2L, 3L));
+
+    final String accessToken = "Bearer Token";
+
+    //when
+    doNothing().when(updateNotificationCommandService).deleteBatch(any(), any());
+
+    //then
+    mockMvc.perform(delete("/update-notifications")
+            .content(objectMapper.writeValueAsString(request))
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", accessToken))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("delete-update-notifications", requestFields));
   }
 }
