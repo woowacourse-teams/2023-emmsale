@@ -13,8 +13,8 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.setting.notificationTagConfig.uistate.ConferenceNotificationTagUiState
-import com.emmsale.presentation.ui.setting.notificationTagConfig.uistate.NotificationTagsUiState
+import com.emmsale.presentation.ui.setting.notificationTagConfig.uistate.NotificationTagConfigUiState
+import com.emmsale.presentation.ui.setting.notificationTagConfig.uistate.NotificationTagsConfigUiState
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -24,9 +24,8 @@ class NotificationTagConfigViewModel(
     private val tokenRepository: TokenRepository,
     private val eventTagRepository: EventTagRepository,
 ) : ViewModel() {
-
-    private val _notificationTags = NotNullMutableLiveData(NotificationTagsUiState())
-    val notificationTags: NotNullLiveData<NotificationTagsUiState> = _notificationTags
+    private val _notificationTags = NotNullMutableLiveData(NotificationTagsConfigUiState())
+    val notificationTags: NotNullLiveData<NotificationTagsConfigUiState> = _notificationTags
 
     init {
         fetchNotificationTags()
@@ -43,7 +42,7 @@ class NotificationTagConfigViewModel(
                 getInterestEventTagIdsAsync(memberId),
             )
 
-            _notificationTags.value = NotificationTagsUiState.from(
+            _notificationTags.value = NotificationTagsConfigUiState.from(
                 eventTags = eventTags.filterIsInstance(EventTag::class.java),
                 interestTagIds = interestEventTagIds.filterIsInstance(Long::class.java),
             )
@@ -90,7 +89,7 @@ class NotificationTagConfigViewModel(
         viewModelScope.launch {
             _notificationTags.value = notificationTags.value.copy(isLoading = true)
             val interestEventTags = notificationTags.value.conferenceTags
-                .filter(ConferenceNotificationTagUiState::isChecked)
+                .filter(NotificationTagConfigUiState::isChecked)
                 .map { EventTag(id = it.id, name = it.tagName) }
 
             when (eventTagRepository.updateInterestEventTags(interestEventTags)) {

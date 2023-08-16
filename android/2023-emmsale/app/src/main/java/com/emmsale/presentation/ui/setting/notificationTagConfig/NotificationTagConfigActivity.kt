@@ -12,8 +12,8 @@ import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.activityChipOf
-import com.emmsale.presentation.ui.setting.notificationTagConfig.uistate.ConferenceNotificationTagUiState
-import com.emmsale.presentation.ui.setting.notificationTagConfig.uistate.NotificationTagsUiState
+import com.emmsale.presentation.ui.setting.notificationTagConfig.uistate.NotificationTagConfigUiState
+import com.emmsale.presentation.ui.setting.notificationTagConfig.uistate.NotificationTagsConfigUiState
 
 class NotificationTagConfigActivity : AppCompatActivity() {
     private val viewModel: NotificationTagConfigViewModel by viewModels { NotificationTagConfigViewModel.factory }
@@ -64,7 +64,7 @@ class NotificationTagConfigActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleNotificationTagsErrors(uiState: NotificationTagsUiState) {
+    private fun handleNotificationTagsErrors(uiState: NotificationTagsConfigUiState) {
         when {
             uiState.isTagFetchingError || uiState.isInterestTagFetchingError -> showTagFetchingErrorMessage()
             uiState.isInterestTagsUpdatingError -> showInterestTagsUpdateErrorMessage()
@@ -79,14 +79,14 @@ class NotificationTagConfigActivity : AppCompatActivity() {
         binding.root.showSnackbar(R.string.notificationtagconfig_interest_tags_update_error_message)
     }
 
-    private fun handleNotificationTagsSuccess(uiState: NotificationTagsUiState) {
+    private fun handleNotificationTagsSuccess(uiState: NotificationTagsConfigUiState) {
         when {
             uiState.isTagFetchingSuccess -> updateNotificationTagViews(uiState.conferenceTags)
             uiState.isInterestTagsUpdateSuccess -> finishWithTagUpdateMessage()
         }
     }
 
-    private fun updateNotificationTagViews(conferenceTags: List<ConferenceNotificationTagUiState>) {
+    private fun updateNotificationTagViews(conferenceTags: List<NotificationTagConfigUiState>) {
         clearNotificationTagViews()
         addConferenceTags(conferenceTags)
     }
@@ -95,23 +95,23 @@ class NotificationTagConfigActivity : AppCompatActivity() {
         binding.cgNotificationTag.removeAllViews()
     }
 
-    private fun addConferenceTags(conferenceTags: List<ConferenceNotificationTagUiState>) {
+    private fun addConferenceTags(conferenceTags: List<NotificationTagConfigUiState>) {
         conferenceTags.forEach(::addConferenceTag)
     }
 
-    private fun addConferenceTag(conferenceTag: ConferenceNotificationTagUiState) {
+    private fun addConferenceTag(conferenceTag: NotificationTagConfigUiState) {
         binding.cgNotificationTag.addView(createEventTag(conferenceTag))
     }
 
-    private fun createEventTag(conferenceTag: ConferenceNotificationTagUiState): ActivityTag =
+    private fun createEventTag(eventTag: NotificationTagConfigUiState): ActivityTag =
         activityChipOf {
-            text = conferenceTag.tagName
-            isChecked = conferenceTag.isChecked
+            text = eventTag.tagName
+            isChecked = eventTag.isChecked
             setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    viewModel.addInterestTag(conferenceTag.id)
+                    viewModel.addInterestTag(eventTag.id)
                 } else {
-                    viewModel.removeInterestTag(conferenceTag.id)
+                    viewModel.removeInterestTag(eventTag.id)
                 }
             }
         }
@@ -122,8 +122,7 @@ class NotificationTagConfigActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun startActivity(context: Context) {
-            context.startActivity(Intent(context, NotificationTagConfigActivity::class.java))
-        }
+        fun getIntent(context: Context): Intent =
+            Intent(context, NotificationTagConfigActivity::class.java)
     }
 }
