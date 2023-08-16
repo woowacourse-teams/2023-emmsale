@@ -32,9 +32,11 @@ data class NotificationTagsConfigUiState(
     companion object {
         fun from(
             eventTags: List<EventTag>,
-            interestTagIds: List<Long>,
-        ): NotificationTagsConfigUiState =
-            NotificationTagsConfigUiState(
+            interestEventTags: List<EventTag>,
+        ): NotificationTagsConfigUiState {
+            val interestTagIds = interestEventTags.map(EventTag::id)
+
+            return NotificationTagsConfigUiState(
                 conferenceTags = eventTags.map { eventTag ->
                     NotificationTagConfigUiState.from(
                         eventTag = eventTag,
@@ -43,5 +45,6 @@ data class NotificationTagsConfigUiState(
                 },
                 isTagFetchingSuccess = true,
             )
+        }
     }
 }
