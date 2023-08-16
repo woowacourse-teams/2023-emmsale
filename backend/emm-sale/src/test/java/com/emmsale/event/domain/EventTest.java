@@ -1,6 +1,8 @@
 package com.emmsale.event.domain;
 
 import static com.emmsale.event.EventFixture.eventFixture;
+import static com.emmsale.event.EventFixture.인프콘_2023;
+import static com.emmsale.tag.TagFixture.IOS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -17,14 +19,18 @@ import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.domain.Tag;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class EventTest {
 
@@ -127,9 +133,9 @@ class EventTest {
     final LocalDateTime newStartDateTime = LocalDateTime.now();
     final LocalDateTime newEndDateTime = newStartDateTime.plusDays(1);
     final String newInformationUrl = "https://새로운-상세-URL.com";
-    final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+    final List<Tag> newTags = List.of(IOS(), TagFixture.AI());
 
-    final Event event = EventFixture.인프콘_2023();
+    final Event event = 인프콘_2023();
 
     //when
     final Event updatedEvent = event.updateEventContent(
@@ -163,9 +169,9 @@ class EventTest {
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String newInformationUrl = "https://새로운-상세-URL.com";
-    final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+    final List<Tag> newTags = List.of(IOS(), TagFixture.AI());
 
-    final Event event = EventFixture.인프콘_2023();
+    final Event event = 인프콘_2023();
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
@@ -184,9 +190,9 @@ class EventTest {
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String newInformationUrl = "https://새로운-상세-URL.com";
-    final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+    final List<Tag> newTags = List.of(IOS(), TagFixture.AI());
 
-    final Event event = EventFixture.인프콘_2023();
+    final Event event = 인프콘_2023();
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
@@ -206,9 +212,9 @@ class EventTest {
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String newInformationUrl = "https://새로운-상세-URL.com";
-    final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+    final List<Tag> newTags = List.of(IOS(), TagFixture.AI());
 
-    final Event event = EventFixture.인프콘_2023();
+    final Event event = 인프콘_2023();
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
@@ -227,9 +233,9 @@ class EventTest {
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String newInformationUrl = "https://새로운-상세-URL.com";
-    final List<Tag> newTags = List.of(TagFixture.IOS(), TagFixture.AI());
+    final List<Tag> newTags = List.of(IOS(), TagFixture.AI());
 
-    final Event event = EventFixture.인프콘_2023();
+    final Event event = 인프콘_2023();
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
@@ -350,5 +356,31 @@ class EventTest {
       //then
       assertThat(actual).isFalse();
     }
+  }
+
+  @ParameterizedTest
+  @MethodSource("hasSameTagFrom")
+  @DisplayName("hasSameTagFrom() : 행사의 태그에 주어진 태그가 하나라도 포함되어있으면 true를 반환할 수 있다.")
+  void test_hasSameTagFrom(final List<Tag> targetTags, final boolean result) throws Exception {
+    //given
+    final Event event = 인프콘_2023();
+    event.addAllEventTags(List.of(TagFixture.안드로이드(), TagFixture.백엔드()));
+
+    //when & then
+    assertEquals(result, event.hasSameTagFrom(targetTags));
+  }
+
+  static Stream<Arguments> hasSameTagFrom() {
+    final List<Tag> tag1 = List.of(TagFixture.안드로이드());
+    final List<Tag> tag2 = List.of(TagFixture.안드로이드(), TagFixture.IOS());
+    final List<Tag> tag3 = List.of(TagFixture.프론트엔드());
+    final List<Tag> tag4 = Collections.emptyList();
+
+    return Stream.of(
+        Arguments.of(tag1, true),
+        Arguments.of(tag2, true),
+        Arguments.of(tag3, false),
+        Arguments.of(tag4, false)
+    );
   }
 }
