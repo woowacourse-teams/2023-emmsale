@@ -74,6 +74,16 @@ public class RecruitmentPostApi {
     return ResponseEntity.ok(responses);
   }
 
+  @GetMapping("/{event-id}/recruitment-posts/{recruitment-post-id}")
+  public ResponseEntity<RecruitmentPostResponse> findRecruitmentPost(
+      @PathVariable("event-id") final Long eventId,
+      @PathVariable("recruitment-post-id") final Long postId
+  ) {
+    final RecruitmentPostResponse response
+        = postQueryService.findRecruitmentPost(eventId, postId);
+    return ResponseEntity.ok(response);
+  }
+
   @GetMapping("/{eventId}/recruitment-posts/already-recruitment")
   public ResponseEntity<Boolean> isAlreadyRecruit(
       @PathVariable final Long eventId,

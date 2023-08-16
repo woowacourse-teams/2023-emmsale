@@ -86,6 +86,7 @@ public class CommentCommandService {
   ) {
     return comments.stream()
         .filter(it -> it.isNotMyComment(loginMember))
+        .filter(Comment::isNotDeleted)
         .collect(toMap(
             comment -> comment.getMember().getId(),
             comment -> comment,

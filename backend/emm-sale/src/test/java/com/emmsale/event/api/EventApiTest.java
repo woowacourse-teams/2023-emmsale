@@ -1,11 +1,9 @@
 package com.emmsale.event.api;
 
-import static java.lang.String.format;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -104,9 +102,9 @@ class EventApiTest extends MockMvcTestHelper {
     // given
     final RequestParametersSnippet requestParameters = requestParameters(
         parameterWithName("category").description("행사 카테고리(CONFERENCE, COMPETITION)"),
-        parameterWithName("start_date").description("필터링하려는 기간의 시작일(yyyy-mm-dd)(option)")
+        parameterWithName("start_date").description("필터링하려는 기간의 시작일(yyyy:mm:dd)(option)")
             .optional(),
-        parameterWithName("end_date").description("필터링하려는 기간의 끝일(yyyy-mm-dd)(option)").optional(),
+        parameterWithName("end_date").description("필터링하려는 기간의 끝일(yyyy:mm:dd)(option)").optional(),
         parameterWithName("tags").description("필터링하려는 태그(option)").optional(),
         parameterWithName("statuses").description("필터링하려는 상태(UPCOMING, IN_PROGRESS, ENDED)(option)")
             .optional()

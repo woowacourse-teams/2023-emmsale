@@ -3,6 +3,7 @@ package com.emmsale.notification.api;
 import com.emmsale.member.domain.Member;
 import com.emmsale.notification.application.RequestNotificationCommandService;
 import com.emmsale.notification.application.RequestNotificationQueryService;
+import com.emmsale.notification.application.dto.RequestNotificationExistedRequest;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
@@ -38,13 +39,22 @@ public class RequestNotificationApi {
     ).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NO_CONTENT));
   }
 
-  @PatchMapping("/request-notifications/{request-notification-id}")
+  @PatchMapping("/request-notifications/{request-notification-id}/status")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void modify(
       @RequestBody final RequestNotificationModifyRequest requestNotificationModifyRequest,
       @PathVariable("request-notification-id") final Long notificationId
   ) {
     requestNotificationCommandService.modify(requestNotificationModifyRequest, notificationId);
+  }
+
+  @PatchMapping("/request-notifications/{request-notification-id}/read")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void read(
+      @PathVariable("request-notification-id") final Long notificationId,
+      final Member member
+  ) {
+    requestNotificationCommandService.read(notificationId, member);
   }
 
   @GetMapping("/request-notifications/{request-notification-id}")
@@ -67,5 +77,13 @@ public class RequestNotificationApi {
       @PathVariable("request-notification-id") final Long notificationId
   ) {
     requestNotificationCommandService.delete(member, notificationId);
+  }
+
+  @GetMapping("/request-notifications/existed")
+  public boolean isAlreadyExisted(
+      final Member member,
+      final RequestNotificationExistedRequest existedRequest
+  ) {
+    return requestNotificationQueryService.isAlreadyExisted(member, existedRequest);
   }
 }

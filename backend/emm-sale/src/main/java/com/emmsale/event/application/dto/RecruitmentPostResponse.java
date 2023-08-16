@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 public class RecruitmentPostResponse {
 
-  private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+  private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
 
   private final Long id;
   private final Long memberId;

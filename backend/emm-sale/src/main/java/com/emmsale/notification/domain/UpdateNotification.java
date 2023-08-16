@@ -30,6 +30,8 @@ public class UpdateNotification {
   @Column(name = "type", nullable = false)
   private UpdateNotificationType updateNotificationType;
   private LocalDateTime createdAt;
+  @Column(nullable = false)
+  private boolean isRead;
 
   public UpdateNotification(
       final Long receiverId,
@@ -41,5 +43,22 @@ public class UpdateNotification {
     this.redirectId = redirectId;
     this.updateNotificationType = updateNotificationType;
     this.createdAt = createdAt;
+    this.isRead = false;
+  }
+
+  public boolean isCommentNotification() {
+    return updateNotificationType == UpdateNotificationType.COMMENT;
+  }
+
+  public boolean isEventNotification() {
+    return updateNotificationType == UpdateNotificationType.EVENT;
+  }
+
+  public boolean isOwner(final Long memberId) {
+    return receiverId.equals(memberId);
+  }
+
+  public void read() {
+    isRead = true;
   }
 }
