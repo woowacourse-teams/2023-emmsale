@@ -78,7 +78,7 @@
                 android:id="@+id/button_divider"
                 android:layout_width="1dp"
                 android:layout_height="0dp"
-                android:background="@color/gray"
+                android:background="@color/light_gray"
                 app:layout_constraintBottom_toBottomOf="@+id/btn_cancel"
                 app:layout_constraintEnd_toStartOf="@+id/btn_okay"
                 app:layout_constraintStart_toEndOf="@+id/btn_cancel"

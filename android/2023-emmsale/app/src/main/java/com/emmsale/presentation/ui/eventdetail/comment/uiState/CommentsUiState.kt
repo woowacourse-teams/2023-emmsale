@@ -6,6 +6,7 @@ data class CommentsUiState(
     val isLoading: Boolean,
     val isFetchingError: Boolean,
     val isPostingError: Boolean,
+    val isUpdateError: Boolean,
     val isDeletionError: Boolean,
     val comments: List<CommentUiState>,
 ) {
@@ -14,6 +15,7 @@ data class CommentsUiState(
         isLoading = true,
         isFetchingError = false,
         isPostingError = false,
+        isUpdateError = false,
         isDeletionError = false,
     )
 
@@ -21,6 +23,7 @@ data class CommentsUiState(
         isLoading = false,
         isFetchingError = true,
         isPostingError = false,
+        isUpdateError = false,
         isDeletionError = false,
     )
 
@@ -28,6 +31,15 @@ data class CommentsUiState(
         isLoading = false,
         isFetchingError = false,
         isPostingError = true,
+        isUpdateError = false,
+        isDeletionError = false,
+    )
+
+    fun changeToUpdateErrorState(): CommentsUiState = copy(
+        isLoading = false,
+        isFetchingError = false,
+        isPostingError = false,
+        isUpdateError = true,
         isDeletionError = false,
     )
 
@@ -35,6 +47,7 @@ data class CommentsUiState(
         isLoading = false,
         isFetchingError = false,
         isPostingError = false,
+        isUpdateError = false,
         isDeletionError = true,
     )
 
@@ -53,6 +66,7 @@ data class CommentsUiState(
             isLoading = true,
             isFetchingError = false,
             isPostingError = false,
+            isUpdateError = false,
             isDeletionError = false,
             comments = listOf(),
         )

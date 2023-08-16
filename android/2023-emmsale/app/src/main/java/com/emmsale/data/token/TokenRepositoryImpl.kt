@@ -9,8 +9,8 @@ class TokenRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val preference: SharedPreferences,
 ) : TokenRepository {
-
     private val preferenceEditor = preference.edit()
+
     override suspend fun saveToken(token: Token) = withContext(dispatcher) {
         preferenceEditor.putLong(UID_KEY, token.uid).apply()
         preferenceEditor.putString(ACCESS_TOKEN_KEY, token.accessToken).apply()
@@ -23,6 +23,7 @@ class TokenRepositoryImpl(
         if (accessToken == null || accessToken == DEFAULT_TOKEN_VALUE) return@withContext null
         Token(uid, accessToken)
     }
+
     override fun getMyUid(): Long? {
         val uid = preference.getLong(UID_KEY, DEFAULT_UID_VALUE)
         if (uid == DEFAULT_UID_VALUE) return null

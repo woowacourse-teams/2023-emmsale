@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
@@ -8,13 +10,15 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.eventdetail.EventDetailRepository
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.notification.NotificationRepository
-import com.emmsale.data.notification.RecruitmentNotification
-import com.emmsale.data.notification.RecruitmentStatus
+import com.emmsale.data.notification.recruitment.RecruitmentNotification
+import com.emmsale.data.notification.recruitment.RecruitmentStatus
+import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationBodyUiState
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationEvent
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationHeaderUiState
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationMemberUiState
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationUiState
@@ -25,6 +29,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class RecruitmentNotificationViewModel(
+    private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val eventDetailRepository: EventDetailRepository,
     private val notificationRepository: NotificationRepository,
@@ -35,18 +40,25 @@ class RecruitmentNotificationViewModel(
     private val _recruitmentUiState = NotNullMutableLiveData(RecruitmentUiState())
     val recruitmentUiState: NotNullLiveData<RecruitmentUiState> = _recruitmentUiState
 
+    private val _event = MutableLiveData<RecruitmentNotificationEvent?>(null)
+    val event: LiveData<RecruitmentNotificationEvent?> = _event
+
     init {
-        fetchNotifications()
+        fetchRecruitmentNotifications()
     }
 
-    private fun fetchNotifications() {
+    private fun fetchRecruitmentNotifications() {
         viewModelScope.launch {
             _notifications.postValue(_notifications.value.copy(isLoading = true))
+            val uid = tokenRepository.getToken()?.uid ?: return@launch
 
-            when (val notificationsResult = notificationRepository.getRecruitmentNotifications()) {
-                is ApiSuccess -> updateNotifications(notificationsResult.data)
+            when (val result = notificationRepository.getRecruitmentNotifications(uid)) {
+                is ApiSuccess -> updateNotifications(result.data)
                 is ApiException, is ApiError -> _notifications.postValue(
-                    _notifications.value.copy(isLoadingNotificationsFailed = true),
+                    _notifications.value.copy(
+                        isLoading = false,
+                        isLoadingNotificationsFailed = true,
+                    ),
                 )
             }
         }
@@ -62,11 +74,13 @@ class RecruitmentNotificationViewModel(
                 eventId = conferenceId,
                 conferenceName = notifications.first().eventName,
                 notifications = notifications,
-                isRead = notifications.any { !it.isRead },
             )
         }
 
-        _notifications.value = _notifications.value.copy(notificationGroups = notificationHeaders)
+        _notifications.value = _notifications.value.copy(
+            isLoading = false,
+            notificationGroups = notificationHeaders,
+        )
     }
 
     private suspend fun convertToNotificationBodies(
@@ -87,8 +101,9 @@ class RecruitmentNotificationViewModel(
         viewModelScope.async {
             when (val member = memberRepository.getMember(userId)) {
                 is ApiSuccess -> RecruitmentNotificationMemberUiState(
-                    member.data.name,
-                    member.data.imageUrl,
+                    name = member.data.name,
+                    profileImageUrl = member.data.imageUrl,
+                    openChatUrl = member.data.openProfileUrl,
                 )
 
                 is ApiException, is ApiError -> null
@@ -104,7 +119,7 @@ class RecruitmentNotificationViewModel(
         }
 
     fun toggleExpand(eventId: Long) {
-        _notifications.value = _notifications.value.toggleNotificationExpanded(eventId)
+        _notifications.value = notifications.value.toggleNotificationExpanded(eventId)
     }
 
     fun acceptRecruit(notificationId: Long) {
@@ -119,7 +134,7 @@ class RecruitmentNotificationViewModel(
             ) {
                 is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToAcceptedState()
-                    _notifications.value = _notifications.value.changeAcceptStateBy(notificationId)
+                    _notifications.value = notifications.value.changeAcceptStateBy(notificationId)
                 }
 
                 is ApiException, is ApiError ->
@@ -141,7 +156,7 @@ class RecruitmentNotificationViewModel(
             ) {
                 is ApiSuccess -> {
                     _recruitmentUiState.value = recruitmentUiState.value.changeToRejectedState()
-                    _notifications.value = _notifications.value.changeRejectStateBy(notificationId)
+                    _notifications.value = notifications.value.changeRejectStateBy(notificationId)
                 }
 
                 is ApiException, is ApiError ->
@@ -152,7 +167,30 @@ class RecruitmentNotificationViewModel(
     }
 
     fun reportRecruitmentNotification(notificationId: Long) {
-        // TODO("신고 기능 추가 예정")
+        viewModelScope.launch {
+            val uid = tokenRepository.getToken()?.uid ?: return@launch
+            val recruitmentNotification =
+                _notifications.value.notificationGroups.flatMap { header -> header.notifications }
+                    .find { it.id == notificationId } ?: return@launch
+
+            val result =
+                notificationRepository.reportRecruitmentNotification(
+                    recruitmentNotificationId = recruitmentNotification.id,
+                    senderId = recruitmentNotification.senderUid,
+                    reporterId = uid,
+                )
+            when (result) {
+                is ApiError, is ApiException ->
+                    _event.value =
+                        RecruitmentNotificationEvent.REPORT_FAIL
+
+                is ApiSuccess -> _event.value = RecruitmentNotificationEvent.REPORT_SUCCESS
+            }
+        }
+    }
+
+    fun removeEvent() {
+        _event.value = null
     }
 
     fun updateNotificationsToReadStatusBy(eventId: Long) {
@@ -168,16 +206,14 @@ class RecruitmentNotificationViewModel(
         notification: RecruitmentNotificationBodyUiState,
     ) {
         if (!notification.isRead) {
-            notificationRepository.updateNotificationReadStatus(notification.id, true)
+            notificationRepository.updateNotificationReadStatus(notification.id)
         }
     }
 
     companion object {
-        private const val MEMBER_INDEX = 0
-        private const val CONFERENCE_NAME_INDEX = 1
-
         val factory = ViewModelFactory {
             RecruitmentNotificationViewModel(
+                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
                 eventDetailRepository = KerdyApplication.repositoryContainer.eventDetailRepository,
                 notificationRepository = KerdyApplication.repositoryContainer.notificationRepository,

@@ -26,6 +26,7 @@ class OnboardingEducationFragment :
 
     private fun initClickListener() {
         binding.btnNext.setOnClickListener(this)
+        binding.btnBack.setOnClickListener(this)
     }
 
     private fun setupEducations() {
@@ -50,6 +51,7 @@ class OnboardingEducationFragment :
     override fun onClick(view: View) {
         when (view.id) {
             R.id.btn_next -> (requireActivity() as OnboardingActivity).navigateToNextPage()
+            R.id.btn_back -> (requireActivity() as OnboardingActivity).navigateToPrevPage()
         }
     }
 }

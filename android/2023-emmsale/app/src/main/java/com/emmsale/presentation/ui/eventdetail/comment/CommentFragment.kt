@@ -1,5 +1,6 @@
 package com.emmsale.presentation.ui.eventdetail.comment
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -11,11 +12,15 @@ import com.emmsale.databinding.FragmentCommentsBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.common.views.InfoDialog
+import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentRecyclerViewDivider
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentsAdapter
+import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsEvent
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.profile.ProfileActivity
 
 class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     override val layoutResId: Int = R.layout.fragment_comments
@@ -53,6 +58,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
 
     override fun onStart() {
         super.onStart()
+
         viewModel.fetchComments(eventId)
     }
 
@@ -83,30 +89,78 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
+        binding.cancelUpdateComment = ::cancelUpdateComment
+        binding.updateComment = ::updateComment
+    }
+
+    private fun cancelUpdateComment() {
+        viewModel.setEditMode(false)
+        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
+        imm.hideSoftInputFromWindow(binding.etCommentsCommentUpdate.windowToken, 0)
+    }
+
+    private fun updateComment() {
+        val commentId = viewModel.editingCommentId.value ?: return
+        val content = binding.etCommentsCommentUpdate.text.toString()
+        viewModel.updateComment(commentId, content, eventId)
+        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
+        imm.hideSoftInputFromWindow(binding.etCommentsCommentUpdate.windowToken, 0)
     }
 
     private fun initCommentsRecyclerView() {
         binding.rvCommentsComments.apply {
             adapter = CommentsAdapter(
+                showProfile = ::showProfile,
                 showChildComments = ::showChildComments,
+                editComment = ::editComment,
                 deleteComment = ::deleteComment,
+                reportComment = ::reportComment,
             )
             itemAnimator = null
             addItemDecoration(CommentRecyclerViewDivider(requireContext()))
         }
     }
 
+    private fun showProfile(authorId: Long) {
+        ProfileActivity.startActivity(context ?: return, authorId)
+    }
+
     private fun showChildComments(commentId: Long) {
         ChildCommentActivity.startActivity(requireContext(), eventId, commentId)
+    }
+
+    private fun editComment(commentId: Long) {
+        viewModel.setEditMode(true, commentId)
+        binding.etCommentsCommentUpdate.requestFocus()
+
+        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
+        @Suppress("DEPRECATION")
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
     private fun deleteComment(commentId: Long) {
         viewModel.deleteComment(commentId, eventId)
     }
 
+    private fun reportComment(commentId: Long) {
+        val context = context ?: return
+        WarningDialog(
+            context = context,
+            title = context.getString(R.string.all_report_dialog_title),
+            message = context.getString(R.string.comments_comment_report_dialog_message),
+            positiveButtonLabel = context.getString(R.string.all_report_dialog_positive_button_label),
+            negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
+            onPositiveButtonClick = {
+                viewModel.reportComment(commentId)
+            },
+        ).show()
+    }
+
     private fun setupUiLogic() {
         setupLoginUiLogic()
         setupCommentsUiLogic()
+        setupEditingCommentUiLogic()
+        setupEventUiLogic()
     }
 
     private fun setupLoginUiLogic() {
@@ -155,7 +209,6 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
 
     private fun handleComments(comments: CommentsUiState) {
         (binding.rvCommentsComments.adapter as CommentsAdapter).submitList(comments.comments)
-        if (isSaveButtonClick) scrollToLastPosition(comments)
     }
 
     private fun handleCommentEditing() {
@@ -164,8 +217,8 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
 
     private fun onCommentSave() {
         isSaveButtonClick = true
-        viewModel.saveComment(binding.etCommentsEditcommentcontent.text.toString(), eventId)
-        binding.etCommentsEditcommentcontent.apply {
+        viewModel.saveComment(binding.etCommentsPostComment.text.toString(), eventId)
+        binding.etCommentsPostComment.apply {
             text.clear()
         }
         hideKeyboard()
@@ -177,6 +230,33 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
 
     private fun hideKeyboard() {
         inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
+    }
+
+    private fun setupEditingCommentUiLogic() {
+        viewModel.editingCommentContent.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
+            binding.etCommentsCommentUpdate.setText(it)
+        }
+    }
+
+    private fun setupEventUiLogic() {
+        viewModel.event.observe(viewLifecycleOwner) {
+            handleEvents(it)
+        }
+    }
+
+    private fun handleEvents(event: CommentsEvent?) {
+        if (event == null) return
+        when (event) {
+            CommentsEvent.REPORT_ERROR -> showToast(R.string.all_report_fail_message)
+            CommentsEvent.REPORT_COMPLETE -> InfoDialog(
+                context = context ?: return,
+                title = getString(R.string.all_report_complete_dialog_title),
+                message = getString(R.string.all_report_complete_dialog_message),
+                buttonLabel = getString(R.string.all_okay),
+            ).show()
+        }
+        viewModel.removeEvent()
     }
 
     companion object {

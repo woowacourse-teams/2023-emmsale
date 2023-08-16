@@ -6,12 +6,22 @@ import androidx.recyclerview.widget.ListAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState
 
 class CommentsAdapter(
+    private val showProfile: (authorId: Long) -> Unit,
     private val showChildComments: (parentCommentId: Long) -> Unit,
+    private val editComment: (commentId: Long) -> Unit,
     private val deleteComment: (commentId: Long) -> Unit,
+    private val reportComment: (commentId: Long) -> Unit,
 ) : ListAdapter<CommentUiState, CommentViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
-        return CommentViewHolder.create(parent, showChildComments, deleteComment)
+        return CommentViewHolder.create(
+            parent = parent,
+            showProfile = showProfile,
+            showChildComments = showChildComments,
+            editComment = editComment,
+            deleteComment = deleteComment,
+            reportComment = reportComment,
+        )
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
@@ -23,7 +33,7 @@ class CommentsAdapter(
             override fun areItemsTheSame(
                 oldItem: CommentUiState,
                 newItem: CommentUiState,
-            ): Boolean = oldItem.commentId == newItem.commentId
+            ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: CommentUiState,

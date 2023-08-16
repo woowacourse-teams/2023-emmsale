@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityConferenceFilterBinding
 import com.emmsale.databinding.LayoutFilterConferenceDurationBinding
-import com.emmsale.databinding.LayoutFilterConferenceEventTagBinding
 import com.emmsale.databinding.LayoutFilterConferenceStatusBinding
+import com.emmsale.databinding.LayoutFilterConferenceTagBinding
 import com.emmsale.presentation.common.extension.checkAll
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
 import com.emmsale.presentation.common.extension.message
@@ -33,9 +33,9 @@ class ConferenceFilterActivity : AppCompatActivity() {
     private val binding: ActivityConferenceFilterBinding by lazy {
         ActivityConferenceFilterBinding.inflate(layoutInflater)
     }
-    private val eventStatusBinding: LayoutFilterConferenceStatusBinding by lazy { binding.layoutFilterStatus }
-    private val eventTagBinding: LayoutFilterConferenceEventTagBinding by lazy { binding.layoutFilterTag }
-    private val eventDurationBinding: LayoutFilterConferenceDurationBinding by lazy { binding.layoutFilterDuration }
+    private val statusFilterBinding: LayoutFilterConferenceStatusBinding by lazy { binding.layoutFilterStatus }
+    private val tagFilterBinding: LayoutFilterConferenceTagBinding by lazy { binding.layoutFilterTag }
+    private val durationFilterBinding: LayoutFilterConferenceDurationBinding by lazy { binding.layoutFilterDuration }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +50,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun initView() {
         initEventFilterToolbarClickListener()
+        initAllFilteringOptionsClearButtonClickListener()
         initEventFilterApplyButtonClickListener()
         initTagAllFilterButtonClickListener()
         initDurationButtonClickListener()
@@ -57,12 +58,10 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun initEventFilterToolbarClickListener() {
         binding.tbEventFilter.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
-        binding.tbEventFilter.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.filter_clear -> askFilterClear()
-            }
-            true
-        }
+    }
+
+    private fun initAllFilteringOptionsClearButtonClickListener() {
+        binding.btnAllFilteringOptionsClear.setOnClickListener { askFilterClear() }
     }
 
     private fun askFilterClear() {
@@ -97,21 +96,21 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun initTagAllFilterButtonClickListener() {
-        eventTagBinding.tagAllFilter.setOnClickListener {
-            if (eventTagBinding.tagAllFilter.isChecked) {
-                eventTagBinding.cgConferenceTagChips.checkAll()
+        tagFilterBinding.tagAllFilter.setOnClickListener {
+            if (tagFilterBinding.tagAllFilter.isChecked) {
+                tagFilterBinding.cgConferenceTagChips.checkAll()
             } else {
-                eventTagBinding.cgConferenceTagChips.uncheckAll()
+                tagFilterBinding.cgConferenceTagChips.uncheckAll()
             }
         }
     }
 
     private fun initDurationButtonClickListener() {
-        eventDurationBinding.btnFilterStartDuration.setOnClickListener {
+        durationFilterBinding.btnFilterStartDuration.setOnClickListener {
             showDatePickerDialog(viewModel::updateStartDate)
         }
 
-        eventDurationBinding.btnFilterEndDuration.setOnClickListener {
+        durationFilterBinding.btnFilterEndDuration.setOnClickListener {
             showDatePickerDialog(viewModel::updateEndDate)
         }
     }
@@ -134,8 +133,8 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun updateFilterViews(conferenceFilters: ConferenceFilterUiState) {
-        updateStatusFilters(conferenceFilters.conferenceStatusFilteringOptions)
-        updateTagFilters(conferenceFilters.conferenceTagFilteringOptions)
+        updateStatusFilters(conferenceFilters.statusFilteringOptions)
+        updateTagFilters(conferenceFilters.tagFilteringOptions)
         updateConferenceDurations(
             conferenceFilters.selectedStartDate,
             conferenceFilters.selectedEndDate,
@@ -145,7 +144,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
     private fun updateStatusFilters(eventStatuses: List<ConferenceFilteringOptionUiState>) {
         removeFilterStatuses()
         eventStatuses.forEach { filter ->
-            addTagFilter(eventStatusBinding.cgConferenceStatusChips, filter) {
+            addTagFilter(statusFilterBinding.cgConferenceStatusChips, filter) {
                 viewModel.toggleFilterSelection(filter)
             }
         }
@@ -154,22 +153,22 @@ class ConferenceFilterActivity : AppCompatActivity() {
     private fun updateTagFilters(eventTags: List<ConferenceFilteringOptionUiState>) {
         removeTagFiltersExcludingAllTag()
         eventTags.forEach { filter ->
-            addTagFilter(eventTagBinding.cgConferenceTagChips, filter) {
+            addTagFilter(tagFilterBinding.cgConferenceTagChips, filter) {
                 viewModel.toggleFilterSelection(filter)
             }
         }
     }
 
     private fun removeFilterStatuses() {
-        eventStatusBinding.cgConferenceStatusChips.removeAllViews()
+        statusFilterBinding.cgConferenceStatusChips.removeAllViews()
     }
 
     private fun removeTagFiltersExcludingAllTag() {
         val startTagWithoutAllTagPosition = 1
 
-        eventTagBinding.cgConferenceTagChips.removeViews(
+        tagFilterBinding.cgConferenceTagChips.removeViews(
             startTagWithoutAllTagPosition,
-            eventTagBinding.cgConferenceTagChips.childCount - 1,
+            tagFilterBinding.cgConferenceTagChips.childCount - 1,
         )
     }
 
@@ -191,11 +190,11 @@ class ConferenceFilterActivity : AppCompatActivity() {
         startDate: ConferenceFilteringDateOptionUiState?,
         endDate: ConferenceFilteringDateOptionUiState?,
     ) {
-        eventDurationBinding.btnFilterStartDuration.text = startDate?.transformToDateString(this)
-        eventDurationBinding.btnFilterEndDuration.text = endDate?.transformToDateString(this)
+        durationFilterBinding.btnFilterStartDuration.text = startDate?.transformToDateString(this)
+        durationFilterBinding.btnFilterEndDuration.text = endDate?.transformToDateString(this)
 
-        eventDurationBinding.btnFilterStartDuration.isActive = (startDate != null)
-        eventDurationBinding.btnFilterEndDuration.isActive = (endDate != null)
+        durationFilterBinding.btnFilterStartDuration.isActive = (startDate != null)
+        durationFilterBinding.btnFilterEndDuration.isActive = (endDate != null)
     }
 
     private fun setupIsEventTagAllSelected() {
@@ -205,7 +204,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
     }
 
     private fun updateTagFilterViews(isTagAllSelected: Boolean) {
-        eventTagBinding.tagAllFilter.isChecked = isTagAllSelected
+        tagFilterBinding.tagAllFilter.isChecked = isTagAllSelected
     }
 
     private fun fetchFilters() {
@@ -228,7 +227,7 @@ class ConferenceFilterActivity : AppCompatActivity() {
 
     private fun setupIsStartDateSelected() {
         viewModel.isStartDateSelected.observe(this) { isSelected ->
-            eventDurationBinding.btnFilterEndDuration.isEnabled = isSelected
+            durationFilterBinding.btnFilterEndDuration.isEnabled = isSelected
         }
     }
 

@@ -14,7 +14,8 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.CompanionRequestUiState
+import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
+import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.CompanionRequestTaskUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState
 import kotlinx.coroutines.launch
 
@@ -28,14 +29,20 @@ class RecruitmentPostDetailViewModel(
         NotNullMutableLiveData(RecruitmentPostUiState())
     val recruitmentPost: NotNullLiveData<RecruitmentPostUiState> = _recruitmentPost
 
-    private val _companionRequest: NotNullMutableLiveData<CompanionRequestUiState> =
-        NotNullMutableLiveData(CompanionRequestUiState())
-    val companionRequest: NotNullLiveData<CompanionRequestUiState> = _companionRequest
+    private val _companionRequest: NotNullMutableLiveData<CompanionRequestTaskUiState> =
+        NotNullMutableLiveData(CompanionRequestTaskUiState())
+    val companionRequest: NotNullLiveData<CompanionRequestTaskUiState> = _companionRequest
 
-    private val _isPostDeleteSuccess: MutableLiveData<Boolean> = MutableLiveData()
-    val isPostDeleteSuccess: LiveData<Boolean> = _isPostDeleteSuccess
+    private val _isDeletePostSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val isDeletePostSuccess: LiveData<Boolean> = _isDeletePostSuccess
+
+    private val _isAlreadyRequest: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isAlreadyRequest: LiveData<Boolean> = _isAlreadyRequest
 
     private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
+
+    private val _event = MutableLiveData<RecruitmentPostDetailEvent?>(null)
+    val event: LiveData<RecruitmentPostDetailEvent?> = _event
 
     init {
         fetchRecruitmentPost()
@@ -79,10 +86,30 @@ class RecruitmentPostDetailViewModel(
     fun deleteRecruitmentPost() {
         viewModelScope.launch {
             when (recruitmentRepository.deleteRecruitment(eventId, recruitmentId)) {
-                is ApiSuccess -> _isPostDeleteSuccess.postValue(true)
-                is ApiError, is ApiException -> _isPostDeleteSuccess.postValue(false)
+                is ApiSuccess -> _isDeletePostSuccess.postValue(true)
+                is ApiError, is ApiException -> _isDeletePostSuccess.postValue(false)
             }
         }
+    }
+
+    fun reportRecruitment() {
+        viewModelScope.launch {
+            val result = recruitmentRepository.reportRecruitment(
+                recruitmentId,
+                recruitmentPost.value.memberId,
+                myUid,
+            )
+            when (result) {
+                is ApiError, is ApiException ->
+                    _event.value = RecruitmentPostDetailEvent.REPORT_FAIL
+
+                is ApiSuccess -> _event.value = RecruitmentPostDetailEvent.REPORT_SUCCESS
+            }
+        }
+    }
+
+    fun removeEvent() {
+        _event.value = null
     }
 
     private fun checkIsAlreadyRequestCompanion() {
@@ -129,7 +156,7 @@ class RecruitmentPostDetailViewModel(
     }
 
     private fun setRequestCompanionIsAlreadyState(state: Boolean) {
-        _companionRequest.value = _companionRequest.value.setIsAlreadyRequestState(state)
+        _isAlreadyRequest.value = state
     }
 
     companion object {

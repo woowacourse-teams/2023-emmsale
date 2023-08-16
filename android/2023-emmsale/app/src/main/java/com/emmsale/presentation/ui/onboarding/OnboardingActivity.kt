@@ -67,7 +67,7 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToPrevPage() {
+    fun navigateToPrevPage() {
         when {
             binding.vpOnboarding.currentItem == 0 -> finish()
             binding.vpOnboarding.currentItem > 0 -> binding.vpOnboarding.currentItem -= 1

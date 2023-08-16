@@ -21,7 +21,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/menu_conference_filter"
             app:navigationIcon="@drawable/ic_back"
             app:title="@string/conferencefilter_title"
             app:titleCentered="true"
@@ -42,13 +41,42 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:id="@+id/btn_all_filtering_options_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="17dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:contentDescription="@string/conferencefilter_all_filtering_option_clear"
+                        android:src="@drawable/ic_event_filter_clear"
+                        app:tint="@color/gray" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/conferencefilter_all_filtering_option_clear"
+                        android:textColor="@color/gray"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
                 <include
                     android:id="@+id/layout_filter_status"
                     layout="@layout/layout_filter_conference_status" />
 
                 <include
                     android:id="@+id/layout_filter_tag"
-                    layout="@layout/layout_filter_conference_event_tag" />
+                    layout="@layout/layout_filter_conference_tag" />
 
                 <include
                     android:id="@+id/layout_filter_duration"

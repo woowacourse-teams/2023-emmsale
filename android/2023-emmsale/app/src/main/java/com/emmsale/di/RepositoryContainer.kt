@@ -4,10 +4,14 @@ import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.activity.ActivityRepositoryImpl
 import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.comment.CommentRepositoryImpl
-import com.emmsale.data.conference.EventRepository
-import com.emmsale.data.conference.EventRepositoryImpl
+import com.emmsale.data.competitionStatus.CompetitionStatusRepository
+import com.emmsale.data.competitionStatus.CompetitionStatusRepositoryImpl
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepositoryImpl
+import com.emmsale.data.config.ConfigRepository
+import com.emmsale.data.config.ConfigRepositoryImpl
+import com.emmsale.data.event.EventRepository
+import com.emmsale.data.event.EventRepositoryImpl
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.data.eventTag.EventTagRepositoryImpl
 import com.emmsale.data.eventdetail.EventDetailRepository
@@ -30,6 +34,10 @@ import com.emmsale.data.token.TokenRepositoryImpl
 class RepositoryContainer(
     serviceContainer: ServiceContainer,
     preferenceContainer: SharedPreferenceContainer,
+    localDataSourceContainer: LocalDataSourceContainer = LocalDataSourceContainer(),
+    remoteDataSourceContainer: RemoteDataSourceContainer = RemoteDataSourceContainer(
+        serviceContainer,
+    ),
 ) {
     val loginRepository: LoginRepository by lazy {
         LoginRepositoryImpl(loginService = serviceContainer.loginService)
@@ -55,8 +63,12 @@ class RepositoryContainer(
         )
     }
     val conferenceStatusRepository: ConferenceStatusRepository by lazy { ConferenceStatusRepositoryImpl() }
+    val competitionStatusRepository: CompetitionStatusRepository by lazy { CompetitionStatusRepositoryImpl() }
     val eventTagRepository: EventTagRepository by lazy {
-        EventTagRepositoryImpl(eventTagService = serviceContainer.eventTagService)
+        EventTagRepositoryImpl(
+            eventTagLocalDataSource = localDataSourceContainer.eventTagLocalDataSource,
+            eventTagRemoteDataSource = remoteDataSourceContainer.eventTagRemoteDataSource,
+        )
     }
     val eventDetailRepository: EventDetailRepository by lazy {
         EventDetailRepositoryImpl(
@@ -74,5 +86,11 @@ class RepositoryContainer(
     }
     val scrappedEventRepository: ScrappedEventRepository by lazy {
         ScrappedEventRepositoryImpl(scrappedEventService = serviceContainer.scrappedEventService)
+    }
+    val blockedMemberRepository: BlockedMemberRepository by lazy {
+        BlockedMemberRepositoryImpl(blockedMemberService = serviceContainer.blockedMemberService)
+    }
+    val configRepository: ConfigRepository by lazy {
+        ConfigRepositoryImpl(preference = preferenceContainer.preference)
     }
 }

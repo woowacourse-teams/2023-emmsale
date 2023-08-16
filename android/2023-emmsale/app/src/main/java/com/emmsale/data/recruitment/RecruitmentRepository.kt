@@ -42,4 +42,10 @@ interface RecruitmentRepository {
     ): ApiResult<Boolean>
 
     suspend fun checkIsAlreadyPostRecruitment(eventId: Long): ApiResult<Boolean>
+
+    suspend fun reportRecruitment(
+        recruitmentId: Long,
+        authorId: Long,
+        reporterId: Long,
+    ): ApiResult<Unit>
 }

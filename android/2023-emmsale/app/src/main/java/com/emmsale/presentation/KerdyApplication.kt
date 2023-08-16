@@ -14,10 +14,18 @@ class KerdyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        initDiContainer()
+        initFirebaseAnalytics()
+    }
+
+    private fun initDiContainer() {
         repositoryContainer = RepositoryContainer(
             serviceContainer = ServiceContainer(ServiceFactory()),
             preferenceContainer = SharedPreferenceContainer(this),
         )
+    }
+
+    private fun initFirebaseAnalytics() {
         applicationScope.launch {
             repositoryContainer.tokenRepository.getToken()?.let(::initFirebaseAnalytics)
         }

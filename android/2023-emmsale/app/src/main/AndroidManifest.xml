@@ -17,10 +17,24 @@
         android:theme="@style/Theme.Emmsale"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
-        <activity android:name=".presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity"
-            android:exported="true"/>
-        <activity android:name=".presentation.ui.eventdetail.recruitment.detail.RecruitmentPostDetailActivity"
-            android:exported="true"/>
+        <activity
+            android:name=".presentation.ui.setting.myComments.MyCommentsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.ui.setting.block.MemberBlockActivity"
+            android:exported="true" />
+        <activity
+            android:name=".presentation.ui.setting.notificationConfig.NotificationConfigActivity"
+            android:exported="true" />
+        <activity
+            android:name=".presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".presentation.ui.eventdetail.recruitment.detail.RecruitmentPostDetailActivity"
+            android:exported="true" />
+        <activity
+            android:name=".presentation.ui.main.myProfile.editMyProfile.EditMyProfileActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.ui.profile.ProfileActivity"
             android:exported="false" />
@@ -35,6 +49,9 @@
             android:exported="false" />
         <activity
             android:name=".presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".presentation.ui.main.event.competitionFilter.CompetitionFilterActivity"
             android:exported="true" />
         <activity
             android:name=".presentation.ui.main.MainActivity"

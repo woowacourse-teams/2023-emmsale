@@ -10,8 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.common.views.BottomDialogMenuItem
-import com.emmsale.presentation.common.views.BottomMenuDialog
+import com.emmsale.presentation.common.views.InfoDialog
+import com.emmsale.presentation.common.views.WarningDialog
+import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
+import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
+import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
 import com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 
@@ -37,26 +40,48 @@ class RecruitmentPostDetailActivity :
         BottomMenuDialog(this).apply {
             addMenuItemBelow(
                 title = getString(R.string.recruitmentpostdetail_dialog_editing_text),
-                menuItemType = BottomDialogMenuItem.NORMAL,
                 onClick = { navigateToEditPage() },
             )
 
             addMenuItemBelow(
                 title = getString(R.string.recruitmentpostdetail_dialog_deletion_text),
-                menuItemType = BottomDialogMenuItem.NORMAL,
-                onClick = { viewModel.deleteRecruitmentPost() },
+                onClick = { showDeleteDialog() },
             )
         }
     }
+
+    private fun showDeleteDialog() {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.recruitmentpostdetail_delete_dialog_title),
+            message = getString(R.string.recruitmentpostdetail_delete_dialog_message),
+            positiveButtonLabel = getString(R.string.all_delete_button_label),
+            negativeButtonLabel = getString(R.string.all_delete_button_label),
+            onPositiveButtonClick = { viewModel.deleteRecruitmentPost() },
+        ).show()
+    }
+
     private val postReportDialog: BottomMenuDialog by lazy {
         BottomMenuDialog(this).apply {
             addMenuItemBelow(
                 title = getString(R.string.recruitmentpostdetail_dialog_report_text),
-                menuItemType = BottomDialogMenuItem.DANGER,
-                onClick = { navigateToEditPage() },
+                menuItemType = MenuItemType.IMPORTANT,
+                onClick = { showReportDialog() },
             )
         }
     }
+
+    private fun showReportDialog() {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.all_report_dialog_title),
+            message = getString(R.string.recruitmentpostdetail_report_dialog_message),
+            positiveButtonLabel = getString(R.string.all_report_dialog_positive_button_label),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { viewModel.reportRecruitment() },
+        ).show()
+    }
+
     private val postingResultActivityLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
@@ -76,6 +101,7 @@ class RecruitmentPostDetailActivity :
         initClickListener()
         setUpCompanionRequest()
         setUpIsPostDeleteSuccess()
+        setupEventUiLogic()
     }
 
     private fun initBinding() {
@@ -95,20 +121,26 @@ class RecruitmentPostDetailActivity :
     private fun setUpCompanionRequest() {
         viewModel.companionRequest.observe(this) { companionRequest ->
             when {
-                companionRequest.isRequestSuccess -> showToast(getString(R.string.recruitmentpostdetail_success_request_message))
-                companionRequest.isRequestError -> showToast(getString(R.string.recruitmentpostdetail_fail_request_message))
+                companionRequest.isSuccess -> showToast(getString(R.string.recruitmentpostdetail_success_request_message))
+                companionRequest.isError -> showToast(getString(R.string.recruitmentpostdetail_fail_request_message))
             }
         }
     }
 
     private fun setUpIsPostDeleteSuccess() {
-        viewModel.isPostDeleteSuccess.observe(this) { isPostDeleteSuccess ->
+        viewModel.isDeletePostSuccess.observe(this) { isPostDeleteSuccess ->
             if (isPostDeleteSuccess) {
                 showToast(getString(R.string.recruitmentpostdetail_deletion_success_message))
                 onBackPressedDispatcher.onBackPressed()
             } else {
                 showToast(getString(R.string.recruitmentpostdetail_deletion_fail_message))
             }
+        }
+    }
+
+    private fun setupEventUiLogic() {
+        viewModel.event.observe(this) {
+            handleEvent(it)
         }
     }
 
@@ -144,6 +176,20 @@ class RecruitmentPostDetailActivity :
         binding.ivRecruitmentdetailProfileImage.setOnClickListener {
             ProfileActivity.startActivity(this, viewModel.recruitmentPost.value.memberId)
         }
+    }
+
+    private fun handleEvent(event: RecruitmentPostDetailEvent?) {
+        if (event == null) return
+        when (event) {
+            RecruitmentPostDetailEvent.REPORT_FAIL -> showToast(getString(R.string.all_report_fail_message))
+            RecruitmentPostDetailEvent.REPORT_SUCCESS -> InfoDialog(
+                context = this,
+                title = getString(R.string.all_report_complete_dialog_title),
+                message = getString(R.string.all_report_complete_dialog_message),
+                buttonLabel = getString(R.string.all_okay),
+            ).show()
+        }
+        viewModel.removeEvent()
     }
 
     private fun finishWithResult() {

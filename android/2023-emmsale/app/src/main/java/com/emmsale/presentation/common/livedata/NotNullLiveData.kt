@@ -12,9 +12,7 @@ open class NotNullLiveData<T : Any>(value: T) : LiveData<T>(value) {
     inline fun observe(owner: LifecycleOwner, crossinline onChanged: (t: T) -> Unit) {
         this.observe(
             owner,
-            Observer { value ->
-                value?.let(onChanged)
-            },
+            Observer { value -> value?.let(onChanged) },
         )
     }
 }

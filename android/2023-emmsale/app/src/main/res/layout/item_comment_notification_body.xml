@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <import type="android.view.View" />
+
+        <import type="com.emmsale.presentation.common.extension.LocalDateTimeExt" />
+
+        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState" />
+
+        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.CommentNotificationUiState" />
+
+        <import type="kotlin.jvm.functions.Function1" />
+
+        <variable
+            name="commentNotification"
+            type="CommentNotificationUiState" />
+
+        <variable
+            name="onDeleteClick"
+            type="Function1&lt;Long, Unit>" />
+
+        <variable
+            name="onNotificationClick"
+            type="Function1&lt;PrimaryNotificationUiState, Unit>" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> onNotificationClick.invoke(commentNotification)}"
+        android:paddingHorizontal="17dp"
+        android:paddingVertical="21dp">
+
+        <ImageView
+            android:id="@+id/iv_member_profile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/primarynotification_profile_image_desc"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{commentNotification.commentProfileImageUrl}"
+            app:isCircle="@{true}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{commentNotification.commentContent}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/btn_delete"
+            app:layout_constraintStart_toEndOf="@+id/iv_member_profile"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="이번 행사 너무 재밌었어요! 저는 그래도 더 재밌었던 것 같아요. 다음에 또 만나요!" />
+
+        <TextView
+            android:id="@+id/tv_comment_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{LocalDateTimeExt.compareToString(commentNotification.createdAt, context)}"
+            android:textColor="@color/dark_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_comment"
+            app:layout_constraintTop_toBottomOf="@+id/tv_comment"
+            tools:text="07.28" />
+
+        <ImageView
+            android:id="@+id/btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/primarynotification_past_notification_delete"
+            android:onClick="@{() -> onDeleteClick.invoke(commentNotification.id)}"
+            android:src="@drawable/ic_primarynotification_delete"
+            android:visibility="@{commentNotification.isRead ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_comment"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_comment" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

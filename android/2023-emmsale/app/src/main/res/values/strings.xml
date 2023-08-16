@@ -15,8 +15,16 @@
     <string name="all_update_button_label">수정</string>
     <string name="all_delete_button_label">삭제</string>
     <string name="all_report_button_label">신고하기</string>
+    <string name="all_report_dialog_title">신고하기</string>
+    <string name="all_report_dialog_positive_button_label">신고</string>
+    <string name="all_report_complete_dialog_title">신고 완료</string>
+    <string name="all_report_complete_dialog_message">커뮤니티 가이드에 따라\n검토 후 처리 됩니다. 감사합니다.</string>
+    <string name="all_report_fail_message">신고하는 데 실패했어요 😢</string>
+    <string name="all_report_duplicate_message">이미 신고 하셨습니다.</string>
+    <string name="all_block">차단</string>
 
     <string name="onboarding_member_update_failed_message">회원정보 업데이트를 실패했어요!</string>
+    <string name="onboarding_back_press_desc">온보딩 화면 뒤로가기</string>
 
     <string name="onboardingname_page">1/4</string>
     <string name="onboardingname_title">이름 설정</string>
@@ -28,6 +36,7 @@
     <string name="onboardingfield_title">관심 분야</string>
     <string name="onboardingfield_message">관심 있는 카테고리를 선택해 주세요.</string>
     <string name="onboardingfield_sub_message">복수 선택이 최대 4개까지 가능합니다.</string>
+    <string name="onboardingfield_selection_limit_exceed">선택할 수 있는 개수를 초과했어요!</string>
 
     <string name="eventdetail_date_format">%s ~ %s</string>
     <string name="onboardingeducation_page">3/4</string>
@@ -70,19 +79,24 @@
     <string name="profile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
     <string name="profile_toolbar_title">프로필 조회</string>
     <string name="profile_more_button_title">더보기</string>
+    <string name="profile_block_complete_dialog_title">차단 완료</string>
+    <string name="profile_block_complete_dialog_message">해당 회원의 댓글, 모집 글, 같이가요 요청이 차단됩니다.</string>
+    <string name="profile_block_fail_message">차단에 실패했어요</string>
+    <string name="profile_block_warning_dialog_message">해당 회원을 차단 하시겠습니까?</string>
 
     <string name="profilemenudialog_block_button_label">차단하기</string>
     <string name="profilemenudialog_report_button_label">신고하기</string>
 
     <string name="event_poster_description">event poster</string>
     <string name="event_filter">필터 설정</string>
-    <string name="event_count_format">%,d개</string>
+    <string name="event_count_format">%,d</string>
     <string name="event_count_prefix">총</string>
     <string name="event_count_suffix">개</string>
 
     <string name="comment_menu_button">댓글의 메뉴 버튼</string>
     <string name="comment_deleted_comment_author_name">삭제</string>
     <string name="comment_deleted_comment_content">삭제된 댓글입니다.</string>
+    <string name="comment_author_image">댓글 작성자의 사진</string>
 
     <string name="comments_is_updated">수정됨</string>
     <string name="comments_child_comments_count_format">답글 %d</string>
@@ -93,7 +107,8 @@
     <string name="comments_complete_post_comment">댓글을 게시했습니다.</string>
     <string name="comments_comments_fetching_error_message">댓글들을 불러오는 데 실패했어요 😥</string>
     <string name="comments_comments_posting_error_message">댓글을 게시하는 데 실패했어요 😥</string>
-    <string name="comments_comments_deletion_error_message">댓글을 삭제하는 데 실패했어요 😥</string>
+    <string name="comments_comments_deletion_error_message">댓글을 삭제하는 데 실패했어요 😥</string>.
+    <string name="comments_comment_report_dialog_message">해당 댓글을 신고 하시겠습니까?</string>
 
     <string name="commentsmenudialog_edit_button_label">수정</string>
     <string name="commentsmenudialog_delete_button_label">삭제</string>
@@ -106,6 +121,8 @@
 
     <string name="childcomments_edit_child_comment_hint">답글을 입력하세요.</string>
     <string name="childcomments_toolbar_title">답글</string>
+    <string name="childcomments_parent_comment_image_description">부모 댓글 작성자의 사진</string>
+    <string name="childcomments_child_comment_author_image_description">자식 댓글 작성자의 사진</string>
 
     <string name="event_view_notification_description">알림 목록 화면 조회</string>
     <string name="event_search_conference_description">컨퍼런스 검색 화면</string>
@@ -129,6 +146,26 @@
     <string name="conferencefilter_clear_message">선택된 필터를 모두 초기화 할까요?</string>
     <string name="conferencefilter_backpress_dialog_message">뒤로 가기를 하면 변경사항이 적용되지 않아요!</string>
     <string name="conferencefilter_backpress_dialog_title">필터 적용</string>
+    <string name="conferencefilter_all_filtering_option_clear">전체 초기화</string>
+
+    <string name="competitionfilter_title">필터</string>
+    <string name="competitionfilter_competition_status_title">진행 상태</string>
+    <string name="competitionfilter_all_tag_name">전체</string>
+    <string name="competitionfilter_status_in_progress_tag_name">진행 중</string>
+    <string name="competitionfilter_status_scheduled_tag_name">진행 예정</string>
+    <string name="competitionfilter_status_ended_tag_name">마감</string>
+    <string name="competitionfilter_competition_event_tag_title">태그</string>
+    <string name="competitionfilter_competition_duration_title">기간</string>
+    <string name="competitionfilter_apply">적용하기</string>
+    <string name="competitionfilter_competition_duration_divider_mark">~</string>
+    <string name="competitionfilter_duration_date_format">%02d.%02d.%02d</string>
+    <string name="competitionfilter_duration_date_last_format">&#160;- %02d.%02d.%02d</string>
+    <string name="competitionfilter_clear">초기화</string>
+    <string name="competitionfilter_clear_title">필터 초기화</string>
+    <string name="competitionfilter_clear_message">선택된 필터를 모두 초기화 할까요?</string>
+    <string name="competitionfilter_backpress_dialog_message">뒤로 가기를 하면 변경사항이 적용되지 않아요!</string>
+    <string name="competitionfilter_backpress_dialog_title">필터 적용</string>
+    <string name="competitionfilter_all_filtering_option_clear">전체 초기화</string>
 
     <string name="eventinformation_navigate_website">웹사이트로 이동</string>
 
@@ -136,6 +173,7 @@
     <string name="notificationbox_delete_noti">알림 삭제</string>
     <string name="notificationbox_primary">알림</string>
     <string name="notificationbox_recruitment">요청</string>
+
     <string name="notificationbox_recruitment_status_changing_failed">서버와의 통신 오류로 같이가기에 실패했어요!</string>
     <string name="notificationbox_recruitment_rejected_message">같이 가기를 거절했어요!</string>
 
@@ -149,8 +187,12 @@
     <string name="recruitmentnotification_reject">거절</string>
     <string name="recruitmentnotification_accept">수락</string>
     <string name="recruitmentnotification_open_chat">오픈 채팅으로 이동</string>
+    <string name="recruitmentnotification_reject_button_label">요청을 거절했습니다.</string>
     <string name="recruitmentnotification_more_button">더보기 버튼</string>
     <string name="recruitmentnotification_header_expand_view">화면을 팽창 시킵니다.</string>
+    <string name="recruitmentnotification_unregistered_sender_open_chat_url">상대방의 오픈 채팅이 등록되어 있지 않아요!</string>
+    <string name="recruitmentnotification_report_dialog_message">해당 같이가요 요청을 신고 하시겠습니까?</string>
+
 
     <string name="conference_default_people_count">0</string>
 
@@ -159,9 +201,6 @@
     <string name="eventdetail_tab_comment">댓글</string>
     <string name="eventdetail_tab_recruitment">같이가요</string>
     <string name="eventdetail_tablayout_content_description">상세정보 보기 탭</string>
-    <string name="eventdetail_place">장소</string>
-    <string name="eventdetail_date">일시</string>
-    <string name="eventdetail_apply_date">접수기간</string>
 
     <string name="eventrecruitment_fetch_recruitments_error_message">글을 불러올 수 없습니다. 관리자에게 문의하세요.</string>
     <string name="eventrecruitment_has_not_permission_writing">모집글은 한번만 작성이 가능합니다!!</string>
@@ -192,6 +231,7 @@
     <string name="recruitmentpostdetail_dialog_editing_text">수정</string>
     <string name="recruitmentpostdetail_dialog_deletion_text">삭제</string>
     <string name="recruitmentpostdetail_dialog_report_text">신고하기</string>
+    <string name="recruitmentpostdetail_report_dialog_message">해당 모집 글을 신고 하시겠습니까?</string>
 
     <string name="setting_member_image_description">회원의 사진</string>
     <string name="setting_notification_setting_button_label">알림 설정</string>
@@ -214,9 +254,65 @@
     <string name="logoutdialog_message">정말로 로그아웃 하시겠습니까?</string>
     <string name="logoutdialog_positive_button_label">로그아웃</string>
     <string name="logoutdialog_negative_button_label">취소</string>
-    <string name="eventinfromation_scrap">스크랩</string>
-    <string name="event_scrap">스크랩</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="primarynotification_new_notification_header_title">새로운 알림</string>
+    <string name="primarynotification_past_notification_header_title">지난 알림</string>
+    <string name="primarynotification_past_notification_delete_all">전체 삭제</string>
+    <string name="primarynotification_profile_image_desc">유저 프로필</string>
+    <string name="primarynotification_past_notification_delete">지난 알림 삭제</string>
+    <string name="primarynotification_interest_event_message">관심 태그 행사가 업데이트 되었어요.</string>
+    <string name="primarynotification_before_minute_format">%d분 전</string>
+    <string name="primarynotification_before_hour_format">%d시간 전</string>
+    <string name="primarynotification_delete_notification_failed_message">알림 삭제를 할 수 없어요!</string>
+    <string name="primarynotification_delete_notification_confirm_message">지난 알림을 모두 삭제하시겠어요?</string>
+    <string name="primarynotification_delete_notification_confirm_title">알림 삭제</string>
+
+    <string name="myprofile_profile_edit">프로필 수정</string>
+
+    <string name="editmyprofile_edit_profile">프로필 수정</string>
+    <string name="editmyprofile_description_hint">소개말을 입력하세요.</string>
+    <string name="editmyprofile_choose_field_message">내가 관심있는 분야를 선택하세요.</string>
+    <string name="editmyprofile_field_label">관심 카테고리</string>
+    <string name="editmyprofile_field_add_button">관심 카테고리 추가 버튼</string>
+    <string name="editmyprofile_member_image">회원의 사진</string>
+    <string name="editmyprofile_field_delete_button_description">관심 카테고리 제거</string>
+    <string name="editmyprofile_activity_label">활동</string>
+    <string name="editmyprofile_choose_activity_message">활동했던 이력을 추가해보세요.</string>
+    <string name="editmyprofile_clubs_label">동아리 활동</string>
+    <string name="editmyprofile_educations_label">교육 활동</string>
+    <string name="editmyprofile_educations_all_remote_button_description">교육 활동 전체 삭제 버튼</string>
+    <string name="editmyprofile_clubs_all_remove_button_description">동아리 활동 전체 삭제 버튼</string>
+    <string name="editmyprofile_activity_type_add_button_description">활동 종류 추가 버튼</string>
+    <string name="editmyprofile_add">추가하기</string>
+    <string name="editmyprofile_activity_remote_button_description">활동 삭제 버튼</string>
+    <string name="editmyprofile_activity_remove_warning_title">활동 삭제</string>
+    <string name="editmyprofile_activity_remove_warning_message">해당 활동을 삭제하시겠습니까?</string>
+    <string name="editmyprofile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
+    <string name="editmyprofile_update_description_error_message">한 줄 소개를 수정하는 데 실패했어요 😥</string>
+    <string name="editmyprofile_all_activities_fetching_error_message">활동 정보를 불러오는 데 실패했어요 😥</string>
+    <string name="editmyprofile_activity_remove_error_message">활동을 삭제하는 데 실패했어요 😥</string>
+    <string name="editmyprofile_acitivities_add_error_message">활동들을 추가하는 데 실패했어요 😥</string>
+
+    <string name="editmyprofilebottomdialog_field_selection_guide">최대 %d개까지 선택 가능합니다.</string>
+
+    <string name="memberblock_block_description">차단된 사용자는 내 명함과 내가 쓴 글을 볼 수 없습니다.</string>
+    <string name="memberblock_block_button_label">차단 해제</string>
+    <string name="memberblock_menu_close_title">종료</string>
+    <string name="memberblock_loading_blocked_members_failed_message">차단 목록을 불러오는 데에 실패했어요!</string>
+    <string name="memberblock_unblock_member_failed_message">차단 해제를 실패했어요!</string>
+    <string name="memberblock_unblock_member_dialog_title">차단 해제</string>
+    <string name="memberblock_unblock_member_dialog_message">사용자를 차단 해제하시겠습니까?</string>
+
+    <string name="writtencomments_toolbar_title">작성한 댓글</string>
+
+    <string name="notificationconfig_toolbar_title">알림 설정</string>
+    <string name="notificationconfig_config_notification_label">알림 수신</string>
+    <string name="notificationconfig_notification_tag_title">태그 알림</string>
+    <string name="notificationconfig_notification_tag_desc">태그 알림 설정 시 태그 관련 게시물 업로드 알림을 보내드립니다.</string>
+    <string name="notificationconfig_add_notification_tag">알림 태그 추가</string>
+    <string name="recruitmentpostdetail_delete_dialog_title">모집 글 삭제</string>
+    <string name="recruitmentpostdetail_delete_dialog_message">해당 모집 글을 삭제 하시겠습니까?</string>
+    <string name="eventinfromation_scrap">스크랩</string>
+
+    <string name="event_scrap">스크랩</string>
 </resources>

@@ -43,6 +43,7 @@ fun ImageView.setCircleImage(imageUrl: String?, isCircle: Boolean) {
         setImage(imageUrl)
         return
     }
+
     Glide.with(this)
         .load(imageUrl)
         .placeholder(R.drawable.img_all_error)

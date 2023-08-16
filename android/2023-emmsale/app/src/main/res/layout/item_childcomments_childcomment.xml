@@ -20,20 +20,20 @@
             android:id="@+id/tv_childcomment_authorname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="14dp"
             android:text="@{comment.isDeleted ? @string/comment_deleted_comment_author_name : comment.authorName}"
             android:textSize="12sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/iv_childcomment_arrowdecoration"
+            app:layout_constraintStart_toEndOf="@+id/iv_childcomments_child_comment_author_image"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="김커디" />
+            tools:text="김커디"
+            android:layout_marginStart="8dp" />
 
         <TextView
             android:id="@+id/tv_childcomment_lastmodifieddate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
+            android:layout_marginStart="8dp"
             android:text="@{comment.lastModifiedDate}"
             android:textColor="@color/gray"
             android:textSize="11sp"
@@ -76,14 +76,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="13dp"
-            android:padding="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/comment_menu_button"
+            android:padding="4dp"
             android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_childcomment_authorname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_childcomment_authorname"
-            app:srcCompat="@drawable/ic_comment_menubutton"
-            android:contentDescription="@string/comment_menu_button" />
+            app:srcCompat="@drawable/ic_comment_menubutton" />
 
         <ImageView
             android:id="@+id/iv_childcomment_arrowdecoration"
@@ -95,6 +95,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_childcomment_arrow" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            tools:srcCompat="@tools:sample/avatars"
+            android:id="@+id/iv_childcomments_child_comment_author_image"
+            app:layout_constraintStart_toEndOf="@+id/iv_childcomment_arrowdecoration"
+            app:layout_constraintTop_toTopOf="parent"
+            app:imageUrl="@{comment.authorImageUrl}"
+            app:isCircle="@{true}"
+            android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/childcomments_child_comment_author_image_description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
