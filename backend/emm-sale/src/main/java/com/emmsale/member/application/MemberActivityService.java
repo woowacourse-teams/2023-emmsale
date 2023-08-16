@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.toList;
 
 import com.emmsale.activity.domain.ActivityRepository;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
-import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponses;
 import com.emmsale.member.domain.Member;
@@ -93,10 +92,8 @@ public class MemberActivityService {
 
   public List<MemberActivityResponses> deleteActivity(
       final Member member,
-      final MemberActivityDeleteRequest memberActivityDeleteRequest
+      final List<Long> deleteActivityIds
   ) {
-    final List<Long> deleteActivityIds = memberActivityDeleteRequest.getActivityIds();
-
     final List<Long> savedMemberActivityIds =
         memberActivityRepository.findAllByMemberAndActivityIds(member, deleteActivityIds)
             .stream()

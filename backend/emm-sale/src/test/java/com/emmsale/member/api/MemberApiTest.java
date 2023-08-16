@@ -21,7 +21,6 @@ import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
-import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityResponses;
@@ -140,8 +139,7 @@ class MemberApiTest extends MockMvcTestHelper {
   @DisplayName("내 명함에서 활동이력들을 성공적으로 삭제하면, 200 OK를 반환해줄 수 있다.")
   void test_deleteActivity() throws Exception {
     //given
-    final List<Long> activityIds = List.of(1L, 2L);
-    final MemberActivityDeleteRequest request = new MemberActivityDeleteRequest(activityIds);
+    final String activityIds = "1,2";
 
     final List<MemberActivityResponses> memberActivityResponses = List.of(
         new MemberActivityResponses("동아리",
@@ -154,13 +152,11 @@ class MemberApiTest extends MockMvcTestHelper {
         .thenReturn(memberActivityResponses);
 
     //when & then
-    mockMvc.perform(delete("/members/activities")
-            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request)))
+    mockMvc.perform(delete("/members/activities?activity-ids={activityIds}", activityIds)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("delete-activity", MEMBER_ACTIVITY_REQUEST_FIELDS,
+        .andDo(document("delete-activity",
             MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
