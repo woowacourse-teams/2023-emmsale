@@ -5,11 +5,14 @@
 
     <data>
 
+        <variable
+            name="myPost"
+            type="com.emmsale.presentation.ui.setting.myPost.uiState.MyPostUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
         <TextView
@@ -26,6 +29,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_my_post_content" />
 
         <TextView
+            android:text="@{myPost.eventName}"
             android:id="@+id/tv_eventrecruitment_membername"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -43,6 +47,7 @@
             android:layout_marginEnd="17dp" />
 
         <TextView
+            android:text="@{myPost.updatedAt}"
             android:id="@+id/tv_my_post_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,6 +61,7 @@
             android:layout_marginStart="17dp" />
 
         <TextView
+            android:text="@{myPost.content}"
             android:id="@+id/tv_my_post_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

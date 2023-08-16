@@ -8,6 +8,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="isNavigatedFromMyPost"
+            type="Boolean" />
+
+        <variable
             name="vm"
             type="com.emmsale.presentation.ui.eventdetail.recruitment.detail.RecruitmentPostDetailViewModel" />
     </data>
@@ -122,7 +126,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginHorizontal="17dp"
-            android:layout_marginBottom="17dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_all_two_state_button"
             android:clickable="true"
             android:enabled="@{!vm.isAlreadyRequest}"
@@ -135,6 +139,26 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+
+        <TextView
+            android:id="@+id/btn_recruitmentdetail_navigate_to_event_detail"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="17dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_all_two_state_button"
+            android:clickable="true"
+            android:fontFamily="@font/nanum_square_bold"
+            android:gravity="center"
+            android:text="@string/recruitmentpostdetail_navigate_to_event_detail_btn_text"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="@{isNavigatedFromMyPost ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
 
         <ImageView
             android:id="@+id/iv_recruitmentdetail_profile_image"

@@ -12,6 +12,7 @@ import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.BottomDialogMenuItem
 import com.emmsale.presentation.common.views.BottomMenuDialog
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 
@@ -32,6 +33,9 @@ class RecruitmentPostDetailActivity :
     }
     private val recruitmentId: Long by lazy {
         intent.getLongExtra(RECRUITMENT_ID_KEY, DEFAULT__ID)
+    }
+    private val isNavigatedFromMyPost: Boolean by lazy {
+        intent.getBooleanExtra(FROM_MY_POST_KEY, false)
     }
     private val postEditorDialog: BottomMenuDialog by lazy {
         BottomMenuDialog(this).apply {
@@ -57,7 +61,8 @@ class RecruitmentPostDetailActivity :
             )
         }
     }
-    private val postingResultActivityLauncher =
+
+    private val fetchByResultActivityLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
         ) { result ->
@@ -82,6 +87,7 @@ class RecruitmentPostDetailActivity :
         setContentView(binding.root)
         binding.lifecycleOwner = this
         binding.vm = viewModel
+        binding.isNavigatedFromMyPost = isNavigatedFromMyPost
     }
 
     private fun initClickListener() {
@@ -90,6 +96,7 @@ class RecruitmentPostDetailActivity :
         initBackPressButtonClick()
         initBackPressIconClick()
         initProfileClick()
+        initNavigateToEventDetailButtonClick()
     }
 
     private fun setUpCompanionRequest() {
@@ -128,6 +135,12 @@ class RecruitmentPostDetailActivity :
         }
     }
 
+    private fun initNavigateToEventDetailButtonClick() {
+        binding.btnRecruitmentdetailNavigateToEventDetail.setOnClickListener {
+            EventDetailActivity.startActivity(this, eventId)
+        }
+    }
+
     private fun initBackPressButtonClick() {
         onBackPressedDispatcher.addCallback(this) {
             finishWithResult()
@@ -162,22 +175,24 @@ class RecruitmentPostDetailActivity :
             recruitmentId,
             viewModel.recruitmentPost.value.content,
         )
-        postingResultActivityLauncher.launch(intent)
+        fetchByResultActivityLauncher.launch(intent)
     }
-
     companion object {
         private const val EVENT_ID_KEY = "EVENT_ID_KEY"
         private const val RECRUITMENT_ID_KEY = "RECRUITMENT_ID_KEY"
+        private const val FROM_MY_POST_KEY = "FROM_MY_POST_KEY"
         private const val DEFAULT__ID = -1L
 
         fun getIntent(
             context: Context,
             eventId: Long,
             recruitmentId: Long,
+            isNavigatedFromMyPost: Boolean = false,
         ): Intent {
             val intent = Intent(context, RecruitmentPostDetailActivity::class.java)
             intent.putExtra(EVENT_ID_KEY, eventId)
             intent.putExtra(RECRUITMENT_ID_KEY, recruitmentId)
+            intent.putExtra(FROM_MY_POST_KEY, isNavigatedFromMyPost)
             return intent
         }
     }

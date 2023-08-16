@@ -129,7 +129,6 @@ class RecruitmentRepositoryImpl(
             mapToDomain = { it },
         )
     }
-
     companion object {
         private const val HEADER_LOCATION = "Location"
         private const val NOT_LOGIN_ERROR_MESSAGE = "로그인 되지 않아서 같이가요 정보를 가져올 수 없어요"
