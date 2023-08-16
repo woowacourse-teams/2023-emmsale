@@ -10,6 +10,8 @@ import com.emmsale.data.competitionStatus.CompetitionStatusRepository
 import com.emmsale.data.competitionStatus.CompetitionStatusRepositoryImpl
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepositoryImpl
+import com.emmsale.data.config.ConfigRepository
+import com.emmsale.data.config.ConfigRepositoryImpl
 import com.emmsale.data.event.EventRepository
 import com.emmsale.data.event.EventRepositoryImpl
 import com.emmsale.data.eventTag.EventTagRepository
@@ -81,8 +83,9 @@ class RepositoryContainer(
         NotificationRepositoryImpl(notificationService = serviceContainer.notificationService)
     }
     val blockedMemberRepository: BlockedMemberRepository by lazy {
-        BlockedMemberRepositoryImpl(
-            blockedMemberService = serviceContainer.blockedMemberService,
-        )
+        BlockedMemberRepositoryImpl(blockedMemberService = serviceContainer.blockedMemberService)
+    }
+    val configRepository: ConfigRepository by lazy {
+        ConfigRepositoryImpl(preference = preferenceContainer.preference)
     }
 }

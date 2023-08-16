@@ -26,7 +26,6 @@ class NotificationConfigActivity : AppCompatActivity() {
 
     private fun initClickListener() {
         initToolbarMenuClickListener()
-        initNotificationSwitchClickListener()
         initTagAddButtonClickListener()
     }
 
@@ -34,12 +33,6 @@ class NotificationConfigActivity : AppCompatActivity() {
         binding.tbNotificationConfig.setOnMenuItemClickListener {
             if (it.itemId == R.id.close) finish()
             true
-        }
-    }
-
-    private fun initNotificationSwitchClickListener() {
-        binding.switchNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setNotificationReceiveConfig(isChecked)
         }
     }
 
