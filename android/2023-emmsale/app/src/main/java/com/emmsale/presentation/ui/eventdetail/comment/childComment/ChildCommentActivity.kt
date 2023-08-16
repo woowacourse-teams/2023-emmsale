@@ -99,7 +99,7 @@ class ChildCommentActivity : AppCompatActivity() {
         WarningDialog(
             context = this,
             title = getString(R.string.all_report_dialog_title),
-            message = getString(R.string.all_comment_report_dialog_message),
+            message = getString(R.string.comments_comment_report_dialog_message),
             positiveButtonLabel = getString(R.string.all_report_dialog_positive_button_label),
             negativeButtonLabel = getString(R.string.commentdeletedialog_negative_button_label),
             onPositiveButtonClick = { viewModel.reportComment(commentId) },

@@ -107,7 +107,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
         WarningDialog(
             context = context,
             title = context.getString(R.string.all_report_dialog_title),
-            message = context.getString(R.string.all_comment_report_dialog_message),
+            message = context.getString(R.string.comments_comment_report_dialog_message),
             positiveButtonLabel = context.getString(R.string.all_report_dialog_positive_button_label),
             negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
             onPositiveButtonClick = {

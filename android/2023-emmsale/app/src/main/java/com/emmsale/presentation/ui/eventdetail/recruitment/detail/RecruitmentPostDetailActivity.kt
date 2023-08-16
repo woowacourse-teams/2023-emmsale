@@ -53,8 +53,8 @@ class RecruitmentPostDetailActivity :
     private fun showDeleteDialog() {
         WarningDialog(
             context = this,
-            title = "모집 글 삭제",
-            message = "해당 모집 글을 삭제 하시겠습니까?",
+            title = getString(R.string.recruitmentpostdetail_delete_dialog_title),
+            message = getString(R.string.recruitmentpostdetail_delete_dialog_message),
             positiveButtonLabel = getString(R.string.all_delete_button_label),
             negativeButtonLabel = getString(R.string.all_delete_button_label),
             onPositiveButtonClick = { viewModel.deleteRecruitmentPost() },
@@ -74,8 +74,8 @@ class RecruitmentPostDetailActivity :
     private fun showReportDialog() {
         WarningDialog(
             context = this,
-            title = "신고하기",
-            message = "해당 모집 글을 신고 하시겠습니까?",
+            title = getString(R.string.all_report_dialog_title),
+            message = getString(R.string.recruitmentpostdetail_report_dialog_message),
             positiveButtonLabel = getString(R.string.all_report_dialog_positive_button_label),
             negativeButtonLabel = getString(R.string.all_cancel),
             onPositiveButtonClick = { viewModel.reportRecruitment() },
