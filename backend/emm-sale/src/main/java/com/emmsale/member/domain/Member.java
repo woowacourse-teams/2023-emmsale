@@ -34,19 +34,25 @@ public class Member extends BaseEntity {
   private String openProfileUrl;
   @Column(nullable = false)
   private String imageUrl;
+  @Column(nullable = false)
+  private String githubUsername;
 
-  public Member(final Long id, final Long githubId, final String imageUrl, final String name) {
+
+  public Member(final Long id, final Long githubId, final String imageUrl, final String name,
+      final String githubUsername) {
     this.id = id;
     this.githubId = githubId;
     this.imageUrl = imageUrl;
     this.name = name;
     this.description = DEFAULT_DESCRIPTION;
+    this.githubUsername = githubUsername;
   }
 
-  public Member(final Long githubId, final String imageUrl) {
+  public Member(final Long githubId, final String imageUrl, final String githubUsername) {
     this.githubId = githubId;
     this.imageUrl = imageUrl;
     this.description = DEFAULT_DESCRIPTION;
+    this.githubUsername = githubUsername;
   }
 
   public void updateName(final String name) {

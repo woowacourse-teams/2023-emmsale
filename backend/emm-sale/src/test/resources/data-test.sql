@@ -32,12 +32,16 @@ values (5, 'EDUCATION', '우아한테크코스');
 insert into activity(id, type, name)
 values (6, 'JOB', 'Backend');
 
-insert into member(id, name, image_url, open_profile_url, github_id, created_at, updated_at)
-values (1, null, 'https://imageurl.com', 'https://openprofileurl.com', 1, CURRENT_TIMESTAMP(),
+insert into member(id, name, image_url, open_profile_url, github_id, github_username, created_at,
+                   updated_at)
+values (1, null, 'https://imageurl.com', 'https://openprofileurl.com', 1, 'amaran-th',
+        CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP());
 
-insert into member(id, name, image_url, open_profile_url, github_id, created_at, updated_at)
-values (2, 'member2', 'https://imageurl.com', 'https://openprofileurl.com', 2, CURRENT_TIMESTAMP(),
+insert into member(id, name, image_url, open_profile_url, github_id, github_username, created_at,
+                   updated_at)
+values (2, 'member2', 'https://imageurl.com', 'https://openprofileurl.com', 2, 'amaran-th22',
+        CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP());
 
 insert into member_activity(id, activity_id, member_id, created_at, updated_at)

@@ -8,12 +8,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberProfileResponse {
 
+  private static final String GITHUB_URL_PREFIX = "https://github.com/";
+
   private final Long id;
   private final String name;
   private final String description;
   private final String imageUrl;
   private final String openProfileUrl;
-  private final Long githubId;
+  private final String githubUrl;
 
   public static MemberProfileResponse from(Member member) {
     return new MemberProfileResponse(
@@ -22,7 +24,7 @@ public class MemberProfileResponse {
         member.getDescription(),
         member.getImageUrl(),
         member.getOptionalOpenProfileUrl().orElse(""),
-        member.getGithubId()
+        GITHUB_URL_PREFIX + member.getGithubUsername()
     );
   }
 }

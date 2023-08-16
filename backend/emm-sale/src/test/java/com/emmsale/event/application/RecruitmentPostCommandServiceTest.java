@@ -227,7 +227,8 @@ class RecruitmentPostCommandServiceTest extends ServiceIntegrationTestHelper {
       final RecruitmentPostUpdateRequest request = new RecruitmentPostUpdateRequest("변환할 내용");
       final Member otherMember = memberRepository.save(new Member(
           4321L,
-          "이미지URL"
+          "이미지URL",
+          "아마란스"
       ));
 
       //when && then

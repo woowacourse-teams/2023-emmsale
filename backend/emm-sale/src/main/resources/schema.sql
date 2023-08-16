@@ -180,3 +180,8 @@ create table report
     created_at  datetime(6),
     updated_at  datetime(6)
 );
+
+-- 2023-08-16 13:42
+
+alter table member
+    add column github_username varchar(40) not null default '';
