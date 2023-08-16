@@ -2,6 +2,7 @@ package com.emmsale.event.api;
 
 import static java.lang.String.format;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -94,6 +95,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
   @DisplayName("행사의 참여 게시글을 전체 조회할 수 있다.")
   void findRecruitmentPosts() throws Exception {
     //given
+    final String fakeAccessToken = "Bearer accessToken";
     final Long eventId = 1L;
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("함께해요 게시글 식별자"),
@@ -101,19 +103,22 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
         fieldWithPath("[].name").type(JsonFieldType.STRING).description("member 이름"),
         fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
         fieldWithPath("[].content").type(JsonFieldType.STRING).description("함께해요 게시글 내용"),
+        fieldWithPath("[].status").type(JsonFieldType.STRING)
+            .description("요청 상태(NOT_REQUEST, ACCEPTED, REJECTED, IN_PROGRESS)"),
         fieldWithPath("[].updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜")
     );
     final List<RecruitmentPostResponse> responses = List.of(
         new RecruitmentPostResponse(1L, 1L, "스캇", "imageUrl", "저랑 같이 컨퍼런스 갈 사람",
-            LocalDate.of(2023, 7, 15)),
+            "NOT_REQUEST", LocalDate.of(2023, 7, 15)),
         new RecruitmentPostResponse(2L, 2L, "홍실", "imageUrl", "스캇 말고 저랑 갈 사람",
-            LocalDate.of(2023, 7, 22))
+            "IN_PROGRESS", LocalDate.of(2023, 7, 22))
     );
 
-    when(postQueryService.findRecruitmentPosts(eventId)).thenReturn(responses);
+    when(postQueryService.findRecruitmentPosts(eq(eventId), any())).thenReturn(responses);
 
     //when && then
-    mockMvc.perform(get(format("/events/%s/recruitment-posts", eventId)))
+    mockMvc.perform(get(format("/events/%s/recruitment-posts", eventId))
+            .header("Authorization", fakeAccessToken))
         .andExpect(status().isOk())
         .andDo(document("find-recruitment-posts", responseFields));
   }
@@ -122,6 +127,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
   @DisplayName("참여 게시글을 단건조회할 수 있다.")
   void findRecruitmentPost() throws Exception {
     //given
+    final String fakeAccessToken = "Bearer accessToken";
     final Long eventId = 1L;
     final Long postId = 2L;
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -130,16 +136,20 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
         fieldWithPath("name").type(JsonFieldType.STRING).description("member 이름"),
         fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("프로필 이미지 url"),
         fieldWithPath("content").type(JsonFieldType.STRING).description("함께해요 게시글 내용"),
+        fieldWithPath("status").type(JsonFieldType.STRING)
+            .description("요청 상태(NOT_REQUEST, ACCEPTED, REJECTED, IN_PROGRESS)"),
         fieldWithPath("updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜")
     );
     final RecruitmentPostResponse response = new RecruitmentPostResponse(2L, 1L,
-        "스캇", "imageUrl", "저랑 같이 컨퍼런스 갈 사람",
+        "스캇", "imageUrl", "저랑 같이 컨퍼런스 갈 사람", "NOT_REQUEST",
         LocalDate.of(2023, 7, 15));
 
-    when(postQueryService.findRecruitmentPost(eventId, postId)).thenReturn(response);
+    when(postQueryService.findRecruitmentPost(eq(eventId), eq(postId), any())).thenReturn(
+        response);
 
     //when && then
-    mockMvc.perform(get(format("/events/%s/recruitment-posts/%s", eventId, postId)))
+    mockMvc.perform(get(format("/events/%s/recruitment-posts/%s", eventId, postId))
+            .header("Authorization", fakeAccessToken))
         .andExpect(status().isOk())
         .andDo(document("find-recruitment-post", responseFields));
   }
