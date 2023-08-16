@@ -110,13 +110,13 @@ class ScrapApiTest extends MockMvcTestHelper {
   @DisplayName("스크랩을 성공적으로 삭제하면 204 NO_CONTENT를 반환한다.")
   void deleteScrap() throws Exception {
     //given
-    final long scrapId = 1L;
+    final long eventId = 1L;
 
     //when
     doNothing().when(scrapCommandService).deleteScrap(any(), any());
 
     //then
-    mockMvc.perform(delete("/scraps/{scrapId}", scrapId)
+    mockMvc.perform(delete("/scraps?event-id={eventId}", eventId)
             .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
         .andExpect(status().isNoContent())
         .andDo(document("delete-scrap"));
