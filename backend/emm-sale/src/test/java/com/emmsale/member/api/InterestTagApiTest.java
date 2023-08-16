@@ -2,6 +2,9 @@ package com.emmsale.member.api;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -9,20 +12,20 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.member.application.InterestTagService;
-import com.emmsale.member.application.dto.InterestTagAddRequest;
 import com.emmsale.member.application.dto.InterestTagDeleteRequest;
 import com.emmsale.member.application.dto.InterestTagResponse;
+import com.emmsale.member.application.dto.InterestTagsRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
@@ -47,7 +50,7 @@ class InterestTagApiTest extends MockMvcTestHelper {
     //given
     final String accessToken = "Bearer accessToken";
     final List<Long> tagIds = List.of(4L, 5L);
-    final InterestTagAddRequest request = new InterestTagAddRequest(tagIds);
+    final InterestTagsRequest request = new InterestTagsRequest(tagIds);
 
     final List<InterestTagResponse> interestTagResponse = List.of(
         new InterestTagResponse(1L, "백엔드"),
@@ -62,11 +65,38 @@ class InterestTagApiTest extends MockMvcTestHelper {
     //when & then
     mockMvc.perform(post("/interest-tags")
             .header("Authorization", accessToken)
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
         .andDo(document("add-interest-tag", INTEREST_TAG_REQUEST_FIELDS,
+            INTEREST_TAG_RESPONSE_FIELDS));
+  }
+
+  @Test
+  @DisplayName("행사 관심 태그를 성공적으로 업데이트하면, 201 CREATED를 반환한다.")
+  void updateInterestTagsTest() throws Exception {
+    //given
+    final String accessToken = "Bearer accessToken";
+    final List<Long> tagIds = List.of(1L, 2L);
+    final InterestTagsRequest request = new InterestTagsRequest(tagIds);
+
+    final List<InterestTagResponse> interestTagResponse = List.of(
+        new InterestTagResponse(1L, "백엔드"),
+        new InterestTagResponse(2L, "프론트엔드")
+    );
+
+    when(interestTagService.updateInterestTags(any(), any()))
+        .thenReturn(interestTagResponse);
+
+    //when & then
+    mockMvc.perform(put("/interest-tags")
+            .header(AUTHORIZATION, accessToken)
+            .contentType(APPLICATION_JSON_VALUE)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isCreated())
+        .andDo(print())
+        .andDo(document("update-interest-tags", INTEREST_TAG_REQUEST_FIELDS,
             INTEREST_TAG_RESPONSE_FIELDS));
   }
 
@@ -90,7 +120,7 @@ class InterestTagApiTest extends MockMvcTestHelper {
     //when & then
     mockMvc.perform(delete("/interest-tags")
             .header("Authorization", accessToken)
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andDo(print())
@@ -114,7 +144,7 @@ class InterestTagApiTest extends MockMvcTestHelper {
     //then
     mockMvc.perform(get("/interest-tags")
             .queryParam("member_id", "1")
-            .contentType(MediaType.APPLICATION_JSON))
+            .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-interest-tags", INTEREST_TAG_RESPONSE_FIELDS));
