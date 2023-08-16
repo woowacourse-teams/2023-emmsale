@@ -69,18 +69,20 @@ public class RecruitmentPostApi {
 
   @GetMapping("/{id}/recruitment-posts")
   public ResponseEntity<List<RecruitmentPostResponse>> findRecruitmentPosts(
-      @PathVariable final Long id) {
-    final List<RecruitmentPostResponse> responses = postQueryService.findRecruitmentPosts(id);
+      @PathVariable final Long id, final Member member) {
+    final List<RecruitmentPostResponse> responses = postQueryService.findRecruitmentPosts(id,
+        member);
     return ResponseEntity.ok(responses);
   }
 
   @GetMapping("/{event-id}/recruitment-posts/{recruitment-post-id}")
   public ResponseEntity<RecruitmentPostResponse> findRecruitmentPost(
       @PathVariable("event-id") final Long eventId,
-      @PathVariable("recruitment-post-id") final Long postId
+      @PathVariable("recruitment-post-id") final Long postId,
+      final Member member
   ) {
     final RecruitmentPostResponse response
-        = postQueryService.findRecruitmentPost(eventId, postId);
+        = postQueryService.findRecruitmentPost(eventId, postId, member);
     return ResponseEntity.ok(response);
   }
 
