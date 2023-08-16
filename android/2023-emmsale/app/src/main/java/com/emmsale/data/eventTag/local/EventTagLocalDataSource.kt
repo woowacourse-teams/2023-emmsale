@@ -86,7 +86,7 @@ class EventTagLocalDataSource {
         ),
     )
 
-    fun getInterestEventTags(): List<EventTag> = interestEventTags.map { it.copy() }
+    fun getInterestEventTags(): List<EventTag> = interestEventTags.map(EventTag::copy)
 
     fun updateInterestEventTags(newInterestEventTags: List<EventTag>) {
         interestEventTags.clear()
