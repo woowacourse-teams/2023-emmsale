@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.eventdetail.comment
 
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -11,9 +11,9 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentCommentsBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentRecyclerViewDivider
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentsAdapter
