@@ -4,8 +4,8 @@ POST http://localhost:8080/notifications/token
 Content-Type: application/json
 
 {
-  "token" : "토큰이다",
-  "memberId" : 1
+  "token": "토큰이다",
+  "memberId": 1
 }
 
 ### FCM 토큰 저장 API (기존에 있던 것 수정)
@@ -14,6 +14,6 @@ POST http://localhost:8080/notifications/token
 Content-Type: application/json
 
 {
-  "token" : "수정된 토큰이다",
-  "memberId" : 1
+  "token": "수정된 토큰이다",
+  "memberId": 1
 }

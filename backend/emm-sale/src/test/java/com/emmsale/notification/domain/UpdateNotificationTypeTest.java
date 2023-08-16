@@ -12,14 +12,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class UpdateNotificationTypeTest {
 
-  @ParameterizedTest
-  @MethodSource("convertClassTypeToEnum")
-  @DisplayName("from() : 클래스 타입을 통해서 어떤 알림의 종류인지 알 수 있다.")
-  void test_from(final String notificationType, final UpdateNotificationType type) throws Exception {
-    //when & then
-    assertEquals(UpdateNotificationType.from(notificationType), type);
-  }
-
   static Stream<Arguments> convertClassTypeToEnum() {
 
     final String notificationType1 = Event.class.getName();
@@ -32,5 +24,14 @@ class UpdateNotificationTypeTest {
         Arguments.of(notificationType1, type1),
         Arguments.of(notificationType2, type2)
     );
+  }
+
+  @ParameterizedTest
+  @MethodSource("convertClassTypeToEnum")
+  @DisplayName("from() : 클래스 타입을 통해서 어떤 알림의 종류인지 알 수 있다.")
+  void test_from(final String notificationType, final UpdateNotificationType type)
+      throws Exception {
+    //when & then
+    assertEquals(UpdateNotificationType.from(notificationType), type);
   }
 }

@@ -23,14 +23,6 @@ public class UpdateNotificationResponse {
   private final boolean isRead;
   private final CommentTypeNotification commentTypeNotification;
 
-  @RequiredArgsConstructor
-  @Getter
-  public static class CommentTypeNotification {
-    private final String content;
-    private final String eventName;
-    private final String commenterImageUrl;
-  }
-
   public static UpdateNotificationResponse convertCommentNotification(
       final UpdateNotification notification,
       final Comment comment
@@ -60,5 +52,14 @@ public class UpdateNotificationResponse {
 
   private boolean getIsRead() {
     return isRead;
+  }
+
+  @RequiredArgsConstructor
+  @Getter
+  public static class CommentTypeNotification {
+
+    private final String content;
+    private final String eventName;
+    private final String commenterImageUrl;
   }
 }

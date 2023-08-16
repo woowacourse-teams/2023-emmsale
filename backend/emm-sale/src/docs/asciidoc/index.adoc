@@ -544,3 +544,35 @@ include::{snippets}/find-reports/http-response.adoc[]
 
 .HTTP response 설명
 include::{snippets}/find-reports/response-fields.adoc[]
+
+== 스크랩
+
+=== `GET` : 전체 스크랩 조회
+
+.HTTP request
+include::{snippets}/find-all-scraps/http-request.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-all-scraps/response-fields.adoc[]
+
+.HTTP response
+include::{snippets}/find-all-scraps/http-response.adoc[]
+
+=== `POST` : 스크랩 추가
+
+.HTTP request 설명
+include::{snippets}/append-scrap/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/append-scrap/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/append-scrap/http-response.adoc[]
+
+=== `DELETE` : 스크랩 삭제
+
+.HTTP request
+include::{snippets}/delete-scrap/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/delete-scrap/http-response.adoc[]

@@ -4,10 +4,10 @@ POST http://localhost:8080/request-notifications
 Content-Type: application/json
 
 {
-  "senderId" : 1,
-  "receiverId" : 2,
-  "message" : "테스트 알람이다",
-  "eventId" : 1
+  "senderId": 1,
+  "receiverId": 2,
+  "message": "테스트 알람이다",
+  "eventId": 1
 }
 
 ### 알림 상태를 변경하는 API
@@ -16,7 +16,7 @@ PATCH http://localhost:8080/request-notifications/2
 Content-Type: application/json
 
 {
-  "updatedStatus" : "ACCEPTED"
+  "updatedStatus": "ACCEPTED"
 }
 
 ### id로 알림 조회하는 API

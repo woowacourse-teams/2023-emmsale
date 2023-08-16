@@ -12,6 +12,7 @@ truncate table update_notification;
 truncate table block;
 truncate table fcm_token;
 truncate table report;
+truncate table scrap;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');
