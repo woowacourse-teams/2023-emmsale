@@ -76,7 +76,7 @@
 
     <string name="event_poster_description">event poster</string>
     <string name="event_filter">필터 설정</string>
-    <string name="event_count_format">%,d</string>
+    <string name="event_count_format">%,d개</string>
     <string name="event_count_prefix">총</string>
     <string name="event_count_suffix">개</string>
 
@@ -215,5 +215,8 @@
     <string name="logoutdialog_positive_button_label">로그아웃</string>
     <string name="logoutdialog_negative_button_label">취소</string>
     <string name="eventinfromation_scrap">스크랩</string>
+    <string name="event_scrap">스크랩</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

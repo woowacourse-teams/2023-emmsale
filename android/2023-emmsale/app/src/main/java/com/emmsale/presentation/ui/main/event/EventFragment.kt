@@ -34,6 +34,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
 
     private fun initEventTabLayoutMediator() {
         val eventTabNames = listOf(
+            getString(R.string.event_scrap),
             getString(R.string.event_conference),
             getString(R.string.event_competition),
         )
