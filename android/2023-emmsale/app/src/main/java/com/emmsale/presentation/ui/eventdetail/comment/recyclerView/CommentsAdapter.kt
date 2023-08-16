@@ -13,7 +13,13 @@ class CommentsAdapter(
 ) : ListAdapter<CommentUiState, CommentViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
-        return CommentViewHolder.create(parent, showProfile, showChildComments, editComment, deleteComment)
+        return CommentViewHolder.create(
+            parent,
+            showProfile,
+            showChildComments,
+            editComment,
+            deleteComment,
+        )
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
