@@ -60,6 +60,7 @@ data class ChildCommentsUiState(
             parentComment = CommentUiState(
                 authorId = -1,
                 authorName = "",
+                authorImageUrl = "",
                 lastModifiedDate = "",
                 isUpdated = false,
                 id = -1,
