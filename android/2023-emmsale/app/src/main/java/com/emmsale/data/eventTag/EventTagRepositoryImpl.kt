@@ -7,6 +7,7 @@ import com.emmsale.data.eventTag.local.EventTagLocalDataSource
 import com.emmsale.data.eventTag.mapper.toData
 import com.emmsale.data.eventTag.remote.EventTagRemoteDataSource
 import com.emmsale.data.eventTag.remote.dto.EventTagApiModel
+import com.emmsale.data.eventTag.remote.dto.InterestEventTagUpdateRequestApiModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -40,6 +41,18 @@ class EventTagRepositoryImpl(
             handleApi(
                 execute = { eventTagRemoteDataSource.getInterestEventTags(memberId) },
                 mapToDomain = List<EventTagApiModel>::toData,
+            )
+        }
+
+    override suspend fun updateInterestEventTags(interestEventTagIds: List<Long>): ApiResult<Unit> =
+        withContext(dispatcher) {
+            handleApi(
+                execute = {
+                    eventTagRemoteDataSource.updateInterestEventTags(
+                        InterestEventTagUpdateRequestApiModel(interestEventTagIds),
+                    )
+                },
+                mapToDomain = { },
             )
         }
 }

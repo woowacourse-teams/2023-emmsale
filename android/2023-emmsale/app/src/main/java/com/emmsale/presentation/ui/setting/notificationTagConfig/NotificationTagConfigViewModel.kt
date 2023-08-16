@@ -54,10 +54,17 @@ class NotificationTagConfigViewModel(
         when (val result = eventTagRepository.getEventTags(EventCategory.CONFERENCE)) {
             is ApiSuccess -> result.data
             is ApiError, is ApiException -> {
-                NotificationTagsUiState.TAG_FETCHING_ERROR
+                changeToTagFetchingErrorState()
                 emptyList()
             }
         }
+    }
+
+    private fun changeToTagFetchingErrorState() {
+        _notificationTags.value = notificationTags.value.copy(
+            isLoading = false,
+            isTagFetchingError = true,
+        )
     }
 
     private suspend fun getInterestEventTagIdsAsync(memberId: Long): Deferred<List<Long>> =
@@ -65,11 +72,48 @@ class NotificationTagConfigViewModel(
             when (val result = eventTagRepository.getInterestEventTags(memberId)) {
                 is ApiSuccess -> result.data.map(EventTag::id)
                 is ApiError, is ApiException -> {
-                    NotificationTagsUiState.INTEREST_TAG_FETCHING_ERROR
+                    changeToInterestingTagFetchingErrorState()
                     emptyList()
                 }
             }
         }
+
+    private fun changeToInterestingTagFetchingErrorState() {
+        _notificationTags.value = notificationTags.value.copy(
+            isLoading = false,
+            isInterestTagFetchingError = true,
+        )
+    }
+
+    fun saveInterestEventTagIds() {
+        viewModelScope.launch {
+            _notificationTags.value = notificationTags.value.copy(isLoading = true)
+
+            val interestEventTagIds = notificationTags.value.interestTagIds
+            when (eventTagRepository.updateInterestEventTags(interestEventTagIds)) {
+                is ApiSuccess -> _notificationTags.value = notificationTags.value.copy(
+                    isInterestTagsUpdateSuccess = true,
+                )
+
+                is ApiError, is ApiException -> changeToInterestTagsUpdatingError()
+            }
+        }
+    }
+
+    private fun changeToInterestTagsUpdatingError() {
+        _notificationTags.value = notificationTags.value.copy(
+            isLoading = false,
+            isInterestTagsUpdatingError = true,
+        )
+    }
+
+    fun addInterestTag(tagId: Long) {
+        _notificationTags.value = notificationTags.value.addInterestTagById(tagId)
+    }
+
+    fun removeInterestTag(tagId: Long) {
+        _notificationTags.value = notificationTags.value.removeInterestTagById(tagId)
+    }
 
     companion object {
         val factory = ViewModelFactory {

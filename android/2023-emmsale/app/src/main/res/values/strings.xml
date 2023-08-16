@@ -296,4 +296,7 @@
     <string name="notificationtagconfig_register_tag">등록하기</string>
     <string name="notificationtagconfig_finish_dialog_message">태그 알림을 저장하지 않고\n떠나시겠어요?</string>
     <string name="notificationtagconfig_finish_dialog_title">태그 알림</string>
+    <string name="notificationtagconfig_interest_tags_update_message">관심 태그를 변경했어요!</string>
+    <string name="notificationtagconfig_tag_fetching_error_message">태그 목록을 불러오지 못했어요!</string>
+    <string name="notificationtagconfig_interest_tags_update_error_message">관심 태그 업데이트를 실패했어요!</string>
 </resources>
