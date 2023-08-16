@@ -1,6 +1,6 @@
 package com.emmsale.data.config
 
 interface ConfigRepository {
-    suspend fun getNotificationReceiveConfig(): Config
-    suspend fun saveNotificationReceiveConfig(isReceive: Boolean)
+    fun getConfig(): Config
+    fun saveNotificationReceiveConfig(isReceive: Boolean)
 }

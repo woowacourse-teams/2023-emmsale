@@ -1,5 +1,5 @@
 package com.emmsale.data.config
 
 data class Config(
-    val isNotificationReceive: Boolean = false,
+    val isNotificationReceive: Boolean = true,
 )

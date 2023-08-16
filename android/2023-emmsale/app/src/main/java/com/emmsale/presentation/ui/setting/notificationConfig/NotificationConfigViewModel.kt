@@ -20,7 +20,7 @@ class NotificationConfigViewModel(
 
     init {
         viewModelScope.launch {
-            val config = configRepository.getNotificationReceiveConfig()
+            val config = configRepository.getConfig()
             _notificationConfig.value = NotificationConfigUiState.from(config)
         }
     }
