@@ -12,6 +12,7 @@ import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState
 
 class CommentViewHolder(
     private val binding: ItemCommentsCommentsBinding,
+    private val showProfile: (authorId: Long) -> Unit,
     private val showChildComments: (parentCommentId: Long) -> Unit,
     private val editComment: (commentId: Long) -> Unit,
     private val deleteComment: (commentId: Long) -> Unit,
@@ -22,6 +23,9 @@ class CommentViewHolder(
     init {
         binding.root.setOnClickListener {
             showChildComments(binding.comment?.id ?: return@setOnClickListener)
+        }
+        binding.ivCommentAuthorImage.setOnClickListener {
+            showProfile(binding.comment?.authorId ?: return@setOnClickListener)
         }
     }
 
@@ -74,6 +78,7 @@ class CommentViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
+            showProfile: (authorId: Long) -> Unit,
             showChildComments: (parentCommentId: Long) -> Unit,
             editComment: (commentId: Long) -> Unit,
             deleteComment: (commentId: Long) -> Unit,
@@ -81,7 +86,13 @@ class CommentViewHolder(
             val binding = ItemCommentsCommentsBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
-            return CommentViewHolder(binding, showChildComments, editComment, deleteComment)
+            return CommentViewHolder(
+                binding,
+                showProfile,
+                showChildComments,
+                editComment,
+                deleteComment,
+            )
         }
     }
 }
