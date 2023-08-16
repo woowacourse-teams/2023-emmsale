@@ -31,7 +31,7 @@ public class BlockApi {
   }
 
   @GetMapping
-  public ResponseEntity<List<BlockResponse>> getBlockMembers(final Member member) {
+  public ResponseEntity<List<BlockResponse>> findBlockMembers(final Member member) {
     final List<BlockResponse> responses = blockQueryService.findAll(member);
     return ResponseEntity.ok(responses);
   }

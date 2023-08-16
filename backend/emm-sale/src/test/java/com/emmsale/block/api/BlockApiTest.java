@@ -62,7 +62,7 @@ class BlockApiTest extends MockMvcTestHelper {
   }
 
   @Test
-  @DisplayName("차단되 사용자들을 전부 조회한다.")
+  @DisplayName("차단된 사용자들을 전부 조회한다.")
   void findAllTest() throws Exception {
     //given
     final String accessToken = "Bearer accessToken";
@@ -85,7 +85,7 @@ class BlockApiTest extends MockMvcTestHelper {
     mockMvc.perform(get("/blocks")
             .header("Authorization", accessToken)
             .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isCreated())
-        .andDo(document("get-blocks", responseFields));
+        .andExpect(status().isOk())
+        .andDo(document("find-blocks", responseFields));
   }
 }
