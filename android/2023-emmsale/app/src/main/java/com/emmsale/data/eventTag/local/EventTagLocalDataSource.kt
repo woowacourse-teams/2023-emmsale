@@ -1,9 +1,12 @@
 package com.emmsale.data.eventTag.local
 
+import com.emmsale.data.eventTag.EventTag
 import com.emmsale.data.eventTag.remote.dto.EventTagApiModel
 import retrofit2.Response
 
 class EventTagLocalDataSource {
+    private val interestEventTags = mutableListOf<EventTag>()
+
     fun getEventTags(
         eventCategory: String,
     ): Response<List<EventTagApiModel>> = when (eventCategory) {
@@ -82,6 +85,13 @@ class EventTagLocalDataSource {
             name = "정보보안",
         ),
     )
+
+    fun getInterestEventTags(): List<EventTag> = interestEventTags.map { it.copy() }
+
+    fun updateInterestEventTags(newInterestEventTags: List<EventTag>) {
+        interestEventTags.clear()
+        interestEventTags.addAll(newInterestEventTags)
+    }
 
     companion object {
         private const val CONFERENCE = "CONFERENCE"

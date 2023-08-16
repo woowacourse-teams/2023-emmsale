@@ -11,7 +11,7 @@ data class NotificationTagsUiState(
     val isInterestTagsUpdateSuccess: Boolean = false,
     val isInterestTagsUpdatingError: Boolean = false,
 ) {
-    val interestTagIds: List<Long> =
+    val toData: List<Long> =
         conferenceTags.filter(ConferenceNotificationTagUiState::isChecked)
             .map(ConferenceNotificationTagUiState::id)
 

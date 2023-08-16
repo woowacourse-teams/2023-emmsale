@@ -13,6 +13,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.ui.setting.notificationTagConfig.uistate.ConferenceNotificationTagUiState
 import com.emmsale.presentation.ui.setting.notificationTagConfig.uistate.NotificationTagsUiState
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -88,9 +89,11 @@ class NotificationTagConfigViewModel(
     fun saveInterestEventTagIds() {
         viewModelScope.launch {
             _notificationTags.value = notificationTags.value.copy(isLoading = true)
+            val interestEventTags = notificationTags.value.conferenceTags
+                .filter(ConferenceNotificationTagUiState::isChecked)
+                .map { EventTag(id = it.id, name = it.tagName) }
 
-            val interestEventTagIds = notificationTags.value.interestTagIds
-            when (eventTagRepository.updateInterestEventTags(interestEventTagIds)) {
+            when (eventTagRepository.updateInterestEventTags(interestEventTags)) {
                 is ApiSuccess -> _notificationTags.value = notificationTags.value.copy(
                     isInterestTagsUpdateSuccess = true,
                 )
