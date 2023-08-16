@@ -42,14 +42,20 @@ class MyProfileViewModel(
             }
             launch {
                 when (val result = memberRepository.getMember(token.uid)) {
-                    is ApiError, is ApiException -> _errorEvents.value = MyProfileErrorEvent.PROFILE_FETCHING
+                    is ApiError, is ApiException ->
+                        _errorEvents.value =
+                            MyProfileErrorEvent.PROFILE_FETCHING
+
                     is ApiSuccess ->
                         _myProfile.value = _myProfile.value.changeMemberState(result.data)
                 }
             }
             launch {
                 when (val result = activityRepository.getActivities(token.uid)) {
-                    is ApiError, is ApiException -> _errorEvents.value = MyProfileErrorEvent.PROFILE_FETCHING
+                    is ApiError, is ApiException ->
+                        _errorEvents.value =
+                            MyProfileErrorEvent.PROFILE_FETCHING
+
                     is ApiSuccess ->
                         _myProfile.value = _myProfile.value.changeActivitiesState(result.data)
                 }
