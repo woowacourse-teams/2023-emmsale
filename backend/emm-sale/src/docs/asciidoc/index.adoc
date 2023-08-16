@@ -381,6 +381,17 @@ include::{snippets}/create-request-notification/response-fields.adoc[]
 .HTTP response
 include::{snippets}/create-request-notification/http-response.adoc[]
 
+==== `POST` : 차단된 사용자에게 알림 전송
+
+.HTTP request 설명
+include::{snippets}/create-blocked-member-requestNotification/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/create-blocked-member-requestNotification/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/create-blocked-member-requestNotification/http-response.adoc[]
+
 === `PATCH` : 함께 가기 알림 상태 변경
 
 .HTTP request 설명

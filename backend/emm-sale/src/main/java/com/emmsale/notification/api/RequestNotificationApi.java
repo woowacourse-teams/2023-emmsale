@@ -8,8 +8,10 @@ import com.emmsale.notification.application.dto.RequestNotificationModifyRequest
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,10 +29,14 @@ public class RequestNotificationApi {
   private final RequestNotificationQueryService requestNotificationQueryService;
 
   @PostMapping("/request-notifications")
-  @ResponseStatus(HttpStatus.CREATED)
-  public RequestNotificationResponse create(
+  public ResponseEntity<RequestNotificationResponse> create(
       @RequestBody final RequestNotificationRequest requestNotificationRequest) {
-    return requestNotificationCommandService.create(requestNotificationRequest);
+    final Optional<RequestNotificationResponse> requestNotificationResponse = requestNotificationCommandService.create(
+        requestNotificationRequest);
+
+    return requestNotificationResponse.map(
+        response -> new ResponseEntity<>(response, HttpStatus.CREATED)
+    ).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NO_CONTENT));
   }
 
   @PatchMapping("/request-notifications/{request-notification-id}/status")
