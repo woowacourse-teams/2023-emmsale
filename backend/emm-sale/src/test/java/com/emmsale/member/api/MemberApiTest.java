@@ -55,7 +55,7 @@ class MemberApiTest extends MockMvcTestHelper {
       fieldWithPath("description").type(JsonFieldType.STRING).description("사용자 한 줄 자기소개"),
       fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url"),
       fieldWithPath("openProfileUrl").type(JsonFieldType.STRING).description("오픈 프로필 url"),
-      fieldWithPath("githubId").type(JsonFieldType.NUMBER).description("깃허브 ID")
+      fieldWithPath("githubUsername").type(JsonFieldType.STRING).description("깃허브 ID")
   );
 
   private static final RequestFieldsSnippet MEMBER_ACTIVITY_REQUEST_FIELDS = requestFields(
@@ -273,7 +273,7 @@ class MemberApiTest extends MockMvcTestHelper {
         "안녕하세요, 김길동입니다.",
         "https://image",
         "https://open.profile.url",
-        12451L
+        "amaran-th"
     );
     when(memberQueryService.findProfile(any()))
         .thenReturn(memberProfileResponse);

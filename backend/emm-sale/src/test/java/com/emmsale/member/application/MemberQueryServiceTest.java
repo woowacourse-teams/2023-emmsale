@@ -73,7 +73,7 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
           "",
           "https://imageurl.com",
           "https://openprofileurl.com",
-          1L
+          "amaran-th"
       );
 
       //when

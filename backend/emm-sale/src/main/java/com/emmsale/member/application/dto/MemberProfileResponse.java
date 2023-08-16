@@ -13,7 +13,7 @@ public class MemberProfileResponse {
   private final String description;
   private final String imageUrl;
   private final String openProfileUrl;
-  private final Long githubId;
+  private final String githubUsername;
 
   public static MemberProfileResponse from(Member member) {
     return new MemberProfileResponse(
@@ -22,7 +22,7 @@ public class MemberProfileResponse {
         member.getDescription(),
         member.getImageUrl(),
         member.getOptionalOpenProfileUrl().orElse(""),
-        member.getGithubId()
+        member.getGithubUsername()
     );
   }
 }
