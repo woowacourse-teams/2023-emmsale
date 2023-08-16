@@ -46,7 +46,7 @@ public class UpdateNotificationCommandService {
 
     final List<Long> deleteIdsOwnMember = updateNotificationRepository.findAllByIdIn(deleteIds)
         .stream()
-        .filter(it -> it.isOwnUpdateNotification(authMember.getId()))
+        .filter(it -> it.isOwner(authMember.getId()))
         .map(UpdateNotification::getId)
         .collect(Collectors.toList());
 
@@ -57,7 +57,7 @@ public class UpdateNotificationCommandService {
     updateNotificationRepository.deleteAllByIdInBatch(deleteIdsOwnMember);
   }
 
-  private static boolean hasNoNotificationToDeleteBy(final List<Long> deleteIds) {
+  private boolean hasNoNotificationToDeleteBy(final List<Long> deleteIds) {
     return deleteIds.isEmpty();
   }
 }
