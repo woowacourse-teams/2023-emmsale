@@ -37,7 +37,7 @@ class ChildCommentViewHolder(
         bottomMenuDialog.resetMenu()
         if (comment.isUpdatable) bottomMenuDialog.addUpdateButton()
         if (comment.isDeletable) bottomMenuDialog.addDeleteButton()
-        bottomMenuDialog.addReportButton()
+        if (comment.isReportable) bottomMenuDialog.addReportButton()
 
         binding.ivChildcommentMenubutton.setOnClickListener { bottomMenuDialog.show() }
     }

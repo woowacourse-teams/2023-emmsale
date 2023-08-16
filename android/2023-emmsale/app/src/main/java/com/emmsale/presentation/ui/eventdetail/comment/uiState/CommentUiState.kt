@@ -14,6 +14,7 @@ data class CommentUiState(
     val childCommentsCount: Int,
     val isUpdatable: Boolean,
     val isDeletable: Boolean,
+    val isReportable: Boolean,
     val isDeleted: Boolean,
 ) {
     companion object {
@@ -33,6 +34,7 @@ data class CommentUiState(
             childCommentsCount = comment.childComments.size,
             isUpdatable = comment.authorId == loginMemberId,
             isDeletable = comment.authorId == loginMemberId,
+            isReportable = comment.authorId != loginMemberId,
             isDeleted = comment.deleted,
         )
     }

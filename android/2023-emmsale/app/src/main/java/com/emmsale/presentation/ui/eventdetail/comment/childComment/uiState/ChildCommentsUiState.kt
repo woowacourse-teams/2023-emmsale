@@ -67,6 +67,7 @@ data class ChildCommentsUiState(
                 content = "",
                 isUpdatable = false,
                 isDeletable = false,
+                isReportable = false,
                 isDeleted = false,
             ),
             childComments = listOf(),
