@@ -32,19 +32,19 @@ class NotificationTagConfigViewModel(
     }
 
     private fun fetchNotificationTags() {
-        _notificationTags.value = _notificationTags.value.copy(isLoading = true)
+        _notificationTags.value = notificationTags.value.copy(isLoading = true)
 
         viewModelScope.launch {
             val memberId = tokenRepository.getToken()?.uid ?: return@launch
 
             val (eventTags, interestEventTagIds) = awaitAll(
                 getEventTagsAsync(),
-                getInterestEventTagIdsAsync(memberId),
+                getInterestEventTagsAsync(memberId),
             )
 
             _notificationTags.value = NotificationTagsConfigUiState.from(
                 eventTags = eventTags.filterIsInstance(EventTag::class.java),
-                interestTagIds = interestEventTagIds.filterIsInstance(Long::class.java),
+                interestEventTags = interestEventTagIds.filterIsInstance(EventTag::class.java),
             )
         }
     }
@@ -67,10 +67,10 @@ class NotificationTagConfigViewModel(
         )
     }
 
-    private suspend fun getInterestEventTagIdsAsync(memberId: Long): Deferred<List<Long>> =
+    private suspend fun getInterestEventTagsAsync(memberId: Long): Deferred<List<EventTag>> =
         viewModelScope.async {
             when (val result = eventTagRepository.getInterestEventTags(memberId)) {
-                is ApiSuccess -> result.data.map(EventTag::id)
+                is ApiSuccess -> result.data
                 is ApiError, is ApiException -> {
                     changeToInterestingTagFetchingErrorState()
                     emptyList()
