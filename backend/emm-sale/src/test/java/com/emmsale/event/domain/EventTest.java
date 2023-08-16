@@ -278,7 +278,7 @@ class EventTest {
     void success() {
       //given
       final Event 인프콘 = eventFixture();
-      final Member 멤버 = new Member(1L, 1L, "imageUrl", "멤버");
+      final Member 멤버 = new Member(1L, 1L, "imageUrl", "멤버", "아마란스");
       final String 내용 = "저랑 같이 갈 사람 구합니다.";
 
       //when
@@ -298,7 +298,7 @@ class EventTest {
     void fail_alreadyContains() {
       //given
       final Event 인프콘 = eventFixture();
-      final Member 멤버 = new Member(1L, 1L, "이미지URL", "멤버");
+      final Member 멤버 = new Member(1L, 1L, "이미지URL", "멤버", "아마란스");
       final String 내용 = "저랑 같이 갈 사람 구합니다.";
 
       //when

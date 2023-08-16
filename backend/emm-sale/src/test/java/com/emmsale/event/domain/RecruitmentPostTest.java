@@ -23,7 +23,7 @@ class RecruitmentPostTest {
 
   @BeforeEach
   void setUp() {
-    member = new Member(1L, 2L, "이미지URL", "멤버");
+    member = new Member(1L, 2L, "이미지URL", "멤버", "아마란스");
     event = spy(eventFixture());
     when(event.getId()).thenReturn(1L);
   }
@@ -62,7 +62,7 @@ class RecruitmentPostTest {
     void invalidMemberException() {
       //given
       final RecruitmentPost recruitmentPost = new RecruitmentPost(member, event, "content");
-      final Member member = new Member(2L, 3L, "이미지", "다른멤버");
+      final Member member = new Member(2L, 3L, "이미지", "다른멤버", "아마란스");
 
       //when && then
       assertThatThrownBy(() -> recruitmentPost.validateOwner(member))

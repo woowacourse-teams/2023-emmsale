@@ -25,11 +25,11 @@ create table event
     id              bigint auto_increment primary key,
     created_at      datetime(6),
     updated_at      datetime(6),
-    end_date        datetime(6) not null,
+    end_date        datetime(6)  not null,
     information_url varchar(255) not null,
     location        varchar(255) not null,
     name            varchar(255) not null,
-    start_date      datetime(6) not null,
+    start_date      datetime(6)  not null,
     image_url       varchar(255),
     type            varchar(20)  not null
 );
@@ -159,7 +159,6 @@ alter table update_notification
     add column is_read bit not null;
 
 
-
 -- 2023-08-14 13:10
 create table report
 (
@@ -171,3 +170,8 @@ create table report
     created_at  datetime(6),
     updated_at  datetime(6)
 );
+
+-- 2023-08-16 13:42
+
+alter table member
+    add column github_username varchar(40) not null default '';

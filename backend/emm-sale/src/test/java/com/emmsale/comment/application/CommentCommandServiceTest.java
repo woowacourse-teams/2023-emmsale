@@ -162,7 +162,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final String content = "내용";
     final Long eventId = event.getId();
     final Member 댓글_작성자2 = memberRepository.findById(2L).get();
-    final Member savedMember = memberRepository.save(new Member(200L, "imageUrl"));
+    final Member savedMember = memberRepository.save(new Member(200L, "imageUrl", "아마란스"));
     final Member 댓글_작성자3 = memberRepository.findById(savedMember.getId()).get();
 
     doNothing().when(eventPublisher).publish(any());
@@ -194,7 +194,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final String content = "내용";
     final Long eventId = event.getId();
     final Member 댓글_작성자2 = memberRepository.findById(2L).get();
-    final Member savedMember = memberRepository.save(new Member(200L, "imageUrl"));
+    final Member savedMember = memberRepository.save(new Member(200L, "imageUrl", "아마란스"));
     final Member 댓글_작성자3 = memberRepository.findById(savedMember.getId()).get();
 
     doNothing().when(eventPublisher).publish(any());
@@ -227,7 +227,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final String content = "내용";
     final Long eventId = event.getId();
     final Member 댓글_작성자2 = memberRepository.findById(2L).get();
-    final Member savedMember = memberRepository.save(new Member(200L, "imageUrl"));
+    final Member savedMember = memberRepository.save(new Member(200L, "imageUrl", "아마란스"));
     final Member 댓글_작성자3 = memberRepository.findById(savedMember.getId()).get();
 
     doNothing().when(eventPublisher).publish(any());

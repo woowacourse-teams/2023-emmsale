@@ -36,8 +36,8 @@ class RecruitmentPostQueryServiceTest extends ServiceIntegrationTestHelper {
   void findRecruitmentPosts() {
     // given
     final Event 인프콘 = eventRepository.save(eventFixture());
-    final Member 멤버1 = memberRepository.save(new Member(123L, "image1.com"));
-    final Member 멤버2 = memberRepository.save(new Member(124L, "image2.com"));
+    final Member 멤버1 = memberRepository.save(new Member(123L, "image1.com", "아마란스"));
+    final Member 멤버2 = memberRepository.save(new Member(124L, "image2.com", "아마란스"));
 
     final RecruitmentPostRequest requestMember1 = createRecruitmentPostRequest(멤버1);
     final RecruitmentPostRequest requestMember2 = createRecruitmentPostRequest(멤버2);
@@ -68,7 +68,7 @@ class RecruitmentPostQueryServiceTest extends ServiceIntegrationTestHelper {
   void findRecruitmentPost() {
     // given
     final Event 인프콘 = eventRepository.save(eventFixture());
-    final Member 멤버1 = memberRepository.save(new Member(123L, "image1.com"));
+    final Member 멤버1 = memberRepository.save(new Member(123L, "image1.com", "아마란스"));
 
     final RecruitmentPostRequest requestMember1 = createRecruitmentPostRequest(멤버1);
 
