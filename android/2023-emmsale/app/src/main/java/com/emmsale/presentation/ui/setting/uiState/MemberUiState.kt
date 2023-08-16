@@ -46,14 +46,14 @@ data class MemberUiState(
         isLogout = true,
     )
 
-    fun changeMemberState(member: Member, githubId: String): MemberUiState = copy(
+    fun changeMemberState(member: Member): MemberUiState = copy(
         isLoading = false,
         isFetchingError = false,
         isDeleteError = false,
         id = member.id,
         imageUrl = member.imageUrl,
         name = member.name,
-        githubId = githubId,
+        githubId = member.githubId,
     )
 
     companion object {
