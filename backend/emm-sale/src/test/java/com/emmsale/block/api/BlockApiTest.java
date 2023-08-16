@@ -2,6 +2,15 @@ package com.emmsale.block.api;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -26,6 +35,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
 @WebMvcTest(BlockApi.class)
@@ -62,6 +72,24 @@ class BlockApiTest extends MockMvcTestHelper {
   }
 
   @Test
+  @DisplayName("성공적으로 차단을 해제한 경우 no content를 반환한다")
+  void unregisterTest() throws Exception {
+    final Long blockId = 2L;
+    final String accessToken = "Bearer accessToken";
+
+    final PathParametersSnippet pathParams = pathParameters(
+        parameterWithName("block-id").description("차단 ID")
+    );
+
+    //when && then
+    mockMvc.perform(delete("/blocks/{block-id}", blockId)
+            .header("Authorization", accessToken))
+        .andExpect(status().isNoContent())
+        .andDo(document("unregister-block", pathParams));
+
+    verify(blockCommandService, times(1)).unregister(any(), any());
+  }
+
   @DisplayName("차단된 사용자들을 전부 조회한다.")
   void findAllTest() throws Exception {
     //given

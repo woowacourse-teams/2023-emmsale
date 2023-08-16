@@ -494,6 +494,17 @@ include::{snippets}/register-block/http-request.adoc[]
 .HTTP response
 include::{snippets}/register-block/http-response.adoc[]
 
+=== `DELETE` : 사용자 차단 해제
+
+.PathVariable 설명
+include::{snippets}/unregister-block/path-parameters.adoc[]
+
+.HTTP request
+include::{snippets}/unregister-block/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/unregister-block/http-response.adoc[]
+
 === `GET` : 차단한 사용자 목록 조회
 
 .HTTP request
