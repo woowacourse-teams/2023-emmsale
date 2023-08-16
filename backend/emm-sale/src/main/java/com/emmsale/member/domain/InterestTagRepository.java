@@ -17,4 +17,7 @@ public interface InterestTagRepository extends JpaRepository<InterestTag, Long> 
   List<InterestTag> findAllByMemberAndTagIds(
       @Param("member") final Member member,
       @Param("deleteTagId") final List<Long> deleteTagId);
+
+  @Query("select it from InterestTag it join fetch it.tag where it.tag.id in :ids")
+  List<InterestTag> findInterestTagsByTagIdIn(@Param("ids") final List<Long> ids);
 }

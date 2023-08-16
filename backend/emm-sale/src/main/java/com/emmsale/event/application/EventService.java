@@ -17,10 +17,9 @@ import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventSpecification;
 import com.emmsale.event.domain.repository.EventTagRepository;
-import com.emmsale.event.domain.repository.RecruitmentPostRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
-import com.emmsale.member.domain.Member;
+import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
@@ -45,15 +44,9 @@ public class EventService {
   private static final String MAX_DATE = "2999-12-31";
 
   private final EventRepository eventRepository;
-  private final RecruitmentPostRepository recruitmentPostRepository;
   private final EventTagRepository eventTagRepository;
   private final TagRepository tagRepository;
-
-  private static void validateMemberNotAllowed(final Long memberId, final Member member) {
-    if (member.isNotMe(memberId)) {
-      throw new EventException(EventExceptionType.FORBIDDEN_CREATE_RECRUITMENT_POST);
-    }
-  }
+  private final EventPublisher eventPublisher;
 
   @Transactional(readOnly = true)
   public EventDetailResponse findEvent(final Long id, final LocalDate today) {
@@ -173,6 +166,8 @@ public class EventService {
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
 
     event.addAllEventTags(tags);
+
+    eventPublisher.publish(event);
 
     return EventDetailResponse.from(event, today);
   }
