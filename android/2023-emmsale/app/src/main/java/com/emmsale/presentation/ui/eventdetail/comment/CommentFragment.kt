@@ -1,7 +1,9 @@
 package com.emmsale.presentation.ui.eventdetail.comment
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentCommentsBinding
@@ -43,12 +45,29 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
+        binding.cancelUpdateComment = ::cancelUpdateComment
+        binding.updateComment = ::updateComment
+    }
+
+    private fun cancelUpdateComment() {
+        viewModel.setEditMode(false)
+        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
+        imm.hideSoftInputFromWindow(binding.etCommentsCommentUpdate.windowToken, 0)
+    }
+
+    private fun updateComment() {
+        val commentId = viewModel.editingCommentId.value ?: return
+        val content = binding.etCommentsCommentUpdate.text.toString()
+        viewModel.updateComment(commentId, content, eventId)
+        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
+        imm.hideSoftInputFromWindow(binding.etCommentsCommentUpdate.windowToken, 0)
     }
 
     private fun initCommentsRecyclerView() {
         binding.rvCommentsComments.apply {
             adapter = CommentsAdapter(
                 showChildComments = ::showChildComments,
+                editComment = ::editComment,
                 deleteComment = ::deleteComment,
             )
             itemAnimator = null
@@ -60,6 +79,14 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
         ChildCommentActivity.startActivity(requireContext(), eventId, commentId)
     }
 
+    private fun editComment(commentId: Long) {
+        viewModel.setEditMode(true, commentId)
+        binding.etCommentsCommentUpdate.requestFocus()
+
+        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+    }
+
     private fun deleteComment(commentId: Long) {
         viewModel.deleteComment(commentId, eventId)
     }
@@ -67,6 +94,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     private fun setupUiLogic() {
         setupLoginUiLogic()
         setupCommentsUiLogic()
+        setupEditingCommentUiLogic()
     }
 
     private fun setupLoginUiLogic() {
@@ -122,9 +150,16 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     }
 
     private fun onCommentSave() {
-        viewModel.saveComment(binding.etCommentsEditcommentcontent.text.toString(), eventId)
-        binding.etCommentsEditcommentcontent.apply {
+        viewModel.saveComment(binding.etCommentsPostComment.text.toString(), eventId)
+        binding.etCommentsPostComment.apply {
             text.clear()
+        }
+    }
+
+    private fun setupEditingCommentUiLogic() {
+        viewModel.editingCommentContent.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
+            binding.etCommentsCommentUpdate.setText(it)
         }
     }
 

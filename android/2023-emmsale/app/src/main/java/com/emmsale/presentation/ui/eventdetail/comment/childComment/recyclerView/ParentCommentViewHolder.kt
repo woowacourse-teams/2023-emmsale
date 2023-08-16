@@ -12,10 +12,19 @@ import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.Comm
 
 class ParentCommentViewHolder(
     private val binding: ItemChildcommentsParentcommentBinding,
-    private val commentDelete: (commentId: Long) -> Unit,
+    private val showProfile: (authorId: Long) -> Unit,
+    private val editComment: (commentId: Long) -> Unit,
+    private val deleteComment: (commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val bottomMenuDialog = BottomMenuDialog(binding.root.context)
+
+    init {
+        binding.root.setOnClickListener {
+            if (binding.comment?.isDeleted == true) return@setOnClickListener
+            showProfile(binding.comment?.authorId ?: return@setOnClickListener)
+        }
+    }
 
     fun bind(comment: CommentUiState) {
         binding.comment = comment
@@ -33,7 +42,9 @@ class ParentCommentViewHolder(
     }
 
     private fun BottomMenuDialog.addUpdateButton() {
-        addMenuItemBelow(context.getString(R.string.all_update_button_label)) { }
+        addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
+            editComment(binding.comment?.id ?: return@addMenuItemBelow)
+        }
     }
 
     private fun BottomMenuDialog.addDeleteButton() {
@@ -49,7 +60,7 @@ class ParentCommentViewHolder(
             positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
             negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
             onPositiveButtonClick = {
-                commentDelete(binding.comment?.commentId ?: return@WarningDialog)
+                deleteComment(binding.comment?.id ?: return@WarningDialog)
             },
         ).show()
     }
@@ -64,6 +75,8 @@ class ParentCommentViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
+            showProfile: (authorId: Long) -> Unit,
+            updateComment: (commentId: Long) -> Unit,
             deleteComment: (commendId: Long) -> Unit,
         ): ParentCommentViewHolder {
             val binding = ItemChildcommentsParentcommentBinding.inflate(
@@ -72,7 +85,7 @@ class ParentCommentViewHolder(
                 false,
             )
 
-            return ParentCommentViewHolder(binding, deleteComment)
+            return ParentCommentViewHolder(binding, showProfile, updateComment, deleteComment)
         }
     }
 }
