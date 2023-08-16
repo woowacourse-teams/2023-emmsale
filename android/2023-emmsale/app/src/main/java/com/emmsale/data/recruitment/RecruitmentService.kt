@@ -4,6 +4,8 @@ import com.emmsale.data.recruitment.dto.CompanionRequestBody
 import com.emmsale.data.recruitment.dto.RecruitmentApiModel
 import com.emmsale.data.recruitment.dto.RecruitmentDeletionRequestBody
 import com.emmsale.data.recruitment.dto.RecruitmentPostingRequestBody
+import com.emmsale.data.report.dto.ReportApiModel
+import com.emmsale.data.report.dto.ReportRequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -62,4 +64,7 @@ interface RecruitmentService {
         @Query("eventId") eventId: Long,
         @Query("senderId") senderId: Long,
     ): Response<Boolean>
+
+    @POST("reports")
+    suspend fun reportRecruitment(@Body reportRequestBody: ReportRequestBody): Response<ReportApiModel>
 }

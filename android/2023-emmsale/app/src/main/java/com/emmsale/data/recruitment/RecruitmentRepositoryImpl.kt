@@ -8,6 +8,7 @@ import com.emmsale.data.recruitment.dto.RecruitmentApiModel
 import com.emmsale.data.recruitment.dto.RecruitmentDeletionRequestBody
 import com.emmsale.data.recruitment.dto.RecruitmentPostingRequestBody
 import com.emmsale.data.recruitment.mapper.toData
+import com.emmsale.data.report.dto.ReportRequestBody
 import com.emmsale.data.token.TokenRepository
 import okhttp3.Headers
 
@@ -127,6 +128,25 @@ class RecruitmentRepositoryImpl(
         return handleApi(
             execute = { recruitmentService.checkIsAlreadyPostRecruitment(eventId, myUid) },
             mapToDomain = { it },
+        )
+    }
+
+    override suspend fun reportRecruitment(
+        recruitmentId: Long,
+        authorId: Long,
+        reporterId: Long,
+    ): ApiResult<Unit> {
+        return handleApi(
+            execute = {
+                recruitmentService.reportRecruitment(
+                    ReportRequestBody.createRecruitmentReport(
+                        recruitmentId = recruitmentId,
+                        authorId = authorId,
+                        reporterId = reporterId,
+                    ),
+                )
+            },
+            mapToDomain = {},
         )
     }
 
