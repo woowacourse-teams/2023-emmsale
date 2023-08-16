@@ -63,7 +63,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     final Member member1 = memberRepository.findById(1L).get();
     final Member member2 = memberRepository.findById(2L).get();
-    final Member member3 = memberRepository.save(new Member(1444L, "imageUrl"));
+    final Member member3 = memberRepository.save(new Member(1444L, "imageUrl", "username"));
     final Tag 안드로이드 = tagRepository.save(안드로이드());
     final Tag 백엔드 = tagRepository.save(백엔드());
     final Tag 프론트엔드 = tagRepository.save(프론트엔드());
@@ -104,7 +104,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     //아무도 알림이 안감
     final Member member1 = memberRepository.findById(1L).get();
     final Member member2 = memberRepository.findById(2L).get();
-    final Member member3 = memberRepository.save(new Member(1444L, "imageUrl"));
+    final Member member3 = memberRepository.save(new Member(1444L, "imageUrl", "username"));
     final Tag 안드로이드 = tagRepository.save(안드로이드());
     final Tag 백엔드 = tagRepository.save(백엔드());
     final Tag 프론트엔드 = tagRepository.save(프론트엔드());
