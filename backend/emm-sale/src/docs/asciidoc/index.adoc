@@ -494,6 +494,17 @@ include::{snippets}/register-block/http-request.adoc[]
 .HTTP response
 include::{snippets}/register-block/http-response.adoc[]
 
+=== `GET` : 차단한 사용자 목록 조회
+
+.HTTP request
+include::{snippets}/find-blocks/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-blocks/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-blocks/response-fields.adoc[]
+
 == TAG
 
 === `GET` : 존재하는 모든 태그 조회
