@@ -7,6 +7,7 @@ import com.emmsale.data.comment.mapper.toData
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
+import com.emmsale.data.report.dto.ReportRequestBody
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -161,6 +162,25 @@ class CommentRepositoryImpl(
     override suspend fun deleteComment(commentId: Long): ApiResult<Unit> = withContext(dispatcher) {
         handleApi(
             execute = { commentService.deleteComment(commentId) },
+            mapToDomain = {},
+        )
+    }
+
+    override suspend fun reportComment(
+        commentId: Long,
+        authorId: Long,
+        reporterId: Long,
+    ): ApiResult<Unit> = withContext(dispatcher) {
+        handleApi(
+            execute = {
+                commentService.reportComment(
+                    ReportRequestBody.createCommentReport(
+                        commentId = commentId,
+                        authorId = authorId,
+                        reporterId = reporterId,
+                    ),
+                )
+            },
             mapToDomain = {},
         )
     }

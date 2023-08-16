@@ -14,6 +14,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsEvent
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import kotlinx.coroutines.launch
 
@@ -32,6 +33,9 @@ class CommentViewModel(
     val editingCommentId: LiveData<Long?> = _editingCommentId
     val editingCommentContent =
         _editingCommentId.map { _comments.value.comments.find { comment -> comment.id == it }?.content }
+
+    private val _event = MutableLiveData<CommentsEvent?>(null)
+    val event: LiveData<CommentsEvent?> = _event
 
     fun fetchComments(eventId: Long) {
         _comments.value = _comments.value.changeToLoadingState()
@@ -96,6 +100,22 @@ class CommentViewModel(
             return
         }
         _editingCommentId.value = commentId
+    }
+
+    fun reportComment(commentId: Long) {
+        viewModelScope.launch {
+            val token = tokenRepository.getToken()
+            if (token == null) {
+                _isLogin.value = false
+                return@launch
+            }
+            val authorId =
+                _comments.value.comments.find { it.id == commentId }?.authorId ?: return@launch
+            when (commentRepository.reportComment(commentId, authorId, token.uid)) {
+                is ApiError, is ApiException -> _event.value = CommentsEvent.REPORT_ERROR
+                is ApiSuccess -> _event.value = CommentsEvent.REPORT_COMPLETE
+            }
+        }
     }
 
     companion object {

@@ -9,9 +9,12 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentCommentsBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.views.InfoDialog
+import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentRecyclerViewDivider
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentsAdapter
+import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsEvent
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
@@ -71,6 +74,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
                 showChildComments = ::showChildComments,
                 editComment = ::editComment,
                 deleteComment = ::deleteComment,
+                reportComment = ::reportComment,
             )
             itemAnimator = null
             addItemDecoration(CommentRecyclerViewDivider(requireContext()))
@@ -97,10 +101,25 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
         viewModel.deleteComment(commentId, eventId)
     }
 
+    private fun reportComment(commentId: Long) {
+        val context = context ?: return
+        WarningDialog(
+            context = context,
+            title = context.getString(R.string.all_report_dialog_title),
+            message = context.getString(R.string.all_comment_report_dialog_message),
+            positiveButtonLabel = context.getString(R.string.all_report_dialog_positive_button_label),
+            negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
+            onPositiveButtonClick = {
+                viewModel.reportComment(commentId)
+            },
+        ).show()
+    }
+
     private fun setupUiLogic() {
         setupLoginUiLogic()
         setupCommentsUiLogic()
         setupEditingCommentUiLogic()
+        setupEventUiLogic()
     }
 
     private fun setupLoginUiLogic() {
@@ -166,6 +185,25 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
         viewModel.editingCommentContent.observe(viewLifecycleOwner) {
             if (it == null) return@observe
             binding.etCommentsCommentUpdate.setText(it)
+        }
+    }
+
+    private fun setupEventUiLogic() {
+        viewModel.event.observe(viewLifecycleOwner) {
+            handleEvents(it)
+        }
+    }
+
+    private fun handleEvents(event: CommentsEvent?) {
+        if (event == null) return
+        when (event) {
+            CommentsEvent.REPORT_ERROR -> showToast(R.string.all_report_fail_message)
+            CommentsEvent.REPORT_COMPLETE -> InfoDialog(
+                context = context ?: return,
+                title = getString(R.string.all_report_complete_dialog_title),
+                message = getString(R.string.all_report_complete_dialog_message),
+                buttonLabel = getString(R.string.all_okay),
+            ).show()
         }
     }
 
