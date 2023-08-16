@@ -37,15 +37,15 @@
             tools:text="멋쟁이사자처럼 5기" />
 
         <ImageView
+            android:id="@+id/iv_editmyprfileactivities_activity_remove_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_editmyprofile_remove_button"
-            android:id="@+id/iv_editmyprfileactivities_activity_remove_button"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/editmyprofile_activity_remote_button_description"
             android:padding="7dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_editmyprofileactivities_activityname"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_editmyprofileactivities_activityname"
             app:layout_constraintTop_toTopOf="@+id/tv_editmyprofileactivities_activityname"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_editmyprofileactivities_activityname"
-            android:contentDescription="@string/editmyprofile_activity_remote_button_description" />
+            app:srcCompat="@drawable/ic_editmyprofile_remove_button" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

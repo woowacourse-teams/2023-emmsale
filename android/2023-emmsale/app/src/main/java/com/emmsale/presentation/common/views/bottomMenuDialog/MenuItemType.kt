@@ -12,7 +12,8 @@ enum class MenuItemType {
     IMPORTANT {
         override fun getColor(context: Context): Int =
             ContextCompat.getColor(context, R.color.important)
-    }, ;
+    },
+    ;
 
     abstract fun getColor(context: Context): Int
 }
