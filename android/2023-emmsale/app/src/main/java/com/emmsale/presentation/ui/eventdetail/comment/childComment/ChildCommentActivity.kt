@@ -9,8 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.views.InfoDialog
+import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentRecyclerViewDivider
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsEvent
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
@@ -68,7 +71,8 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun initChildCommentsRecyclerView() {
         binding.rvChildcommentsChildcomments.apply {
-            adapter = ChildCommentAdapter(::showProfile, ::editComment, ::deleteComment)
+            adapter =
+                ChildCommentAdapter(::showProfile, ::editComment, ::deleteComment, ::reportComment)
             itemAnimator = null
             addItemDecoration(ChildCommentRecyclerViewDivider(this@ChildCommentActivity))
         }
@@ -83,6 +87,7 @@ class ChildCommentActivity : AppCompatActivity() {
         binding.etChildcommentsCommentUpdate.requestFocus()
 
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        @Suppress("DEPRECATION")
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
@@ -90,10 +95,22 @@ class ChildCommentActivity : AppCompatActivity() {
         viewModel.deleteComment(commentId, parentCommentId)
     }
 
+    private fun reportComment(commentId: Long) {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.all_report_dialog_title),
+            message = getString(R.string.all_comment_report_dialog_message),
+            positiveButtonLabel = getString(R.string.all_report_dialog_positive_button_label),
+            negativeButtonLabel = getString(R.string.commentdeletedialog_negative_button_label),
+            onPositiveButtonClick = { viewModel.reportComment(commentId) },
+        ).show()
+    }
+
     private fun setupUiLogic() {
         setupLoginUiLogic()
         setupCommentsUiLogic()
         setupEditingCommentUiLogic()
+        setupEventUiLogic()
     }
 
     private fun setupLoginUiLogic() {
@@ -157,6 +174,28 @@ class ChildCommentActivity : AppCompatActivity() {
         binding.tvChildcommentsPostchildcommentbutton.setOnClickListener {
             onChildCommentSave()
         }
+    }
+
+    private fun setupEventUiLogic() {
+        viewModel.event.observe(this) {
+            handleEvent(it)
+        }
+    }
+
+    private fun handleEvent(event: ChildCommentsEvent?) {
+        if (event == null) return
+        when (event) {
+            ChildCommentsEvent.REPORT_ERROR -> showToast(getString(R.string.all_report_fail_message))
+            ChildCommentsEvent.REPORT_COMPLETE -> InfoDialog(
+                context = this,
+                title = getString(R.string.all_report_complete_dialog_title),
+                message = getString(R.string.all_report_complete_dialog_message),
+                buttonLabel = getString(R.string.all_okay),
+            ).show()
+
+            ChildCommentsEvent.REPORT_DUPLICATION -> showToast(getString(R.string.all_report_duplicate_message))
+        }
+        viewModel.removeEvent()
     }
 
     private fun onChildCommentSave() {

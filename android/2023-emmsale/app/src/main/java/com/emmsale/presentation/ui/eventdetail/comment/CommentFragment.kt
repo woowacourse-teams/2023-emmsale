@@ -94,6 +94,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
         binding.etCommentsCommentUpdate.requestFocus()
 
         val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
+        @Suppress("DEPRECATION")
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
@@ -205,6 +206,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
                 buttonLabel = getString(R.string.all_okay),
             ).show()
         }
+        viewModel.removeEvent()
     }
 
     companion object {

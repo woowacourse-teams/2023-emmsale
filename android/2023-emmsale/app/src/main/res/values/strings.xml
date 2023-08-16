@@ -21,6 +21,7 @@
     <string name="all_report_complete_dialog_title">신고 완료</string>
     <string name="all_report_complete_dialog_message">커뮤니티 가이드에 따라\n검토 후 처리 됩니다. 감사합니다.</string>
     <string name="all_report_fail_message">신고하는 데 실패했어요 😢</string>
+    <string name="all_report_duplicate_message">이미 신고 하셨습니다.</string>
 
     <string name="onboarding_member_update_failed_message">회원정보 업데이트를 실패했어요!</string>
     <string name="onboarding_back_press_desc">온보딩 화면 뒤로가기</string>

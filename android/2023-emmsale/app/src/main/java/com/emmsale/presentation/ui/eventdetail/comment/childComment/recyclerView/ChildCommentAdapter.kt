@@ -10,13 +10,26 @@ class ChildCommentAdapter(
     private val showProfile: (authorId: Long) -> Unit,
     private val editComment: (commentId: Long) -> Unit,
     private val deleteComment: (commentId: Long) -> Unit,
+    private val reportComment: (commentId: Long) -> Unit,
 ) : ListAdapter<CommentUiState, RecyclerView.ViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == PARENT_COMMENT_VIEW_TYPE) {
-            ParentCommentViewHolder.create(parent, showProfile, editComment, deleteComment)
+            ParentCommentViewHolder.create(
+                parent,
+                showProfile,
+                editComment,
+                deleteComment,
+                reportComment,
+            )
         } else {
-            ChildCommentViewHolder.create(parent, showProfile, editComment, deleteComment)
+            ChildCommentViewHolder.create(
+                parent,
+                showProfile,
+                editComment,
+                deleteComment,
+                reportComment,
+            )
         }
     }
 

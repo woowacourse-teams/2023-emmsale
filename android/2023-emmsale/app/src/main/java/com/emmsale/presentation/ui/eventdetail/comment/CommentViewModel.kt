@@ -118,6 +118,10 @@ class CommentViewModel(
         }
     }
 
+    fun removeEvent() {
+        _event.value = null
+    }
+
     companion object {
         val factory = ViewModelFactory {
             CommentViewModel(
