@@ -18,7 +18,7 @@ public class UpdateNotificationEvent {
     return new UpdateNotificationEvent(
         comment.getMember().getId(),
         comment.getParentIdOrSelfId(),
-        comment.getClass().getName(),
+        comment.getClass().getSimpleName(),
         LocalDateTime.now()
     );
   }

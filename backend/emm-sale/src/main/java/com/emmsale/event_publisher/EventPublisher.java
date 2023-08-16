@@ -47,7 +47,7 @@ public class EventPublisher {
       final UpdateNotificationEvent updateNotificationEvent = new UpdateNotificationEvent(
           member.getId(),
           event.getId(),
-          UpdateNotificationType.from(event.getClass().getName()).toString(),
+          UpdateNotificationType.from(event.getClass().getSimpleName()).toString(),
           LocalDateTime.now()
       );
 
