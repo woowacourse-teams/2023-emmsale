@@ -15,7 +15,13 @@ class MyCommentViewHolder(
         binding.root.setOnClickListener {
             showChildComments(
                 binding.comment?.eventId ?: return@setOnClickListener,
-                binding.comment?.id ?: return@setOnClickListener,
+                if (binding.comment?.parentId == null) {
+                    binding.comment?.id
+                        ?: return@setOnClickListener
+                } else {
+                    binding.comment?.parentId
+                        ?: return@setOnClickListener
+                },
             )
         }
     }

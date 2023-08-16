@@ -5,14 +5,11 @@ import com.emmsale.data.comment.dto.SaveCommentRequestBody
 import com.emmsale.data.comment.dto.UpdateCommentRequestBody
 import com.emmsale.data.comment.mapper.toData
 import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.report.dto.ReportRequestBody
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.Headers
-import java.time.LocalDateTime
 
 class CommentRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -29,88 +26,9 @@ class CommentRepositoryImpl(
 
     override suspend fun getCommentsByMemberId(memberId: Long): ApiResult<List<Comment>> =
         withContext(dispatcher) {
-            ApiSuccess(
-                listOf(
-                    Comment(
-                        id = 1L,
-                        eventId = 1L,
-                        eventName = "더미 행사 명",
-                        authorId = 1L,
-                        authorImageUrl = "",
-                        content = "doiajiofj",
-                        authorName = "oasidjf",
-                        createdAt = LocalDateTime.now(),
-                        updatedAt = LocalDateTime.now(),
-                        deleted = false,
-                        childComments = listOf(),
-                    ),
-                    Comment(
-                        id = 2L,
-                        eventId = 1L,
-                        eventName = "더미 행사 명",
-                        authorImageUrl = "",
-                        authorId = 1L,
-                        content = "doiajiofj",
-                        authorName = "oasidjf",
-                        createdAt = LocalDateTime.now(),
-                        updatedAt = LocalDateTime.now(),
-                        deleted = false,
-                        childComments = listOf(),
-                    ),
-                    Comment(
-                        id = 3L,
-                        eventId = 1L,
-                        eventName = "더미 행사 명",
-                        authorImageUrl = "",
-                        authorId = 1L,
-                        content = "doiajiofj",
-                        authorName = "oasidjf",
-                        createdAt = LocalDateTime.now(),
-                        updatedAt = LocalDateTime.now(),
-                        deleted = false,
-                        childComments = listOf(),
-                    ),
-                    Comment(
-                        id = 4L,
-                        eventId = 1L,
-                        eventName = "더미 행사 명",
-                        authorId = 1L,
-                        content = "doiajiofj",
-                        authorName = "oasidjf",
-                        authorImageUrl = "",
-                        createdAt = LocalDateTime.now(),
-                        updatedAt = LocalDateTime.now(),
-                        deleted = false,
-                        childComments = listOf(),
-                    ),
-                    Comment(
-                        id = 5L,
-                        eventId = 1L,
-                        eventName = "더미 행사 명",
-                        authorId = 1L,
-                        content = "doiajiofj",
-                        authorName = "oasidjf",
-                        authorImageUrl = "",
-                        createdAt = LocalDateTime.now(),
-                        updatedAt = LocalDateTime.now(),
-                        deleted = false,
-                        childComments = listOf(),
-                    ),
-                    Comment(
-                        id = 6L,
-                        eventId = 1L,
-                        eventName = "더미 행사 명",
-                        authorId = 1L,
-                        content = "doiajiofj",
-                        authorImageUrl = "",
-                        authorName = "oasidjf",
-                        createdAt = LocalDateTime.now(),
-                        updatedAt = LocalDateTime.now(),
-                        deleted = false,
-                        childComments = listOf(),
-                    ),
-                ),
-                Headers.headersOf(),
+            handleApi(
+                execute = { commentService.getCommentsByMemberId(memberId) },
+                mapToDomain = List<CommentFamilyApiModel>::toData,
             )
         }
 

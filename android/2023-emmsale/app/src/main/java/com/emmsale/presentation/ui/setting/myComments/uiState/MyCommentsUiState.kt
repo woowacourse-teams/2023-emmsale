@@ -13,10 +13,12 @@ data class MyCommentsUiState(
         isFetchingError = true,
     )
 
-    fun setCommentsState(comments: List<Comment>): MyCommentsUiState = copy(
+    fun setCommentsState(newComments: List<Comment>, loginMemberId: Long): MyCommentsUiState = copy(
         isLoading = false,
         isFetchingError = false,
-        comments = comments.map(MyCommentUiState::from),
+        comments = newComments.flatMap { comment ->
+            comment.childComments.map(MyCommentUiState::from) + MyCommentUiState.from(comment)
+        }.filter { it.authorId == loginMemberId && !it.isDeleted },
     )
 
     companion object {
