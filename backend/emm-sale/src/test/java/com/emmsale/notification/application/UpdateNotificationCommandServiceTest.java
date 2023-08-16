@@ -1,5 +1,6 @@
 package com.emmsale.notification.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,10 +14,12 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
+import com.emmsale.notification.application.dto.UpdateNotificationDeleteRequest;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
 import com.emmsale.notification.domain.UpdateNotificationType;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,5 +81,51 @@ class UpdateNotificationCommandServiceTest extends ServiceIntegrationTestHelper 
     assertThatThrownBy(() -> updateNotificationCommandService.read(otherMember, 이벤트_알림.getId()))
         .isInstanceOf(MemberException.class)
         .hasMessage(MemberExceptionType.NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER.errorMessage());
+  }
+
+  @Test
+  @DisplayName("deleteBatch() : 댓글 & 행사 알림을 삭제할 ID로 본인의 알림들만을 삭제할 수 있다.")
+  void test_deleteBatch() throws Exception {
+    //given
+    final Long receiverId = member.getId();
+
+    final UpdateNotification notification1 = new UpdateNotification(
+        receiverId, 2L,
+        UpdateNotificationType.COMMENT, LocalDateTime.now()
+    );
+    final UpdateNotification notification2 = new UpdateNotification(
+        receiverId, 3L,
+        UpdateNotificationType.EVENT, LocalDateTime.now()
+    );
+    final UpdateNotification notification3 = new UpdateNotification(
+        2L, 4L,
+        UpdateNotificationType.COMMENT, LocalDateTime.now()
+    );
+    updateNotificationRepository.saveAll(List.of(notification1, notification2, notification3));
+
+    final UpdateNotificationDeleteRequest request =
+        new UpdateNotificationDeleteRequest(
+            List.of(
+                notification1.getId(),
+                notification2.getId(),
+                notification3.getId()
+            )
+        );
+
+    final List<UpdateNotification> expected = List.of(notification3);
+
+
+    //when
+    updateNotificationCommandService.deleteBatch(member, request);
+
+    //then
+    final List<UpdateNotification> actual =
+        updateNotificationRepository.findAllByIdIn(request.getDeleteIds());
+
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .ignoringCollectionOrder()
+        .ignoringFields("createdAt")
+        .isEqualTo(expected);
   }
 }

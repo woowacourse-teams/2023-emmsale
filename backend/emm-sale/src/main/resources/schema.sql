@@ -11,6 +11,7 @@ drop table if exists kerdy.request_notification;
 drop table if exists kerdy.fcm_token;
 drop table if exists kerdy.block;
 drop table if exists kerdy.update_notification;
+drop table if exists kerdy.report;
 
 create table activity
 (
@@ -158,3 +159,15 @@ alter table update_notification
     add column is_read bit not null;
 
 
+
+-- 2023-08-14 13:10
+create table report
+(
+    id          bigint auto_increment primary key,
+    reporter_id bigint      not null,
+    reported_id bigint      not null,
+    type        varchar(20) not null,
+    content_id  bigint      not null,
+    created_at  datetime(6),
+    updated_at  datetime(6)
+);

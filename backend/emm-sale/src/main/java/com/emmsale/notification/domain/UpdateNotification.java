@@ -54,6 +54,10 @@ public class UpdateNotification {
     return updateNotificationType == UpdateNotificationType.EVENT;
   }
 
+  public boolean isOwner(final Long memberId) {
+    return receiverId.equals(memberId);
+  }
+
   public void read() {
     isRead = true;
   }

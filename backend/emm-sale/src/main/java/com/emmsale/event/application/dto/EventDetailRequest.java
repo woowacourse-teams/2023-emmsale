@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 public class EventDetailRequest {
 
-  private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+  private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
 
   @NotBlank(message = "행사의 이름을 입력해 주세요.")
   private final String name;

@@ -1,5 +1,7 @@
 package com.emmsale.notification.application;
 
+import static com.emmsale.notification.exception.NotificationExceptionType.BAD_REQUEST_MEMBER_ID;
+import static com.emmsale.notification.exception.NotificationExceptionType.NOT_OWNER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,6 +12,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 
+import com.emmsale.block.domain.Block;
+import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -23,6 +27,7 @@ import com.emmsale.notification.exception.NotificationException;
 import com.emmsale.notification.exception.NotificationExceptionType;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,6 +43,8 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
   private RequestNotificationRepository requestNotificationRepository;
   @Autowired
   private MemberRepository memberRepository;
+  @Autowired
+  private BlockRepository blockRepository;
   private RequestNotificationCommandService mockingRequestNotificationCommandService;
   private FirebaseCloudMessageClient firebaseCloudMessageClient;
 
@@ -48,7 +55,8 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
     mockingRequestNotificationCommandService = new RequestNotificationCommandService(
         requestNotificationRepository,
         memberRepository,
-        firebaseCloudMessageClient
+        firebaseCloudMessageClient,
+        blockRepository
     );
   }
 
@@ -81,7 +89,7 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
 
     //when
     final RequestNotificationResponse actual = mockingRequestNotificationCommandService.create(
-        request);
+        request).get();
 
     //then
     assertThat(actual)
@@ -205,7 +213,7 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
     );
     final Long notificationId = notification.getId();
 
-    final NotificationExceptionType expectExceptionType = NotificationExceptionType.NOT_OWNER;
+    final NotificationExceptionType expectExceptionType = NOT_OWNER;
 
     //when
     final NotificationException actualException = assertThrowsExactly(
@@ -244,5 +252,31 @@ class RequestNotificationCommandServiceTest extends ServiceIntegrationTestHelper
         savedRequestNotification.getId()).get();
 
     assertTrue(readNotification.isRead());
+  }
+
+  @Test
+  @DisplayName("차단된 사용자에게 알림을 보낼 경우 Optional.empty()가 반환된다.")
+  void createWithBlockedSender() {
+    //given
+    final long senderId = 1L;
+    final long receiverId = 2L;
+    final long eventId = 3L;
+    final String message = "알림 메시지야";
+
+    blockRepository.save(new Block(receiverId, senderId));
+
+    final RequestNotificationRequest request = new RequestNotificationRequest(
+        senderId,
+        receiverId,
+        message,
+        eventId
+    );
+
+    //when
+    final Optional<RequestNotificationResponse> response = requestNotificationCommandService.create(
+        request);
+
+    //then
+    assertFalse(response.isPresent());
   }
 }

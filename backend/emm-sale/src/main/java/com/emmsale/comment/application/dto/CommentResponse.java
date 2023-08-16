@@ -15,14 +15,16 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CommentResponse {
 
+  private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
+
   private String content;
   private Long commentId;
   private Long parentId;
   private Long eventId;
   private boolean isDeleted;
-  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private LocalDateTime createdAt;
-  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private LocalDateTime updatedAt;
   private Long memberId;
   private String memberImageUrl;

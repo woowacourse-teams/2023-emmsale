@@ -5,9 +5,12 @@ import static com.emmsale.notification.exception.NotificationExceptionType.NOT_F
 
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.exception.MemberException;
+import com.emmsale.notification.application.dto.UpdateNotificationDeleteRequest;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
 import com.emmsale.notification.exception.NotificationException;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,5 +36,28 @@ public class UpdateNotificationCommandService {
     if (authMember.isNotMe(loginMemberId)) {
       throw new MemberException(NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER);
     }
+  }
+
+  public void deleteBatch(
+      final Member authMember,
+      final UpdateNotificationDeleteRequest updateNotificationDeleteRequest
+  ) {
+    final List<Long> deleteIds = updateNotificationDeleteRequest.getDeleteIds();
+
+    final List<Long> deleteIdsOwnMember = updateNotificationRepository.findAllByIdIn(deleteIds)
+        .stream()
+        .filter(it -> it.isOwner(authMember.getId()))
+        .map(UpdateNotification::getId)
+        .collect(Collectors.toList());
+
+    if (hasNoNotificationToDeleteBy(deleteIdsOwnMember)) {
+      return;
+    }
+
+    updateNotificationRepository.deleteAllByIdInBatch(deleteIdsOwnMember);
+  }
+
+  private boolean hasNoNotificationToDeleteBy(final List<Long> deleteIds) {
+    return deleteIds.isEmpty();
   }
 }
