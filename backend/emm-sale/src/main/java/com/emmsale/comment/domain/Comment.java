@@ -115,6 +115,10 @@ public class Comment extends BaseEntity {
     return parent.id;
   }
 
+  public boolean isNotOwner(final Long memberId) {
+    return member.isNotMe(memberId);
+  }
+
   @Override
   public boolean equals(final Object o) {
     if (this == o) {

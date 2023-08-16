@@ -54,6 +54,10 @@ public class RequestNotification extends BaseEntity {
     return !receiverId.equals(memberId);
   }
 
+  public boolean isNotSender(final Long memberId) {
+    return !senderId.equals(memberId);
+  }
+
   public void modifyStatus(final RequestNotificationStatus status) {
     this.status = status;
   }
