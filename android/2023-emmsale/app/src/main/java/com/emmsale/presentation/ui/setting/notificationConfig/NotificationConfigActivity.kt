@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.setting.notificationConfig
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -44,5 +46,10 @@ class NotificationConfigActivity : AppCompatActivity() {
 
     private fun navigateToNotificationTagConfigActivity() {
 
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent =
+            Intent(context, NotificationConfigActivity::class.java)
     }
 }
