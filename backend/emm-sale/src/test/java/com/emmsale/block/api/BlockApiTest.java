@@ -57,18 +57,14 @@ class BlockApiTest extends MockMvcTestHelper {
   @Test
   @DisplayName("성공적으로 차단을 해제한 경우 no content를 반환한다")
   void unregisterTest() throws Exception {
-    final long blockId = 2L;
     final String accessToken = "Bearer accessToken";
 
-    final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("block").description("차단 id")
-    );
 
     //when && then
-    mockMvc.perform(delete("/blocks/%s", blockId)
+    mockMvc.perform(delete("/blocks/2")
             .header("Authorization", accessToken))
         .andExpect(status().isNoContent())
-        .andDo(document("unregister-block", requestFields));
+        .andDo(document("unregister-block"));
 
     verify(blockCommandService, times(1)).unregister(any(), any());
   }
