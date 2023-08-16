@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.setting.notificationConfig
+package com.emmsale.presentation.ui.setting.notification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.setting.notificationConfig.uistate.NotificationConfigUiState
+import com.emmsale.presentation.ui.setting.notification.uistate.NotificationConfigUiState
 import kotlinx.coroutines.launch
 
 class NotificationConfigViewModel(
@@ -19,6 +19,10 @@ class NotificationConfigViewModel(
     val notificationConfig: NotNullLiveData<NotificationConfigUiState> = _notificationConfig
 
     init {
+        fetchNotificationConfig()
+    }
+
+    private fun fetchNotificationConfig() {
         viewModelScope.launch {
             val config = configRepository.getConfig()
             _notificationConfig.value = NotificationConfigUiState.from(config)

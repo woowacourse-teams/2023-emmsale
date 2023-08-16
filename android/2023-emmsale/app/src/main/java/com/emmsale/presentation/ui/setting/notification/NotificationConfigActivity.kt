@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.setting.notificationConfig
+package com.emmsale.presentation.ui.setting.notification
 
 import android.content.Context
 import android.content.Intent

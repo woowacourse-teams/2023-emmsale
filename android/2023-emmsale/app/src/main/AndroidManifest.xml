@@ -18,13 +18,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".presentation.ui.setting.notificationTagConfig.NotificationTagConfigActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.setting.myComments.MyCommentsActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.ui.setting.block.MemberBlockActivity"
             android:exported="true" />
         <activity
-            android:name=".presentation.ui.setting.notificationConfig.NotificationConfigActivity"
+            android:name=".presentation.ui.setting.notification.NotificationConfigActivity"
             android:exported="true" />
         <activity
             android:name=".presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity"

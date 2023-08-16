@@ -11,7 +11,7 @@ import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.setting.block.MemberBlockActivity
 import com.emmsale.presentation.ui.setting.myComments.MyCommentsActivity
-import com.emmsale.presentation.ui.setting.notificationConfig.NotificationConfigActivity
+import com.emmsale.presentation.ui.setting.notification.NotificationConfigActivity
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>() {
