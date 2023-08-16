@@ -92,7 +92,12 @@ class NotificationConfigActivity : AppCompatActivity() {
     }
 
     private fun clearNotificationTagViews() {
-        binding.cgNotificationTag.removeAllViews()
+        val tagAddButtonCount = 1
+
+        binding.cgNotificationTag.removeViews(
+            tagAddButtonCount,
+            binding.cgNotificationTag.childCount - tagAddButtonCount,
+        )
     }
 
     private fun addConferenceTags(conferenceTags: List<NotificationTagUiState>) {
