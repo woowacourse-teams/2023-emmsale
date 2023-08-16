@@ -8,8 +8,8 @@ import com.emmsale.data.report.dto.ReportApiModel
 import com.emmsale.data.report.dto.ReportRequestBody
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -43,7 +43,7 @@ interface NotificationService {
         @Path("update-notification-id") notificationId: Long,
     ): Response<Unit>
 
-    @DELETE("/update-notifications")
+    @HTTP(method = "DELETE", path = "/update-notifications", hasBody = true)
     suspend fun deleteNotification(
         @Body notificationIds: UpdatedNotificationDeleteRequestModel,
     ): Response<Unit>

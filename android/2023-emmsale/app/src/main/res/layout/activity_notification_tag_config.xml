@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.setting.notificationTagConfig.NotificationTagConfigViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".presentation.ui.setting.notificationTagConfig.NotificationTagConfigActivity">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/tb_notification_tag_config"
+                android:layout_width="0dp"
+                android:layout_height="?actionBarSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/ic_back"
+                app:title="@string/notificationtagconfig_toolbar_title"
+                app:titleCentered="true"
+                app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
+
+            <TextView
+                android:id="@+id/tv_notification_tag_config_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="17dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/notificationtagconfig_tag_group_title"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tb_notification_tag_config" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_notification_tag"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="14dp"
+                app:layout_constrainedHeight="true"
+                app:layout_constraintBottom_toTopOf="@+id/btn_register_tags"
+                app:layout_constraintEnd_toEndOf="@+id/tv_notification_tag_config_title"
+                app:layout_constraintStart_toStartOf="@+id/tv_notification_tag_config_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_notification_tag_config_title" />
+
+            <TextView
+                android:id="@+id/btn_register_tags"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="17dp"
+                android:background="@drawable/bg_all_two_state_button"
+                android:gravity="center"
+                android:onClick="@{() -> viewModel.saveInterestEventTagIds()}"
+                android:paddingVertical="21dp"
+                android:text="@string/notificationtagconfig_register_tag"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tv_notification_tag_config_title"
+                app:layout_constraintStart_toStartOf="@+id/tv_notification_tag_config_title"
+                app:layout_constraintTop_toBottomOf="@+id/cg_notification_tag" />
+
+            <ProgressBar
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="@{viewModel.notificationTags.loading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

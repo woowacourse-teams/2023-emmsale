@@ -7,14 +7,14 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.setting.notificationConfig.NotificationConfigViewModel" />
+            type="com.emmsale.presentation.ui.setting.notification.NotificationConfigViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.setting.notificationConfig.NotificationConfigActivity">
+        tools:context=".presentation.ui.setting.notification.NotificationConfigActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_notification_config"
@@ -52,8 +52,6 @@
                 android:id="@+id/switch_notification_receive_config"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{viewModel.notificationConfig.notificationReceive}"
-                android:onCheckedChanged="@{(v, isChecked) -> viewModel.setNotificationReceiveConfig(isChecked)}"
                 android:thumb="@drawable/bg_notificationconfig_switch_thumb"
                 android:track="@drawable/bg_notificationconfig_switch_track"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -87,6 +85,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_notification_tag_title" />
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_notification_tag"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"

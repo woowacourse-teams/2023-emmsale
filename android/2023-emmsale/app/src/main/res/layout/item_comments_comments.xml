@@ -21,28 +21,28 @@
             android:id="@+id/tv_comment_authorname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="14dp"
             android:text="@{comment.isDeleted ? @string/comment_deleted_comment_author_name : comment.authorName}"
             android:textSize="12sp"
             android:textStyle="bold"
-            tools:text="김커디"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="14dp"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="36dp" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="김커디" />
 
         <TextView
             android:id="@+id/tv_comment_lastmodifieddate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:text="@{comment.lastModifiedDate}"
             android:textColor="@color/gray"
             android:textSize="11sp"
             android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
-            tools:text="2023.08.03"
-            app:layout_constraintStart_toEndOf="@+id/tv_comment_authorname"
-            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_comment_authorname"
-            app:layout_constraintTop_toTopOf="@+id/tv_comment_authorname" />
+            app:layout_constraintStart_toEndOf="@+id/tv_comment_authorname"
+            app:layout_constraintTop_toTopOf="@+id/tv_comment_authorname"
+            tools:text="2023.08.03" />
 
         <TextView
             android:id="@+id/tv_comment_isupdated"
@@ -61,19 +61,20 @@
             android:id="@+id/tv_comment_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="17dp"
             android:text="@{comment.isDeleted ? @string/comment_deleted_comment_content : comment.content}"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_comment_authorname"
             app:layout_constraintTop_toBottomOf="@+id/tv_comment_authorname"
-            tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하"
-            android:layout_marginEnd="17dp"
-            android:layout_marginTop="10dp" />
+            tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하" />
 
         <TextView
             android:id="@+id/tv_comment_childcommentscount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="-4dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="10dp"
             android:padding="4dp"
@@ -83,8 +84,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_comment_content"
             app:layout_constraintTop_toBottomOf="@+id/tv_comment_content"
-            tools:text="답글 0"
-            android:layout_marginStart="-4dp" />
+            tools:text="답글 0" />
 
         <ImageView
             android:id="@+id/iv_comment_menubutton"
@@ -101,19 +101,19 @@
             app:srcCompat="@drawable/ic_comment_menubutton" />
 
         <ImageView
+            android:id="@+id/iv_comment_author_image"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            tools:srcCompat="@tools:sample/avatars"
-            android:id="@+id/iv_comment_author_image"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:imageUrl="@{comment.authorImageUrl}"
-            android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
-            app:isCircle="@{true}"
             android:layout_marginStart="8dp"
             android:layout_marginTop="14dp"
-            android:contentDescription="@string/comment_author_image" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/comment_author_image"
+            android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
+            app:imageUrl="@{comment.authorImageUrl}"
+            app:isCircle="@{true}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

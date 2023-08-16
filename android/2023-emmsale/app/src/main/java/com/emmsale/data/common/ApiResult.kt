@@ -5,7 +5,7 @@ import retrofit2.HttpException
 import retrofit2.Response
 
 sealed interface ApiResult<T : Any>
-class ApiSuccess<T : Any>(val data: T, val header: Headers) : ApiResult<T>
+class ApiSuccess<T : Any>(val data: T, val header: Headers = Headers.headersOf()) : ApiResult<T>
 class ApiError<T : Any>(val code: Int, val message: String?) : ApiResult<T>
 class ApiException<T : Any>(val e: Throwable) : ApiResult<T>
 

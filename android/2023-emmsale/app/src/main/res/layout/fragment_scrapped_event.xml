@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.emmsale.presentation.ui.main.event.scrap.ScrappedEventViewModel" />
@@ -33,8 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="6dp"
-            android:paddingBottom="17dp"
             android:gravity="center"
+            android:paddingBottom="17dp"
             android:text="@{@string/event_count_format(vm.scrappedEvents.list.size)}"
             android:textColor="@color/primary_color"
             android:textSize="12sp"
@@ -50,17 +52,17 @@
             android:layout_height="0dp"
             android:background="@drawable/bg_event_recyclerview"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_conference"
             app:layout_constraintTop_toBottomOf="@+id/tv_events_count"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            tools:itemCount="2"
+            tools:listitem="@layout/item_conference" />
 
         <ProgressBar
-            android:visibility="@{vm.scrappedEvents.loading ? View.VISIBLE : View.GONE}"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:visibility="@{vm.scrappedEvents.loading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

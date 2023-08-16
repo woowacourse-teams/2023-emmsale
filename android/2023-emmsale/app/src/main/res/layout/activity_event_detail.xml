@@ -34,10 +34,10 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:paddingBottom="20dp"
             android:id="@+id/cl_event_detail_event_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appbarlayout_eventdetail">
@@ -114,82 +114,82 @@
                 android:id="@+id/tv_eventdetail_eventplace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="17dp"
                 android:drawablePadding="12dp"
                 android:fontFamily="@font/nanum_square_regular"
                 android:text="@{vm.eventDetail.location}"
                 android:textColor="@color/black"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/line_eventdetail_top"
-                tools:text="삼성동 코엑스 몰 2층 101"
                 app:layout_constraintStart_toEndOf="@+id/tv_event_detail_place_title"
-                android:layout_marginStart="45dp"
-                android:layout_marginTop="17dp" />
+                app:layout_constraintTop_toBottomOf="@+id/line_eventdetail_top"
+                tools:text="삼성동 코엑스 몰 2층 101" />
 
             <TextView
-                android:text="@string/eventdetail_place"
+                android:id="@+id/tv_event_detail_place_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_event_detail_place_title"
-                android:textSize="12sp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/nanum_square_bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/line_eventdetail_top"
                 android:layout_marginStart="17dp"
-                android:layout_marginTop="17dp" />
+                android:layout_marginTop="17dp"
+                android:fontFamily="@font/nanum_square_bold"
+                android:text="@string/eventdetail_place"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/line_eventdetail_top" />
 
             <TextView
                 android:id="@+id/tv_eventdetail_eventdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
                 android:drawablePadding="12dp"
                 android:fontFamily="@font/nanum_square_regular"
                 android:text="@{@string/eventdetail_date_format(vm.eventDetail.startDate,vm.eventDetail.endDate)}"
                 android:textColor="@color/black"
                 android:textSize="12sp"
-                tools:text="2023.8.15 12:00 "
-                android:layout_marginTop="13dp"
+                app:layout_constraintStart_toStartOf="@+id/tv_eventdetail_eventplace"
                 app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventplace"
-                app:layout_constraintStart_toStartOf="@+id/tv_eventdetail_eventplace" />
+                tools:text="2023.8.15 12:00 " />
 
             <TextView
+                android:id="@+id/tv_event_detail_date_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="13dp"
+                android:fontFamily="@font/nanum_square_bold"
                 android:text="@string/eventdetail_date"
                 android:textColor="@color/black"
                 android:textSize="12sp"
-                android:fontFamily="@font/nanum_square_bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_event_detail_date_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_event_detail_place_title"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="13dp" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_event_detail_place_title" />
 
             <TextView
+                android:id="@+id/tv_eventdetail_apply_date_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="13dp"
+                android:fontFamily="@font/nanum_square_bold"
                 android:text="@string/eventdetail_apply_date"
                 android:textColor="@color/black"
                 android:textSize="12sp"
-                android:fontFamily="@font/nanum_square_bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_eventdetail_apply_date_title"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="17dp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_event_detail_date_title"
-                android:layout_marginTop="13dp" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_event_detail_date_title" />
 
             <TextView
-                android:text="@{@string/eventdetail_date_format(vm.eventDetail.applyStartDate,vm.eventDetail.applyEndDate)}"
-                tools:text="2023.08.15 12:00 ~ 2023.08.17 17:00"
+                android:id="@+id/tv_event_detail_apply_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
                 android:fontFamily="@font/nanum_square_regular"
-                android:textSize="12sp"
+                android:text="@{@string/eventdetail_date_format(vm.eventDetail.applyStartDate,vm.eventDetail.applyEndDate)}"
                 android:textColor="@color/black"
-                android:id="@+id/tv_event_detail_apply_date"
-                app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventdate"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/tv_eventdetail_eventdate"
-                android:layout_marginTop="13dp" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventdate"
+                tools:text="2023.08.15 12:00 ~ 2023.08.17 17:00" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.tabs.TabLayout
@@ -198,14 +198,14 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_event_detail_event_container"
             app:tabIndicatorColor="@color/primary_color"
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="2dp"
             app:tabSelectedTextAppearance="@style/EventDetail_SelectedTabStyle"
             app:tabSelectedTextColor="@color/primary_color"
             app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle"
-            app:tabTextColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/cl_event_detail_event_container" />
+            app:tabTextColor="@color/black" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_eventdetail"

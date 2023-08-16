@@ -20,14 +20,14 @@
             android:id="@+id/tv_childcomment_authorname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="14dp"
             android:text="@{comment.isDeleted ? @string/comment_deleted_comment_author_name : comment.authorName}"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/iv_childcomments_child_comment_author_image"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="김커디"
-            android:layout_marginStart="8dp" />
+            tools:text="김커디" />
 
         <TextView
             android:id="@+id/tv_childcomment_lastmodifieddate"
@@ -97,18 +97,18 @@
             app:srcCompat="@drawable/ic_childcomment_arrow" />
 
         <ImageView
+            android:id="@+id/iv_childcomments_child_comment_author_image"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            tools:srcCompat="@tools:sample/avatars"
-            android:id="@+id/iv_childcomments_child_comment_author_image"
-            app:layout_constraintStart_toEndOf="@+id/iv_childcomment_arrowdecoration"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="14dp"
+            android:contentDescription="@string/childcomments_child_comment_author_image_description"
+            android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
             app:imageUrl="@{comment.authorImageUrl}"
             app:isCircle="@{true}"
-            android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
-            android:layout_marginTop="14dp"
-            android:layout_marginStart="8dp"
-            android:contentDescription="@string/childcomments_child_comment_author_image_description" />
+            app:layout_constraintStart_toEndOf="@+id/iv_childcomment_arrowdecoration"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

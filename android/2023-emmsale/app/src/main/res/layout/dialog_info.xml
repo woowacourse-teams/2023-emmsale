@@ -8,12 +8,15 @@
         <variable
             name="title"
             type="String" />
+
         <variable
             name="message"
             type="String" />
+
         <variable
             name="buttonLabel"
             type="String" />
+
         <variable
             name="onButtonClick"
             type="kotlin.jvm.functions.Function0" />
@@ -75,8 +78,8 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="확인"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_infodialog_horizontaldivider" />
+            app:layout_constraintTop_toBottomOf="@+id/view_infodialog_horizontaldivider"
+            tools:text="확인" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

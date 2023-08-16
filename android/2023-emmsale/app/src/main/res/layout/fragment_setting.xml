@@ -275,8 +275,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginEnd="17dp"
-            android:visibility="gone"
             android:onClick="@{() -> deleteMember.invoke()}"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cl_setting_version_info_button">

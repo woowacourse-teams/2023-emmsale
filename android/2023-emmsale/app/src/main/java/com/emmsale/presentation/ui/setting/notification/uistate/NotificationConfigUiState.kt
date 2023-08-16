@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.setting.notificationConfig.uistate
+package com.emmsale.presentation.ui.setting.notification.uistate
 
 import com.emmsale.data.config.Config
 

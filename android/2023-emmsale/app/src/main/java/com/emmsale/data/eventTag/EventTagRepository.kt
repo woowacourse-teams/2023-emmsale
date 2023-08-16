@@ -11,4 +11,5 @@ interface EventTagRepository {
     ): ApiResult<List<EventTag>>
 
     suspend fun getInterestEventTags(memberId: Long): ApiResult<List<EventTag>>
+    suspend fun updateInterestEventTags(interestEventTags: List<EventTag>): ApiResult<Unit>
 }
