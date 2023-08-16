@@ -50,9 +50,9 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_all_scrap_unchecked"
             android:id="@+id/iv_event_information_scrap"
-            android:layout_marginEnd="26dp"
+            android:layout_marginEnd="20dp"
+            android:padding="6dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="6dp"
             app:layout_constraintBottom_toTopOf="@+id/tv_event_information_scrap" />
 
         <TextView
