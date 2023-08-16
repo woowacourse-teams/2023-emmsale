@@ -36,7 +36,8 @@ class MyCommentsViewModel(
                 is ApiError, is ApiException ->
                     _comments.value = _comments.value.changeToFetchingErrorState()
 
-                is ApiSuccess -> _comments.value = _comments.value.setCommentsState(result.data)
+                is ApiSuccess ->
+                    _comments.value = _comments.value.setCommentsState(result.data, token.uid)
             }
         }
     }

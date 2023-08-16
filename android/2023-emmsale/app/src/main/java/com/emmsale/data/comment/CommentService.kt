@@ -20,6 +20,9 @@ interface CommentService {
     @GET("comments")
     suspend fun getComments(@Query("eventId") eventId: Long): Response<List<CommentFamilyApiModel>>
 
+    @GET("comments")
+    suspend fun getCommentsByMemberId(@Query("memberId") memberId: Long): Response<List<CommentFamilyApiModel>>
+
     @GET("comments/{commentId}")
     suspend fun getComment(@Path("commentId") commentId: Long): Response<CommentFamilyApiModel>
 

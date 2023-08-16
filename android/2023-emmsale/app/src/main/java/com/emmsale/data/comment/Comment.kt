@@ -9,6 +9,7 @@ data class Comment(
     val authorId: Long,
     val authorName: String,
     val authorImageUrl: String,
+    val parentId: Long?,
     val content: String,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
