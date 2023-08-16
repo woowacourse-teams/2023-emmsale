@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.emmsale.block.domain.Block;
 import com.emmsale.block.domain.BlockRepository;
+import com.emmsale.comment.application.dto.CommentFindRequest;
 import com.emmsale.comment.application.dto.CommentHierarchyResponse;
 import com.emmsale.comment.application.dto.CommentResponse;
 import com.emmsale.comment.domain.Comment;
@@ -57,8 +58,8 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
   }
 
   @Test
-  @DisplayName("findByEventId() : 행사에 존재하는 댓글들을 모두 조회할 수 있다.")
-  void test_findByEventId() throws Exception {
+  @DisplayName("findAllComments() : 주어진 memberId가 null이고, eventId가 주어지면 행사에 존재하는 댓글들을 모두 조회할 수 있다.")
+  void test_findAllComments_eventId() throws Exception {
     //given
     final Comment comment1 = Comment.createChild(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글1");
     final Comment comment2 = Comment.createChild(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글2");
@@ -68,7 +69,7 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
     final List<CommentHierarchyResponse> expected = List.of(
         new CommentHierarchyResponse(
             CommentResponse.from(부모_댓글2),
-            Collections.EMPTY_LIST
+            Collections.emptyList()
         ),
         new CommentHierarchyResponse(
             CommentResponse.from(부모_댓글1),
@@ -79,9 +80,46 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
         )
     );
 
+    final CommentFindRequest request = new CommentFindRequest(event.getId(), null);
+
     //when
-    final List<CommentHierarchyResponse> actual = commentQueryService.findAllCommentsByEventId(
-        event.getId(), member);
+    final List<CommentHierarchyResponse> actual =
+        commentQueryService.findAllComments(request, member);
+
+    //then
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("findAllComments() : 주어진 eventId가 null이고, memberId가 주어지면 사용자가 작성한 댓글들을 모두 조회할 수 있다.")
+  void test_findAllComments_memberId() throws Exception {
+    //given
+    final Comment comment1 = Comment.createChild(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글1");
+    final Comment comment2 = Comment.createChild(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글2");
+    commentRepository.save(comment2);
+    commentRepository.save(comment1);
+
+    final List<CommentHierarchyResponse> expected = List.of(
+        new CommentHierarchyResponse(
+            CommentResponse.from(부모_댓글2),
+            Collections.emptyList()
+        ),
+        new CommentHierarchyResponse(
+            CommentResponse.from(부모_댓글1),
+            List.of(
+                CommentResponse.from(comment2),
+                CommentResponse.from(comment1)
+            )
+        )
+    );
+
+    final CommentFindRequest request = new CommentFindRequest(null, member.getId());
+
+    //when
+    final List<CommentHierarchyResponse> actual =
+        commentQueryService.findAllComments(request, member);
 
     //then
     assertThat(actual)
@@ -135,9 +173,11 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
       final Block block = new Block(member.getId(), blockedMemberId);
       blockRepository.save(block);
 
+      final CommentFindRequest request = new CommentFindRequest(event.getId(), null);
+
       //when
-      final List<CommentHierarchyResponse> result = commentQueryService.findAllCommentsByEventId(
-          event.getId(), member);
+      final List<CommentHierarchyResponse> result = commentQueryService.findAllComments
+          (request, member);
 
       //then
       final int lastIndexOfResult = result.size() - 1;
@@ -158,9 +198,11 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
       final Block block = new Block(member.getId(), blockedMemberId);
       blockRepository.save(block);
 
+      final CommentFindRequest request = new CommentFindRequest(event.getId(), null);
+
       //when
-      final List<CommentHierarchyResponse> result = commentQueryService.findAllCommentsByEventId(
-          event.getId(), member);
+      final List<CommentHierarchyResponse> result =
+          commentQueryService.findAllComments(request, member);
 
       //then
       final String actualBlockedMemberContent = result.get(1).getChildComments().get(0)

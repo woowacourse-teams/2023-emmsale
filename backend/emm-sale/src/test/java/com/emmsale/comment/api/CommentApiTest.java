@@ -93,7 +93,10 @@ class CommentApiTest extends MockMvcTestHelper {
     final String accessToken = "Bearer AccessToken";
 
     final RequestParametersSnippet requestParam = requestParameters(
-        parameterWithName("eventId").description("댓글을 볼 행사 id"));
+        parameterWithName("eventId").description("댓글을 볼 행사 id(빈 값 가능)").optional(),
+        parameterWithName("memberId").description("조회할 댓글을 작성한 사용자 ID(빈 값 가능) [둘 다 빈 값 X]")
+            .optional()
+    );
 
     final ResponseFieldsSnippet responseFieldsSnippet = responseFields(
         fieldWithPath("[].parentComment.content").description("댓글 내용"),
@@ -123,7 +126,7 @@ class CommentApiTest extends MockMvcTestHelper {
         new CommentHierarchyResponse(
             new CommentResponse("부모댓글2", 4L, null, 1L, false,
                 LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
-            Collections.EMPTY_LIST
+            Collections.emptyList()
         ),
         new CommentHierarchyResponse(
             new CommentResponse("부모댓글1", 5L, null, 1L, false,
@@ -136,7 +139,7 @@ class CommentApiTest extends MockMvcTestHelper {
                 ))
         ));
 
-    when(commentQueryService.findAllCommentsByEventId(anyLong(), any()))
+    when(commentQueryService.findAllComments(any(), any()))
         .thenReturn(result);
 
     //when & then

@@ -3,6 +3,7 @@ package com.emmsale.comment.api;
 import com.emmsale.comment.application.CommentCommandService;
 import com.emmsale.comment.application.CommentQueryService;
 import com.emmsale.comment.application.dto.CommentAddRequest;
+import com.emmsale.comment.application.dto.CommentFindRequest;
 import com.emmsale.comment.application.dto.CommentHierarchyResponse;
 import com.emmsale.comment.application.dto.CommentModifyRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,9 +36,11 @@ public class CommentApi {
   }
 
   @GetMapping("/comments")
-  public List<CommentHierarchyResponse> findAll(@RequestParam final Long eventId,
-      final Member member) {
-    return commentQueryService.findAllCommentsByEventId(eventId, member);
+  public List<CommentHierarchyResponse> findAll(
+      final CommentFindRequest commentFindRequest,
+      final Member member
+  ) {
+    return commentQueryService.findAllComments(commentFindRequest, member);
   }
 
   @GetMapping("/comments/{comment-id}")

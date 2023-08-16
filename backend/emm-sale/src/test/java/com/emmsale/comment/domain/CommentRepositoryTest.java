@@ -81,4 +81,32 @@ class CommentRepositoryTest {
         List.of(parent.getId(), 자식댓글1.getId(), 자식댓글2.getId())
     );
   }
+
+  @Test
+  @DisplayName("findByMemberId() : 사용자가 작성한 댓글을 조회할 수 있다.")
+  void test_findByMemberId() throws Exception {
+    //given
+    final Event event1 = eventRepository.save(EventFixture.AI_컨퍼런스());
+    final Member member1 = memberRepository.findById(1L).get();
+    final Member member2 = memberRepository.findById(2L).get();
+
+    final Comment comment1 = commentRepository.save(
+        Comment.createRoot(event1, member1, "부모댓글1")
+    );
+    commentRepository.save(Comment.createChild(event1, comment1, member2, "자식댓글1"));
+    final Comment comment2 = commentRepository.save(
+        Comment.createChild(event1, comment1, member1, "자식댓글2")
+    );
+
+    final List<Comment> expected = List.of(comment1, comment2);
+
+    //when
+    final List<Comment> actual = commentRepository.findByMemberId(member1.getId());
+
+    //then
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .ignoringFields("createdAt")
+        .isEqualTo(expected);
+  }
 }
