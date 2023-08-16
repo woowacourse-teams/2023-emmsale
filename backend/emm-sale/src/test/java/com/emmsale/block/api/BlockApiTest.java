@@ -9,6 +9,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.block.application.BlockCommandService;
@@ -22,6 +24,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 
 @WebMvcTest(BlockApi.class)
 class BlockApiTest extends MockMvcTestHelper {
@@ -57,14 +60,18 @@ class BlockApiTest extends MockMvcTestHelper {
   @Test
   @DisplayName("성공적으로 차단을 해제한 경우 no content를 반환한다")
   void unregisterTest() throws Exception {
+    final Long blockId = 2L;
     final String accessToken = "Bearer accessToken";
 
+    final PathParametersSnippet pathParams = pathParameters(
+        parameterWithName("block-id").description("차단 ID")
+    );
 
     //when && then
-    mockMvc.perform(delete("/blocks/2")
+    mockMvc.perform(delete("/blocks/{block-id}", blockId)
             .header("Authorization", accessToken))
         .andExpect(status().isNoContent())
-        .andDo(document("unregister-block"));
+        .andDo(document("unregister-block", pathParams));
 
     verify(blockCommandService, times(1)).unregister(any(), any());
   }
