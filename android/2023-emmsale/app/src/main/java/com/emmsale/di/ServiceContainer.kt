@@ -25,7 +25,11 @@ class ServiceContainer(serviceFactory: ServiceFactory) {
     val eventDetailService: EventDetailService by lazy { serviceFactory.create(EventDetailService::class.java) }
     val recruitmentService: RecruitmentService by lazy { serviceFactory.create(RecruitmentService::class.java) }
     val notificationService: NotificationService by lazy { serviceFactory.create(NotificationService::class.java) }
-    val scrappedEventService: ScrappedEventService by lazy { serviceFactory.create(ScrappedEventService::class.java) }
+    val scrappedEventService: ScrappedEventService by lazy {
+        serviceFactory.create(
+            ScrappedEventService::class.java,
+        )
+    }
     val blockedMemberService: BlockedMemberService by lazy {
         serviceFactory.create(BlockedMemberService::class.java)
     }
