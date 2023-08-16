@@ -15,7 +15,6 @@ public class MemberProfileResponse {
   private final String description;
   private final String imageUrl;
   private final String openProfileUrl;
-  private final String githubUsername;
   private final String githubUrl;
 
   public static MemberProfileResponse from(Member member) {
@@ -25,7 +24,6 @@ public class MemberProfileResponse {
         member.getDescription(),
         member.getImageUrl(),
         member.getOptionalOpenProfileUrl().orElse(""),
-        member.getGithubUsername(),
         GITHUB_URL_PREFIX + member.getGithubUsername()
     );
   }
