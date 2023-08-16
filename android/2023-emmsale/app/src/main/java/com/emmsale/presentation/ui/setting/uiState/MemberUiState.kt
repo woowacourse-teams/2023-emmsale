@@ -53,7 +53,7 @@ data class MemberUiState(
         id = member.id,
         imageUrl = member.imageUrl,
         name = member.name,
-        githubId = member.githubId,
+        githubId = member.githubUrl,
     )
 
     companion object {

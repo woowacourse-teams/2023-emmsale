@@ -4,6 +4,8 @@ import com.emmsale.data.comment.Comment
 import java.time.format.DateTimeFormatter
 
 data class CommentUiState(
+    val authorId: Long,
+    val authorImageUrl: String,
     val authorName: String,
     val lastModifiedDate: String,
     val isUpdated: Boolean,
@@ -12,6 +14,7 @@ data class CommentUiState(
     val childCommentsCount: Int,
     val isUpdatable: Boolean,
     val isDeletable: Boolean,
+    val isReportable: Boolean,
     val isDeleted: Boolean,
 ) {
     companion object {
@@ -21,6 +24,8 @@ data class CommentUiState(
             comment: Comment,
             loginMemberId: Long,
         ) = CommentUiState(
+            authorId = comment.authorId,
+            authorImageUrl = comment.authorImageUrl,
             authorName = comment.authorName,
             lastModifiedDate = comment.updatedAt.format(dateTimeFormatter),
             isUpdated = comment.createdAt != comment.updatedAt,
@@ -29,6 +34,7 @@ data class CommentUiState(
             childCommentsCount = comment.childComments.size,
             isUpdatable = comment.authorId == loginMemberId,
             isDeletable = comment.authorId == loginMemberId,
+            isReportable = comment.authorId != loginMemberId,
             isDeleted = comment.deleted,
         )
     }

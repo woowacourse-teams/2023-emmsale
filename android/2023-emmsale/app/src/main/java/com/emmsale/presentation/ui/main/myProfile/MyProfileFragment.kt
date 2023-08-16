@@ -69,13 +69,12 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         }
     }
 
-    private fun handleErrors(errorEvents: List<MyProfileErrorEvent>) {
-        errorEvents.forEach {
-            when (it) {
-                MyProfileErrorEvent.PROFILE_FETCHING -> {}
-            }
+    private fun handleErrors(errorEvent: MyProfileErrorEvent?) {
+        if (errorEvent == null) return
+        when (errorEvent) {
+            MyProfileErrorEvent.PROFILE_FETCHING -> {}
         }
-        viewModel.errorEvents.clear()
+        viewModel.removeErrorEvent()
     }
 
     private fun handleFields(myProfile: MyProfileUiState) {

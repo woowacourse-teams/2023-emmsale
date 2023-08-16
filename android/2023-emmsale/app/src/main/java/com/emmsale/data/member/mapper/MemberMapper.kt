@@ -5,7 +5,7 @@ import com.emmsale.data.member.dto.MemberApiModel
 
 fun MemberApiModel.toData() = Member(
     id = id,
-    githubId = githubId,
+    githubUrl = githubUrl,
     name = name,
     description = description,
     imageUrl = imageUrl,

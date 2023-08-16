@@ -29,4 +29,10 @@ interface NotificationRepository {
     suspend fun deleteUpdatedNotifications(
         notificationIds: List<Long>,
     ): ApiResult<Unit>
+
+    suspend fun reportRecruitmentNotification(
+        recruitmentNotificationId: Long,
+        senderId: Long,
+        reporterId: Long,
+    ): ApiResult<Unit>
 }

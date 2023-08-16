@@ -15,6 +15,13 @@
     <string name="all_update_button_label">수정</string>
     <string name="all_delete_button_label">삭제</string>
     <string name="all_report_button_label">신고하기</string>
+    <string name="all_report_dialog_title">신고하기</string>
+    <string name="all_report_dialog_positive_button_label">신고</string>
+    <string name="all_report_complete_dialog_title">신고 완료</string>
+    <string name="all_report_complete_dialog_message">커뮤니티 가이드에 따라\n검토 후 처리 됩니다. 감사합니다.</string>
+    <string name="all_report_fail_message">신고하는 데 실패했어요 😢</string>
+    <string name="all_report_duplicate_message">이미 신고 하셨습니다.</string>
+    <string name="all_block">차단</string>
 
     <string name="onboarding_member_update_failed_message">회원정보 업데이트를 실패했어요!</string>
     <string name="onboarding_back_press_desc">온보딩 화면 뒤로가기</string>
@@ -72,6 +79,10 @@
     <string name="profile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
     <string name="profile_toolbar_title">프로필 조회</string>
     <string name="profile_more_button_title">더보기</string>
+    <string name="profile_block_complete_dialog_title">차단 완료</string>
+    <string name="profile_block_complete_dialog_message">해당 회원의 댓글, 모집 글, 같이가요 요청이 차단됩니다.</string>
+    <string name="profile_block_fail_message">차단에 실패했어요</string>
+    <string name="profile_block_warning_dialog_message">해당 회원을 차단 하시겠습니까?</string>
 
     <string name="profilemenudialog_block_button_label">차단하기</string>
     <string name="profilemenudialog_report_button_label">신고하기</string>
@@ -85,6 +96,7 @@
     <string name="comment_menu_button">댓글의 메뉴 버튼</string>
     <string name="comment_deleted_comment_author_name">삭제</string>
     <string name="comment_deleted_comment_content">삭제된 댓글입니다.</string>
+    <string name="comment_author_image">댓글 작성자의 사진</string>
 
     <string name="comments_is_updated">수정됨</string>
     <string name="comments_child_comments_count_format">답글 %d</string>
@@ -95,7 +107,8 @@
     <string name="comments_complete_post_comment">댓글을 게시했습니다.</string>
     <string name="comments_comments_fetching_error_message">댓글들을 불러오는 데 실패했어요 😥</string>
     <string name="comments_comments_posting_error_message">댓글을 게시하는 데 실패했어요 😥</string>
-    <string name="comments_comments_deletion_error_message">댓글을 삭제하는 데 실패했어요 😥</string>
+    <string name="comments_comments_deletion_error_message">댓글을 삭제하는 데 실패했어요 😥</string>.
+    <string name="comments_comment_report_dialog_message">해당 댓글을 신고 하시겠습니까?</string>
 
     <string name="commentsmenudialog_edit_button_label">수정</string>
     <string name="commentsmenudialog_delete_button_label">삭제</string>
@@ -108,6 +121,8 @@
 
     <string name="childcomments_edit_child_comment_hint">답글을 입력하세요.</string>
     <string name="childcomments_toolbar_title">답글</string>
+    <string name="childcomments_parent_comment_image_description">부모 댓글 작성자의 사진</string>
+    <string name="childcomments_child_comment_author_image_description">자식 댓글 작성자의 사진</string>
 
     <string name="event_view_notification_description">알림 목록 화면 조회</string>
     <string name="event_search_conference_description">컨퍼런스 검색 화면</string>
@@ -176,6 +191,7 @@
     <string name="recruitmentnotification_more_button">더보기 버튼</string>
     <string name="recruitmentnotification_header_expand_view">화면을 팽창 시킵니다.</string>
     <string name="recruitmentnotification_unregistered_sender_open_chat_url">상대방의 오픈 채팅이 등록되어 있지 않아요!</string>
+    <string name="recruitmentnotification_report_dialog_message">해당 같이가요 요청을 신고 하시겠습니까?</string>
 
     <string name="conference_default_people_count">0</string>
 
@@ -214,6 +230,7 @@
     <string name="recruitmentpostdetail_dialog_editing_text">수정</string>
     <string name="recruitmentpostdetail_dialog_deletion_text">삭제</string>
     <string name="recruitmentpostdetail_dialog_report_text">신고하기</string>
+    <string name="recruitmentpostdetail_report_dialog_message">해당 모집 글을 신고 하시겠습니까?</string>
 
     <string name="setting_member_image_description">회원의 사진</string>
     <string name="setting_notification_setting_button_label">알림 설정</string>
@@ -272,6 +289,8 @@
     <string name="editmyprofile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
     <string name="editmyprofile_update_description_error_message">한 줄 소개를 수정하는 데 실패했어요 😥</string>
     <string name="editmyprofile_all_activities_fetching_error_message">활동 정보를 불러오는 데 실패했어요 😥</string>
+    <string name="editmyprofile_activity_remove_error_message">활동을 삭제하는 데 실패했어요 😥</string>
+    <string name="editmyprofile_acitivities_add_error_message">활동들을 추가하는 데 실패했어요 😥</string>
 
     <string name="editmyprofilebottomdialog_field_selection_guide">최대 %d개까지 선택 가능합니다.</string>
 
@@ -304,4 +323,6 @@
     <string name="notificationtagconfig_tag_fetching_error_message">태그를 불러오지 못했어요!</string>
     <string name="notificationtagconfig_interest_tags_update_error_message">관심 태그 업데이트를 실패했어요!</string>
 
+    <string name="recruitmentpostdetail_delete_dialog_title">모집 글 삭제</string>
+    <string name="recruitmentpostdetail_delete_dialog_message">해당 모집 글을 삭제 하시겠습니까?</string>
 </resources>

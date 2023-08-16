@@ -10,11 +10,14 @@ import com.emmsale.databinding.FragmentRecruitmentNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.views.InfoDialog
+import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.dialog.RecruitmentAcceptedDialog
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.dialog.RecruitmentRejectConfirmDialog
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.body.RecruitmentNotificationBodyClickListener
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderAdapter
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderClickListener
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationEvent
 
 class RecruitmentNotificationFragment :
     BaseFragment<FragmentRecruitmentNotificationBinding>(),
@@ -32,6 +35,7 @@ class RecruitmentNotificationFragment :
         initView()
         setupNotifications()
         setupRecruitment()
+        setupEvent()
     }
 
     private fun initView() {
@@ -53,7 +57,14 @@ class RecruitmentNotificationFragment :
     }
 
     override fun onMoreButtonClick(notificationId: Long) {
-        viewModel.reportRecruitmentNotification(notificationId)
+        WarningDialog(
+            context = context ?: return,
+            title = getString(R.string.all_report_dialog_title),
+            message = getString(R.string.recruitmentnotification_report_dialog_message),
+            positiveButtonLabel = getString(R.string.all_report_dialog_positive_button_label),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { viewModel.reportRecruitmentNotification(notificationId) },
+        ).show()
     }
 
     override fun onOpenChatButtonClick(openChatUrl: String) {
@@ -119,5 +130,21 @@ class RecruitmentNotificationFragment :
 
     private fun showRecruitmentAcceptedDialog() {
         RecruitmentAcceptedDialog(requireContext()).show()
+    }
+
+    private fun setupEvent() {
+        viewModel.event.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
+            when (it) {
+                RecruitmentNotificationEvent.REPORT_FAIL -> showToast(getString(R.string.all_report_fail_message))
+                RecruitmentNotificationEvent.REPORT_SUCCESS -> InfoDialog(
+                    context = context ?: return@observe,
+                    title = getString(R.string.all_report_complete_dialog_title),
+                    message = getString(R.string.all_report_complete_dialog_message),
+                    buttonLabel = getString(R.string.all_okay),
+                ).show()
+            }
+            viewModel.removeEvent()
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.profile
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.activity.ActivityRepository
@@ -12,6 +14,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.ui.profile.uiState.ProfileEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 import kotlinx.coroutines.launch
 
@@ -26,6 +29,9 @@ class ProfileViewModel(
 
     private val _profile = NotNullMutableLiveData(ProfileUiState.FIRST_LOADING)
     val profile: NotNullLiveData<ProfileUiState> = _profile
+
+    private val _event = MutableLiveData<ProfileEvent?>(null)
+    val event: LiveData<ProfileEvent?> = _event
 
     fun fetchMember(memberId: Long) {
         _profile.value = _profile.value.changeToLoadingState()
@@ -54,6 +60,19 @@ class ProfileViewModel(
                 }
             }
         }
+    }
+
+    fun blockMember(memberId: Long) {
+        viewModelScope.launch {
+            when (memberRepository.blockMember(memberId)) {
+                is ApiError, is ApiException -> _event.value = ProfileEvent.BLOCK_FAIL
+                is ApiSuccess -> _event.value = ProfileEvent.BLOCK_COMPLETE
+            }
+        }
+    }
+
+    fun removeEvent() {
+        _event.value = null
     }
 
     companion object {

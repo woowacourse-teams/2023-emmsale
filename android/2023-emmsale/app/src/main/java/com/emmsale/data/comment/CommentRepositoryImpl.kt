@@ -7,6 +7,7 @@ import com.emmsale.data.comment.mapper.toData
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
+import com.emmsale.data.report.dto.ReportRequestBody
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -35,6 +36,7 @@ class CommentRepositoryImpl(
                         eventId = 1L,
                         eventName = "더미 행사 명",
                         authorId = 1L,
+                        authorImageUrl = "",
                         content = "doiajiofj",
                         authorName = "oasidjf",
                         createdAt = LocalDateTime.now(),
@@ -46,6 +48,7 @@ class CommentRepositoryImpl(
                         id = 2L,
                         eventId = 1L,
                         eventName = "더미 행사 명",
+                        authorImageUrl = "",
                         authorId = 1L,
                         content = "doiajiofj",
                         authorName = "oasidjf",
@@ -58,6 +61,7 @@ class CommentRepositoryImpl(
                         id = 3L,
                         eventId = 1L,
                         eventName = "더미 행사 명",
+                        authorImageUrl = "",
                         authorId = 1L,
                         content = "doiajiofj",
                         authorName = "oasidjf",
@@ -73,6 +77,7 @@ class CommentRepositoryImpl(
                         authorId = 1L,
                         content = "doiajiofj",
                         authorName = "oasidjf",
+                        authorImageUrl = "",
                         createdAt = LocalDateTime.now(),
                         updatedAt = LocalDateTime.now(),
                         deleted = false,
@@ -85,6 +90,7 @@ class CommentRepositoryImpl(
                         authorId = 1L,
                         content = "doiajiofj",
                         authorName = "oasidjf",
+                        authorImageUrl = "",
                         createdAt = LocalDateTime.now(),
                         updatedAt = LocalDateTime.now(),
                         deleted = false,
@@ -96,6 +102,7 @@ class CommentRepositoryImpl(
                         eventName = "더미 행사 명",
                         authorId = 1L,
                         content = "doiajiofj",
+                        authorImageUrl = "",
                         authorName = "oasidjf",
                         createdAt = LocalDateTime.now(),
                         updatedAt = LocalDateTime.now(),
@@ -155,6 +162,25 @@ class CommentRepositoryImpl(
     override suspend fun deleteComment(commentId: Long): ApiResult<Unit> = withContext(dispatcher) {
         handleApi(
             execute = { commentService.deleteComment(commentId) },
+            mapToDomain = {},
+        )
+    }
+
+    override suspend fun reportComment(
+        commentId: Long,
+        authorId: Long,
+        reporterId: Long,
+    ): ApiResult<Unit> = withContext(dispatcher) {
+        handleApi(
+            execute = {
+                commentService.reportComment(
+                    ReportRequestBody.createCommentReport(
+                        commentId = commentId,
+                        authorId = authorId,
+                        reporterId = reporterId,
+                    ),
+                )
+            },
             mapToDomain = {},
         )
     }

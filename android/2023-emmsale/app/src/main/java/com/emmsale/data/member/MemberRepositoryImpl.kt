@@ -1,15 +1,15 @@
 package com.emmsale.data.member
 
 import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
+import com.emmsale.data.member.dto.BlockRequestBody
+import com.emmsale.data.member.dto.MemberActivitiesUpdateRequestBody
 import com.emmsale.data.member.dto.MemberDescriptionUpdateRequestBody
 import com.emmsale.data.member.dto.MemberUpdateRequestBody
 import com.emmsale.data.member.mapper.toData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.Headers
 
 class MemberRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -52,13 +52,34 @@ class MemberRepositoryImpl(
             )
         }
 
-    override suspend fun updateMemberActivities(activities: List<Long>): ApiResult<Unit> {
-        return ApiSuccess(Unit, Headers.headersOf())
-    }
+    override suspend fun addMemberActivities(activityIds: List<Long>): ApiResult<Unit> =
+        withContext(dispatcher) {
+            handleApi(
+                execute = {
+                    memberService.addMemberActivities(MemberActivitiesUpdateRequestBody(activityIds))
+                },
+                mapToDomain = {},
+            )
+        }
+
+    override suspend fun deleteMemberActivities(activityIds: List<Long>): ApiResult<Unit> =
+        withContext(dispatcher) {
+            handleApi(
+                execute = { memberService.deleteMemberActivities(activityIds) },
+                mapToDomain = { },
+            )
+        }
 
     override suspend fun deleteMember(memberId: Long): ApiResult<Unit> = withContext(dispatcher) {
         handleApi(
             execute = { memberService.deleteMember(memberId) },
+            mapToDomain = {},
+        )
+    }
+
+    override suspend fun blockMember(memberId: Long): ApiResult<Unit> = withContext(dispatcher) {
+        handleApi(
+            execute = { memberService.blockMember(BlockRequestBody(memberId)) },
             mapToDomain = {},
         )
     }

@@ -9,11 +9,13 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityProfileBinding
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTag
+import com.emmsale.presentation.common.views.InfoDialog
+import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
-import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
+import com.emmsale.presentation.ui.profile.uiState.ProfileEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 
 class ProfileActivity : AppCompatActivity() {
@@ -35,12 +37,19 @@ class ProfileActivity : AppCompatActivity() {
 
     private val menuDialog: BottomMenuDialog by lazy {
         BottomMenuDialog(this).apply {
-            addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) {}
-            addMenuItemBelow(
-                getString(R.string.profilemenudialog_report_button_label),
-                MenuItemType.IMPORTANT,
-            ) {}
+            addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) { onBlockButtonClick() }
         }
+    }
+
+    private fun onBlockButtonClick() {
+        WarningDialog(
+            context = this@ProfileActivity,
+            title = getString(R.string.profilemenudialog_block_button_label),
+            message = getString(R.string.profile_block_warning_dialog_message),
+            positiveButtonLabel = getString(R.string.all_block),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { viewModel.blockMember(memberId) },
+        ).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,6 +86,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun setupUiLogic() {
         setupLoginUiLogic()
         setupProfileUiLogic()
+        setupProfileEventUiLogic()
     }
 
     private fun setupLoginUiLogic() {
@@ -92,6 +102,25 @@ class ProfileActivity : AppCompatActivity() {
             handleFields(it)
             handleActivities(it)
         }
+    }
+
+    private fun setupProfileEventUiLogic() {
+        viewModel.event.observe(this) {
+            handleEvents(it)
+        }
+    }
+
+    private fun handleEvents(event: ProfileEvent?) {
+        if (event == null) return
+        when (event) {
+            ProfileEvent.BLOCK_FAIL -> showToast(getString(R.string.profile_block_fail_message))
+            ProfileEvent.BLOCK_COMPLETE -> InfoDialog(
+                context = this,
+                title = getString(R.string.profile_block_complete_dialog_title),
+                message = getString(R.string.profile_block_complete_dialog_message),
+            ).show()
+        }
+        viewModel.removeEvent()
     }
 
     private fun handleLoginMember(profile: ProfileUiState) {

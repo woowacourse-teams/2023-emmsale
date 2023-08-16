@@ -12,9 +12,11 @@ import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentUiState
 
 class CommentViewHolder(
     private val binding: ItemCommentsCommentsBinding,
+    private val showProfile: (authorId: Long) -> Unit,
     private val showChildComments: (parentCommentId: Long) -> Unit,
     private val editComment: (commentId: Long) -> Unit,
     private val deleteComment: (commentId: Long) -> Unit,
+    private val reportComment: (commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val bottomMenuDialog = BottomMenuDialog(binding.root.context)
@@ -22,6 +24,9 @@ class CommentViewHolder(
     init {
         binding.root.setOnClickListener {
             showChildComments(binding.comment?.id ?: return@setOnClickListener)
+        }
+        binding.ivCommentAuthorImage.setOnClickListener {
+            showProfile(binding.comment?.authorId ?: return@setOnClickListener)
         }
     }
 
@@ -35,7 +40,7 @@ class CommentViewHolder(
         bottomMenuDialog.resetMenu()
         if (comment.isUpdatable) bottomMenuDialog.addUpdateButton()
         if (comment.isDeletable) bottomMenuDialog.addDeleteButton()
-        bottomMenuDialog.addReportButton()
+        if (comment.isReportable) bottomMenuDialog.addReportButton()
 
         binding.ivCommentMenubutton.setOnClickListener { bottomMenuDialog.show() }
     }
@@ -68,20 +73,29 @@ class CommentViewHolder(
         addMenuItemBelow(
             context.getString(R.string.all_report_button_label),
             MenuItemType.IMPORTANT,
-        ) { }
+        ) { reportComment(binding.comment?.id ?: return@addMenuItemBelow) }
     }
 
     companion object {
         fun create(
             parent: ViewGroup,
+            showProfile: (authorId: Long) -> Unit,
             showChildComments: (parentCommentId: Long) -> Unit,
             editComment: (commentId: Long) -> Unit,
             deleteComment: (commentId: Long) -> Unit,
+            reportComment: (commentId: Long) -> Unit,
         ): CommentViewHolder {
             val binding = ItemCommentsCommentsBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
-            return CommentViewHolder(binding, showChildComments, editComment, deleteComment)
+            return CommentViewHolder(
+                binding,
+                showProfile,
+                showChildComments,
+                editComment,
+                deleteComment,
+                reportComment,
+            )
         }
     }
 }
