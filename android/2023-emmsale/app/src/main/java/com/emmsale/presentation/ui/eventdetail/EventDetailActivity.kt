@@ -3,6 +3,7 @@ package com.emmsale.presentation.ui.eventdetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
@@ -23,6 +24,14 @@ class EventDetailActivity : AppCompatActivity() {
         setUpBinding()
         setUpEventDetail()
         initBackPressButtonClickListener()
+    }
+
+    fun hideEventInformation() {
+        binding.clEventDetailEventContainer.visibility = View.GONE
+    }
+
+    fun showEventInformation() {
+        binding.clEventDetailEventContainer.visibility = View.VISIBLE
     }
 
     private fun setUpBinding() {

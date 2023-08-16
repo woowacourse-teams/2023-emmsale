@@ -28,6 +28,8 @@ import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.data.notification.NotificationRepositoryImpl
 import com.emmsale.data.recruitment.RecruitmentRepository
 import com.emmsale.data.recruitment.RecruitmentRepositoryImpl
+import com.emmsale.data.scrap.ScrappedEventRepository
+import com.emmsale.data.scrap.ScrappedEventRepositoryImpl
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.data.token.TokenRepositoryImpl
 
@@ -52,7 +54,7 @@ class RepositoryContainer(
         MemberRepositoryImpl(memberService = serviceContainer.memberService)
     }
     val eventRepository: EventRepository by lazy {
-        EventRepositoryImpl(eventService = serviceContainer.eventService)
+        EventRepositoryImpl(eventService = serviceContainer.conferenceService)
     }
     val fcmTokenRepository: FcmTokenRepository by lazy {
         FcmTokenRepositoryImpl(fcmTokenService = serviceContainer.fcmTokenService)
@@ -71,7 +73,9 @@ class RepositoryContainer(
         )
     }
     val eventDetailRepository: EventDetailRepository by lazy {
-        EventDetailRepositoryImpl(eventDetailService = serviceContainer.eventDetailService)
+        EventDetailRepositoryImpl(
+            eventDetailService = serviceContainer.eventDetailService,
+        )
     }
     val recruitmentRepository: RecruitmentRepository by lazy {
         RecruitmentRepositoryImpl(
@@ -81,6 +85,9 @@ class RepositoryContainer(
     }
     val notificationRepository: NotificationRepository by lazy {
         NotificationRepositoryImpl(notificationService = serviceContainer.notificationService)
+    }
+    val scrappedEventRepository: ScrappedEventRepository by lazy {
+        ScrappedEventRepositoryImpl(scrappedEventService = serviceContainer.scrappedEventService)
     }
     val blockedMemberRepository: BlockedMemberRepository by lazy {
         BlockedMemberRepositoryImpl(blockedMemberService = serviceContainer.blockedMemberService)

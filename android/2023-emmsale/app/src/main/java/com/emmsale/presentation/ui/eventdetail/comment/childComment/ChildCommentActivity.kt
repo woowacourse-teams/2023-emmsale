@@ -32,6 +32,12 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private val parentCommentId: Long by lazy { intent.getLongExtra(KEY_PARENT_COMMENT_ID, -1) }
 
+    private val inputMethodManager: InputMethodManager by lazy {
+        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    }
+
+    private var saveButtonCLick: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -168,6 +174,7 @@ class ChildCommentActivity : AppCompatActivity() {
         (binding.rvChildcommentsChildcomments.adapter as ChildCommentAdapter).submitList(
             listOf(childComments.parentComment) + childComments.childComments,
         )
+        if (saveButtonCLick) scrollToLastPosition(childComments)
     }
 
     private fun handleEditComment() {
@@ -199,6 +206,7 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private fun onChildCommentSave() {
+        saveButtonCLick = true
         viewModel.saveChildComment(
             content = binding.etChildcommentsEditchildcommentcontent.text.toString(),
             parentCommentId = parentCommentId,
@@ -207,6 +215,15 @@ class ChildCommentActivity : AppCompatActivity() {
         binding.etChildcommentsEditchildcommentcontent.apply {
             text.clear()
         }
+        hideKeyboard()
+    }
+
+    private fun scrollToLastPosition(childComments: ChildCommentsUiState) {
+        binding.rvChildcommentsChildcomments.smoothScrollToPosition(childComments.childComments.size + 1)
+    }
+
+    private fun hideKeyboard() {
+        inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
     companion object {
