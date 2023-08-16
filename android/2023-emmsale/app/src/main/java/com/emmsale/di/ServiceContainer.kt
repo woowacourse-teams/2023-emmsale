@@ -12,6 +12,7 @@ import com.emmsale.data.login.LoginService
 import com.emmsale.data.member.MemberService
 import com.emmsale.data.notification.NotificationService
 import com.emmsale.data.recruitment.RecruitmentService
+import com.emmsale.data.scrap.ScrappedEventService
 
 class ServiceContainer(serviceFactory: ServiceFactory) {
     val loginService: LoginService by lazy { serviceFactory.create(LoginService::class.java) }
@@ -24,4 +25,5 @@ class ServiceContainer(serviceFactory: ServiceFactory) {
     val eventDetailService: EventDetailService by lazy { serviceFactory.create(EventDetailService::class.java) }
     val recruitmentService: RecruitmentService by lazy { serviceFactory.create(RecruitmentService::class.java) }
     val notificationService: NotificationService by lazy { serviceFactory.create(NotificationService::class.java) }
+    val scrappedEventService: ScrappedEventService by lazy { serviceFactory.create(ScrappedEventService::class.java) }
 }

@@ -22,6 +22,8 @@ import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.data.notification.NotificationRepositoryImpl
 import com.emmsale.data.recruitment.RecruitmentRepository
 import com.emmsale.data.recruitment.RecruitmentRepositoryImpl
+import com.emmsale.data.scrap.ScrappedEventRepository
+import com.emmsale.data.scrap.ScrappedEventRepositoryImpl
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.data.token.TokenRepositoryImpl
 
@@ -59,7 +61,6 @@ class RepositoryContainer(
     val eventDetailRepository: EventDetailRepository by lazy {
         EventDetailRepositoryImpl(
             eventDetailService = serviceContainer.eventDetailService,
-            tokenRepository = tokenRepository,
         )
     }
     val recruitmentRepository: RecruitmentRepository by lazy {
@@ -70,5 +71,8 @@ class RepositoryContainer(
     }
     val notificationRepository: NotificationRepository by lazy {
         NotificationRepositoryImpl(notificationService = serviceContainer.notificationService)
+    }
+    val scrappedEventRepository: ScrappedEventRepository by lazy {
+        ScrappedEventRepositoryImpl(scrappedEventService = serviceContainer.scrappedEventService)
     }
 }
