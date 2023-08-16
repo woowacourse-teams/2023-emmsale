@@ -14,10 +14,10 @@ class UpdateNotificationTypeTest {
 
   static Stream<Arguments> convertClassTypeToEnum() {
 
-    final String notificationType1 = Event.class.getName();
+    final String notificationType1 = "event";
     final UpdateNotificationType type1 = UpdateNotificationType.EVENT;
 
-    final String notificationType2 = Comment.class.getName();
+    final String notificationType2 = "comment";
     final UpdateNotificationType type2 = UpdateNotificationType.COMMENT;
 
     return Stream.of(
