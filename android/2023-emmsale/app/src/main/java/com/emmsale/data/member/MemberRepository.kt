@@ -15,4 +15,6 @@ interface MemberRepository {
     suspend fun deleteMemberActivities(activityIds: List<Long>): ApiResult<Unit>
 
     suspend fun deleteMember(memberId: Long): ApiResult<Unit>
+
+    suspend fun blockMember(memberId: Long): ApiResult<Unit>
 }

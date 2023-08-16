@@ -2,6 +2,7 @@ package com.emmsale.data.member
 
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
+import com.emmsale.data.member.dto.BlockRequestBody
 import com.emmsale.data.member.dto.MemberActivitiesUpdateRequestBody
 import com.emmsale.data.member.dto.MemberDescriptionUpdateRequestBody
 import com.emmsale.data.member.dto.MemberUpdateRequestBody
@@ -72,6 +73,13 @@ class MemberRepositoryImpl(
     override suspend fun deleteMember(memberId: Long): ApiResult<Unit> = withContext(dispatcher) {
         handleApi(
             execute = { memberService.deleteMember(memberId) },
+            mapToDomain = {},
+        )
+    }
+
+    override suspend fun blockMember(memberId: Long): ApiResult<Unit> = withContext(dispatcher) {
+        handleApi(
+            execute = { memberService.blockMember(BlockRequestBody(memberId)) },
             mapToDomain = {},
         )
     }

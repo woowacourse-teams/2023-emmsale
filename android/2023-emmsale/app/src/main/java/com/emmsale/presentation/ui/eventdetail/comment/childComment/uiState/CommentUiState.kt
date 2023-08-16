@@ -13,6 +13,7 @@ data class CommentUiState(
     val content: String,
     val isUpdatable: Boolean,
     val isDeletable: Boolean,
+    val isReportable: Boolean,
     val isDeleted: Boolean,
 ) {
     companion object {
@@ -31,6 +32,7 @@ data class CommentUiState(
             content = comment.content,
             isUpdatable = comment.authorId == loginMemberId,
             isDeletable = comment.authorId == loginMemberId,
+            isReportable = comment.authorId != loginMemberId,
             isDeleted = comment.deleted,
         )
     }

@@ -1,6 +1,7 @@
 package com.emmsale.data.member
 
 import com.emmsale.data.activity.dto.MemberActivitiesApiModel
+import com.emmsale.data.member.dto.BlockRequestBody
 import com.emmsale.data.member.dto.MemberActivitiesUpdateRequestBody
 import com.emmsale.data.member.dto.MemberApiModel
 import com.emmsale.data.member.dto.MemberDescriptionUpdateRequestBody
@@ -33,4 +34,7 @@ interface MemberService {
 
     @DELETE("/members/{memberId}")
     suspend fun deleteMember(@Path("memberId") memberId: Long): Response<Unit>
+
+    @POST("/blocks")
+    suspend fun blockMember(@Body blockRequestBody: BlockRequestBody): Response<Unit>
 }

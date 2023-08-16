@@ -4,6 +4,8 @@ import com.emmsale.data.comment.dto.CommentApiModel
 import com.emmsale.data.comment.dto.CommentFamilyApiModel
 import com.emmsale.data.comment.dto.SaveCommentRequestBody
 import com.emmsale.data.comment.dto.UpdateCommentRequestBody
+import com.emmsale.data.report.dto.ReportApiModel
+import com.emmsale.data.report.dto.ReportRequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -35,4 +37,7 @@ interface CommentService {
 
     @DELETE("comments/{commentId}")
     suspend fun deleteComment(@Path("commentId") commentId: Long): Response<Unit>
+
+    @POST("/reports")
+    suspend fun reportComment(@Body reportRequestBody: ReportRequestBody): Response<ReportApiModel>
 }

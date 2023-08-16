@@ -11,6 +11,7 @@ import com.emmsale.data.notification.updated.UpdatedNotification
 import com.emmsale.data.notification.updated.dto.UpdatedNotificationApiModel
 import com.emmsale.data.notification.updated.dto.UpdatedNotificationDeleteRequestModel
 import com.emmsale.data.notification.updated.mapper.toData
+import com.emmsale.data.report.dto.ReportRequestBody
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -80,5 +81,24 @@ class NotificationRepositoryImpl(
                 mapToDomain = { },
             )
         }
+    }
+
+    override suspend fun reportRecruitmentNotification(
+        recruitmentNotificationId: Long,
+        senderId: Long,
+        reporterId: Long,
+    ): ApiResult<Unit> = withContext(dispatcher) {
+        handleApi(
+            execute = {
+                notificationService.reportRecruitmentNotification(
+                    ReportRequestBody.createRecruitmentNotificationReport(
+                        recruitmentNotificationId = recruitmentNotificationId,
+                        senderId = senderId,
+                        reporterId = reporterId,
+                    ),
+                )
+            },
+            mapToDomain = {},
+        )
     }
 }

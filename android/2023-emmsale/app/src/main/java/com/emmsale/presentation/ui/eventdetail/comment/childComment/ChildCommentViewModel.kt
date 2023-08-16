@@ -14,6 +14,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsEvent
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiState
 import kotlinx.coroutines.launch
 
@@ -35,6 +36,9 @@ class ChildCommentViewModel(
             .find { comment -> comment.id == it }
             ?.content
     }
+
+    private val _event = MutableLiveData<ChildCommentsEvent?>(null)
+    val event: LiveData<ChildCommentsEvent?> = _event
 
     fun fetchComment(commentId: Long) {
         _comments.value = _comments.value.changeToLoadingState()
@@ -101,7 +105,30 @@ class ChildCommentViewModel(
         _editingCommentId.value = commentId
     }
 
+    fun reportComment(commentId: Long) {
+        viewModelScope.launch {
+            val token = tokenRepository.getToken()
+            if (token == null) {
+                _isLogin.value = false
+                return@launch
+            }
+            val authorId =
+                (_comments.value.childComments + _comments.value.parentComment).find { it.id == commentId }?.authorId
+                    ?: return@launch
+            when (commentRepository.reportComment(commentId, authorId, token.uid)) {
+                is ApiError, is ApiException -> _event.value = ChildCommentsEvent.REPORT_ERROR
+                is ApiSuccess -> _event.value = ChildCommentsEvent.REPORT_COMPLETE
+            }
+        }
+    }
+
+    fun removeEvent() {
+        _event.value = null
+    }
+
     companion object {
+        private const val REPORT_DUPLICATE_ERROR_CODE = "이미"
+
         val factory = ViewModelFactory {
             ChildCommentViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,

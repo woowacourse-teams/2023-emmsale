@@ -14,6 +14,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.CompanionRequestTaskUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState
 import kotlinx.coroutines.launch
@@ -39,6 +40,9 @@ class RecruitmentPostDetailViewModel(
     val isAlreadyRequest: LiveData<Boolean> = _isAlreadyRequest
 
     private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
+
+    private val _event = MutableLiveData<RecruitmentPostDetailEvent?>(null)
+    val event: LiveData<RecruitmentPostDetailEvent?> = _event
 
     init {
         fetchRecruitmentPost()
@@ -86,6 +90,26 @@ class RecruitmentPostDetailViewModel(
                 is ApiError, is ApiException -> _isDeletePostSuccess.postValue(false)
             }
         }
+    }
+
+    fun reportRecruitment() {
+        viewModelScope.launch {
+            val result = recruitmentRepository.reportRecruitment(
+                recruitmentId,
+                recruitmentPost.value.memberId,
+                myUid,
+            )
+            when (result) {
+                is ApiError, is ApiException ->
+                    _event.value = RecruitmentPostDetailEvent.REPORT_FAIL
+
+                is ApiSuccess -> _event.value = RecruitmentPostDetailEvent.REPORT_SUCCESS
+            }
+        }
+    }
+
+    fun removeEvent() {
+        _event.value = null
     }
 
     private fun checkIsAlreadyRequestCompanion() {

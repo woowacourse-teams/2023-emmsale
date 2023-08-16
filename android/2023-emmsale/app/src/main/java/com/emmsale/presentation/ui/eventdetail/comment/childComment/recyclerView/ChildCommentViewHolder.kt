@@ -15,6 +15,7 @@ class ChildCommentViewHolder(
     private val showProfile: (authorId: Long) -> Unit,
     private val editComment: (commentId: Long) -> Unit,
     private val deleteComment: (commentId: Long) -> Unit,
+    private val reportComment: (commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val bottomMenuDialog = BottomMenuDialog(binding.root.context)
@@ -36,7 +37,7 @@ class ChildCommentViewHolder(
         bottomMenuDialog.resetMenu()
         if (comment.isUpdatable) bottomMenuDialog.addUpdateButton()
         if (comment.isDeletable) bottomMenuDialog.addDeleteButton()
-        bottomMenuDialog.addReportButton()
+        if (comment.isReportable) bottomMenuDialog.addReportButton()
 
         binding.ivChildcommentMenubutton.setOnClickListener { bottomMenuDialog.show() }
     }
@@ -69,7 +70,7 @@ class ChildCommentViewHolder(
         addMenuItemBelow(
             context.getString(R.string.all_report_button_label),
             MenuItemType.IMPORTANT,
-        ) { }
+        ) { reportComment(binding.comment?.id ?: return@addMenuItemBelow) }
     }
 
     companion object {
@@ -78,11 +79,18 @@ class ChildCommentViewHolder(
             showProfile: (authorId: Long) -> Unit,
             editComment: (commentId: Long) -> Unit,
             deleteComment: (commentId: Long) -> Unit,
+            reportComment: (commentId: Long) -> Unit,
         ): ChildCommentViewHolder {
             val binding = ItemChildcommentsChildcommentBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
-            return ChildCommentViewHolder(binding, showProfile, editComment, deleteComment)
+            return ChildCommentViewHolder(
+                binding,
+                showProfile,
+                editComment,
+                deleteComment,
+                reportComment,
+            )
         }
     }
 }
