@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationConfigBinding
+import com.emmsale.presentation.ui.setting.notificationTagConfig.NotificationTagConfigActivity
 
 class NotificationConfigActivity : AppCompatActivity() {
     private val viewModel: NotificationConfigViewModel by viewModels { NotificationConfigViewModel.factory }
@@ -45,6 +46,7 @@ class NotificationConfigActivity : AppCompatActivity() {
     }
 
     private fun navigateToNotificationTagConfigActivity() {
+        NotificationTagConfigActivity.startActivity(this)
     }
 
     companion object {

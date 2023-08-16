@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.setting.notificationTagConfig
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,5 +22,11 @@ class NotificationTagConfigActivity : AppCompatActivity() {
     private fun initView() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+    }
+
+    companion object {
+        fun startActivity(context: Context) {
+            context.startActivity(Intent(context, NotificationTagConfigActivity::class.java))
+        }
     }
 }
