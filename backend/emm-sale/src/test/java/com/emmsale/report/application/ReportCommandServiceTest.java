@@ -4,7 +4,6 @@ import static com.emmsale.event.EventFixture.eventFixture;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.domain.Event;
@@ -22,6 +21,7 @@ import com.emmsale.report.domain.ReportType;
 import com.emmsale.report.exception.ReportException;
 import com.emmsale.report.exception.ReportExceptionType;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -39,8 +39,6 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
   private MemberRepository memberRepository;
   @Autowired
   private EventRepository eventRepository;
-  @Autowired
-  private BlockRepository blockRepository;
   @Autowired
   private CommentRepository commentRepository;
   @Autowired
@@ -126,10 +124,8 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
           .hasMessage(ReportExceptionType.REPORTER_MISMATCH.errorMessage());
     }
 
-
-    // TODO: 2023-08-16 수정해야 함
     @Test
-    @DisplayName("이미 신고한 사용자를 한 번 더 신고할 경우 예외를 반환한다.")
+    @DisplayName("이미 신고한 게시물을 한 번 더 신고할 경우 예외를 반환한다.")
     void create_fail_already_exist_report() {
       // given
       final Long abusingContentId = 1L;
@@ -249,14 +245,64 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
 
         // when
         final ReportCreateResponse actual = reportCommandService.create(request, reporter);
-        final boolean isBlocked = blockRepository.existsByRequestMemberIdAndBlockMemberId(신고자_ID,
-            신고_대상자_ID);
 
         // then
         assertThat(actual)
             .usingRecursiveComparison()
             .ignoringFields("id", "createdAt")
             .isEqualTo(expected);
+      }
+
+      @Test
+      @DisplayName("한 사용자의 여러 게시물을 연달아서 신고할 수 있다.")
+      void create_success() {
+        // given
+        final Long abusingContentId = 1L;
+        final Member reporter = memberRepository.findById(신고자_ID).get();
+        final ReportCreateRequest commentRequest = new ReportCreateRequest(신고자_ID, 신고_대상자_ID,
+            ReportType.COMMENT,
+            abusingContentId);
+        final ReportCreateResponse commentExpected = new ReportCreateResponse(1L, 신고자_ID, 신고_대상자_ID,
+            ReportType.COMMENT, abusingContentId, null);
+        final ReportCreateRequest recruitmentPostRequest = new ReportCreateRequest(신고자_ID,
+            신고_대상자_ID,
+            ReportType.RECRUITMENT_POST,
+            abusingContentId);
+        final ReportCreateResponse recruitmentPostExpected = new ReportCreateResponse(2L, 신고자_ID,
+            신고_대상자_ID,
+            ReportType.RECRUITMENT_POST, abusingContentId, null);
+        final ReportCreateRequest requestNotificationRequest = new ReportCreateRequest(신고자_ID,
+            신고_대상자_ID,
+            ReportType.REQUEST_NOTIFICATION,
+            abusingContentId);
+        final ReportCreateResponse requestNotificationExpected = new ReportCreateResponse(3L,
+            신고자_ID, 신고_대상자_ID,
+            ReportType.REQUEST_NOTIFICATION, abusingContentId, null);
+
+        // when
+        final ReportCreateResponse commentActual = reportCommandService.create(commentRequest,
+            reporter);
+        final ReportCreateResponse recruitmentPostActual = reportCommandService.create(
+            recruitmentPostRequest, reporter);
+        final ReportCreateResponse requestNotificationActual = reportCommandService.create(
+            requestNotificationRequest, reporter);
+
+        // then
+        Assertions.assertAll(
+            () -> assertThat(commentActual)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "createdAt")
+                .isEqualTo(commentExpected),
+            () -> assertThat(recruitmentPostActual)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "createdAt")
+                .isEqualTo(recruitmentPostExpected),
+            () -> assertThat(requestNotificationActual)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "createdAt")
+                .isEqualTo(requestNotificationExpected)
+        );
+
       }
 
     }

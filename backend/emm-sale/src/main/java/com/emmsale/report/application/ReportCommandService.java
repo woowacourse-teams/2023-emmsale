@@ -65,8 +65,8 @@ public class ReportCommandService {
   }
 
   private void validateAlreadyExistReport(final ReportCreateRequest reportRequest) {
-    if (reportRepository.existsReportByReporterIdAndReportedId(
-        reportRequest.getReporterId(), reportRequest.getReportedId())) {
+    if (reportRepository.existsReportByReporterIdAndContentIdAndType(
+        reportRequest.getReporterId(), reportRequest.getContentId(), reportRequest.getType())) {
       throw new ReportException(ReportExceptionType.ALREADY_EXIST_REPORT);
     }
   }
