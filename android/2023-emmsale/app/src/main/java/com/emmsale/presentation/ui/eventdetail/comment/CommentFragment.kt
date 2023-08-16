@@ -156,7 +156,6 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     private fun handleComments(comments: CommentsUiState) {
         (binding.rvCommentsComments.adapter as CommentsAdapter).submitList(comments.comments)
         if (isSaveButtonClick) scrollToLastPosition(comments)
-        isSaveButtonClick = false
     }
 
     private fun handleCommentEditing() {
