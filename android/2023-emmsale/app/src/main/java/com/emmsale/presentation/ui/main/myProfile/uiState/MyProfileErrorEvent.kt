@@ -1,7 +1,5 @@
 package com.emmsale.presentation.ui.main.myProfile.uiState
 
-import com.emmsale.presentation.common.livedata.error.ErrorEvent
-
-enum class MyProfileErrorEvent : ErrorEvent {
+enum class MyProfileErrorEvent {
     PROFILE_FETCHING,
 }

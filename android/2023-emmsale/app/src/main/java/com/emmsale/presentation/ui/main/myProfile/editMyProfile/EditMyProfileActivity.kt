@@ -195,15 +195,14 @@ class EditMyProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleErrors(errorEvents: List<EditMyProfileErrorEvent>) {
-        errorEvents.forEach {
-            when (it) {
-                EditMyProfileErrorEvent.MEMBER_FETCHING -> {}
-                EditMyProfileErrorEvent.DESCRIPTION_UPDATE -> showToast(getString(R.string.editmyprofile_update_description_error_message))
-                EditMyProfileErrorEvent.ACTIVITIES_FETCHING -> {}
-            }
+    private fun handleErrors(errorEvent: EditMyProfileErrorEvent?) {
+        when (errorEvent) {
+            EditMyProfileErrorEvent.DESCRIPTION_UPDATE -> showToast(getString(R.string.editmyprofile_update_description_error_message))
+            EditMyProfileErrorEvent.ACTIVITY_REMOVE -> showToast(getString(R.string.editmyprofile_activity_remove_error_message))
+            EditMyProfileErrorEvent.ACTIVITIES_ADD -> showToast(getString(R.string.editmyprofile_acitivities_add_error_message))
+            else -> return
         }
-        viewModel.errorEvents.clear()
+        viewModel.removeError()
     }
 
     companion object {

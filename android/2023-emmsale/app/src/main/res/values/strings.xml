@@ -272,6 +272,8 @@
     <string name="editmyprofile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
     <string name="editmyprofile_update_description_error_message">한 줄 소개를 수정하는 데 실패했어요 😥</string>
     <string name="editmyprofile_all_activities_fetching_error_message">활동 정보를 불러오는 데 실패했어요 😥</string>
+    <string name="editmyprofile_activity_remove_error_message">활동을 삭제하는 데 실패했어요 😥</string>
+    <string name="editmyprofile_acitivities_add_error_message">활동들을 추가하는 데 실패했어요 😥</string>
 
     <string name="editmyprofilebottomdialog_field_selection_guide">최대 %d개까지 선택 가능합니다.</string>
 
