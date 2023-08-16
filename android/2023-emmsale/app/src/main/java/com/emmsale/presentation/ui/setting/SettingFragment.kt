@@ -10,8 +10,8 @@ import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.setting.block.MemberBlockActivity
+import com.emmsale.presentation.ui.setting.myComments.MyCommentsActivity
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
-import com.emmsale.presentation.ui.setting.writtenComments.WrittenCommentsActivity
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     override val layoutResId: Int = R.layout.fragment_setting
@@ -45,7 +45,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     }
 
     private fun showWrittenComments() {
-        WrittenCommentsActivity.startActivity(context ?: return)
+        MyCommentsActivity.startActivity(context ?: return)
     }
 
     private fun showNotificationSetting() {
