@@ -8,6 +8,9 @@ import com.emmsale.presentation.common.ViewModelFactory
 class NotificationConfigViewModel(
     private val eventTagRepository: EventTagRepository,
 ) : ViewModel() {
+    fun setNotificationReceiveConfig(newState: Boolean) {
+
+    }
 
     companion object {
         val factory = ViewModelFactory {

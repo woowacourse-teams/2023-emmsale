@@ -49,7 +49,7 @@
                 android:textSize="14sp" />
 
             <Switch
-                android:id="@+id/class_start_notification_switch"
+                android:id="@+id/switch_notification_receive_config"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:thumb="@drawable/bg_notificationconfig_switch_thumb"
@@ -93,7 +93,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_notification_tag_desc">
 
             <ImageView
-                android:id="@+id/btn_add_tag"
+                android:id="@+id/btn_tag_add"
                 android:layout_width="60dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="22dp"

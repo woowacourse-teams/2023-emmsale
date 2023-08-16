@@ -14,12 +14,42 @@ class NotificationConfigActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_notification_config)
+        setContentView(binding.root)
         initView()
     }
 
     private fun initView() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+        initClickListener()
+    }
+
+    private fun initClickListener() {
+        initToolbarMenuClickListener()
+        initNotificationSwitchClickListener()
+        initTagAddButtonClickListener()
+    }
+
+    private fun initToolbarMenuClickListener() {
+        binding.tbNotificationConfig.setOnMenuItemClickListener {
+            if (it.itemId == R.id.close) finish()
+            true
+        }
+    }
+
+    private fun initNotificationSwitchClickListener() {
+        binding.switchNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setNotificationReceiveConfig(isChecked)
+        }
+    }
+
+    private fun initTagAddButtonClickListener() {
+        binding.btnTagAdd.setOnClickListener {
+            navigateToNotificationTagConfigActivity()
+        }
+    }
+
+    private fun navigateToNotificationTagConfigActivity() {
+
     }
 }
