@@ -45,7 +45,6 @@ class NotificationConfigActivity : AppCompatActivity() {
     }
 
     private fun navigateToNotificationTagConfigActivity() {
-
     }
 
     companion object {

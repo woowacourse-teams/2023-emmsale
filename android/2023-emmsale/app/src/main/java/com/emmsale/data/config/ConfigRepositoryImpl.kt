@@ -8,7 +8,7 @@ class ConfigRepositoryImpl(
     private val preferenceEditor = preference.edit()
 
     override fun getConfig(): Config = Config(
-        isNotificationReceive = preference.getBoolean(KEY_NOTIFICATION_RECEIVE_KEY, true)
+        isNotificationReceive = preference.getBoolean(KEY_NOTIFICATION_RECEIVE_KEY, true),
     )
 
     override fun saveNotificationReceiveConfig(isReceive: Boolean) {

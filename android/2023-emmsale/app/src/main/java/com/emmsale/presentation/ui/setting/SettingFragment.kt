@@ -9,6 +9,8 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.setting.block.MemberBlockActivity
+import com.emmsale.presentation.ui.setting.myComments.MyCommentsActivity
 import com.emmsale.presentation.ui.setting.notificationConfig.NotificationConfigActivity
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
 
@@ -44,7 +46,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     }
 
     private fun showWrittenComments() {
-        // TODO("작성한 댓글 화면으로 이동")
+        MyCommentsActivity.startActivity(context ?: return)
     }
 
     private fun navigateToNotificationConfig() {
@@ -52,7 +54,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     }
 
     private fun showBlocks() {
-        // TODO("차단 목록 화면으로 이동")
+        MemberBlockActivity.startActivity(context ?: return)
     }
 
     private fun showUseTerm() {

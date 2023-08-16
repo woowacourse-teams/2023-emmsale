@@ -10,6 +10,14 @@
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentViewModel" />
+
+        <variable
+            name="cancelUpdateComment"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="updateComment"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +39,7 @@
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            onRefresh="@{() -> viewModel.fetchComment(viewModel.comments.parentComment.commentId)}"
+            onRefresh="@{() -> viewModel.fetchComment(viewModel.comments.parentComment.id)}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -89,7 +97,7 @@
                             android:importantForAutofill="no"
                             android:inputType="text|textMultiLine"
                             android:maxLength="255"
-                            android:maxLines="3"
+                            android:maxLines="5"
                             android:padding="18dp"
                             android:textColor="@color/black"
                             android:textSize="14sp"
@@ -103,17 +111,71 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="1dp"
-                            android:background="?attr/selectableItemBackground"
                             android:enabled="@{viewModel.comments.isLoading || etChildcommentsEditchildcommentcontent.text.toString().isBlank() ? false : true}"
                             android:padding="18dp"
                             android:text="@string/comments_comment_submit_button_label"
-                            android:textColor="@color/primary_color"
+                            android:textColor="@color/all_enable_primary"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_childcomments_comment_update"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:elevation="5dp"
+                    android:paddingTop="8dp"
+                    android:visibility="@{viewModel.editingCommentId == null ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <EditText
+                        android:id="@+id/et_childcomments_comment_update"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="17dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@android:color/transparent"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:maxLength="255"
+                        android:maxLines="5"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toTopOf="@id/tv_childcomments_comment_update_button"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_childcomments_update_cancel_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> cancelUpdateComment.invoke()}"
+                        android:paddingHorizontal="17dp"
+                        android:paddingVertical="13dp"
+                        android:text="@string/all_cancel"
+                        android:textColor="@color/light_gray"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/tv_childcomments_comment_update_button" />
+
+                    <TextView
+                        android:id="@+id/tv_childcomments_comment_update_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="@{viewModel.comments.isLoading || etChildcommentsCommentUpdate.text.toString().isBlank() ? false : true}"
+                        android:onClick="@{() -> updateComment.invoke()}"
+                        android:paddingHorizontal="17dp"
+                        android:paddingVertical="13dp"
+                        android:text="@string/all_update_button_label"
+                        android:textColor="@color/all_enable_primary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

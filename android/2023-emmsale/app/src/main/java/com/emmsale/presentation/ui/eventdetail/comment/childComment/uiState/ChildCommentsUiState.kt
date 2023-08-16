@@ -62,7 +62,7 @@ data class ChildCommentsUiState(
                 authorName = "",
                 lastModifiedDate = "",
                 isUpdated = false,
-                commentId = -1,
+                id = -1,
                 content = "",
                 isUpdatable = false,
                 isDeletable = false,

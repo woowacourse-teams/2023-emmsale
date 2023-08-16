@@ -36,7 +36,7 @@ class RepositoryContainer(
     preferenceContainer: SharedPreferenceContainer,
     localDataSourceContainer: LocalDataSourceContainer = LocalDataSourceContainer(),
     remoteDataSourceContainer: RemoteDataSourceContainer = RemoteDataSourceContainer(
-        serviceContainer
+        serviceContainer,
     ),
 ) {
     val loginRepository: LoginRepository by lazy {

@@ -130,8 +130,10 @@ class CompetitionViewModel(
         competitionStatusRepository.getCompetitionStatusByIds(tagFilterIds)
 
     private suspend fun getEventTagByIds(statusFilterIds: Array<Long>): List<EventTag> =
-        when (val eventTagResult =
-            eventTagRepository.getEventTagByIds(EventCategory.COMPETITION, statusFilterIds)) {
+        when (
+            val eventTagResult =
+                eventTagRepository.getEventTagByIds(EventCategory.COMPETITION, statusFilterIds)
+        ) {
             is ApiSuccess -> eventTagResult.data
             is ApiError, is ApiException -> emptyList()
         }

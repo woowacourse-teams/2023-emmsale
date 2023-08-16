@@ -6,9 +6,10 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.main.myProfile.editMyProfile.EditMyProfileActivity
+import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
@@ -16,17 +17,19 @@ import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecorat
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     override val layoutResId: Int = R.layout.fragment_my_profile
 
-    private val viewModel: MyProfileViewModel by viewModels {
-        MyProfileViewModel.factory
-    }
+    private val viewModel: MyProfileViewModel by viewModels { MyProfileViewModel.factory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initDataBinding()
         setupUiLogic()
+        initToolbar()
         initActivitiesRecyclerView()
+    }
 
+    override fun onStart() {
+        super.onStart()
         viewModel.fetchMember()
     }
 
@@ -37,6 +40,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     private fun setupUiLogic() {
         setupLoginUiLogic()
         setupMyProfileUiLogic()
+        setupErrorUiLogic()
     }
 
     private fun setupLoginUiLogic() {
@@ -47,15 +51,8 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     private fun setupMyProfileUiLogic() {
         viewModel.myProfile.observe(viewLifecycleOwner) {
-            handleMyProfileFetchingError(it)
             handleFields(it)
             handleActivities(it)
-        }
-    }
-
-    private fun handleMyProfileFetchingError(myProfile: MyProfileUiState) {
-        if (myProfile.isFetchingError) {
-            context?.showToast(getString(R.string.profile_profile_fetching_error_message))
         }
     }
 
@@ -64,6 +61,21 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             LoginActivity.startActivity(requireContext())
             activity?.finish()
         }
+    }
+
+    private fun setupErrorUiLogic() {
+        viewModel.errorEvents.observe(viewLifecycleOwner) {
+            handleErrors(it)
+        }
+    }
+
+    private fun handleErrors(errorEvents: List<MyProfileErrorEvent>) {
+        errorEvents.forEach {
+            when (it) {
+                MyProfileErrorEvent.PROFILE_FETCHING -> {}
+            }
+        }
+        viewModel.errorEvents.clear()
     }
 
     private fun handleFields(myProfile: MyProfileUiState) {
@@ -80,6 +92,15 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             myProfile.educations,
         )
         (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfile.clubs)
+    }
+
+    private fun initToolbar() {
+        binding.tbMyprofileToolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.myprofile_edit_mode -> EditMyProfileActivity.startActivity(requireContext())
+            }
+            true
+        }
     }
 
     private fun initActivitiesRecyclerView() {

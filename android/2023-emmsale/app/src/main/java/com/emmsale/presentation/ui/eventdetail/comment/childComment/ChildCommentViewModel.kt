@@ -1,6 +1,9 @@
 package com.emmsale.presentation.ui.eventdetail.comment.childComment
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.common.ApiError
@@ -24,6 +27,14 @@ class ChildCommentViewModel(
 
     private val _comments = NotNullMutableLiveData(ChildCommentsUiState.FIRST_LOADING)
     val comments: NotNullLiveData<ChildCommentsUiState> = _comments
+
+    private val _editingCommentId = MutableLiveData<Long?>()
+    val editingCommentId: LiveData<Long?> = _editingCommentId
+    val editingCommentContent = _editingCommentId.map {
+        (_comments.value.childComments + _comments.value.parentComment)
+            .find { comment -> comment.id == it }
+            ?.content
+    }
 
     fun fetchComment(commentId: Long) {
         _comments.value = _comments.value.changeToLoadingState()
@@ -57,6 +68,19 @@ class ChildCommentViewModel(
         }
     }
 
+    fun updateComment(commentId: Long, content: String, parentCommentId: Long) {
+        viewModelScope.launch {
+            when (commentRepository.updateComment(commentId, content)) {
+                is ApiError, is ApiException -> {}
+
+                is ApiSuccess -> {
+                    _editingCommentId.value = null
+                    fetchComment(parentCommentId)
+                }
+            }
+        }
+    }
+
     fun deleteComment(commentId: Long, parentCommentId: Long) {
         _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
@@ -67,6 +91,14 @@ class ChildCommentViewModel(
                 is ApiSuccess -> fetchComment(parentCommentId)
             }
         }
+    }
+
+    fun setEditMode(isEditMode: Boolean, commentId: Long = -1) {
+        if (!isEditMode) {
+            _editingCommentId.value = null
+            return
+        }
+        _editingCommentId.value = commentId
     }
 
     companion object {

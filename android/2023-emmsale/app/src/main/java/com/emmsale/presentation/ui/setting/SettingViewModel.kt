@@ -41,7 +41,7 @@ class SettingViewModel(
 
                 is ApiSuccess ->
                     _member.value =
-                        _member.value.changeMemberState(result.data, "git1234567@github.com")
+                        _member.value.changeMemberState(result.data)
             }
         }
     }

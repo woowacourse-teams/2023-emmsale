@@ -121,7 +121,7 @@ class ConferenceViewModel(
                     ConferenceSelectedFilteringOptionUiState::from,
                 ),
                 startDateFilteringOption = startDate?.let(
-                    ConferenceSelectedFilteringDateOptionUiState::from
+                    ConferenceSelectedFilteringDateOptionUiState::from,
                 ),
                 endDateFilteringOption = endDate?.let(ConferenceSelectedFilteringDateOptionUiState::from),
             ),
@@ -132,8 +132,10 @@ class ConferenceViewModel(
         conferenceStatusRepository.getConferenceStatusByIds(tagFilterIds)
 
     private suspend fun getEventTagByIds(statusFilterIds: Array<Long>): List<EventTag> =
-        when (val eventTagResult =
-            eventTagRepository.getEventTagByIds(EventCategory.CONFERENCE, statusFilterIds)) {
+        when (
+            val eventTagResult =
+                eventTagRepository.getEventTagByIds(EventCategory.CONFERENCE, statusFilterIds)
+        ) {
             is ApiSuccess -> eventTagResult.data
             is ApiError, is ApiException -> emptyList()
         }

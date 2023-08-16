@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.setting.block
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -69,7 +71,13 @@ class MemberBlockActivity : AppCompatActivity() {
             context = this,
             title = getString(R.string.memberblock_unblock_member_dialog_title),
             message = getString(R.string.memberblock_unblock_member_dialog_message),
-            onPositiveButtonClick = { viewModel.unblockMember(blockId) }
+            onPositiveButtonClick = { viewModel.unblockMember(blockId) },
         ).show()
+    }
+
+    companion object {
+        fun startActivity(context: Context) {
+            context.startActivity(Intent(context, MemberBlockActivity::class.java))
+        }
     }
 }
