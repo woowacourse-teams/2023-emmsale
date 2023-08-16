@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
@@ -37,6 +39,7 @@ import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
+import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
@@ -56,6 +59,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
@@ -85,6 +89,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private EventTagRepository eventTagRepository;
   @Autowired
   private TagRepository tagRepository;
+  @MockBean
+  private EventPublisher eventPublisher;
 
   @BeforeEach
   void init() {
@@ -497,6 +503,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type
       );
 
+      doNothing().when(eventPublisher).publish((Event) any());
+
       //when
       final EventDetailResponse response = eventService.addEvent(request, now);
       final Event savedEvent = eventRepository.findById(response.getId()).get();
@@ -537,12 +545,13 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type
       );
 
+      doNothing().when(eventPublisher).publish((Event) any());
+
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
           () -> eventService.addEvent(request, now));
 
-      assertEquals(exception.exceptionType(),
-          START_DATE_TIME_AFTER_END_DATE_TIME);
+      assertEquals(exception.exceptionType(), START_DATE_TIME_AFTER_END_DATE_TIME);
     }
 
     @Test
@@ -568,12 +577,13 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type
       );
 
+      doNothing().when(eventPublisher).publish((Event) any());
+
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
           () -> eventService.addEvent(request, now));
 
-      assertEquals(exception.exceptionType(),
-          NOT_FOUND_TAG);
+      assertEquals(exception.exceptionType(), NOT_FOUND_TAG);
     }
   }
 
