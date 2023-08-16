@@ -294,4 +294,6 @@
     <string name="notificationtagconfig_toolbar_title">태그 알림</string>
     <string name="notificationtagconfig_tag_group_title">태그</string>
     <string name="notificationtagconfig_register_tag">등록하기</string>
+    <string name="notificationtagconfig_finish_dialog_message">태그 알림을 저장하지 않고\n떠나시겠어요?</string>
+    <string name="notificationtagconfig_finish_dialog_title">태그 알림</string>
 </resources>
