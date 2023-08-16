@@ -20,6 +20,7 @@ import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.domain.repository.RecruitmentPostRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
+import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.member.domain.Member;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
@@ -48,6 +49,7 @@ public class EventService {
   private final RecruitmentPostRepository recruitmentPostRepository;
   private final EventTagRepository eventTagRepository;
   private final TagRepository tagRepository;
+  private final EventPublisher eventPublisher;
 
   private static void validateMemberNotAllowed(final Long memberId, final Member member) {
     if (member.isNotMe(memberId)) {
@@ -173,6 +175,8 @@ public class EventService {
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
 
     event.addAllEventTags(tags);
+
+    eventPublisher.publish(event);
 
     return EventDetailResponse.from(event, today);
   }
