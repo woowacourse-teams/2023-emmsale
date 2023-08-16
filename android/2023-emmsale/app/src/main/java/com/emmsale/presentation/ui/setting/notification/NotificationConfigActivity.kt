@@ -8,6 +8,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationConfigBinding
+import com.emmsale.presentation.common.extension.checkPostNotificationPermission
+import com.emmsale.presentation.common.extension.navigateToApplicationSettings
+import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.common.views.CancelablePrimaryTag
 import com.emmsale.presentation.common.views.ConfirmDialog
@@ -24,6 +27,9 @@ class NotificationConfigActivity : AppCompatActivity() {
     private val notiTagConfigLauncher = registerForActivityResult(StartActivityForResult()) {
         viewModel.fetchNotificationTags()
     }
+    private val settingLauncher = registerForActivityResult(StartActivityForResult()) {
+        viewModel.setNotificationReceiveConfig(checkPostNotificationPermission())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +42,7 @@ class NotificationConfigActivity : AppCompatActivity() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         initClickListener()
+        initNotificationConfigSwitch()
     }
 
     private fun initClickListener() {
@@ -60,8 +67,36 @@ class NotificationConfigActivity : AppCompatActivity() {
         notiTagConfigLauncher.launch(NotificationTagConfigActivity.getIntent(this))
     }
 
+    private fun initNotificationConfigSwitch() {
+        binding.switchNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
+            if (!checkPostNotificationPermission() && isChecked) {
+                showPermissionRequestDialog()
+                return@setOnCheckedChangeListener
+            }
+            viewModel.setNotificationReceiveConfig(isChecked)
+        }
+    }
+
+    private fun showPermissionRequestDialog() {
+        showPermissionRequestDialog(
+            onConfirm = { navigateToApplicationSettings(settingLauncher) },
+            onDenied = { binding.switchNotificationReceiveConfig.isChecked = false },
+        )
+    }
+
     private fun setupObservers() {
+        setupConfigObserver()
         setupNotificationTagsObserver()
+    }
+
+    private fun setupConfigObserver() {
+        viewModel.notificationConfig.observe(this) { uiState ->
+            val isNotificationPermissionChecked = checkPostNotificationPermission()
+            val isNotificationReceive = uiState.isNotificationReceive
+
+            binding.switchNotificationReceiveConfig.isChecked =
+                isNotificationPermissionChecked && isNotificationReceive
+        }
     }
 
     private fun setupNotificationTagsObserver() {

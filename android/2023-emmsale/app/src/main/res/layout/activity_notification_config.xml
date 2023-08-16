@@ -52,8 +52,6 @@
                 android:id="@+id/switch_notification_receive_config"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{viewModel.notificationConfig.notificationReceive}"
-                android:onCheckedChanged="@{(v, isChecked) -> viewModel.setNotificationReceiveConfig(isChecked)}"
                 android:thumb="@drawable/bg_notificationconfig_switch_thumb"
                 android:track="@drawable/bg_notificationconfig_switch_track"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />

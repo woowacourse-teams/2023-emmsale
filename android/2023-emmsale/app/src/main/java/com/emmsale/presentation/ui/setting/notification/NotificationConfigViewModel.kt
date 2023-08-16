@@ -61,7 +61,14 @@ class NotificationConfigViewModel(
     fun setNotificationReceiveConfig(isReceive: Boolean) {
         viewModelScope.launch {
             configRepository.saveNotificationReceiveConfig(isReceive)
+            updateNotificationReceiveConfig(isReceive)
         }
+    }
+
+    private fun updateNotificationReceiveConfig(isReceive: Boolean) {
+        _notificationConfig.value = notificationConfig.value.copy(
+            isNotificationReceive = isReceive,
+        )
     }
 
     fun removeInterestTagById(eventId: Long) {
