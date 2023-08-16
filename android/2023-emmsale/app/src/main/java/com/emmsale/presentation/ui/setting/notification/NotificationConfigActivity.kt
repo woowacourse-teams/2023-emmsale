@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationConfigBinding
-import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.common.views.CancelablePrimaryTag
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.cancelablePrimaryChipOf
@@ -66,17 +66,24 @@ class NotificationConfigActivity : AppCompatActivity() {
 
     private fun setupNotificationTagsObserver() {
         viewModel.notificationTags.observe(this) { uiState ->
-            handleNotificationTagError(uiState)
+            handleNotificationTagsErrors(uiState)
             if (uiState.isTagFetchingSuccess) updateNotificationTagViews(uiState.conferenceTags)
         }
     }
 
-    private fun handleNotificationTagError(uiState: NotificationTagsUiState) {
-        if (uiState.isTagFetchingError) showTagFetchingErrorMessage()
+    private fun handleNotificationTagsErrors(uiState: NotificationTagsUiState) {
+        when {
+            uiState.isTagFetchingError -> showTagFetchingErrorMessage()
+            uiState.isTagRemoveError -> showTagRemovingErrorMessage()
+        }
     }
 
     private fun showTagFetchingErrorMessage() {
-        showToast(R.string.notificationconfig_tag_fetching_error_message)
+        binding.root.showSnackbar(R.string.notificationconfig_tag_fetching_error_message)
+    }
+
+    private fun showTagRemovingErrorMessage() {
+        binding.root.showSnackbar(R.string.notificationconfig_tag_removing_error_message)
     }
 
     private fun updateNotificationTagViews(conferenceTags: List<NotificationTagUiState>) {
