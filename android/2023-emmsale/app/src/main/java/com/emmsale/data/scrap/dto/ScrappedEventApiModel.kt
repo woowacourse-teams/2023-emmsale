@@ -1,7 +1,9 @@
 package com.emmsale.data.scrap.dto
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ScrappedEventApiModel(
     @SerialName("scrapId")
     val scrapId: Long,

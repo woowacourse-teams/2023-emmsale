@@ -15,7 +15,7 @@ interface ScrappedEventService {
 
     @POST("scraps")
     suspend fun scrapEvent(
-        @Body ScrappedEventRequestBody: ScrappedEventRequestBody,
+        @Body scrappedEventRequestBody: ScrappedEventRequestBody,
     ): Response<Unit>
 
     @DELETE("scraps/{eventId}")

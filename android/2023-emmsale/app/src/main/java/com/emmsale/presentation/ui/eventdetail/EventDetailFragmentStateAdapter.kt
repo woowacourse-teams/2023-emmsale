@@ -18,7 +18,7 @@ class EventDetailFragmentStateAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            INFORMATION_TAB -> EventInfoFragment.create(informationUrl, imageUrl)
+            INFORMATION_TAB -> EventInfoFragment.create(informationUrl, imageUrl, eventId)
             COMMENT_TAB -> CommentFragment.create(eventId)
             RECRUITMENT_TAB -> EventRecruitmentFragment.create(eventId)
             else -> throw IllegalArgumentException(VIEWPAGER_ERROR_MESSAGE)
