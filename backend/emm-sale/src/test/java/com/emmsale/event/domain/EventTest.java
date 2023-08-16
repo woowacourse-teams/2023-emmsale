@@ -360,30 +360,4 @@ class EventTest {
       assertThat(actual).isFalse();
     }
   }
-
-  @ParameterizedTest
-  @MethodSource("hasSameTagFrom")
-  @DisplayName("hasSameTagFrom() : 행사의 태그에 주어진 태그가 하나라도 포함되어있으면 true를 반환할 수 있다.")
-  void test_hasSameTagFrom(final List<Tag> targetTags, final boolean result) throws Exception {
-    //given
-    final Event event = 인프콘_2023();
-    event.addAllEventTags(List.of(안드로이드(), 백엔드()));
-
-    //when & then
-    assertEquals(result, event.hasSameTagFrom(targetTags));
-  }
-
-  static Stream<Arguments> hasSameTagFrom() {
-    final List<Tag> tag1 = List.of(안드로이드());
-    final List<Tag> tag2 = List.of(안드로이드(), IOS());
-    final List<Tag> tag3 = List.of(프론트엔드());
-    final List<Tag> tag4 = Collections.emptyList();
-
-    return Stream.of(
-        Arguments.of(tag1, true),
-        Arguments.of(tag2, true),
-        Arguments.of(tag3, false),
-        Arguments.of(tag4, false)
-    );
-  }
 }

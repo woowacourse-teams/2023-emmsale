@@ -127,16 +127,4 @@ public class Event extends BaseEntity {
         .map(tag -> tag.getTag().getName())
         .collect(Collectors.toList());
   }
-
-  public boolean hasSameTagFrom(final List<Tag> targetTags) {
-    return tags.stream()
-        .map(it -> it.getTag().getName())
-        .anyMatch(targetTagName -> isContainBetween(targetTags, targetTagName));
-  }
-
-  private boolean isContainBetween(final List<Tag> targetTags, final String targetTagName) {
-    return targetTags.stream()
-        .map(Tag::getName)
-        .anyMatch(tagName -> tagName.equals(targetTagName));
-  }
 }
