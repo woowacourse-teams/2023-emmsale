@@ -85,7 +85,7 @@ public class EventFixture {
     return LocalDate.of(2023, 8, 10);
   }
 
-  public static RecruitmentPostRequest createRecruitmentPostRequest(final Member member){
+  public static RecruitmentPostRequest createRecruitmentPostRequest(final Member member) {
     return new RecruitmentPostRequest(member.getId(), "같이 가요 요청 글");
   }
 }

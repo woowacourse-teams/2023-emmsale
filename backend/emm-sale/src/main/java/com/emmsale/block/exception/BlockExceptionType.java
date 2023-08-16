@@ -16,6 +16,14 @@ public enum BlockExceptionType implements BaseExceptionType {
   BAD_REQUEST_SELF_BLOCK(
       HttpStatus.BAD_REQUEST,
       "자기 자신은 차단할 수 없습니다."
+  ),
+  NOT_FOUND_BLOCK(
+      HttpStatus.NOT_FOUND,
+      "요청한 차단 사용자를 찾을 수 없습니다."
+  ),
+  FORBBIDEN_UNREGISTER_BLOCK(
+      HttpStatus.FORBIDDEN,
+      "해당 차단에 대한 권한이 없습니다."
   );
 
   private final HttpStatus httpStatus;

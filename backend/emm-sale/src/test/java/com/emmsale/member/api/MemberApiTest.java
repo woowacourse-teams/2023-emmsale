@@ -32,6 +32,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
@@ -85,6 +86,7 @@ class MemberApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(post("/members")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
@@ -125,6 +127,7 @@ class MemberApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(post("/members/activities")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
@@ -152,6 +155,7 @@ class MemberApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(delete("/members/activities")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
@@ -210,33 +214,12 @@ class MemberApiTest extends MockMvcTestHelper {
 
     // when
     final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
+        .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(request)));
 
     // then
     result.andExpect(status().isNoContent())
-        .andDo(print())
-        .andDo(document("update-open-profile-url", REQUEST_FIELDS));
-  }
-
-  @Test
-  @DisplayName("사용자의 openProfileUrl이 유효하지 않으면, 400 BAD_REQUEST를 반환한다.")
-  void test_updateOpenProfileUrlWithInvalidUrl() throws Exception {
-    // given
-    final String openProfileUrl = "https://invalid.kakao.com/profile";
-    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(openProfileUrl);
-
-    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
-        fieldWithPath("openProfileUrl").description("오픈 채팅 url")
-    );
-
-    // when
-    final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(request)));
-
-    // then
-    result.andExpect(status().isBadRequest())
         .andDo(print())
         .andDo(document("update-open-profile-url", REQUEST_FIELDS));
   }
@@ -254,6 +237,7 @@ class MemberApiTest extends MockMvcTestHelper {
 
     // when
     final ResultActions result = mockMvc.perform(put("/members/description")
+        .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(request)));
 

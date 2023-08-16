@@ -1,5 +1,9 @@
 package com.emmsale.block.application;
 
+import static com.emmsale.block.exception.BlockExceptionType.FORBBIDEN_UNREGISTER_BLOCK;
+import static com.emmsale.block.exception.BlockExceptionType.NOT_FOUND_BLOCK;
+import static com.emmsale.member.MemberFixture.memberFixture;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -100,6 +104,68 @@ class BlockCommandServiceTest extends ServiceIntegrationTestHelper {
 
       //then
       assertEquals(expectExceptionType, actualException.exceptionType());
+    }
+  }
+
+  @Nested
+  @DisplayName("차단된 사용자를 해제할 수 있다.")
+  class UnregisterTest {
+
+    final Member requestMember = memberRepository.findById(1L).get();
+    final Member blockMember = memberRepository.findById(2L).get();
+
+    @Test
+    @DisplayName("사용자를 성공적으로 차단 해제한다.")
+    void success() {
+      //given
+      final Block block = blockRepository.save(
+          new Block(requestMember.getId(), blockMember.getId()));
+
+      //when
+      blockCommandService.unregister(block.getId(), requestMember);
+
+      //then
+      assertThat(blockRepository.existsById(block.getId()))
+          .isFalse();
+    }
+
+    @Test
+    @DisplayName("차단한 ID가 존재하지 않으면, exception이 발생한다.")
+    void notFound() {
+      //given
+      final long nonExistBlockId = 0L;
+
+      //when
+      final BlockException actualException = assertThrowsExactly(
+          BlockException.class,
+          () -> {
+            blockCommandService.unregister(nonExistBlockId, requestMember);
+          }
+      );
+
+      //then
+      assertThat(actualException.getMessage())
+          .isEqualTo(NOT_FOUND_BLOCK.errorMessage());
+    }
+
+    @Test
+    @DisplayName("member가 실제로 block을 한 대상자가 아닌 경우 exception이 발생한다.")
+    void forbbiden() {
+      //given
+      final Block block = blockRepository.save(
+          new Block(requestMember.getId(), blockMember.getId()));
+      final Member otherMember = memberRepository
+          .save(memberFixture());
+
+      //when
+      final BlockException actualException = assertThrowsExactly(
+          BlockException.class,
+          () -> blockCommandService.unregister(block.getId(), otherMember)
+      );
+
+      //then
+      assertThat(actualException.getMessage())
+          .isEqualTo(FORBBIDEN_UNREGISTER_BLOCK.errorMessage());
     }
   }
 }

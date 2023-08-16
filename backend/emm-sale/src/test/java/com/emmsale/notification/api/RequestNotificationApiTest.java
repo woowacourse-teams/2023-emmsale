@@ -25,8 +25,11 @@ import com.emmsale.notification.application.dto.RequestNotificationModifyRequest
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
 import com.emmsale.notification.domain.RequestNotificationStatus;
+import com.emmsale.notification.exception.NotificationException;
+import com.emmsale.notification.exception.NotificationExceptionType;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -92,7 +95,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
     );
 
     when(requestNotificationCommandService.create(any()))
-        .thenReturn(response);
+        .thenReturn(Optional.of(response));
 
     //when & then
     mockMvc.perform(post("/request-notifications")
@@ -102,6 +105,42 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
         .andDo(print())
         .andDo(document("create-request-notification", requestFields, responseFields));
   }
+
+  @Test
+  @DisplayName("create() : 차단된 사용자에게 알림을 보낼 경우 204 NO_CONTENT를 반환한다.")
+  void test_createWithBlockedSender() throws Exception {
+    //given
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("senderId").description("보내는 사람 ID"),
+        fieldWithPath("receiverId").description("받는 사람 ID"),
+        fieldWithPath("message").description("알림 보낼 때 메시지"),
+        fieldWithPath("eventId").description("행사 ID")
+    );
+
+    final long senderId = 1L;
+    final long receiverId = 2L;
+    final long eventId = 3L;
+    final String message = "알림 메시지야";
+
+    final RequestNotificationRequest request = new RequestNotificationRequest(
+        senderId,
+        receiverId,
+        message,
+        eventId
+    );
+
+    when(requestNotificationCommandService.create(any()))
+        .thenThrow(new NotificationException(NotificationExceptionType.NO_CONTENT_BLOCKED_MEMBER));
+
+    //when & then
+    mockMvc.perform(post("/request-notifications")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("create-blocked-member-requestNotification", requestFields));
+  }
+
 
   @Test
   @DisplayName("modify() : 알림 상태를 성공적으로 변경되면 204 No Content를 반환할 수 있다.")

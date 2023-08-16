@@ -12,6 +12,7 @@ drop table if exists kerdy.fcm_token;
 drop table if exists kerdy.block;
 drop table if exists kerdy.update_notification;
 drop table if exists kerdy.report;
+drop table if exists kerdy.scrap;
 
 create table activity
 (
@@ -150,6 +151,16 @@ alter table event
 alter table event
     add column apply_end_date datetime(6) not null;
 
+-- 2023-08-10 12:50
+create table scrap
+(
+    id         bigint auto_increment primary key,
+    member_id  bigint not null,
+    event_id   bigint not null,
+    created_at datetime(6),
+    updated_at datetime(6)
+);
+
 -- 2023-08-11 21:41
 alter table request_notification
     add column is_read bit not null;
@@ -157,7 +168,6 @@ alter table request_notification
 -- 2023-08-12 12:55
 alter table update_notification
     add column is_read bit not null;
-
 
 -- 2023-08-14 13:10
 create table report

@@ -26,6 +26,22 @@ class CommentTest {
   private Member writer;
   private Member blockedMember;
 
+  static Stream<Arguments> commentCandidate() {
+    final Event event = EventFixture.인프콘_2023();
+    final Member writer = MemberFixture.memberFixture();
+
+    final Comment comment1 = Comment.createRoot(event, writer, "댓글 내용");
+    final Comment comment2 = Comment.createRoot(event, writer, "댓글");
+    comment2.delete();
+    final Comment comment3 = Comment.createRoot(event, writer, "삭제된 댓글입니다.");
+
+    return Stream.of(
+        Arguments.of(comment1, true),
+        Arguments.of(comment2, false),
+        Arguments.of(comment3, true)
+    );
+  }
+
   @BeforeEach
   void init() {
     event = EventFixture.인프콘_2023();
@@ -75,21 +91,5 @@ class CommentTest {
   void test_isNotDeleted(final Comment comment, final boolean result) throws Exception {
     //when & then
     assertEquals(comment.isNotDeleted(), result);
-  }
-
-  static Stream<Arguments> commentCandidate() {
-    final Event event = EventFixture.인프콘_2023();
-    final Member writer = MemberFixture.memberFixture();
-
-    final Comment comment1 = Comment.createRoot(event, writer, "댓글 내용");
-    final Comment comment2 = Comment.createRoot(event, writer, "댓글");
-    comment2.delete();
-    final Comment comment3 = Comment.createRoot(event, writer, "삭제된 댓글입니다.");
-
-    return Stream.of(
-        Arguments.of(comment1, true),
-        Arguments.of(comment2, false),
-        Arguments.of(comment3, true)
-    );
   }
 }
