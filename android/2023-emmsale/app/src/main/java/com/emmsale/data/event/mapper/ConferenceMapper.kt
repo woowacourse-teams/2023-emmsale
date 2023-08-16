@@ -1,8 +1,8 @@
-package com.emmsale.data.conference.mapper
+package com.emmsale.data.event.mapper
 
-import com.emmsale.data.conference.Conference
-import com.emmsale.data.conference.dto.ConferenceApiModel
 import com.emmsale.data.conferenceStatus.ConferenceStatus
+import com.emmsale.data.event.dto.ConferenceApiModel
+import com.emmsale.data.event.model.Conference
 import com.emmsale.data.eventApplyStatus.EventApplyStatus
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
