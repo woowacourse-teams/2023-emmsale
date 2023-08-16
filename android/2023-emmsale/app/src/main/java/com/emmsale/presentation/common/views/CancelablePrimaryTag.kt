@@ -8,6 +8,7 @@ import androidx.annotation.Dimension
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.emmsale.R
+import com.emmsale.presentation.common.extension.dp
 
 class CancelablePrimaryTag(
     context: Context,
@@ -41,8 +42,8 @@ class CancelablePrimaryTag(
     private fun drawCancelIcon() {
         val cancelIcon = ContextCompat.getDrawable(context, R.drawable.ic_cancelable_close)
 
-        setCompoundDrawables(null, null, cancelIcon, null)
-        compoundDrawablePadding = DRAWABLE_PADDING_SIZE
+        setCompoundDrawablesWithIntrinsicBounds(null, null, cancelIcon, null)
+        compoundDrawablePadding = 10.dp
     }
 
     private fun initCancelClickListener(parent: ViewGroup?, onCancel: () -> Unit) {
@@ -50,10 +51,6 @@ class CancelablePrimaryTag(
             parent?.removeView(this)
             onCancel()
         }
-    }
-
-    companion object {
-        private const val DRAWABLE_PADDING_SIZE = 10
     }
 }
 
