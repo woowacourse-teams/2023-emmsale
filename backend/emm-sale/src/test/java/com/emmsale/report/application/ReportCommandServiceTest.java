@@ -22,7 +22,6 @@ import com.emmsale.report.domain.ReportType;
 import com.emmsale.report.exception.ReportException;
 import com.emmsale.report.exception.ReportExceptionType;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -127,6 +126,8 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
           .hasMessage(ReportExceptionType.REPORTER_MISMATCH.errorMessage());
     }
 
+
+    // TODO: 2023-08-16 수정해야 함
     @Test
     @DisplayName("이미 신고한 사용자를 한 번 더 신고할 경우 예외를 반환한다.")
     void create_fail_already_exist_report() {
@@ -186,7 +187,7 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
     }
 
     @Nested
-    @DisplayName("신고자와 신고 대상자, 신고 유형 등을 입력하면 특정 게시물을 정상적으로 신고할 수 있고, 게시물 작성자가 차단된다.")
+    @DisplayName("신고자와 신고 대상자, 신고 유형 등을 입력하면 특정 게시물을 정상적으로 신고할 수 있다.")
     class CreateSuccess {
 
       @Test
@@ -203,17 +204,12 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
 
         // when
         final ReportCreateResponse actual = reportCommandService.create(request, reporter);
-        final boolean isBlocked = blockRepository.existsByRequestMemberIdAndBlockMemberId(신고자_ID,
-            신고_대상자_ID);
 
         // then
-        Assertions.assertAll(
-            () -> assertThat(actual)
-                .usingRecursiveComparison()
-                .ignoringFields("id", "createdAt")
-                .isEqualTo(expected),
-            () -> assertThat(isBlocked).isTrue()
-        );
+        assertThat(actual)
+            .usingRecursiveComparison()
+            .ignoringFields("id", "createdAt")
+            .isEqualTo(expected);
 
       }
 
@@ -231,17 +227,12 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
 
         // when
         final ReportCreateResponse actual = reportCommandService.create(request, reporter);
-        final boolean isBlocked = blockRepository.existsByRequestMemberIdAndBlockMemberId(신고자_ID,
-            신고_대상자_ID);
 
         // then
-        Assertions.assertAll(
-            () -> assertThat(actual)
-                .usingRecursiveComparison()
-                .ignoringFields("id", "createdAt")
-                .isEqualTo(expected),
-            () -> assertThat(isBlocked).isTrue()
-        );
+        assertThat(actual)
+            .usingRecursiveComparison()
+            .ignoringFields("id", "createdAt")
+            .isEqualTo(expected);
       }
 
       @Test
@@ -262,13 +253,10 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
             신고_대상자_ID);
 
         // then
-        Assertions.assertAll(
-            () -> assertThat(actual)
-                .usingRecursiveComparison()
-                .ignoringFields("id", "createdAt")
-                .isEqualTo(expected),
-            () -> assertThat(isBlocked).isTrue()
-        );
+        assertThat(actual)
+            .usingRecursiveComparison()
+            .ignoringFields("id", "createdAt")
+            .isEqualTo(expected);
       }
 
     }
