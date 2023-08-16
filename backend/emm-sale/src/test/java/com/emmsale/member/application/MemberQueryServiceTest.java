@@ -73,7 +73,8 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
           "",
           "https://imageurl.com",
           "https://openprofileurl.com",
-          "amaran-th"
+          "amaran-th",
+          "https://github.com/amaran-th"
       );
 
       //when
