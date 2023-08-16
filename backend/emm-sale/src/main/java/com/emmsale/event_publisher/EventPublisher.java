@@ -2,14 +2,13 @@ package com.emmsale.event_publisher;
 
 import com.emmsale.comment.event.UpdateNotificationEvent;
 import com.emmsale.event.domain.Event;
-import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.notification.domain.UpdateNotificationType;
-import com.emmsale.tag.domain.Tag;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -28,28 +27,31 @@ public class EventPublisher {
   }
 
   public void publish(final Event event) {
-
-    final List<Long> memberIds = memberRepository.findAll()
+    final List<Long> tagIds = event.getTags()
         .stream()
-        .map(Member::getId)
+        .map(it -> it.getTag().getId())
         .collect(Collectors.toList());
 
-    for (final Long memberId : memberIds) {
-      final List<Tag> interestTags = interestTagRepository.findInterestTagsByMemberId(memberId)
-          .stream()
-          .map(InterestTag::getTag)
-          .collect(Collectors.toList());
+    final Set<Long> memberIds = interestTagRepository.findInterestTagsByTagIdIn(tagIds)
+        .stream()
+        .collect(Collectors.groupingBy(it -> it.getMember().getId()))
+        .keySet();
 
-      if (event.hasSameTagFrom(interestTags)) {
-        final UpdateNotificationEvent updateNotificationEvent = new UpdateNotificationEvent(
-            memberId,
-            event.getId(),
-            UpdateNotificationType.from(event.getClass().getName()).toString(),
-            LocalDateTime.now()
-        );
+    final List<Member> members = memberRepository.findAllByIdIn(memberIds);
 
-        applicationEventPublisher.publishEvent(updateNotificationEvent);
-      }
+    publishEvent(event, members);
+  }
+
+  private void publishEvent(final Event event, final List<Member> members) {
+    for (Member member : members) {
+      final UpdateNotificationEvent updateNotificationEvent = new UpdateNotificationEvent(
+          member.getId(),
+          event.getId(),
+          UpdateNotificationType.from(event.getClass().getName()).toString(),
+          LocalDateTime.now()
+      );
+
+      applicationEventPublisher.publishEvent(updateNotificationEvent);
     }
   }
 }

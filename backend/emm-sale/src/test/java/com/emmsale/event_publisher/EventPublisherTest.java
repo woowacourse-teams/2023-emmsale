@@ -6,57 +6,52 @@ import static com.emmsale.tag.TagFixture.안드로이드;
 import static com.emmsale.tag.TagFixture.프론트엔드;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.emmsale.comment.event.UpdateNotificationEvent;
+import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
-import com.emmsale.event.domain.EventType;
+import com.emmsale.event.domain.repository.EventRepository;
+import com.emmsale.event_publisher.EventPublisherTest.TestConfig;
+import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.tag.domain.Tag;
-import java.time.LocalDateTime;
-import java.util.Collections;
+import com.emmsale.tag.domain.TagRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 
-class EventPublisherTest {
+@Import(TestConfig.class)
+class EventPublisherTest extends ServiceIntegrationTestHelper {
 
+  @Autowired
   private EventPublisher eventPublisher;
-  private ApplicationEventPublisher applicationEventPublisher;
+  @Autowired
   private InterestTagRepository interestTagRepository;
+  @Autowired
   private MemberRepository memberRepository;
-  private Member member1, member2, member3;
+  @Autowired
+  private TagRepository tagRepository;
+  @Autowired
+  private EventRepository eventRepository;
+  @MockBean
+  private ApplicationEventPublisher applicationEventPublisher;
 
-  @BeforeEach
-  void setUp() {
-    applicationEventPublisher = mock(ApplicationEventPublisher.class);
-    interestTagRepository = mock(InterestTagRepository.class);
-    memberRepository = mock(MemberRepository.class);
-
-    eventPublisher = new EventPublisher(
-        applicationEventPublisher,
-        interestTagRepository,
-        memberRepository
-    );
-
-    member1 = spy(new Member(222L, "imageUrl"));
-    when(member1.getId()).thenReturn(1L);
-    member2 = spy(new Member(223L, "imageUrl"));
-    when(member2.getId()).thenReturn(2L);
-    member3 = spy(new Member(224L, "imageUrl"));
-    when(member3.getId()).thenReturn(3L);
-  }
+  private Event event = EventFixture.인프콘_2023();
 
   @Test
   @DisplayName("publish(Event) : 행사 생성 이벤트가 발생했을 때, 사용자가 관심있어하는 태그가 행사에 포함될 경우 알림을 보낼 수 있다.")
@@ -65,51 +60,26 @@ class EventPublisherTest {
     //member1 -> 안드로이드, member2 -> 안드로이드 백엔드, member3 -> 프론트엔드
     //안드로이드, 백엔드 태그를 가진 Event 추가
     //member1, member2만 알림이 감
-    when(memberRepository.findAll())
-        .thenReturn(List.of(member1, member2, member3));
 
-    final List<InterestTag> member1Tags = List.of(
-        new InterestTag(member1, new Tag(안드로이드().getName()))
-    );
+    final Member member1 = memberRepository.findById(1L).get();
+    final Member member2 = memberRepository.findById(2L).get();
+    final Member member3 = memberRepository.save(new Member(1444L, "imageUrl"));
+    final Tag 안드로이드 = tagRepository.save(안드로이드());
+    final Tag 백엔드 = tagRepository.save(백엔드());
+    final Tag 프론트엔드 = tagRepository.save(프론트엔드());
+    interestTagRepository.save(new InterestTag(member1, 안드로이드));
+    interestTagRepository.save(new InterestTag(member2, 안드로이드));
+    interestTagRepository.save(new InterestTag(member2, 백엔드));
+    interestTagRepository.save(new InterestTag(member3, 프론트엔드));
 
-    when(interestTagRepository.findInterestTagsByMemberId(member1.getId()))
-        .thenReturn(member1Tags);
+    final List<Long> expected = List.of(member1.getId(), member2.getId());
 
-    final List<InterestTag> member2Tags = List.of(
-        new InterestTag(member2, new Tag(안드로이드().getName())),
-        new InterestTag(member2, new Tag(백엔드().getName()))
-    );
+    event.addAllEventTags(List.of(백엔드, 안드로이드));
 
-    when(interestTagRepository.findInterestTagsByMemberId(member2.getId()))
-        .thenReturn(member2Tags);
-
-    final List<InterestTag> member3Tags = List.of(
-        new InterestTag(member3, new Tag(프론트엔드().getName()))
-    );
-
-    when(interestTagRepository.findInterestTagsByMemberId(member3.getId()))
-        .thenReturn(member3Tags);
-
-    final Event event = new Event(
-        "name",
-        "location",
-        LocalDateTime.now(),
-        LocalDateTime.now(),
-        LocalDateTime.now().minusDays(15L),
-        LocalDateTime.now().minusDays(10L),
-        "informationUrl",
-        EventType.CONFERENCE,
-        "imageUrl"
-    );
-
-    event.addAllEventTags(
-        List.of(new Tag(백엔드().getName()), new Tag(안드로이드().getName()))
-    );
-
-    List<Long> expectedNotificationIds = List.of(1L, 2L);
+    final Event savedEvent = eventRepository.save(event);
 
     //when
-    eventPublisher.publish(event);
+    eventPublisher.publish(savedEvent);
 
     //then
     ArgumentCaptor<UpdateNotificationEvent> captor = ArgumentCaptor.forClass(
@@ -122,7 +92,7 @@ class EventPublisherTest {
         .map(UpdateNotificationEvent::getReceiverId)
         .collect(Collectors.toList());
 
-    Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expectedNotificationIds);
+    Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
   }
 
   @Test
@@ -132,49 +102,24 @@ class EventPublisherTest {
     //member1 -> 안드로이드, member2 -> 안드로이드 백엔드, member3 -> 프론트엔드
     //IOS 태그를 가진 Event 추가
     //아무도 알림이 안감
-    when(memberRepository.findAll())
-        .thenReturn(List.of(member1, member2, member3));
+    final Member member1 = memberRepository.findById(1L).get();
+    final Member member2 = memberRepository.findById(2L).get();
+    final Member member3 = memberRepository.save(new Member(1444L, "imageUrl"));
+    final Tag 안드로이드 = tagRepository.save(안드로이드());
+    final Tag 백엔드 = tagRepository.save(백엔드());
+    final Tag 프론트엔드 = tagRepository.save(프론트엔드());
+    final Tag IOS = tagRepository.save(IOS());
+    interestTagRepository.save(new InterestTag(member1, 안드로이드));
+    interestTagRepository.save(new InterestTag(member2, 안드로이드));
+    interestTagRepository.save(new InterestTag(member2, 백엔드));
+    interestTagRepository.save(new InterestTag(member3, 프론트엔드));
 
-    final List<InterestTag> member1Tags = List.of(
-        new InterestTag(member1, new Tag(안드로이드().getName()))
-    );
+    event.addAllEventTags(List.of(IOS));
 
-    when(interestTagRepository.findInterestTagsByMemberId(member1.getId()))
-        .thenReturn(member1Tags);
-
-    final List<InterestTag> member2Tags = List.of(
-        new InterestTag(member2, new Tag(안드로이드().getName())),
-        new InterestTag(member2, new Tag(백엔드().getName()))
-    );
-
-    when(interestTagRepository.findInterestTagsByMemberId(member2.getId()))
-        .thenReturn(member2Tags);
-
-    final List<InterestTag> member3Tags = List.of(
-        new InterestTag(member3, new Tag(프론트엔드().getName()))
-    );
-
-    when(interestTagRepository.findInterestTagsByMemberId(member3.getId()))
-        .thenReturn(member3Tags);
-
-    final Event event = new Event(
-        "name",
-        "location",
-        LocalDateTime.now(),
-        LocalDateTime.now(),
-        LocalDateTime.now().minusDays(15L),
-        LocalDateTime.now().minusDays(10L),
-        "informationUrl",
-        EventType.CONFERENCE,
-        "imageUrl"
-    );
-
-    event.addAllEventTags(
-        List.of(new Tag(IOS().getName()))
-    );
+    final Event savedEvent = eventRepository.save(event);
 
     //when
-    eventPublisher.publish(event);
+    eventPublisher.publish(savedEvent);
 
     //then
     verify(applicationEventPublisher, times(0))
@@ -188,33 +133,28 @@ class EventPublisherTest {
     //member1 -> 태그 없음
     //IOS 태그를 가진 Event 추가
     //아무도 알림이 안감
-    when(memberRepository.findAll())
-        .thenReturn(List.of(member1));
+    final Member member1 = memberRepository.findById(1L).get();
+    final Tag IOS = tagRepository.save(IOS());
 
-    when(interestTagRepository.findInterestTagsByMemberId(member1.getId()))
-        .thenReturn(Collections.emptyList());
+    event.addAllEventTags(List.of(IOS));
 
-    final Event event = new Event(
-        "name",
-        "location",
-        LocalDateTime.now(),
-        LocalDateTime.now(),
-        LocalDateTime.now().minusDays(15L),
-        LocalDateTime.now().minusDays(10L),
-        "informationUrl",
-        EventType.CONFERENCE,
-        "imageUrl"
-    );
-
-    event.addAllEventTags(
-        List.of(new Tag(IOS().getName()))
-    );
+    final Event savedEvent = eventRepository.save(event);
 
     //when
-    eventPublisher.publish(event);
+    eventPublisher.publish(savedEvent);
 
     //then
     verify(applicationEventPublisher, times(0))
         .publishEvent(any(UpdateNotificationEvent.class));
+  }
+
+  @TestConfiguration
+  static class TestConfig {
+
+    @Bean
+    @Primary
+    public ApplicationEventPublisher publisher() {
+      return mock(ApplicationEventPublisher.class);
+    }
   }
 }
