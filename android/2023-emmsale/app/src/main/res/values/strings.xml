@@ -89,7 +89,7 @@
 
     <string name="event_poster_description">event poster</string>
     <string name="event_filter">필터 설정</string>
-    <string name="event_count_format">%,d</string>
+    <string name="event_count_format">%,d개</string>
     <string name="event_count_prefix">총</string>
     <string name="event_count_suffix">개</string>
 
@@ -201,6 +201,9 @@
     <string name="eventdetail_tab_comment">댓글</string>
     <string name="eventdetail_tab_recruitment">같이가요</string>
     <string name="eventdetail_tablayout_content_description">상세정보 보기 탭</string>
+    <string name="eventdetail_place">장소</string>
+    <string name="eventdetail_date">일시</string>
+    <string name="eventdetail_apply_date">접수 기간</string>
 
     <string name="eventrecruitment_fetch_recruitments_error_message">글을 불러올 수 없습니다. 관리자에게 문의하세요.</string>
     <string name="eventrecruitment_has_not_permission_writing">모집글은 한번만 작성이 가능합니다!!</string>
@@ -312,4 +315,7 @@
     <string name="notificationconfig_add_notification_tag">알림 태그 추가</string>
     <string name="recruitmentpostdetail_delete_dialog_title">모집 글 삭제</string>
     <string name="recruitmentpostdetail_delete_dialog_message">해당 모집 글을 삭제 하시겠습니까?</string>
+    <string name="eventinfromation_scrap">스크랩</string>
+
+    <string name="event_scrap">스크랩</string>
 </resources>

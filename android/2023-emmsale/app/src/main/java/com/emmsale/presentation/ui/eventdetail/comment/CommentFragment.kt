@@ -1,16 +1,19 @@
 package com.emmsale.presentation.ui.eventdetail.comment
 
+import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.FragmentCommentsBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentRecyclerViewDivider
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentsAdapter
@@ -33,12 +36,24 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
         CommentViewModel.factory
     }
 
+    private val inputMethodManager: InputMethodManager by lazy {
+        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    }
+
+    private lateinit var eventDetailActivity: EventDetailActivity
+    private var isSaveButtonClick = false
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        eventDetailActivity = context as EventDetailActivity
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initDataBinding()
         initCommentsRecyclerView()
         setupUiLogic()
+        initRecyclerViewListener()
     }
 
     override fun onStart() {
@@ -46,6 +61,31 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
 
         viewModel.fetchComments(eventId)
     }
+
+    override fun onResume() {
+        super.onResume()
+        eventDetailActivity.showEventInformation()
+    }
+
+    private fun initRecyclerViewListener() {
+        binding.rvCommentsComments.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                handleEventInformationVisibility(newState)
+            }
+        })
+    }
+
+    private fun handleEventInformationVisibility(newState: Int) {
+        if (newState == RecyclerView.SCROLL_STATE_IDLE && isScrollTop()) {
+            eventDetailActivity.showEventInformation()
+        } else if (!isScrollTop()) {
+            eventDetailActivity.hideEventInformation()
+        }
+    }
+
+    private fun isScrollTop(): Boolean =
+        !binding.rvCommentsComments.canScrollVertically(TOP_CONDITION)
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
@@ -176,10 +216,20 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     }
 
     private fun onCommentSave() {
+        isSaveButtonClick = true
         viewModel.saveComment(binding.etCommentsPostComment.text.toString(), eventId)
         binding.etCommentsPostComment.apply {
             text.clear()
         }
+        hideKeyboard()
+    }
+
+    private fun scrollToLastPosition(comments: CommentsUiState) {
+        binding.rvCommentsComments.smoothScrollToPosition(comments.comments.size + 1)
+    }
+
+    private fun hideKeyboard() {
+        inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
     private fun setupEditingCommentUiLogic() {
@@ -211,7 +261,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
 
     companion object {
         private const val KEY_EVENT_ID = "KEY_EVENT_ID"
-
+        private const val TOP_CONDITION = -1
         fun create(eventId: Long): CommentFragment {
             val fragment = CommentFragment()
             fragment.arguments = Bundle().apply {
