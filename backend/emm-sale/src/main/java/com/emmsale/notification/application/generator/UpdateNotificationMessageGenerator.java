@@ -40,12 +40,13 @@ public class UpdateNotificationMessageGenerator implements NotificationMessageGe
 
     try {
       return objectMapper.writeValueAsString(updateNotificationMessage);
-    } catch (JsonProcessingException e) {
+    } catch (final JsonProcessingException e) {
       throw new NotificationException(CONVERTING_JSON_ERROR);
     }
   }
 
-  private void validateIsExistedReceiver(final MemberRepository memberRepository, final Long receiverId) {
+  private void validateIsExistedReceiver(final MemberRepository memberRepository,
+      final Long receiverId) {
     if (!memberRepository.existsById(receiverId)) {
       throw new NotificationException(BAD_REQUEST_MEMBER_ID);
     }

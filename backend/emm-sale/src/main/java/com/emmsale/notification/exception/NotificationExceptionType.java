@@ -53,6 +53,10 @@ public enum NotificationExceptionType implements BaseExceptionType {
   NOT_OWNER(
       HttpStatus.BAD_REQUEST,
       "알림의 소유자가 아닙니다."
+  ),
+  NO_CONTENT_BLOCKED_MEMBER(
+      HttpStatus.NO_CONTENT,
+      "차단된 사용자이므로 알림이 전송되지 않았습니다."
   );
 
   private final HttpStatus httpStatus;

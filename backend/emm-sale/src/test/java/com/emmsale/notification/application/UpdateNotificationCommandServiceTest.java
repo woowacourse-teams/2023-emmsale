@@ -114,7 +114,6 @@ class UpdateNotificationCommandServiceTest extends ServiceIntegrationTestHelper 
 
     final List<UpdateNotification> expected = List.of(notification3);
 
-
     //when
     updateNotificationCommandService.deleteBatch(member, request);
 

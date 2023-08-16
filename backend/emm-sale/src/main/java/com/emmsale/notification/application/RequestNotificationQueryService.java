@@ -22,7 +22,8 @@ public class RequestNotificationQueryService {
   private final RequestNotificationRepository requestNotificationRepository;
 
   public RequestNotificationResponse findNotificationBy(final Long notificationId) {
-    final RequestNotification savedRequestNotification = requestNotificationRepository.findById(notificationId)
+    final RequestNotification savedRequestNotification = requestNotificationRepository.findById(
+            notificationId)
         .orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
 
     return RequestNotificationResponse.from(savedRequestNotification);

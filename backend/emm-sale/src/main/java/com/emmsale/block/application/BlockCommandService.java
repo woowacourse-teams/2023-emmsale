@@ -41,4 +41,11 @@ public class BlockCommandService {
       throw new BlockException(BlockExceptionType.ALREADY_BLOCKED_MEMBER);
     }
   }
+
+  public void unregister(final Long blockId, final Member member) {
+    final Block block = blockRepository.findById(blockId)
+        .orElseThrow(() -> new BlockException(BlockExceptionType.NOT_FOUND_BLOCK));
+    block.validateOwner(member);
+    blockRepository.deleteById(block.getId());
+  }
 }

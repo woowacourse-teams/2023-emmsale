@@ -5,6 +5,7 @@ import static com.emmsale.notification.exception.NotificationExceptionType.BAD_R
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_OWNER;
 
+import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
@@ -14,6 +15,7 @@ import com.emmsale.notification.domain.RequestNotification;
 import com.emmsale.notification.domain.RequestNotificationRepository;
 import com.emmsale.notification.exception.NotificationException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,9 @@ public class RequestNotificationCommandService {
   private final RequestNotificationRepository requestNotificationRepository;
   private final MemberRepository memberRepository;
   private final FirebaseCloudMessageClient firebaseCloudMessageClient;
+  private final BlockRepository blockRepository;
 
-  public RequestNotificationResponse create(
+  public Optional<RequestNotificationResponse> create(
       final RequestNotificationRequest requestNotificationRequest
   ) {
     final Long senderId = requestNotificationRequest.getSenderId();
@@ -37,6 +40,9 @@ public class RequestNotificationCommandService {
 
     validateAlreadyExistedNotification(senderId, receiverId, eventId);
     validateExistedSenderOrReceiver(List.of(senderId, receiverId));
+    if (isBlockedSender(receiverId, senderId)) {
+      return Optional.empty();
+    }
 
     final RequestNotification savedRequestNotification = requestNotificationRepository.save(
         new RequestNotification(
@@ -48,7 +54,11 @@ public class RequestNotificationCommandService {
 
     firebaseCloudMessageClient.sendMessageTo(savedRequestNotification);
 
-    return RequestNotificationResponse.from(savedRequestNotification);
+    return Optional.of(RequestNotificationResponse.from(savedRequestNotification));
+  }
+
+  private boolean isBlockedSender(final Long receiverId, final Long senderId) {
+    return blockRepository.existsByRequestMemberIdAndBlockMemberId(receiverId, senderId);
   }
 
   private void validateAlreadyExistedNotification(

@@ -1,6 +1,8 @@
 package com.emmsale.notification.application;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.notification.application.dto.FcmTokenRequest;

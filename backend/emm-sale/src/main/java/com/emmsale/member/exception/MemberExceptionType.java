@@ -57,9 +57,7 @@ public enum MemberExceptionType implements BaseExceptionType {
   NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER(
       HttpStatus.UNAUTHORIZED,
       "사용자가 일치하지 않습니다."
-  )
-
-  ;
+  );
 
   private final HttpStatus httpStatus;
   private final String errorMessage;
