@@ -1,14 +1,17 @@
 package com.emmsale.presentation.ui.eventdetail
 
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEventDetailBinding
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.ui.main.MainActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
 class EventDetailActivity : AppCompatActivity() {
@@ -21,6 +24,7 @@ class EventDetailActivity : AppCompatActivity() {
     private val viewModel: EventDetailViewModel by viewModels { EventDetailViewModel.factory(eventId) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initBackPressedDispatcher()
         setUpBinding()
         setUpEventDetail()
         initBackPressButtonClickListener()
@@ -32,6 +36,10 @@ class EventDetailActivity : AppCompatActivity() {
 
     fun showEventInformation() {
         binding.clEventDetailEventContainer.visibility = View.VISIBLE
+    }
+
+    private fun initBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(this, EventDetailOnBackPressedCallback())
     }
 
     private fun setUpBinding() {
@@ -78,7 +86,7 @@ class EventDetailActivity : AppCompatActivity() {
 
     private fun initBackPressButtonClickListener() {
         binding.ivEventdetailBackpress.setOnClickListener {
-            finish()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -88,7 +96,6 @@ class EventDetailActivity : AppCompatActivity() {
         fun startActivity(context: Context, eventId: Long) {
             val intent = Intent(context, EventDetailActivity::class.java)
             intent.putExtra(EVENT_ID_KEY, eventId)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             context.startActivity(intent)
         }
 
@@ -96,5 +103,13 @@ class EventDetailActivity : AppCompatActivity() {
             Intent(context, EventDetailActivity::class.java).apply {
                 putExtra(EVENT_ID_KEY, eventId)
             }
+    }
+
+    inner class EventDetailOnBackPressedCallback : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            finish()
+            val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            if (activityManager.appTasks.size == 1) MainActivity.startActivity(this@EventDetailActivity)
+        }
     }
 }

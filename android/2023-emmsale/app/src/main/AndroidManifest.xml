@@ -58,6 +58,7 @@
             android:exported="true" />
         <activity
             android:name=".presentation.ui.main.MainActivity"
+            android:launchMode="singleTask"
             android:exported="true" />
         <activity
             android:name=".presentation.ui.onboarding.OnboardingActivity"

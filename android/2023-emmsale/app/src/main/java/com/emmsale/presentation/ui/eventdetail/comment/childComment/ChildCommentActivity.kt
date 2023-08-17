@@ -251,7 +251,7 @@ class ChildCommentActivity : AppCompatActivity() {
             context: Context,
             eventId: Long,
             parentCommentId: Long,
-            fromNotification: Boolean,
+            fromNotification: Boolean = false,
         ): Intent =
             Intent(context, ChildCommentActivity::class.java).apply {
                 putExtra(KEY_EVENT_ID, eventId)
@@ -262,7 +262,9 @@ class ChildCommentActivity : AppCompatActivity() {
 
     inner class ChildCommentOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            EventDetailActivity.startActivity(this@ChildCommentActivity, eventId)
+            if (intent.getBooleanExtra(KEY_FROM_NOTIFICATION, false)) {
+                EventDetailActivity.startActivity(this@ChildCommentActivity, eventId)
+            }
             finish()
         }
     }
