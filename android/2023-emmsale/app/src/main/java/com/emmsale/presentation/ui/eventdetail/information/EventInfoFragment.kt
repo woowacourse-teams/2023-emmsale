@@ -52,11 +52,21 @@ class EventInfoFragment : BaseFragment<FragmentEventInformationBinding>() {
     private fun setUpIsScrapped() {
         viewModel.isScraped.observe(viewLifecycleOwner) { isScrapped ->
             if (isScrapped) {
-                binding.ivEventInformationScrap.setImageResource(R.drawable.ic_all_scrap_checked)
+                setScrapButtonChecked()
+                setScrapButtonEnabled(true)
             } else {
-                binding.ivEventInformationScrap.setImageResource(R.drawable.ic_all_scrap_unchecked)
+                setScrapButtonUnChecked()
+                setScrapButtonEnabled(true)
             }
         }
+    }
+
+    private fun setScrapButtonChecked() {
+        binding.ivEventInformationScrap.setImageResource(R.drawable.ic_all_scrap_checked)
+    }
+
+    private fun setScrapButtonUnChecked() {
+        binding.ivEventInformationScrap.setImageResource(R.drawable.ic_all_scrap_unchecked)
     }
 
     private fun setUpIsError() {
@@ -75,10 +85,16 @@ class EventInfoFragment : BaseFragment<FragmentEventInformationBinding>() {
         binding.ivEventInformationScrap.setOnClickListener {
             if (viewModel.isScraped.value!!) {
                 viewModel.deleteScrap()
+                setScrapButtonEnabled(false)
             } else {
                 viewModel.scrapEvent()
+                setScrapButtonEnabled(false)
             }
         }
+    }
+
+    private fun setScrapButtonEnabled(state: Boolean) {
+        binding.ivEventInformationScrap.isEnabled = state
     }
 
     private fun navigateToUrl() {
