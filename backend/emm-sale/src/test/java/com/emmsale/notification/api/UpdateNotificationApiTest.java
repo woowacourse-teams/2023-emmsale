@@ -66,6 +66,10 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
             .optional(),
         fieldWithPath("[].commentTypeNotification.eventName").description("(댓글 알림일 경우)이벤트 이름")
             .optional(),
+        fieldWithPath("[].commentTypeNotification.parentId").description("(댓글 알림일 경우)부모 댓글 ID")
+            .optional(),
+        fieldWithPath("[].commentTypeNotification.eventId").description("(댓글 알림일 경우)이벤트 ID")
+            .optional(),
         fieldWithPath("[].commentTypeNotification.commenterImageUrl").description(
                 "(댓글 알림일 경우) 댓글 작성자 이미지 Url")
             .optional()
@@ -74,7 +78,9 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
     final CommentTypeNotification commentTypeNotification = new CommentTypeNotification(
         "대댓글 내용",
         "이벤트 이름",
-        "대댓글 단 사용자의 이미지 URL"
+        "대댓글 단 사용자의 이미지 URL",
+        3L,
+        5L
     );
 
     final List<UpdateNotificationResponse> responses = List.of(

@@ -87,7 +87,9 @@ class UpdateNotificationQueryServiceTest extends ServiceIntegrationTestHelper {
             new CommentTypeNotification(
                 comment.getContent(),
                 comment.getEvent().getName(),
-                comment.getMember().getImageUrl()
+                comment.getMember().getImageUrl(),
+                comment.getParentIdOrSelfId(),
+                comment.getEvent().getId()
             )
         )
     );

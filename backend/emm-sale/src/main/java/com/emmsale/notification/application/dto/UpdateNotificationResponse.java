@@ -34,7 +34,9 @@ public class UpdateNotificationResponse {
         new CommentTypeNotification(
             comment.getContent(),
             comment.getEvent().getName(),
-            comment.getMember().getImageUrl()
+            comment.getMember().getImageUrl(),
+            comment.getParentIdOrSelfId(),
+            comment.getEvent().getId()
         )
     );
   }
@@ -50,10 +52,6 @@ public class UpdateNotificationResponse {
     );
   }
 
-  private boolean getIsRead() {
-    return isRead;
-  }
-
   @RequiredArgsConstructor
   @Getter
   public static class CommentTypeNotification {
@@ -61,5 +59,11 @@ public class UpdateNotificationResponse {
     private final String content;
     private final String eventName;
     private final String commenterImageUrl;
+    private final Long parentId;
+    private final Long eventId;
+  }
+
+  private boolean getIsRead() {
+    return isRead;
   }
 }
