@@ -92,7 +92,7 @@ fun Context.showNotification(
             channelName,
             channelDescription,
         )
-        val notification = createNotification(channelId, title, message, intent)
+        val notification = createNotification(channelId, title, message, notificationId, intent)
         notificationManager.notify(notificationId, notification)
     }
 }
@@ -114,15 +114,14 @@ private fun Context.createNotification(
     channelId: String,
     title: String,
     message: String,
+    notificationId: Int,
     intent: Intent? = null,
 ) = NotificationCompat.Builder(this, channelId)
     .setSmallIcon(R.drawable.ic_launcher_foreground)
     .setContentTitle(title)
     .setContentText(message)
     .setContentIntent(
-        intent?.let {
-            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-        },
+        PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_MUTABLE),
     )
     .setPriority(NotificationCompat.PRIORITY_HIGH)
     .setAutoCancel(true)

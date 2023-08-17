@@ -29,8 +29,8 @@ interface MemberService {
     @POST("/members/activities")
     suspend fun addMemberActivities(@Body memberActivitiesUpdateRequestBody: MemberActivitiesUpdateRequestBody): Response<Unit>
 
-    @DELETE("/members/activities?{ids}")
-    suspend fun deleteMemberActivities(@Query("ids") ids: List<Long>): Response<List<MemberActivitiesApiModel>>
+    @DELETE("/members/activities")
+    suspend fun deleteMemberActivities(@Query("activity-ids") ids: List<Long>): Response<List<MemberActivitiesApiModel>>
 
     @DELETE("/members/{memberId}")
     suspend fun deleteMember(@Path("memberId") memberId: Long): Response<Unit>

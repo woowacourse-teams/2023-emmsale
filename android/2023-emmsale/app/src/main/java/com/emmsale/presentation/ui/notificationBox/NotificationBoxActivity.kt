@@ -30,8 +30,7 @@ class NotificationBoxActivity : AppCompatActivity() {
 
     private fun initNotificationBoxTabLayoutSelectedListener() {
         binding.tlNotificationBox.addOnTabSelectedListener(
-            object :
-                TabLayout.OnTabSelectedListener {
+            object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     binding.vpNotificationBox.currentItem = tab.position
                 }

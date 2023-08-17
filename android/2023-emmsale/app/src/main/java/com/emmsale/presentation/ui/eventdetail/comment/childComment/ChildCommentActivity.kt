@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
@@ -11,6 +12,7 @@ import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentRecyclerViewDivider
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsEvent
@@ -41,8 +43,8 @@ class ChildCommentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
         initDataBinding()
+        initBackPressedDispatcher()
         initToolbar()
         initChildCommentsRecyclerView()
         setupUiLogic()
@@ -71,8 +73,12 @@ class ChildCommentActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(binding.etChildcommentsCommentUpdate.windowToken, 0)
     }
 
+    private fun initBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(this, ChildCommentOnBackPressedCallback())
+    }
+
     private fun initToolbar() {
-        binding.tbChildcommentsToolbar.setNavigationOnClickListener { finish() }
+        binding.tbChildcommentsToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
     private fun initChildCommentsRecyclerView() {
@@ -229,6 +235,7 @@ class ChildCommentActivity : AppCompatActivity() {
     companion object {
         private const val KEY_EVENT_ID = "KEY_EVENT_ID"
         private const val KEY_PARENT_COMMENT_ID = "KEY_PARENT_COMMENT_ID"
+        private const val KEY_FROM_NOTIFICATION = "KEY_FROM_NOTIFICATION"
 
         fun startActivity(context: Context, eventId: Long, parentCommentId: Long) {
             val intent = Intent(context, ChildCommentActivity::class.java).apply {
@@ -239,10 +246,26 @@ class ChildCommentActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        fun getIntent(context: Context, eventId: Long, parentCommentId: Long): Intent =
+        fun getIntent(
+            context: Context,
+            eventId: Long,
+            parentCommentId: Long,
+            fromNotification: Boolean = false,
+        ): Intent =
             Intent(context, ChildCommentActivity::class.java).apply {
                 putExtra(KEY_EVENT_ID, eventId)
                 putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                if (fromNotification) putExtra(KEY_FROM_NOTIFICATION, true)
             }
+    }
+
+    inner class ChildCommentOnBackPressedCallback : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (intent.getBooleanExtra(KEY_FROM_NOTIFICATION, false)) {
+                EventDetailActivity.startActivity(this@ChildCommentActivity, eventId)
+            }
+            finish()
+        }
     }
 }

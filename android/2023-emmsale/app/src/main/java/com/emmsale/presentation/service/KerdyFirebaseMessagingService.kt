@@ -11,6 +11,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
+import com.emmsale.presentation.ui.main.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.runBlocking
@@ -48,30 +49,31 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             channelId = FOLLOW_CHANNEL_ID,
             channelName = getString(R.string.kerdyfirebasemessaging_follow_notification_channel_name),
             channelDescription = getString(R.string.kerdyfirebasemessaging_follow_notification_channel_description),
+            intent = MainActivity.getIntent(this),
         )
     }
 
     private fun showChildCommentNotification(message: RemoteMessage) {
-        fun getEventId(commentId: Long): Long {
+        fun getEventIdAndParentCommentId(commentId: Long): Pair<Long, Long> {
             return runBlocking {
                 val eventIdResult = handleApi(
                     execute = { commentService.getComment(commentId) },
-                    mapToDomain = { it.parentComment.eventId },
+                    mapToDomain = { it.parentComment.eventId to it.parentComment.commentId },
                 )
                 when (eventIdResult) {
-                    is ApiError -> ERROR_EVENT_ID
-                    is ApiException -> ERROR_EVENT_ID
+                    is ApiError -> ERROR_EVENT_ID to ERROR_EVENT_ID
+                    is ApiException -> ERROR_EVENT_ID to ERROR_EVENT_ID
                     is ApiSuccess -> eventIdResult.data
                 }
             }
         }
 
         val memberId = message.data["receiverId"]?.toLong() ?: return
-        val parentCommentId = message.data["redirectId"]?.toLong() ?: return
+        val childCommentId = message.data["redirectId"]?.toLong() ?: return
         val notificationType = message.data["notificationType"] ?: return
         val createdAt = message.data["createdAt"] ?: return
 
-        val eventId = getEventId(parentCommentId)
+        val (eventId, parentCommentId) = getEventIdAndParentCommentId(childCommentId)
         if (eventId == ERROR_EVENT_ID) return
 
         baseContext.showNotification(
@@ -80,7 +82,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             channelId = CHILD_COMMENT_POSTING_CHANNEL_ID,
             channelName = getString(R.string.kerdyfirebasemessaging_child_comment_notification_channel_name),
             channelDescription = getString(R.string.kerdyfirebasemessaging_child_comment_notification_channel_description),
-            intent = ChildCommentActivity.getIntent(this, eventId, parentCommentId),
+            intent = ChildCommentActivity.getIntent(this, eventId, parentCommentId, true),
         )
     }
 

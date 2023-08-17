@@ -5,21 +5,23 @@ data class RecruitmentNotificationUiState(
     val isLoading: Boolean = false,
     val isLoadingNotificationsFailed: Boolean = false,
 ) {
-    fun toggleNotificationExpanded(eventId: Long): RecruitmentNotificationUiState =
-        copy(notificationGroups = toggleExpanded(eventId))
+    fun toggleNotificationExpanded(eventId: Long): RecruitmentNotificationUiState = copy(
+        notificationGroups = toggleExpanded(eventId),
+    )
 
-    fun changeAcceptStateBy(notificationId: Long): RecruitmentNotificationUiState =
-        copy(notificationGroups = notificationGroups.map { it.changeToAcceptedStateBy(notificationId) })
+    fun changeAcceptStateBy(notificationId: Long): RecruitmentNotificationUiState = copy(
+        notificationGroups = notificationGroups.map { it.changeToAcceptedStateBy(notificationId) },
+    )
 
-    fun changeRejectStateBy(notificationId: Long): RecruitmentNotificationUiState =
-        copy(notificationGroups = notificationGroups.map { it.changeToRejectedStateBy(notificationId) })
+    fun changeRejectStateBy(notificationId: Long): RecruitmentNotificationUiState = copy(
+        notificationGroups = notificationGroups.map { it.changeToRejectedStateBy(notificationId) },
+    )
 
-    fun changeReadStateBy(eventId: Long): RecruitmentNotificationUiState =
-        copy(
-            notificationGroups = notificationGroups.map {
-                if (it.eventId == eventId) it.changeToReadState() else it
-            },
-        )
+    fun changeReadStateBy(eventId: Long): RecruitmentNotificationUiState = copy(
+        notificationGroups = notificationGroups.map {
+            if (it.eventId == eventId) it.changeToReadState() else it
+        },
+    )
 
     private fun toggleExpanded(eventId: Long): List<RecruitmentNotificationHeaderUiState> {
         return notificationGroups.map { header ->

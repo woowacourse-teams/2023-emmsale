@@ -19,11 +19,7 @@ class ScrappedEventViewModel(
     private val _scrappedEvents = NotNullMutableLiveData(ScrappedEventsUiState())
     val scrappedEvents: NotNullLiveData<ScrappedEventsUiState> = _scrappedEvents
 
-    init {
-        fetchScrappedEvents()
-    }
-
-    private fun fetchScrappedEvents() {
+    fun fetchScrappedEvents() {
         changeToLoadingState()
         viewModelScope.launch {
             when (val response = scrappedEventRepository.getScrappedEvents()) {
