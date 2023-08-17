@@ -6,7 +6,6 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentScrappedEventBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.scrap.recyclerView.ScrappedEventAdapter
 import com.emmsale.presentation.ui.main.event.scrap.uistate.ScrappedEventUiState
@@ -28,7 +27,7 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.fetchScrappedEvents()
+        viewModel.refresh()
     }
 
     private fun initBinding() {
@@ -39,11 +38,7 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
 
     private fun setUpScrappedEvents() {
         viewModel.scrappedEvents.observe(viewLifecycleOwner) { scrappedEvents ->
-            if (scrappedEvents.isError) {
-                requireContext().showToast(getString(R.string.all_data_loading_failed_message))
-            } else {
-                scrappedEventsAdapter.submitList(scrappedEvents.list)
-            }
+            scrappedEventsAdapter.submitList(scrappedEvents.list)
         }
     }
 

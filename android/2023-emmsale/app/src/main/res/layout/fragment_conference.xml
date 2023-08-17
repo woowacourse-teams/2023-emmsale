@@ -131,7 +131,8 @@
             bind:viewModel="@{viewModel}"
             android:background="@color/white"
             android:visibility="@{viewModel.conferences.isError ? View.VISIBLE : View.GONE}"
-            android:clickable="true" />
+            android:clickable="true"
+            tools:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
