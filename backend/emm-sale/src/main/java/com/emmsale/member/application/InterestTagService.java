@@ -3,6 +3,7 @@ package com.emmsale.member.application;
 import com.emmsale.member.application.dto.InterestTagAddRequest;
 import com.emmsale.member.application.dto.InterestTagDeleteRequest;
 import com.emmsale.member.application.dto.InterestTagResponse;
+import com.emmsale.member.application.dto.InterestTagUpdateRequest;
 import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
@@ -86,4 +87,23 @@ public class InterestTagService {
     }
   }
 
+  public List<InterestTagResponse> updateInterestTags(
+      final Member member,
+      final InterestTagUpdateRequest request
+  ) {
+    final List<Long> requestTagIds = request.getTagIds();
+    final List<Tag> requestTags = tagRepository.findAllById(requestTagIds);
+
+    validateAllTagExist(requestTags, requestTagIds);
+
+    interestTagRepository.deleteAllByMember(member);
+
+    final List<InterestTag> interestTags = requestTags.stream()
+        .map(tag -> new InterestTag(member, tag))
+        .collect(Collectors.toList());
+
+    return interestTagRepository.saveAll(interestTags).stream()
+        .map(InterestTagResponse::from)
+        .collect(Collectors.toList());
+  }
 }

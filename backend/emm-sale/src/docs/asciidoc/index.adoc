@@ -139,6 +139,20 @@ include::{snippets}/add-interest-tag/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/add-interest-tag/response-fields.adoc[]
 
+=== `PUT` : 사용자의 관심 태그 업데이트
+
+.HTTP request
+include::{snippets}/update-interest-tags/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/update-interest-tags/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/update-interest-tags/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/update-interest-tags/response-fields.adoc[]
+
 === `DELETE` : 사용자의 관심 태그 삭제
 
 .HTTP request
