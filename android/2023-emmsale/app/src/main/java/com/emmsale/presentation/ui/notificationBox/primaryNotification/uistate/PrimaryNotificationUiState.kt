@@ -8,7 +8,6 @@ import java.time.LocalDateTime
 abstract class PrimaryNotificationUiState(
     val id: Long,
     val receiverId: Long,
-    val redirectId: Long,
     val createdAt: LocalDateTime,
     val isRead: Boolean,
 ) {
@@ -18,7 +17,6 @@ abstract class PrimaryNotificationUiState(
 
         if (id != other.id) return false
         if (receiverId != other.receiverId) return false
-        if (redirectId != other.redirectId) return false
         if (createdAt != other.createdAt) return false
         if (isRead != other.isRead) return false
 
@@ -28,7 +26,6 @@ abstract class PrimaryNotificationUiState(
     override fun hashCode(): Int {
         var result = id
         result = 31 * result + receiverId
-        result = 31 * result + redirectId
         result = 31 * result + createdAt.hashCode()
         result = 31 * result + isRead.hashCode()
         return result.toInt()

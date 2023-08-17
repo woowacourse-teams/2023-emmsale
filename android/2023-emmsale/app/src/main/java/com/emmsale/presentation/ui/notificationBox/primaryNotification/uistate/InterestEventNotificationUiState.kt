@@ -7,13 +7,12 @@ import java.time.LocalDateTime
 class InterestEventNotificationUiState(
     id: Long,
     receiverId: Long,
-    eventId: Long,
     createdAt: LocalDateTime,
     isRead: Boolean,
+    val eventId: Long,
 ) : PrimaryNotificationUiState(
     id,
     receiverId,
-    eventId,
     createdAt,
     isRead,
 ) {
