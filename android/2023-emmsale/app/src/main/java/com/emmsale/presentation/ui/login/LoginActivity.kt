@@ -15,7 +15,7 @@ import com.emmsale.BuildConfig
 import com.emmsale.R
 import com.emmsale.databinding.ActivityLoginBinding
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
-import com.emmsale.presentation.common.extension.showSnackbar
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
@@ -95,7 +95,7 @@ class LoginActivity :
 
     private fun showLoginFailedMessage() {
         changeLoadingVisibility(false)
-        binding.root.showSnackbar(getString(R.string.login_failed_message))
+        binding.root.showSnackBar(getString(R.string.login_failed_message))
     }
 
     private fun changeLoadingVisibility(isShow: Boolean) {

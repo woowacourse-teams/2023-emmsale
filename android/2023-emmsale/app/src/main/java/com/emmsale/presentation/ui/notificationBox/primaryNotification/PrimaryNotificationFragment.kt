@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showSnackbar
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
@@ -97,11 +97,11 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     }
 
     private fun showNotificationFetchingFailedMessage() {
-        binding.root.showSnackbar(R.string.all_data_loading_failed_message)
+        binding.root.showSnackBar(R.string.all_data_loading_failed_message)
     }
 
     private fun showNotificationDeleteFailedMessage() {
-        binding.root.showSnackbar(R.string.primarynotification_delete_notification_failed_message)
+        binding.root.showSnackBar(R.string.primarynotification_delete_notification_failed_message)
     }
 
     private fun navigateToDetail(notification: PrimaryNotificationUiState) {

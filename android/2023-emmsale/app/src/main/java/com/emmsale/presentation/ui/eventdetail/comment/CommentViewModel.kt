@@ -11,10 +11,10 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsEvent
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import kotlinx.coroutines.launch

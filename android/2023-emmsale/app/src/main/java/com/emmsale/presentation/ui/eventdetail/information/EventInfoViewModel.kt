@@ -9,7 +9,7 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.scrap.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import kotlinx.coroutines.launch
 
 class EventInfoViewModel(

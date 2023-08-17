@@ -13,7 +13,7 @@ import com.emmsale.data.login.Login
 import com.emmsale.data.login.LoginRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.login.uistate.LoginUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll

@@ -14,9 +14,9 @@ import com.emmsale.data.event.model.Competition
 import com.emmsale.data.eventTag.EventTag
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringUiState

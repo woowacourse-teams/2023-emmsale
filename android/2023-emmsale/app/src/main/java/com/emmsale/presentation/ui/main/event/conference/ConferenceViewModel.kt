@@ -14,9 +14,9 @@ import com.emmsale.data.event.model.Conference
 import com.emmsale.data.eventTag.EventTag
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringUiState

@@ -14,9 +14,9 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileUiState
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.SelectableActivityUiState

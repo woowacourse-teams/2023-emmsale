@@ -12,10 +12,10 @@ import com.emmsale.data.recruitment.Recruitment
 import com.emmsale.data.recruitment.RecruitmentRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.firebase.analytics.logRecruitment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.HasOpenUrlUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.CompanionRequestTaskUiState

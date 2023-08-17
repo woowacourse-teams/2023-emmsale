@@ -14,9 +14,9 @@ import com.emmsale.data.notification.recruitment.RecruitmentNotification
 import com.emmsale.data.notification.recruitment.RecruitmentStatus
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationBodyUiState
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationEvent
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationHeaderUiState

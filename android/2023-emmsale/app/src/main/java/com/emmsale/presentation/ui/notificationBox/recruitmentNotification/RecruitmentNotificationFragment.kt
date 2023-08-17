@@ -8,7 +8,7 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentRecruitmentNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showSnackbar
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
@@ -77,7 +77,7 @@ class RecruitmentNotificationFragment :
     }
 
     private fun showUnregisteredOpenChatUrlErrorMessage() {
-        binding.root.showSnackbar(R.string.recruitmentnotification_unregistered_sender_open_chat_url)
+        binding.root.showSnackBar(R.string.recruitmentnotification_unregistered_sender_open_chat_url)
     }
 
     private fun navigateToChat(chatUrl: String) {
@@ -123,7 +123,7 @@ class RecruitmentNotificationFragment :
             when {
                 uiState.isChangingRecruitmentStatusFailed -> requireContext().showToast(getString(R.string.notificationbox_recruitment_status_changing_failed))
                 uiState.isAccepted -> showRecruitmentAcceptedDialog()
-                uiState.isRejected -> binding.root.showSnackbar(getString(R.string.notificationbox_recruitment_rejected_message))
+                uiState.isRejected -> binding.root.showSnackBar(getString(R.string.notificationbox_recruitment_rejected_message))
             }
         }
     }

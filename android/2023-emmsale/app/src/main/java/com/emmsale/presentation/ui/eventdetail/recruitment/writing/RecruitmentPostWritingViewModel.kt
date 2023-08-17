@@ -7,10 +7,10 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.recruitment.RecruitmentRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.firebase.analytics.logWriting
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostWritingUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.WritingModeUiState.EDIT
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.WritingModeUiState.POST

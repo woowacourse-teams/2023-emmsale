@@ -110,6 +110,7 @@
     <string name="comments_complete_post_comment">댓글을 게시했습니다.</string>
     <string name="comments_comments_fetching_error_message">댓글들을 불러오는 데 실패했어요 😥</string>
     <string name="comments_comments_posting_error_message">댓글을 게시하는 데 실패했어요 😥</string>
+    <string name="comments_comments_update_error_message">댓글을 수정하는 데 실패했어요 😥</string>
     <string name="comments_comments_deletion_error_message">댓글을 삭제하는 데 실패했어요 😥</string>.
     <string name="comments_comment_report_dialog_message">해당 댓글을 신고 하시겠습니까?</string>
 
