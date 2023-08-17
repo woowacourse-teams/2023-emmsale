@@ -10,10 +10,9 @@ import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
-import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.ActivitiesAdapter
@@ -21,7 +20,6 @@ import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.Act
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.recyclerView.FieldsAdapter
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState.EditMyProfileUiState
-import kotlinx.coroutines.launch
 
 class EditMyProfileActivity : AppCompatActivity() {
 
@@ -45,11 +43,6 @@ class EditMyProfileActivity : AppCompatActivity() {
         initActivitiesRecyclerViews()
         initFieldsRecyclerView()
         setupUiLogic()
-
-        lifecycleScope.launch {
-            viewModel.fetchMember().join()
-            viewModel.fetchAllActivities()
-        }
     }
 
     private fun initDataBinding() {
@@ -197,9 +190,9 @@ class EditMyProfileActivity : AppCompatActivity() {
 
     private fun handleErrors(errorEvent: EditMyProfileErrorEvent?) {
         when (errorEvent) {
-            EditMyProfileErrorEvent.DESCRIPTION_UPDATE -> showToast(getString(R.string.editmyprofile_update_description_error_message))
-            EditMyProfileErrorEvent.ACTIVITY_REMOVE -> showToast(getString(R.string.editmyprofile_activity_remove_error_message))
-            EditMyProfileErrorEvent.ACTIVITIES_ADD -> showToast(getString(R.string.editmyprofile_acitivities_add_error_message))
+            EditMyProfileErrorEvent.DESCRIPTION_UPDATE -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_description_error_message))
+            EditMyProfileErrorEvent.ACTIVITY_REMOVE -> binding.root.showSnackBar(getString(R.string.editmyprofile_activity_remove_error_message))
+            EditMyProfileErrorEvent.ACTIVITIES_ADD -> binding.root.showSnackBar(getString(R.string.editmyprofile_acitivities_add_error_message))
             else -> return
         }
         viewModel.removeError()
