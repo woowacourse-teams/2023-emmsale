@@ -14,7 +14,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/tv_childcomment_authorname"
@@ -98,8 +99,8 @@
 
         <ImageView
             android:id="@+id/iv_childcomments_child_comment_author_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="14dp"
             android:contentDescription="@string/childcomments_child_comment_author_image_description"
