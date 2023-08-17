@@ -81,10 +81,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="17dp"
-            app:layout_constraintTop_toBottomOf="@id/appbarlayout_recruitmentdetail"
             app:layout_constraintBottom_toTopOf="@id/btn_recruitmentdetail_request_companion"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/appbarlayout_recruitmentdetail">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -133,8 +133,6 @@
                     app:layout_constraintStart_toStartOf="@+id/iv_recruitmentdetail_profile_image"
                     app:layout_constraintTop_toBottomOf="@+id/iv_recruitmentdetail_profile_image"
                     tools:text="아무나 같이가실 분 구합니다! 역에서 만나서 같이가면 좋을 것 같아요! 많이들 신청해 주세용!!!" />
-
-
 
 
                 <ImageView

@@ -10,13 +10,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.HasOpenUrlUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
 import com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity
+import com.emmsale.presentation.ui.main.setting.openProfileUrl.OpenProfileUrlConfigActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 
 class RecruitmentPostDetailActivity :
@@ -84,6 +87,18 @@ class RecruitmentPostDetailActivity :
         }
     }
 
+    private fun showNavigateToUrlConfigConfirmDialog() {
+        ConfirmDialog(
+            context = this,
+            title = getString(R.string.recruitmentpostdetail_dialog_open_profile_title),
+            message = getString(R.string.recruitmentpostdetail_dialog_open_profile_message),
+            positiveButtonLabel = getString(R.string.recruitmentpostdetail_dialog_open_profile_positive_label),
+            negativeButtonLabel = getString(R.string.recruitmentpostdetail_dialog_open_profile_negative_label),
+            onPositiveButtonClick = { OpenProfileUrlConfigActivity.startActivity(this) },
+            onNegativeButtonClick = {},
+        ).show()
+    }
+
     private fun showReportDialog() {
         WarningDialog(
             context = this,
@@ -107,6 +122,7 @@ class RecruitmentPostDetailActivity :
         setUpCompanionRequest()
         setUpIsPostDeleteSuccess()
         setupEventUiLogic()
+        setUpHasOpenProfileUrl()
     }
 
     private fun initBinding() {
@@ -145,6 +161,16 @@ class RecruitmentPostDetailActivity :
         }
     }
 
+    private fun setUpHasOpenProfileUrl() {
+        viewModel.hasOpenProfileUrl.observe(this) { state ->
+            when (state) {
+                HasOpenUrlUiState.TRUE -> showRequestCompanionDialog()
+                HasOpenUrlUiState.FALSE -> showNavigateToUrlConfigConfirmDialog()
+                HasOpenUrlUiState.ERROR -> showToast(getString(R.string.all_data_loading_failed_message))
+            }
+        }
+    }
+
     private fun setupEventUiLogic() {
         viewModel.event.observe(this) {
             handleEvent(it)
@@ -153,7 +179,7 @@ class RecruitmentPostDetailActivity :
 
     private fun initRequestCompanionButtonClick() {
         binding.btnRecruitmentdetailRequestCompanion.setOnClickListener {
-            showRequestCompanionDialog()
+            viewModel.fetchProfile()
         }
     }
 

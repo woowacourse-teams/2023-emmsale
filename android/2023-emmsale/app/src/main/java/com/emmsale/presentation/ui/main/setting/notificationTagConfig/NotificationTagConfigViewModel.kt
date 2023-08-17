@@ -11,6 +11,7 @@ import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.common.firebase.analytics.logInterestTags
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.main.setting.notificationTagConfig.uistate.NotificationTagConfigUiState
@@ -93,9 +94,12 @@ class NotificationTagConfigViewModel(
                 .map { EventTag(id = it.id, name = it.tagName) }
 
             when (eventTagRepository.updateInterestEventTags(interestEventTags)) {
-                is ApiSuccess -> _notificationTags.value = notificationTags.value.copy(
-                    isInterestTagsUpdateSuccess = true,
-                )
+                is ApiSuccess -> {
+                    _notificationTags.value = notificationTags.value.copy(
+                        isInterestTagsUpdateSuccess = true,
+                    )
+                    logInterestTags(interestEventTags.map(EventTag::name))
+                }
 
                 is ApiError, is ApiException -> changeToInterestTagsUpdatingError()
             }

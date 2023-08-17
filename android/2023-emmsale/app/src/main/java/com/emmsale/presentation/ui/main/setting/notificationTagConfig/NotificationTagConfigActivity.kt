@@ -9,13 +9,17 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationTagConfigBinding
 import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.main.setting.notificationTagConfig.uistate.NotificationTagConfigUiState
 import com.emmsale.presentation.ui.main.setting.notificationTagConfig.uistate.NotificationTagsConfigUiState
 
-class NotificationTagConfigActivity : AppCompatActivity() {
+class NotificationTagConfigActivity :
+    AppCompatActivity(),
+    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("notification_tag_config") {
     private val viewModel: NotificationTagConfigViewModel by viewModels { NotificationTagConfigViewModel.factory }
     private val binding: ActivityNotificationTagConfigBinding by lazy {
         ActivityNotificationTagConfigBinding.inflate(layoutInflater)
@@ -23,6 +27,7 @@ class NotificationTagConfigActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        registerScreen(this)
         setContentView(binding.root)
         initView()
     }

@@ -12,6 +12,8 @@ import com.emmsale.presentation.common.extension.checkPostNotificationPermission
 import com.emmsale.presentation.common.extension.navigateToApplicationSettings
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showSnackbar
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.common.views.CancelablePrimaryTag
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.cancelablePrimaryChipOf
@@ -19,7 +21,9 @@ import com.emmsale.presentation.ui.main.setting.notification.uistate.Notificatio
 import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationTagsUiState
 import com.emmsale.presentation.ui.main.setting.notificationTagConfig.NotificationTagConfigActivity
 
-class NotificationConfigActivity : AppCompatActivity() {
+class NotificationConfigActivity :
+    AppCompatActivity(),
+    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("notification_config") {
     private val viewModel: NotificationConfigViewModel by viewModels { NotificationConfigViewModel.factory }
     private val binding: ActivityNotificationConfigBinding by lazy {
         ActivityNotificationConfigBinding.inflate(layoutInflater)
@@ -34,6 +38,7 @@ class NotificationConfigActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        registerScreen(this)
         initView()
         setupObservers()
     }

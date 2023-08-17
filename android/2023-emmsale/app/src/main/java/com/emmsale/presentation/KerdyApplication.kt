@@ -5,10 +5,9 @@ import com.emmsale.data.common.ServiceFactory
 import com.emmsale.di.RepositoryContainer
 import com.emmsale.di.ServiceContainer
 import com.emmsale.di.SharedPreferenceContainer
-import com.emmsale.presentation.common.firebase.analytics.KerdyAnalytics.initFirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class KerdyApplication : Application() {
 
@@ -26,13 +25,13 @@ class KerdyApplication : Application() {
     }
 
     private fun initFirebaseAnalytics() {
-        applicationScope.launch {
-            repositoryContainer.tokenRepository.getToken()?.let(::initFirebaseAnalytics)
-        }
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 
     companion object {
         lateinit var repositoryContainer: RepositoryContainer
+            private set
+        lateinit var firebaseAnalytics: FirebaseAnalytics
             private set
         val applicationScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
     }

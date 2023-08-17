@@ -11,6 +11,8 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentCommentsBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
@@ -22,7 +24,9 @@ import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 
-class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
+class CommentFragment :
+    BaseFragment<FragmentCommentsBinding>(),
+    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("comment") {
     override val layoutResId: Int = R.layout.fragment_comments
 
     private val eventId: Long by lazy {
@@ -37,7 +41,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     }
 
     private val inputMethodManager: InputMethodManager by lazy {
-        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
     private lateinit var eventDetailActivity: EventDetailActivity
@@ -46,6 +50,7 @@ class CommentFragment : BaseFragment<FragmentCommentsBinding>() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         eventDetailActivity = context as EventDetailActivity
+        registerScreen(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

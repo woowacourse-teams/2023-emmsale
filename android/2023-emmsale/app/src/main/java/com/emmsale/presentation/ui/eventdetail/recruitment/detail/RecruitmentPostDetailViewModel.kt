@@ -7,13 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.recruitment.Recruitment
 import com.emmsale.data.recruitment.RecruitmentRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.common.firebase.analytics.logRecruitment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.HasOpenUrlUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.CompanionRequestTaskUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState
@@ -23,8 +26,10 @@ class RecruitmentPostDetailViewModel(
     private val eventId: Long,
     private val recruitmentId: Long,
     private val recruitmentRepository: RecruitmentRepository,
+    private val memberRepository: MemberRepository,
     tokenRepository: TokenRepository,
 ) : ViewModel() {
+
     private val _recruitmentPost: NotNullMutableLiveData<RecruitmentPostUiState> =
         NotNullMutableLiveData(RecruitmentPostUiState())
     val recruitmentPost: NotNullLiveData<RecruitmentPostUiState> = _recruitmentPost
@@ -39,10 +44,13 @@ class RecruitmentPostDetailViewModel(
     private val _isAlreadyRequest: MutableLiveData<Boolean> = MutableLiveData(false)
     val isAlreadyRequest: LiveData<Boolean> = _isAlreadyRequest
 
-    private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
-
     private val _event = MutableLiveData<RecruitmentPostDetailEvent?>(null)
     val event: LiveData<RecruitmentPostDetailEvent?> = _event
+
+    private val _hasOpenProfileUrl: MutableLiveData<HasOpenUrlUiState> = MutableLiveData()
+    val hasOpenProfileUrl: LiveData<HasOpenUrlUiState> = _hasOpenProfileUrl
+
+    private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
 
     init {
         fetchRecruitmentPost()
@@ -76,6 +84,7 @@ class RecruitmentPostDetailViewModel(
                 is ApiSuccess -> {
                     changeRequestCompanionToSuccessState()
                     setRequestCompanionIsAlreadyState(true)
+                    logRecruitment(message, myUid)
                 }
 
                 is ApiError, is ApiException -> changeRequestCompanionToErrorState()
@@ -104,6 +113,24 @@ class RecruitmentPostDetailViewModel(
                     _event.value = RecruitmentPostDetailEvent.REPORT_FAIL
 
                 is ApiSuccess -> _event.value = RecruitmentPostDetailEvent.REPORT_SUCCESS
+            }
+        }
+    }
+
+    fun fetchProfile() {
+        viewModelScope.launch {
+            when (val response = memberRepository.getMember(myUid)) {
+                is ApiSuccess -> {
+                    if (response.data.openProfileUrl != "") {
+                        _hasOpenProfileUrl.value =
+                            HasOpenUrlUiState.TRUE
+                    } else {
+                        _hasOpenProfileUrl.value =
+                            HasOpenUrlUiState.FALSE
+                    }
+                }
+
+                else -> _hasOpenProfileUrl.value = HasOpenUrlUiState.ERROR
             }
         }
     }
@@ -166,10 +193,11 @@ class RecruitmentPostDetailViewModel(
             recruitmentId: Long,
         ) = ViewModelFactory {
             RecruitmentPostDetailViewModel(
-                eventId,
-                recruitmentId,
-                KerdyApplication.repositoryContainer.recruitmentRepository,
-                KerdyApplication.repositoryContainer.tokenRepository,
+                eventId = eventId,
+                recruitmentId = recruitmentId,
+                recruitmentRepository = KerdyApplication.repositoryContainer.recruitmentRepository,
+                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
+                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
             )
         }
     }
