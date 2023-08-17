@@ -26,7 +26,7 @@ class FilterTag : AppCompatButton {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         val marginLayoutParams = MarginLayoutParams::class.java.cast(layoutParams)
-        marginLayoutParams.marginEnd = 5.dp
+        marginLayoutParams?.marginEnd = 5.dp
         layoutParams = marginLayoutParams
     }
 }

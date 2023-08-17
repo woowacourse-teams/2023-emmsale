@@ -11,4 +11,8 @@ data class CommentTypeNotificationApiModel(
     val eventName: String,
     @SerialName("commenterImageUrl")
     val commentProfileImageUrl: String,
+    @SerialName("parentId")
+    val parentId: Long,
+    @SerialName("eventId")
+    val eventId: Long,
 )

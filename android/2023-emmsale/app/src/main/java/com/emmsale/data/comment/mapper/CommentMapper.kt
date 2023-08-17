@@ -11,8 +11,12 @@ fun List<CommentFamilyApiModel>.toData(): List<Comment> = map(CommentFamilyApiMo
 
 fun CommentFamilyApiModel.toData() = Comment(
     id = parentComment.commentId,
+    eventId = 1L,
+    eventName = parentComment.eventName,
     authorId = parentComment.memberId,
     authorName = parentComment.memberName,
+    authorImageUrl = parentComment.memberImageUrl,
+    parentId = parentComment.parentId,
     content = parentComment.content,
     createdAt = LocalDateTime.parse(parentComment.createdAt, dateTimeFormatter),
     updatedAt = LocalDateTime.parse(parentComment.updatedAt, dateTimeFormatter),
@@ -25,13 +29,17 @@ fun List<CommentApiModel>.toData(): List<Comment> = map(CommentApiModel::toData)
 
 fun CommentApiModel.toData() = Comment(
     id = commentId,
+    eventId = 1L,
+    eventName = eventName,
     authorId = memberId,
     authorName = memberName,
+    authorImageUrl = memberImageUrl,
+    parentId = parentId,
     content = content,
     createdAt = LocalDateTime.parse(createdAt, dateTimeFormatter),
     updatedAt = LocalDateTime.parse(updatedAt, dateTimeFormatter),
     deleted = deleted,
-    listOf(),
+    childComments = listOf(),
 )
 
 private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")

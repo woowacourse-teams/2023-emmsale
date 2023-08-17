@@ -46,19 +46,6 @@
             app:layout_constraintTop_toTopOf="@+id/tv_events_prefix"
             tools:text="58" />
 
-        <TextView
-            android:id="@+id/tv_events_suffix"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="1dp"
-            android:text="@string/event_count_suffix"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_events_prefix"
-            app:layout_constraintStart_toEndOf="@+id/tv_events_count"
-            app:layout_constraintTop_toTopOf="@+id/tv_events_prefix" />
-
         <LinearLayout
             android:id="@+id/btn_event_filter"
             android:layout_width="wrap_content"

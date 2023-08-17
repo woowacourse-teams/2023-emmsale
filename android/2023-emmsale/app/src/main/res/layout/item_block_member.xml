@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/activity_member_block">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="blockedMember"
+            type="com.emmsale.presentation.ui.setting.block.uistate.BlockedMemberUiState" />
+
+        <variable
+            name="onUnblockMemberClick"
+            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="17dp"
+        android:paddingVertical="10dp">
+
+        <ImageView
+            android:id="@+id/iv_member_profile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:imageUrl="@{blockedMember.profileImageUrl}"
+            app:isCircle="@{true}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_member_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="@{blockedMember.name}"
+            android:textAppearance="@style/KerdyTextStyleBlackBold15"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_block_member"
+            app:layout_constraintStart_toEndOf="@+id/iv_member_profile"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="김커디" />
+
+        <TextView
+            android:id="@+id/btn_block_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_block_member_button"
+            android:onClick="@{() -> onUnblockMemberClick.invoke(blockedMember.blockId)}"
+            android:paddingHorizontal="34dp"
+            android:paddingVertical="10dp"
+            android:text="@string/memberblock_block_button_label"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

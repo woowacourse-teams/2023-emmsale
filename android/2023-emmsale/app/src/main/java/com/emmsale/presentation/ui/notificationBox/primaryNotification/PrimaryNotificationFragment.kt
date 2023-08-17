@@ -9,9 +9,11 @@ import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.common.views.WarningDialog
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PastNotificationAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.RecentNotificationAdapter
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.CommentNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiState
@@ -38,9 +40,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         )
     }
     private val primaryNotificationAdapter: ConcatAdapter by lazy {
-        val config = ConcatAdapter.Config.Builder()
-            .setIsolateViewTypes(false)
-            .build()
+        val config = ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
 
         ConcatAdapter(
             config,
@@ -105,15 +105,20 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
 
     private fun navigateToDetail(notification: PrimaryNotificationUiState) {
         when (notification) {
-            is InterestEventNotificationUiState -> navigateToEventScreen()
-            is CommentNotificationUiState -> navigateToCommentScreen()
+            is InterestEventNotificationUiState -> navigateToEventScreen(notification.eventId)
+            is ChildCommentNotificationUiState -> navigateToCommentScreen(
+                eventId = notification.eventId,
+                parentCommentId = notification.parentCommentId,
+            )
         }
     }
 
-    private fun navigateToCommentScreen() {
+    private fun navigateToEventScreen(eventId: Long) {
+        EventDetailActivity.startActivity(requireContext(), eventId)
     }
 
-    private fun navigateToEventScreen() {
+    private fun navigateToCommentScreen(eventId: Long, parentCommentId: Long) {
+        ChildCommentActivity.startActivity(requireContext(), eventId, parentCommentId)
     }
 
     private fun showNotificationDeleteConfirmDialog() {

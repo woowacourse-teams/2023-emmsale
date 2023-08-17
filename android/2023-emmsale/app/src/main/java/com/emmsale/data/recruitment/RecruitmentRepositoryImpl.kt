@@ -8,6 +8,7 @@ import com.emmsale.data.recruitment.dto.RecruitmentApiModel
 import com.emmsale.data.recruitment.dto.RecruitmentDeletionRequestBody
 import com.emmsale.data.recruitment.dto.RecruitmentPostingRequestBody
 import com.emmsale.data.recruitment.mapper.toData
+import com.emmsale.data.report.dto.ReportRequestBody
 import com.emmsale.data.token.TokenRepository
 import okhttp3.Headers
 
@@ -129,6 +130,26 @@ class RecruitmentRepositoryImpl(
             mapToDomain = { it },
         )
     }
+
+    override suspend fun reportRecruitment(
+        recruitmentId: Long,
+        authorId: Long,
+        reporterId: Long,
+    ): ApiResult<Unit> {
+        return handleApi(
+            execute = {
+                recruitmentService.reportRecruitment(
+                    ReportRequestBody.createRecruitmentReport(
+                        recruitmentId = recruitmentId,
+                        authorId = authorId,
+                        reporterId = reporterId,
+                    ),
+                )
+            },
+            mapToDomain = {},
+        )
+    }
+
     companion object {
         private const val HEADER_LOCATION = "Location"
         private const val NOT_LOGIN_ERROR_MESSAGE = "로그인 되지 않아서 같이가요 정보를 가져올 수 없어요"

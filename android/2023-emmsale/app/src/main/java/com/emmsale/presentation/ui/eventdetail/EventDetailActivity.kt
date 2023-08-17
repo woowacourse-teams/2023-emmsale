@@ -3,6 +3,7 @@ package com.emmsale.presentation.ui.eventdetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
@@ -23,6 +24,14 @@ class EventDetailActivity : AppCompatActivity() {
         setUpBinding()
         setUpEventDetail()
         initBackPressButtonClickListener()
+    }
+
+    fun hideEventInformation() {
+        binding.clEventDetailEventContainer.visibility = View.GONE
+    }
+
+    fun showEventInformation() {
+        binding.clEventDetailEventContainer.visibility = View.VISIBLE
     }
 
     private fun setUpBinding() {
@@ -68,14 +77,13 @@ class EventDetailActivity : AppCompatActivity() {
     }
 
     private fun initBackPressButtonClickListener() {
-        binding.ivEventdetailBackpress.setOnClickListener {
-            finish()
-        }
+        binding.ivEventdetailBackpress.setOnClickListener { finish() }
     }
 
     companion object {
         private const val EVENT_ID_KEY = "EVENT_ID_KEY"
         private const val DEFAULT_EVENT_ID = 1L
+
         fun startActivity(context: Context, eventId: Long) {
             val intent = Intent(context, EventDetailActivity::class.java)
             intent.putExtra(EVENT_ID_KEY, eventId)

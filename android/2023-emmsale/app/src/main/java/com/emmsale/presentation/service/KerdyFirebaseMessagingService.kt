@@ -7,6 +7,7 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.ServiceFactory
 import com.emmsale.data.common.handleApi
+import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
@@ -21,15 +22,15 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
+        val configRepository = KerdyApplication.repositoryContainer.configRepository
+        val isNotificationReceive = configRepository.getConfig().isNotificationReceive
+        if (!isNotificationReceive) return
+
         when (message.data["notificationType"]) {
             FOLLOW_NOTIFICATION_TYPE -> showFollowNotification(message)
             CHILD_COMMENT_NOTIFICATION_TYPE -> showChildCommentNotification(message)
             EVENT_NOTIFICATION_TYPE -> showInterestEventNotification(message)
         }
-    }
-
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
     }
 
     private fun showFollowNotification(message: RemoteMessage) {

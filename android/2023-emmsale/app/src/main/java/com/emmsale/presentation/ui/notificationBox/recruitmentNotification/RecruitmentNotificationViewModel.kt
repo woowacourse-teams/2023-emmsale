@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
@@ -16,6 +18,7 @@ import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationBodyUiState
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationEvent
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationHeaderUiState
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationMemberUiState
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationUiState
@@ -36,6 +39,9 @@ class RecruitmentNotificationViewModel(
 
     private val _recruitmentUiState = NotNullMutableLiveData(RecruitmentUiState())
     val recruitmentUiState: NotNullLiveData<RecruitmentUiState> = _recruitmentUiState
+
+    private val _event = MutableLiveData<RecruitmentNotificationEvent?>(null)
+    val event: LiveData<RecruitmentNotificationEvent?> = _event
 
     init {
         fetchRecruitmentNotifications()
@@ -161,15 +167,36 @@ class RecruitmentNotificationViewModel(
     }
 
     fun reportRecruitmentNotification(notificationId: Long) {
-        // TODO("신고 기능 추가 예정")
+        viewModelScope.launch {
+            val uid = tokenRepository.getToken()?.uid ?: return@launch
+            val recruitmentNotification =
+                _notifications.value.notificationGroups.flatMap { header -> header.notifications }
+                    .find { it.id == notificationId } ?: return@launch
+
+            val result = notificationRepository.reportRecruitmentNotification(
+                recruitmentNotificationId = recruitmentNotification.id,
+                senderId = recruitmentNotification.senderUid,
+                reporterId = uid,
+            )
+            when (result) {
+                is ApiError, is ApiException ->
+                    _event.value =
+                        RecruitmentNotificationEvent.REPORT_FAIL
+
+                is ApiSuccess -> _event.value = RecruitmentNotificationEvent.REPORT_SUCCESS
+            }
+        }
+    }
+
+    fun removeEvent() {
+        _event.value = null
     }
 
     fun updateNotificationsToReadStatusBy(eventId: Long) {
         viewModelScope.launch {
-            _notifications.value = notifications.value.changeReadStateBy(eventId)
-            notifications.value.notificationGroups
-                .flatMap { group -> group.notifications }
+            notifications.value.notificationGroups.flatMap { group -> group.notifications }
                 .forEach { notification -> updateNotificationReadStatus(notification) }
+            _notifications.value = notifications.value.changeReadStateBy(eventId)
         }
     }
 

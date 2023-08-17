@@ -21,8 +21,8 @@
             android:id="@+id/tv_comment_authorname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="14dp"
             android:text="@{comment.isDeleted ? @string/comment_deleted_comment_author_name : comment.authorName}"
             android:textSize="12sp"
             android:textStyle="bold"
@@ -34,7 +34,7 @@
             android:id="@+id/tv_comment_lastmodifieddate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
+            android:layout_marginStart="8dp"
             android:text="@{comment.lastModifiedDate}"
             android:textColor="@color/gray"
             android:textSize="11sp"
@@ -74,7 +74,7 @@
             android:id="@+id/tv_comment_childcommentscount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="13dp"
+            android:layout_marginStart="-4dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="10dp"
             android:padding="4dp"
@@ -82,7 +82,7 @@
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_comment_content"
             app:layout_constraintTop_toBottomOf="@+id/tv_comment_content"
             tools:text="답글 0" />
 
@@ -99,6 +99,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_comment_authorname"
             app:srcCompat="@drawable/ic_comment_menubutton" />
+
+        <ImageView
+            android:id="@+id/iv_comment_author_image"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="14dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/comment_author_image"
+            android:visibility="@{comment.isDeleted ? View.GONE : View.VISIBLE}"
+            app:imageUrl="@{comment.authorImageUrl}"
+            app:isCircle="@{true}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

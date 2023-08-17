@@ -12,14 +12,17 @@ import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.Comm
 
 class ChildCommentViewHolder(
     private val binding: ItemChildcommentsChildcommentBinding,
-    private val deleteComment: (commentId: Long) -> Unit,
     private val showProfile: (authorId: Long) -> Unit,
+    private val editComment: (commentId: Long) -> Unit,
+    private val deleteComment: (commentId: Long) -> Unit,
+    private val reportComment: (commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val bottomMenuDialog = BottomMenuDialog(binding.root.context)
 
     init {
-        binding.root.setOnClickListener {
+        binding.ivChildcommentsChildCommentAuthorImage.setOnClickListener {
+            if (binding.comment?.isDeleted == true) return@setOnClickListener
             showProfile(binding.comment?.authorId ?: return@setOnClickListener)
         }
     }
@@ -34,13 +37,15 @@ class ChildCommentViewHolder(
         bottomMenuDialog.resetMenu()
         if (comment.isUpdatable) bottomMenuDialog.addUpdateButton()
         if (comment.isDeletable) bottomMenuDialog.addDeleteButton()
-        bottomMenuDialog.addReportButton()
+        if (comment.isReportable) bottomMenuDialog.addReportButton()
 
         binding.ivChildcommentMenubutton.setOnClickListener { bottomMenuDialog.show() }
     }
 
     private fun BottomMenuDialog.addUpdateButton() {
-        addMenuItemBelow(context.getString(R.string.all_update_button_label)) { }
+        addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
+            editComment(binding.comment?.id ?: return@addMenuItemBelow)
+        }
     }
 
     private fun BottomMenuDialog.addDeleteButton() {
@@ -56,7 +61,7 @@ class ChildCommentViewHolder(
             positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
             negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
             onPositiveButtonClick = {
-                deleteComment(binding.comment?.commentId ?: return@WarningDialog)
+                deleteComment(binding.comment?.id ?: return@WarningDialog)
             },
         ).show()
     }
@@ -65,19 +70,27 @@ class ChildCommentViewHolder(
         addMenuItemBelow(
             context.getString(R.string.all_report_button_label),
             MenuItemType.IMPORTANT,
-        ) { }
+        ) { reportComment(binding.comment?.id ?: return@addMenuItemBelow) }
     }
 
     companion object {
         fun create(
             parent: ViewGroup,
-            deleteComment: (commentId: Long) -> Unit,
             showProfile: (authorId: Long) -> Unit,
+            editComment: (commentId: Long) -> Unit,
+            deleteComment: (commentId: Long) -> Unit,
+            reportComment: (commentId: Long) -> Unit,
         ): ChildCommentViewHolder {
             val binding = ItemChildcommentsChildcommentBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
-            return ChildCommentViewHolder(binding, deleteComment, showProfile)
+            return ChildCommentViewHolder(
+                binding,
+                showProfile,
+                editComment,
+                deleteComment,
+                reportComment,
+            )
         }
     }
 }

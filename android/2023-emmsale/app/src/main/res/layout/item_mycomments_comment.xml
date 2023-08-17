@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="comment"
+            type="com.emmsale.presentation.ui.setting.myComments.uiState.MyCommentUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/tv_mycomments_event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="17dp"
+            android:text="@{comment.eventName}"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="사실 없는 행사임" />
+
+        <TextView
+            android:id="@+id/tv_mycomments_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="17dp"
+            android:lineSpacingExtra="3dp"
+            android:text="@{comment.content}"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_mycomments_event_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mycomments_event_name"
+            tools:text="해커톤 프로그램 열려서 너무 좋아요.해커톤 프로그램 열려서 너무 좋아요.해커톤 프로그램 열려서 너무 좋아요.해커톤 프로그램 열려서 너무 좋아요.해커톤 프로그램 열려서 너무 좋아요.해커톤 프로그램 열려서 너무 좋아요." />
+
+        <TextView
+            android:id="@+id/tv_mycomments_child_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="17dp"
+            android:text="@{@string/comments_child_comments_count_format(comment.childCount)}"
+            android:textColor="@color/primary_color"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_mycomments_event_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mycomments_content"
+            tools:text="답글 0" />
+
+        <TextView
+            android:id="@+id/tv_mycomment_last_modified_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{comment.lastModifiedDate}"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_mycomments_child_count"
+            app:layout_constraintStart_toEndOf="@+id/tv_mycomments_child_count"
+            app:layout_constraintTop_toTopOf="@+id/tv_mycomments_child_count"
+            tools:text="2023.08.11" />
+
+        <TextView
+            android:id="@+id/tv_mycomments_modified_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:text="@string/comments_is_updated"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_mycomment_last_modified_date"
+            app:layout_constraintStart_toEndOf="@+id/tv_mycomment_last_modified_date"
+            app:layout_constraintTop_toTopOf="@+id/tv_mycomment_last_modified_date" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

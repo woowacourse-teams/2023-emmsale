@@ -1,12 +1,16 @@
 package com.emmsale.presentation.ui.eventdetail.information
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventInformationBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 
 class EventInfoFragment : BaseFragment<FragmentEventInformationBinding>() {
     override val layoutResId: Int = R.layout.fragment_event_information
@@ -19,16 +23,78 @@ class EventInfoFragment : BaseFragment<FragmentEventInformationBinding>() {
         arguments?.getString(IMAGE_URL_KEY)
     }
 
+    private val eventId: Long by lazy {
+        arguments?.getLong(EVENT_ID_KEY) ?: throw IllegalArgumentException(NOT_EVENT_ID_ERROR)
+    }
+
+    private val viewModel: EventInfoViewModel by viewModels { EventInfoViewModel.factory(eventId) }
+    private lateinit var eventDetailActivity: EventDetailActivity
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        eventDetailActivity = context as EventDetailActivity
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        urlButtonClick()
         binding.imageUrl = imageUrl
+    }
+
+    override fun onResume() {
+        super.onResume()
+        eventDetailActivity.showEventInformation()
+        urlButtonClick()
+        scarpButtonClick()
+        setUpIsScrapped()
+        setUpIsError()
+    }
+
+    private fun setUpIsScrapped() {
+        viewModel.isScraped.observe(viewLifecycleOwner) { isScrapped ->
+            if (isScrapped) {
+                setScrapButtonChecked()
+                setScrapButtonEnabled(true)
+            } else {
+                setScrapButtonUnChecked()
+                setScrapButtonEnabled(true)
+            }
+        }
+    }
+
+    private fun setScrapButtonChecked() {
+        binding.ivEventInformationScrap.setImageResource(R.drawable.ic_all_scrap_checked)
+    }
+
+    private fun setScrapButtonUnChecked() {
+        binding.ivEventInformationScrap.setImageResource(R.drawable.ic_all_scrap_unchecked)
+    }
+
+    private fun setUpIsError() {
+        viewModel.isError.observe(viewLifecycleOwner) { isError ->
+            if (isError) requireContext().showToast("스크랩 불가")
+        }
     }
 
     private fun urlButtonClick() {
         binding.buttonEventinformationNavigatewebsite.setOnClickListener {
             navigateToUrl()
         }
+    }
+
+    private fun scarpButtonClick() {
+        binding.ivEventInformationScrap.setOnClickListener {
+            if (viewModel.isScraped.value!!) {
+                viewModel.deleteScrap()
+                setScrapButtonEnabled(false)
+            } else {
+                viewModel.scrapEvent()
+                setScrapButtonEnabled(false)
+            }
+        }
+    }
+
+    private fun setScrapButtonEnabled(state: Boolean) {
+        binding.ivEventInformationScrap.isEnabled = state
     }
 
     private fun navigateToUrl() {
@@ -39,12 +105,15 @@ class EventInfoFragment : BaseFragment<FragmentEventInformationBinding>() {
     companion object {
         private const val INFORMATION_URL_KEY = "INFORMATION_URL_KEY"
         private const val IMAGE_URL_KEY = "IMAGE_URL_KEY"
+        private const val EVENT_ID_KEY = "EVENT_ID_KEY"
+        private const val NOT_EVENT_ID_ERROR = "이벤트 아이디를 얻어오지 못했어요"
 
-        fun create(informationUrl: String, imageUrl: String?): EventInfoFragment {
+        fun create(informationUrl: String, imageUrl: String?, eventId: Long): EventInfoFragment {
             val fragment = EventInfoFragment()
             fragment.arguments = Bundle().apply {
                 putString(INFORMATION_URL_KEY, informationUrl)
                 putString(IMAGE_URL_KEY, imageUrl)
+                putLong(EVENT_ID_KEY, eventId)
             }
             return fragment
         }

@@ -1,6 +1,9 @@
 package com.emmsale.presentation.ui.eventdetail.comment.childComment
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.common.ApiError
@@ -11,6 +14,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsEvent
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiState
 import kotlinx.coroutines.launch
 
@@ -24,6 +28,17 @@ class ChildCommentViewModel(
 
     private val _comments = NotNullMutableLiveData(ChildCommentsUiState.FIRST_LOADING)
     val comments: NotNullLiveData<ChildCommentsUiState> = _comments
+
+    private val _editingCommentId = MutableLiveData<Long?>()
+    val editingCommentId: LiveData<Long?> = _editingCommentId
+    val editingCommentContent = _editingCommentId.map {
+        (_comments.value.childComments + _comments.value.parentComment)
+            .find { comment -> comment.id == it }
+            ?.content
+    }
+
+    private val _event = MutableLiveData<ChildCommentsEvent?>(null)
+    val event: LiveData<ChildCommentsEvent?> = _event
 
     fun fetchComment(commentId: Long) {
         _comments.value = _comments.value.changeToLoadingState()
@@ -57,6 +72,19 @@ class ChildCommentViewModel(
         }
     }
 
+    fun updateComment(commentId: Long, content: String, parentCommentId: Long) {
+        viewModelScope.launch {
+            when (commentRepository.updateComment(commentId, content)) {
+                is ApiError, is ApiException -> {}
+
+                is ApiSuccess -> {
+                    _editingCommentId.value = null
+                    fetchComment(parentCommentId)
+                }
+            }
+        }
+    }
+
     fun deleteComment(commentId: Long, parentCommentId: Long) {
         _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
@@ -69,7 +97,38 @@ class ChildCommentViewModel(
         }
     }
 
+    fun setEditMode(isEditMode: Boolean, commentId: Long = -1) {
+        if (!isEditMode) {
+            _editingCommentId.value = null
+            return
+        }
+        _editingCommentId.value = commentId
+    }
+
+    fun reportComment(commentId: Long) {
+        viewModelScope.launch {
+            val token = tokenRepository.getToken()
+            if (token == null) {
+                _isLogin.value = false
+                return@launch
+            }
+            val authorId =
+                (_comments.value.childComments + _comments.value.parentComment).find { it.id == commentId }?.authorId
+                    ?: return@launch
+            when (commentRepository.reportComment(commentId, authorId, token.uid)) {
+                is ApiError, is ApiException -> _event.value = ChildCommentsEvent.REPORT_ERROR
+                is ApiSuccess -> _event.value = ChildCommentsEvent.REPORT_COMPLETE
+            }
+        }
+    }
+
+    fun removeEvent() {
+        _event.value = null
+    }
+
     companion object {
+        private const val REPORT_DUPLICATE_ERROR_CODE = "이미"
+
         val factory = ViewModelFactory {
             ChildCommentViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,

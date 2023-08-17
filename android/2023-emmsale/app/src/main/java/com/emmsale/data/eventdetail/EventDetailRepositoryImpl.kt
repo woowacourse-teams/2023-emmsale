@@ -8,7 +8,6 @@ import com.emmsale.data.eventdetail.mapper.toData
 class EventDetailRepositoryImpl(
     private val eventDetailService: EventDetailService,
 ) : EventDetailRepository {
-
     override suspend fun getEventDetail(eventId: Long): ApiResult<EventDetail> {
         return handleApi(
             execute = { eventDetailService.getEventDetail(eventId) },

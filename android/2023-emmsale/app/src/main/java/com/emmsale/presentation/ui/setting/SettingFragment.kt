@@ -9,6 +9,9 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.setting.block.MemberBlockActivity
+import com.emmsale.presentation.ui.setting.myComments.MyCommentsActivity
+import com.emmsale.presentation.ui.setting.notification.NotificationConfigActivity
 import com.emmsale.presentation.ui.setting.myPost.MyPostActivity
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
 
@@ -32,7 +35,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         binding.viewModel = viewModel
         binding.showWritings = ::showWritings
         binding.showWrittenComments = ::showWrittenComments
-        binding.showNotificationSetting = ::showNotificationSetting
+        binding.showNotificationSetting = ::navigateToNotificationConfig
         binding.showBlocks = ::showBlocks
         binding.showUseTerm = ::showUseTerm
         binding.deleteMember = ::deleteMember
@@ -44,15 +47,15 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     }
 
     private fun showWrittenComments() {
-        // TODO("작성한 댓글 화면으로 이동")
+        MyCommentsActivity.startActivity(context ?: return)
     }
 
-    private fun showNotificationSetting() {
-        // TODO("알림 설정 화면으로 이동")
+    private fun navigateToNotificationConfig() {
+        startActivity(NotificationConfigActivity.getIntent(requireContext()))
     }
 
     private fun showBlocks() {
-        // TODO("차단 목록 화면으로 이동")
+        MemberBlockActivity.startActivity(context ?: return)
     }
 
     private fun showUseTerm() {

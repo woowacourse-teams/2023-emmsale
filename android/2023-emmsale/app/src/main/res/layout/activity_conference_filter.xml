@@ -57,7 +57,7 @@
                         android:layout_width="10dp"
                         android:layout_height="10dp"
                         android:contentDescription="@string/conferencefilter_all_filtering_option_clear"
-                        android:src="@drawable/ic_conference_filter_clear"
+                        android:src="@drawable/ic_event_filter_clear"
                         app:tint="@color/gray" />
 
                     <TextView
@@ -76,7 +76,7 @@
 
                 <include
                     android:id="@+id/layout_filter_tag"
-                    layout="@layout/layout_filter_conference_event_tag" />
+                    layout="@layout/layout_filter_conference_tag" />
 
                 <include
                     android:id="@+id/layout_filter_duration"

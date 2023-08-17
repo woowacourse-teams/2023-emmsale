@@ -31,10 +31,10 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_eventinformation_navigatewebsite"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginStart="17dp"
             android:layout_marginEnd="17dp"
-            android:layout_marginBottom="17dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_eventinformation_urlbutton"
             android:fontFamily="@font/nanum_square_bold"
             android:stateListAnimator="@null"
@@ -42,8 +42,31 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_event_information_scrap"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_event_information_scrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:padding="6dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_event_information_scrap"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_all_scrap_unchecked" />
+
+        <TextView
+            android:id="@+id/tv_event_information_scrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@string/eventinfromation_scrap"
+            android:textColor="@color/gray"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

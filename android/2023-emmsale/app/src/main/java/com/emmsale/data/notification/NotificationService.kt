@@ -4,11 +4,14 @@ import com.emmsale.data.notification.recruitment.dto.RecruitmentNotificationApiM
 import com.emmsale.data.notification.recruitment.dto.RecruitmentStatusUpdateRequestModel
 import com.emmsale.data.notification.updated.dto.UpdatedNotificationApiModel
 import com.emmsale.data.notification.updated.dto.UpdatedNotificationDeleteRequestModel
+import com.emmsale.data.report.dto.ReportApiModel
+import com.emmsale.data.report.dto.ReportRequestBody
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -40,8 +43,11 @@ interface NotificationService {
         @Path("update-notification-id") notificationId: Long,
     ): Response<Unit>
 
-    @DELETE("/update-notifications")
+    @HTTP(method = "DELETE", path = "/update-notifications", hasBody = true)
     suspend fun deleteNotification(
         @Body notificationIds: UpdatedNotificationDeleteRequestModel,
     ): Response<Unit>
+
+    @POST("/reports")
+    suspend fun reportRecruitmentNotification(@Body reportRequestBody: ReportRequestBody): Response<ReportApiModel>
 }

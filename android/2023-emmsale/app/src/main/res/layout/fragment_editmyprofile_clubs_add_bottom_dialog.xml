@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.main.myProfile.editMyProfile.EditMyProfileViewModel" />
+
+        <variable
+            name="addClubs"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_all_bottom_dialog"
+        android:paddingHorizontal="17dp"
+        android:paddingBottom="17dp">
+
+        <ImageView
+            android:id="@+id/iv_editmyprofileclubsdialog_topdecoration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:importantForAccessibility="no"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_bottomdialog_topdecoration" />
+
+        <TextView
+            android:id="@+id/tv_editmyprofileclubsdialog_clubs_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="49dp"
+            android:text="@string/editmyprofile_clubs_label"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_editmyprofileclubsdialog_clubs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofileclubsdialog_clubs_label">
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            android:id="@+id/tv_editmyprofileclubsdialog_add_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_all_two_state_button"
+            android:enabled="@{viewModel.selectedClubsSize > 0}"
+            android:gravity="center"
+            android:onClick="@{() -> addClubs.invoke()}"
+            android:paddingVertical="21dp"
+            android:text="@string/editmyprofile_add"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cg_editmyprofileclubsdialog_clubs" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

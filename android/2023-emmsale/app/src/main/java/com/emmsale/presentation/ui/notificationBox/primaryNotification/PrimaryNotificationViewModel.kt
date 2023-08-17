@@ -12,6 +12,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiState
 import kotlinx.coroutines.launch
 
@@ -31,13 +32,13 @@ class PrimaryNotificationViewModel(
 
     private fun fetchPrimaryNotifications() {
         viewModelScope.launch {
-            _recentNotifications.value = recentNotifications.value.copy(isLoading = true)
             val uid = tokenRepository.getToken()?.uid ?: return@launch
+            _recentNotifications.value = recentNotifications.value.copy(isLoading = true)
 
             when (val result = notificationRepository.getUpdatedNotifications(uid)) {
                 is ApiSuccess -> {
-                    updatePastNotifications(result.data.filter { it.isPast })
-                    updateNewNotifications(result.data.filterNot { it.isPast })
+                    updatePastNotifications(result.data.filter { it.isRead })
+                    updateRecentNotifications(result.data.filterNot { it.isRead })
                 }
 
                 is ApiError, is ApiException -> {
@@ -48,12 +49,16 @@ class PrimaryNotificationViewModel(
         }
     }
 
-    private fun updateNewNotifications(notifications: List<UpdatedNotification>) {
-        _recentNotifications.value = PrimaryNotificationsUiState.from(notifications)
+    private fun updateRecentNotifications(notifications: List<UpdatedNotification>) {
+        _recentNotifications.value = PrimaryNotificationsUiState(
+            notifications = notifications.map(PrimaryNotificationUiState::from),
+        )
     }
 
     private fun updatePastNotifications(notifications: List<UpdatedNotification>) {
-        _pastNotifications.value = PrimaryNotificationsUiState.from(notifications)
+        _pastNotifications.value = PrimaryNotificationsUiState(
+            notifications = notifications.map(PrimaryNotificationUiState::from),
+        )
     }
 
     fun changeToRead(notificationId: Long) {
