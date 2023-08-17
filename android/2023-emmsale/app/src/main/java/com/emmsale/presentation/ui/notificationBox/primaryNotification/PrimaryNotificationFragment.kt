@@ -30,6 +30,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
                 viewModel.changeToRead(notification.id)
                 navigateToDetail(notification)
             },
+            onDeleteClick = viewModel::deleteNotification,
         )
     }
     private val pastNotificationAdapter by lazy {

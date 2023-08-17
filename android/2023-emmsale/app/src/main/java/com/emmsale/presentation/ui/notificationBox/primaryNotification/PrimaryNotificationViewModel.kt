@@ -70,15 +70,19 @@ class PrimaryNotificationViewModel(
     fun deleteNotification(notificationId: Long) {
         viewModelScope.launch {
             when (notificationRepository.deleteUpdatedNotifications(listOf(notificationId))) {
-                is ApiSuccess ->
-                    _pastNotifications.value =
-                        pastNotifications.value.deleteNotificationById(notificationId)
-
-                is ApiError, is ApiException ->
-                    _pastNotifications.value =
-                        pastNotifications.value.copy(isDeleteNotificationError = true)
+                is ApiSuccess -> deleteNotificationById(notificationId)
+                is ApiError, is ApiException -> updateToNotificationDeleteErrorState()
             }
         }
+    }
+
+    private fun deleteNotificationById(id: Long) {
+        _pastNotifications.value = pastNotifications.value.deleteNotificationById(id)
+        _recentNotifications.value = recentNotifications.value.deleteNotificationById(id)
+    }
+
+    private fun updateToNotificationDeleteErrorState() {
+        _pastNotifications.value = pastNotifications.value.copy(isDeleteNotificationError = true)
     }
 
     fun deleteAllPastNotifications() {
@@ -86,9 +90,7 @@ class PrimaryNotificationViewModel(
         viewModelScope.launch {
             when (notificationRepository.deleteUpdatedNotifications(pastNotificationIds)) {
                 is ApiSuccess -> _pastNotifications.value = PrimaryNotificationsUiState.EMPTY
-                is ApiError, is ApiException ->
-                    _pastNotifications.value =
-                        pastNotifications.value.copy(isDeleteNotificationError = true)
+                is ApiError, is ApiException -> updateToNotificationDeleteErrorState()
             }
         }
     }

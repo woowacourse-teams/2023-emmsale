@@ -18,22 +18,27 @@ class PastNotificationAdapter(
 ) : ListAdapter<PrimaryNotificationUiState, RecentNotificationViewHolder>(
     PrimaryNotificationDiffUtil,
 ) {
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): RecentNotificationViewHolder = when (PrimaryNotificationViewType.of(viewType)) {
         PrimaryNotificationViewType.RECENT_HEADER -> RecentNotificationHeaderViewHolder(parent)
         PrimaryNotificationViewType.PAST_HEADER -> PastNotificationHeaderViewHolder(
-            parent,
-            onDeleteAllClick,
+            parent = parent,
+            onDeleteAllClick = onDeleteAllClick,
         )
 
-        PrimaryNotificationViewType.COMMENT ->
-            CommentNotificationViewHolder(parent, onNotificationClick, onDeleteClick)
+        PrimaryNotificationViewType.COMMENT -> CommentNotificationViewHolder(
+            parent = parent,
+            onNotificationClick = onNotificationClick,
+            onDeleteClick = onDeleteClick,
+        )
 
-        PrimaryNotificationViewType.INTEREST_EVENT ->
-            InterestEventNotificationViewHolder(parent, onNotificationClick, onDeleteClick)
+        PrimaryNotificationViewType.INTEREST_EVENT -> InterestEventNotificationViewHolder(
+            parent = parent,
+            onNotificationClick = onNotificationClick,
+            onDeleteClick = onDeleteClick,
+        )
     }
 
     override fun onBindViewHolder(holder: RecentNotificationViewHolder, position: Int) {

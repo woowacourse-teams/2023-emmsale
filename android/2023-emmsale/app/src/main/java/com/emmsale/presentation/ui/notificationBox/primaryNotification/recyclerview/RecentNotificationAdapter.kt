@@ -13,6 +13,7 @@ import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.P
 
 class RecentNotificationAdapter(
     private val onNotificationClick: (notification: PrimaryNotificationUiState) -> Unit,
+    private val onDeleteClick: (notificationId: Long) -> Unit,
 ) :
     ListAdapter<PrimaryNotificationUiState, RecentNotificationViewHolder>(
         PrimaryNotificationDiffUtil,
@@ -25,13 +26,15 @@ class RecentNotificationAdapter(
         PrimaryNotificationViewType.RECENT_HEADER -> RecentNotificationHeaderViewHolder(parent)
         PrimaryNotificationViewType.PAST_HEADER -> PastNotificationHeaderViewHolder(parent)
         PrimaryNotificationViewType.COMMENT -> CommentNotificationViewHolder(
-            parent,
-            onNotificationClick,
+            parent = parent,
+            onNotificationClick = onNotificationClick,
+            onDeleteClick = onDeleteClick,
         )
 
         PrimaryNotificationViewType.INTEREST_EVENT -> InterestEventNotificationViewHolder(
-            parent,
-            onNotificationClick,
+            parent = parent,
+            onNotificationClick = onNotificationClick,
+            onDeleteClick = onDeleteClick,
         )
     }
 
