@@ -82,7 +82,7 @@ jobs:
       - name: 도커 실행
         run: |
           docker stop kerdy && docker rm kerdy && docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
-          docker run -d -p 8080:8080 -v /home/ubuntu/logs/:/logs/ --name kerdy ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
+          docker run -d -p 8080:8080 -v /home/ubuntu/logs/:/logs/ --e TZ=Asia/Seoul -name kerdy ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
 
       - name: 슬랙 메시지 보내기
         uses: 8398a7/action-slack@v3
