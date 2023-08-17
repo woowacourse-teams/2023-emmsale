@@ -15,6 +15,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logRecruitment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.HasOpenUrlUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
@@ -28,7 +29,7 @@ class RecruitmentPostDetailViewModel(
     private val recruitmentRepository: RecruitmentRepository,
     private val memberRepository: MemberRepository,
     tokenRepository: TokenRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
 
     private val _recruitmentPost: NotNullMutableLiveData<RecruitmentPostUiState> =
         NotNullMutableLiveData(RecruitmentPostUiState())
@@ -53,10 +54,10 @@ class RecruitmentPostDetailViewModel(
     private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
 
     init {
-        fetchRecruitmentPost()
+        refresh()
     }
 
-    fun fetchRecruitmentPost() {
+    override fun refresh() {
         changeRecruitmentPostToLoadingState()
         viewModelScope.launch {
             val response = recruitmentRepository.getEventRecruitment(eventId, recruitmentId)

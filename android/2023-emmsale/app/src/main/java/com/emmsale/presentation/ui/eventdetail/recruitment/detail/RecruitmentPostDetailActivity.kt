@@ -63,7 +63,7 @@ class RecruitmentPostDetailActivity :
             ActivityResultContracts.StartActivityForResult(),
         ) { result ->
             if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
-            viewModel.fetchRecruitmentPost()
+            viewModel.refresh()
         }
 
     private fun showDeleteDialog() {

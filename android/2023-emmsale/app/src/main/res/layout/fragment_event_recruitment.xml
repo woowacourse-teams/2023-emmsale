@@ -31,8 +31,8 @@
         <ProgressBar
             android:id="@+id/pb_eventDetailParticipant_loadingbar"
             style="?android:attr/progressBarStyle"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="@{viewModel.recruitments.isLoading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
