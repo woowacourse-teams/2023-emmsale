@@ -72,14 +72,14 @@ public class Comment extends BaseEntity {
       final Member member,
       final String content
   ) {
-    if (isChildChildComment(parent)) {
+    if (isGrandChildComment(parent)) {
       throw new CommentException(NOT_CREATE_CHILD_CHILD_COMMENT);
     }
 
     return new Comment(event, parent, member, content);
   }
 
-  private static boolean isChildChildComment(final Comment parent) {
+  private static boolean isGrandChildComment(final Comment parent) {
     return parent.parent != null;
   }
 
