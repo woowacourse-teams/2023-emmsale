@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.InfoDialog
@@ -153,10 +154,10 @@ class RecruitmentPostDetailActivity :
     private fun setUpIsPostDeleteSuccess() {
         viewModel.isDeletePostSuccess.observe(this) { isPostDeleteSuccess ->
             if (isPostDeleteSuccess) {
-                showToast(getString(R.string.recruitmentpostdetail_deletion_success_message))
+                binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_deletion_success_message))
                 onBackPressedDispatcher.onBackPressed()
             } else {
-                showToast(getString(R.string.recruitmentpostdetail_deletion_fail_message))
+                binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_deletion_fail_message))
             }
         }
     }
@@ -166,7 +167,7 @@ class RecruitmentPostDetailActivity :
             when (state) {
                 HasOpenUrlUiState.TRUE -> showRequestCompanionDialog()
                 HasOpenUrlUiState.FALSE -> showNavigateToUrlConfigConfirmDialog()
-                HasOpenUrlUiState.ERROR -> showToast(getString(R.string.all_data_loading_failed_message))
+                HasOpenUrlUiState.ERROR -> binding.root.showSnackBar(getString(R.string.all_data_loading_failed_message))
             }
         }
     }
@@ -220,7 +221,7 @@ class RecruitmentPostDetailActivity :
     private fun handleEvent(event: RecruitmentPostDetailEvent?) {
         if (event == null) return
         when (event) {
-            RecruitmentPostDetailEvent.REPORT_FAIL -> showToast(getString(R.string.all_report_fail_message))
+            RecruitmentPostDetailEvent.REPORT_FAIL -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
             RecruitmentPostDetailEvent.REPORT_SUCCESS -> InfoDialog(
                 context = this,
                 title = getString(R.string.all_report_complete_dialog_title),

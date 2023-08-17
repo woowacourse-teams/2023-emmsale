@@ -16,6 +16,7 @@ import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringOptionUiState
@@ -29,7 +30,7 @@ class CompetitionViewModel(
     private val eventRepository: EventRepository,
     private val competitionStatusRepository: CompetitionStatusRepository,
     private val eventTagRepository: EventTagRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
     private val _competitions = NotNullMutableLiveData(CompetitionsUiState())
     val competitions: NotNullLiveData<CompetitionsUiState> = _competitions
 
@@ -37,6 +38,11 @@ class CompetitionViewModel(
     val selectedFilter: NotNullLiveData<CompetitionSelectedFilteringUiState> = _selectedFilter
 
     init {
+        refresh()
+    }
+
+    override fun refresh() {
+        _selectedFilter.value = CompetitionSelectedFilteringUiState()
         fetchCompetitions()
     }
 
@@ -53,10 +59,11 @@ class CompetitionViewModel(
                     _competitions.value = _competitions.value.copy(
                         competitions = eventsResult.data.map(CompetitionUiState::from),
                         isLoading = false,
+                        isError = false,
                     )
 
                 is ApiError, is ApiException -> _competitions.value = _competitions.value.copy(
-                    isLoadingCompetitionsFailed = true,
+                    isError = true,
                     isLoading = false,
                 )
             }
