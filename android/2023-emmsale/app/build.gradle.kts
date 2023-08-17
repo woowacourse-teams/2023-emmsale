@@ -12,14 +12,15 @@ plugins {
 
 android {
     namespace = "com.emmsale"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.emmsale"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        compileSdkPreview = "UpsideDownCake"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -33,10 +34,10 @@ android {
         buildConfig = true
     }
     buildTypes {
-        getByName("debug") {
+        debug {
             buildConfigField("String", "BASE_URL", "\"https://kerdy.kro.kr\"")
         }
-        getByName("release") {
+        release {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -107,6 +108,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
     implementation("androidx.recyclerview:recyclerview:1.3.1")
+    implementation("androidx.core:core-splashscreen:1.1.0-alpha01")
 
     // imageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
