@@ -212,6 +212,17 @@ include::{snippets}/check-already-recruitment-post/http-request.adoc[]
 .HTTP response
 include::{snippets}/check-already-recruitment-post/http-response.adoc[]
 
+=== `GET`: 사용자의 id를 기반으로 사용자가 작성한 모든 함께해요 요청 조회
+
+.HTTP request
+include::{snippets}/find-all-by-member-id-recruitment-post/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-all-by-member-id-recruitment-post/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-all-by-member-id-recruitment-post/response-fields.adoc[]
+
 === `GET`: 행사 목록 조회
 
 .HTTP request

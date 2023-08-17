@@ -5,6 +5,7 @@ import static java.net.URI.create;
 
 import com.emmsale.event.application.RecruitmentPostCommandService;
 import com.emmsale.event.application.RecruitmentPostQueryService;
+import com.emmsale.event.application.dto.RecruitmentPostQueryResponse;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.application.dto.RecruitmentPostResponse;
 import com.emmsale.event.application.dto.RecruitmentPostUpdateRequest;
@@ -12,6 +13,7 @@ import com.emmsale.member.domain.Member;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -90,5 +93,14 @@ public class RecruitmentPostApi {
       @RequestParam(name = "member-id") final Long memberId
   ) {
     return ResponseEntity.ok(postQueryService.isAlreadyRecruit(eventId, memberId));
+  }
+
+  @GetMapping("/recruitment-posts")
+  @ResponseStatus(HttpStatus.OK)
+  public List<RecruitmentPostQueryResponse> findRecruitmentPostsByMemberId(
+      final Member member,
+      @RequestParam("member-id") final Long memberId
+  ) {
+    return postQueryService.findRecruitmentPostsByMemberId(member, memberId);
   }
 }

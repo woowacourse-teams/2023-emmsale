@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.event.application.RecruitmentPostCommandService;
 import com.emmsale.event.application.RecruitmentPostQueryService;
+import com.emmsale.event.application.dto.RecruitmentPostQueryResponse;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.application.dto.RecruitmentPostResponse;
 import com.emmsale.event.application.dto.RecruitmentPostUpdateRequest;
@@ -28,6 +29,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
@@ -186,5 +188,36 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
         )
         .andExpect(status().isOk())
         .andDo(document("check-already-recruitment-post"));
+  }
+
+  @Test
+  @DisplayName("사용자의 모든 함께가기 요청 목록을 조회한다.")
+  void findRecruitmentPostsByMemberIdTest() throws Exception {
+    //given
+    final Long memberId = 1L;
+    final LocalDate postedAt = LocalDate.of(2023, 7, 15);
+
+    final List<RecruitmentPostQueryResponse> response = List.of(
+        new RecruitmentPostQueryResponse(1L, memberId, 21L, "함께해요~", postedAt),
+        new RecruitmentPostQueryResponse(2L, memberId, 43L, "같이 가요~", postedAt)
+    );
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("함께해요 게시글 식별자"),
+        fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
+        fieldWithPath("[].eventId").type(JsonFieldType.NUMBER).description("행사의 식별자"),
+        fieldWithPath("[].content").type(JsonFieldType.STRING).description("함께해요 게시글 내용"),
+        fieldWithPath("[].updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜")
+    );
+
+    //when
+    given(postQueryService.findRecruitmentPostsByMemberId(any(), any()))
+        .willReturn(response);
+
+    //then
+    mockMvc.perform(get("/events/recruitment-posts?member-id={memberId}", memberId)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
+        .andExpect(status().isOk())
+        .andDo(document("find-all-by-member-id-recruitment-post", responseFields));
   }
 }
