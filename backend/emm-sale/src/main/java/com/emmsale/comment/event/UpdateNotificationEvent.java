@@ -16,10 +16,10 @@ public class UpdateNotificationEvent {
   private final String updateNotificationType;
   private final LocalDateTime createdAt;
 
-  public static UpdateNotificationEvent from(final Comment comment) {
+  public static UpdateNotificationEvent from(final Comment comment, final Long redirectId) {
     return new UpdateNotificationEvent(
         comment.getMember().getId(),
-        comment.getId(),
+        redirectId,
         UPDATE_NOTIFICATION_COMMENT_TYPE,
         LocalDateTime.now()
     );
