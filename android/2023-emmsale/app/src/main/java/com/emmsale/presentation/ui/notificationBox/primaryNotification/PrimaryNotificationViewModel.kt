@@ -2,7 +2,6 @@ package com.emmsale.presentation.ui.notificationBox.primaryNotification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
@@ -20,7 +19,6 @@ import kotlinx.coroutines.launch
 class PrimaryNotificationViewModel(
     private val tokenRepository: TokenRepository,
     private val notificationRepository: NotificationRepository,
-    private val commentRepository: CommentRepository,
 ) : ViewModel() {
     private val _pastNotifications = NotNullMutableLiveData(PrimaryNotificationsUiState())
     val pastNotifications: NotNullLiveData<PrimaryNotificationsUiState> = _pastNotifications
@@ -96,13 +94,10 @@ class PrimaryNotificationViewModel(
     }
 
     companion object {
-        private const val INVALID_COMMENT_ID_ERROR_MESSAGE = "댓글 정보를 가져오는데 실패했습니다."
-
         val factory: ViewModelFactory<PrimaryNotificationViewModel> = ViewModelFactory {
             PrimaryNotificationViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 notificationRepository = KerdyApplication.repositoryContainer.notificationRepository,
-                commentRepository = KerdyApplication.repositoryContainer.commentRepository,
             )
         }
     }

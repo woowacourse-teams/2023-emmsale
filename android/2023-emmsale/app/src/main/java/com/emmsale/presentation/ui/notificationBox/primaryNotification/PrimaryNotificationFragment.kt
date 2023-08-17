@@ -1,7 +1,6 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -28,8 +27,6 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     private val recentNotificationAdapter by lazy {
         RecentNotificationAdapter(
             onNotificationClick = { notification ->
-                Log.d("buna", "onNotificationClick: $notification")
-
                 viewModel.changeToRead(notification.id)
                 navigateToDetail(notification)
             },
