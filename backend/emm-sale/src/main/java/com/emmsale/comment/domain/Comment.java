@@ -123,7 +123,7 @@ public class Comment extends BaseEntity {
     if (parent == null) {
       return id;
     }
-    return parent.id;
+    return parent.getId();
   }
 
   public boolean isNotOwner(final Long memberId) {
@@ -135,11 +135,11 @@ public class Comment extends BaseEntity {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!(o instanceof Comment)) {
       return false;
     }
     final Comment comment = (Comment) o;
-    return Objects.equals(id, comment.id);
+    return Objects.equals(id, comment.getId());
   }
 
   @Override
