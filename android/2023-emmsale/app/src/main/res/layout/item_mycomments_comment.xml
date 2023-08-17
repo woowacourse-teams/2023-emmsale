@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="comment"
             type="com.emmsale.presentation.ui.main.setting.myComments.uiState.MyCommentUiState" />
@@ -77,6 +79,7 @@
             android:text="@string/comments_is_updated"
             android:textColor="@color/gray"
             android:textSize="11sp"
+            android:visibility="@{comment.isUpdated ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_mycomment_last_modified_date"
             app:layout_constraintStart_toEndOf="@+id/tv_mycomment_last_modified_date"
             app:layout_constraintTop_toTopOf="@+id/tv_mycomment_last_modified_date" />
