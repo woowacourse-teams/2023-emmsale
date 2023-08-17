@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="refresh"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:srcCompat="@drawable/ic_all_network_error"
+                android:id="@+id/iv_errorscreen_error_icon_foreground"
+                app:layout_constraintEnd_toEndOf="@+id/iv_errorscreen_error_icon_background"
+                app:layout_constraintStart_toStartOf="@+id/iv_errorscreen_error_icon_background"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_errorscreen_error_icon_background"
+                app:layout_constraintTop_toTopOf="@+id/iv_errorscreen_error_icon_background"
+                android:contentDescription="@string/all_network_error_icon_description" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/bg_errorscreen_network_error_icon"
+                android:id="@+id/iv_errorscreen_error_icon_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                android:text="@string/all_network_error_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/iv_errorscreen_error_icon_background"
+                app:layout_constraintStart_toStartOf="@+id/iv_errorscreen_error_icon_background"
+                app:layout_constraintTop_toBottomOf="@+id/iv_errorscreen_error_icon_background"
+                android:layout_marginTop="15dp" />
+
+            <TextView
+                android:text="@string/network_error_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView2"
+                android:textColor="@color/gray"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="@+id/textView"
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                android:lineSpacingExtra="4.2sp"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                android:layout_marginTop="11dp" />
+
+            <TextView
+                android:text="@string/all_retry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:paddingVertical="9dp"
+                android:paddingHorizontal="41dp"
+                android:background="@drawable/bg_all_middle_primary_button"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:onClick="@{() -> refresh.invoke()}"
+                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintEnd_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                android:layout_marginTop="21dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

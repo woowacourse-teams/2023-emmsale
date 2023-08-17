@@ -351,4 +351,8 @@
     <string name="recruitmentpostdetail_dialog_open_profile_message">오픈 프로필 URL이 없으면\n함께하기 요청을 할 수 없습니다.\n 등록창으로 이동하시겠습니까?</string>
     <string name="recruitmentpostdetail_dialog_open_profile_positive_label">이동</string>
     <string name="recruitmentpostdetail_dialog_open_profile_negative_label">취소</string>
+    <string name="all_network_error_icon_description">네트워크 에러 아이콘</string>
+    <string name="all_network_error_title">인터넷 연결이 불안정합니다.</string>
+    <string name="network_error_message">인터넷 연결이 불안정하여\n데이터를 불러올 수 없습니다.</string>
+    <string name="all_retry">재시도</string>
 </resources>
