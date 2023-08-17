@@ -15,6 +15,7 @@ import com.emmsale.comment.application.dto.CommentModifyRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
+import com.emmsale.comment.event.UpdateNotificationEvent;
 import com.emmsale.comment.exception.CommentException;
 import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
@@ -76,7 +77,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
 
     final CommentAddRequest 부모_댓글_요청 = new CommentAddRequest(content, event.getId(), null);
 
-    doNothing().when(eventPublisher).publish(any());
+    doNothing().when(eventPublisher).publish(any(UpdateNotificationEvent.class));
 
     //when
     final CommentResponse 부모_댓글_응답 = commentCommandService.create(부모_댓글_요청, 댓글_작성자);
@@ -96,13 +97,13 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final String content = "내용";
     final CommentAddRequest 부모_댓글_요청 = new CommentAddRequest(content, event.getId(), null);
 
-    doNothing().when(eventPublisher).publish(any());
+    doNothing().when(eventPublisher).publish(any(UpdateNotificationEvent.class));
 
     //when
     commentCommandService.create(부모_댓글_요청, 댓글_작성자);
 
     //then
-    verify(eventPublisher, times(0)).publish(any());
+    verify(eventPublisher, times(0)).publish(any(UpdateNotificationEvent.class));
   }
 
   @Test
@@ -116,7 +117,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final CommentResponse 부모_댓글_응답 = commentCommandService.create(부모_댓글_요청, 댓글_작성자);
     final CommentAddRequest 자식_댓글_요청 = new CommentAddRequest(content, eventId, 1L);
 
-    doNothing().when(eventPublisher).publish(any());
+    doNothing().when(eventPublisher).publish(any(UpdateNotificationEvent.class));
 
     //when
     final CommentResponse 자식_댓글_응답 = commentCommandService.create(자식_댓글_요청, 댓글_작성자);
@@ -140,13 +141,13 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     commentCommandService.create(부모_댓글_요청, 댓글_작성자);
     final CommentAddRequest 자식_댓글_요청 = new CommentAddRequest(content, eventId, 1L);
 
-    doNothing().when(eventPublisher).publish(any());
+    doNothing().when(eventPublisher).publish(any(UpdateNotificationEvent.class));
 
     //when
     commentCommandService.create(자식_댓글_요청, 댓글_작성자);
 
     //then
-    verify(eventPublisher, times(0)).publish(any());
+    verify(eventPublisher, times(0)).publish(any(UpdateNotificationEvent.class));
   }
 
   /**
@@ -165,7 +166,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final Member savedMember = memberRepository.save(new Member(200L, "imageUrl", "아마란스"));
     final Member 댓글_작성자3 = memberRepository.findById(savedMember.getId()).get();
 
-    doNothing().when(eventPublisher).publish(any());
+    doNothing().when(eventPublisher).publish(any(UpdateNotificationEvent.class));
 
     final CommentAddRequest 부모_댓글_요청 = new CommentAddRequest(content, eventId, null);
     commentCommandService.create(부모_댓글_요청, 댓글_작성자);
@@ -184,7 +185,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     commentCommandService.create(알림이_가는_자식_댓글_요청, 댓글_작성자2);
 
     //then
-    verify(eventPublisher, times(5)).publish(any());
+    verify(eventPublisher, times(5)).publish(any(UpdateNotificationEvent.class));
   }
 
   @Test
@@ -197,7 +198,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final Member savedMember = memberRepository.save(new Member(200L, "imageUrl", "아마란스"));
     final Member 댓글_작성자3 = memberRepository.findById(savedMember.getId()).get();
 
-    doNothing().when(eventPublisher).publish(any());
+    doNothing().when(eventPublisher).publish(any(UpdateNotificationEvent.class));
 
     final CommentAddRequest 부모_댓글_요청 = new CommentAddRequest(content, eventId, null);
     commentCommandService.create(부모_댓글_요청, 댓글_작성자);
@@ -217,7 +218,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     commentCommandService.create(알림이_가는_자식_댓글_요청, 댓글_작성자2);
 
     //then
-    verify(eventPublisher, times(4)).publish(any());
+    verify(eventPublisher, times(4)).publish(any(UpdateNotificationEvent.class));
   }
 
   @Test
@@ -230,7 +231,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final Member savedMember = memberRepository.save(new Member(200L, "imageUrl", "아마란스"));
     final Member 댓글_작성자3 = memberRepository.findById(savedMember.getId()).get();
 
-    doNothing().when(eventPublisher).publish(any());
+    doNothing().when(eventPublisher).publish(any(UpdateNotificationEvent.class));
 
     final CommentAddRequest 부모_댓글_요청 = new CommentAddRequest(content, eventId, null);
     final CommentResponse response = commentCommandService.create(부모_댓글_요청, 댓글_작성자);
@@ -252,7 +253,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     commentCommandService.create(알림이_가는_자식_댓글_요청, 댓글_작성자2);
 
     //then
-    verify(eventPublisher, times(3)).publish(any());
+    verify(eventPublisher, times(3)).publish(any(UpdateNotificationEvent.class));
   }
 
   @Test

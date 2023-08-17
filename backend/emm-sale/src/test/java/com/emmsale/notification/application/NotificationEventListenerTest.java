@@ -42,7 +42,7 @@ class NotificationEventListenerTest extends ServiceIntegrationTestHelper {
     final UpdateNotificationEvent event = new UpdateNotificationEvent(
         1L,
         2L,
-        Comment.class.getName(),
+        "comment",
         LocalDateTime.now()
     );
 

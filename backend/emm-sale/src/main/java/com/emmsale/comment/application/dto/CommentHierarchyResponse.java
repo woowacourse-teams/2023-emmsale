@@ -51,8 +51,10 @@ public class CommentHierarchyResponse {
           mapToCommentResponse(entry, parentComment, blockedMemberIds);
 
       result.add(
-          new CommentHierarchyResponse(CommentResponse.from(parentComment, blockedMemberIds),
-              childCommentResponses)
+          new CommentHierarchyResponse(
+              CommentResponse.from(parentComment, blockedMemberIds),
+              childCommentResponses
+          )
       );
     }
 

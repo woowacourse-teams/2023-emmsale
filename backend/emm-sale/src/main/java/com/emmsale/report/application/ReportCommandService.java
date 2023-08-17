@@ -1,7 +1,5 @@
 package com.emmsale.report.application;
 
-import com.emmsale.block.domain.Block;
-import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.domain.RecruitmentPost;
@@ -31,12 +29,10 @@ public class ReportCommandService {
   private final CommentRepository commentRepository;
   private final RecruitmentPostRepository recruitmentPostRepository;
   private final RequestNotificationRepository requestNotificationRepository;
-  private final BlockRepository blockRepository;
 
   public ReportCreateResponse create(final ReportCreateRequest reportRequest, final Member member) {
     validateReportRequest(reportRequest, member);
     final Report report = reportRequest.toReport();
-    blockReportedMember(reportRequest);
     return ReportCreateResponse.from(reportRepository.save(report));
   }
 
@@ -69,8 +65,8 @@ public class ReportCommandService {
   }
 
   private void validateAlreadyExistReport(final ReportCreateRequest reportRequest) {
-    if (reportRepository.existsReportByReporterIdAndReportedId(
-        reportRequest.getReporterId(), reportRequest.getReportedId())) {
+    if (reportRepository.existsReportByReporterIdAndContentIdAndType(
+        reportRequest.getReporterId(), reportRequest.getContentId(), reportRequest.getType())) {
       throw new ReportException(ReportExceptionType.ALREADY_EXIST_REPORT);
     }
   }
@@ -110,15 +106,6 @@ public class ReportCommandService {
         .orElseThrow(() -> new ReportException(ReportExceptionType.NOT_FOUND_CONTENT));
     if (requestNotification.isNotSender(reportCreateRequest.getReportedId())) {
       throw new ReportException(ReportExceptionType.REPORTED_MISMATCH_WRITER);
-    }
-  }
-
-  private void blockReportedMember(final ReportCreateRequest reportCreateRequest) {
-    final Long reporterId = reportCreateRequest.getReporterId();
-    final Long reportedId = reportCreateRequest.getReportedId();
-    if (!blockRepository.existsByRequestMemberIdAndBlockMemberId(reporterId, reportedId)) {
-      final Block block = new Block(reporterId, reportedId);
-      blockRepository.save(block);
     }
   }
 }
