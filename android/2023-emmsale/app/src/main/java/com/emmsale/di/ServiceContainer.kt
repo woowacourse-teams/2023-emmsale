@@ -10,6 +10,7 @@ import com.emmsale.data.eventdetail.EventDetailService
 import com.emmsale.data.fcmToken.FcmTokenService
 import com.emmsale.data.login.LoginService
 import com.emmsale.data.member.MemberService
+import com.emmsale.data.myPost.MyPostService
 import com.emmsale.data.notification.NotificationService
 import com.emmsale.data.recruitment.RecruitmentService
 import com.emmsale.data.scrap.ScrappedEventService
@@ -32,5 +33,8 @@ class ServiceContainer(serviceFactory: ServiceFactory) {
     }
     val blockedMemberService: BlockedMemberService by lazy {
         serviceFactory.create(BlockedMemberService::class.java)
+    }
+    val myPostService: MyPostService by lazy {
+        serviceFactory.create(MyPostService::class.java)
     }
 }
