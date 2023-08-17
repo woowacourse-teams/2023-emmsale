@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.emmsale.R
 import com.emmsale.databinding.ItemCommentNotificationBodyBinding
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.CommentNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 
 class CommentNotificationViewHolder(
@@ -26,7 +26,7 @@ class CommentNotificationViewHolder(
     }
 
     override fun bind(item: PrimaryNotificationUiState) {
-        if (item !is CommentNotificationUiState) return
+        if (item !is ChildCommentNotificationUiState) return
 
         binding.commentNotification = item
     }

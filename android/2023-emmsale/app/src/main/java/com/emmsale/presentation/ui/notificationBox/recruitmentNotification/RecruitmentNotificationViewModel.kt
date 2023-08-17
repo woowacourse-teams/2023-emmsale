@@ -173,12 +173,11 @@ class RecruitmentNotificationViewModel(
                 _notifications.value.notificationGroups.flatMap { header -> header.notifications }
                     .find { it.id == notificationId } ?: return@launch
 
-            val result =
-                notificationRepository.reportRecruitmentNotification(
-                    recruitmentNotificationId = recruitmentNotification.id,
-                    senderId = recruitmentNotification.senderUid,
-                    reporterId = uid,
-                )
+            val result = notificationRepository.reportRecruitmentNotification(
+                recruitmentNotificationId = recruitmentNotification.id,
+                senderId = recruitmentNotification.senderUid,
+                reporterId = uid,
+            )
             when (result) {
                 is ApiError, is ApiException ->
                     _event.value =
@@ -195,10 +194,9 @@ class RecruitmentNotificationViewModel(
 
     fun updateNotificationsToReadStatusBy(eventId: Long) {
         viewModelScope.launch {
-            _notifications.value = notifications.value.changeReadStateBy(eventId)
-            notifications.value.notificationGroups
-                .flatMap { group -> group.notifications }
+            notifications.value.notificationGroups.flatMap { group -> group.notifications }
                 .forEach { notification -> updateNotificationReadStatus(notification) }
+            _notifications.value = notifications.value.changeReadStateBy(eventId)
         }
     }
 

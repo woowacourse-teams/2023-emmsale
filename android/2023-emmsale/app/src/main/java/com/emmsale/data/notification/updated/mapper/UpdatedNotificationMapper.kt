@@ -13,23 +13,25 @@ private const val COMMENT_TYPE = "COMMENT"
 fun List<UpdatedNotificationApiModel>.toData(): List<UpdatedNotification> = map { it.toData() }
 
 fun UpdatedNotificationApiModel.toData(): UpdatedNotification = when (type) {
-    EVENT_TYPE -> ChildCommentNotification(
+    EVENT_TYPE -> InterestEventNotification(
         id = id,
         receiverId = receiverId,
-        redirectId = redirectId,
+        eventId = redirectId,
         createdAt = createdAt.toLocalDateTime(),
         isRead = isRead,
-        commentContent = commentTypeNotification?.childCommentContent ?: "",
-        eventName = commentTypeNotification?.eventName ?: "",
-        commentProfileImageUrl = commentTypeNotification?.commentProfileImageUrl ?: "",
     )
 
-    COMMENT_TYPE -> InterestEventNotification(
+    COMMENT_TYPE -> ChildCommentNotification(
         id = id,
         receiverId = receiverId,
-        redirectId = redirectId,
         createdAt = createdAt.toLocalDateTime(),
         isRead = isRead,
+        parentCommentId = commentTypeNotification?.parentId ?: 0,
+        childCommentId = redirectId,
+        childCommentContent = commentTypeNotification?.childCommentContent ?: "",
+        eventId = commentTypeNotification?.eventId ?: 0,
+        eventName = commentTypeNotification?.eventName ?: "",
+        commentProfileImageUrl = commentTypeNotification?.commentProfileImageUrl ?: "",
     )
 
     else -> throw IllegalArgumentException("$type : 알 수 없는 알림 타입입니다.")
