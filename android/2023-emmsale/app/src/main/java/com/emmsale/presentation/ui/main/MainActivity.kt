@@ -10,7 +10,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
 import com.emmsale.presentation.ui.main.event.EventFragment
 import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
-import com.emmsale.presentation.ui.setting.SettingFragment
+import com.emmsale.presentation.ui.main.setting.SettingFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,7 +42,11 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.commitNow {
             add(R.id.fcv_main, MyProfileFragment(), MyProfileFragment.TAG)
             add(R.id.fcv_main, EventFragment(), EventFragment.TAG)
-            add(R.id.fcv_main, SettingFragment(), SettingFragment.TAG)
+            add(
+                R.id.fcv_main,
+                SettingFragment(),
+                SettingFragment.TAG,
+            )
         }
     }
 

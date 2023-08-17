@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.setting.block.MemberBlockViewModel" />
+            type="com.emmsale.presentation.ui.main.setting.block.MemberBlockViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

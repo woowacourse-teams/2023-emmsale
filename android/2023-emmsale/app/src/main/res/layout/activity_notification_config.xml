@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.setting.notification.NotificationConfigViewModel" />
+            type="com.emmsale.presentation.ui.main.setting.notification.NotificationConfigViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
