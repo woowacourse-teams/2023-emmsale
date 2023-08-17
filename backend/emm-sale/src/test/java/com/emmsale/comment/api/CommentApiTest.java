@@ -151,7 +151,7 @@ class CommentApiTest extends MockMvcTestHelper {
             .header("Authorization", accessToken))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("get-comment", requestParam, responseFieldsSnippet));
+        .andDo(document("get-comments", requestParam, responseFieldsSnippet));
   }
 
   @Test
@@ -159,7 +159,7 @@ class CommentApiTest extends MockMvcTestHelper {
   void test_findChildren() throws Exception {
     //given
     final PathParametersSnippet pathParams = pathParameters(
-        parameterWithName("comment-id").description("부모 ID")
+        parameterWithName("comment-id").description("댓글 ID")
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(

@@ -289,16 +289,16 @@ include::{snippets}/delete-event/http-response.adoc[]
 === `GET` : 댓글 모두 조회
 
 .HTTP request 설명
-include::{snippets}/get-comment/request-parameters.adoc[]
+include::{snippets}/get-comments/request-parameters.adoc[]
 
 .HTTP request
-include::{snippets}/get-comment/http-request.adoc[]
+include::{snippets}/get-comments/http-request.adoc[]
 
 .HTTP response
-include::{snippets}/get-comment/http-response.adoc[]
+include::{snippets}/get-comments/http-response.adoc[]
 
 .HTTP response 설명
-include::{snippets}/get-comment/response-fields.adoc[]
+include::{snippets}/get-comments/response-fields.adoc[]
 
 === `GET` : 특정 댓글 조회(대댓글 있을 경우 같이 조회)
 
