@@ -11,6 +11,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
+import com.emmsale.presentation.ui.main.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.runBlocking
@@ -48,6 +49,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             channelId = FOLLOW_CHANNEL_ID,
             channelName = getString(R.string.kerdyfirebasemessaging_follow_notification_channel_name),
             channelDescription = getString(R.string.kerdyfirebasemessaging_follow_notification_channel_description),
+            intent = MainActivity.getIntent(this),
         )
     }
 
