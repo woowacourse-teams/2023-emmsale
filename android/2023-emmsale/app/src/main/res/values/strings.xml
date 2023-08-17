@@ -22,6 +22,8 @@
     <string name="all_report_fail_message">신고하는 데 실패했어요 😢</string>
     <string name="all_report_duplicate_message">이미 신고 하셨습니다.</string>
     <string name="all_block">차단</string>
+    <string name="all_report_duplicate_dialog_title">중복 신고</string>
+    <string name="all_report_duplicate_dialog_message">이미 신고하셨습니다.</string>
 
     <string name="onboarding_member_update_failed_message">회원정보 업데이트를 실패했어요!</string>
     <string name="onboarding_back_press_desc">온보딩 화면 뒤로가기</string>
@@ -111,7 +113,7 @@
     <string name="comments_comments_fetching_error_message">댓글들을 불러오는 데 실패했어요 😥</string>
     <string name="comments_comments_posting_error_message">댓글을 게시하는 데 실패했어요 😥</string>
     <string name="comments_comments_update_error_message">댓글을 수정하는 데 실패했어요 😥</string>
-    <string name="comments_comments_deletion_error_message">댓글을 삭제하는 데 실패했어요 😥</string>.
+    <string name="comments_comments_delete_error_message">댓글을 삭제하는 데 실패했어요 😥</string>.
     <string name="comments_comment_report_dialog_message">해당 댓글을 신고 하시겠습니까?</string>
 
     <string name="commentsmenudialog_edit_button_label">수정</string>

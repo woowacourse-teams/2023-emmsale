@@ -188,7 +188,7 @@ class ChildCommentActivity : AppCompatActivity() {
             ChildCommentsUiEvent.REPORT_DUPLICATION -> binding.root.showSnackBar(getString(R.string.all_report_duplicate_message))
             ChildCommentsUiEvent.POST_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_posting_error_message))
             ChildCommentsUiEvent.UPDATE_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_update_error_message))
-            ChildCommentsUiEvent.DELETE_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_deletion_error_message))
+            ChildCommentsUiEvent.DELETE_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))
         }
         viewModel.removeEvent()
     }
