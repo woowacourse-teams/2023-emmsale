@@ -13,9 +13,10 @@ public class RecruitmentPostQueryResponse {
 
   private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
 
-  private final Long id;
+  private final Long postId;
   private final Long memberId;
   private final Long eventId;
+  private final String eventName;
   private final String content;
   @DateTimeFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDate updatedAt;
@@ -26,6 +27,7 @@ public class RecruitmentPostQueryResponse {
         recruitmentPost.getId(),
         member.getId(),
         recruitmentPost.getEvent().getId(),
+        recruitmentPost.getEvent().getName(),
         recruitmentPost.getContent(),
         recruitmentPost.getUpdatedAt().toLocalDate()
     );
