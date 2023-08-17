@@ -14,19 +14,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/eventinformation_poster"
-            android:layout_width="match_parent"
-            android:layout_height="360dp"
-            android:layout_marginVertical="17dp"
-            android:paddingHorizontal="17dp"
-            android:scaleType="fitXY"
-            app:imageUrl="@{imageUrl}"
-            app:layout_constraintBottom_toTopOf="@+id/button_eventinformation_navigatewebsite"
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toTopOf="@id/button_eventinformation_navigatewebsite"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/img_login_logo" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/eventinformation_poster"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="17dp"
+                android:adjustViewBounds="true"
+                app:imageUrl="@{imageUrl}"
+                app:layout_constraintBottom_toTopOf="@+id/button_eventinformation_navigatewebsite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/img_login_logo" />
+
+        </ScrollView>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_eventinformation_navigatewebsite"

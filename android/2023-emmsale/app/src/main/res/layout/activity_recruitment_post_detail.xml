@@ -77,49 +77,79 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
-            android:id="@+id/tv_recruitmentdetail_membername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="9dp"
-            android:layout_marginTop="18dp"
-            android:fontFamily="@font/nanum_square_bold"
-            android:text="@{vm.recruitmentPost.name}"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/iv_recruitmentdetail_profile_image"
-            app:layout_constraintTop_toBottomOf="@id/appbarlayout_recruitmentdetail"
-            tools:text="김커디" />
-
-        <TextView
-            android:id="@+id/tv_recruitmentdetail_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="9dp"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/nanum_square_regular"
-            android:text="@{@string/recruitmentpostdetail_update_date_format(vm.recruitmentPost.updatedAt)}"
-            android:textColor="@color/gray"
-            android:textSize="11sp"
-            app:layout_constraintStart_toEndOf="@+id/iv_recruitmentdetail_profile_image"
-            app:layout_constraintTop_toBottomOf="@+id/tv_recruitmentdetail_membername"
-            tools:text="2023.08.03" />
-
-        <TextView
-            android:id="@+id/tv_recruitmentdetail_message"
+        <ScrollView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="17dp"
-            android:fontFamily="@font/nanum_square_regular"
-            android:lineHeight="17.5dp"
-            android:text="@{vm.recruitmentPost.content}"
-            android:textColor="@color/black"
-            android:textSize="13sp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="17dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_recruitmentdetail_request_companion"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/iv_recruitmentdetail_profile_image"
-            app:layout_constraintTop_toBottomOf="@+id/iv_recruitmentdetail_profile_image"
-            tools:text="아무나 같이가실 분 구합니다! 역에서 만나서 같이가면 좋을 것 같아요! 많이들 신청해 주세용!!!" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appbarlayout_recruitmentdetail">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_recruitmentdetail_membername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="18dp"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:text="@{vm.recruitmentPost.name}"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/iv_recruitmentdetail_profile_image"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="김커디" />
+
+                <TextView
+                    android:id="@+id/tv_recruitmentdetail_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:text="@{vm.recruitmentPost.updatedAt}"
+                    android:textColor="@color/gray"
+                    android:textSize="11sp"
+                    app:layout_constraintStart_toEndOf="@+id/iv_recruitmentdetail_profile_image"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_recruitmentdetail_membername"
+                    tools:text="2023.08.03" />
+
+                <TextView
+                    android:id="@+id/tv_recruitmentdetail_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="17dp"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:lineHeight="17.5dp"
+                    android:text="@{vm.recruitmentPost.content}"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/iv_recruitmentdetail_profile_image"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_recruitmentdetail_profile_image"
+                    tools:text="아무나 같이가실 분 구합니다! 역에서 만나서 같이가면 좋을 것 같아요! 많이들 신청해 주세용!!!" />
+
+
+                <ImageView
+                    android:id="@+id/iv_recruitmentdetail_profile_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="14dp"
+                    app:imageUrl="@{vm.recruitmentPost.profileImageUrl}"
+                    app:isCircle="@{true}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
         <TextView
             android:id="@+id/btn_recruitmentdetail_request_companion"
@@ -158,19 +188,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-
-        <ImageView
-            android:id="@+id/iv_recruitmentdetail_profile_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="14dp"
-            app:imageUrl="@{vm.recruitmentPost.profileImageUrl}"
-            app:isCircle="@{true}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appbarlayout_recruitmentdetail"
-            tools:srcCompat="@tools:sample/avatars" />
 
         <ProgressBar
             android:layout_width="100dp"
