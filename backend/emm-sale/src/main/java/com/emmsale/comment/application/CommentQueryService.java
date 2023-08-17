@@ -1,6 +1,7 @@
 package com.emmsale.comment.application;
 
 import static com.emmsale.comment.exception.CommentExceptionType.NOT_EVENT_AND_MEMBER_ID_BOTH_NULL;
+import static com.emmsale.comment.exception.CommentExceptionType.NOT_FOUND_COMMENT;
 
 import com.emmsale.block.domain.Block;
 import com.emmsale.block.domain.BlockRepository;
@@ -55,8 +56,12 @@ public class CommentQueryService {
 
     final List<Long> blockedMemberIds = getBlockedMemberIds(member);
 
-    final List<Comment> parentWithChildrenComments
-        = commentRepository.findParentAndChildrenByParentId(commentId);
+    final Comment comment = commentRepository.findById(commentId)
+        .orElseThrow(() -> new CommentException(NOT_FOUND_COMMENT));
+
+    final List<Comment> parentWithChildrenComments = comment.getParent()
+        .map(it -> commentRepository.findParentAndChildrenByParentId(it.getId()))
+        .orElseGet(() -> commentRepository.findParentAndChildrenByParentId(commentId));
 
     return CommentHierarchyResponse.from(parentWithChildrenComments, blockedMemberIds);
   }

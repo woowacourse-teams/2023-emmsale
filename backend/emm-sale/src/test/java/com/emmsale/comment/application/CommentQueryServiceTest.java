@@ -128,8 +128,8 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
   }
 
   @Test
-  @DisplayName("findParentWithChildren() : 부모 댓글에 있는 자식 댓글들을 모두 조회할 수 있다.")
-  void test_findChildrenComments() throws Exception {
+  @DisplayName("findParentWithChildren() : 부모 댓글이라면 해당 부모 댓글과 그 자식 댓글들을 모두 조회할 수 있다.")
+  void test_findChildrenComments_parentId() throws Exception {
     //given
     final Comment 자식댓글2 = commentRepository.save(
         Comment.createChild(event, 부모_댓글1, member, "자식댓글2"));
@@ -148,6 +148,34 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
     //when
     final CommentHierarchyResponse actual =
         commentQueryService.findParentWithChildren(부모_댓글1.getId(), member);
+
+    //then
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("findParentWithChildren() : 자식 댓글이라면 해당 부모 댓글과 그 자식 댓글들을 모두 조회할 수 있다.")
+  void test_findChildrenComments_childId() throws Exception {
+    //given
+    final Comment 자식댓글2 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글1, member, "자식댓글2"));
+    final Comment 자식댓글1 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글1, member, "자식댓글1"));
+
+    final CommentHierarchyResponse expected =
+        new CommentHierarchyResponse(
+            CommentResponse.from(부모_댓글1),
+            List.of(
+                CommentResponse.from(자식댓글2),
+                CommentResponse.from(자식댓글1)
+            )
+        );
+
+    //when
+    final CommentHierarchyResponse actual =
+        commentQueryService.findParentWithChildren(자식댓글1.getId(), member);
 
     //then
     assertThat(actual)

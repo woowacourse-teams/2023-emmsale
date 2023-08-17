@@ -1,6 +1,9 @@
 package com.emmsale.comment.domain;
 
+import static com.emmsale.comment.exception.CommentExceptionType.NOT_CREATE_CHILD_CHILD_COMMENT;
+
 import com.emmsale.base.BaseEntity;
+import com.emmsale.comment.exception.CommentException;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.Member;
 import java.util.List;
@@ -69,7 +72,15 @@ public class Comment extends BaseEntity {
       final Member member,
       final String content
   ) {
+    if (isGrandChildComment(parent)) {
+      throw new CommentException(NOT_CREATE_CHILD_CHILD_COMMENT);
+    }
+
     return new Comment(event, parent, member, content);
+  }
+
+  private static boolean isGrandChildComment(final Comment parent) {
+    return parent.parent != null;
   }
 
   public void delete() {
@@ -112,7 +123,7 @@ public class Comment extends BaseEntity {
     if (parent == null) {
       return id;
     }
-    return parent.id;
+    return parent.getId();
   }
 
   public boolean isNotOwner(final Long memberId) {
@@ -124,11 +135,11 @@ public class Comment extends BaseEntity {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!(o instanceof Comment)) {
       return false;
     }
     final Comment comment = (Comment) o;
-    return Objects.equals(id, comment.id);
+    return Objects.equals(id, comment.getId());
   }
 
   @Override

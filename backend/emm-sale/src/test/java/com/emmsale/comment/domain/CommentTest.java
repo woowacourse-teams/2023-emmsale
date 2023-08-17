@@ -1,9 +1,12 @@
 package com.emmsale.comment.domain;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import com.emmsale.comment.exception.CommentException;
+import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.MemberFixture;
@@ -91,5 +94,22 @@ class CommentTest {
   void test_isNotDeleted(final Comment comment, final boolean result) throws Exception {
     //when & then
     assertEquals(comment.isNotDeleted(), result);
+  }
+
+  @Test
+  @DisplayName("createChild() : 대대댓글은 작성할 경우 NOT_CREATE_CHILD_CHILD_COMMENT 발생할 수 있다.")
+  void test_createChild_not_create_child_child_comment() throws Exception {
+    //given
+    final Event event = EventFixture.구름톤();
+    final Member member = new Member(1333L, "imageUrl", "usrename");
+
+    final Comment root = Comment.createRoot(event, member, "부모내용");
+    final Comment child1 = Comment.createChild(event, root, member, "자식내용1");
+    final Comment child2 = Comment.createChild(event, root, member, "자식내용2");
+
+    //when & then
+    assertThatThrownBy(() -> Comment.createChild(event, child1, member, "자자식댓글1"))
+        .isInstanceOf(CommentException.class)
+        .hasMessage(CommentExceptionType.NOT_CREATE_CHILD_CHILD_COMMENT.errorMessage());
   }
 }

@@ -68,7 +68,7 @@ public class CommentCommandService {
         .orElse(Collections.emptySet());
 
     notificationCommentCandidates.stream()
-        .map(UpdateNotificationEvent::from)
+        .map(it -> UpdateNotificationEvent.from(it, savedComment.getId()))
         .forEach(eventPublisher::publish);
   }
 
