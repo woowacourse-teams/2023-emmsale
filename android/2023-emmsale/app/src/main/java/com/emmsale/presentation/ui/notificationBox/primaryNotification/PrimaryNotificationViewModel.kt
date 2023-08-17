@@ -64,14 +64,6 @@ class PrimaryNotificationViewModel(
         )
     }
 
-    private fun getEventIdByCommentIdAsync(commentId: Long): Deferred<Long> = viewModelScope.async {
-        when (val comment = commentRepository.getComment(commentId)) {
-            is ApiSuccess -> comment.data.eventId
-            is ApiError, is ApiException ->
-                throw IllegalArgumentException(INVALID_COMMENT_ID_ERROR_MESSAGE)
-        }
-    }
-
     private suspend fun updatePastNotifications(notifications: List<UpdatedNotification>) {
         _pastNotifications.value = PrimaryNotificationsUiState(
             notifications = notifications.map { notification ->
@@ -81,6 +73,14 @@ class PrimaryNotificationViewModel(
                 )
             },
         )
+    }
+
+    private fun getEventIdByCommentIdAsync(commentId: Long): Deferred<Long> = viewModelScope.async {
+        when (val comment = commentRepository.getComment(commentId)) {
+            is ApiSuccess -> comment.data.eventId
+            is ApiError, is ApiException ->
+                throw IllegalArgumentException(INVALID_COMMENT_ID_ERROR_MESSAGE)
+        }
     }
 
     fun changeToRead(notificationId: Long) {

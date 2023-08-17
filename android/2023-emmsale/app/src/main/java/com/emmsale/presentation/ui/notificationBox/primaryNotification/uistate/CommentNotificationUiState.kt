@@ -34,7 +34,7 @@ class CommentNotificationUiState(
 
             return CommentNotificationUiState(
                 id = updatedNotification.id,
-                eventId = updatedNotification.redirectId,
+                eventId = eventId,
                 receiverId = updatedNotification.receiverId,
                 commentId = updatedNotification.redirectId,
                 createdAt = updatedNotification.createdAt,
