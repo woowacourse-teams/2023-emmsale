@@ -28,7 +28,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun setupSplashObserver() {
-        viewModel.splashState.observe(this) { splashState ->
+        viewModel.splash.observe(this) { splashState ->
             when (splashState) {
                 is SplashUiState.Loading -> initSplashAnimation(splashState.splashTimeMs)
                 is SplashUiState.Done -> handleAutoLogin(splashState.isAutoLogin)

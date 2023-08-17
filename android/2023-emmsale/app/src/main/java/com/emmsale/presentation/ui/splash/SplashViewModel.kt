@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 class SplashViewModel(
     private val configRepository: ConfigRepository,
 ) : ViewModel() {
-    private val _splashState = NotNullMutableLiveData<SplashUiState>(SplashUiState.Loading())
-    val splashState: NotNullLiveData<SplashUiState> = _splashState
+    private val _splash = NotNullMutableLiveData<SplashUiState>(SplashUiState.Loading())
+    val splash: NotNullLiveData<SplashUiState> = _splash
 
     init {
         autoLogin()
@@ -24,9 +24,13 @@ class SplashViewModel(
     private fun autoLogin() {
         viewModelScope.launch {
             val autoLogin = configRepository.getConfig().isAutoLogin
-            delay(1000)
+            val splashState = splash.value
 
-            _splashState.value = SplashUiState.Done(isAutoLogin = autoLogin)
+            if (splashState is SplashUiState.Loading) {
+                delay(splashState.splashTimeMs)
+            }
+
+            _splash.value = SplashUiState.Done(isAutoLogin = autoLogin)
         }
     }
 
