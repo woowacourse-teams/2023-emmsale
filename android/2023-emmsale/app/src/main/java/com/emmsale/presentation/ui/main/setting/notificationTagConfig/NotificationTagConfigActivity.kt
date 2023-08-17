@@ -19,7 +19,7 @@ import com.emmsale.presentation.ui.main.setting.notificationTagConfig.uistate.No
 
 class NotificationTagConfigActivity :
     AppCompatActivity(),
-    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("notification_tag") {
+    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("notification_tag_config") {
     private val viewModel: NotificationTagConfigViewModel by viewModels { NotificationTagConfigViewModel.factory }
     private val binding: ActivityNotificationTagConfigBinding by lazy {
         ActivityNotificationTagConfigBinding.inflate(layoutInflater)
