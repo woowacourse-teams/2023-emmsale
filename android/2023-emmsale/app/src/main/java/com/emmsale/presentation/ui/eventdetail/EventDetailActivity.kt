@@ -88,6 +88,7 @@ class EventDetailActivity : AppCompatActivity() {
         fun startActivity(context: Context, eventId: Long) {
             val intent = Intent(context, EventDetailActivity::class.java)
             intent.putExtra(EVENT_ID_KEY, eventId)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             context.startActivity(intent)
         }
 

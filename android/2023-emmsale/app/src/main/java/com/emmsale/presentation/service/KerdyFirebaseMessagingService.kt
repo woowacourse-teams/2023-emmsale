@@ -80,7 +80,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             channelId = CHILD_COMMENT_POSTING_CHANNEL_ID,
             channelName = getString(R.string.kerdyfirebasemessaging_child_comment_notification_channel_name),
             channelDescription = getString(R.string.kerdyfirebasemessaging_child_comment_notification_channel_description),
-            intent = ChildCommentActivity.getIntent(this, eventId, parentCommentId),
+            intent = ChildCommentActivity.getIntent(this, eventId, parentCommentId, true),
         )
     }
 
