@@ -21,6 +21,7 @@ class OpenProfileUrlConfigActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
+        initToolbar()
         setUpIsUpdateUrlSuccess()
         setUpOpenProfileUrlConfig()
         initCompleteButtonClick()
@@ -30,6 +31,15 @@ class OpenProfileUrlConfigActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.vm = viewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun initToolbar() {
+        binding.tbOpenProfileUrlConfig.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.close -> finish()
+            }
+            true
+        }
     }
 
     private fun setUpOpenProfileUrlConfig() {
