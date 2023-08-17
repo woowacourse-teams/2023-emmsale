@@ -35,22 +35,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private val menuDialog: BottomMenuDialog by lazy {
-        BottomMenuDialog(this).apply {
-            addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) { onBlockButtonClick() }
-        }
-    }
-
-    private fun onBlockButtonClick() {
-        WarningDialog(
-            context = this@ProfileActivity,
-            title = getString(R.string.profilemenudialog_block_button_label),
-            message = getString(R.string.profile_block_warning_dialog_message),
-            positiveButtonLabel = getString(R.string.all_block),
-            negativeButtonLabel = getString(R.string.all_cancel),
-            onPositiveButtonClick = { viewModel.blockMember(memberId) },
-        ).show()
-    }
+    private val menuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +65,29 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun showMoreMenu() {
-        menuDialog.show()
+        menuDialog.resetMenu()
+        menuDialog.apply {
+            if (viewModel.isBlocked(memberId)) {
+                addMenuItemBelow(getString(R.string.profilemenudialog_unblock_button_label)) { onUnblockButtonClick() }
+            } else {
+                addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) { onBlockButtonClick() }
+            }
+        }.show()
+    }
+
+    private fun onBlockButtonClick() {
+        WarningDialog(
+            context = this@ProfileActivity,
+            title = getString(R.string.profilemenudialog_block_button_label),
+            message = getString(R.string.profile_block_warning_dialog_message),
+            positiveButtonLabel = getString(R.string.all_block),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { viewModel.blockMember(memberId) },
+        ).show()
+    }
+
+    private fun onUnblockButtonClick() {
+        viewModel.unblockMember(memberId)
     }
 
     private fun setupUiLogic() {
@@ -119,6 +126,9 @@ class ProfileActivity : AppCompatActivity() {
                 title = getString(R.string.profile_block_complete_dialog_title),
                 message = getString(R.string.profile_block_complete_dialog_message),
             ).show()
+
+            ProfileEvent.UNBLOCK_FAIL -> showToast(getString(R.string.profile_unblock_fail_message))
+            ProfileEvent.UNBLOCK_SUCCESS -> showToast(getString(R.string.profile_unblock_complete_message))
         }
         viewModel.removeEvent()
     }

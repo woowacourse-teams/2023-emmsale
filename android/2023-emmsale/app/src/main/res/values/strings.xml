@@ -81,9 +81,11 @@
     <string name="profile_toolbar_title">프로필 조회</string>
     <string name="profile_more_button_title">더보기</string>
     <string name="profile_block_complete_dialog_title">차단 완료</string>
-    <string name="profile_block_complete_dialog_message">해당 회원의 댓글, 모집 글, 같이가요 요청이 차단됩니다.</string>
-    <string name="profile_block_fail_message">차단에 실패했어요</string>
+    <string name="profile_block_complete_dialog_message">해당 회원의 댓글, 모집 글,\n같이가요 요청이 차단됩니다.</string>
+    <string name="profile_block_fail_message">차단에 실패했어요 😥</string>
     <string name="profile_block_warning_dialog_message">해당 회원을 차단 하시겠습니까?</string>
+    <string name="profile_unblock_complete_message">차단 해제 했습니다</string>
+    <string name="profile_unblock_fail_message">차단 해제에 실패했어요 😥</string>
 
     <string name="profilemenudialog_block_button_label">차단하기</string>
     <string name="profilemenudialog_report_button_label">신고하기</string>
@@ -343,6 +345,7 @@
     <string name="openprofileurlconfig_complete">완료</string>
     <string name="openprofileurlconfig_register_success">성공적으로 등록하였습니다</string>
     <string name="oepnprofileurlconfig_register_fail">등록에 실패하였습니다</string>
+    <string name="profilemenudialog_unblock_button_label">차단 해제</string>
 
     <string name="recruitmentpostdetail_dialog_open_profile_title">오픈 프로필 URL 등록</string>
     <string name="recruitmentpostdetail_dialog_open_profile_message">오픈 프로필 URL이 없으면\n함께하기 요청을 할 수 없습니다.\n 등록창으로 이동하시겠습니까?</string>
