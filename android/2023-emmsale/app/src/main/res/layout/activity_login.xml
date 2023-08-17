@@ -13,25 +13,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@drawable/bg_login"
         tools:context=".presentation.ui.login.LoginActivity">
 
         <ImageView
             android:id="@+id/iv_login_logo"
-            android:layout_width="0dp"
+            android:layout_width="150dp"
             android:layout_height="0dp"
             android:contentDescription="@string/login_logo"
-            android:src="@drawable/img_login_logo"
+            android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintBottom_toTopOf="@+id/btn_github_login"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight="160dp"
-            app:layout_constraintHeight_max="160dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth="188dp"
-            app:layout_constraintWidth_max="188dp"
-            app:tint="@color/primary_color" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/btn_github_login"
