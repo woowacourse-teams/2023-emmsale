@@ -1,4 +1,4 @@
 FROM openjdk:11 as build
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} kerdy.jar
-ENTRYPOINT ["java","-Duser.timezone=Asia/Seoul", "-Dspring.profiles.active=prod","-jar","/kerdy.jar"]
+ENTRYPOINT ["java","-Duser.timezone=Asia/Seoul","-Dspring.profiles.active=prod","-jar","/kerdy.jar"]
