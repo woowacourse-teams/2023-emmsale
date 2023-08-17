@@ -12,7 +12,7 @@ data class CommentTypeNotificationApiModel(
     @SerialName("commenterImageUrl")
     val commentProfileImageUrl: String,
     @SerialName("parentId")
-    val parentId: Long,
+    val parentId: Long = -1L,
     @SerialName("eventId")
-    val eventId: Long,
+    val eventId: Long = -1L,
 )
