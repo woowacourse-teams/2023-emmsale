@@ -77,14 +77,13 @@ class EventDetailActivity : AppCompatActivity() {
     }
 
     private fun initBackPressButtonClickListener() {
-        binding.ivEventdetailBackpress.setOnClickListener {
-            finish()
-        }
+        binding.ivEventdetailBackpress.setOnClickListener { finish() }
     }
 
     companion object {
         private const val EVENT_ID_KEY = "EVENT_ID_KEY"
         private const val DEFAULT_EVENT_ID = 1L
+
         fun startActivity(context: Context, eventId: Long) {
             val intent = Intent(context, EventDetailActivity::class.java)
             intent.putExtra(EVENT_ID_KEY, eventId)

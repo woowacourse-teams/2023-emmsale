@@ -7,7 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ScrappedEventService {
     @GET("scraps")
@@ -18,8 +18,8 @@ interface ScrappedEventService {
         @Body scrappedEventRequestBody: ScrappedEventRequestBody,
     ): Response<Unit>
 
-    @DELETE("scraps/{eventId}")
+    @DELETE("scraps")
     suspend fun deleteScrap(
-        @Path("eventId") eventId: Long,
+        @Query("event-id") eventId: Long,
     ): Response<Unit>
 }
