@@ -5,6 +5,7 @@ import com.emmsale.data.member.dto.BlockRequestBody
 import com.emmsale.data.member.dto.MemberActivitiesUpdateRequestBody
 import com.emmsale.data.member.dto.MemberApiModel
 import com.emmsale.data.member.dto.MemberDescriptionUpdateRequestBody
+import com.emmsale.data.member.dto.MemberOpenProfileUrlUpdateRequestBody
 import com.emmsale.data.member.dto.MemberUpdateRequestBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -25,6 +26,11 @@ interface MemberService {
 
     @PUT("/members/description")
     suspend fun updateMemberDescription(@Body memberDescriptionUpdateRequestBody: MemberDescriptionUpdateRequestBody): Response<Unit>
+
+    @PUT("/members/open-profile-url")
+    suspend fun updateMemberOpenProfileUrl(
+        @Body memberOpenProfileUrlUpdateRequestBody: MemberOpenProfileUrlUpdateRequestBody,
+    ): Response<Unit>
 
     @POST("/members/activities")
     suspend fun addMemberActivities(@Body memberActivitiesUpdateRequestBody: MemberActivitiesUpdateRequestBody): Response<Unit>

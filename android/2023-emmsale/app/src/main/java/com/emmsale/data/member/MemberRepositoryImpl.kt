@@ -5,6 +5,7 @@ import com.emmsale.data.common.handleApi
 import com.emmsale.data.member.dto.BlockRequestBody
 import com.emmsale.data.member.dto.MemberActivitiesUpdateRequestBody
 import com.emmsale.data.member.dto.MemberDescriptionUpdateRequestBody
+import com.emmsale.data.member.dto.MemberOpenProfileUrlUpdateRequestBody
 import com.emmsale.data.member.dto.MemberUpdateRequestBody
 import com.emmsale.data.member.mapper.toData
 import kotlinx.coroutines.CoroutineDispatcher
@@ -46,6 +47,18 @@ class MemberRepositoryImpl(
                 execute = {
                     memberService.updateMemberDescription(
                         MemberDescriptionUpdateRequestBody(description),
+                    )
+                },
+                mapToDomain = {},
+            )
+        }
+
+    override suspend fun updateMemberOpenProfileUrl(openProfileUrl: String): ApiResult<Unit> =
+        withContext(dispatcher) {
+            handleApi(
+                execute = {
+                    memberService.updateMemberOpenProfileUrl(
+                        MemberOpenProfileUrlUpdateRequestBody(openProfileUrl),
                     )
                 },
                 mapToDomain = {},
