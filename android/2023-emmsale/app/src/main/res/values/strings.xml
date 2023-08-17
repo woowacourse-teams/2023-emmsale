@@ -33,6 +33,8 @@
     <string name="splash_app_update_title">업데이트</string>
     <string name="splash_app_update_message">새로운 버전이 출시되었어요!\n지금 바로 커디 스토어로 이동하시겠어요?</string>
     <string name="splash_app_update_canceled_message">업데이트 없이 서비스를 이용하실 수 없어요 😥</string>
+    <string name="all_report_duplicate_dialog_title">중복 신고</string>
+    <string name="all_report_duplicate_dialog_message">이미 신고하셨습니다.</string>
 
     <string name="onboarding_member_update_failed_message">회원정보 업데이트를 실패했어요!</string>
     <string name="onboarding_back_press_desc">온보딩 화면 뒤로가기</string>
