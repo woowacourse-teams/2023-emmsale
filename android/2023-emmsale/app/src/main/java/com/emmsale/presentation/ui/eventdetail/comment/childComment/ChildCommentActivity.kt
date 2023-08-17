@@ -48,7 +48,10 @@ class ChildCommentActivity : AppCompatActivity() {
         initToolbar()
         initChildCommentsRecyclerView()
         setupUiLogic()
+    }
 
+    override fun onStart() {
+        super.onStart()
         viewModel.fetchComment(parentCommentId)
     }
 
