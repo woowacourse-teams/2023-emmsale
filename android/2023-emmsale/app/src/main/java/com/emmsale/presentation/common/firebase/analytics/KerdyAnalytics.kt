@@ -46,11 +46,10 @@ fun logEventClick(eventName: String, eventId: Long, memberId: Long) {
     }
 }
 
-fun logComment(commentName: String, commentId: Long, memberId: Long) {
+fun logComment(commentName: String, eventId: Long) {
     log(COMMENT) {
-        param(EVENT_NAME, commentName)
-        param(EVENT_ID, commentId)
-        param(USER_ID, memberId)
+        param(WRITING_CONTENT, commentName)
+        param(EVENT_ID, eventId)
     }
 }
 
