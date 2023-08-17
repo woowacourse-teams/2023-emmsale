@@ -1,6 +1,9 @@
 package com.emmsale.comment.domain;
 
+import static com.emmsale.comment.exception.CommentExceptionType.NOT_CREATE_CHILD_CHILD_COMMENT;
+
 import com.emmsale.base.BaseEntity;
+import com.emmsale.comment.exception.CommentException;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.Member;
 import java.util.List;
@@ -69,7 +72,15 @@ public class Comment extends BaseEntity {
       final Member member,
       final String content
   ) {
+    if (isChildChildComment(parent)) {
+      throw new CommentException(NOT_CREATE_CHILD_CHILD_COMMENT);
+    }
+
     return new Comment(event, parent, member, content);
+  }
+
+  private static boolean isChildChildComment(final Comment parent) {
+    return parent.parent != null;
   }
 
   public void delete() {
