@@ -13,10 +13,7 @@ import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
 import com.emmsale.presentation.ui.setting.SettingFragment
 
 class MainActivity : AppCompatActivity() {
-
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
+    private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -8,6 +8,7 @@ fun LoginApiModel.toData(): Login = Login(
     token = Token(
         uid = uid,
         accessToken = accessToken,
+        isAutoLogin = true,
     ),
     isOnboarded = isOnboarded,
 )

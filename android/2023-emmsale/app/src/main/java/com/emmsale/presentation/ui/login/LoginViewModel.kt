@@ -25,6 +25,13 @@ class LoginViewModel(
     private val _loginState: MutableLiveData<LoginUiState> = MutableLiveData()
     val loginState: LiveData<LoginUiState> = _loginState
 
+    init {
+        viewModelScope.launch {
+            val isAutoLogin = tokenRepository.getToken()?.isAutoLogin ?: return@launch
+            if (isAutoLogin) changeLoginState(LoginUiState.Login)
+        }
+    }
+
     fun login(fcmToken: String, code: String) {
         changeLoginState(LoginUiState.Loading)
 
@@ -60,11 +67,10 @@ class LoginViewModel(
 
     companion object {
         val factory = ViewModelFactory {
-            val repositoryContainer = KerdyApplication.repositoryContainer
             LoginViewModel(
-                loginRepository = repositoryContainer.loginRepository,
-                tokenRepository = repositoryContainer.tokenRepository,
-                fcmTokenRepository = repositoryContainer.fcmTokenRepository,
+                loginRepository = KerdyApplication.repositoryContainer.loginRepository,
+                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
+                fcmTokenRepository = KerdyApplication.repositoryContainer.fcmTokenRepository,
             )
         }
     }

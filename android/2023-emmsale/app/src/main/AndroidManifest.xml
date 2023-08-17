@@ -68,7 +68,8 @@
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:exported="true"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Emmsale.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,16 +1,22 @@
 package com.emmsale.presentation.ui.login
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnticipateInterpolator
+import android.window.SplashScreenView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.emmsale.BuildConfig
 import com.emmsale.R
 import com.emmsale.databinding.ActivityLoginBinding
@@ -35,12 +41,31 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.viewModel = viewModel
+        initSplashAnimation()
         setupClickListener()
         setupLoginState()
         askNotificationPermission()
+    }
+
+    private fun initSplashAnimation() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
+
+        splashScreen.setOnExitAnimationListener(::showSplashEndAnimation)
+    }
+
+    private fun showSplashEndAnimation(splashScreenView: SplashScreenView) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
+
+        ObjectAnimator.ofFloat(splashScreenView, View.ALPHA, 1F, 0F).run {
+            interpolator = AnticipateInterpolator()
+            duration = 500L
+            doOnEnd { splashScreenView.remove() }
+            start()
+        }
     }
 
     private fun setupClickListener() {
