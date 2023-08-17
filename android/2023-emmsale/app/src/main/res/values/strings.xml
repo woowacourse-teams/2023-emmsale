@@ -337,10 +337,10 @@
 
     <string name="useterm_appbar_title">이용 약관</string>
 
-    <string name="open_profile_url_config_title">카카오 오픈 프로필 URL을 \n입력해주세요.</string>
-    <string name="open_profile_url_config_warning">https://open.kakao.com 로 시작해야 합니다</string>
-    <string name="open_profile_url_config_hint">https://open.kakao.com/...</string>
-    <string name="open_profile_url_config_complete">완료</string>
+    <string name="openprofileurlconfig_title">카카오 오픈 프로필 URL을 \n입력해주세요.</string>
+    <string name="openprofileurlconfig_warning">https://open.kakao.com 로 시작해야 합니다</string>
+    <string name="openprofileurlconfig_hint">https://open.kakao.com/...</string>
+    <string name="openprofileurlconfig_complete">완료</string>
     <string name="openprofileurlconfig_register_success">성공적으로 등록하였습니다</string>
     <string name="oepnprofileurlconfig_register_fail">등록에 실패하였습니다</string>
     <string name="recruitmentpostdetail_dialog_open_profile_title">오픈 프로필 URL 등록</string>

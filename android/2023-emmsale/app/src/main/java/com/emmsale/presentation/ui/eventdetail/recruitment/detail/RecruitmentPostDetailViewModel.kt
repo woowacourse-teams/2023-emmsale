@@ -123,12 +123,13 @@ class RecruitmentPostDetailViewModel(
                 is ApiSuccess -> {
                     if (response.data.openProfileUrl != "") {
                         _hasOpenProfileUrl.value =
-                        HasOpenUrlUiState.TRUE
+                            HasOpenUrlUiState.TRUE
                     } else {
                         _hasOpenProfileUrl.value =
-                        HasOpenUrlUiState.FALSE
+                            HasOpenUrlUiState.FALSE
                     }
                 }
+
                 else -> _hasOpenProfileUrl.value = HasOpenUrlUiState.ERROR
             }
         }
