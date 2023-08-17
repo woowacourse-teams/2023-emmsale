@@ -44,6 +44,19 @@ class ScrapCommandServiceTest extends ServiceIntegrationTestHelper {
     event = eventRepository.save(EventFixture.구름톤());
   }
 
+  @Test
+  @DisplayName("스크랩을 정상적으로 삭제한다.")
+  void append() {
+    //given
+    final Scrap scrap = scrapRepository.save(new Scrap(member.getId(), event));
+
+    //when
+    scrapCommandService.deleteScrap(member, event.getId());
+
+    //then
+    assertFalse(scrapRepository.findById(scrap.getId()).isPresent());
+  }
+
   @Nested
   @DisplayName("스크랩을 추가하는 테스트")
   class AppendScrap {
@@ -99,57 +112,4 @@ class ScrapCommandServiceTest extends ServiceIntegrationTestHelper {
     }
 
   }
-
-  @Nested
-  @DisplayName("스크랩을 삭제하는 테스트")
-  class DeleteScrap {
-
-    @Test
-    @DisplayName("스크랩을 정상적으로 삭제한다.")
-    void append() {
-      //given
-      final Scrap scrap = scrapRepository.save(new Scrap(member.getId(), event));
-
-      //when
-      scrapCommandService.deleteScrap(member, scrap.getId());
-
-      //then
-      assertFalse(scrapRepository.findById(scrap.getId()).isPresent());
-    }
-
-    @Test
-    @DisplayName("스크랩이 존재하지 않을 경우 NOT_FOUND_SCRAP 타입의 ScrapException이 발생한다.")
-    void appendWithNotExistEvent() {
-      //given
-      final long 존재하지_않는_스크랩_id = 0L;
-
-      final ScrapExceptionType expectExceptionType = ScrapExceptionType.NOT_FOUND_SCRAP;
-
-      //when
-      final ScrapException actualException = assertThrowsExactly(ScrapException.class,
-          () -> scrapCommandService.deleteScrap(member, 존재하지_않는_스크랩_id));
-
-      //then
-      assertEquals(expectExceptionType, actualException.exceptionType());
-    }
-
-    @Test
-    @DisplayName("자신의 스크랩이 아닐 경우 FORBIDDEN_NOT_OWNER 타입의 ScrapException이 발생한다.")
-    void appendWithAlreadyScraped() {
-      //given
-      final long 다른_멤버_id = 2L;
-      final Scrap scrap = scrapRepository.save(new Scrap(다른_멤버_id, event));
-
-      final ScrapExceptionType expectExceptionType = ScrapExceptionType.FORBIDDEN_NOT_OWNER;
-
-      //when
-      final ScrapException actualException = assertThrowsExactly(ScrapException.class,
-          () -> scrapCommandService.deleteScrap(member, scrap.getId()));
-
-      //then
-      assertEquals(expectExceptionType, actualException.exceptionType());
-    }
-
-  }
-
 }

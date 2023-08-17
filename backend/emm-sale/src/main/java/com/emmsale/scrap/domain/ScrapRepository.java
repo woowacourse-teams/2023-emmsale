@@ -10,4 +10,5 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 
   List<Scrap> findAllByMemberId(@Param("memberId") Long memberId);
 
+  void deleteByMemberIdAndEventId(Long memberId, Long eventId);
 }
