@@ -65,10 +65,8 @@
   </appender>
 
   <!-- Loggers -->
-  <logger name="globalWarnLogger" level="warn">
+  <logger name="com.emmsale" level="warn">
     <appender-ref ref="WARN_FILE"/>
-  </logger>
-  <logger name="globalErrorLogger" level="error">
     <appender-ref ref="ERROR_FILE"/>
   </logger>
 
