@@ -25,7 +25,8 @@ private const val EVENT_ID = "event_id"
 private const val USER_ID = "user_id"
 private const val INTEREST_TAG_TYPE = "tag_type"
 private const val CONFIG_TYPE = "config_type"
-private const val WRITING_CONTENT = "recruitment_content"
+private const val WRITING_TYPE = "writing_type"
+private const val WRITING_CONTENT = "writing_content"
 
 fun log(event: String, parameters: ParametersBuilder.() -> Unit = {}) {
     KerdyApplication.firebaseAnalytics.logEvent(event, parameters)
@@ -53,10 +54,11 @@ fun logComment(commentName: String, commentId: Long, memberId: Long) {
     }
 }
 
-fun logWriting(writingContent: String, memberId: Long) {
+fun logWriting(writingType: String, writingContent: String, eventId: Long) {
     log(WRITE_RECRUITMENT) {
+        param(WRITING_TYPE, writingType)
         param(WRITING_CONTENT, writingContent)
-        param(USER_ID, memberId)
+        param(EVENT_ID, eventId)
     }
 }
 
