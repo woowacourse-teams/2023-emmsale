@@ -13,53 +13,23 @@
         android:background="@color/white"
         tools:context=".presentation.ui.main.event.EventFragment">
 
-        <LinearLayout
-            android:id="@+id/layout_search"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="64dp"
-            android:background="@drawable/bg_event_search"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingVertical="10dp"
-            android:paddingStart="14dp"
-            app:layout_constraintEnd_toStartOf="@+id/btn_notifications"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:contentDescription="@string/event_search_conference_description"
-                android:src="@drawable/ic_event_search" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/btn_notifications"
-            android:layout_width="20dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="@string/event_view_notification_description"
-            android:focusable="true"
-            android:src="@drawable/ic_notification"
-            app:layout_constraintBottom_toBottomOf="@+id/layout_search"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_event_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/layout_search" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_main_toolbar" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_event"
             android:layout_width="0dp"
             android:layout_height="38dp"
-            android:layout_marginTop="10dp"
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_search"
+            app:layout_constraintTop_toBottomOf="@+id/tb_event_toolbar"
             app:tabBackground="@drawable/bg_tablayout_indicator"
             app:tabIndicatorColor="@color/color_tab_indicator"
             app:tabIndicatorFullWidth="true"
