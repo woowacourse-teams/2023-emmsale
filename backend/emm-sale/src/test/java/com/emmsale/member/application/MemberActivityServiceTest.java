@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
-import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityResponses;
@@ -165,7 +164,6 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
     final long savedMemberId = 1L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
-    final MemberActivityDeleteRequest request = new MemberActivityDeleteRequest(deleteActivityIds);
 
     final List<MemberActivityResponses> expected = List.of(
         new MemberActivityResponses("동아리",
@@ -176,7 +174,7 @@ class MemberActivityServiceTest extends ServiceIntegrationTestHelper {
 
     //when
     final List<MemberActivityResponses> actual = memberActivityService.deleteActivity(member,
-        request);
+        deleteActivityIds);
 
     //then
     assertThat(expected)
