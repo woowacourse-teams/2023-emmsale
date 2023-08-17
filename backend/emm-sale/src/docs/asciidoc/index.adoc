@@ -48,9 +48,6 @@ include::{snippets}/add-activity/response-fields.adoc[]
 
 === `DELETE`: 사용자의 Activity 삭제 API
 
-.HTTP request 설명
-include::{snippets}/delete-activity/request-fields.adoc[]
-
 .HTTP request
 include::{snippets}/delete-activity/http-request.adoc[]
 
