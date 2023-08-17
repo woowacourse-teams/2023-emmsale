@@ -10,7 +10,7 @@ import com.emmsale.databinding.ActivityMemberBlockBinding
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.ui.main.setting.block.recyclerview.BlockedMemberAdapter
-import com.emmsale.presentation.ui.main.setting.block.uistate.BlockedMembersUiState
+import com.emmsale.presentation.ui.main.setting.block.uistate.BlockedMembersUiEvent
 
 class MemberBlockActivity : AppCompatActivity() {
     private val binding: ActivityMemberBlockBinding by lazy {
@@ -31,6 +31,7 @@ class MemberBlockActivity : AppCompatActivity() {
         initToolbarMenuClickListener()
         initBlockedMemberRecyclerView()
         setupBlockedMembersObserver()
+        setupUiEvent()
     }
 
     private fun initToolbarMenuClickListener() {
@@ -46,20 +47,21 @@ class MemberBlockActivity : AppCompatActivity() {
 
     private fun setupBlockedMembersObserver() {
         viewModel.blockedMembers.observe(this) { uiState ->
-            handleBlockedMembersErrors(uiState)
             if (!uiState.isLoading) blockedMemberAdapter.submitList(uiState.blockedMembers)
         }
     }
 
-    private fun handleBlockedMembersErrors(uiState: BlockedMembersUiState) {
-        when {
-            uiState.isFetchingError -> showBlockedMemberFetchingErrorMessage()
-            uiState.isDeletingBlockedMemberError -> showBlockedMemberDeletingErrorMessage()
+    private fun setupUiEvent() {
+        viewModel.event.observe(this) {
+            handleEvent(it)
         }
     }
 
-    private fun showBlockedMemberFetchingErrorMessage() {
-        binding.root.showSnackBar(R.string.memberblock_loading_blocked_members_failed_message)
+    private fun handleEvent(event: BlockedMembersUiEvent?) {
+        if (event == null) return
+        when (event) {
+            BlockedMembersUiEvent.DELETE_ERROR -> showBlockedMemberDeletingErrorMessage()
+        }
     }
 
     private fun showBlockedMemberDeletingErrorMessage() {

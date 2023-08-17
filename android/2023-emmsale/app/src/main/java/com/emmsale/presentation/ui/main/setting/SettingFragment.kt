@@ -7,7 +7,6 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentSettingBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.common.views.WarningDialog
@@ -37,8 +36,6 @@ class SettingFragment :
         super.onViewCreated(view, savedInstanceState)
         initDataBinding()
         setupUiLogic()
-
-        viewModel.fetchMember()
     }
 
     private fun initDataBinding() {
@@ -48,7 +45,6 @@ class SettingFragment :
         binding.showNotificationSetting = ::navigateToNotificationConfig
         binding.showBlocks = ::showBlocks
         binding.showUseTerm = ::showUseTerm
-        binding.deleteMember = ::deleteMember
         binding.logout = ::logout
         binding.showOpenProfileUrlConfig = ::showOpenProfileUrlConfig
     }
@@ -75,17 +71,6 @@ class SettingFragment :
 
     private fun showOpenProfileUrlConfig() {
         OpenProfileUrlConfigActivity.startActivity(requireContext())
-    }
-
-    private fun deleteMember() {
-        WarningDialog(
-            context = context ?: return,
-            title = getString(R.string.memberdeletedialog_title),
-            message = getString(R.string.memberdeletedialog_message),
-            positiveButtonLabel = getString(R.string.memberdeletedialog_positive_button_label),
-            negativeButtonLabel = getString(R.string.memberdeletedialog_negative_button_label),
-            onPositiveButtonClick = { viewModel.deleteMember() },
-        ).show()
     }
 
     private fun logout() {
@@ -119,22 +104,8 @@ class SettingFragment :
 
     private fun setupMemberUiLogic() {
         viewModel.member.observe(viewLifecycleOwner) {
-            handleMemberFetchingError(it)
-            handleMemberDeleteError(it)
             handleMemberDelete(it)
             handleLogout(it)
-        }
-    }
-
-    private fun handleMemberFetchingError(member: MemberUiState) {
-        if (member.isFetchingError) {
-            context?.showToast(getString(R.string.setting_member_fetching_error_message))
-        }
-    }
-
-    private fun handleMemberDeleteError(member: MemberUiState) {
-        if (member.isDeleteError) {
-            context?.showToast(getString(R.string.setting_member_delete_error_message))
         }
     }
 

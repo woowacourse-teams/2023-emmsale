@@ -4,8 +4,7 @@ import com.emmsale.data.member.Member
 
 data class MemberUiState(
     val isLoading: Boolean,
-    val isFetchingError: Boolean,
-    val isDeleteError: Boolean,
+    val isError: Boolean,
     val isDeleted: Boolean,
     val isLogout: Boolean,
     val id: Long,
@@ -16,40 +15,27 @@ data class MemberUiState(
 
     fun changeToLoadingState(): MemberUiState = copy(
         isLoading = true,
-        isFetchingError = false,
-        isDeleteError = false,
     )
 
-    fun changeToFetchingErrorState(): MemberUiState = copy(
-        isLoading = false,
-        isFetchingError = true,
-        isDeleteError = false,
-    )
-
-    fun changeToDeleteErrorState(): MemberUiState = copy(
-        isLoading = false,
-        isFetchingError = false,
-        isDeleteError = true,
+    fun changeToErrorState(): MemberUiState = copy(
+        isError = true,
     )
 
     fun changeToDeletedState(): MemberUiState = copy(
         isLoading = false,
-        isFetchingError = false,
-        isDeleteError = false,
+        isError = false,
         isDeleted = true,
     )
 
     fun changeToLogoutState(): MemberUiState = copy(
         isLoading = false,
-        isFetchingError = false,
-        isDeleteError = false,
+        isError = false,
         isLogout = true,
     )
 
     fun changeMemberState(member: Member): MemberUiState = copy(
         isLoading = false,
-        isFetchingError = false,
-        isDeleteError = false,
+        isError = false,
         id = member.id,
         imageUrl = member.imageUrl,
         name = member.name,
@@ -59,8 +45,7 @@ data class MemberUiState(
     companion object {
         val FIRST_LOADING = MemberUiState(
             isLoading = true,
-            isFetchingError = false,
-            isDeleteError = false,
+            isError = false,
             isDeleted = false,
             isLogout = false,
             id = -1,

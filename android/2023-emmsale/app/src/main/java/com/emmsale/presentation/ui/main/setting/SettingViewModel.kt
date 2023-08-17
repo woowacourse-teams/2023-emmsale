@@ -10,6 +10,7 @@ import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.setting.uiState.MemberUiState
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 class SettingViewModel(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
@@ -28,7 +29,11 @@ class SettingViewModel(
     private val _appVersion = NotNullMutableLiveData("1.0")
     val appVersion: NotNullLiveData<String> = _appVersion
 
-    fun fetchMember() {
+    init {
+        refresh()
+    }
+
+    override fun refresh() {
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
@@ -37,29 +42,11 @@ class SettingViewModel(
             }
             when (val result = memberRepository.getMember(token.uid)) {
                 is ApiError, is ApiException ->
-                    _member.value = _member.value.changeToFetchingErrorState()
+                    _member.value = _member.value.changeToErrorState()
 
                 is ApiSuccess ->
                     _member.value =
                         _member.value.changeMemberState(result.data)
-            }
-        }
-    }
-
-    fun deleteMember() {
-        _member.value = _member.value.changeToLoadingState()
-        viewModelScope.launch {
-            val token = tokenRepository.getToken()
-            if (token == null) {
-                _isLogin.value = false
-                return@launch
-            }
-            when (memberRepository.deleteMember(token.uid)) {
-                is ApiError, is ApiException ->
-                    _member.value = _member.value.changeToDeleteErrorState()
-
-                is ApiSuccess ->
-                    _member.value = _member.value.changeToDeletedState()
             }
         }
     }
