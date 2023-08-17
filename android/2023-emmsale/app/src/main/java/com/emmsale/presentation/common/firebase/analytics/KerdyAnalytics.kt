@@ -1,20 +1,81 @@
-package com.emmsale.presentation.common.firebase.analytics // ktlint-disable filename
+package com.emmsale.presentation.common.firebase.analytics
 
-import com.emmsale.data.token.Token
+import com.emmsale.presentation.KerdyApplication
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.ParametersBuilder
-import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.ktx.Firebase
 
-object KerdyAnalytics {
-    private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
+/**
+ * ANALYTICS EVENT NAMES
+ *
+ * */
+private const val EVENT_CLICK = "event_click"
+private const val COMMENT = "button_click"
+private const val RECRUITMENT = "recruitment"
+private const val WRITE_RECRUITMENT = "write_recruitment"
+private const val INTEREST_TAGS = "interest_tags"
+private const val CHANGE_CONFIG = "change_config"
 
-    fun initFirebaseAnalytics(token: Token) {
-        firebaseAnalytics.setUserId(token.uid.toString())
+/**
+ *  ANALYTICS PARAM KEYS
+ *
+ *  */
+private const val USER_ID = "user_id"
+private const val EVENT_ID = "event_id"
+private const val EVENT_NAME = "event_name"
+private const val EVENT_TAG = "event_tag"
+private const val WRITING_TYPE = "writing_type"
+private const val WRITING_CONTENT = "writing_content"
+
+fun log(event: String, parameters: ParametersBuilder.() -> Unit = {}) {
+    KerdyApplication.firebaseAnalytics.logEvent(event, parameters)
+}
+
+fun logScreen(screenName: String) {
+    log(FirebaseAnalytics.Event.SCREEN_VIEW) {
+        param(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
     }
+}
 
-    fun log(event: String, parameters: ParametersBuilder.() -> Unit = {}) {
-        firebaseAnalytics.logEvent(event, parameters)
+fun logEventClick(eventName: String, eventId: Long) {
+    log(EVENT_CLICK) {
+        param(EVENT_NAME, eventName)
+        param(EVENT_ID, eventId)
+    }
+}
+
+fun logComment(commentName: String, eventId: Long) {
+    log(COMMENT) {
+        param(WRITING_CONTENT, commentName)
+        param(EVENT_ID, eventId)
+    }
+}
+
+fun logWriting(writingType: String, writingContent: String, eventId: Long) {
+    log(WRITE_RECRUITMENT) {
+        param(WRITING_TYPE, writingType)
+        param(WRITING_CONTENT, writingContent)
+        param(EVENT_ID, eventId)
+    }
+}
+
+fun logRecruitment(recruitmentMessage: String, memberId: Long) {
+    log(RECRUITMENT) {
+        param(WRITING_CONTENT, recruitmentMessage)
+        param(USER_ID, memberId)
+    }
+}
+
+fun logInterestTags(tags: List<String>) {
+    tags.forEach { tag ->
+        log(INTEREST_TAGS) {
+            param(EVENT_TAG, tag)
+        }
+    }
+}
+
+fun logChangeConfig(configName: String, configState: Boolean) {
+    log(CHANGE_CONFIG) {
+        param(configName, configState.toString())
     }
 }

@@ -1,5 +1,6 @@
 package com.emmsale.presentation.ui.main.setting
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -7,6 +8,8 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentSettingBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.main.setting.block.MemberBlockActivity
@@ -16,16 +19,22 @@ import com.emmsale.presentation.ui.main.setting.notification.NotificationConfigA
 import com.emmsale.presentation.ui.main.setting.openProfileUrl.OpenProfileUrlConfigActivity
 import com.emmsale.presentation.ui.main.setting.uiState.MemberUiState
 
-class SettingFragment : BaseFragment<FragmentSettingBinding>() {
+class SettingFragment :
+    BaseFragment<FragmentSettingBinding>(),
+    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("setting") {
     override val layoutResId: Int = R.layout.fragment_setting
 
     private val viewModel: SettingViewModel by viewModels {
         SettingViewModel.factory
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        registerScreen(this)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initDataBinding()
         setupUiLogic()
 

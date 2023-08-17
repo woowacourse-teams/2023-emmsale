@@ -12,6 +12,7 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsEvent
@@ -60,8 +61,10 @@ class CommentViewModel(
         _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId)) {
-                is ApiError, is ApiException ->
+                is ApiError, is ApiException -> {
                     _comments.value = _comments.value.changeToPostingErrorState()
+                    logComment(content, eventId)
+                }
 
                 is ApiSuccess -> fetchComments(eventId)
             }

@@ -10,9 +10,13 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentEventInformationBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 
-class EventInfoFragment : BaseFragment<FragmentEventInformationBinding>() {
+class EventInfoFragment :
+    BaseFragment<FragmentEventInformationBinding>(),
+    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("event_recruitment") {
     override val layoutResId: Int = R.layout.fragment_event_information
 
     private val informationUrl: String? by lazy {
@@ -33,6 +37,7 @@ class EventInfoFragment : BaseFragment<FragmentEventInformationBinding>() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         eventDetailActivity = context as EventDetailActivity
+        registerScreen(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
