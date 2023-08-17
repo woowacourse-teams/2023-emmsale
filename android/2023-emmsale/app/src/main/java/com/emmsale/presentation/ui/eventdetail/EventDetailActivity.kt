@@ -11,10 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEventDetailBinding
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
+import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.main.MainActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
-class EventDetailActivity : AppCompatActivity() {
+class EventDetailActivity :
+    AppCompatActivity(),
+    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("event_detail") {
     private val binding: ActivityEventDetailBinding by lazy {
         ActivityEventDetailBinding.inflate(layoutInflater)
     }
@@ -22,8 +26,10 @@ class EventDetailActivity : AppCompatActivity() {
         intent.getLongExtra(EVENT_ID_KEY, DEFAULT_EVENT_ID)
     }
     private val viewModel: EventDetailViewModel by viewModels { EventDetailViewModel.factory(eventId) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        registerScreen(this)
         initBackPressedDispatcher()
         setUpBinding()
         setUpEventDetail()

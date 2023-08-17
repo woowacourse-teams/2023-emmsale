@@ -75,7 +75,7 @@ fun logInterestTags(tags: List<String>) {
     }
 }
 
-fun logChangeConfig(configName: String) {
+fun logChangeConfig(configName: String, configState: Boolean) {
     log(CHANGE_CONFIG) {
         param(CONFIG_TYPE, configName)
     }

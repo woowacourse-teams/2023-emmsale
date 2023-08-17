@@ -26,7 +26,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginActivity :
     AppCompatActivity(),
-    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl(LoginActivity::javaClass.name) {
+    FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("login") {
     private val viewModel: LoginViewModel by viewModels { LoginViewModel.factory }
     private val binding: ActivityLoginBinding by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         ActivityLoginBinding.inflate(layoutInflater)
