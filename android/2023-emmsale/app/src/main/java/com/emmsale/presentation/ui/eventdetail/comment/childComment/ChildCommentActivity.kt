@@ -255,6 +255,7 @@ class ChildCommentActivity : AppCompatActivity() {
             Intent(context, ChildCommentActivity::class.java).apply {
                 putExtra(KEY_EVENT_ID, eventId)
                 putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 if (fromNotification) putExtra(KEY_FROM_NOTIFICATION, true)
             }
     }
