@@ -18,6 +18,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".presentation.ui.splash.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Emmsale.SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".presentation.ui.setting.notificationTagConfig.NotificationTagConfigActivity"
             android:exported="true" />
         <activity
@@ -68,13 +77,7 @@
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Emmsale.SplashScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

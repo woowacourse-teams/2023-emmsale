@@ -14,18 +14,16 @@ class TokenRepositoryImpl(
     override suspend fun saveToken(token: Token) = withContext(dispatcher) {
         preferenceEditor.putLong(UID_KEY, token.uid).apply()
         preferenceEditor.putString(ACCESS_TOKEN_KEY, token.accessToken).apply()
-        preferenceEditor.putBoolean(AUTO_LOGIN_KEY, token.isAutoLogin).apply()
     }
 
     override suspend fun getToken(): Token? = withContext(dispatcher) {
         val uid = preference.getLong(UID_KEY, DEFAULT_UID_VALUE)
         val accessToken = preference.getString(ACCESS_TOKEN_KEY, DEFAULT_TOKEN_VALUE)
-        val isAutoLogin = preference.getBoolean(AUTO_LOGIN_KEY, DEFAULT_AUTO_LOGIN_VALUE)
 
         if (uid == DEFAULT_UID_VALUE) return@withContext null
         if (accessToken == null || accessToken == DEFAULT_TOKEN_VALUE) return@withContext null
 
-        Token(uid, accessToken, isAutoLogin)
+        Token(uid, accessToken)
     }
 
     override fun getMyUid(): Long? {
@@ -36,10 +34,7 @@ class TokenRepositoryImpl(
     }
 
     override suspend fun deleteToken() = withContext(dispatcher) {
-        preference.edit()
-            .remove(UID_KEY)
-            .remove(ACCESS_TOKEN_KEY)
-            .apply()
+        preference.edit().remove(UID_KEY).remove(ACCESS_TOKEN_KEY).apply()
     }
 
     companion object {
@@ -48,8 +43,5 @@ class TokenRepositoryImpl(
 
         private const val ACCESS_TOKEN_KEY = "access_token_key"
         private const val DEFAULT_TOKEN_VALUE = "default"
-
-        private const val AUTO_LOGIN_KEY = "auto_login_key"
-        private const val DEFAULT_AUTO_LOGIN_VALUE = false
     }
 }
