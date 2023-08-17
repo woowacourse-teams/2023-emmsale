@@ -1,8 +1,9 @@
 package com.emmsale.member.application;
 
+import com.emmsale.member.application.dto.InterestTagAddRequest;
 import com.emmsale.member.application.dto.InterestTagDeleteRequest;
 import com.emmsale.member.application.dto.InterestTagResponse;
-import com.emmsale.member.application.dto.InterestTagsRequest;
+import com.emmsale.member.application.dto.InterestTagUpdateRequest;
 import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
@@ -33,7 +34,7 @@ public class InterestTagService {
   }
 
   public List<InterestTagResponse> addInterestTag(final Member member,
-      final InterestTagsRequest request) {
+      final InterestTagAddRequest request) {
     final List<Long> tagIds = request.getTagIds();
     final List<Tag> tags = tagRepository.findAllById(tagIds);
     validateAllTagExist(tags, tagIds);
@@ -88,7 +89,7 @@ public class InterestTagService {
 
   public List<InterestTagResponse> updateInterestTags(
       final Member member,
-      final InterestTagsRequest request
+      final InterestTagUpdateRequest request
   ) {
     final List<Long> requestTagIds = request.getTagIds();
     final List<Tag> requestTags = tagRepository.findAllById(requestTagIds);

@@ -1,9 +1,10 @@
 package com.emmsale.member.api;
 
 import com.emmsale.member.application.InterestTagService;
+import com.emmsale.member.application.dto.InterestTagAddRequest;
 import com.emmsale.member.application.dto.InterestTagDeleteRequest;
 import com.emmsale.member.application.dto.InterestTagResponse;
-import com.emmsale.member.application.dto.InterestTagsRequest;
+import com.emmsale.member.application.dto.InterestTagUpdateRequest;
 import com.emmsale.member.domain.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class InterestTagApi {
   @PostMapping
   public ResponseEntity<List<InterestTagResponse>> addInterestTag(
       final Member member,
-      @RequestBody final InterestTagsRequest interestTagAddRequest
+      @RequestBody final InterestTagAddRequest interestTagAddRequest
   ) {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(interestTagService.addInterestTag(member, interestTagAddRequest));
@@ -40,7 +41,7 @@ public class InterestTagApi {
   @ResponseStatus(HttpStatus.CREATED)
   public List<InterestTagResponse> updateInterestTags(
       final Member member,
-      @RequestBody final InterestTagsRequest request
+      @RequestBody final InterestTagUpdateRequest request
   ) {
     return interestTagService.updateInterestTags(member, request);
   }
