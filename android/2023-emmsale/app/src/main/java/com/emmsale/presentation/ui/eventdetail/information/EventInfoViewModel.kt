@@ -9,20 +9,29 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.scrap.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
+import com.emmsale.presentation.ui.eventdetail.information.uiState.EventInfoUiEvent
 import kotlinx.coroutines.launch
 
 class EventInfoViewModel(
     private val eventId: Long,
     private val scrappedEventRepository: ScrappedEventRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
     private val _isScraped: MutableLiveData<Boolean> = MutableLiveData(false)
     val isScraped: LiveData<Boolean> = _isScraped
 
     private val _isError: MutableLiveData<Boolean> = MutableLiveData(false)
     val isError: LiveData<Boolean> = _isError
 
+    private val _event = MutableLiveData<EventInfoUiEvent?>(null)
+    val event: LiveData<EventInfoUiEvent?> = _event
+
     init {
+        refresh()
+    }
+
+    override fun refresh() {
         viewModelScope.launch {
             when (val response = scrappedEventRepository.isScraped(eventId)) {
                 is ApiSuccess -> _isScraped.value = response.data
@@ -35,7 +44,7 @@ class EventInfoViewModel(
         viewModelScope.launch {
             when (scrappedEventRepository.scrapEvent(eventId = eventId)) {
                 is ApiSuccess -> _isScraped.value = true
-                is ApiError, is ApiException -> _isError.value = true
+                is ApiError, is ApiException -> _event.value = EventInfoUiEvent.SCRAP_ERROR
             }
         }
     }
@@ -44,7 +53,7 @@ class EventInfoViewModel(
         viewModelScope.launch {
             when (scrappedEventRepository.deleteScrap(eventId = eventId)) {
                 is ApiSuccess -> _isScraped.value = false
-                is ApiError, is ApiException -> _isError.value = true
+                is ApiError, is ApiException -> _event.value = EventInfoUiEvent.SCRAP_DELETE_ERROR
             }
         }
     }
