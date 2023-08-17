@@ -19,7 +19,7 @@ public class UpdateNotificationEvent {
   public static UpdateNotificationEvent from(final Comment comment) {
     return new UpdateNotificationEvent(
         comment.getMember().getId(),
-        comment.getParentIdOrSelfId(),
+        comment.getId(),
         UPDATE_NOTIFICATION_COMMENT_TYPE,
         LocalDateTime.now()
     );
