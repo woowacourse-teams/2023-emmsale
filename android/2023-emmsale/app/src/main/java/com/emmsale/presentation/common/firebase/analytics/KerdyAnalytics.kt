@@ -20,11 +20,10 @@ private const val CHANGE_CONFIG = "change_config"
  *  ANALYTICS PARAM KEYS
  *
  *  */
-private const val EVENT_NAME = "event_name"
-private const val EVENT_ID = "event_id"
 private const val USER_ID = "user_id"
-private const val INTEREST_TAG_TYPE = "tag_type"
-private const val CONFIG_TYPE = "config_type"
+private const val EVENT_ID = "event_id"
+private const val EVENT_NAME = "event_name"
+private const val EVENT_TAG = "event_tag"
 private const val WRITING_TYPE = "writing_type"
 private const val WRITING_CONTENT = "writing_content"
 
@@ -38,11 +37,10 @@ fun logScreen(screenName: String) {
     }
 }
 
-fun logEventClick(eventName: String, eventId: Long, memberId: Long) {
+fun logEventClick(eventName: String, eventId: Long) {
     log(EVENT_CLICK) {
         param(EVENT_NAME, eventName)
         param(EVENT_ID, eventId)
-        param(USER_ID, memberId)
     }
 }
 
@@ -71,13 +69,13 @@ fun logRecruitment(recruitmentMessage: String, memberId: Long) {
 fun logInterestTags(tags: List<String>) {
     tags.forEach { tag ->
         log(INTEREST_TAGS) {
-            param(INTEREST_TAG_TYPE, tag)
+            param(EVENT_TAG, tag)
         }
     }
 }
 
 fun logChangeConfig(configName: String, configState: Boolean) {
     log(CHANGE_CONFIG) {
-        param(CONFIG_TYPE, configName)
+        param(configName, configState.toString())
     }
 }
