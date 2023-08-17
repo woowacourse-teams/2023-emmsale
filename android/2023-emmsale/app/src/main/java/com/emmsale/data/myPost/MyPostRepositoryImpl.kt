@@ -1,24 +1,20 @@
 package com.emmsale.data.myPost
 
 import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.ApiSuccess
-import okhttp3.Headers
-import java.time.LocalDate
+import com.emmsale.data.common.handleApi
+import com.emmsale.data.myPost.dto.MyPostApiModel
+import com.emmsale.data.myPost.mapper.toData
+import com.emmsale.data.token.TokenRepository
 
-class MyPostRepositoryImpl : MyPostRepository {
-    override fun getMyPosts(): ApiResult<List<MyPost>> {
-        return ApiSuccess(
-            List(10) {
-                MyPost(
-                    id = 1,
-                    eventId = 11,
-                    postId = 36,
-                    content = "진짜 저 누구랑 가고싶은데 같이 갈 사람이 없어요... 연락주세요",
-                    eventName = "인프콘 2023",
-                    updatedAt = LocalDate.now(),
-                )
-            },
-            Headers.headersOf("Auth", "good"),
+class MyPostRepositoryImpl(
+    private val myPostService: MyPostService,
+    tokenRepository: TokenRepository,
+) : MyPostRepository {
+    private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException("로그인 되지 않았어요!!!!")
+    override suspend fun getMyPosts(): ApiResult<List<MyPost>> {
+        return handleApi(
+            execute = { myPostService.getMyPosts(myUid) },
+            mapToDomain = List<MyPostApiModel>::toData,
         )
     }
 }

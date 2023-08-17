@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.setting.myPost.MyPostViewModel" />
+            type="com.emmsale.presentation.ui.main.setting.myPost.MyPostViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

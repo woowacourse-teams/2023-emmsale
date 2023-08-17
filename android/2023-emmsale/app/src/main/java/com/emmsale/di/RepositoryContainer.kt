@@ -8,11 +8,11 @@ import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.comment.CommentRepositoryImpl
 import com.emmsale.data.competitionStatus.CompetitionStatusRepository
 import com.emmsale.data.competitionStatus.CompetitionStatusRepositoryImpl
-import com.emmsale.data.conference.EventRepository
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepositoryImpl
 import com.emmsale.data.config.ConfigRepository
 import com.emmsale.data.config.ConfigRepositoryImpl
+import com.emmsale.data.event.EventRepository
 import com.emmsale.data.event.EventRepositoryImpl
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.data.eventTag.EventTagRepositoryImpl
@@ -24,6 +24,8 @@ import com.emmsale.data.login.LoginRepository
 import com.emmsale.data.login.LoginRepositoryImpl
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.member.MemberRepositoryImpl
+import com.emmsale.data.myPost.MyPostRepository
+import com.emmsale.data.myPost.MyPostRepositoryImpl
 import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.data.notification.NotificationRepositoryImpl
 import com.emmsale.data.recruitment.RecruitmentRepository
@@ -94,5 +96,11 @@ class RepositoryContainer(
     }
     val configRepository: ConfigRepository by lazy {
         ConfigRepositoryImpl(preference = preferenceContainer.preference)
+    }
+    val myPostRepository: MyPostRepository by lazy {
+        MyPostRepositoryImpl(
+            myPostService = serviceContainer.myPostService,
+            tokenRepository = tokenRepository,
+        )
     }
 }

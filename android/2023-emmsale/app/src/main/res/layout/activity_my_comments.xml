@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.setting.myComments.MyCommentsViewModel" />
+            type="com.emmsale.presentation.ui.main.setting.myComments.MyCommentsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

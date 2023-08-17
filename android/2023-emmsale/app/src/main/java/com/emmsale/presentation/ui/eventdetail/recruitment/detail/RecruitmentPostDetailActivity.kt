@@ -10,11 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
-import com.emmsale.presentation.common.views.bottomMenuDialog.BottomDialogMenuItem
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
 import com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 
@@ -43,7 +44,7 @@ class RecruitmentPostDetailActivity :
         BottomMenuDialog(this).apply {
             addMenuItemBelow(
                 title = getString(R.string.recruitmentpostdetail_dialog_editing_text),
-                menuItemType = BottomDialogMenuItem.NORMAL,
+                menuItemType = MenuItemType.NORMAL,
                 onClick = { navigateToEditPage() },
             )
 
@@ -53,6 +54,14 @@ class RecruitmentPostDetailActivity :
             )
         }
     }
+
+    private val fetchByResultActivityLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
+            viewModel.fetchRecruitmentPost()
+        }
 
     private fun showDeleteDialog() {
         WarningDialog(
@@ -85,15 +94,6 @@ class RecruitmentPostDetailActivity :
             onPositiveButtonClick = { viewModel.reportRecruitment() },
         ).show()
     }
-
-    private val fetchByResultActivityLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-        ) { result ->
-            if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
-            viewModel.fetchRecruitmentPost()
-        }
-
     override fun getReceiverName(): String = viewModel.recruitmentPost.value.name
 
     override fun onPositiveButtonClick(content: String): Unit =
@@ -112,6 +112,7 @@ class RecruitmentPostDetailActivity :
         setContentView(binding.root)
         binding.lifecycleOwner = this
         binding.vm = viewModel
+        binding.isNavigatedFromMyPost = isNavigatedFromMyPost
     }
 
     private fun initClickListener() {
@@ -120,6 +121,7 @@ class RecruitmentPostDetailActivity :
         initBackPressButtonClick()
         initBackPressIconClick()
         initProfileClick()
+        initNavigateToEventDetailButtonClick()
     }
 
     private fun setUpCompanionRequest() {
