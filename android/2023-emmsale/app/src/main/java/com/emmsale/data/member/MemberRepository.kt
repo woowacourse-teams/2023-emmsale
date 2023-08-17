@@ -10,6 +10,8 @@ interface MemberRepository {
 
     suspend fun updateMemberDescription(description: String): ApiResult<Unit>
 
+    suspend fun updateMemberOpenProfileUrl(openProfileUrl: String): ApiResult<Unit>
+
     suspend fun addMemberActivities(activityIds: List<Long>): ApiResult<Unit>
 
     suspend fun deleteMemberActivities(activityIds: List<Long>): ApiResult<Unit>
