@@ -185,7 +185,12 @@ class ChildCommentActivity : AppCompatActivity() {
                 buttonLabel = getString(R.string.all_okay),
             ).show()
 
-            ChildCommentsUiEvent.REPORT_DUPLICATION -> binding.root.showSnackBar(getString(R.string.all_report_duplicate_message))
+            ChildCommentsUiEvent.REPORT_DUPLICATE -> InfoDialog(
+                context = this,
+                title = getString(R.string.all_report_duplicate_dialog_title),
+                message = getString(R.string.all_report_duplicate_message),
+                buttonLabel = getString(R.string.all_okay),
+            ).show()
             ChildCommentsUiEvent.POST_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_posting_error_message))
             ChildCommentsUiEvent.UPDATE_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_update_error_message))
             ChildCommentsUiEvent.DELETE_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))

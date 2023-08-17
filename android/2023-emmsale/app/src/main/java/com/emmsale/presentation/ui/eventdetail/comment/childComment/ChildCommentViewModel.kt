@@ -112,8 +112,16 @@ class ChildCommentViewModel(
             val authorId =
                 (_comments.value.childComments + _comments.value.parentComment).find { it.id == commentId }?.authorId
                     ?: return@launch
-            when (commentRepository.reportComment(commentId, authorId, token.uid)) {
-                is ApiError, is ApiException -> _event.value = ChildCommentsUiEvent.REPORT_ERROR
+            when (val result = commentRepository.reportComment(commentId, authorId, token.uid)) {
+                is ApiError -> {
+                    if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
+                        _event.value = ChildCommentsUiEvent.REPORT_DUPLICATE
+                    } else {
+                        _event.value = ChildCommentsUiEvent.REPORT_ERROR
+                    }
+                }
+
+                is ApiException -> _event.value = ChildCommentsUiEvent.REPORT_ERROR
                 is ApiSuccess -> _event.value = ChildCommentsUiEvent.REPORT_COMPLETE
             }
         }
@@ -124,7 +132,7 @@ class ChildCommentViewModel(
     }
 
     companion object {
-        private const val REPORT_DUPLICATE_ERROR_CODE = "이미"
+        private const val REPORT_DUPLICATE_ERROR_CODE = 400
 
         fun factory(parentCommentId: Long) = ViewModelFactory {
             ChildCommentViewModel(
