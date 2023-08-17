@@ -334,4 +334,5 @@
     <string name="event_scrap">스크랩</string>
     <string name="mypost_appbar_title">작성한 글</string>
     <string name="recruitmentpostdetail_navigate_to_event_detail_btn_text">행사 상세보기</string>
+    <string name="useterm_appbar_title">이용 약관</string>
 </resources>
