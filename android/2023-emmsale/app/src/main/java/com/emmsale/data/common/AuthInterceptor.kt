@@ -1,6 +1,5 @@
 package com.emmsale.data.common
 
-import android.util.Log
 import com.emmsale.presentation.KerdyApplication
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -12,7 +11,6 @@ class AuthInterceptor : Interceptor {
         val newRequest = chain.request().newBuilder()
             .addHeader(ACCESS_TOKEN_HEADER, ACCESS_TOKEN_FORMAT.format(token?.accessToken))
             .build()
-        Log.d("wooseok", newRequest.toString())
         return chain.proceed(newRequest)
     }
 
