@@ -206,7 +206,7 @@
             app:tabIndicatorColor="@color/primary_color"
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="2dp"
-            android:background="@color/white"
+            app:tabBackground="@color/white"
             app:tabSelectedTextAppearance="@style/EventDetail_SelectedTabStyle"
             app:tabSelectedTextColor="@color/primary_color"
             app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle"

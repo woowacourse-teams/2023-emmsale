@@ -9,7 +9,6 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.main.myProfile.editMyProfile.EditMyProfileActivity
-import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
@@ -30,7 +29,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.fetchMember()
+        viewModel.refresh()
     }
 
     private fun initDataBinding() {
@@ -40,7 +39,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     private fun setupUiLogic() {
         setupLoginUiLogic()
         setupMyProfileUiLogic()
-        setupErrorUiLogic()
     }
 
     private fun setupLoginUiLogic() {
@@ -61,20 +59,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             LoginActivity.startActivity(requireContext())
             activity?.finish()
         }
-    }
-
-    private fun setupErrorUiLogic() {
-        viewModel.errorEvents.observe(viewLifecycleOwner) {
-            handleErrors(it)
-        }
-    }
-
-    private fun handleErrors(errorEvent: MyProfileErrorEvent?) {
-        if (errorEvent == null) return
-        when (errorEvent) {
-            MyProfileErrorEvent.PROFILE_FETCHING -> {}
-        }
-        viewModel.removeErrorEvent()
     }
 
     private fun handleFields(myProfile: MyProfileUiState) {

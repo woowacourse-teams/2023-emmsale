@@ -9,7 +9,6 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentConferenceBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
-import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.FilterTag
 import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
@@ -75,7 +74,6 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private fun setupEventsObserver() {
         viewModel.conferences.observe(viewLifecycleOwner) { eventsResult ->
             when {
-                eventsResult.isError -> binding.root.showSnackBar(getString(R.string.all_data_loading_failed_message))
                 !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferences) {
                     binding.rvEvents.scrollToPosition(0)
                 }

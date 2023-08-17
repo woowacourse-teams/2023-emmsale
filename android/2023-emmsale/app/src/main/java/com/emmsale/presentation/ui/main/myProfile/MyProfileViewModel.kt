@@ -1,7 +1,5 @@
 package com.emmsale.presentation.ui.main.myProfile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.activity.ActivityRepository
@@ -13,8 +11,8 @@ import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
-import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileErrorEvent
 import com.emmsale.presentation.ui.main.myProfile.uiState.MyProfileUiState
 import kotlinx.coroutines.launch
 
@@ -22,7 +20,7 @@ class MyProfileViewModel(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val activityRepository: ActivityRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
@@ -30,10 +28,8 @@ class MyProfileViewModel(
     private val _myProfile = NotNullMutableLiveData(MyProfileUiState())
     val myProfile: NotNullLiveData<MyProfileUiState> = _myProfile
 
-    private val _errorEvents = MutableLiveData<MyProfileErrorEvent?>(null)
-    val errorEvents: LiveData<MyProfileErrorEvent?> = _errorEvents
-
-    fun fetchMember() {
+    override fun refresh() {
+        _myProfile.value = _myProfile.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
@@ -43,8 +39,7 @@ class MyProfileViewModel(
             launch {
                 when (val result = memberRepository.getMember(token.uid)) {
                     is ApiError, is ApiException ->
-                        _errorEvents.value =
-                            MyProfileErrorEvent.PROFILE_FETCHING
+                        _myProfile.value = _myProfile.value.changeToErrorState()
 
                     is ApiSuccess ->
                         _myProfile.value = _myProfile.value.changeMemberState(result.data)
@@ -53,18 +48,13 @@ class MyProfileViewModel(
             launch {
                 when (val result = activityRepository.getActivities(token.uid)) {
                     is ApiError, is ApiException ->
-                        _errorEvents.value =
-                            MyProfileErrorEvent.PROFILE_FETCHING
+                        _myProfile.value = _myProfile.value.changeToErrorState()
 
                     is ApiSuccess ->
                         _myProfile.value = _myProfile.value.changeActivitiesState(result.data)
                 }
             }
         }
-    }
-
-    fun removeErrorEvent() {
-        _errorEvents.value = null
     }
 
     companion object {

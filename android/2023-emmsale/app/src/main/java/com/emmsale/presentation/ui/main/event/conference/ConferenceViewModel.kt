@@ -59,6 +59,7 @@ class ConferenceViewModel(
                     _conferences.value = _conferences.value.copy(
                         conferences = eventsResult.data.map(ConferenceUiState::from),
                         isLoading = false,
+                        isError = false,
                     )
 
                 is ApiError, is ApiException -> _conferences.value = _conferences.value.copy(
