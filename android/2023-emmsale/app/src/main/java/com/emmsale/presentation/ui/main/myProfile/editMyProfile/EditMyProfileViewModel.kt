@@ -101,7 +101,7 @@ class EditMyProfileViewModel(
                     _errorEvents.value =
                         EditMyProfileErrorEvent.ACTIVITY_REMOVE
 
-                is ApiSuccess -> fetchMember()
+                is ApiSuccess -> refresh()
             }
         }
     }

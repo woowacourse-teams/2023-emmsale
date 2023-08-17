@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.setting.SettingViewModel" />
+            type="com.emmsale.presentation.ui.main.setting.SettingViewModel" />
 
         <variable
             name="showWritings"

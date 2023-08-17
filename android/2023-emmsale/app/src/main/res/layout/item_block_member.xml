@@ -10,7 +10,7 @@
 
         <variable
             name="blockedMember"
-            type="com.emmsale.presentation.ui.setting.block.uistate.BlockedMemberUiState" />
+            type="com.emmsale.presentation.ui.main.setting.block.uistate.BlockedMemberUiState" />
 
         <variable
             name="onUnblockMemberClick"
