@@ -59,7 +59,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     }
 
     private fun showUseTerm() {
-        // TODO("이용 약관 화면으로 이동")
+        UseTermWebViewActivity.startActivity(requireContext())
     }
 
     private fun deleteMember() {
