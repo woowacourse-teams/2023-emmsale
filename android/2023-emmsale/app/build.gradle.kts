@@ -107,6 +107,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
     implementation("androidx.recyclerview:recyclerview:1.3.1")
+    implementation("androidx.core:core-splashscreen:1.1.0-alpha01")
 
     // imageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
