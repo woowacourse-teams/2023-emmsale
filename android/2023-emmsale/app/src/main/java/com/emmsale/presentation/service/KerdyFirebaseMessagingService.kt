@@ -54,26 +54,26 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun showChildCommentNotification(message: RemoteMessage) {
-        fun getEventId(commentId: Long): Long {
+        fun getEventIdAndParentCommentId(commentId: Long): Pair<Long, Long> {
             return runBlocking {
                 val eventIdResult = handleApi(
                     execute = { commentService.getComment(commentId) },
-                    mapToDomain = { it.parentComment.eventId },
+                    mapToDomain = { it.parentComment.eventId to it.parentComment.commentId },
                 )
                 when (eventIdResult) {
-                    is ApiError -> ERROR_EVENT_ID
-                    is ApiException -> ERROR_EVENT_ID
+                    is ApiError -> ERROR_EVENT_ID to ERROR_EVENT_ID
+                    is ApiException -> ERROR_EVENT_ID to ERROR_EVENT_ID
                     is ApiSuccess -> eventIdResult.data
                 }
             }
         }
 
         val memberId = message.data["receiverId"]?.toLong() ?: return
-        val parentCommentId = message.data["redirectId"]?.toLong() ?: return
+        val childCommentId = message.data["redirectId"]?.toLong() ?: return
         val notificationType = message.data["notificationType"] ?: return
         val createdAt = message.data["createdAt"] ?: return
 
-        val eventId = getEventId(parentCommentId)
+        val (eventId, parentCommentId) = getEventIdAndParentCommentId(childCommentId)
         if (eventId == ERROR_EVENT_ID) return
 
         baseContext.showNotification(
