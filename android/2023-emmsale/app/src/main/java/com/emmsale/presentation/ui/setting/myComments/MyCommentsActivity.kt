@@ -3,7 +3,6 @@ package com.emmsale.presentation.ui.setting.myComments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
@@ -94,7 +93,6 @@ class MyCommentsActivity : AppCompatActivity() {
     }
 
     private fun handleComments(comments: MyCommentsUiState) {
-        Log.d("THOMAS", "댓글 : " + comments.comments.toString())
         (binding.rvMycommentsMycomments.adapter as MyCommentsAdapter).submitList(comments.comments)
     }
 

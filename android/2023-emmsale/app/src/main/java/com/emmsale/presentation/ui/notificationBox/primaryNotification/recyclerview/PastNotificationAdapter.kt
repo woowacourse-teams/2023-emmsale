@@ -7,7 +7,7 @@ import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerv
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.viewholder.PastNotificationHeaderViewHolder
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.viewholder.RecentNotificationHeaderViewHolder
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.viewholder.RecentNotificationViewHolder
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.CommentNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 
@@ -44,7 +44,7 @@ class PastNotificationAdapter(
 
     override fun getItemViewType(position: Int): Int = when {
         position == HEADER_POSITION -> PrimaryNotificationViewType.PAST_HEADER.viewType
-        getItem(position) is CommentNotificationUiState -> PrimaryNotificationViewType.COMMENT.viewType
+        getItem(position) is ChildCommentNotificationUiState -> PrimaryNotificationViewType.COMMENT.viewType
         getItem(position) is InterestEventNotificationUiState -> PrimaryNotificationViewType.INTEREST_EVENT.viewType
         else -> INVALID_VIEW_TYPE
     }

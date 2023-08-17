@@ -21,9 +21,7 @@ class EventRecruitmentFragment : BaseFragment<FragmentEventRecruitmentBinding>()
     override val layoutResId: Int = R.layout.fragment_event_recruitment
 
     private val viewModel: EventRecruitmentViewModel by viewModels {
-        EventRecruitmentViewModel.factory(
-            eventId,
-        )
+        EventRecruitmentViewModel.factory(eventId)
     }
     private val eventId: Long by lazy {
         arguments?.getLong(EVENT_ID_KEY) ?: throw IllegalArgumentException(EVENT_ID_NULL_ERROR)

@@ -26,6 +26,11 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
         setUpScrappedEvents()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchScrappedEvents()
+    }
+
     private fun initBinding() {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
