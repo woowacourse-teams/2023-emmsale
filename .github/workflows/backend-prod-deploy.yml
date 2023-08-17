@@ -35,7 +35,7 @@ jobs:
       - name: firebase key 이동
         run: |
           cp firebase-kerdy.json src/main/resources
-      
+
       - name: JDK 11로 설정
         uses: actions/setup-java@v3
         with:
@@ -44,7 +44,7 @@ jobs:
 
       - name: Gradle에 실행 권한 부여
         run: chmod +x gradlew
-      
+
       - name: Actions/Caches에 Gradle 라이브러리 캐싱
         id: cache-gradle
         uses: actions/cache@v3
@@ -55,7 +55,7 @@ jobs:
       # RestDocs의 index.html 업데이트 반영을 위해 2번 build하도록 함
       - name: gradle 빌드
         run: ./gradlew build && ./gradlew build
-      
+
       - name: 도커 빌더 생성 및 부팅
         uses: docker/setup-buildx-action@v2
 
@@ -81,9 +81,9 @@ jobs:
     steps:
       - name: 도커 실행
         run: |
-          docker stop kerdy && docker rm kerdy && docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
-          docker run -d -p 8080:8080 --name kerdy ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
-      
+          docker stop kerdy && docker rm kerdy && docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
+          docker run -d -p 8080:8080 -v /home/ubuntu/logs/:/logs/ --name test ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
+
       - name: 슬랙 메시지 보내기
         uses: 8398a7/action-slack@v3
         with:
