@@ -116,8 +116,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun uri(block: Uri.Builder.() -> Unit): Uri = Uri.Builder().apply(block).build()
 
-    private fun Intent.parseGithubCode(): String? =
-        data?.getQueryParameter(GITHUB_CODE_PARAMETER)
+    private fun Intent.parseGithubCode(): String? = data?.getQueryParameter(GITHUB_CODE_PARAMETER)
 
     companion object {
         private const val GITHUB_CODE_PARAMETER = "code"

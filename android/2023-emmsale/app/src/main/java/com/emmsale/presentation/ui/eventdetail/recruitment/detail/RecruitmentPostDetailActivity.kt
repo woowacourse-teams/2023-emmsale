@@ -94,6 +94,7 @@ class RecruitmentPostDetailActivity :
             onPositiveButtonClick = { viewModel.reportRecruitment() },
         ).show()
     }
+
     override fun getReceiverName(): String = viewModel.recruitmentPost.value.name
 
     override fun onPositiveButtonClick(content: String): Unit =

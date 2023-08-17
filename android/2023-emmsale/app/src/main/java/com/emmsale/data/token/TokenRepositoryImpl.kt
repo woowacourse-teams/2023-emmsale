@@ -19,28 +19,29 @@ class TokenRepositoryImpl(
     override suspend fun getToken(): Token? = withContext(dispatcher) {
         val uid = preference.getLong(UID_KEY, DEFAULT_UID_VALUE)
         val accessToken = preference.getString(ACCESS_TOKEN_KEY, DEFAULT_TOKEN_VALUE)
+
         if (uid == DEFAULT_UID_VALUE) return@withContext null
         if (accessToken == null || accessToken == DEFAULT_TOKEN_VALUE) return@withContext null
+
         Token(uid, accessToken)
     }
 
     override fun getMyUid(): Long? {
         val uid = preference.getLong(UID_KEY, DEFAULT_UID_VALUE)
         if (uid == DEFAULT_UID_VALUE) return null
+
         return uid
     }
 
     override suspend fun deleteToken() = withContext(dispatcher) {
-        preference.edit()
-            .remove(UID_KEY)
-            .remove(ACCESS_TOKEN_KEY)
-            .apply()
+        preference.edit().remove(UID_KEY).remove(ACCESS_TOKEN_KEY).apply()
     }
 
     companion object {
         private const val UID_KEY = "uid_key"
+        private const val DEFAULT_UID_VALUE = -1L
+
         private const val ACCESS_TOKEN_KEY = "access_token_key"
-        const val DEFAULT_UID_VALUE = -1L
         private const val DEFAULT_TOKEN_VALUE = "default"
     }
 }

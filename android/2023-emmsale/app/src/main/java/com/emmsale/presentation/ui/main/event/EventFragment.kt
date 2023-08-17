@@ -15,11 +15,19 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        selectConferenceTab()
     }
 
     private fun initView() {
+        selectConferenceTab()
         initEventViewPager()
         initNotificationButtonClickListener()
+    }
+
+    private fun selectConferenceTab() {
+        binding.tlEvent.getTabAt(CONFERENCE_TAB).apply {
+            this?.select()
+        }
     }
 
     private fun initEventViewPager() {
@@ -63,5 +71,6 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
 
     companion object {
         val TAG: String = EventFragment::class.java.simpleName
+        private const val CONFERENCE_TAB = 1
     }
 }
