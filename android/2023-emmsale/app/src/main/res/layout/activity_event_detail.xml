@@ -236,6 +236,7 @@
             bind:viewModel="@{vm}"
             android:background="@color/white"
             android:visibility="@{vm.eventDetail.isError ? View.VISIBLE : View.GONE}"
-            android:clickable="true" />
+            android:clickable="true"
+            tools:visibility="gone"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
