@@ -11,6 +11,7 @@ import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.InterestTagAddRequest;
 import com.emmsale.member.application.dto.InterestTagDeleteRequest;
 import com.emmsale.member.application.dto.InterestTagResponse;
+import com.emmsale.member.application.dto.InterestTagUpdateRequest;
 import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
@@ -75,6 +76,24 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
         .isEqualTo(expected);
   }
 
+  @Test
+  @DisplayName("기존 관심 태그를 전부 삭제하고 관심 태그를 새로 다시 등록한다.")
+  void updateInterestTagsTest() {
+    //given
+    final InterestTagUpdateRequest request = new InterestTagUpdateRequest(
+        List.of(백엔드.getId(), 안드로이드.getId()));
+
+    final List<InterestTagResponse> expected = InterestTagResponse.convertAllFrom(
+        List.of(new InterestTag(사용자, 백엔드), new InterestTag(사용자, 안드로이드)));
+
+    //when
+    final List<InterestTagResponse> actual = interestTagService.updateInterestTags(사용자, request);
+
+    //then
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .isEqualTo(expected);
+  }
 
   @Nested
   @DisplayName("사용자의 관심 태그를 추가할 수 있다.")
