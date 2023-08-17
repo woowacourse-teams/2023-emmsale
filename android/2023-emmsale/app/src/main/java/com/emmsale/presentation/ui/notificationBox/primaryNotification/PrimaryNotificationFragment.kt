@@ -107,10 +107,10 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
 
     private fun navigateToDetail(notification: PrimaryNotificationUiState) {
         when (notification) {
-            is InterestEventNotificationUiState -> navigateToEventScreen(notification.redirectId)
+            is InterestEventNotificationUiState -> navigateToEventScreen(notification.eventId)
             is CommentNotificationUiState -> navigateToCommentScreen(
                 eventId = notification.eventId,
-                commentId = notification.redirectId,
+                commentId = notification.commentId,
             )
         }
     }

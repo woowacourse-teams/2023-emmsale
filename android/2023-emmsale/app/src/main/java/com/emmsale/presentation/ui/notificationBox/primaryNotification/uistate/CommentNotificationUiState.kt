@@ -7,9 +7,9 @@ import java.time.LocalDateTime
 class CommentNotificationUiState(
     id: Long,
     receiverId: Long,
-    commentId: Long,
     createdAt: LocalDateTime,
     isRead: Boolean,
+    val commentId: Long,
     val eventId: Long,
     val commentContent: String,
     val eventName: String,
@@ -17,7 +17,6 @@ class CommentNotificationUiState(
 ) : PrimaryNotificationUiState(
     id,
     receiverId,
-    commentId,
     createdAt,
     isRead,
 ) {
