@@ -243,7 +243,7 @@
     <string name="setting_logout_button_label">로그아웃</string>
     <string name="setting_blocks_button_label">차단 목록</string>
     <string name="setting_writings_button_label">작성한 글</string>
-    <string name="setting_kakao_url_label">채팅 URL 등록</string>
+    <string name="setting_kakao_url_label">오픈 프로필 등록</string>
     <string name="setting_written_comments_button_label">작성한 댓글</string>
     <string name="setting_member_fetching_error_message">회원 정보를 불러오는 데 실패했어요 😥</string>
     <string name="setting_member_delete_error_message">회원 탈퇴하는 데 실패했어요 😥</string>
@@ -337,10 +337,14 @@
 
     <string name="useterm_appbar_title">이용 약관</string>
 
-    <string name="open_profile_url_config_title">카카오 오픈 프로필 URL을 \n입력해주세요.</string>
-    <string name="open_profile_url_config_warning">https://open.kakao.com 로 시작해야 합니다</string>
-    <string name="open_profile_url_config_hint">https://open.kakao.com/...</string>
-    <string name="open_profile_url_config_complete">완료</string>
+    <string name="openprofileurlconfig_title">카카오 오픈 프로필 URL을 \n입력해주세요.</string>
+    <string name="openprofileurlconfig_warning">https://open.kakao.com 로 시작해야 합니다</string>
+    <string name="openprofileurlconfig_hint">https://open.kakao.com/...</string>
+    <string name="openprofileurlconfig_complete">완료</string>
     <string name="openprofileurlconfig_register_success">성공적으로 등록하였습니다</string>
     <string name="oepnprofileurlconfig_register_fail">등록에 실패하였습니다</string>
+    <string name="recruitmentpostdetail_dialog_open_profile_title">오픈 프로필 URL 등록</string>
+    <string name="recruitmentpostdetail_dialog_open_profile_message">오픈 프로필 URL이 없으면\n함께하기 요청을 할 수 없습니다.\n 등록창으로 이동하시겠습니까?</string>
+    <string name="recruitmentpostdetail_dialog_open_profile_positive_label">이동</string>
+    <string name="recruitmentpostdetail_dialog_open_profile_negative_label">취소</string>
 </resources>
