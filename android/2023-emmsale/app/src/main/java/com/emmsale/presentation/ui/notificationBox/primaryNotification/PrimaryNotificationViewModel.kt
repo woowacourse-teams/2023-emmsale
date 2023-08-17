@@ -15,8 +15,6 @@ import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiState
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class PrimaryNotificationViewModel(
@@ -41,8 +39,8 @@ class PrimaryNotificationViewModel(
 
             when (val result = notificationRepository.getUpdatedNotifications(uid)) {
                 is ApiSuccess -> {
-                    updatePastNotifications(result.data.filter { it.isPast })
-                    updateRecentNotifications(result.data.filterNot { it.isPast })
+                    updatePastNotifications(result.data.filter { it.isRead })
+                    updateRecentNotifications(result.data.filterNot { it.isRead })
                 }
 
                 is ApiError, is ApiException -> {
@@ -53,34 +51,16 @@ class PrimaryNotificationViewModel(
         }
     }
 
-    private suspend fun updateRecentNotifications(notifications: List<UpdatedNotification>) {
+    private fun updateRecentNotifications(notifications: List<UpdatedNotification>) {
         _recentNotifications.value = PrimaryNotificationsUiState(
-            notifications = notifications.map { notification ->
-                PrimaryNotificationUiState.from(
-                    notification,
-                    getEventIdByCommentIdAsync(notification.redirectId).await(),
-                )
-            },
+            notifications = notifications.map(PrimaryNotificationUiState::from),
         )
     }
 
-    private suspend fun updatePastNotifications(notifications: List<UpdatedNotification>) {
+    private fun updatePastNotifications(notifications: List<UpdatedNotification>) {
         _pastNotifications.value = PrimaryNotificationsUiState(
-            notifications = notifications.map { notification ->
-                PrimaryNotificationUiState.from(
-                    notification,
-                    getEventIdByCommentIdAsync(notification.redirectId).await(),
-                )
-            },
+            notifications = notifications.map(PrimaryNotificationUiState::from),
         )
-    }
-
-    private fun getEventIdByCommentIdAsync(commentId: Long): Deferred<Long> = viewModelScope.async {
-        when (val comment = commentRepository.getComment(commentId)) {
-            is ApiSuccess -> comment.data.eventId
-            is ApiError, is ApiException ->
-                throw IllegalArgumentException(INVALID_COMMENT_ID_ERROR_MESSAGE)
-        }
     }
 
     fun changeToRead(notificationId: Long) {

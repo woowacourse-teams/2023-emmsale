@@ -1,6 +1,7 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -13,7 +14,7 @@ import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PastNotificationAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.RecentNotificationAdapter
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.CommentNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiState
@@ -27,6 +28,8 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     private val recentNotificationAdapter by lazy {
         RecentNotificationAdapter(
             onNotificationClick = { notification ->
+                Log.d("buna", "onNotificationClick: $notification")
+
                 viewModel.changeToRead(notification.id)
                 navigateToDetail(notification)
             },
@@ -40,9 +43,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         )
     }
     private val primaryNotificationAdapter: ConcatAdapter by lazy {
-        val config = ConcatAdapter.Config.Builder()
-            .setIsolateViewTypes(false)
-            .build()
+        val config = ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
 
         ConcatAdapter(
             config,
@@ -108,9 +109,9 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     private fun navigateToDetail(notification: PrimaryNotificationUiState) {
         when (notification) {
             is InterestEventNotificationUiState -> navigateToEventScreen(notification.eventId)
-            is CommentNotificationUiState -> navigateToCommentScreen(
+            is ChildCommentNotificationUiState -> navigateToCommentScreen(
                 eventId = notification.eventId,
-                commentId = notification.commentId,
+                parentCommentId = notification.parentCommentId,
             )
         }
     }
@@ -119,8 +120,8 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         EventDetailActivity.startActivity(requireContext(), eventId)
     }
 
-    private fun navigateToCommentScreen(eventId: Long, commentId: Long) {
-        ChildCommentActivity.startActivity(requireContext(), eventId, commentId)
+    private fun navigateToCommentScreen(eventId: Long, parentCommentId: Long) {
+        ChildCommentActivity.startActivity(requireContext(), eventId, parentCommentId)
     }
 
     private fun showNotificationDeleteConfirmDialog() {

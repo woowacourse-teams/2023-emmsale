@@ -13,13 +13,13 @@
 
         <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState" />
 
-        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.CommentNotificationUiState" />
+        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState" />
 
         <import type="kotlin.jvm.functions.Function1" />
 
         <variable
             name="commentNotification"
-            type="CommentNotificationUiState" />
+            type="ChildCommentNotificationUiState" />
 
         <variable
             name="onDeleteClick"

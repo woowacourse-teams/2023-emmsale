@@ -24,10 +24,12 @@ fun UpdatedNotificationApiModel.toData(): UpdatedNotification = when (type) {
     COMMENT_TYPE -> ChildCommentNotification(
         id = id,
         receiverId = receiverId,
-        commentId = redirectId,
         createdAt = createdAt.toLocalDateTime(),
         isRead = isRead,
-        commentContent = commentTypeNotification?.childCommentContent ?: "",
+        parentCommentId = commentTypeNotification?.parentId ?: 0,
+        childCommentId = redirectId,
+        childCommentContent = commentTypeNotification?.childCommentContent ?: "",
+        eventId = commentTypeNotification?.eventId ?: 0,
         eventName = commentTypeNotification?.eventName ?: "",
         commentProfileImageUrl = commentTypeNotification?.commentProfileImageUrl ?: "",
     )

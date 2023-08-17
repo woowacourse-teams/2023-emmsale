@@ -26,9 +26,9 @@ class InterestEventNotificationUiState(
             return InterestEventNotificationUiState(
                 id = updatedNotification.id,
                 receiverId = updatedNotification.receiverId,
-                eventId = updatedNotification.redirectId,
+                eventId = updatedNotification.eventId,
                 createdAt = updatedNotification.createdAt,
-                isRead = updatedNotification.isPast,
+                isRead = updatedNotification.isRead,
             )
         }
     }
