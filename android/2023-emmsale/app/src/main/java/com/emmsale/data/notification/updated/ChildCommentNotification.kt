@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 class ChildCommentNotification(
     id: Long,
     receiverId: Long,
-    redirectId: Long,
+    commentId: Long,
     createdAt: LocalDateTime,
     isRead: Boolean,
     val commentContent: String,
@@ -14,7 +14,7 @@ class ChildCommentNotification(
 ) : UpdatedNotification(
     id,
     receiverId,
-    redirectId,
+    commentId,
     createdAt,
     isRead,
 )

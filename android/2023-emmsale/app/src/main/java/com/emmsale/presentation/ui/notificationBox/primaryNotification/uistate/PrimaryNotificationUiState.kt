@@ -35,10 +35,14 @@ abstract class PrimaryNotificationUiState(
     }
 
     companion object {
-        fun from(notification: UpdatedNotification): PrimaryNotificationUiState =
+        fun from(notification: UpdatedNotification, eventId: Long): PrimaryNotificationUiState =
             when (notification) {
-                is ChildCommentNotification -> CommentNotificationUiState.from(notification)
                 is InterestEventNotification -> InterestEventNotificationUiState.from(notification)
+                is ChildCommentNotification -> CommentNotificationUiState.from(
+                    updatedNotification = notification,
+                    eventId = eventId,
+                )
+
                 else -> throw IllegalArgumentException("${notification::javaClass.name} 타입이 아닙니다.")
             }
     }

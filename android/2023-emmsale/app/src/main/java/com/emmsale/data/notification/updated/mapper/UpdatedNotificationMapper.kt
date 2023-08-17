@@ -16,7 +16,7 @@ fun UpdatedNotificationApiModel.toData(): UpdatedNotification = when (type) {
     EVENT_TYPE -> InterestEventNotification(
         id = id,
         receiverId = receiverId,
-        redirectId = redirectId,
+        eventId = redirectId,
         createdAt = createdAt.toLocalDateTime(),
         isRead = isRead,
     )
@@ -24,7 +24,7 @@ fun UpdatedNotificationApiModel.toData(): UpdatedNotification = when (type) {
     COMMENT_TYPE -> ChildCommentNotification(
         id = id,
         receiverId = receiverId,
-        redirectId = redirectId,
+        commentId = redirectId,
         createdAt = createdAt.toLocalDateTime(),
         isRead = isRead,
         commentContent = commentTypeNotification?.childCommentContent ?: "",

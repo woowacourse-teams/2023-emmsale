@@ -7,13 +7,13 @@ import java.time.LocalDateTime
 class InterestEventNotificationUiState(
     id: Long,
     receiverId: Long,
-    redirectId: Long,
+    eventId: Long,
     createdAt: LocalDateTime,
     isRead: Boolean,
 ) : PrimaryNotificationUiState(
     id,
     receiverId,
-    redirectId,
+    eventId,
     createdAt,
     isRead,
 ) {
@@ -27,7 +27,7 @@ class InterestEventNotificationUiState(
             return InterestEventNotificationUiState(
                 id = updatedNotification.id,
                 receiverId = updatedNotification.receiverId,
-                redirectId = updatedNotification.redirectId,
+                eventId = updatedNotification.redirectId,
                 createdAt = updatedNotification.createdAt,
                 isRead = updatedNotification.isPast,
             )

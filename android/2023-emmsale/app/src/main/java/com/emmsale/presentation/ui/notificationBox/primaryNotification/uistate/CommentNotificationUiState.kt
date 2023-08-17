@@ -7,16 +7,17 @@ import java.time.LocalDateTime
 class CommentNotificationUiState(
     id: Long,
     receiverId: Long,
-    redirectId: Long,
+    commentId: Long,
     createdAt: LocalDateTime,
     isRead: Boolean,
+    val eventId: Long,
     val commentContent: String,
     val eventName: String,
     val commentProfileImageUrl: String,
 ) : PrimaryNotificationUiState(
     id,
     receiverId,
-    redirectId,
+    commentId,
     createdAt,
     isRead,
 ) {
@@ -25,13 +26,17 @@ class CommentNotificationUiState(
         private val MAPPING_FAILED_ERROR_MESSAGE: String =
             "${ChildCommentNotification::javaClass.name} 타입이 아닙니다."
 
-        fun from(updatedNotification: UpdatedNotification): PrimaryNotificationUiState {
+        fun from(
+            updatedNotification: UpdatedNotification,
+            eventId: Long,
+        ): PrimaryNotificationUiState {
             check(updatedNotification is ChildCommentNotification) { MAPPING_FAILED_ERROR_MESSAGE }
 
             return CommentNotificationUiState(
                 id = updatedNotification.id,
+                eventId = updatedNotification.redirectId,
                 receiverId = updatedNotification.receiverId,
-                redirectId = updatedNotification.redirectId,
+                commentId = updatedNotification.redirectId,
                 createdAt = updatedNotification.createdAt,
                 isRead = updatedNotification.isPast,
                 commentContent = updatedNotification.commentContent,

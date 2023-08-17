@@ -1,7 +1,6 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -11,6 +10,7 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showSnackbar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PastNotificationAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.RecentNotificationAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.CommentNotificationUiState
@@ -108,7 +108,10 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     private fun navigateToDetail(notification: PrimaryNotificationUiState) {
         when (notification) {
             is InterestEventNotificationUiState -> navigateToEventScreen(notification.redirectId)
-            is CommentNotificationUiState -> navigateToCommentScreen(notification.redirectId)
+            is CommentNotificationUiState -> navigateToCommentScreen(
+                eventId = notification.eventId,
+                commentId = notification.redirectId,
+            )
         }
     }
 
@@ -116,8 +119,8 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         EventDetailActivity.startActivity(requireContext(), eventId)
     }
 
-    private fun navigateToCommentScreen(commentId: Long) {
-        Log.d("buna", "Comment")
+    private fun navigateToCommentScreen(eventId: Long, commentId: Long) {
+        ChildCommentActivity.startActivity(requireContext(), eventId, commentId)
     }
 
     private fun showNotificationDeleteConfirmDialog() {

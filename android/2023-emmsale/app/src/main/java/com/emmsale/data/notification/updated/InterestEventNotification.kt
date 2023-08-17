@@ -5,13 +5,13 @@ import java.time.LocalDateTime
 class InterestEventNotification(
     id: Long,
     receiverId: Long,
-    redirectId: Long,
+    eventId: Long,
     createdAt: LocalDateTime,
     isRead: Boolean,
 ) : UpdatedNotification(
     id,
     receiverId,
-    redirectId,
+    eventId,
     createdAt,
     isRead,
 )
