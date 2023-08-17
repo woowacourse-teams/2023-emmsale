@@ -298,7 +298,7 @@
 
     <string name="editmyprofilebottomdialog_field_selection_guide">최대 %d개까지 선택 가능합니다.</string>
 
-    <string name="memberblock_block_description">차단된 사용자는 내 명함과 내가 쓴 글을 볼 수 없습니다.</string>
+    <string name="memberblock_block_description">차단된 사용자의 댓글, 모집 글, 같이가요 요청이 보이지 않습니다.</string>
     <string name="memberblock_block_button_label">차단 해제</string>
     <string name="memberblock_menu_close_title">종료</string>
     <string name="memberblock_loading_blocked_members_failed_message">차단 목록을 불러오는 데에 실패했어요!</string>
@@ -339,7 +339,7 @@
 
     <string name="open_profile_url_config_title">카카오 오픈 프로필 URL을 \n입력해주세요.</string>
     <string name="open_profile_url_config_warning">https://open.kakao.com 로 시작해야 합니다</string>
-    <string name="open_profile_url_config_hint">https://open.kakao.com/...</string>
+    <string name="open_profile_url_config_hint">https://open.kakao.com/&#8230;</string>
     <string name="open_profile_url_config_complete">완료</string>
     <string name="openprofileurlconfig_register_success">성공적으로 등록하였습니다</string>
     <string name="oepnprofileurlconfig_register_fail">등록에 실패하였습니다</string>
