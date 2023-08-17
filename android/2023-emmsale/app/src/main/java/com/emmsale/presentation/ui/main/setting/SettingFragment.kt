@@ -13,6 +13,7 @@ import com.emmsale.presentation.ui.main.setting.block.MemberBlockActivity
 import com.emmsale.presentation.ui.main.setting.myComments.MyCommentsActivity
 import com.emmsale.presentation.ui.main.setting.myPost.MyPostActivity
 import com.emmsale.presentation.ui.main.setting.notification.NotificationConfigActivity
+import com.emmsale.presentation.ui.main.setting.openProfileUrl.OpenProfileUrlConfigActivity
 import com.emmsale.presentation.ui.main.setting.uiState.MemberUiState
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>() {
@@ -40,6 +41,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         binding.showUseTerm = ::showUseTerm
         binding.deleteMember = ::deleteMember
         binding.logout = ::logout
+        binding.showOpenProfileUrlConfig = ::showOpenProfileUrlConfig
     }
 
     private fun showWritings() {
@@ -60,6 +62,10 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
 
     private fun showUseTerm() {
         UseTermWebViewActivity.startActivity(requireContext())
+    }
+
+    private fun showOpenProfileUrlConfig() {
+        OpenProfileUrlConfigActivity.startActivity(requireContext())
     }
 
     private fun deleteMember() {

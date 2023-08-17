@@ -30,6 +30,12 @@
             android:name=".presentation.ui.main.setting.UseTermWebViewActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.ui.main.setting.openProfileUrl.OpenProfileUrlConfigActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.ui.main.setting.UseTermWebViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.main.setting.myPost.MyPostActivity"
             android:exported="true" />
         <activity
