@@ -64,5 +64,9 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(context, MainActivity::class.java)
             context.startActivity(intent)
         }
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
+        }
     }
 }
