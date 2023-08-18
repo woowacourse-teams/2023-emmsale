@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -31,16 +32,30 @@
             tools:listitem="@layout/item_recruitment_notification_body" />
 
         <ProgressBar
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="@{viewModel.recruitmentUiState.loading || viewModel.notifications.loading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.notifications.loading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="0.15"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
+
+        <include
+            layout="@layout/layout_all_error_screen"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            bind:viewModel="@{viewModel}"
+            android:background="@color/white"
+            android:visibility="@{viewModel.notifications.isError ? View.VISIBLE : View.GONE}"
+            android:clickable="true"
+            tools:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

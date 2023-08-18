@@ -18,7 +18,7 @@ import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.RefreshableViewModel
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.HasOpenUrlUiState
-import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
+import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailUiEvent
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.CompanionRequestTaskUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState
 import kotlinx.coroutines.launch
@@ -45,8 +45,8 @@ class RecruitmentPostDetailViewModel(
     private val _isAlreadyRequest: MutableLiveData<Boolean> = MutableLiveData(false)
     val isAlreadyRequest: LiveData<Boolean> = _isAlreadyRequest
 
-    private val _event = MutableLiveData<RecruitmentPostDetailEvent?>(null)
-    val event: LiveData<RecruitmentPostDetailEvent?> = _event
+    private val _event = MutableLiveData<RecruitmentPostDetailUiEvent?>(null)
+    val event: LiveData<RecruitmentPostDetailUiEvent?> = _event
 
     private val _hasOpenProfileUrl: MutableLiveData<HasOpenUrlUiState> = MutableLiveData()
     val hasOpenProfileUrl: LiveData<HasOpenUrlUiState> = _hasOpenProfileUrl
@@ -110,10 +110,18 @@ class RecruitmentPostDetailViewModel(
                 myUid,
             )
             when (result) {
-                is ApiError, is ApiException ->
-                    _event.value = RecruitmentPostDetailEvent.REPORT_FAIL
+                is ApiError -> {
+                    if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
+                        _event.value = RecruitmentPostDetailUiEvent.REPORT_DUPLICATE
+                    } else {
+                        _event.value = RecruitmentPostDetailUiEvent.REPORT_ERROR
+                    }
+                }
 
-                is ApiSuccess -> _event.value = RecruitmentPostDetailEvent.REPORT_SUCCESS
+                is ApiException ->
+                    _event.value = RecruitmentPostDetailUiEvent.REPORT_ERROR
+
+                is ApiSuccess -> _event.value = RecruitmentPostDetailUiEvent.REPORT_SUCCESS
             }
         }
     }
@@ -189,6 +197,8 @@ class RecruitmentPostDetailViewModel(
 
     companion object {
         private const val NOT_LOGIN_ERROR = "로그인되지 않은 사용자는 이용할 수 없어요!!"
+        private const val REPORT_DUPLICATE_ERROR_CODE = 400
+
         fun factory(
             eventId: Long,
             recruitmentId: Long,

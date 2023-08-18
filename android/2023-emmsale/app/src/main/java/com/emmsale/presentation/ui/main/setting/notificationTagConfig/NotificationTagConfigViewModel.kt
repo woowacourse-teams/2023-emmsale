@@ -96,6 +96,7 @@ class NotificationTagConfigViewModel(
             when (eventTagRepository.updateInterestEventTags(interestEventTags)) {
                 is ApiSuccess -> {
                     _notificationTags.value = notificationTags.value.copy(
+                        isTagFetchingSuccess = false,
                         isInterestTagsUpdateSuccess = true,
                     )
                     logInterestTags(interestEventTags.map(EventTag::name))
