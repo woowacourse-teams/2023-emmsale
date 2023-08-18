@@ -76,6 +76,7 @@
             android:inputType="text"
             android:maxLines="1"
             android:singleLine="true"
+            android:maxLength="30"
             android:text="@={viewModel.name}"
             android:textCursorDrawable="@drawable/bg_edittext_cursor"
             android:textSize="16sp"

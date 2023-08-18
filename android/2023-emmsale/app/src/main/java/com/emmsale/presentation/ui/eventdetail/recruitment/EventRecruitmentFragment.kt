@@ -101,11 +101,7 @@ class EventRecruitmentFragment :
 
     private fun setUpRecruitments() {
         viewModel.recruitments.observe(viewLifecycleOwner) { recruitmentsUiState ->
-            if (recruitmentsUiState.isError) {
-                binding.root.showSnackBar(getString(R.string.eventrecruitment_fetch_recruitments_error_message))
-            } else {
-                recruitmentAdapter.submitList(recruitmentsUiState.list)
-            }
+            recruitmentAdapter.submitList(recruitmentsUiState.list)
         }
     }
 
