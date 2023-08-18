@@ -32,8 +32,6 @@ class MyCommentsActivity : AppCompatActivity() {
         initToolbar()
         initMyCommentsRecyclerView()
         setupUiLogic()
-
-        viewModel.refresh()
     }
 
     fun initDataBinding() {
