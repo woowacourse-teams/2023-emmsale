@@ -1,6 +1,5 @@
 package com.emmsale.data.common
 
-import com.emmsale.BuildConfig
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -31,6 +30,7 @@ class ServiceFactory {
     fun <T> create(service: Class<T>): T = retrofit.create(service)
 
     companion object {
-        private const val BASE_URL = BuildConfig.BASE_URL
+        //        private const val BASE_URL = BuildConfig.BASE_URL
+        private const val BASE_URL = "https://prod.kerdy.kro.kr"
     }
 }
