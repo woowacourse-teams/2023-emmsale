@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -71,11 +71,12 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
 
-        <include layout="@layout/layout_all_error_screen"
-            bind:viewModel="@{vm}"
+        <include
+            layout="@layout/layout_all_error_screen"
             android:background="@color/white"
-            android:visibility="@{vm.scrappedEvents.isError ? View.VISIBLE : View.GONE}"
             android:clickable="true"
-            tools:visibility="gone"/>
+            android:visibility="@{vm.scrappedEvents.isError ? View.VISIBLE : View.GONE}"
+            bind:viewModel="@{vm}"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
