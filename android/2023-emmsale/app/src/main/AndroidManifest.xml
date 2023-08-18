@@ -81,8 +81,8 @@
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.Emmsale.FullScreen"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Emmsale.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

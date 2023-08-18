@@ -58,8 +58,11 @@ class NotificationBoxActivity : AppCompatActivity() {
     }
 
     companion object {
+        fun getIntent(context: Context): Intent =
+            Intent(context, NotificationBoxActivity::class.java)
+
         fun startActivity(context: Context) {
-            context.startActivity(Intent(context, NotificationBoxActivity::class.java))
+            context.startActivity(getIntent(context))
         }
     }
 }

@@ -1,7 +1,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -22,8 +22,8 @@
             android:id="@+id/appbarlayout_eventdetail"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:gravity="center"
             android:background="@color/white"
+            android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -40,8 +40,8 @@
             android:id="@+id/cl_event_detail_event_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dp"
             android:background="@color/white"
+            android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appbarlayout_eventdetail">
@@ -203,10 +203,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cl_event_detail_event_container"
+            app:tabBackground="@drawable/bg_tablayout_indicator"
             app:tabIndicatorColor="@color/primary_color"
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="2dp"
-            app:tabBackground="@drawable/bg_tablayout_indicator"
             app:tabSelectedTextAppearance="@style/EventDetail_SelectedTabStyle"
             app:tabSelectedTextColor="@color/primary_color"
             app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle"
@@ -233,10 +233,10 @@
 
         <include
             layout="@layout/layout_all_error_screen"
-            bind:viewModel="@{vm}"
             android:background="@color/white"
-            android:visibility="@{vm.eventDetail.isError ? View.VISIBLE : View.GONE}"
             android:clickable="true"
-            tools:visibility="gone"/>
+            android:visibility="@{vm.eventDetail.isError ? View.VISIBLE : View.GONE}"
+            bind:viewModel="@{vm}"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
