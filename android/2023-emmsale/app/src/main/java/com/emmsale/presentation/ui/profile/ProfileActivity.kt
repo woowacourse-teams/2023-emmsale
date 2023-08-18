@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityProfileBinding
-import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.CategoryTag
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
@@ -25,7 +25,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private val viewModel: ProfileViewModel by viewModels {
-        ProfileViewModel.factory
+        ProfileViewModel.factory(memberId)
     }
 
     private val memberId: Long by lazy {
@@ -45,8 +45,6 @@ class ProfileActivity : AppCompatActivity() {
         initToolbar()
         setupUiLogic()
         initActivitiesRecyclerView()
-
-        viewModel.fetchMember(memberId)
     }
 
     private fun initDataBinding() {
@@ -67,7 +65,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun showMoreMenu() {
         menuDialog.resetMenu()
         menuDialog.apply {
-            if (viewModel.isBlocked(memberId)) {
+            if (viewModel.isBlocked()) {
                 addMenuItemBelow(getString(R.string.profilemenudialog_unblock_button_label)) { onUnblockButtonClick() }
             } else {
                 addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) { onBlockButtonClick() }
@@ -82,12 +80,12 @@ class ProfileActivity : AppCompatActivity() {
             message = getString(R.string.profile_block_warning_dialog_message),
             positiveButtonLabel = getString(R.string.all_block),
             negativeButtonLabel = getString(R.string.all_cancel),
-            onPositiveButtonClick = { viewModel.blockMember(memberId) },
+            onPositiveButtonClick = { viewModel.blockMember() },
         ).show()
     }
 
     private fun onUnblockButtonClick() {
-        viewModel.unblockMember(memberId)
+        viewModel.unblockMember()
     }
 
     private fun setupUiLogic() {
@@ -105,7 +103,6 @@ class ProfileActivity : AppCompatActivity() {
     private fun setupProfileUiLogic() {
         viewModel.profile.observe(this) {
             handleLoginMember(it)
-            handleProfileFetchingError(it)
             handleFields(it)
             handleActivities(it)
         }
@@ -120,15 +117,15 @@ class ProfileActivity : AppCompatActivity() {
     private fun handleEvents(event: ProfileEvent?) {
         if (event == null) return
         when (event) {
-            ProfileEvent.BLOCK_FAIL -> showToast(getString(R.string.profile_block_fail_message))
+            ProfileEvent.BLOCK_FAIL -> binding.root.showSnackBar(getString(R.string.profile_block_fail_message))
             ProfileEvent.BLOCK_COMPLETE -> InfoDialog(
                 context = this,
                 title = getString(R.string.profile_block_complete_dialog_title),
                 message = getString(R.string.profile_block_complete_dialog_message),
             ).show()
 
-            ProfileEvent.UNBLOCK_FAIL -> showToast(getString(R.string.profile_unblock_fail_message))
-            ProfileEvent.UNBLOCK_SUCCESS -> showToast(getString(R.string.profile_unblock_complete_message))
+            ProfileEvent.UNBLOCK_FAIL -> binding.root.showSnackBar(getString(R.string.profile_unblock_fail_message))
+            ProfileEvent.UNBLOCK_SUCCESS -> binding.root.showSnackBar(getString(R.string.profile_unblock_complete_message))
         }
         viewModel.removeEvent()
     }
@@ -136,12 +133,6 @@ class ProfileActivity : AppCompatActivity() {
     private fun handleLoginMember(profile: ProfileUiState) {
         if (profile.isLoginMember) {
             binding.tbProfileToolbar.menu.clear()
-        }
-    }
-
-    private fun handleProfileFetchingError(profile: ProfileUiState) {
-        if (profile.isFetchingError) {
-            showToast(getString(R.string.profile_profile_fetching_error_message))
         }
     }
 

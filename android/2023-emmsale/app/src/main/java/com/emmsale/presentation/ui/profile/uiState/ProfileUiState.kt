@@ -6,7 +6,7 @@ import com.emmsale.data.member.Member
 
 data class ProfileUiState(
     val isLoading: Boolean,
-    val isFetchingError: Boolean,
+    val isError: Boolean,
     val isLoginMember: Boolean,
     val memberId: Long,
     val memberName: String,
@@ -19,17 +19,17 @@ data class ProfileUiState(
 
     fun changeToLoadingState(): ProfileUiState = copy(
         isLoading = true,
-        isFetchingError = false,
+        isError = false,
     )
 
     fun changeToFetchingErrorState(): ProfileUiState = copy(
         isLoading = false,
-        isFetchingError = true,
+        isError = true,
     )
 
     fun changeMemberState(member: Member, loginMemberId: Long): ProfileUiState = copy(
         isLoading = false,
-        isFetchingError = false,
+        isError = false,
         isLoginMember = member.id == loginMemberId,
         memberId = member.id,
         memberName = member.name,
@@ -39,7 +39,7 @@ data class ProfileUiState(
 
     fun changeActivityState(activities: List<Activity>): ProfileUiState = copy(
         isLoading = false,
-        isFetchingError = false,
+        isError = false,
         fields = activities.getActivityUiStatesOf(ActivityType.FIELD),
         educations = activities.getActivityUiStatesOf(ActivityType.EDUCATION),
         clubs = activities.getActivityUiStatesOf(ActivityType.CLUB),
@@ -53,7 +53,7 @@ data class ProfileUiState(
     companion object {
         val FIRST_LOADING = ProfileUiState(
             isLoading = true,
-            isFetchingError = false,
+            isError = false,
             isLoginMember = false,
             memberId = -1,
             memberName = "",

@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
@@ -18,7 +17,7 @@ import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.HasOpenUrlUiState
-import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
+import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailUiEvent
 import com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity
 import com.emmsale.presentation.ui.main.setting.openProfileUrl.OpenProfileUrlConfigActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
@@ -145,8 +144,8 @@ class RecruitmentPostDetailActivity :
     private fun setUpCompanionRequest() {
         viewModel.companionRequest.observe(this) { companionRequest ->
             when {
-                companionRequest.isSuccess -> showToast(getString(R.string.recruitmentpostdetail_success_request_message))
-                companionRequest.isError -> showToast(getString(R.string.recruitmentpostdetail_fail_request_message))
+                companionRequest.isSuccess -> binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_success_request_message))
+                companionRequest.isError -> binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_fail_request_message))
             }
         }
     }
@@ -218,14 +217,21 @@ class RecruitmentPostDetailActivity :
         }
     }
 
-    private fun handleEvent(event: RecruitmentPostDetailEvent?) {
+    private fun handleEvent(event: RecruitmentPostDetailUiEvent?) {
         if (event == null) return
         when (event) {
-            RecruitmentPostDetailEvent.REPORT_FAIL -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
-            RecruitmentPostDetailEvent.REPORT_SUCCESS -> InfoDialog(
+            RecruitmentPostDetailUiEvent.REPORT_ERROR -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
+            RecruitmentPostDetailUiEvent.REPORT_SUCCESS -> InfoDialog(
                 context = this,
                 title = getString(R.string.all_report_complete_dialog_title),
                 message = getString(R.string.all_report_complete_dialog_message),
+                buttonLabel = getString(R.string.all_okay),
+            ).show()
+
+            RecruitmentPostDetailUiEvent.REPORT_DUPLICATE -> InfoDialog(
+                context = this,
+                title = getString(R.string.all_report_duplicate_dialog_title),
+                message = getString(R.string.all_report_duplicate_message),
                 buttonLabel = getString(R.string.all_okay),
             ).show()
         }
