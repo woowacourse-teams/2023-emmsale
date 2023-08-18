@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationTagConfigBinding
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.common.views.ActivityTag
@@ -122,7 +121,7 @@ class NotificationTagConfigActivity :
         }
 
     private fun finishWithTagUpdateMessage() {
-        showToast(R.string.notificationtagconfig_interest_tags_update_message)
+        binding.root.showSnackBar(R.string.notificationtagconfig_interest_tags_update_message)
         finish()
     }
 
