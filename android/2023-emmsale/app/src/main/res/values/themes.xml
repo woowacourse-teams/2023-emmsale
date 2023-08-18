@@ -14,4 +14,8 @@
         <item name="IconTextButtonStyle">@style/IconTextButtonStyle</item>
         <item name="FilterTagStyle">@style/FilterTagStyle</item>
     </style>
+
+    <style name="Theme.Emmsale.FullScreen" parent="Theme.Emmsale">
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>
