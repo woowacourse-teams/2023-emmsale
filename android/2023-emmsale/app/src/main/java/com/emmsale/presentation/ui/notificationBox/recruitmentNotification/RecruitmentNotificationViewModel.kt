@@ -170,7 +170,15 @@ class RecruitmentNotificationViewModel(
                 reporterId = uid,
             )
             when (result) {
-                is ApiError, is ApiException ->
+                is ApiError -> {
+                    if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
+                        _event.value = RecruitmentNotificationUiEvent.REPORT_DUPLICATE
+                    } else {
+                        _event.value = RecruitmentNotificationUiEvent.REPORT_FAIL
+                    }
+                }
+
+                is ApiException ->
                     _event.value =
                         RecruitmentNotificationUiEvent.REPORT_FAIL
 
@@ -200,6 +208,8 @@ class RecruitmentNotificationViewModel(
     }
 
     companion object {
+        private const val REPORT_DUPLICATE_ERROR_CODE = 400
+
         val factory = ViewModelFactory {
             RecruitmentNotificationViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,

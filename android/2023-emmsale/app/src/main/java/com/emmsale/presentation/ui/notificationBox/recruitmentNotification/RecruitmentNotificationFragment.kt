@@ -138,6 +138,12 @@ class RecruitmentNotificationFragment :
             RecruitmentNotificationUiEvent.REJECT_COMPLETE -> binding.root.showSnackBar(getString(R.string.notificationbox_recruitment_rejected_message))
             RecruitmentNotificationUiEvent.ACCEPT_FAIL -> {}
             RecruitmentNotificationUiEvent.REJECT_FAIL -> {}
+            RecruitmentNotificationUiEvent.REPORT_DUPLICATE -> InfoDialog(
+                context = context ?: return,
+                title = getString(R.string.all_report_duplicate_dialog_title),
+                message = getString(R.string.all_report_duplicate_message),
+                buttonLabel = getString(R.string.all_okay),
+            ).show()
         }
         viewModel.removeEvent()
     }
