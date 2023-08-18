@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uist
 data class RecruitmentNotificationUiState(
     val notificationGroups: List<RecruitmentNotificationHeaderUiState> = emptyList(),
     val isLoading: Boolean = false,
-    val isLoadingNotificationsFailed: Boolean = false,
+    val isError: Boolean = false,
 ) {
     fun toggleNotificationExpanded(eventId: Long): RecruitmentNotificationUiState = copy(
         notificationGroups = toggleExpanded(eventId),

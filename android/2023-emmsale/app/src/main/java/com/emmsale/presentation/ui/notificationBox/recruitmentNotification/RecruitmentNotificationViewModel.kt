@@ -16,13 +16,13 @@ import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationBodyUiState
-import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationEvent
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationHeaderUiState
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationMemberUiState
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationUiEvent
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationUiState
-import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentUiState
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -33,21 +33,18 @@ class RecruitmentNotificationViewModel(
     private val memberRepository: MemberRepository,
     private val eventDetailRepository: EventDetailRepository,
     private val notificationRepository: NotificationRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
     private val _notifications = NotNullMutableLiveData(RecruitmentNotificationUiState())
     val notifications: NotNullLiveData<RecruitmentNotificationUiState> = _notifications
 
-    private val _recruitmentUiState = NotNullMutableLiveData(RecruitmentUiState())
-    val recruitmentUiState: NotNullLiveData<RecruitmentUiState> = _recruitmentUiState
-
-    private val _event = MutableLiveData<RecruitmentNotificationEvent?>(null)
-    val event: LiveData<RecruitmentNotificationEvent?> = _event
+    private val _event = MutableLiveData<RecruitmentNotificationUiEvent?>(null)
+    val event: LiveData<RecruitmentNotificationUiEvent?> = _event
 
     init {
-        fetchRecruitmentNotifications()
+        refresh()
     }
 
-    private fun fetchRecruitmentNotifications() {
+    override fun refresh() {
         viewModelScope.launch {
             _notifications.postValue(_notifications.value.copy(isLoading = true))
             val uid = tokenRepository.getToken()?.uid ?: return@launch
@@ -57,7 +54,7 @@ class RecruitmentNotificationViewModel(
                 is ApiException, is ApiError -> _notifications.postValue(
                     _notifications.value.copy(
                         isLoading = false,
-                        isLoadingNotificationsFailed = true,
+                        isError = true,
                     ),
                 )
             }
@@ -124,8 +121,6 @@ class RecruitmentNotificationViewModel(
 
     fun acceptRecruit(notificationId: Long) {
         viewModelScope.launch {
-            _recruitmentUiState.value = recruitmentUiState.value.changeToLoadingState()
-
             when (
                 notificationRepository.updateRecruitmentStatus(
                     notificationId,
@@ -133,21 +128,18 @@ class RecruitmentNotificationViewModel(
                 )
             ) {
                 is ApiSuccess -> {
-                    _recruitmentUiState.value = recruitmentUiState.value.changeToAcceptedState()
+                    _event.value = RecruitmentNotificationUiEvent.ACCEPT_COMPLETE
                     _notifications.value = notifications.value.changeAcceptStateBy(notificationId)
                 }
 
                 is ApiException, is ApiError ->
-                    _recruitmentUiState.value =
-                        recruitmentUiState.value.changeToUpdatingRecruitmentStatusErrorState()
+                    _event.value = RecruitmentNotificationUiEvent.ACCEPT_FAIL
             }
         }
     }
 
     fun rejectRecruit(notificationId: Long) {
         viewModelScope.launch {
-            _recruitmentUiState.value = recruitmentUiState.value.changeToLoadingState()
-
             when (
                 notificationRepository.updateRecruitmentStatus(
                     notificationId,
@@ -155,13 +147,12 @@ class RecruitmentNotificationViewModel(
                 )
             ) {
                 is ApiSuccess -> {
-                    _recruitmentUiState.value = recruitmentUiState.value.changeToRejectedState()
+                    _event.value = RecruitmentNotificationUiEvent.REJECT_COMPLETE
                     _notifications.value = notifications.value.changeRejectStateBy(notificationId)
                 }
 
                 is ApiException, is ApiError ->
-                    _recruitmentUiState.value =
-                        recruitmentUiState.value.changeToUpdatingRecruitmentStatusErrorState()
+                    _event.value = RecruitmentNotificationUiEvent.REJECT_FAIL
             }
         }
     }
@@ -181,9 +172,9 @@ class RecruitmentNotificationViewModel(
             when (result) {
                 is ApiError, is ApiException ->
                     _event.value =
-                        RecruitmentNotificationEvent.REPORT_FAIL
+                        RecruitmentNotificationUiEvent.REPORT_FAIL
 
-                is ApiSuccess -> _event.value = RecruitmentNotificationEvent.REPORT_SUCCESS
+                is ApiSuccess -> _event.value = RecruitmentNotificationUiEvent.REPORT_SUCCESS
             }
         }
     }

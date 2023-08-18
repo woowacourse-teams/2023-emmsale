@@ -83,7 +83,7 @@
     <string name="profile_toolbar_title">프로필 조회</string>
     <string name="profile_more_button_title">더보기</string>
     <string name="profile_block_complete_dialog_title">차단 완료</string>
-    <string name="profile_block_complete_dialog_message">해당 회원의 댓글, 모집 글,\n같이가요 요청이 차단됩니다.</string>
+    <string name="profile_block_complete_dialog_message">해당 회원의 댓글, 같이가요 요청이 차단됩니다.</string>
     <string name="profile_block_fail_message">차단에 실패했어요 😥</string>
     <string name="profile_block_warning_dialog_message">해당 회원을 차단 하시겠습니까?</string>
     <string name="profile_unblock_complete_message">차단 해제 했습니다</string>
