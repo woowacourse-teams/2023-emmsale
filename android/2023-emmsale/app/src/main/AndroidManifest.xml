@@ -27,9 +27,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ui.main.setting.UseTermWebViewActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.ui.main.setting.openProfileUrl.OpenProfileUrlConfigActivity"
             android:exported="false" />
         <activity
@@ -61,9 +58,6 @@
             android:exported="false" />
         <activity
             android:name=".presentation.ui.notificationBox.NotificationBoxActivity"
-            android:exported="true" />
-        <activity
-            android:name=".presentation.ui.notificationBox.recruitmentNotification.RecruitmentNotificationFragment"
             android:exported="true" />
         <activity
             android:name=".presentation.ui.eventdetail.comment.childComment.ChildCommentActivity"
@@ -109,5 +103,4 @@
             </intent-filter>
         </service>
     </application>
-
 </manifest>
