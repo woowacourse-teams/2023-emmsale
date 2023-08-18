@@ -76,7 +76,7 @@ class NotificationConfigViewModel(
     fun removeInterestTagById(eventId: Long) {
         viewModelScope.launch {
             val removedInterestEventTags = notificationTags.value.conferenceTags
-                .filterNot { it.id != eventId }
+                .filterNot { it.id == eventId }
                 .map { EventTag(id = it.id, name = it.tagName) }
 
             when (eventTagRepository.updateInterestEventTags(removedInterestEventTags)) {
