@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_github_button_label"
-                android:textColor="@color/white"
+                android:textColor="@color/github_login_color"
                 android:textSize="14sp" />
         </LinearLayout>
 
