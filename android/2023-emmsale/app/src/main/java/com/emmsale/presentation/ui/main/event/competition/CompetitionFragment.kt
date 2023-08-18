@@ -9,7 +9,6 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentCompetitionBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.FilterTag
 import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
@@ -75,7 +74,6 @@ class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
     private fun setupEventsObserver() {
         viewModel.competitions.observe(viewLifecycleOwner) { eventsResult ->
             when {
-                eventsResult.isLoadingCompetitionsFailed -> requireContext().showToast(getString(R.string.all_data_loading_failed_message))
                 !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.competitions) {
                     binding.rvEvents.scrollToPosition(0)
                 }

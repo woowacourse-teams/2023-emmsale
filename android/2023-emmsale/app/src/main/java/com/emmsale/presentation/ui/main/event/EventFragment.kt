@@ -64,8 +64,11 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
     }
 
     private fun initNotificationButtonClickListener() {
-        binding.btnNotifications.setOnClickListener {
-            NotificationBoxActivity.startActivity(requireContext())
+        binding.tbEventToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.notification_button -> NotificationBoxActivity.startActivity(requireContext())
+            }
+            true
         }
     }
 

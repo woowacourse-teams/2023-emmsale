@@ -6,6 +6,8 @@ import com.emmsale.data.member.Member
 import com.emmsale.presentation.ui.profile.uiState.ActivityUiState
 
 data class MyProfileUiState(
+    val isLoading: Boolean = true,
+    val isError: Boolean = false,
     val memberId: Long = -1,
     val memberName: String = "",
     val description: String = "",
@@ -15,6 +17,8 @@ data class MyProfileUiState(
     val clubs: List<ActivityUiState> = listOf(),
 ) {
     fun changeMemberState(member: Member): MyProfileUiState = copy(
+        isLoading = false,
+        isError = false,
         memberId = member.id,
         memberName = member.name,
         description = member.description,
@@ -22,9 +26,19 @@ data class MyProfileUiState(
     )
 
     fun changeActivitiesState(activities: List<Activity>): MyProfileUiState = copy(
+        isLoading = false,
+        isError = false,
         fields = activities.getActivityUiStatesOf(ActivityType.FIELD),
         educations = activities.getActivityUiStatesOf(ActivityType.EDUCATION),
         clubs = activities.getActivityUiStatesOf(ActivityType.CLUB),
+    )
+
+    fun changeToLoadingState(): MyProfileUiState = copy(
+        isLoading = true,
+    )
+
+    fun changeToErrorState(): MyProfileUiState = copy(
+        isError = true,
     )
 
     private fun List<Activity>.getActivityUiStatesOf(activityType: ActivityType): List<ActivityUiState> {

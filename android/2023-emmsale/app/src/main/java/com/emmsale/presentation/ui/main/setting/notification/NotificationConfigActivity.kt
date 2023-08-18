@@ -11,7 +11,7 @@ import com.emmsale.databinding.ActivityNotificationConfigBinding
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
 import com.emmsale.presentation.common.extension.navigateToApplicationSettings
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
-import com.emmsale.presentation.common.extension.showSnackbar
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.common.views.CancelablePrimaryTag
@@ -119,11 +119,11 @@ class NotificationConfigActivity :
     }
 
     private fun showTagFetchingErrorMessage() {
-        binding.root.showSnackbar(R.string.notificationconfig_tag_fetching_error_message)
+        binding.root.showSnackBar(R.string.notificationconfig_tag_fetching_error_message)
     }
 
     private fun showTagRemovingErrorMessage() {
-        binding.root.showSnackbar(R.string.notificationconfig_tag_removing_error_message)
+        binding.root.showSnackBar(R.string.notificationconfig_tag_removing_error_message)
     }
 
     private fun updateNotificationTagViews(conferenceTags: List<NotificationTagUiState>) {

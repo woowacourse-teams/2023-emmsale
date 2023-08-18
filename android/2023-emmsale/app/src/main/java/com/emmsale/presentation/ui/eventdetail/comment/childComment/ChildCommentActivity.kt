@@ -9,13 +9,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
-import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentAdapter
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.recyclerView.ChildCommentRecyclerViewDivider
-import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsEvent
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
@@ -27,7 +27,7 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private val viewModel: ChildCommentViewModel by viewModels {
-        ChildCommentViewModel.factory
+        ChildCommentViewModel.factory(parentCommentId)
     }
 
     private val eventId: Long by lazy { intent.getLongExtra(KEY_EVENT_ID, -1) }
@@ -52,7 +52,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.fetchComment(parentCommentId)
+        viewModel.refresh()
     }
 
     private fun initDataBinding() {
@@ -71,7 +71,7 @@ class ChildCommentActivity : AppCompatActivity() {
     private fun updateComment() {
         val commentId = viewModel.editingCommentId.value ?: return
         val content = binding.etChildcommentsCommentUpdate.text.toString()
-        viewModel.updateComment(commentId, content, parentCommentId)
+        viewModel.updateComment(commentId, content)
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.etChildcommentsCommentUpdate.windowToken, 0)
     }
@@ -107,7 +107,7 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private fun deleteComment(commentId: Long) {
-        viewModel.deleteComment(commentId, parentCommentId)
+        viewModel.deleteComment(commentId)
     }
 
     private fun reportComment(commentId: Long) {
@@ -136,7 +136,6 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun setupCommentsUiLogic() {
         viewModel.comments.observe(this) {
-            handleErrors(it)
             handleChildComments(it)
             handleEditComment()
         }
@@ -147,29 +146,6 @@ class ChildCommentActivity : AppCompatActivity() {
             if (it == null) return@observe
             binding.etChildcommentsCommentUpdate.setText(it)
         }
-    }
-
-    private fun handleErrors(childComments: ChildCommentsUiState) {
-        fun handleCommentsFetchingError(childCommentsUiState: ChildCommentsUiState) {
-            if (childCommentsUiState.isFetchingError) {
-                showToast(getString(R.string.comments_comments_fetching_error_message))
-            }
-        }
-
-        fun handleCommentPostingError(childComments: ChildCommentsUiState) {
-            if (childComments.isPostingError) {
-                showToast(getString(R.string.comments_comments_posting_error_message))
-            }
-        }
-
-        fun handleCommentDeletionError(childComments: ChildCommentsUiState) {
-            if (childComments.isDeletionError) {
-                showToast(getString(R.string.comments_comments_deletion_error_message))
-            }
-        }
-        handleCommentsFetchingError(childComments)
-        handleCommentPostingError(childComments)
-        handleCommentDeletionError(childComments)
     }
 
     private fun handleNotLogin(isLogin: Boolean) {
@@ -198,18 +174,27 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleEvent(event: ChildCommentsEvent?) {
+    private fun handleEvent(event: ChildCommentsUiEvent?) {
         if (event == null) return
         when (event) {
-            ChildCommentsEvent.REPORT_ERROR -> showToast(getString(R.string.all_report_fail_message))
-            ChildCommentsEvent.REPORT_COMPLETE -> InfoDialog(
+            ChildCommentsUiEvent.REPORT_ERROR -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
+            ChildCommentsUiEvent.REPORT_COMPLETE -> InfoDialog(
                 context = this,
                 title = getString(R.string.all_report_complete_dialog_title),
                 message = getString(R.string.all_report_complete_dialog_message),
                 buttonLabel = getString(R.string.all_okay),
             ).show()
 
-            ChildCommentsEvent.REPORT_DUPLICATION -> showToast(getString(R.string.all_report_duplicate_message))
+            ChildCommentsUiEvent.REPORT_DUPLICATE -> InfoDialog(
+                context = this,
+                title = getString(R.string.all_report_duplicate_dialog_title),
+                message = getString(R.string.all_report_duplicate_message),
+                buttonLabel = getString(R.string.all_okay),
+            ).show()
+
+            ChildCommentsUiEvent.POST_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_posting_error_message))
+            ChildCommentsUiEvent.UPDATE_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_update_error_message))
+            ChildCommentsUiEvent.DELETE_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))
         }
         viewModel.removeEvent()
     }

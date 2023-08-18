@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostWritingBinding
-import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.RecruitmentPostDetailActivity
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostWritingUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.WritingModeUiState.EDIT
@@ -96,13 +96,13 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
     }
 
     private fun showPostingErrorMessage() =
-        showToast(getString(R.string.recruitmentpostwriting_register_error_message))
+        binding.root.showSnackBar(getString(R.string.recruitmentpostwriting_register_error_message))
 
     private fun showPostingSuccessMessage() =
-        showToast(getString(R.string.recruitmentpostwriting_register_success_message))
+        binding.root.showSnackBar(getString(R.string.recruitmentpostwriting_register_success_message))
 
     private fun showEditingSuccessMessage() =
-        showToast(getString(R.string.recruitmentpostwriting_edit_success_message))
+        binding.root.showSnackBar(getString(R.string.recruitmentpostwriting_edit_success_message))
 
     private fun initBackPressIconClick() {
         binding.ivRecruitmentwritingBackpress.setOnClickListener {
@@ -114,7 +114,7 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
         binding.tvRecruitmentwritingComplete.setOnClickListener {
             val content = binding.etRecruitmentwriting.text.toString()
             if (content.isEmpty()) {
-                showToast(getString(R.string.recruitmentpostwriting_no_content_error_message))
+                binding.root.showSnackBar(getString(R.string.recruitmentpostwriting_no_content_error_message))
                 return@setOnClickListener
             }
             when (viewModel.recruitmentWriting.value.writingMode) {

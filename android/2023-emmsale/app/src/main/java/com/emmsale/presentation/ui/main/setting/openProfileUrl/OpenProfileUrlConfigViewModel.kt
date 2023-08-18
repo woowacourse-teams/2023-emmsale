@@ -11,7 +11,7 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import kotlinx.coroutines.launch
 
 class OpenProfileUrlConfigViewModel(

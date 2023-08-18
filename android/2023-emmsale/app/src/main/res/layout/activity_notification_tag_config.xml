@@ -80,8 +80,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/cg_notification_tag" />
 
             <ProgressBar
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:visibility="@{viewModel.notificationTags.loading ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

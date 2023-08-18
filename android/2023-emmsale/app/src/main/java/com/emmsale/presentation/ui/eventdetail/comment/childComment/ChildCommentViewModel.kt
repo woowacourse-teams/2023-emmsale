@@ -11,17 +11,19 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsEvent
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState.ChildCommentsUiState
 import kotlinx.coroutines.launch
 
 class ChildCommentViewModel(
+    private val parentCommentId: Long,
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
@@ -37,10 +39,10 @@ class ChildCommentViewModel(
             ?.content
     }
 
-    private val _event = MutableLiveData<ChildCommentsEvent?>(null)
-    val event: LiveData<ChildCommentsEvent?> = _event
+    private val _event = MutableLiveData<ChildCommentsUiEvent?>(null)
+    val event: LiveData<ChildCommentsUiEvent?> = _event
 
-    fun fetchComment(commentId: Long) {
+    override fun refresh() {
         _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
@@ -49,9 +51,9 @@ class ChildCommentViewModel(
                 return@launch
             }
 
-            when (val result = commentRepository.getComment(commentId)) {
+            when (val result = commentRepository.getComment(parentCommentId)) {
                 is ApiError, is ApiException ->
-                    _comments.value = _comments.value.changeToFetchingErrorState()
+                    _comments.value = _comments.value.changeToErrorState()
 
                 is ApiSuccess ->
                     _comments.value =
@@ -64,35 +66,30 @@ class ChildCommentViewModel(
         _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId, parentCommentId)) {
-                is ApiError, is ApiException ->
-                    _comments.value = _comments.value.changeToPostingErrorState()
-
-                is ApiSuccess -> fetchComment(parentCommentId)
+                is ApiError, is ApiException -> _event.value = ChildCommentsUiEvent.POST_ERROR
+                is ApiSuccess -> refresh()
             }
         }
     }
 
-    fun updateComment(commentId: Long, content: String, parentCommentId: Long) {
+    fun updateComment(commentId: Long, content: String) {
         viewModelScope.launch {
             when (commentRepository.updateComment(commentId, content)) {
-                is ApiError, is ApiException -> {}
-
+                is ApiError, is ApiException -> _event.value = ChildCommentsUiEvent.UPDATE_ERROR
                 is ApiSuccess -> {
                     _editingCommentId.value = null
-                    fetchComment(parentCommentId)
+                    refresh()
                 }
             }
         }
     }
 
-    fun deleteComment(commentId: Long, parentCommentId: Long) {
+    fun deleteComment(commentId: Long) {
         _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
-                is ApiError, is ApiException ->
-                    _comments.value = _comments.value.changeToDeleteErrorState()
-
-                is ApiSuccess -> fetchComment(parentCommentId)
+                is ApiError, is ApiException -> _event.value = ChildCommentsUiEvent.DELETE_ERROR
+                is ApiSuccess -> refresh()
             }
         }
     }
@@ -115,9 +112,17 @@ class ChildCommentViewModel(
             val authorId =
                 (_comments.value.childComments + _comments.value.parentComment).find { it.id == commentId }?.authorId
                     ?: return@launch
-            when (commentRepository.reportComment(commentId, authorId, token.uid)) {
-                is ApiError, is ApiException -> _event.value = ChildCommentsEvent.REPORT_ERROR
-                is ApiSuccess -> _event.value = ChildCommentsEvent.REPORT_COMPLETE
+            when (val result = commentRepository.reportComment(commentId, authorId, token.uid)) {
+                is ApiError -> {
+                    if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
+                        _event.value = ChildCommentsUiEvent.REPORT_DUPLICATE
+                    } else {
+                        _event.value = ChildCommentsUiEvent.REPORT_ERROR
+                    }
+                }
+
+                is ApiException -> _event.value = ChildCommentsUiEvent.REPORT_ERROR
+                is ApiSuccess -> _event.value = ChildCommentsUiEvent.REPORT_COMPLETE
             }
         }
     }
@@ -127,10 +132,11 @@ class ChildCommentViewModel(
     }
 
     companion object {
-        private const val REPORT_DUPLICATE_ERROR_CODE = "이미"
+        private const val REPORT_DUPLICATE_ERROR_CODE = 400
 
-        val factory = ViewModelFactory {
+        fun factory(parentCommentId: Long) = ViewModelFactory {
             ChildCommentViewModel(
+                parentCommentId = parentCommentId,
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 commentRepository = KerdyApplication.repositoryContainer.commentRepository,
             )

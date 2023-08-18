@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
@@ -9,28 +11,33 @@ import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.data.notification.updated.UpdatedNotification
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiEvent
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiState
 import kotlinx.coroutines.launch
 
 class PrimaryNotificationViewModel(
     private val tokenRepository: TokenRepository,
     private val notificationRepository: NotificationRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
     private val _pastNotifications = NotNullMutableLiveData(PrimaryNotificationsUiState())
     val pastNotifications: NotNullLiveData<PrimaryNotificationsUiState> = _pastNotifications
 
     private val _recentNotifications = NotNullMutableLiveData(PrimaryNotificationsUiState())
     val recentNotifications: NotNullLiveData<PrimaryNotificationsUiState> = _recentNotifications
 
+    private val _event = MutableLiveData<PrimaryNotificationsUiEvent?>(null)
+    val event: LiveData<PrimaryNotificationsUiEvent?> = _event
+
     init {
-        fetchPrimaryNotifications()
+        refresh()
     }
 
-    private fun fetchPrimaryNotifications() {
+    override fun refresh() {
         viewModelScope.launch {
             val uid = tokenRepository.getToken()?.uid ?: return@launch
             _recentNotifications.value = recentNotifications.value.copy(isLoading = true)
@@ -43,7 +50,7 @@ class PrimaryNotificationViewModel(
 
                 is ApiError, is ApiException -> {
                     _recentNotifications.value =
-                        recentNotifications.value.copy(isLoading = false, isFetchingError = true)
+                        recentNotifications.value.copy(isLoading = false, isError = true)
                 }
             }
         }
@@ -82,7 +89,7 @@ class PrimaryNotificationViewModel(
     }
 
     private fun updateToNotificationDeleteErrorState() {
-        _pastNotifications.value = pastNotifications.value.copy(isDeleteNotificationError = true)
+        _event.value = PrimaryNotificationsUiEvent.DELETE_ERROR
     }
 
     fun deleteAllPastNotifications() {
@@ -93,6 +100,10 @@ class PrimaryNotificationViewModel(
                 is ApiError, is ApiException -> updateToNotificationDeleteErrorState()
             }
         }
+    }
+
+    fun resetEvent() {
+        _event.value = null
     }
 
     companion object {

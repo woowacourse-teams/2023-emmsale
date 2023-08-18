@@ -8,8 +8,7 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentRecruitmentNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showSnackbar
-import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.dialog.RecruitmentAcceptedDialog
@@ -17,7 +16,7 @@ import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.dialo
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.body.RecruitmentNotificationBodyClickListener
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderAdapter
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderClickListener
-import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationEvent
+import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationUiEvent
 
 class RecruitmentNotificationFragment :
     BaseFragment<FragmentRecruitmentNotificationBinding>(),
@@ -34,8 +33,7 @@ class RecruitmentNotificationFragment :
         super.onViewCreated(view, savedInstanceState)
         initView()
         setupNotifications()
-        setupRecruitment()
-        setupEvent()
+        setupUiEvent()
     }
 
     private fun initView() {
@@ -77,7 +75,7 @@ class RecruitmentNotificationFragment :
     }
 
     private fun showUnregisteredOpenChatUrlErrorMessage() {
-        binding.root.showSnackbar(R.string.recruitmentnotification_unregistered_sender_open_chat_url)
+        binding.root.showSnackBar(R.string.recruitmentnotification_unregistered_sender_open_chat_url)
     }
 
     private fun navigateToChat(chatUrl: String) {
@@ -109,42 +107,48 @@ class RecruitmentNotificationFragment :
     private fun setupNotifications() {
         viewModel.notifications.observe(viewLifecycleOwner) { uiState ->
             when {
-                uiState.isLoadingNotificationsFailed ->
-                    requireContext().showToast(getString(R.string.all_data_loading_failed_message))
-
                 !uiState.isLoading ->
                     recruitmentNotificationHeaderAdapter.submitList(uiState.notificationGroups)
             }
         }
     }
 
-    private fun setupRecruitment() {
-        viewModel.recruitmentUiState.observe(viewLifecycleOwner) { uiState ->
-            when {
-                uiState.isChangingRecruitmentStatusFailed -> requireContext().showToast(getString(R.string.notificationbox_recruitment_status_changing_failed))
-                uiState.isAccepted -> showRecruitmentAcceptedDialog()
-                uiState.isRejected -> binding.root.showSnackbar(getString(R.string.notificationbox_recruitment_rejected_message))
-            }
+    private fun setupUiEvent() {
+        viewModel.event.observe(viewLifecycleOwner) {
+            handleEvent(it)
         }
+    }
+
+    private fun handleEvent(event: RecruitmentNotificationUiEvent?) {
+        if (event == null) return
+        when (event) {
+            RecruitmentNotificationUiEvent.REPORT_FAIL -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
+            RecruitmentNotificationUiEvent.REPORT_SUCCESS -> InfoDialog(
+                context = context ?: return,
+                title = getString(R.string.all_report_complete_dialog_title),
+                message = getString(R.string.all_report_complete_dialog_message),
+                buttonLabel = getString(R.string.all_okay),
+            ).show()
+
+            RecruitmentNotificationUiEvent.CHANGE_RECRUITMENT_STATUS_FAIL -> binding.root.showSnackBar(
+                getString(R.string.notificationbox_recruitment_status_changing_failed),
+            )
+
+            RecruitmentNotificationUiEvent.ACCEPT_COMPLETE -> showRecruitmentAcceptedDialog()
+            RecruitmentNotificationUiEvent.REJECT_COMPLETE -> binding.root.showSnackBar(getString(R.string.notificationbox_recruitment_rejected_message))
+            RecruitmentNotificationUiEvent.ACCEPT_FAIL -> {}
+            RecruitmentNotificationUiEvent.REJECT_FAIL -> {}
+            RecruitmentNotificationUiEvent.REPORT_DUPLICATE -> InfoDialog(
+                context = context ?: return,
+                title = getString(R.string.all_report_duplicate_dialog_title),
+                message = getString(R.string.all_report_duplicate_message),
+                buttonLabel = getString(R.string.all_okay),
+            ).show()
+        }
+        viewModel.removeEvent()
     }
 
     private fun showRecruitmentAcceptedDialog() {
         RecruitmentAcceptedDialog(requireContext()).show()
-    }
-
-    private fun setupEvent() {
-        viewModel.event.observe(viewLifecycleOwner) {
-            if (it == null) return@observe
-            when (it) {
-                RecruitmentNotificationEvent.REPORT_FAIL -> showToast(getString(R.string.all_report_fail_message))
-                RecruitmentNotificationEvent.REPORT_SUCCESS -> InfoDialog(
-                    context = context ?: return@observe,
-                    title = getString(R.string.all_report_complete_dialog_title),
-                    message = getString(R.string.all_report_complete_dialog_message),
-                    buttonLabel = getString(R.string.all_okay),
-                ).show()
-            }
-            viewModel.removeEvent()
-        }
     }
 }

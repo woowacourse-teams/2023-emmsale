@@ -33,9 +33,6 @@
             android:name=".presentation.ui.main.setting.openProfileUrl.OpenProfileUrlConfigActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.main.setting.UseTermWebViewActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.ui.main.setting.myPost.MyPostActivity"
             android:exported="true" />
         <activity
@@ -90,6 +87,7 @@
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:exported="true"
+            android:theme="@style/Theme.Emmsale.FullScreen"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

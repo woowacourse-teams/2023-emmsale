@@ -10,10 +10,10 @@ import com.emmsale.data.eventTag.EventTag
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.firebase.analytics.logChangeConfig
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationConfigUiState
 import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationTagsUiState
 import kotlinx.coroutines.launch

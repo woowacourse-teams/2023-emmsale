@@ -12,12 +12,13 @@ import com.emmsale.data.recruitment.Recruitment
 import com.emmsale.data.recruitment.RecruitmentRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.firebase.analytics.logRecruitment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.HasOpenUrlUiState
-import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailEvent
+import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailUiEvent
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.CompanionRequestTaskUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class RecruitmentPostDetailViewModel(
     private val recruitmentRepository: RecruitmentRepository,
     private val memberRepository: MemberRepository,
     tokenRepository: TokenRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
 
     private val _recruitmentPost: NotNullMutableLiveData<RecruitmentPostUiState> =
         NotNullMutableLiveData(RecruitmentPostUiState())
@@ -44,8 +45,8 @@ class RecruitmentPostDetailViewModel(
     private val _isAlreadyRequest: MutableLiveData<Boolean> = MutableLiveData(false)
     val isAlreadyRequest: LiveData<Boolean> = _isAlreadyRequest
 
-    private val _event = MutableLiveData<RecruitmentPostDetailEvent?>(null)
-    val event: LiveData<RecruitmentPostDetailEvent?> = _event
+    private val _event = MutableLiveData<RecruitmentPostDetailUiEvent?>(null)
+    val event: LiveData<RecruitmentPostDetailUiEvent?> = _event
 
     private val _hasOpenProfileUrl: MutableLiveData<HasOpenUrlUiState> = MutableLiveData()
     val hasOpenProfileUrl: LiveData<HasOpenUrlUiState> = _hasOpenProfileUrl
@@ -53,10 +54,10 @@ class RecruitmentPostDetailViewModel(
     private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
 
     init {
-        fetchRecruitmentPost()
+        refresh()
     }
 
-    fun fetchRecruitmentPost() {
+    override fun refresh() {
         changeRecruitmentPostToLoadingState()
         viewModelScope.launch {
             val response = recruitmentRepository.getEventRecruitment(eventId, recruitmentId)
@@ -109,10 +110,18 @@ class RecruitmentPostDetailViewModel(
                 myUid,
             )
             when (result) {
-                is ApiError, is ApiException ->
-                    _event.value = RecruitmentPostDetailEvent.REPORT_FAIL
+                is ApiError -> {
+                    if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
+                        _event.value = RecruitmentPostDetailUiEvent.REPORT_DUPLICATE
+                    } else {
+                        _event.value = RecruitmentPostDetailUiEvent.REPORT_ERROR
+                    }
+                }
 
-                is ApiSuccess -> _event.value = RecruitmentPostDetailEvent.REPORT_SUCCESS
+                is ApiException ->
+                    _event.value = RecruitmentPostDetailUiEvent.REPORT_ERROR
+
+                is ApiSuccess -> _event.value = RecruitmentPostDetailUiEvent.REPORT_SUCCESS
             }
         }
     }
@@ -188,6 +197,8 @@ class RecruitmentPostDetailViewModel(
 
     companion object {
         private const val NOT_LOGIN_ERROR = "로그인되지 않은 사용자는 이용할 수 없어요!!"
+        private const val REPORT_DUPLICATE_ERROR_CODE = 400
+
         fun factory(
             eventId: Long,
             recruitmentId: Long,

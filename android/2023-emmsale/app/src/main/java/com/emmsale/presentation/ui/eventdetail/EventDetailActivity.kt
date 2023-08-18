@@ -10,7 +10,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEventDetailBinding
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.main.MainActivity
@@ -56,15 +55,11 @@ class EventDetailActivity :
 
     private fun setUpEventDetail() {
         viewModel.eventDetail.observe(this) { eventDetailUiState ->
-            if (eventDetailUiState.isError) {
-                showToast(getString(R.string.eventdetail_fetch_eventdetail_error_message))
-            } else {
-                addEventTag(eventDetailUiState.tags)
-                initFragmentStateAdapter(
-                    eventDetailUiState.informationUrl,
-                    eventDetailUiState.imageUrl,
-                )
-            }
+            addEventTag(eventDetailUiState.tags)
+            initFragmentStateAdapter(
+                eventDetailUiState.informationUrl,
+                eventDetailUiState.imageUrl,
+            )
         }
     }
 

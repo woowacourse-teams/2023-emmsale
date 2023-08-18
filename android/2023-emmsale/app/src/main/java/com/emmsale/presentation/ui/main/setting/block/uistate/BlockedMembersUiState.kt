@@ -5,8 +5,7 @@ import com.emmsale.data.blockedMember.BlockedMember
 data class BlockedMembersUiState(
     val blockedMembers: List<BlockedMemberUiState> = emptyList(),
     val isLoading: Boolean = false,
-    val isFetchingError: Boolean = false,
-    val isDeletingBlockedMemberError: Boolean = false,
+    val isError: Boolean = false,
 ) {
     fun deleteBlockedMember(blockId: Long): BlockedMembersUiState =
         copy(blockedMembers = blockedMembers.filterNot { it.blockId == blockId })

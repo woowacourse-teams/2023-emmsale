@@ -5,7 +5,6 @@ import com.emmsale.data.activity.ActivityType
 import com.emmsale.data.member.Member
 
 data class EditMyProfileUiState(
-    val isLoading: Boolean,
     val id: Long,
     val name: String,
     val imageUrl: String,
@@ -15,7 +14,6 @@ data class EditMyProfileUiState(
     val educations: List<ActivityUiState>,
 ) {
     fun changeMemberState(member: Member): EditMyProfileUiState = copy(
-        isLoading = false,
         id = member.id,
         name = member.name,
         imageUrl = member.imageUrl,
@@ -23,7 +21,6 @@ data class EditMyProfileUiState(
     )
 
     fun changeActivities(activities: List<Activity>): EditMyProfileUiState = copy(
-        isLoading = false,
         fields = activities.getActivityUiStatesOf(ActivityType.FIELD),
         clubs = activities.getActivityUiStatesOf(ActivityType.CLUB),
         educations = activities.getActivityUiStatesOf(ActivityType.EDUCATION),
@@ -35,13 +32,11 @@ data class EditMyProfileUiState(
     }
 
     fun changeDescription(description: String): EditMyProfileUiState = copy(
-        isLoading = false,
         description = description,
     )
 
     companion object {
         val FIRST_LOADING = EditMyProfileUiState(
-            isLoading = true,
             id = -1,
             name = "",
             imageUrl = "",

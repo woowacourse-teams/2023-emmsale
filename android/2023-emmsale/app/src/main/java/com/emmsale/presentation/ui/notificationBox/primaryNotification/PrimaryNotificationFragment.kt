@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showSnackbar
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
@@ -16,7 +16,7 @@ import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerv
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiEvent
 
 class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBinding>() {
     override val layoutResId: Int = R.layout.fragment_primary_notification
@@ -70,6 +70,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     private fun setupObservers() {
         setupRecentNotificationsObserver()
         setupPastNotificationsObserver()
+        setupUiEvent()
     }
 
     private fun setupRecentNotificationsObserver() {
@@ -82,26 +83,28 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
 
     private fun setupPastNotificationsObserver() {
         viewModel.pastNotifications.observe(viewLifecycleOwner) { pastNotifications ->
-            handlePastNotificationsError(pastNotifications)
             when {
                 !pastNotifications.isLoading -> pastNotificationAdapter.submitList(pastNotifications.notifications)
             }
         }
     }
 
-    private fun handlePastNotificationsError(pastNotifications: PrimaryNotificationsUiState) {
-        when {
-            pastNotifications.isFetchingError -> showNotificationFetchingFailedMessage()
-            pastNotifications.isDeleteNotificationError -> showNotificationDeleteFailedMessage()
+    private fun setupUiEvent() {
+        viewModel.event.observe(viewLifecycleOwner) {
+            handleEvent(it)
         }
     }
 
-    private fun showNotificationFetchingFailedMessage() {
-        binding.root.showSnackbar(R.string.all_data_loading_failed_message)
+    private fun handleEvent(event: PrimaryNotificationsUiEvent?) {
+        if (event == null) return
+        when (event) {
+            PrimaryNotificationsUiEvent.DELETE_ERROR -> showNotificationDeleteConfirmDialog()
+        }
+        viewModel.resetEvent()
     }
 
     private fun showNotificationDeleteFailedMessage() {
-        binding.root.showSnackbar(R.string.primarynotification_delete_notification_failed_message)
+        binding.root.showSnackBar(R.string.primarynotification_delete_notification_failed_message)
     }
 
     private fun navigateToDetail(notification: PrimaryNotificationUiState) {

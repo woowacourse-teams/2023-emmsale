@@ -9,10 +9,11 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventInformationBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.information.uiState.EventInfoUiEvent
 
 class EventInfoFragment :
     BaseFragment<FragmentEventInformationBinding>(),
@@ -51,7 +52,7 @@ class EventInfoFragment :
         urlButtonClick()
         scarpButtonClick()
         setUpIsScrapped()
-        setUpIsError()
+        setupUiEvent()
     }
 
     private fun setUpIsScrapped() {
@@ -74,9 +75,17 @@ class EventInfoFragment :
         binding.ivEventInformationScrap.setImageResource(R.drawable.ic_all_scrap_unchecked)
     }
 
-    private fun setUpIsError() {
-        viewModel.isError.observe(viewLifecycleOwner) { isError ->
-            if (isError) requireContext().showToast("스크랩 불가")
+    private fun setupUiEvent() {
+        viewModel.event.observe(viewLifecycleOwner) {
+            handleEvent(it)
+        }
+    }
+
+    private fun handleEvent(event: EventInfoUiEvent?) {
+        if (event == null) return
+        when (event) {
+            EventInfoUiEvent.SCRAP_ERROR -> binding.root.showSnackBar("스크랩 불가")
+            EventInfoUiEvent.SCRAP_DELETE_ERROR -> binding.root.showSnackBar("스크랩 삭제 불가")
         }
     }
 

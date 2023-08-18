@@ -11,9 +11,9 @@ import com.emmsale.data.competitionStatus.CompetitionStatusRepository
 import com.emmsale.data.event.EventCategory
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.event.competitionFilter.uistate.CompetitionFilterUiState
 import com.emmsale.presentation.ui.main.event.competitionFilter.uistate.CompetitionFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.competitionFilter.uistate.CompetitionFilteringOptionUiState

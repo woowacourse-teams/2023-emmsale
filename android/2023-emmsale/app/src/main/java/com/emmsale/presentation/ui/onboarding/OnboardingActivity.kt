@@ -9,7 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityOnboardingBinding
-import com.emmsale.presentation.common.extension.showSnackbar
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.onboarding.uistate.MemberSavingUiState
 
@@ -55,7 +55,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun showMemberUpdateFailed() {
         binding.progressbarLoading.visibility = View.GONE
-        binding.root.showSnackbar(getString(R.string.onboarding_member_update_failed_message))
+        binding.root.showSnackBar(getString(R.string.onboarding_member_update_failed_message))
     }
 
     fun navigateToNextPage() {

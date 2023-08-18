@@ -14,9 +14,10 @@ import com.emmsale.data.event.model.Conference
 import com.emmsale.data.eventTag.EventTag
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringUiState
@@ -29,7 +30,7 @@ class ConferenceViewModel(
     private val eventRepository: EventRepository,
     private val conferenceStatusRepository: ConferenceStatusRepository,
     private val eventTagRepository: EventTagRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
     private val _conferences = NotNullMutableLiveData(ConferencesUiState())
     val conferences: NotNullLiveData<ConferencesUiState> = _conferences
 
@@ -37,6 +38,11 @@ class ConferenceViewModel(
     val selectedFilter: NotNullLiveData<ConferenceSelectedFilteringUiState> = _selectedFilter
 
     init {
+        refresh()
+    }
+
+    override fun refresh() {
+        _selectedFilter.value = ConferenceSelectedFilteringUiState()
         fetchConferences()
     }
 
@@ -53,10 +59,11 @@ class ConferenceViewModel(
                     _conferences.value = _conferences.value.copy(
                         conferences = eventsResult.data.map(ConferenceUiState::from),
                         isLoading = false,
+                        isError = false,
                     )
 
                 is ApiError, is ApiException -> _conferences.value = _conferences.value.copy(
-                    isLoadingConferencesFailed = true,
+                    isError = true,
                     isLoading = false,
                 )
             }

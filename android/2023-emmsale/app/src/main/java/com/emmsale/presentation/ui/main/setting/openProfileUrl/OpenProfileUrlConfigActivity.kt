@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityOpenProfileUrlConfigBinding
-import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.showSnackBar
 
 class OpenProfileUrlConfigActivity : AppCompatActivity() {
 
@@ -45,7 +45,7 @@ class OpenProfileUrlConfigActivity : AppCompatActivity() {
     private fun setUpOpenProfileUrlConfig() {
         viewModel.isUrlFetchError.observe(this) { isError ->
             if (isError) {
-                showToast(getString(R.string.all_data_loading_failed_message))
+                binding.root.showSnackBar(getString(R.string.all_data_loading_failed_message))
                 finish()
             }
         }
@@ -54,10 +54,10 @@ class OpenProfileUrlConfigActivity : AppCompatActivity() {
     private fun setUpIsUpdateUrlSuccess() {
         viewModel.isUpdateUrlSuccess.observe(this) { isSuccess ->
             if (isSuccess) {
-                showToast(getString(R.string.openprofileurlconfig_register_success))
+                binding.root.showSnackBar(getString(R.string.openprofileurlconfig_register_success))
                 finish()
             } else {
-                showToast(getString(R.string.oepnprofileurlconfig_register_fail))
+                binding.root.showSnackBar(getString(R.string.oepnprofileurlconfig_register_fail))
             }
         }
     }

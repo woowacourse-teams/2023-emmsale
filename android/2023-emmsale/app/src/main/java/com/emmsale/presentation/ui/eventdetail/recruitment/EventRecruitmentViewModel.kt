@@ -10,16 +10,17 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.recruitment.Recruitment
 import com.emmsale.data.recruitment.RecruitmentRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostsUiState
 import kotlinx.coroutines.launch
 
 class EventRecruitmentViewModel(
     private val eventId: Long,
     private val recruitmentRepository: RecruitmentRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
 
     private val _recruitments: NotNullMutableLiveData<RecruitmentPostsUiState> =
         NotNullMutableLiveData(
@@ -31,6 +32,10 @@ class EventRecruitmentViewModel(
     val hasWritingPermission: LiveData<Boolean> = _hasWritingPermission
 
     init {
+        refresh()
+    }
+
+    override fun refresh() {
         fetchRecruitments()
         fetchHasWritingPermission()
     }

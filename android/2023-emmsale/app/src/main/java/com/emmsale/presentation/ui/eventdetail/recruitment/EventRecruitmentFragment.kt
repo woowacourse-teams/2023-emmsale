@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventRecruitmentBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
@@ -102,7 +102,7 @@ class EventRecruitmentFragment :
     private fun setUpRecruitments() {
         viewModel.recruitments.observe(viewLifecycleOwner) { recruitmentsUiState ->
             if (recruitmentsUiState.isError) {
-                requireContext().showToast(getString(R.string.eventrecruitment_fetch_recruitments_error_message))
+                binding.root.showSnackBar(getString(R.string.eventrecruitment_fetch_recruitments_error_message))
             } else {
                 recruitmentAdapter.submitList(recruitmentsUiState.list)
             }
@@ -117,7 +117,7 @@ class EventRecruitmentFragment :
                     RecruitmentPostWritingActivity.getPostModeIntent(requireContext(), eventId)
                 postingResultActivityLauncher.launch(intent)
             } else {
-                requireContext().showToast(getString(R.string.eventrecruitment_has_not_permission_writing))
+                binding.root.showSnackBar(getString(R.string.eventrecruitment_has_not_permission_writing))
             }
         }
     }

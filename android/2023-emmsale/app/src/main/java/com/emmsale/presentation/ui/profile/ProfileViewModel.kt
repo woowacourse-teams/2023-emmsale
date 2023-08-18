@@ -12,20 +12,22 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.profile.uiState.BlockedMemberUiState
 import com.emmsale.presentation.ui.profile.uiState.ProfileEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
+    private val memberId: Long,
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val activityRepository: ActivityRepository,
     private val blockedMemberRepository: BlockedMemberRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
@@ -38,7 +40,11 @@ class ProfileViewModel(
     private val _event = MutableLiveData<ProfileEvent?>(null)
     val event: LiveData<ProfileEvent?> = _event
 
-    fun fetchMember(memberId: Long) {
+    init {
+        refresh()
+    }
+
+    override fun refresh() {
         _profile.value = _profile.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
@@ -76,23 +82,23 @@ class ProfileViewModel(
         }
     }
 
-    fun isBlocked(memberId: Long): Boolean {
+    fun isBlocked(): Boolean {
         return memberId in _blockedMembers.value.map { it.blockedMemberId }
     }
 
-    fun blockMember(memberId: Long) {
+    fun blockMember() {
         viewModelScope.launch {
             when (memberRepository.blockMember(memberId)) {
                 is ApiError, is ApiException -> _event.value = ProfileEvent.BLOCK_FAIL
                 is ApiSuccess -> {
                     _event.value = ProfileEvent.BLOCK_COMPLETE
-                    fetchMember(memberId)
+                    refresh()
                 }
             }
         }
     }
 
-    fun unblockMember(memberId: Long) {
+    fun unblockMember() {
         viewModelScope.launch {
             val blockId = _blockedMembers.value.find { it.blockedMemberId == memberId }?.blockId
                 ?: return@launch
@@ -100,7 +106,7 @@ class ProfileViewModel(
                 is ApiError, is ApiException -> _event.value = ProfileEvent.UNBLOCK_FAIL
                 is ApiSuccess -> {
                     _event.value = ProfileEvent.UNBLOCK_SUCCESS
-                    fetchMember(memberId)
+                    refresh()
                 }
             }
         }
@@ -111,8 +117,9 @@ class ProfileViewModel(
     }
 
     companion object {
-        val factory = ViewModelFactory {
+        fun factory(memberId: Long) = ViewModelFactory {
             ProfileViewModel(
+                memberId = memberId,
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
                 activityRepository = KerdyApplication.repositoryContainer.activityRepository,

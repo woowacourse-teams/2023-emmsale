@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMyCommentsBinding
-import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.eventdetail.comment.recyclerView.CommentRecyclerViewDivider
 import com.emmsale.presentation.ui.login.LoginActivity
@@ -32,8 +32,6 @@ class MyCommentsActivity : AppCompatActivity() {
         initToolbar()
         initMyCommentsRecyclerView()
         setupUiLogic()
-
-        viewModel.fetchMyComments()
     }
 
     fun initDataBinding() {
@@ -87,8 +85,8 @@ class MyCommentsActivity : AppCompatActivity() {
     }
 
     private fun handleFetchingError(comments: MyCommentsUiState) {
-        if (comments.isFetchingError) {
-            showToast(getString(R.string.comments_comments_fetching_error_message))
+        if (comments.isError) {
+            binding.root.showSnackBar(getString(R.string.comments_comments_fetching_error_message))
         }
     }
 

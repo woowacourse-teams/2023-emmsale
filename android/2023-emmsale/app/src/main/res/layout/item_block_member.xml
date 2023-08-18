@@ -21,7 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="17dp"
-        android:paddingVertical="10dp">
+        android:paddingVertical="10dp"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/iv_member_profile"

@@ -8,27 +8,29 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.eventdetail.EventDetail
 import com.emmsale.data.eventdetail.EventDetailRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.ViewModelFactory
 import com.emmsale.presentation.common.firebase.analytics.logEventClick
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.uistate.EventDetailUiState
 import kotlinx.coroutines.launch
 
 class EventDetailViewModel(
-    eventId: Long,
+    private val eventId: Long,
     private val eventDetailRepository: EventDetailRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
 
     private val _eventDetail: NotNullMutableLiveData<EventDetailUiState> =
         NotNullMutableLiveData(EventDetailUiState())
     val eventDetail: NotNullLiveData<EventDetailUiState> = _eventDetail
 
     init {
-        fetchEventDetail(eventId)
+        setLoadingState(true)
+        refresh()
     }
 
-    private fun fetchEventDetail(eventId: Long) {
+    override fun refresh() {
         setLoadingState(true)
         viewModelScope.launch {
             when (val result = eventDetailRepository.getEventDetail(eventId)) {
