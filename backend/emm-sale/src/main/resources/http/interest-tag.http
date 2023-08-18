@@ -1,0 +1,29 @@
+### 특정 사용자의 행사 관심 태그 조회
+
+GET http://localhost:8080/interest-tags?member_id=1
+Content-Type: application/json
+
+### 사용자의 행사 관심 태그 추가
+POST http://localhost:8080/interest-tags
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
+
+{
+  "tagIds": [
+    1,
+    2,
+    3
+  ]
+}
+
+### 사용자의 행사 관심 태그 삭제
+DELETE http://localhost:8080/interest-tags
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
+
+{
+  "tagIds": [
+    1,
+    2
+  ]
+}

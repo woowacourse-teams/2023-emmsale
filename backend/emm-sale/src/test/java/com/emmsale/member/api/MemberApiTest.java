@@ -21,7 +21,6 @@ import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
-import com.emmsale.member.application.dto.MemberActivityDeleteRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityResponses;
@@ -32,6 +31,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
@@ -53,10 +53,12 @@ class MemberApiTest extends MockMvcTestHelper {
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
       fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
       fieldWithPath("description").type(JsonFieldType.STRING).description("사용자 한 줄 자기소개"),
-      fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url")
+      fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url"),
+      fieldWithPath("openProfileUrl").type(JsonFieldType.STRING).description("오픈 프로필 url"),
+      fieldWithPath("githubUrl").type(JsonFieldType.STRING).description("깃허브 URL")
   );
 
-  private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+  private static final RequestFieldsSnippet MEMBER_ACTIVITY_REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
 
   @MockBean
@@ -83,6 +85,7 @@ class MemberApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(post("/members")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
@@ -123,19 +126,20 @@ class MemberApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(post("/members/activities")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
-        .andDo(document("add-activity", REQUEST_FIELDS, MEMBER_ACTIVITY_RESPONSE_FIELDS));
+        .andDo(document("add-activity", MEMBER_ACTIVITY_REQUEST_FIELDS,
+            MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
   @DisplayName("내 명함에서 활동이력들을 성공적으로 삭제하면, 200 OK를 반환해줄 수 있다.")
   void test_deleteActivity() throws Exception {
     //given
-    final List<Long> activityIds = List.of(1L, 2L);
-    final MemberActivityDeleteRequest request = new MemberActivityDeleteRequest(activityIds);
+    final String activityIds = "1,2";
 
     final List<MemberActivityResponses> memberActivityResponses = List.of(
         new MemberActivityResponses("동아리",
@@ -148,12 +152,12 @@ class MemberApiTest extends MockMvcTestHelper {
         .thenReturn(memberActivityResponses);
 
     //when & then
-    mockMvc.perform(delete("/members/activities")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request)))
+    mockMvc.perform(delete("/members/activities?activity-ids={activityIds}", activityIds)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("delete-activity", REQUEST_FIELDS, MEMBER_ACTIVITY_RESPONSE_FIELDS));
+        .andDo(document("delete-activity",
+            MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
@@ -206,33 +210,12 @@ class MemberApiTest extends MockMvcTestHelper {
 
     // when
     final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
+        .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(request)));
 
     // then
     result.andExpect(status().isNoContent())
-        .andDo(print())
-        .andDo(document("update-open-profile-url", REQUEST_FIELDS));
-  }
-
-  @Test
-  @DisplayName("사용자의 openProfileUrl이 유효하지 않으면, 400 BAD_REQUEST를 반환한다.")
-  void test_updateOpenProfileUrlWithInvalidUrl() throws Exception {
-    // given
-    final String openProfileUrl = "https://invalid.kakao.com/profile";
-    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(openProfileUrl);
-
-    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
-        fieldWithPath("openProfileUrl").description("오픈 채팅 url")
-    );
-
-    // when
-    final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(request)));
-
-    // then
-    result.andExpect(status().isBadRequest())
         .andDo(print())
         .andDo(document("update-open-profile-url", REQUEST_FIELDS));
   }
@@ -250,6 +233,7 @@ class MemberApiTest extends MockMvcTestHelper {
 
     // when
     final ResultActions result = mockMvc.perform(put("/members/description")
+        .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(request)));
 
@@ -263,8 +247,14 @@ class MemberApiTest extends MockMvcTestHelper {
   @DisplayName("특정 사용자의 프로필 정보를 조회할 수 있다.")
   void test_findProfile() throws Exception {
     //given
-    final MemberProfileResponse memberProfileResponse = new MemberProfileResponse(1L, "김길동",
-        "안녕하세요, 김길동입니다.", "https://image");
+    final MemberProfileResponse memberProfileResponse = new MemberProfileResponse(
+        1L,
+        "김길동",
+        "안녕하세요, 김길동입니다.",
+        "https://image",
+        "https://open.profile.url",
+        "https://github.com/amaran-th"
+    );
     when(memberQueryService.findProfile(any()))
         .thenReturn(memberProfileResponse);
 

@@ -27,8 +27,8 @@ Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5L
 GET http://localhost:8080/comments?eventId=1
 Content-Type: application/json
 
-### 부모 ID로 대댓글 조회하기
-GET http://localhost:8080/comments/1/children
+### 댓글 ID로 조회하기(대댓글 있을 경우 같이 조회)
+GET http://localhost:8080/comments/1
 
 ### 댓글 삭제 /comments/{comment-id}
 

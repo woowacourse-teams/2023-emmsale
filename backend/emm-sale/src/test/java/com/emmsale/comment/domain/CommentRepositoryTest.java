@@ -1,6 +1,6 @@
 package com.emmsale.comment.domain;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -57,7 +57,7 @@ class CommentRepositoryTest {
   }
 
   @Test
-  @DisplayName("findByParentId() : 부모 ID가 주어졌을 때, 해당 자식 댓글들을 모두 조회할 수 있다.")
+  @DisplayName("findParentAndChildrenByParentId() : 부모 ID가 주어졌을 때, 부모, 자식 댓글들을 모두 조회할 수 있다.")
   void test_findByParentId() throws Exception {
     //given
     final Event event1 = eventRepository.save(EventFixture.AI_컨퍼런스());
@@ -69,7 +69,8 @@ class CommentRepositoryTest {
         Comment.createChild(event1, parent, member, "자식댓글2"));
 
     //when
-    List<Comment> childrenComments = commentRepository.findByParentId(parent.getId());
+    final List<Comment> childrenComments = commentRepository.findParentAndChildrenByParentId(
+        parent.getId());
 
     //then
     final List<Long> resultIds = childrenComments.stream()
@@ -77,7 +78,35 @@ class CommentRepositoryTest {
         .collect(Collectors.toList());
 
     assertThat(resultIds).containsExactlyInAnyOrderElementsOf(
-        List.of(자식댓글1.getId(), 자식댓글2.getId())
+        List.of(parent.getId(), 자식댓글1.getId(), 자식댓글2.getId())
     );
+  }
+
+  @Test
+  @DisplayName("findByMemberId() : 사용자가 작성한 댓글을 조회할 수 있다.")
+  void test_findByMemberId() throws Exception {
+    //given
+    final Event event1 = eventRepository.save(EventFixture.AI_컨퍼런스());
+    final Member member1 = memberRepository.findById(1L).get();
+    final Member member2 = memberRepository.findById(2L).get();
+
+    final Comment comment1 = commentRepository.save(
+        Comment.createRoot(event1, member1, "부모댓글1")
+    );
+    commentRepository.save(Comment.createChild(event1, comment1, member2, "자식댓글1"));
+    final Comment comment2 = commentRepository.save(
+        Comment.createChild(event1, comment1, member1, "자식댓글2")
+    );
+
+    final List<Comment> expected = List.of(comment1, comment2);
+
+    //when
+    final List<Comment> actual = commentRepository.findByMemberId(member1.getId());
+
+    //then
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .ignoringFields("createdAt")
+        .isEqualTo(expected);
   }
 }

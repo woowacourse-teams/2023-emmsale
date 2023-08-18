@@ -1,9 +1,11 @@
 package com.emmsale.comment.application.dto;
 
 import com.emmsale.comment.domain.Comment;
+import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,14 +16,17 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CommentResponse {
 
+  private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
+
   private String content;
   private Long commentId;
   private Long parentId;
   private Long eventId;
+  private String eventName;
   private boolean isDeleted;
-  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private LocalDateTime createdAt;
-  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private LocalDateTime updatedAt;
   private Long memberId;
   private String memberImageUrl;
@@ -29,12 +34,29 @@ public class CommentResponse {
 
   public static CommentResponse from(final Comment comment) {
     final Member member = comment.getMember();
+    final Event event = comment.getEvent();
+
     return new CommentResponse(
         comment.getContent(), comment.getId(),
-        getParentId(comment), comment.getEvent().getId(),
-        comment.isDeleted(), comment.getCreatedAt(),
-        comment.getUpdatedAt(), member.getId(),
-        member.getImageUrl(), member.getName()
+        getParentId(comment), event.getId(),
+        event.getName(), comment.isDeleted(),
+        comment.getCreatedAt(), comment.getUpdatedAt(),
+        member.getId(), member.getImageUrl(),
+        member.getName()
+    );
+  }
+
+  public static CommentResponse from(final Comment comment, final List<Long> blockedMemberIds) {
+    final Member member = comment.getMember();
+    final Event event = comment.getEvent();
+
+    return new CommentResponse(
+        comment.getContentOrHideIfBlockedMember(blockedMemberIds), comment.getId(),
+        getParentId(comment), event.getId(),
+        event.getName(), comment.isDeleted(),
+        comment.getCreatedAt(), comment.getUpdatedAt(),
+        member.getId(), member.getImageUrl(),
+        member.getName()
     );
   }
 
@@ -43,4 +65,5 @@ public class CommentResponse {
         .map(Comment::getId)
         .orElse(null);
   }
+
 }

@@ -7,17 +7,19 @@ import static java.util.stream.Collectors.toList;
 import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.application.dto.ActivityResponses;
 import com.emmsale.activity.domain.Activity;
-import com.emmsale.activity.domain.ActivityType;
 import com.emmsale.activity.domain.ActivityRepository;
+import com.emmsale.activity.domain.ActivityType;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map.Entry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ActivityService {
 
   private final ActivityRepository activityRepository;

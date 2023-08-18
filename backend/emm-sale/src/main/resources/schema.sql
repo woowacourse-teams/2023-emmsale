@@ -7,8 +7,12 @@ drop table if exists kerdy.tag;
 drop table if exists kerdy.event_tag;
 drop table if exists kerdy.member_tag;
 drop table if exists kerdy.event_member;
-drop table if exists kerdy.notification;
+drop table if exists kerdy.request_notification;
 drop table if exists kerdy.fcm_token;
+drop table if exists kerdy.block;
+drop table if exists kerdy.update_notification;
+drop table if exists kerdy.report;
+drop table if exists kerdy.scrap;
 
 create table activity
 (
@@ -22,11 +26,11 @@ create table event
     id              bigint auto_increment primary key,
     created_at      datetime(6),
     updated_at      datetime(6),
-    end_date        datetime(6) not null,
+    end_date        datetime(6)  not null,
     information_url varchar(255) not null,
     location        varchar(255) not null,
     name            varchar(255) not null,
-    start_date      datetime(6) not null,
+    start_date      datetime(6)  not null,
     image_url       varchar(255),
     type            varchar(20)  not null
 );
@@ -110,3 +114,74 @@ create table fcm_token
     token     varchar(255) not null,
     member_id bigint       not null unique
 );
+
+-- 2023-08-08 14:40
+alter table event_member
+    add column content varchar(255) not null;
+alter table event_member
+    add column created_at datetime(6);
+alter table event_member
+    add column updated_at datetime(6);
+
+-- 2023.08.08 17:04
+rename table notification TO request_notification;
+
+create table update_notification
+(
+    id          bigint auto_increment primary key,
+    receiver_id bigint       not null,
+    redirect_id bigint       not null,
+    type        varchar(255) not null,
+    created_at  datetime(6)
+);
+
+-- 2023-08-08 17:20
+create table block
+(
+    id                bigint auto_increment primary key,
+    block_member_id   bigint      not null,
+    request_member_id bigint      not null,
+    created_at        datetime(6) null,
+    updated_at        datetime(6) null
+);
+
+-- 2023-08-08 23:00
+alter table event
+    add column apply_start_date datetime(6) not null;
+alter table event
+    add column apply_end_date datetime(6) not null;
+
+-- 2023-08-10 12:50
+create table scrap
+(
+    id         bigint auto_increment primary key,
+    member_id  bigint not null,
+    event_id   bigint not null,
+    created_at datetime(6),
+    updated_at datetime(6)
+);
+
+-- 2023-08-11 21:41
+alter table request_notification
+    add column is_read bit not null;
+
+-- 2023-08-12 12:55
+alter table update_notification
+    add column is_read bit not null;
+
+-- 2023-08-14 13:10
+create table report
+(
+    id          bigint auto_increment primary key,
+    reporter_id bigint      not null,
+    reported_id bigint      not null,
+    type        varchar(20) not null,
+    content_id  bigint      not null,
+    created_at  datetime(6),
+    updated_at  datetime(6)
+);
+
+-- 2023-08-16 13:42
+
+alter table member
+    add column github_username varchar(40) not null default '';

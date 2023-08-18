@@ -1,13 +1,13 @@
 package com.emmsale.member.application;
 
+import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
+
 import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.MemberQueryResponse;
 import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
-import com.emmsale.member.exception.MemberExceptionType;
-import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,8 @@ public class MemberQueryService {
   private final MemberRepository memberRepository;
 
   public Member findById(final Long memberId) {
-    return memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
+    return memberRepository.findById(memberId)
+        .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
   }
 
   //TODO: 다른 클래스로 메서드 분리
@@ -34,8 +35,8 @@ public class MemberQueryService {
   }
 
   public MemberProfileResponse findProfile(Long memberId) {
-    Member member = memberRepository.findById(memberId)
-        .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
+    final Member member = memberRepository.findById(memberId)
+        .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
 
     return MemberProfileResponse.from(member);
   }

@@ -2,6 +2,8 @@ package com.emmsale.comment.application.dto;
 
 import com.emmsale.base.BaseEntity;
 import com.emmsale.comment.domain.Comment;
+import com.emmsale.comment.exception.CommentException;
+import com.emmsale.comment.exception.CommentExceptionType;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -19,7 +21,24 @@ public class CommentHierarchyResponse {
   private final CommentResponse parentComment;
   private final List<CommentResponse> childComments;
 
-  public static List<CommentHierarchyResponse> from(final List<Comment> comments) {
+  public static CommentHierarchyResponse from(final List<Comment> comments,
+      final List<Long> blockedMemberIds) {
+    final List<CommentResponse> childComments = comments.stream()
+        .filter(Comment::isChild)
+        .map(comment -> CommentResponse.from(comment, blockedMemberIds))
+        .collect(Collectors.toList());
+
+    final CommentResponse parentComment = comments.stream()
+        .filter(Comment::isRoot)
+        .map(comment -> CommentResponse.from(comment, blockedMemberIds))
+        .findFirst()
+        .orElseThrow(() -> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT));
+
+    return new CommentHierarchyResponse(parentComment, childComments);
+  }
+
+  public static List<CommentHierarchyResponse> convertAllFrom(final List<Comment> comments,
+      final List<Long> blockedMemberIds) {
 
     final Map<Comment, List<Comment>> groupedByParent =
         groupingByParentAndSortedByCreatedAt(comments);
@@ -29,17 +48,20 @@ public class CommentHierarchyResponse {
     for (final Entry<Comment, List<Comment>> entry : groupedByParent.entrySet()) {
       final Comment parentComment = entry.getKey();
       final List<CommentResponse> childCommentResponses =
-          mapToCommentResponse(entry, parentComment);
+          mapToCommentResponse(entry, parentComment, blockedMemberIds);
 
       result.add(
-          new CommentHierarchyResponse(CommentResponse.from(parentComment), childCommentResponses)
+          new CommentHierarchyResponse(
+              CommentResponse.from(parentComment, blockedMemberIds),
+              childCommentResponses
+          )
       );
     }
 
     return result;
   }
 
-  private static LinkedHashMap<Comment, List<Comment>> groupingByParentAndSortedByCreatedAt(
+  private static Map<Comment, List<Comment>> groupingByParentAndSortedByCreatedAt(
       final List<Comment> comments
   ) {
     return comments.stream()
@@ -52,11 +74,12 @@ public class CommentHierarchyResponse {
 
   private static List<CommentResponse> mapToCommentResponse(
       final Entry<Comment, List<Comment>> entry,
-      final Comment parentComment
+      final Comment parentComment,
+      final List<Long> blockedMemberIds
   ) {
     return entry.getValue().stream()
         .filter(it -> isNotSameKeyAndValue(parentComment, it))
-        .map(CommentResponse::from)
+        .map(comment -> CommentResponse.from(comment, blockedMemberIds))
         .sorted(Comparator.comparing(CommentResponse::getCreatedAt))
         .collect(Collectors.toList());
   }

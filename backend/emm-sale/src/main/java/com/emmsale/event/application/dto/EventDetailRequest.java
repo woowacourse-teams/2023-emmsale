@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 public class EventDetailRequest {
 
-  private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+  private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
 
   @NotBlank(message = "행사의 이름을 입력해 주세요.")
   private final String name;
@@ -33,6 +33,11 @@ public class EventDetailRequest {
   @NotNull(message = "행사의 종료 일시를 입력해 주세요.")
   private final LocalDateTime endDateTime;
 
+  @DateTimeFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime applyStartDateTime;
+  @DateTimeFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime applyEndDateTime;
+
   private final List<TagRequest> tags;
 
   private final String imageUrl;
@@ -44,6 +49,8 @@ public class EventDetailRequest {
         location,
         startDateTime,
         endDateTime,
+        applyStartDateTime,
+        applyEndDateTime,
         informationUrl,
         type,
         imageUrl

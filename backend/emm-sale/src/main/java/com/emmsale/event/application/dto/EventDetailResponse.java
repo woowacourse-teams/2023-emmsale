@@ -16,22 +16,26 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class EventDetailResponse {
 
-  private static final String EXPECTED = "예정";
-  private static final String IN_PROGRESS = "진행 중";
-  private static final String END = "종료";
+  public static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
 
   private final Long id;
   private final String name;
   private final String informationUrl;
-  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime startDate;
-  @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime endDate;
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime applyStartDate;
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime applyEndDate;
   private final String location;
   private final String status;
+  private final String applyStatus;
   private final List<String> tags;
   private final String imageUrl;
   private final Integer remainingDays;
+  private final Integer applyRemainingDays;
   private final String type;
 
   public static EventDetailResponse from(final Event event, final LocalDate today) {
@@ -44,27 +48,18 @@ public class EventDetailResponse {
         event.getId(),
         event.getName(),
         event.getInformationUrl(),
-        event.getStartDate(),
-        event.getEndDate(),
+        event.getEventPeriod().getStartDate(),
+        event.getEventPeriod().getEndDate(),
+        event.getEventPeriod().getApplyStartDate(),
+        event.getEventPeriod().getApplyEndDate(),
         event.getLocation(),
-        calculateStatus(event.getStartDate(), event.getEndDate()),
+        event.getEventPeriod().calculateEventStatus(today).name(),
+        event.getEventPeriod().calculateEventApplyStatus(today).name(),
         tagNames,
         event.getImageUrl(),
-        event.calculateRemainingDays(today),
+        event.getEventPeriod().calculateRemainingDays(today),
+        event.getEventPeriod().calculateApplyRemainingDays(today),
         event.getType().toString()
     );
-  }
-
-  private static String calculateStatus(
-      final LocalDateTime startDate,
-      final LocalDateTime endDate
-  ) {
-    final LocalDateTime now = LocalDateTime.now();
-    if (startDate.isBefore(now)) {
-      return EXPECTED;
-    } else if (endDate.isBefore(now)) {
-      return IN_PROGRESS;
-    }
-    return END;
   }
 }

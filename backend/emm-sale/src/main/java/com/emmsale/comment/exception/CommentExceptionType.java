@@ -23,6 +23,16 @@ public enum CommentExceptionType implements BaseExceptionType {
   FORBIDDEN_MODIFY_DELETED_COMMENT(
       HttpStatus.FORBIDDEN,
       "삭제된 댓글은 수정할 수 없습니다."
+  ),
+
+  NOT_EVENT_AND_MEMBER_ID_BOTH_NULL(
+      HttpStatus.BAD_REQUEST,
+      "댓글 조회할 때 행사 또는 사용자의 ID 둘 다 NULL일 수는 없습니다"
+  ),
+
+  NOT_CREATE_CHILD_CHILD_COMMENT(
+      HttpStatus.BAD_REQUEST,
+      "대대댓글은 작성할 수 없습니다."
   )
 
   ;
