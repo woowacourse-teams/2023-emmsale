@@ -4,18 +4,18 @@ import com.emmsale.data.comment.Comment
 
 data class MyCommentsUiState(
     val isLoading: Boolean,
-    val isFetchingError: Boolean,
+    val isError: Boolean,
     val comments: List<MyCommentUiState>,
 ) {
 
-    fun changeToFetchingErrorState(): MyCommentsUiState = copy(
+    fun changeToErrorState(): MyCommentsUiState = copy(
         isLoading = false,
-        isFetchingError = true,
+        isError = true,
     )
 
     fun setCommentsState(newComments: List<Comment>, loginMemberId: Long): MyCommentsUiState = copy(
         isLoading = false,
-        isFetchingError = false,
+        isError = false,
         comments = newComments.flatMap { comment ->
             comment.childComments.map(MyCommentUiState::from) + MyCommentUiState.from(comment)
         }.filter { it.authorId == loginMemberId && !it.isDeleted },
@@ -24,7 +24,7 @@ data class MyCommentsUiState(
     companion object {
         val FIRST_LOADING = MyCommentsUiState(
             isLoading = true,
-            isFetchingError = false,
+            isError = false,
             comments = listOf(),
         )
     }

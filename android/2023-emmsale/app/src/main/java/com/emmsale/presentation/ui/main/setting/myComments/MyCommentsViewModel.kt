@@ -10,6 +10,7 @@ import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.RefreshableViewModel
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.setting.myComments.uiState.MyCommentsUiState
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 class MyCommentsViewModel(
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
-) : ViewModel() {
+) : ViewModel(), RefreshableViewModel {
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
@@ -25,7 +26,7 @@ class MyCommentsViewModel(
     private val _comments = NotNullMutableLiveData(MyCommentsUiState.FIRST_LOADING)
     val comments: NotNullLiveData<MyCommentsUiState> = _comments
 
-    fun fetchMyComments() {
+    override fun refresh() {
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
@@ -34,7 +35,7 @@ class MyCommentsViewModel(
             }
             when (val result = commentRepository.getCommentsByMemberId(token.uid)) {
                 is ApiError, is ApiException ->
-                    _comments.value = _comments.value.changeToFetchingErrorState()
+                    _comments.value = _comments.value.changeToErrorState()
 
                 is ApiSuccess ->
                     _comments.value = _comments.value.setCommentsState(result.data, token.uid)
