@@ -51,6 +51,7 @@ class OnboardingActivity : AppCompatActivity() {
     private fun navigateToMain() {
         binding.progressbarLoading.visibility = View.GONE
         MainActivity.startActivity(this)
+        finish()
     }
 
     private fun showMemberUpdateFailed() {
