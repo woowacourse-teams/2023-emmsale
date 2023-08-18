@@ -62,6 +62,7 @@ class MemberBlockActivity : AppCompatActivity() {
         when (event) {
             BlockedMembersUiEvent.DELETE_ERROR -> showBlockedMemberDeletingErrorMessage()
         }
+        viewModel.resetEvent()
     }
 
     private fun showBlockedMemberDeletingErrorMessage() {

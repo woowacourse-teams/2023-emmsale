@@ -206,7 +206,7 @@
             app:tabIndicatorColor="@color/primary_color"
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="2dp"
-            app:tabBackground="@color/white"
+            app:tabBackground="@drawable/bg_tablayout_indicator"
             app:tabSelectedTextAppearance="@style/EventDetail_SelectedTabStyle"
             app:tabSelectedTextColor="@color/primary_color"
             app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle"

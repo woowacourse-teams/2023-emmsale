@@ -61,6 +61,10 @@ class MemberBlockViewModel(
         }
     }
 
+    fun resetEvent() {
+        _event.value = null
+    }
+
     companion object {
         val factory = ViewModelFactory {
             MemberBlockViewModel(
