@@ -7,7 +7,6 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EventPublisher {
 
-  private static final String UPDATE_NOTIFICATION_EVENT_TYPE = "event";
 
   private final ApplicationEventPublisher applicationEventPublisher;
   private final InterestTagRepository interestTagRepository;
@@ -34,7 +32,7 @@ public class EventPublisher {
         .orElse(Collections.emptySet());
 
     notificationCommentCandidates.stream()
-        .map(it -> UpdateNotificationEvent.from(it, trigger.getId()))
+        .map(it -> UpdateNotificationEvent.of(it, trigger.getId()))
         .forEach(applicationEventPublisher::publishEvent);
   }
 
@@ -72,15 +70,10 @@ public class EventPublisher {
   }
 
   private void publishEvent(final Event event, final List<Member> members) {
-    for (Member member : members) {
-      final UpdateNotificationEvent updateNotificationEvent = new UpdateNotificationEvent(
-          member.getId(),
-          event.getId(),
-          UPDATE_NOTIFICATION_EVENT_TYPE,
-          LocalDateTime.now()
-      );
-
-      applicationEventPublisher.publishEvent(updateNotificationEvent);
-    }
+    members.forEach(
+        it -> applicationEventPublisher.publishEvent(
+            UpdateNotificationEvent.of(event, it.getId())
+        )
+    );
   }
 }
