@@ -13,7 +13,7 @@ import com.emmsale.presentation.common.extension.dp
 fun ImageView.setImage(imageUrl: String?) {
     Glide.with(this)
         .load(imageUrl)
-        .placeholder(R.mipmap.ic_launcher)
+        .placeholder(R.drawable.img_all_loading)
         .error(R.mipmap.ic_launcher)
         .fallback(R.mipmap.ic_launcher)
         .into(this)
@@ -30,7 +30,7 @@ fun ImageView.setRoundedImageUrl(
 ) {
     Glide.with(this)
         .load(imageUrl)
-        .placeholder(R.mipmap.ic_launcher)
+        .placeholder(R.drawable.img_all_loading)
         .error(R.mipmap.ic_launcher)
         .fallback(R.mipmap.ic_launcher)
         .transform(CenterCrop(), RoundedCorners(radius.dp))
@@ -46,7 +46,7 @@ fun ImageView.setCircleImage(imageUrl: String?, isCircle: Boolean) {
 
     Glide.with(this)
         .load(imageUrl)
-        .placeholder(R.mipmap.ic_launcher)
+        .placeholder(R.drawable.img_all_loading)
         .error(R.mipmap.ic_launcher)
         .fallback(R.mipmap.ic_launcher)
         .transform(CenterCrop(), CircleCrop())
