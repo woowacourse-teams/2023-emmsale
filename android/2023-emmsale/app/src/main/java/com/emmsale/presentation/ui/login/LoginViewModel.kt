@@ -33,11 +33,7 @@ class LoginViewModel(
 
         viewModelScope.launch {
             when (val loginResult = loginRepository.saveGithubCode(code)) {
-                is ApiSuccess -> {
-                    saveTokens(loginResult.data, fcmToken)
-                    configRepository.saveAutoLoginConfig(true)
-                }
-
+                is ApiSuccess -> saveTokens(loginResult.data, fcmToken)
                 is ApiError -> changeLoginState(LoginUiState.Error)
                 is ApiException -> changeLoginState(LoginUiState.Error)
             }
