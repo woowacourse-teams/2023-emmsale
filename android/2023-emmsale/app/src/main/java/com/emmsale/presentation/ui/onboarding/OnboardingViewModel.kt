@@ -7,6 +7,7 @@ import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.config.ConfigRepository
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 class OnboardingViewModel(
     private val activityRepository: ActivityRepository,
     private val memberRepository: MemberRepository,
+    private val configRepository: ConfigRepository,
 ) : ViewModel() {
     val name: MutableLiveData<String> = MutableLiveData("")
 
@@ -38,7 +40,7 @@ class OnboardingViewModel(
         when (val activitiesResult = activityRepository.getActivities()) {
             is ApiSuccess -> _activities.postValue(OnboardingUiState.from(activitiesResult.data))
             is ApiError, is ApiException ->
-                _activities.postValue(_activities.value.copy(isLoadingActivitiesFailed = true))
+                _activities.postValue(activities.value.copy(isLoadingActivitiesFailed = true))
         }
     }
 
@@ -64,7 +66,11 @@ class OnboardingViewModel(
             when (
                 memberRepository.updateMember(name.value!!, _activities.value.selectedActivityIds)
             ) {
-                is ApiSuccess -> updateMemberSavingUiState(MemberSavingUiState.Success)
+                is ApiSuccess -> {
+                    updateMemberSavingUiState(MemberSavingUiState.Success)
+                    configRepository.saveAutoLoginConfig(true)
+                }
+
                 is ApiError -> updateMemberSavingUiState(MemberSavingUiState.Failed)
                 is ApiException -> updateMemberSavingUiState(MemberSavingUiState.Failed)
             }
@@ -82,6 +88,7 @@ class OnboardingViewModel(
             OnboardingViewModel(
                 activityRepository = KerdyApplication.repositoryContainer.activityRepository,
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
+                configRepository = KerdyApplication.repositoryContainer.configRepository,
             )
         }
     }
