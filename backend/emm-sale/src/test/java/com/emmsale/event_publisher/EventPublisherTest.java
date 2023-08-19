@@ -209,6 +209,24 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
   }
 
   @Test
+  @DisplayName("publish(Comment) : 자신이 작성한 댓글이 Root 댓글이라면 알림이 가지 않는다.")
+  void test_publish_root_comment_no_notification() throws Exception {
+    //given
+    final Member 댓글_작성자1 = memberRepository.findById(1L).get();
+    eventRepository.save(event);
+    final Comment 알림_트리거_댓글 = commentRepository.save(
+        Comment.createRoot(event, 댓글_작성자1, "내용1")
+    );
+
+    //when
+    eventPublisher.publish(알림_트리거_댓글, 댓글_작성자1);
+
+    //then
+    verify(applicationEventPublisher, times(0))
+        .publishEvent(any(UpdateNotificationEvent.class));
+  }
+
+  @Test
   @DisplayName("publish(Comment) : 삭제된 댓글에 대해서는 알림이 가지 않는다.")
   void test_publish_comment_not_notification_deletedComment() throws Exception {
     //given

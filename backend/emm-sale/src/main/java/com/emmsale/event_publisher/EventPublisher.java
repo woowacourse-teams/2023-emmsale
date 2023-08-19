@@ -28,10 +28,6 @@ public class EventPublisher {
   private final MemberRepository memberRepository;
   private final CommentRepository commentRepository;
 
-  public void publish(final UpdateNotificationEvent event) {
-    applicationEventPublisher.publishEvent(event);
-  }
-
   public void publish(final Comment trigger, final Member loginMember) {
     final Set<Comment> notificationCommentCandidates = trigger.getParent()
         .map(parent -> findRelatedCommentsExcludingLoginMember(loginMember, parent))
@@ -58,7 +54,6 @@ public class EventPublisher {
             .values()
     );
   }
-
 
   public void publish(final Event event) {
     final List<Long> tagIds = event.getTags()
