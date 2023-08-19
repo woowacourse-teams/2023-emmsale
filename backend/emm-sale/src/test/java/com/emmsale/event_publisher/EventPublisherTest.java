@@ -5,10 +5,13 @@ import static com.emmsale.tag.TagFixture.백엔드;
 import static com.emmsale.tag.TagFixture.안드로이드;
 import static com.emmsale.tag.TagFixture.프론트엔드;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.emmsale.comment.domain.Comment;
+import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.comment.event.UpdateNotificationEvent;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
@@ -48,6 +51,8 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
   private TagRepository tagRepository;
   @Autowired
   private EventRepository eventRepository;
+  @Autowired
+  private CommentRepository commentRepository;
   @MockBean
   private ApplicationEventPublisher applicationEventPublisher;
 
@@ -147,6 +152,130 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     verify(applicationEventPublisher, times(0))
         .publishEvent(any(UpdateNotificationEvent.class));
   }
+
+  /**
+   * 1 ㄴ2 ㄴ3
+   * <p>
+   * 새로운 대댓글 ㄴ2  (1,3에게 알림)
+   */
+  @Test
+  @DisplayName("publish(Comment) : 대댓글이 생성되면 부모와 그 자식 댓글들 중에서 사용자가 작성한 댓글을 제외한 나머지 사용자들에게 알림을 보낼 수 있다.")
+  void test_publish_comment_parent_children() throws Exception {
+    //given
+    final Member 댓글_작성자1 = memberRepository.findById(1L).get();
+    final Member 로그인_사용자 = memberRepository.save(new Member(13445L, "image", "username1"));
+    final Member 댓글_작성자2 = memberRepository.save(new Member(13444L, "image", "username"));
+    eventRepository.save(event);
+    final Comment 부모_댓글 = commentRepository.save(Comment.createRoot(event, 댓글_작성자1, "내용1"));
+    final Comment 자식_댓글1 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 로그인_사용자, "내용2"));
+    final Comment 자식_댓글2 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 댓글_작성자2, "내용3"));
+    final Comment 알림_트리거_댓글 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 로그인_사용자, "내용4"));
+
+    doNothing().when(applicationEventPublisher).publishEvent(any());
+
+    //when
+    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
+
+    //then
+    verify(applicationEventPublisher, times(2))
+        .publishEvent(any(UpdateNotificationEvent.class));
+  }
+
+  @Test
+  @DisplayName("publish(Comment) : 대댓글을 생성할 경우 부모, 자식 댓글에서 나의 댓글만 존재한다면 알림이 가지 않는다.")
+  void test_publish_comment_parent_children_not_notification() throws Exception {
+    //given
+    final Member 댓글_작성자1 = memberRepository.findById(1L).get();
+    eventRepository.save(event);
+    final Comment 부모_댓글 = commentRepository.save(
+        Comment.createRoot(event, 댓글_작성자1, "내용1")
+    );
+    final Comment 자식_댓글1 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 댓글_작성자1, "내용2")
+    );
+    final Comment 알림_트리거_댓글 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 댓글_작성자1, "내용4")
+    );
+
+    //when
+    eventPublisher.publish(알림_트리거_댓글, 댓글_작성자1);
+
+    //then
+    verify(applicationEventPublisher, times(0))
+        .publishEvent(any(UpdateNotificationEvent.class));
+  }
+
+  @Test
+  @DisplayName("publish(Comment) : 삭제된 댓글에 대해서는 알림이 가지 않는다.")
+  void test_publish_comment_not_notification_deletedComment() throws Exception {
+    //given
+    eventRepository.save(event);
+    final Member 로그인_사용자 = memberRepository.findById(1L).get();
+    final Member 댓글_작성자1 = memberRepository.findById(2L).get();
+    final Member savedMember = memberRepository.save(new Member(200L, "imageUrl", "아마란스"));
+    final Member 댓글_작성자2 = memberRepository.findById(savedMember.getId()).get();
+
+    final Comment 부모_댓글 = commentRepository.save(
+        Comment.createRoot(event, 로그인_사용자, "내용1")
+    );
+    final Comment 자식_댓글1 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 댓글_작성자1, "내용2")
+    );
+    final Comment 자식_댓글2 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 댓글_작성자2, "내용3")
+    );
+    자식_댓글2.delete();
+    commentRepository.save(자식_댓글2);
+
+    final Comment 알림_트리거_댓글 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 로그인_사용자, "내용3")
+    );
+
+    //when
+    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
+
+    //then
+    verify(applicationEventPublisher, times(1))
+        .publishEvent(any(UpdateNotificationEvent.class));
+  }
+
+  @Test
+  @DisplayName("publish(Comment) : 삭제된 댓글에 대해서는 알림이 가지 않는다.")
+  void test_publish_comment_not_notification_deletedComment2() throws Exception {
+    //given
+    eventRepository.save(event);
+    final Member 로그인_사용자 = memberRepository.findById(1L).get();
+    final Member 댓글_작성자1 = memberRepository.findById(2L).get();
+    final Member savedMember = memberRepository.save(new Member(200L, "imageUrl", "아마란스"));
+    final Member 댓글_작성자2 = memberRepository.findById(savedMember.getId()).get();
+
+    final Comment 부모_댓글 = commentRepository.save(
+        Comment.createRoot(event, 로그인_사용자, "내용1")
+    );
+    final Comment 자식_댓글1 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 댓글_작성자1, "내용2")
+    );
+    final Comment 자식_댓글2 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 댓글_작성자2, "내용3")
+    );
+    부모_댓글.delete();
+    commentRepository.save(부모_댓글);
+
+    final Comment 알림_트리거_댓글 = commentRepository.save(
+        Comment.createChild(event, 부모_댓글, 로그인_사용자, "내용3")
+    );
+
+    //when
+    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
+
+    //then
+    verify(applicationEventPublisher, times(2))
+        .publishEvent(any(UpdateNotificationEvent.class));
+  }
+
 
   @TestConfiguration
   static class TestConfig {
