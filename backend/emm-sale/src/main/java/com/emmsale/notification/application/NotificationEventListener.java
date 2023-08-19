@@ -1,6 +1,6 @@
 package com.emmsale.notification.application;
 
-import com.emmsale.comment.event.UpdateNotificationEvent;
+import com.emmsale.event_publisher.UpdateNotificationEvent;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
 import com.emmsale.notification.domain.UpdateNotificationType;

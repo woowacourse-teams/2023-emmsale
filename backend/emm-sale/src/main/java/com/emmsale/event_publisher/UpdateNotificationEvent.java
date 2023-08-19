@@ -1,4 +1,4 @@
-package com.emmsale.comment.event;
+package com.emmsale.event_publisher;
 
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.event.domain.Event;

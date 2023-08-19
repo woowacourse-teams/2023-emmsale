@@ -2,7 +2,6 @@ package com.emmsale.event_publisher;
 
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
-import com.emmsale.comment.event.UpdateNotificationEvent;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;

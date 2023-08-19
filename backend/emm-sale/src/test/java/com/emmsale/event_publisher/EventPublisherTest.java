@@ -12,7 +12,6 @@ import static org.mockito.Mockito.verify;
 
 import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
-import com.emmsale.comment.event.UpdateNotificationEvent;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
