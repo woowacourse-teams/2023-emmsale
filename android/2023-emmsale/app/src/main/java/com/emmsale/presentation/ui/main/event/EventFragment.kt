@@ -73,7 +73,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
     }
 
     companion object {
-        val TAG: String = EventFragment::class.java.simpleName
+        const val TAG = "TAG_EVENT"
         private const val CONFERENCE_TAB = 1
     }
 }
