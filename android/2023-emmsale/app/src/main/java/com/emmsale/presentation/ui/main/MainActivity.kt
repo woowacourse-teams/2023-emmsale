@@ -3,11 +3,13 @@ package com.emmsale.presentation.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.main.event.EventFragment
 import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
 import com.emmsale.presentation.ui.main.setting.SettingFragment
@@ -15,11 +17,30 @@ import com.emmsale.presentation.ui.main.setting.SettingFragment
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
+    private var backPressedTime: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         if (savedInstanceState == null) addAllFragments()
         initBottomNavigationView()
+        initBackPressedDispatcher()
+    }
+
+    private fun initBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback {
+            if (binding.bnvMain.selectedItemId != R.id.mi_main_event) {
+                binding.bnvMain.selectedItemId = R.id.mi_main_event
+                return@addCallback
+            }
+
+            if (System.currentTimeMillis() - backPressedTime >= 2000) {
+                backPressedTime = System.currentTimeMillis()
+                showToast(getString(R.string.all_finish_confirm_message))
+            } else {
+                finish()
+            }
+        }
     }
 
     private fun initBottomNavigationView() {
@@ -39,11 +60,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.commitNow {
             add(R.id.fcv_main, MyProfileFragment(), MyProfileFragment.TAG)
             add(R.id.fcv_main, EventFragment(), EventFragment.TAG)
-            add(
-                R.id.fcv_main,
-                SettingFragment(),
-                SettingFragment.TAG,
-            )
+            add(R.id.fcv_main, SettingFragment(), SettingFragment.TAG)
         }
     }
 
