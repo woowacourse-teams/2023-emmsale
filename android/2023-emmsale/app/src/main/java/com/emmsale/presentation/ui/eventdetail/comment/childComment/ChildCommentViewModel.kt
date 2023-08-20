@@ -63,7 +63,6 @@ class ChildCommentViewModel(
     }
 
     fun saveChildComment(content: String, parentCommentId: Long, eventId: Long) {
-        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId, parentCommentId)) {
                 is ApiError, is ApiException -> _event.value = ChildCommentsUiEvent.POST_ERROR
@@ -85,7 +84,6 @@ class ChildCommentViewModel(
     }
 
     fun deleteComment(commentId: Long) {
-        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
                 is ApiError, is ApiException -> _event.value = ChildCommentsUiEvent.DELETE_ERROR
