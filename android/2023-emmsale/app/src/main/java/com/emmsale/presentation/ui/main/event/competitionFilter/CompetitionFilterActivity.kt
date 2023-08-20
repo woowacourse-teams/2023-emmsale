@@ -13,14 +13,10 @@ import com.emmsale.databinding.LayoutFilterCompetitionStatusBinding
 import com.emmsale.databinding.LayoutFilterCompetitionTagBinding
 import com.emmsale.presentation.common.extension.checkAll
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
-import com.emmsale.presentation.common.extension.message
-import com.emmsale.presentation.common.extension.negativeButton
-import com.emmsale.presentation.common.extension.positiveButton
 import com.emmsale.presentation.common.extension.showDatePickerDialog
-import com.emmsale.presentation.common.extension.showDialog
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.common.extension.title
 import com.emmsale.presentation.common.extension.uncheckAll
+import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.main.event.competitionFilter.uistate.CompetitionFilterUiState
 import com.emmsale.presentation.ui.main.event.competitionFilter.uistate.CompetitionFilteringDateOptionUiState
@@ -65,12 +61,12 @@ class CompetitionFilterActivity : AppCompatActivity() {
     }
 
     private fun askFilterClear() {
-        showDialog {
-            title(getString(R.string.competitionfilter_clear_title))
-            message(getString(R.string.competitionfilter_clear_message))
-            positiveButton(getString(R.string.all_okay)) { viewModel.clearFilters() }
-            negativeButton(getString(R.string.all_cancel))
-        }
+        ConfirmDialog(
+            context = this,
+            title = getString(R.string.competitionfilter_clear_title),
+            message = getString(R.string.competitionfilter_clear_message),
+            onPositiveButtonClick = { viewModel.clearFilters() },
+        ).show()
     }
 
     private fun initEventFilterApplyButtonClickListener() {
@@ -256,12 +252,12 @@ class CompetitionFilterActivity : AppCompatActivity() {
         }
 
         private fun showBackPressDialog() {
-            showDialog {
-                title(getString(R.string.competitionfilter_backpress_dialog_title))
-                message(getString(R.string.competitionfilter_backpress_dialog_message))
-                positiveButton { finish() }
-                negativeButton { }
-            }
+            ConfirmDialog(
+                context = this@CompetitionFilterActivity,
+                title = getString(R.string.competitionfilter_backpress_dialog_title),
+                message = getString(R.string.competitionfilter_backpress_dialog_message),
+                onPositiveButtonClick = { finish() },
+            ).show()
         }
     }
 }
