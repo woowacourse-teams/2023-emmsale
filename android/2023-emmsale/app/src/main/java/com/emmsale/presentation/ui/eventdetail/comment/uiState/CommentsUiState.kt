@@ -10,9 +10,11 @@ data class CommentsUiState(
 
     fun changeToLoadingState(): CommentsUiState = copy(
         isLoading = true,
+        isError = false,
     )
 
     fun changeToFetchingErrorState(): CommentsUiState = copy(
+        isLoading = false,
         isError = true,
     )
 

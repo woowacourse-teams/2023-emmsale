@@ -26,7 +26,6 @@ class EventDetailViewModel(
     val eventDetail: NotNullLiveData<EventDetailUiState> = _eventDetail
 
     init {
-        setLoadingState(true)
         refresh()
     }
 

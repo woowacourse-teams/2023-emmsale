@@ -1,6 +1,5 @@
 package com.emmsale.presentation.ui.eventdetail
 
-import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -110,8 +109,7 @@ class EventDetailActivity :
     inner class EventDetailOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             finish()
-            val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-            if (activityManager.appTasks.size == 1) MainActivity.startActivity(this@EventDetailActivity)
+            if (isTaskRoot) MainActivity.startActivity(this@EventDetailActivity)
         }
     }
 }

@@ -117,7 +117,7 @@ private fun Context.createNotification(
     notificationId: Int,
     intent: Intent? = null,
 ) = NotificationCompat.Builder(this, channelId)
-    .setSmallIcon(R.drawable.ic_launcher_foreground)
+    .setSmallIcon(R.drawable.ic_all_notification)
     .setContentTitle(title)
     .setContentText(message)
     .setContentIntent(

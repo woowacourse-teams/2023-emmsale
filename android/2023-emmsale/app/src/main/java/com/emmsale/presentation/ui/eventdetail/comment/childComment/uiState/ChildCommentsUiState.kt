@@ -11,9 +11,11 @@ data class ChildCommentsUiState(
 
     fun changeToLoadingState(): ChildCommentsUiState = copy(
         isLoading = true,
+        isError = false,
     )
 
     fun changeToErrorState(): ChildCommentsUiState = copy(
+        isLoading = false,
         isError = true,
     )
 

@@ -12,6 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
         android:background="@color/white">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,7 +62,7 @@
                 android:layout_marginTop="11dp"
                 android:gravity="center"
                 android:lineSpacingExtra="4.2sp"
-                android:text="@string/network_error_message"
+                android:text="@string/all_network_error_message"
                 android:textColor="@color/gray"
                 app:layout_constraintEnd_toEndOf="@+id/textView"
                 app:layout_constraintStart_toStartOf="@+id/textView"

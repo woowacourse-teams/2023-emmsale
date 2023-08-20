@@ -46,16 +46,14 @@ class RecruitmentNotificationViewModel(
 
     override fun refresh() {
         viewModelScope.launch {
-            _notifications.postValue(_notifications.value.copy(isLoading = true))
+            _notifications.value = _notifications.value.copy(isLoading = true)
             val uid = tokenRepository.getToken()?.uid ?: return@launch
 
             when (val result = notificationRepository.getRecruitmentNotifications(uid)) {
                 is ApiSuccess -> updateNotifications(result.data)
-                is ApiException, is ApiError -> _notifications.postValue(
-                    _notifications.value.copy(
-                        isLoading = false,
-                        isError = true,
-                    ),
+                is ApiException, is ApiError -> _notifications.value = _notifications.value.copy(
+                    isLoading = false,
+                    isError = true,
                 )
             }
         }
@@ -76,6 +74,7 @@ class RecruitmentNotificationViewModel(
 
         _notifications.value = _notifications.value.copy(
             isLoading = false,
+            isError = false,
             notificationGroups = notificationHeaders,
         )
     }

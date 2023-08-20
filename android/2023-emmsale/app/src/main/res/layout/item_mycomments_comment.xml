@@ -45,31 +45,18 @@
             tools:text="해커톤 프로그램 열려서 너무 좋아요.해커톤 프로그램 열려서 너무 좋아요.해커톤 프로그램 열려서 너무 좋아요.해커톤 프로그램 열려서 너무 좋아요.해커톤 프로그램 열려서 너무 좋아요.해커톤 프로그램 열려서 너무 좋아요." />
 
         <TextView
-            android:id="@+id/tv_mycomments_child_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="17dp"
-            android:text="@{@string/comments_child_comments_count_format(comment.childCount)}"
-            android:textColor="@color/primary_color"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_mycomments_event_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_mycomments_content"
-            tools:text="답글 0" />
-
-        <TextView
             android:id="@+id/tv_mycomment_last_modified_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:text="@{comment.lastModifiedDate}"
             android:textColor="@color/gray"
             android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_mycomments_child_count"
-            app:layout_constraintStart_toEndOf="@+id/tv_mycomments_child_count"
-            app:layout_constraintTop_toTopOf="@+id/tv_mycomments_child_count"
-            tools:text="2023.08.11" />
+            tools:text="2023.08.11"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mycomments_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_mycomments_event_name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="17dp" />
 
         <TextView
             android:id="@+id/tv_mycomments_modified_label"

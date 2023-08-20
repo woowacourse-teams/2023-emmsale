@@ -13,8 +13,8 @@ import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDeleg
 import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.activityChipOf
+import com.emmsale.presentation.ui.main.setting.notificationTagConfig.uistate.NotificationTagConfigUiEvent
 import com.emmsale.presentation.ui.main.setting.notificationTagConfig.uistate.NotificationTagConfigUiState
-import com.emmsale.presentation.ui.main.setting.notificationTagConfig.uistate.NotificationTagsConfigUiState
 
 class NotificationTagConfigActivity :
     AppCompatActivity(),
@@ -59,34 +59,12 @@ class NotificationTagConfigActivity :
 
     private fun initObservers() {
         setupNotificationTagsObserver()
+        setupUiEvent()
     }
 
     private fun setupNotificationTagsObserver() {
         viewModel.notificationTags.observe(this) { uiState ->
-            handleNotificationTagsErrors(uiState)
-            handleNotificationTagsSuccess(uiState)
-        }
-    }
-
-    private fun handleNotificationTagsErrors(uiState: NotificationTagsConfigUiState) {
-        when {
-            uiState.isTagFetchingError || uiState.isInterestTagFetchingError -> showTagFetchingErrorMessage()
-            uiState.isInterestTagsUpdatingError -> showInterestTagsUpdateErrorMessage()
-        }
-    }
-
-    private fun showTagFetchingErrorMessage() {
-        binding.root.showSnackBar(R.string.notificationtagconfig_tag_fetching_error_message)
-    }
-
-    private fun showInterestTagsUpdateErrorMessage() {
-        binding.root.showSnackBar(R.string.notificationtagconfig_interest_tags_update_error_message)
-    }
-
-    private fun handleNotificationTagsSuccess(uiState: NotificationTagsConfigUiState) {
-        when {
-            uiState.isTagFetchingSuccess -> updateNotificationTagViews(uiState.conferenceTags)
-            uiState.isInterestTagsUpdateSuccess -> finishWithTagUpdateMessage()
+            updateNotificationTagViews(uiState.conferenceTags)
         }
     }
 
@@ -120,9 +98,28 @@ class NotificationTagConfigActivity :
             }
         }
 
+    private fun setupUiEvent() {
+        viewModel.event.observe(this) {
+            handleEvent(it)
+        }
+    }
+
+    private fun handleEvent(event: NotificationTagConfigUiEvent?) {
+        if (event == null) return
+        when (event) {
+            NotificationTagConfigUiEvent.UPDATE_SUCCESS -> finishWithTagUpdateMessage()
+            NotificationTagConfigUiEvent.UPDATE_FAIL -> showInterestTagsUpdateErrorMessage()
+        }
+        viewModel.resetEvent()
+    }
+
     private fun finishWithTagUpdateMessage() {
         binding.root.showSnackBar(R.string.notificationtagconfig_interest_tags_update_message)
         finish()
+    }
+
+    private fun showInterestTagsUpdateErrorMessage() {
+        binding.root.showSnackBar(R.string.notificationtagconfig_interest_tags_update_error_message)
     }
 
     companion object {

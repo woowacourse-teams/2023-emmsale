@@ -57,7 +57,7 @@ class OpenProfileUrlConfigActivity : AppCompatActivity() {
                 binding.root.showSnackBar(getString(R.string.openprofileurlconfig_register_success))
                 finish()
             } else {
-                binding.root.showSnackBar(getString(R.string.oepnprofileurlconfig_register_fail))
+                binding.root.showSnackBar(getString(R.string.openprofileurlconfig_register_fail))
             }
         }
     }

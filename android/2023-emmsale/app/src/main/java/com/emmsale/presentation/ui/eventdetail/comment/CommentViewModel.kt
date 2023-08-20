@@ -60,7 +60,6 @@ class CommentViewModel(
     }
 
     fun saveComment(content: String, eventId: Long) {
-        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId)) {
                 is ApiError, is ApiException -> {
@@ -87,7 +86,6 @@ class CommentViewModel(
     }
 
     fun deleteComment(commentId: Long) {
-        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
                 is ApiError, is ApiException -> _event.value = CommentsUiEvent.DELETE_ERROR

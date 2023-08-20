@@ -17,6 +17,7 @@ import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyc
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderAdapter
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderClickListener
 import com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationUiEvent
+import com.emmsale.presentation.ui.profile.ProfileActivity
 
 class RecruitmentNotificationFragment :
     BaseFragment<FragmentRecruitmentNotificationBinding>(),
@@ -72,6 +73,10 @@ class RecruitmentNotificationFragment :
         }
 
         navigateToChat(openChatUrl)
+    }
+
+    override fun onSenderImageClick(memberId: Long) {
+        ProfileActivity.startActivity(context ?: return, memberId)
     }
 
     private fun showUnregisteredOpenChatUrlErrorMessage() {

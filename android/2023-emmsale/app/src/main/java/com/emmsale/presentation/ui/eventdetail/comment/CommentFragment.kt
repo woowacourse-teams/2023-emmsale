@@ -100,16 +100,14 @@ class CommentFragment :
 
     private fun cancelUpdateComment() {
         viewModel.setEditMode(false)
-        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
-        imm.hideSoftInputFromWindow(binding.etCommentsCommentUpdate.windowToken, 0)
+        hideKeyboard()
     }
 
     private fun updateComment() {
         val commentId = viewModel.editingCommentId.value ?: return
         val content = binding.etCommentsCommentUpdate.text.toString()
         viewModel.updateComment(commentId, content)
-        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
-        imm.hideSoftInputFromWindow(binding.etCommentsCommentUpdate.windowToken, 0)
+        hideKeyboard()
     }
 
     private fun initCommentsRecyclerView() {
@@ -137,10 +135,7 @@ class CommentFragment :
     private fun editComment(commentId: Long) {
         viewModel.setEditMode(true, commentId)
         binding.etCommentsCommentUpdate.requestFocus()
-
-        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
-        @Suppress("DEPRECATION")
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        showKeyboard()
     }
 
     private fun deleteComment(commentId: Long) {
@@ -207,6 +202,14 @@ class CommentFragment :
 
     private fun hideKeyboard() {
         inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
+    }
+
+    private fun showKeyboard() {
+        @Suppress("DEPRECATION")
+        inputMethodManager.toggleSoftInput(
+            InputMethodManager.SHOW_FORCED,
+            InputMethodManager.HIDE_IMPLICIT_ONLY,
+        )
     }
 
     private fun setupEditingCommentUiLogic() {

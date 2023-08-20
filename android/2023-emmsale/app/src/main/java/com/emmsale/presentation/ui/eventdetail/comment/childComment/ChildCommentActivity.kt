@@ -64,16 +64,14 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun cancelUpdateComment() {
         viewModel.setEditMode(false)
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.etChildcommentsCommentUpdate.windowToken, 0)
+        hideKeyboard()
     }
 
     private fun updateComment() {
         val commentId = viewModel.editingCommentId.value ?: return
         val content = binding.etChildcommentsCommentUpdate.text.toString()
         viewModel.updateComment(commentId, content)
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.etChildcommentsCommentUpdate.windowToken, 0)
+        hideKeyboard()
     }
 
     private fun initBackPressedDispatcher() {
@@ -100,10 +98,7 @@ class ChildCommentActivity : AppCompatActivity() {
     private fun editComment(commentId: Long) {
         viewModel.setEditMode(true, commentId)
         binding.etChildcommentsCommentUpdate.requestFocus()
-
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        @Suppress("DEPRECATION")
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        showKeyboard()
     }
 
     private fun deleteComment(commentId: Long) {
@@ -218,6 +213,12 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun hideKeyboard() {
         inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
+    }
+
+    private fun showKeyboard() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        @Suppress("DEPRECATION")
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
     companion object {

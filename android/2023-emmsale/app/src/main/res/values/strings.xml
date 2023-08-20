@@ -24,6 +24,11 @@
     <string name="all_block">차단</string>
     <string name="all_report_duplicate_dialog_title">중복 신고</string>
     <string name="all_report_duplicate_dialog_message">이미 신고하셨습니다.</string>
+    <string name="all_network_error_icon_description">네트워크 에러 아이콘</string>
+    <string name="all_network_error_title">인터넷 연결이 불안정합니다.</string>
+    <string name="all_network_error_message">인터넷 연결이 불안정하여\n데이터를 불러올 수 없습니다.</string>
+    <string name="all_retry">재시도</string>
+    <string name="all_finish_confirm_message">한번 더 누르면 종료됩니다.</string>
 
     <string name="onboarding_member_update_failed_message">회원정보 업데이트를 실패했어요!</string>
     <string name="onboarding_back_press_desc">온보딩 화면 뒤로가기</string>
@@ -91,12 +96,18 @@
 
     <string name="profilemenudialog_block_button_label">차단하기</string>
     <string name="profilemenudialog_report_button_label">신고하기</string>
+    <string name="profilemenudialog_unblock_button_label">차단 해제</string>
 
     <string name="event_poster_description">event poster</string>
     <string name="event_filter">필터 설정</string>
     <string name="event_count_format">%,d개</string>
     <string name="event_count_prefix">총</string>
     <string name="event_count_suffix">개</string>
+    <string name="event_scrap">스크랩</string>
+    <string name="event_view_notification_description">알림 목록 화면 조회</string>
+    <string name="event_search_conference_description">컨퍼런스 검색 화면</string>
+    <string name="event_competition">대회</string>
+    <string name="event_conference">컨퍼런스</string>
 
     <string name="comment_menu_button">댓글의 메뉴 버튼</string>
     <string name="comment_deleted_comment_author_name">삭제</string>
@@ -129,11 +140,6 @@
     <string name="childcomments_toolbar_title">답글</string>
     <string name="childcomments_parent_comment_image_description">부모 댓글 작성자의 사진</string>
     <string name="childcomments_child_comment_author_image_description">자식 댓글 작성자의 사진</string>
-
-    <string name="event_view_notification_description">알림 목록 화면 조회</string>
-    <string name="event_search_conference_description">컨퍼런스 검색 화면</string>
-    <string name="event_competition">대회</string>
-    <string name="event_conference">컨퍼런스</string>
 
     <string name="conferencefilter_title">필터</string>
     <string name="conferencefilter_conference_status_title">진행 상태</string>
@@ -239,6 +245,13 @@
     <string name="recruitmentpostdetail_dialog_deletion_text">삭제</string>
     <string name="recruitmentpostdetail_dialog_report_text">신고하기</string>
     <string name="recruitmentpostdetail_report_dialog_message">해당 모집 글을 신고 하시겠습니까?</string>
+    <string name="recruitmentpostdetail_delete_dialog_title">모집 글 삭제</string>
+    <string name="recruitmentpostdetail_delete_dialog_message">해당 모집 글을 삭제 하시겠습니까?</string>
+    <string name="recruitmentpostdetail_navigate_to_event_detail_btn_text">행사 상세보기</string>
+    <string name="recruitmentpostdetail_dialog_open_profile_title">오픈 프로필 URL 등록</string>
+    <string name="recruitmentpostdetail_dialog_open_profile_message">오픈 프로필 URL이 없으면\n함께하기 요청을 할 수 없습니다.\n 등록창으로 이동하시겠습니까?</string>
+    <string name="recruitmentpostdetail_dialog_open_profile_positive_label">이동</string>
+    <string name="recruitmentpostdetail_dialog_open_profile_negative_label">취소</string>
 
     <string name="setting_member_image_description">회원의 사진</string>
     <string name="setting_notification_setting_button_label">알림 설정</string>
@@ -303,7 +316,7 @@
 
     <string name="editmyprofilebottomdialog_field_selection_guide">최대 %d개까지 선택 가능합니다.</string>
 
-    <string name="memberblock_block_description">차단된 사용자의 댓글, 모집 글, 같이가요 요청이 보이지 않습니다.</string>
+    <string name="memberblock_block_description">차단된 사용자의 댓글, 같이가요 요청이 보이지 않습니다.</string>
     <string name="memberblock_block_button_label">차단 해제</string>
     <string name="memberblock_menu_close_title">종료</string>
     <string name="memberblock_loading_blocked_members_failed_message">차단 목록을 불러오는 데에 실패했어요!</string>
@@ -332,13 +345,9 @@
     <string name="notificationtagconfig_tag_fetching_error_message">태그를 불러오지 못했어요!</string>
     <string name="notificationtagconfig_interest_tags_update_error_message">관심 태그 업데이트를 실패했어요!</string>
 
-    <string name="recruitmentpostdetail_delete_dialog_title">모집 글 삭제</string>
-    <string name="recruitmentpostdetail_delete_dialog_message">해당 모집 글을 삭제 하시겠습니까?</string>
     <string name="eventinfromation_scrap">스크랩</string>
 
-    <string name="event_scrap">스크랩</string>
     <string name="mypost_appbar_title">작성한 글</string>
-    <string name="recruitmentpostdetail_navigate_to_event_detail_btn_text">행사 상세보기</string>
 
     <string name="useterm_appbar_title">이용 약관</string>
 
@@ -347,15 +356,5 @@
     <string name="openprofileurlconfig_hint">https://open.kakao.com/&#8230;</string>
     <string name="openprofileurlconfig_complete">완료</string>
     <string name="openprofileurlconfig_register_success">성공적으로 등록하였습니다</string>
-    <string name="oepnprofileurlconfig_register_fail">등록에 실패하였습니다</string>
-    <string name="profilemenudialog_unblock_button_label">차단 해제</string>
-
-    <string name="recruitmentpostdetail_dialog_open_profile_title">오픈 프로필 URL 등록</string>
-    <string name="recruitmentpostdetail_dialog_open_profile_message">오픈 프로필 URL이 없으면\n함께하기 요청을 할 수 없습니다.\n 등록창으로 이동하시겠습니까?</string>
-    <string name="recruitmentpostdetail_dialog_open_profile_positive_label">이동</string>
-    <string name="recruitmentpostdetail_dialog_open_profile_negative_label">취소</string>
-    <string name="all_network_error_icon_description">네트워크 에러 아이콘</string>
-    <string name="all_network_error_title">인터넷 연결이 불안정합니다.</string>
-    <string name="network_error_message">인터넷 연결이 불안정하여\n데이터를 불러올 수 없습니다.</string>
-    <string name="all_retry">재시도</string>
+    <string name="openprofileurlconfig_register_fail">등록에 실패하였습니다</string>
 </resources>
