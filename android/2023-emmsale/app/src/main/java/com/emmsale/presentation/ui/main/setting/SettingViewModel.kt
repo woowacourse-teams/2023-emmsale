@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.main.setting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emmsale.BuildConfig
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
@@ -26,7 +27,7 @@ class SettingViewModel(
     private val _member = NotNullMutableLiveData(MemberUiState.FIRST_LOADING)
     val member: NotNullLiveData<MemberUiState> = _member
 
-    private val _appVersion = NotNullMutableLiveData("1.0")
+    private val _appVersion = NotNullMutableLiveData(BuildConfig.VERSION_NAME)
     val appVersion: NotNullLiveData<String> = _appVersion
 
     init {
