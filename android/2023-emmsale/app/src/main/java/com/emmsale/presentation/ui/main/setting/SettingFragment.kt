@@ -124,6 +124,6 @@ class SettingFragment :
     }
 
     companion object {
-        val TAG: String = SettingFragment::class.java.simpleName
+        const val TAG: String = "TAG_SETTING"
     }
 }

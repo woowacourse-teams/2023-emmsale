@@ -28,6 +28,7 @@ android {
             "GITHUB_CLIENT_ID",
             getApiKey("GH_CLIENT_ID"),
         )
+        signingConfig = signingConfigs.getByName("debug")
     }
     buildFeatures {
         buildConfig = true
@@ -37,7 +38,8 @@ android {
             buildConfigField("String", "BASE_URL", "\"https://kerdy.kro.kr\"")
         }
         release {
-            isMinifyEnabled = false
+            isShrinkResources = true
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
