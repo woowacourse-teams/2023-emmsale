@@ -62,6 +62,7 @@
         <activity
             android:name=".presentation.ui.eventdetail.comment.childComment.ChildCommentActivity"
             android:exported="false" />
+        <activity android:name=".presentation.ui.main.setting.UseTermWebViewActivity" />
         <activity
             android:name=".presentation.ui.main.event.conferenceFilter.ConferenceFilterActivity"
             android:exported="true" />
