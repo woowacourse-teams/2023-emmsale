@@ -4,5 +4,5 @@ import com.emmsale.data.token.Token
 
 data class Login(
     val token: Token,
-    val isOnboarded: Boolean,
+    val isDoneOnboarding: Boolean,
 )

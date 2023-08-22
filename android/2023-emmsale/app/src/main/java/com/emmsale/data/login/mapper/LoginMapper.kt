@@ -9,5 +9,5 @@ fun LoginApiModel.toData(): Login = Login(
         uid = uid,
         accessToken = accessToken,
     ),
-    isOnboarded = isOnboarded,
+    isDoneOnboarding = isOnboarded,
 )
