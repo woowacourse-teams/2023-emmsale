@@ -55,12 +55,11 @@ class CompetitionViewModel(
         viewModelScope.launch {
             _competitions.value = _competitions.value.copy(isLoading = true)
             when (val eventsResult = getCompetitions(statuses, tags, startDate, endDate)) {
-                is ApiSuccess ->
-                    _competitions.value = _competitions.value.copy(
-                        competitions = eventsResult.data.map(CompetitionUiState::from),
-                        isLoading = false,
-                        isError = false,
-                    )
+                is ApiSuccess -> _competitions.value = _competitions.value.copy(
+                    competitions = eventsResult.data.map(CompetitionUiState::from),
+                    isLoading = false,
+                    isError = false,
+                )
 
                 is ApiError, is ApiException -> _competitions.value = _competitions.value.copy(
                     isError = true,
@@ -82,8 +81,8 @@ class CompetitionViewModel(
         endDate = endDate,
     )
 
-    private fun fetchFilteredCompetitions(filterOption: CompetitionSelectedFilteringUiState) {
-        with(filterOption) {
+    private fun fetchFilteredCompetitions() {
+        with(selectedFilter.value) {
             fetchFilteredCompetitions(
                 selectedStatusFilteringOptionIds,
                 selectedTagFilteringOptionIds,
@@ -146,14 +145,13 @@ class CompetitionViewModel(
         }
 
     fun removeFilteringOptionBy(filterOptionId: Long) {
-        val newSelectedFilter = _selectedFilter.value.removeFilteringOptionBy(filterOptionId)
-        _selectedFilter.value = newSelectedFilter
-
-        fetchFilteredCompetitions(newSelectedFilter)
+        _selectedFilter.value = selectedFilter.value.removeFilteringOptionBy(filterOptionId)
+        fetchFilteredCompetitions()
     }
 
     fun removeDurationFilteringOption() {
         _selectedFilter.value = _selectedFilter.value.clearSelectedDate()
+        fetchFilteredCompetitions()
     }
 
     companion object {
