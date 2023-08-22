@@ -82,17 +82,6 @@ class ConferenceViewModel(
         endDate = endDate,
     )
 
-    private fun fetchFilteredConferences(filterOption: ConferenceSelectedFilteringUiState) {
-        with(filterOption) {
-            fetchFilteredConferences(
-                selectedStatusFilteringOptionIds,
-                selectedTagFilteringOptionIds,
-                startDateFilteringOption?.date,
-                endDateFilteringOption?.date,
-            )
-        }
-    }
-
     fun fetchFilteredConferences(
         statusFilterIds: Array<Long>,
         tagFilterIds: Array<Long>,
@@ -148,14 +137,24 @@ class ConferenceViewModel(
         }
 
     fun removeFilteringOptionBy(filterOptionId: Long) {
-        val newSelectedFilter = _selectedFilter.value.removeFilteringOptionBy(filterOptionId)
-        _selectedFilter.value = newSelectedFilter
-
-        fetchFilteredConferences(newSelectedFilter)
+        _selectedFilter.value = selectedFilter.value.removeFilteringOptionBy(filterOptionId)
+        fetchFilteredConferences()
     }
 
     fun removeDurationFilteringOption() {
-        _selectedFilter.value = _selectedFilter.value.clearSelectedDate()
+        _selectedFilter.value = selectedFilter.value.clearSelectedDate()
+        fetchFilteredConferences()
+    }
+
+    private fun fetchFilteredConferences() {
+        with(selectedFilter.value) {
+            fetchFilteredConferences(
+                selectedStatusFilteringOptionIds,
+                selectedTagFilteringOptionIds,
+                startDateFilteringOption?.date,
+                endDateFilteringOption?.date,
+            )
+        }
     }
 
     companion object {
