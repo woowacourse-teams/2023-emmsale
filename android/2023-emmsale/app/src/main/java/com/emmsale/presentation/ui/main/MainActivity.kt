@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
             if (System.currentTimeMillis() - backPressedTime >= 2000) {
                 backPressedTime = System.currentTimeMillis()
-                showToast(getString(R.string.all_finish_confirm_message))
+                showToast(R.string.all_finish_confirm_message)
             } else {
                 finish()
             }

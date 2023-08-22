@@ -42,9 +42,12 @@ class LoginViewModel(
 
     private suspend fun saveTokens(login: Login, fcmToken: String) {
         joinAll(saveUserToken(login), saveFcmToken(login.token.uid, fcmToken))
-        when {
-            login.isOnboarded -> changeLoginState(LoginUiState.Login)
-            else -> changeLoginState(LoginUiState.Onboarded)
+
+        if (login.isDoneOnboarding) {
+            changeLoginState(LoginUiState.Login)
+            configRepository.saveAutoLoginConfig(true)
+        } else {
+            changeLoginState(LoginUiState.Onboarded)
         }
     }
 
