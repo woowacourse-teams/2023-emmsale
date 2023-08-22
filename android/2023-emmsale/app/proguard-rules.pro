@@ -20,3 +20,6 @@
 # kept. Suspend functions are wrapped in continuations where the type argument
 # is used.
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+
+# Keep the InterestEventTagUpdateResponseApiModel class itself and its fields from obfuscation
+-keep class com.emmsale.data.eventTag.remote.dto.InterestEventTagUpdateResponseApiModel { *; }

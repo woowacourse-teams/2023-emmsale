@@ -107,15 +107,10 @@ class NotificationTagConfigActivity :
     private fun handleEvent(event: NotificationTagConfigUiEvent?) {
         if (event == null) return
         when (event) {
-            NotificationTagConfigUiEvent.UPDATE_SUCCESS -> finishWithTagUpdateMessage()
+            NotificationTagConfigUiEvent.UPDATE_SUCCESS -> finish()
             NotificationTagConfigUiEvent.UPDATE_FAIL -> showInterestTagsUpdateErrorMessage()
         }
         viewModel.resetEvent()
-    }
-
-    private fun finishWithTagUpdateMessage() {
-        binding.root.showSnackBar(R.string.notificationtagconfig_interest_tags_update_message)
-        finish()
     }
 
     private fun showInterestTagsUpdateErrorMessage() {

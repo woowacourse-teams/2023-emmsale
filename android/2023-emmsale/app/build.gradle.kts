@@ -45,6 +45,7 @@ android {
                 "proguard-rules.pro",
             )
             buildConfigField("String", "BASE_URL", "\"https://prod.kerdy.kro.kr\"")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
