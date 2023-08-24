@@ -7,6 +7,8 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.views.WarningDialog
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PrimaryNotificationsAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState1
 
@@ -56,19 +58,24 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
                 showChildComments = ::showChildComments,
                 deleteNotification = ::deleteNotification,
             )
+            itemAnimator = null
         }
     }
 
     private fun readNotification(notificationId: Long) {
+        viewModel.readNotification(notificationId)
     }
 
     private fun showEvent(eventId: Long) {
+        EventDetailActivity.startActivity(requireContext(), eventId)
     }
 
     private fun showChildComments(eventId: Long, parentCommentId: Long) {
+        ChildCommentActivity.startActivity(requireContext(), eventId, parentCommentId)
     }
 
     private fun deleteNotification(notificationId: Long) {
+        viewModel.deleteNotification(notificationId)
     }
 
     private fun setupUiState() {

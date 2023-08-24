@@ -67,6 +67,27 @@ class PrimaryNotificationViewModel1(
         }
     }
 
+    fun readNotification(notificationId: Long) {
+        viewModelScope.launch {
+            when (notificationRepository.updateUpdatedNotificationReadStatus(notificationId)) {
+                is ApiError, is ApiException -> {}
+
+                is ApiSuccess -> refresh()
+            }
+        }
+    }
+
+    fun deleteNotification(notificationId: Long) {
+        viewModelScope.launch {
+            when (notificationRepository.deleteUpdatedNotifications(listOf(notificationId))) {
+                is ApiError, is ApiException ->
+                    _uiEvent.value = PrimaryNotificationsUiEvent.DELETE_ERROR
+
+                is ApiSuccess -> refresh()
+            }
+        }
+    }
+
     companion object {
         val factory: ViewModelFactory<PrimaryNotificationViewModel1> = ViewModelFactory {
             PrimaryNotificationViewModel1(
