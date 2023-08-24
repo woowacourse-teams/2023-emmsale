@@ -3,6 +3,7 @@ package com.emmsale.presentation.ui.notificationBox.primaryNotification
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
@@ -10,7 +11,9 @@ import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PastNotificationsHeaderAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PrimaryNotificationsAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.RecentNotificationsHeaderAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState1
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiEvent
 
@@ -20,17 +23,35 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         PrimaryNotificationViewModel1.factory
     }
 
+    private val recentNotificationsHeaderAdapter = RecentNotificationsHeaderAdapter()
+
+    private val recentNotificationsAdapter = PrimaryNotificationsAdapter(
+        readNotification = ::readNotification,
+        showEvent = ::showEvent,
+        showChildComments = ::showChildComments,
+        deleteNotification = {},
+    )
+
+    private val pastNotificationsHeaderAdapter =
+        PastNotificationsHeaderAdapter(::showNotificationDeleteConfirmDialog)
+
+    private val pastNotificationsAdapter = PrimaryNotificationsAdapter(
+        readNotification = {},
+        showEvent = ::showEvent,
+        showChildComments = ::showChildComments,
+        deleteNotification = ::deleteNotification,
+    )
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDataBinding()
-        initRecyclerViews()
+        initRecyclerView()
         setupUiState()
         setupUiEvent()
     }
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
-        binding.deleteAllNotifications = ::showNotificationDeleteConfirmDialog
     }
 
     private fun showNotificationDeleteConfirmDialog() {
@@ -44,22 +65,13 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         ).show()
     }
 
-    private fun initRecyclerViews() {
-        binding.rvPrimarynotificationRecentNotifications.apply {
-            adapter = PrimaryNotificationsAdapter(
-                readNotification = ::readNotification,
-                showEvent = ::showEvent,
-                showChildComments = ::showChildComments,
-                deleteNotification = {},
-            )
-            itemAnimator = null
-        }
-        binding.rvPrimarynotificationPastNotifications.apply {
-            adapter = PrimaryNotificationsAdapter(
-                readNotification = {},
-                showEvent = ::showEvent,
-                showChildComments = ::showChildComments,
-                deleteNotification = ::deleteNotification,
+    private fun initRecyclerView() {
+        binding.rvPrimarynotificationNotifications.apply {
+            adapter = ConcatAdapter(
+                recentNotificationsHeaderAdapter,
+                recentNotificationsAdapter,
+                pastNotificationsHeaderAdapter,
+                pastNotificationsAdapter,
             )
             itemAnimator = null
         }
@@ -84,11 +96,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     private fun setupUiState() {
         viewModel.uiState.observe(viewLifecycleOwner) {
             if (it !is PrimaryNotificationScreenUiState1.Success) return@observe
-            val recentNotificationsAdapter =
-                binding.rvPrimarynotificationRecentNotifications.adapter as PrimaryNotificationsAdapter
             recentNotificationsAdapter.submitList(it.recentNotifications)
-            val pastNotificationsAdapter =
-                binding.rvPrimarynotificationPastNotifications.adapter as PrimaryNotificationsAdapter
             pastNotificationsAdapter.submitList(it.pastNotifications)
         }
     }

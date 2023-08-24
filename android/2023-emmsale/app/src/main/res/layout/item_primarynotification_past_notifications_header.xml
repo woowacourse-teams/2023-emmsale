@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/primarynotification_past_notification_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_primarynotification_past_notifications_title"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="17dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:text="@string/primarynotification_past_notification_delete_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_primarynotification_all_delete_button"
+            app:layout_constraintTop_toTopOf="@+id/tv_primarynotification_past_notifications_title"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_primarynotification_past_notifications_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingVertical="10dp"
+            android:layout_marginEnd="17dp"
+            android:textSize="12sp"
+            android:textColor="@color/light_gray"
+            android:textStyle="bold"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:background="@color/light_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_primarynotification_past_notifications_title"
+            android:layout_marginTop="20dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

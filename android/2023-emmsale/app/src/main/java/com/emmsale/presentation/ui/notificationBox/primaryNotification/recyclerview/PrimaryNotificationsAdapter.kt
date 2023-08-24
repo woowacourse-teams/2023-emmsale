@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.ItemPrimarynotificationChildCommentNotificationBinding
 import com.emmsale.databinding.ItemPrimarynotificationInterestEventNotificationBinding
+import com.emmsale.databinding.ItemPrimarynotificationPastNotificationsHeaderBinding
+import com.emmsale.databinding.ItemPrimarynotificationRecentNotificationsHeaderBinding
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState1
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState1
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState1
@@ -160,4 +162,74 @@ class InterestEventNotificationViewHolder(
 
 enum class PrimaryNotificationViewType1 {
     INTEREST_EVENT, CHILD_COMMENT
+}
+
+class RecentNotificationsHeaderAdapter :
+    RecyclerView.Adapter<RecentNotificationsHeaderViewHolder>() {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): RecentNotificationsHeaderViewHolder = RecentNotificationsHeaderViewHolder.create(parent)
+
+    override fun getItemCount(): Int = 1
+
+    override fun onBindViewHolder(holder: RecentNotificationsHeaderViewHolder, position: Int) {
+    }
+}
+
+class RecentNotificationsHeaderViewHolder(
+    binding: ItemPrimarynotificationRecentNotificationsHeaderBinding,
+) : RecyclerView.ViewHolder(binding.root) {
+    companion object {
+        fun create(parent: ViewGroup): RecentNotificationsHeaderViewHolder {
+            val binding = ItemPrimarynotificationRecentNotificationsHeaderBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
+
+            return RecentNotificationsHeaderViewHolder(binding)
+        }
+    }
+}
+
+class PastNotificationsHeaderAdapter(
+    private val deleteAllPastNotifications: () -> Unit,
+) : RecyclerView.Adapter<PastNotificationsHeaderViewHolder>() {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): PastNotificationsHeaderViewHolder = PastNotificationsHeaderViewHolder.create(
+        parent = parent,
+        deleteAllPastNotifications = deleteAllPastNotifications,
+    )
+
+    override fun getItemCount(): Int = 1
+
+    override fun onBindViewHolder(holder: PastNotificationsHeaderViewHolder, position: Int) {
+    }
+}
+
+class PastNotificationsHeaderViewHolder(
+    binding: ItemPrimarynotificationPastNotificationsHeaderBinding,
+    private val deleteAllPastNotifications: () -> Unit,
+) : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        binding.tvPrimarynotificationAllDeleteButton.setOnClickListener {
+            deleteAllPastNotifications()
+        }
+    }
+
+    companion object {
+        fun create(
+            parent: ViewGroup,
+            deleteAllPastNotifications: () -> Unit,
+        ): PastNotificationsHeaderViewHolder {
+            val binding = ItemPrimarynotificationPastNotificationsHeaderBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
+
+            return PastNotificationsHeaderViewHolder(
+                binding = binding,
+                deleteAllPastNotifications = deleteAllPastNotifications,
+            )
+        }
+    }
 }
