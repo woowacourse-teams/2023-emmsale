@@ -6,11 +6,13 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PrimaryNotificationsAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState1
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiEvent
 
 class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBinding>() {
     override val layoutResId: Int = R.layout.fragment_primary_notification
@@ -23,6 +25,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         initDataBinding()
         initRecyclerViews()
         setupUiState()
+        setupUiEvent()
     }
 
     private fun initDataBinding() {
@@ -88,5 +91,19 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
                 binding.rvPrimarynotificationPastNotifications.adapter as PrimaryNotificationsAdapter
             pastNotificationsAdapter.submitList(it.pastNotifications)
         }
+    }
+
+    private fun setupUiEvent() {
+        viewModel.uiEvent.observe(viewLifecycleOwner) {
+            handleUiEvent(it)
+        }
+    }
+
+    private fun handleUiEvent(event: PrimaryNotificationsUiEvent?) {
+        if (event == null) return
+        when (event) {
+            PrimaryNotificationsUiEvent.DELETE_ERROR -> binding.root.showSnackBar(R.string.primarynotification_delete_notification_failed_message)
+        }
+        viewModel.resetUiEvent()
     }
 }

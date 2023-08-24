@@ -88,6 +88,10 @@ class PrimaryNotificationViewModel1(
         }
     }
 
+    fun resetUiEvent() {
+        _uiEvent.value = null
+    }
+
     companion object {
         val factory: ViewModelFactory<PrimaryNotificationViewModel1> = ViewModelFactory {
             PrimaryNotificationViewModel1(
