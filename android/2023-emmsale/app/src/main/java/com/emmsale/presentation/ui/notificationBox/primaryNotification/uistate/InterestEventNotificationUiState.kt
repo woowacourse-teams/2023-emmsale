@@ -1,35 +1,41 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate
 
 import com.emmsale.data.notification.updated.InterestEventNotification
-import com.emmsale.data.notification.updated.UpdatedNotification
 import java.time.LocalDateTime
 
 class InterestEventNotificationUiState(
-    id: Long,
+    notificationId: Long,
     receiverId: Long,
     createdAt: LocalDateTime,
     isRead: Boolean,
     val eventId: Long,
 ) : PrimaryNotificationUiState(
-    id,
-    receiverId,
-    createdAt,
-    isRead,
+    notificationId = notificationId,
+    receiverId = receiverId,
+    createdAt = createdAt,
+    isRead = isRead,
 ) {
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is InterestEventNotificationUiState) return false
+        if (!super.equals(other)) return false
+
+        return eventId == other.eventId
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = PRIME * result + eventId.hashCode()
+        return result
+    }
+
     companion object {
-        private val MAPPING_FAILED_ERROR_MESSAGE: String =
-            "${InterestEventNotification::javaClass.name} 타입이 아닙니다."
-
-        fun from(updatedNotification: UpdatedNotification): PrimaryNotificationUiState {
-            check(updatedNotification is InterestEventNotification) { MAPPING_FAILED_ERROR_MESSAGE }
-
-            return InterestEventNotificationUiState(
-                id = updatedNotification.id,
-                receiverId = updatedNotification.receiverId,
-                eventId = updatedNotification.eventId,
-                createdAt = updatedNotification.createdAt,
-                isRead = updatedNotification.isRead,
-            )
-        }
+        fun from(notification: InterestEventNotification) = InterestEventNotificationUiState(
+            notificationId = notification.id,
+            receiverId = notification.receiverId,
+            createdAt = notification.createdAt,
+            isRead = notification.isRead,
+            eventId = notification.eventId,
+        )
     }
 }

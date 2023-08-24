@@ -8,30 +8,27 @@ import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.notification.NotificationRepository
-import com.emmsale.data.notification.updated.UpdatedNotification
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.RefreshableViewModel
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiEvent
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiState
 import kotlinx.coroutines.launch
 
 class PrimaryNotificationViewModel(
     private val tokenRepository: TokenRepository,
     private val notificationRepository: NotificationRepository,
 ) : ViewModel(), RefreshableViewModel {
-    private val _pastNotifications = NotNullMutableLiveData(PrimaryNotificationsUiState())
-    val pastNotifications: NotNullLiveData<PrimaryNotificationsUiState> = _pastNotifications
 
-    private val _recentNotifications = NotNullMutableLiveData(PrimaryNotificationsUiState())
-    val recentNotifications: NotNullLiveData<PrimaryNotificationsUiState> = _recentNotifications
+    private val _uiState =
+        NotNullMutableLiveData<PrimaryNotificationScreenUiState>(PrimaryNotificationScreenUiState.Loading)
+    val uiState: NotNullLiveData<PrimaryNotificationScreenUiState> = _uiState
 
-    private val _event = MutableLiveData<PrimaryNotificationsUiEvent?>(null)
-    val event: LiveData<PrimaryNotificationsUiEvent?> = _event
+    private val _uiEvent = MutableLiveData<PrimaryNotificationsUiEvent?>(null)
+    val uiEvent: LiveData<PrimaryNotificationsUiEvent?> = _uiEvent
 
     init {
         refresh()
@@ -40,70 +37,59 @@ class PrimaryNotificationViewModel(
     override fun refresh() {
         viewModelScope.launch {
             val uid = tokenRepository.getToken()?.uid ?: return@launch
-            _recentNotifications.value = recentNotifications.value.copy(isLoading = true)
-
             when (val result = notificationRepository.getUpdatedNotifications(uid)) {
-                is ApiSuccess -> {
-                    updatePastNotifications(result.data.filter { it.isRead })
-                    updateRecentNotifications(result.data.filterNot { it.isRead })
-                }
+                is ApiError, is ApiException ->
+                    _uiState.value = PrimaryNotificationScreenUiState.Error
 
-                is ApiError, is ApiException -> {
-                    _recentNotifications.value =
-                        recentNotifications.value.copy(isLoading = false, isError = true)
+                is ApiSuccess -> {
+                    val recentNotifications = result.data.filterNot { it.isRead }
+                    val pastNotifications = result.data.filter { it.isRead }
+                    _uiState.value = PrimaryNotificationScreenUiState.Success.create(
+                        recentNotifications,
+                        pastNotifications,
+                    )
                 }
             }
         }
     }
 
-    private fun updateRecentNotifications(notifications: List<UpdatedNotification>) {
-        _recentNotifications.value = PrimaryNotificationsUiState(
-            notifications = notifications.map(PrimaryNotificationUiState::from),
-        )
-    }
-
-    private fun updatePastNotifications(notifications: List<UpdatedNotification>) {
-        _pastNotifications.value = PrimaryNotificationsUiState(
-            notifications = notifications.map(PrimaryNotificationUiState::from),
-        )
-    }
-
-    fun changeToRead(notificationId: Long) {
+    fun deleteAllPastNotifications() {
         viewModelScope.launch {
-            notificationRepository.updateUpdatedNotificationReadStatus(notificationId)
+            val currentUiState = _uiState.value
+            if (currentUiState !is PrimaryNotificationScreenUiState.Success) return@launch
+            val pastNotificationIds = currentUiState.pastNotifications.map { it.notificationId }
+            when (notificationRepository.deleteUpdatedNotifications(pastNotificationIds)) {
+                is ApiError, is ApiException ->
+                    _uiEvent.value = PrimaryNotificationsUiEvent.DELETE_ERROR
+
+                is ApiSuccess -> refresh()
+            }
+        }
+    }
+
+    fun readNotification(notificationId: Long) {
+        viewModelScope.launch {
+            when (notificationRepository.updateUpdatedNotificationReadStatus(notificationId)) {
+                is ApiError, is ApiException -> {}
+
+                is ApiSuccess -> refresh()
+            }
         }
     }
 
     fun deleteNotification(notificationId: Long) {
         viewModelScope.launch {
             when (notificationRepository.deleteUpdatedNotifications(listOf(notificationId))) {
-                is ApiSuccess -> deleteNotificationById(notificationId)
-                is ApiError, is ApiException -> updateToNotificationDeleteErrorState()
+                is ApiError, is ApiException ->
+                    _uiEvent.value = PrimaryNotificationsUiEvent.DELETE_ERROR
+
+                is ApiSuccess -> refresh()
             }
         }
     }
 
-    private fun deleteNotificationById(id: Long) {
-        _pastNotifications.value = pastNotifications.value.deleteNotificationById(id)
-        _recentNotifications.value = recentNotifications.value.deleteNotificationById(id)
-    }
-
-    private fun updateToNotificationDeleteErrorState() {
-        _event.value = PrimaryNotificationsUiEvent.DELETE_ERROR
-    }
-
-    fun deleteAllPastNotifications() {
-        val pastNotificationIds = pastNotifications.value.notificationIds
-        viewModelScope.launch {
-            when (notificationRepository.deleteUpdatedNotifications(pastNotificationIds)) {
-                is ApiSuccess -> _pastNotifications.value = PrimaryNotificationsUiState.EMPTY
-                is ApiError, is ApiException -> updateToNotificationDeleteErrorState()
-            }
-        }
-    }
-
-    fun resetEvent() {
-        _event.value = null
+    fun resetUiEvent() {
+        _uiEvent.value = null
     }
 
     companion object {

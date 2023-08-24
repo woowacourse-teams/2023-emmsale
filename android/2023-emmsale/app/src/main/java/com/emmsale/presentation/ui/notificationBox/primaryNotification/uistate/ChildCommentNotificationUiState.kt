@@ -1,11 +1,10 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate
 
 import com.emmsale.data.notification.updated.ChildCommentNotification
-import com.emmsale.data.notification.updated.UpdatedNotification
 import java.time.LocalDateTime
 
 class ChildCommentNotificationUiState(
-    id: Long,
+    notificationId: Long,
     receiverId: Long,
     createdAt: LocalDateTime,
     isRead: Boolean,
@@ -14,33 +13,48 @@ class ChildCommentNotificationUiState(
     val parentCommentId: Long,
     val eventId: Long,
     val eventName: String,
-    val commentProfileImageUrl: String,
+    val authorImageUrl: String,
 ) : PrimaryNotificationUiState(
-    id = id,
+    notificationId = notificationId,
     receiverId = receiverId,
     createdAt = createdAt,
     isRead = isRead,
 ) {
+    override fun equals(other: Any?): Boolean {
+        if (other !is ChildCommentNotificationUiState) return false
+        if (!super.equals(other)) return false
+
+        return commentId == other.commentId &&
+            commentContent == other.commentContent &&
+            parentCommentId == other.parentCommentId &&
+            eventId == other.eventId &&
+            eventName == other.eventName &&
+            authorImageUrl == other.authorImageUrl
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = PRIME * result + commentId.hashCode()
+        result = PRIME * result + commentContent.hashCode()
+        result = PRIME * result + parentCommentId.hashCode()
+        result = PRIME * result + eventId.hashCode()
+        result = PRIME * result + eventName.hashCode()
+        result = PRIME * result + authorImageUrl.hashCode()
+        return result
+    }
 
     companion object {
-        private const val MAPPING_FAILED_ERROR_MESSAGE: String =
-            "[ERROR] ChildCommentNotification 타입이 아닙니다."
-
-        fun from(updatedNotification: UpdatedNotification): PrimaryNotificationUiState {
-            check(updatedNotification is ChildCommentNotification) { MAPPING_FAILED_ERROR_MESSAGE }
-
-            return ChildCommentNotificationUiState(
-                id = updatedNotification.id,
-                receiverId = updatedNotification.receiverId,
-                createdAt = updatedNotification.createdAt,
-                isRead = updatedNotification.isRead,
-                commentId = updatedNotification.childCommentId,
-                commentContent = updatedNotification.childCommentContent,
-                parentCommentId = updatedNotification.parentCommentId,
-                eventId = updatedNotification.eventId,
-                eventName = updatedNotification.eventName,
-                commentProfileImageUrl = updatedNotification.commentProfileImageUrl,
-            )
-        }
+        fun from(notification: ChildCommentNotification) = ChildCommentNotificationUiState(
+            notificationId = notification.id,
+            receiverId = notification.receiverId,
+            createdAt = notification.createdAt,
+            isRead = notification.isRead,
+            commentId = notification.childCommentId,
+            commentContent = notification.childCommentContent,
+            parentCommentId = notification.parentCommentId,
+            eventId = notification.eventId,
+            eventName = notification.eventName,
+            authorImageUrl = notification.commentProfileImageUrl,
+        )
     }
 }

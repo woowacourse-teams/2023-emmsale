@@ -11,7 +11,7 @@
 
         <variable
             name="notification"
-            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState1" />
+            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

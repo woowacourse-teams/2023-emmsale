@@ -11,16 +11,16 @@ import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PastNotificationsHeaderAdapter
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PrimaryNotificationsAdapter
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.RecentNotificationsHeaderAdapter
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState1
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.PastNotificationsHeaderAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.PrimaryNotificationsAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.RecentNotificationsHeaderAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiEvent
 
 class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBinding>() {
     override val layoutResId: Int = R.layout.fragment_primary_notification
-    private val viewModel: PrimaryNotificationViewModel1 by viewModels {
-        PrimaryNotificationViewModel1.factory
+    private val viewModel: PrimaryNotificationViewModel by viewModels {
+        PrimaryNotificationViewModel.factory
     }
 
     private val recentNotificationsHeaderAdapter = RecentNotificationsHeaderAdapter()
@@ -95,7 +95,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
 
     private fun setupUiState() {
         viewModel.uiState.observe(viewLifecycleOwner) {
-            if (it !is PrimaryNotificationScreenUiState1.Success) return@observe
+            if (it !is PrimaryNotificationScreenUiState.Success) return@observe
             recentNotificationsAdapter.submitList(it.recentNotifications)
             pastNotificationsAdapter.submitList(it.pastNotifications)
         }

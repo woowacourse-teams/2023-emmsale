@@ -11,7 +11,7 @@
 
         <variable
             name="notification"
-            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState1" />
+            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

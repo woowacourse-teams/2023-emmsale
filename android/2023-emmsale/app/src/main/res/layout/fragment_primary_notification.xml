@@ -7,11 +7,11 @@
     <data>
 
         <import type="android.view.View" />
-        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState1" />
+        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState" />
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.PrimaryNotificationViewModel1" />
+            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.PrimaryNotificationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +34,7 @@
             android:id="@+id/pb_primarynotification_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.uiState == PrimaryNotificationScreenUiState1.Loading.INSTANCE ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState == PrimaryNotificationScreenUiState.Loading.INSTANCE ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +47,7 @@
             android:layout_height="0dp"
             android:background="@color/white"
             android:clickable="true"
-            android:visibility="@{viewModel.uiState == PrimaryNotificationScreenUiState1.Error.INSTANCE ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState == PrimaryNotificationScreenUiState.Error.INSTANCE ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
