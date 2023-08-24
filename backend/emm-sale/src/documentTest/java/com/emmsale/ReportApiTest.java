@@ -1,4 +1,4 @@
-package com.emmsale.report.api;
+package com.emmsale;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.helper.MockMvcTestHelper;
+import com.emmsale.report.api.ReportApi;
 import com.emmsale.report.application.dto.ReportCreateRequest;
 import com.emmsale.report.application.dto.ReportCreateResponse;
 import com.emmsale.report.application.dto.ReportFindResponse;
@@ -68,8 +68,6 @@ class ReportApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(reportRequest)))
         .andExpect(status().isCreated())
         .andDo(document("add-report", requestFields, responseFields));
-
-
   }
 
   @Test
@@ -105,7 +103,5 @@ class ReportApiTest extends MockMvcTestHelper {
     mockMvc.perform(get("/reports"))
         .andExpect(status().isOk())
         .andDo(document("find-reports", responseFields));
-
-
   }
 }

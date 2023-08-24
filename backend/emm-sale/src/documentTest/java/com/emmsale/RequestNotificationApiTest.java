@@ -1,5 +1,6 @@
-package com.emmsale.notification.api;
+package com.emmsale;
 
+import static com.emmsale.notification.exception.NotificationExceptionType.NO_CONTENT_BLOCKED_MEMBER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
@@ -18,19 +19,19 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.helper.MockMvcTestHelper;
+import com.emmsale.notification.api.RequestNotificationApi;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
 import com.emmsale.notification.domain.RequestNotificationStatus;
 import com.emmsale.notification.exception.NotificationException;
-import com.emmsale.notification.exception.NotificationExceptionType;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
@@ -41,20 +42,27 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 class RequestNotificationApiTest extends MockMvcTestHelper {
 
 
+  private static final ResponseFieldsSnippet RESPONSE_FIELDS = responseFields(
+      fieldWithPath("notificationId").description("저장된 알림 ID"),
+      fieldWithPath("senderId").description("보내는 사람 ID"),
+      fieldWithPath("receiverId").description("받는 사람 ID"),
+      fieldWithPath("message").description("알림 보낼 때 메시지"),
+      fieldWithPath("eventId").description("행사 ID"),
+      fieldWithPath("isRead").description("읽은 상태"),
+      fieldWithPath("status").description("ACCEPTED/REJECTED/IN_PROGRESS 상태"),
+      fieldWithPath("createdAt").description("알림 생성 시간")
+  );
+  private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+      fieldWithPath("senderId").description("보내는 사람 ID"),
+      fieldWithPath("receiverId").description("받는 사람 ID"),
+      fieldWithPath("message").description("알림 보낼 때 메시지"),
+      fieldWithPath("eventId").description("행사 ID")
+  );
+
   @Test
   @DisplayName("create() : 알림을 성공적으로 생성한다면 201 Created를 반환할 수 있다.")
   void test_create() throws Exception {
     //given
-    final ResponseFieldsSnippet responseFields = responseFields(
-        fieldWithPath("notificationId").description("저장된 알림 ID"),
-        fieldWithPath("senderId").description("보내는 사람 ID"),
-        fieldWithPath("receiverId").description("받는 사람 ID"),
-        fieldWithPath("message").description("알림 보낼 때 메시지"),
-        fieldWithPath("eventId").description("행사 ID"),
-        fieldWithPath("isRead").description("읽은 상태"),
-        fieldWithPath("status").description("ACCEPTED/REJECTED/IN_PROGRESS 상태"),
-        fieldWithPath("createdAt").description("알림 생성 시간")
-    );
 
     final RequestFieldsSnippet requestFields = requestFields(
         fieldWithPath("senderId").description("보내는 사람 ID"),
@@ -96,20 +104,13 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
-        .andDo(document("create-request-notification", requestFields, responseFields));
+        .andDo(document("create-request-notification", requestFields, RESPONSE_FIELDS));
   }
 
   @Test
   @DisplayName("create() : 차단된 사용자에게 알림을 보낼 경우 204 NO_CONTENT를 반환한다.")
   void test_createWithBlockedSender() throws Exception {
     //given
-    final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("senderId").description("보내는 사람 ID"),
-        fieldWithPath("receiverId").description("받는 사람 ID"),
-        fieldWithPath("message").description("알림 보낼 때 메시지"),
-        fieldWithPath("eventId").description("행사 ID")
-    );
-
     final long senderId = 1L;
     final long receiverId = 2L;
     final long eventId = 3L;
@@ -123,7 +124,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
     );
 
     when(requestNotificationCommandService.create(any()))
-        .thenThrow(new NotificationException(NotificationExceptionType.NO_CONTENT_BLOCKED_MEMBER));
+        .thenThrow(new NotificationException(NO_CONTENT_BLOCKED_MEMBER));
 
     //when & then
     mockMvc.perform(post("/request-notifications")
@@ -131,7 +132,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
         .andDo(print())
-        .andDo(document("create-blocked-member-requestNotification", requestFields));
+        .andDo(document("create-blocked-member-requestNotification", REQUEST_FIELDS));
   }
 
 
@@ -251,7 +252,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(get("/request-notifications")
-            .header("Authorization", accessToken))
+            .header(HttpHeaders.AUTHORIZATION, accessToken))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-all-request-notification", responseFields));
@@ -271,7 +272,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(delete("/request-notifications/{request-notification-id}", notificationId)
-            .header("Authorization", "Bearer AccessToken")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent())
         .andDo(print())
@@ -292,7 +293,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(patch("/request-notifications/{request-notification-id}/read", notificationId)
-            .header("Authorization", "Bearer AccessToken"))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
         .andExpect(status().isNoContent())
         .andDo(print())
         .andDo(document("read-request-notification", pathParameters));
@@ -318,7 +319,7 @@ class RequestNotificationApiTest extends MockMvcTestHelper {
             .queryParam("receiverId", "1")
             .queryParam("senderId", "2")
             .queryParam("eventId", "3")
-            .header("Authorization", accessToken))
+            .header(HttpHeaders.AUTHORIZATION, accessToken))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("already-existed-request-notification", requestParam));

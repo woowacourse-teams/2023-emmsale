@@ -1,4 +1,4 @@
-package com.emmsale.tag.api;
+package com.emmsale;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -7,7 +7,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.helper.MockMvcTestHelper;
+import com.emmsale.tag.api.TagApi;
 import com.emmsale.tag.application.dto.TagResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -23,8 +23,12 @@ class TagApiTest extends MockMvcTestHelper {
   @DisplayName("존재하는 태그를 전부 조회할 수 있다.")
   void findAll() throws Exception {
     //given
-    final List<TagResponse> responses = List.of(new TagResponse(1L, "백엔드"),
-        new TagResponse(2L, "안드로이드"), new TagResponse(3L, "프론트"));
+    final List<TagResponse> responses = List.of(
+        new TagResponse(1L, "백엔드"),
+        new TagResponse(2L, "안드로이드"),
+        new TagResponse(3L, "프론트")
+    );
+
     when(tagQueryService.findAll()).thenReturn(responses);
 
     final ResponseFieldsSnippet responseFields = responseFields(

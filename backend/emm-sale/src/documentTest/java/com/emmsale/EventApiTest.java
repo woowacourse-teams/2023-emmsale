@@ -1,31 +1,13 @@
-package com.emmsale.event.api;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+package com.emmsale;
 
 import com.emmsale.event.EventFixture;
+import com.emmsale.event.api.EventApi;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
-import com.emmsale.helper.MockMvcTestHelper;
 import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.application.dto.TagRequest;
 import java.time.LocalDate;
@@ -40,36 +22,51 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(EventApi.class)
 class EventApiTest extends MockMvcTestHelper {
 
-  private static final ResponseFieldsSnippet EVENT_DETAIL_RESPONSE_FILED = responseFields(
-      fieldWithPath("id").type(JsonFieldType.NUMBER).description("event 식별자"),
-      fieldWithPath("name").type(JsonFieldType.STRING).description("envent 이름"),
-      fieldWithPath("informationUrl").type(JsonFieldType.STRING).description("상세정보 url"),
-      fieldWithPath("startDate").type(JsonFieldType.STRING).description("시작일자"),
-      fieldWithPath("endDate").type(JsonFieldType.STRING).description("종료일자"),
-      fieldWithPath("applyStartDate").type(JsonFieldType.STRING)
+  private static final ResponseFieldsSnippet EVENT_DETAIL_RESPONSE_FILED = PayloadDocumentation.responseFields(
+      PayloadDocumentation.fieldWithPath("id").type(JsonFieldType.NUMBER).description("event 식별자"),
+      PayloadDocumentation.fieldWithPath("name").type(JsonFieldType.STRING)
+          .description("envent 이름"),
+      PayloadDocumentation.fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+          .description("상세정보 url"),
+      PayloadDocumentation.fieldWithPath("startDate").type(JsonFieldType.STRING)
+          .description("시작일자"),
+      PayloadDocumentation.fieldWithPath("endDate").type(JsonFieldType.STRING).description("종료일자"),
+      PayloadDocumentation.fieldWithPath("applyStartDate").type(JsonFieldType.STRING)
           .description("신청 시작일자(nullable)"),
-      fieldWithPath("applyEndDate").type(JsonFieldType.STRING)
+      PayloadDocumentation.fieldWithPath("applyEndDate").type(JsonFieldType.STRING)
           .description("신청 종료일자(nullable)"),
-      fieldWithPath("location").type(JsonFieldType.STRING).description("장소"),
-      fieldWithPath("status").type(JsonFieldType.STRING).description("진행상태"),
-      fieldWithPath("applyStatus").type(JsonFieldType.STRING).description("행사 신청 기간의 진행 상황"),
-      fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("태그들"),
-      fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("이미지 Url(포스터)"),
-      fieldWithPath("remainingDays").type(JsonFieldType.NUMBER).description("시작일로 부터 D-day"),
-      fieldWithPath("applyRemainingDays").type(JsonFieldType.NUMBER)
+      PayloadDocumentation.fieldWithPath("location").type(JsonFieldType.STRING).description("장소"),
+      PayloadDocumentation.fieldWithPath("status").type(JsonFieldType.STRING).description("진행상태"),
+      PayloadDocumentation.fieldWithPath("applyStatus").type(JsonFieldType.STRING)
+          .description("행사 신청 기간의 진행 상황"),
+      PayloadDocumentation.fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("태그들"),
+      PayloadDocumentation.fieldWithPath("imageUrl").type(JsonFieldType.STRING)
+          .description("이미지 Url(포스터)"),
+      PayloadDocumentation.fieldWithPath("remainingDays").type(JsonFieldType.NUMBER)
+          .description("시작일로 부터 D-day"),
+      PayloadDocumentation.fieldWithPath("applyRemainingDays").type(JsonFieldType.NUMBER)
           .description("행사 신청 시작일까지 남은 일 수"),
-      fieldWithPath("type").type(JsonFieldType.STRING).description("event의 타입"));
+      PayloadDocumentation.fieldWithPath("type").type(JsonFieldType.STRING)
+          .description("event의 타입"));
 
   @Test
   @DisplayName("컨퍼런스의 상세정보를 조회할 수 있다.")
@@ -84,44 +81,52 @@ class EventApiTest extends MockMvcTestHelper {
         "ENDED", List.of("코틀린", "백엔드", "안드로이드"),
         "https://www.image.com", 2, -12, EventType.COMPETITION.toString());
 
-    when(eventService.findEvent(anyLong(), any())).thenReturn(eventDetailResponse);
+    Mockito.when(eventService.findEvent(ArgumentMatchers.anyLong(), ArgumentMatchers.any()))
+        .thenReturn(eventDetailResponse);
 
     //when
-    mockMvc.perform(get("/events/" + eventId)).andExpect(status().isOk())
-        .andDo(document("find-event", EVENT_DETAIL_RESPONSE_FILED));
+    mockMvc.perform(MockMvcRequestBuilders.get("/events/" + eventId)).andExpect(
+            MockMvcResultMatchers.status().isOk())
+        .andDo(MockMvcRestDocumentation.document("find-event", EVENT_DETAIL_RESPONSE_FILED));
   }
 
   @Test
   @DisplayName("특정 카테고리의 행사 목록을 조회할 수 있으면 200 OK를 반환한다.")
   void findEvents() throws Exception {
     // given
-    final RequestParametersSnippet requestParameters = requestParameters(
-        parameterWithName("category").description("행사 카테고리(CONFERENCE, COMPETITION)"),
-        parameterWithName("start_date").description("필터링하려는 기간의 시작일(yyyy:mm:dd)(option)")
+    final RequestParametersSnippet requestParameters = RequestDocumentation.requestParameters(
+        RequestDocumentation.parameterWithName("category")
+            .description("행사 카테고리(CONFERENCE, COMPETITION)"),
+        RequestDocumentation.parameterWithName("start_date")
+            .description("필터링하려는 기간의 시작일(yyyy:mm:dd)(option)")
             .optional(),
-        parameterWithName("end_date").description("필터링하려는 기간의 끝일(yyyy:mm:dd)(option)").optional(),
-        parameterWithName("tags").description("필터링하려는 태그(option)").optional(),
-        parameterWithName("statuses").description("필터링하려는 상태(UPCOMING, IN_PROGRESS, ENDED)(option)")
+        RequestDocumentation.parameterWithName("end_date")
+            .description("필터링하려는 기간의 끝일(yyyy:mm:dd)(option)").optional(),
+        RequestDocumentation.parameterWithName("tags").description("필터링하려는 태그(option)").optional(),
+        RequestDocumentation.parameterWithName("statuses")
+            .description("필터링하려는 상태(UPCOMING, IN_PROGRESS, ENDED)(option)")
             .optional()
     );
 
-    final ResponseFieldsSnippet responseFields = responseFields(
-        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
-        fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
-        fieldWithPath("[].startDate").type(JsonFieldType.STRING)
+    final ResponseFieldsSnippet responseFields = PayloadDocumentation.responseFields(
+        PayloadDocumentation.fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
+        PayloadDocumentation.fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
+        PayloadDocumentation.fieldWithPath("[].startDate").type(JsonFieldType.STRING)
             .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
-        fieldWithPath("[].endDate").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("[].endDate").type(JsonFieldType.STRING)
             .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
-        fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
+        PayloadDocumentation.fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
             .description("행사 태그 목록"),
-        fieldWithPath("[].status").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("[].status").type(JsonFieldType.STRING)
             .description("행사 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
-        fieldWithPath("[].applyStatus").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("[].applyStatus").type(JsonFieldType.STRING)
             .description("행사 신청 기간의 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
-        fieldWithPath("[].remainingDays").type(JsonFieldType.NUMBER).description("행사 시작일까지 남은 일 수"),
-        fieldWithPath("[].applyRemainingDays").type(JsonFieldType.NUMBER)
+        PayloadDocumentation.fieldWithPath("[].remainingDays").type(JsonFieldType.NUMBER)
+            .description("행사 시작일까지 남은 일 수"),
+        PayloadDocumentation.fieldWithPath("[].applyRemainingDays").type(JsonFieldType.NUMBER)
             .description("행사 신청 시작일까지 남은 일 수"),
-        fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("행사 이미지 URL")
+        PayloadDocumentation.fieldWithPath("[].imageUrl").type(JsonFieldType.STRING)
+            .description("행사 이미지 URL")
     );
 
     final List<EventResponse> eventResponses = List.of(
@@ -143,19 +148,20 @@ class EventApiTest extends MockMvcTestHelper {
 
     );
 
-    when(eventService.findEvents(any(EventType.class), any(LocalDate.class), eq("2023-07-01"),
-        eq("2023-07-31"),
-        eq(null), any())).thenReturn(eventResponses);
+    Mockito.when(eventService.findEvents(ArgumentMatchers.any(EventType.class),
+        ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.eq("2023-07-01"),
+        ArgumentMatchers.eq("2023-07-31"),
+        ArgumentMatchers.eq(null), ArgumentMatchers.any())).thenReturn(eventResponses);
 
     // when & then
-    mockMvc.perform(get("/events")
+    mockMvc.perform(MockMvcRequestBuilders.get("/events")
             .param("category", "CONFERENCE")
             .param("start_date", "2023-07-01")
             .param("end_date", "2023-07-31")
             .param("statuses", "UPCOMING,IN_PROGRESS")
         )
-        .andExpect(status().isOk())
-        .andDo(document("find-events", requestParameters, responseFields));
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(MockMvcRestDocumentation.document("find-events", requestParameters, responseFields));
   }
 
   @Test
@@ -181,32 +187,42 @@ class EventApiTest extends MockMvcTestHelper {
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()), request.getImageUrl(),
         10, 10, request.getType().toString());
 
-    when(eventService.updateEvent(any(), any(), any())).thenReturn(response);
+    Mockito.when(eventService.updateEvent(ArgumentMatchers.any(), ArgumentMatchers.any(),
+        ArgumentMatchers.any())).thenReturn(response);
 
-    final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("name").type(JsonFieldType.STRING).description("행사(Event) 이름"),
-        fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
-        fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
-        fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
-        fieldWithPath("applyStartDateTime").type(JsonFieldType.STRING)
+    final RequestFieldsSnippet requestFields = PayloadDocumentation.requestFields(
+        PayloadDocumentation.fieldWithPath("name").type(JsonFieldType.STRING)
+            .description("행사(Event) 이름"),
+        PayloadDocumentation.fieldWithPath("location").type(JsonFieldType.STRING)
+            .description("행사(Event) 장소"),
+        PayloadDocumentation.fieldWithPath("startDateTime").type(JsonFieldType.STRING)
+            .description("행사(Event) 시작일시"),
+        PayloadDocumentation.fieldWithPath("endDateTime").type(JsonFieldType.STRING)
+            .description("행사(Event) 종료일시"),
+        PayloadDocumentation.fieldWithPath("applyStartDateTime").type(JsonFieldType.STRING)
             .description("행사(Event) 신청시작일시"),
-        fieldWithPath("applyEndDateTime").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("applyEndDateTime").type(JsonFieldType.STRING)
             .description("행사(Event) 신청종료일시"),
-        fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("informationUrl").type(JsonFieldType.STRING)
             .description("행사(Event) 상세 정보 URL"),
-        fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("연관 태그명"),
-        fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("행사(Event) 이미지url"),
-        fieldWithPath("type").type(JsonFieldType.STRING).description("행사(Event) 타입")
+        PayloadDocumentation.fieldWithPath("tags[].name").type(JsonFieldType.STRING)
+            .description("연관 태그명"),
+        PayloadDocumentation.fieldWithPath("imageUrl").type(JsonFieldType.STRING)
+            .description("행사(Event) 이미지url"),
+        PayloadDocumentation.fieldWithPath("type").type(JsonFieldType.STRING)
+            .description("행사(Event) 타입")
     );
 
     //when
     final ResultActions result = mockMvc.perform(
-        put("/events/" + eventId).contentType(MediaType.APPLICATION_JSON_VALUE)
+        MockMvcRequestBuilders.put("/events/" + eventId)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(objectMapper.writeValueAsString(request)));
 
     //then
-    result.andExpect(status().isOk()).andDo(print())
-        .andDo(document("update-event", requestFields, EVENT_DETAIL_RESPONSE_FILED));
+    result.andExpect(MockMvcResultMatchers.status().isOk()).andDo(MockMvcResultHandlers.print())
+        .andDo(MockMvcRestDocumentation.document("update-event", requestFields,
+            EVENT_DETAIL_RESPONSE_FILED));
   }
 
   @Test
@@ -215,12 +231,15 @@ class EventApiTest extends MockMvcTestHelper {
     //given
     final long eventId = 1L;
 
-    doNothing().when(eventService).deleteEvent(eventId);
+    Mockito.doNothing().when(eventService).deleteEvent(eventId);
     //when
-    final ResultActions result = mockMvc.perform(delete("/events/" + eventId));
+    final ResultActions result = mockMvc.perform(
+        MockMvcRequestBuilders.delete("/events/" + eventId));
 
     //then
-    result.andExpect(status().isNoContent()).andDo(print()).andDo(document("delete-event"));
+    result.andExpect(MockMvcResultMatchers.status().isNoContent())
+        .andDo(MockMvcResultHandlers.print()).andDo(
+            MockMvcRestDocumentation.document("delete-event"));
   }
 
   @Nested
@@ -248,31 +267,41 @@ class EventApiTest extends MockMvcTestHelper {
           tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
           request.getImageUrl(), 10, 10, request.getType().toString());
 
-      when(eventService.addEvent(any(), any())).thenReturn(response);
+      Mockito.when(eventService.addEvent(ArgumentMatchers.any(), ArgumentMatchers.any()))
+          .thenReturn(response);
 
-      final RequestFieldsSnippet requestFields = requestFields(
-          fieldWithPath("name").type(JsonFieldType.STRING).description("행사(Event) 이름"),
-          fieldWithPath("location").type(JsonFieldType.STRING).description("행사(Event) 장소"),
-          fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("행사(Event) 시작일시"),
-          fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("행사(Event) 종료일시"),
-          fieldWithPath("applyStartDateTime").type(JsonFieldType.STRING)
+      final RequestFieldsSnippet requestFields = PayloadDocumentation.requestFields(
+          PayloadDocumentation.fieldWithPath("name").type(JsonFieldType.STRING)
+              .description("행사(Event) 이름"),
+          PayloadDocumentation.fieldWithPath("location").type(JsonFieldType.STRING)
+              .description("행사(Event) 장소"),
+          PayloadDocumentation.fieldWithPath("startDateTime").type(JsonFieldType.STRING)
+              .description("행사(Event) 시작일시"),
+          PayloadDocumentation.fieldWithPath("endDateTime").type(JsonFieldType.STRING)
+              .description("행사(Event) 종료일시"),
+          PayloadDocumentation.fieldWithPath("applyStartDateTime").type(JsonFieldType.STRING)
               .description("행사(Event) 신청시작일시"),
-          fieldWithPath("applyEndDateTime").type(JsonFieldType.STRING)
+          PayloadDocumentation.fieldWithPath("applyEndDateTime").type(JsonFieldType.STRING)
               .description("행사(Event) 신청종료일시"),
-          fieldWithPath("informationUrl").type(JsonFieldType.STRING)
+          PayloadDocumentation.fieldWithPath("informationUrl").type(JsonFieldType.STRING)
               .description("행사(Event) 상세 정보 URL"),
-          fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("연관 태그명"),
-          fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("행사(Event) imageUrl"),
-          fieldWithPath("type").type(JsonFieldType.STRING).description("Event 타입"));
+          PayloadDocumentation.fieldWithPath("tags[].name").type(JsonFieldType.STRING)
+              .description("연관 태그명"),
+          PayloadDocumentation.fieldWithPath("imageUrl").type(JsonFieldType.STRING)
+              .description("행사(Event) imageUrl"),
+          PayloadDocumentation.fieldWithPath("type").type(JsonFieldType.STRING)
+              .description("Event 타입"));
 
       //when
       final ResultActions result = mockMvc.perform(
-          post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
+          MockMvcRequestBuilders.post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
               .content(objectMapper.writeValueAsString(request)));
 
       //then
-      result.andExpect(status().isCreated()).andDo(print())
-          .andDo(document("add-event", requestFields, EVENT_DETAIL_RESPONSE_FILED));
+      result.andExpect(MockMvcResultMatchers.status().isCreated())
+          .andDo(MockMvcResultHandlers.print())
+          .andDo(MockMvcRestDocumentation.document("add-event", requestFields,
+              EVENT_DETAIL_RESPONSE_FILED));
     }
 
     @ParameterizedTest
@@ -295,11 +324,11 @@ class EventApiTest extends MockMvcTestHelper {
 
       //when
       final ResultActions result = mockMvc.perform(
-          post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
+          MockMvcRequestBuilders.post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
               .content(objectMapper.writeValueAsString(request)));
 
       //then
-      result.andExpect(status().isBadRequest());
+      result.andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @ParameterizedTest
@@ -322,11 +351,11 @@ class EventApiTest extends MockMvcTestHelper {
 
       //when
       final ResultActions result = mockMvc.perform(
-          post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
+          MockMvcRequestBuilders.post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
               .content(objectMapper.writeValueAsString(request)));
 
       //then
-      result.andExpect(status().isBadRequest());
+      result.andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @ParameterizedTest
@@ -350,11 +379,11 @@ class EventApiTest extends MockMvcTestHelper {
 
       //when
       final ResultActions result = mockMvc.perform(
-          post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
+          MockMvcRequestBuilders.post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
               .content(objectMapper.writeValueAsString(request)));
 
       //then
-      result.andExpect(status().isBadRequest());
+      result.andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @ParameterizedTest
@@ -376,10 +405,11 @@ class EventApiTest extends MockMvcTestHelper {
 
       //when
       final ResultActions result = mockMvc.perform(
-          post("/events").contentType(MediaType.APPLICATION_JSON_VALUE).content(request));
+          MockMvcRequestBuilders.post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
+              .content(request));
 
       //then
-      result.andExpect(status().isBadRequest());
+      result.andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @ParameterizedTest
@@ -401,13 +431,13 @@ class EventApiTest extends MockMvcTestHelper {
 
       //when
       final ResultActions result = mockMvc.perform(
-          post("/events")
+          MockMvcRequestBuilders.post("/events")
               .contentType(MediaType.APPLICATION_JSON_VALUE)
               .content(request)
       );
 
       //then
-      result.andExpect(status().isBadRequest());
+      result.andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
   }
 

@@ -1,4 +1,4 @@
-package com.emmsale.helper;
+package com.emmsale;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -42,7 +42,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-public class MockMvcTestHelper {
+abstract class MockMvcTestHelper {
 
   @Autowired
   protected MockMvc mockMvc;

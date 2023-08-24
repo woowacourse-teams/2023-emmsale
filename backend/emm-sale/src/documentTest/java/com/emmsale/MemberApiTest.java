@@ -1,4 +1,4 @@
-package com.emmsale.member.api;
+package com.emmsale;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.helper.MockMvcTestHelper;
+import com.emmsale.member.api.MemberApi;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
@@ -44,7 +44,6 @@ class MemberApiTest extends MockMvcTestHelper {
       fieldWithPath("[].memberActivityResponses[].name").type(JsonFieldType.STRING)
           .description("activity 이름")
   );
-
   private static final ResponseFieldsSnippet MEMBER_PROFILE_RESPONSE_FIELDS = responseFields(
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
       fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
@@ -53,9 +52,9 @@ class MemberApiTest extends MockMvcTestHelper {
       fieldWithPath("openProfileUrl").type(JsonFieldType.STRING).description("오픈 프로필 url"),
       fieldWithPath("githubUrl").type(JsonFieldType.STRING).description("깃허브 URL")
   );
-
   private static final RequestFieldsSnippet MEMBER_ACTIVITY_REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
+  private static final String FAKE_BEARER_ACCESS_TOKEN = "Bearer AccessToken";
 
   @Test
   @DisplayName("사용자 정보를 잘 저장하면, 204 no Content를 반환해줄 수 있다.")
@@ -67,19 +66,19 @@ class MemberApiTest extends MockMvcTestHelper {
     final MemberActivityInitialRequest request = new MemberActivityInitialRequest(name,
         activityIds);
 
-    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
+    final RequestFieldsSnippet requestFields = requestFields(
         fieldWithPath("activityIds").description("활동 id들"),
         fieldWithPath("name").description("사용자 이름")
     );
 
     //when & then
     mockMvc.perform(post("/members")
-            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
+            .header(HttpHeaders.AUTHORIZATION, FAKE_BEARER_ACCESS_TOKEN)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isNoContent())
         .andDo(print())
-        .andDo(document("initial-register-member", REQUEST_FIELDS));
+        .andDo(document("initial-register-member", requestFields));
   }
 
   @Test
@@ -89,7 +88,24 @@ class MemberApiTest extends MockMvcTestHelper {
     final List<Long> activityIds = List.of(4L, 5L, 6L);
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
-    final List<MemberActivityResponses> memberActivityResponses = List.of(
+    final List<MemberActivityResponses> memberActivityResponses = createMemberActivityResponses();
+
+    when(memberActivityService.addActivity(any(), any()))
+        .thenReturn(memberActivityResponses);
+
+    //when & then
+    mockMvc.perform(post("/members/activities")
+            .header(HttpHeaders.AUTHORIZATION, FAKE_BEARER_ACCESS_TOKEN)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isCreated())
+        .andDo(print())
+        .andDo(document("add-activity", MEMBER_ACTIVITY_REQUEST_FIELDS,
+            MEMBER_ACTIVITY_RESPONSE_FIELDS));
+  }
+
+  private List<MemberActivityResponses> createMemberActivityResponses() {
+    return List.of(
         new MemberActivityResponses("동아리",
             List.of(
                 new MemberActivityResponse(1L, "YAPP"),
@@ -109,19 +125,6 @@ class MemberApiTest extends MockMvcTestHelper {
                 new MemberActivityResponse(6L, "Backend")
             ))
     );
-
-    when(memberActivityService.addActivity(any(), any()))
-        .thenReturn(memberActivityResponses);
-
-    //when & then
-    mockMvc.perform(post("/members/activities")
-            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isCreated())
-        .andDo(print())
-        .andDo(document("add-activity", MEMBER_ACTIVITY_REQUEST_FIELDS,
-            MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
   @Test
@@ -141,8 +144,9 @@ class MemberApiTest extends MockMvcTestHelper {
         .thenReturn(memberActivityResponses);
 
     //when & then
-    mockMvc.perform(delete("/members/activities?activity-ids={activityIds}", activityIds)
-            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
+    mockMvc.perform(
+            delete("/members/activities?activity-ids={activityIds}", activityIds)
+                .header(HttpHeaders.AUTHORIZATION, FAKE_BEARER_ACCESS_TOKEN))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("delete-activity",
@@ -153,26 +157,7 @@ class MemberApiTest extends MockMvcTestHelper {
   @DisplayName("내 활동들을 조회할 수 있다.")
   void test_findActivity() throws Exception {
     //given
-    final List<MemberActivityResponses> memberActivityResponse = List.of(
-        new MemberActivityResponses("동아리",
-            List.of(
-                new MemberActivityResponse(1L, "YAPP"),
-                new MemberActivityResponse(2L, "DND"),
-                new MemberActivityResponse(3L, "nexters")
-            )),
-        new MemberActivityResponses("컨퍼런스",
-            List.of(
-                new MemberActivityResponse(4L, "인프콘")
-            )),
-        new MemberActivityResponses("교육",
-            List.of(
-                new MemberActivityResponse(5L, "우아한테크코스")
-            )),
-        new MemberActivityResponses("직무",
-            List.of(
-                new MemberActivityResponse(6L, "Backend")
-            ))
-    );
+    final List<MemberActivityResponses> memberActivityResponse = createMemberActivityResponses();
 
     //when
     when(memberActivityService.findActivities(any()))
@@ -199,7 +184,7 @@ class MemberApiTest extends MockMvcTestHelper {
 
     // when
     final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
-        .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
+        .header(HttpHeaders.AUTHORIZATION, FAKE_BEARER_ACCESS_TOKEN)
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(request)));
 
@@ -222,7 +207,7 @@ class MemberApiTest extends MockMvcTestHelper {
 
     // when
     final ResultActions result = mockMvc.perform(put("/members/description")
-        .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken")
+        .header(HttpHeaders.AUTHORIZATION, FAKE_BEARER_ACCESS_TOKEN)
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(request)));
 
