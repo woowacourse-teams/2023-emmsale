@@ -37,7 +37,7 @@ android {
             buildConfigField("String", "BASE_URL", "\"https://kerdy.kro.kr\"")
         }
         release {
-            // isShrinkResources = true
+            isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
