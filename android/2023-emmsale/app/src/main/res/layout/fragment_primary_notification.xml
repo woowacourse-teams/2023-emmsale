@@ -7,10 +7,15 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState1" />
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.PrimaryNotificationViewModel" />
+            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.PrimaryNotificationViewModel1" />
+
+        <variable
+            name="deleteAllNotifications"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,6 +72,8 @@
             app:layout_constraintTop_toTopOf="@+id/tv_primarynotification_past_notifications_title"
             app:layout_constraintBottom_toBottomOf="@+id/tv_primarynotification_past_notifications_title"
             app:layout_constraintEnd_toEndOf="parent"
+            android:paddingVertical="10dp"
+            android:onClick="@{() -> deleteAllNotifications.invoke()}"
             android:layout_marginEnd="17dp"
             android:textSize="12sp"
             android:textColor="@color/light_gray"
@@ -92,22 +99,23 @@
             android:id="@+id/rv_primarynotification_past_notifications" />
 
         <ProgressBar
-            android:id="@+id/progressBar5"
+            android:id="@+id/pb_primarynotification_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.recentNotifications.isLoading || viewModel.pastNotifications.isLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState == PrimaryNotificationScreenUiState1.Loading.INSTANCE ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <include
+            android:id="@+id/include_primarynotification_error_screen"
             layout="@layout/layout_all_error_screen"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/white"
             android:clickable="true"
-            android:visibility="@{viewModel.pastNotifications.isError || viewModel.recentNotifications.isError ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState == PrimaryNotificationScreenUiState1.Error.INSTANCE ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
