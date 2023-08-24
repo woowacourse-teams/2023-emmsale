@@ -16,8 +16,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.block.application.BlockCommandService;
-import com.emmsale.block.application.BlockQueryService;
 import com.emmsale.block.application.dto.BlockRequest;
 import com.emmsale.block.application.dto.BlockResponse;
 import com.emmsale.helper.MockMvcTestHelper;
@@ -27,7 +25,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
@@ -37,10 +34,6 @@ import org.springframework.restdocs.request.PathParametersSnippet;
 @WebMvcTest(BlockApi.class)
 class BlockApiTest extends MockMvcTestHelper {
 
-  @MockBean
-  private BlockCommandService blockCommandService;
-  @MockBean
-  private BlockQueryService blockQueryService;
 
   @Test
   @DisplayName("성공적으로 사용자를 차단할 경우 201 CREATED를 반환한다.")

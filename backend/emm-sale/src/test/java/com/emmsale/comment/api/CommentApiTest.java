@@ -17,8 +17,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.comment.application.CommentCommandService;
-import com.emmsale.comment.application.CommentQueryService;
 import com.emmsale.comment.application.dto.CommentAddRequest;
 import com.emmsale.comment.application.dto.CommentHierarchyResponse;
 import com.emmsale.comment.application.dto.CommentModifyRequest;
@@ -30,7 +28,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
@@ -60,10 +57,6 @@ class CommentApiTest extends MockMvcTestHelper {
       fieldWithPath("memberImageUrl").description("댓글 작성자 이미지 Url"),
       fieldWithPath("memberName").description("댓글 작성자 이름")
   );
-  @MockBean
-  private CommentCommandService commentCommandService;
-  @MockBean
-  private CommentQueryService commentQueryService;
 
   @Test
   @DisplayName("create() : 댓글에 제대로 저장이 되면 200 OK를 반환해줄 수 있다.")
@@ -72,7 +65,8 @@ class CommentApiTest extends MockMvcTestHelper {
     final String content = "내용";
     final CommentAddRequest request = new CommentAddRequest(content, 1L, null);
 
-    final CommentResponse commentResponse = new CommentResponse(content, 2L, 1L, 1L, "eventName",  false,
+    final CommentResponse commentResponse = new CommentResponse(content, 2L, 1L, 1L, "eventName",
+        false,
         LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1");
 
     when(commentCommandService.create(any(), any()))
@@ -132,12 +126,12 @@ class CommentApiTest extends MockMvcTestHelper {
             Collections.emptyList()
         ),
         new CommentHierarchyResponse(
-            new CommentResponse("부모댓글1", 5L, null, 1L, "eventName",  false,
+            new CommentResponse("부모댓글1", 5L, null, 1L, "eventName", false,
                 LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
             List.of(
-                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L,  "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, "eventName", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
-                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L,  "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, "eventName", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"
                 ))
         ));
@@ -190,12 +184,12 @@ class CommentApiTest extends MockMvcTestHelper {
 
     final CommentHierarchyResponse result =
         new CommentHierarchyResponse(
-            new CommentResponse("부모댓글1", 5L, null, 1L,  "eventName", false,
+            new CommentResponse("부모댓글1", 5L, null, 1L, "eventName", false,
                 LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
             List.of(
-                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L,  "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, "eventName", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
-                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L,  "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, "eventName", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1")
             )
         );
@@ -234,7 +228,7 @@ class CommentApiTest extends MockMvcTestHelper {
     final String modifiedContent = "변경된 내용";
     final CommentModifyRequest request = new CommentModifyRequest(modifiedContent);
 
-    final CommentResponse response = new CommentResponse("댓", 5L, null, 1L,  "eventName", false,
+    final CommentResponse response = new CommentResponse("댓", 5L, null, 1L, "eventName", false,
         LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1");
 
     when(commentCommandService.modify(anyLong(), any(), any()))

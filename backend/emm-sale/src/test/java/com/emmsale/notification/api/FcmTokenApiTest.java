@@ -10,20 +10,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
-import com.emmsale.notification.application.FcmTokenRegisterService;
 import com.emmsale.notification.application.dto.FcmTokenRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 
 @WebMvcTest(FcmTokenApi.class)
 class FcmTokenApiTest extends MockMvcTestHelper {
 
-  @MockBean
-  private FcmTokenRegisterService fcmTokenRegisterService;
 
   @Test
   @DisplayName("createFcmToken() : FcmToken이 새로 생성되거나 잘 수정되면 200 OK를 반환할 수 있다.")

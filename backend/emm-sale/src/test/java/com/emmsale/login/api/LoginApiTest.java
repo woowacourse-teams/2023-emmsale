@@ -11,12 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
-import com.emmsale.login.application.LoginService;
 import com.emmsale.login.application.dto.TokenResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
@@ -24,9 +22,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(LoginApi.class)
 class LoginApiTest extends MockMvcTestHelper {
-
-  @MockBean
-  private LoginService loginService;
 
   @Test
   @DisplayName("code가 유효할 경우 200과 함께 TokenResponse를 반환해 준다.")

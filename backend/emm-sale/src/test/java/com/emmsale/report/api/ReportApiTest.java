@@ -11,8 +11,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
-import com.emmsale.report.application.ReportCommandService;
-import com.emmsale.report.application.ReportQueryService;
 import com.emmsale.report.application.dto.ReportCreateRequest;
 import com.emmsale.report.application.dto.ReportCreateResponse;
 import com.emmsale.report.application.dto.ReportFindResponse;
@@ -22,7 +20,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
@@ -30,11 +27,6 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
 @WebMvcTest(ReportApi.class)
 class ReportApiTest extends MockMvcTestHelper {
-
-  @MockBean
-  private ReportCommandService reportCommandService;
-  @MockBean
-  private ReportQueryService reportQueryService;
 
   @Test
   @DisplayName("특정 게시글을 신고할 수 있다.")

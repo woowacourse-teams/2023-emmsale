@@ -19,8 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
-import com.emmsale.notification.application.RequestNotificationCommandService;
-import com.emmsale.notification.application.RequestNotificationQueryService;
 import com.emmsale.notification.application.dto.RequestNotificationModifyRequest;
 import com.emmsale.notification.application.dto.RequestNotificationRequest;
 import com.emmsale.notification.application.dto.RequestNotificationResponse;
@@ -33,7 +31,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
@@ -43,10 +40,6 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 @WebMvcTest(RequestNotificationApi.class)
 class RequestNotificationApiTest extends MockMvcTestHelper {
 
-  @MockBean
-  private RequestNotificationCommandService requestNotificationCommandService;
-  @MockBean
-  private RequestNotificationQueryService requestNotificationQueryService;
 
   @Test
   @DisplayName("create() : 알림을 성공적으로 생성한다면 201 Created를 반환할 수 있다.")

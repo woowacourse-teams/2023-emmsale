@@ -17,15 +17,12 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
-import com.emmsale.scrap.application.ScrapCommandService;
-import com.emmsale.scrap.application.ScrapQueryService;
 import com.emmsale.scrap.application.dto.ScrapRequest;
 import com.emmsale.scrap.application.dto.ScrapResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -34,11 +31,6 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
 @WebMvcTest(ScrapApi.class)
 class ScrapApiTest extends MockMvcTestHelper {
-
-  @MockBean
-  private ScrapQueryService scrapQueryService;
-  @MockBean
-  private ScrapCommandService scrapCommandService;
 
   @Test
   @DisplayName("스크랩 목록을 성공적으로 조회하면 200 OK를 반환한다.")

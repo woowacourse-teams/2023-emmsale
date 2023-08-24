@@ -16,8 +16,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.event.application.RecruitmentPostCommandService;
-import com.emmsale.event.application.RecruitmentPostQueryService;
 import com.emmsale.event.application.dto.RecruitmentPostQueryResponse;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.application.dto.RecruitmentPostResponse;
@@ -28,7 +26,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -37,11 +34,6 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
 @WebMvcTest(RecruitmentPostApi.class)
 class RecruitmentPostApiTest extends MockMvcTestHelper {
-
-  @MockBean
-  private RecruitmentPostQueryService postQueryService;
-  @MockBean
-  private RecruitmentPostCommandService postCommandService;
 
   @Test
   @DisplayName("Event에 참여게시글을 추가할 수 있다.")

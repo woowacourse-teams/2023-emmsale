@@ -16,9 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.helper.MockMvcTestHelper;
-import com.emmsale.member.application.MemberActivityService;
-import com.emmsale.member.application.MemberQueryService;
-import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
@@ -30,7 +27,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -60,13 +56,6 @@ class MemberApiTest extends MockMvcTestHelper {
 
   private static final RequestFieldsSnippet MEMBER_ACTIVITY_REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
-
-  @MockBean
-  private MemberActivityService memberActivityService;
-  @MockBean
-  private MemberUpdateService memberUpdateService;
-  @MockBean
-  private MemberQueryService memberQueryService;
 
   @Test
   @DisplayName("사용자 정보를 잘 저장하면, 204 no Content를 반환해줄 수 있다.")

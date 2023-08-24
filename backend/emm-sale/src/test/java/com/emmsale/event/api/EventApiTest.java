@@ -19,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.event.EventFixture;
-import com.emmsale.event.application.EventService;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
@@ -42,7 +41,6 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
@@ -72,9 +70,6 @@ class EventApiTest extends MockMvcTestHelper {
       fieldWithPath("applyRemainingDays").type(JsonFieldType.NUMBER)
           .description("행사 신청 시작일까지 남은 일 수"),
       fieldWithPath("type").type(JsonFieldType.STRING).description("event의 타입"));
-
-  @MockBean
-  private EventService eventService;
 
   @Test
   @DisplayName("컨퍼런스의 상세정보를 조회할 수 있다.")
