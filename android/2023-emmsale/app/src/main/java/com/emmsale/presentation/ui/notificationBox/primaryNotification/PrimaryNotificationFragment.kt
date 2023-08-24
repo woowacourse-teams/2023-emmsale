@@ -3,7 +3,6 @@ package com.emmsale.presentation.ui.notificationBox.primaryNotification
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
@@ -11,8 +10,6 @@ import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PastNotificationAdapter
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.RecentNotificationAdapter
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
@@ -24,32 +21,6 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         PrimaryNotificationViewModel.factory
     }
 
-    private val recentNotificationAdapter by lazy {
-        RecentNotificationAdapter(
-            onNotificationClick = { notification ->
-                viewModel.changeToRead(notification.id)
-                navigateToDetail(notification)
-            },
-            onDeleteClick = viewModel::deleteNotification,
-        )
-    }
-    private val pastNotificationAdapter by lazy {
-        PastNotificationAdapter(
-            onNotificationClick = ::navigateToDetail,
-            onDeleteClick = viewModel::deleteNotification,
-            onDeleteAllClick = { showNotificationDeleteConfirmDialog() },
-        )
-    }
-    private val primaryNotificationAdapter: ConcatAdapter by lazy {
-        val config = ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
-
-        ConcatAdapter(
-            config,
-            recentNotificationAdapter,
-            pastNotificationAdapter,
-        )
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -58,35 +29,10 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
 
     private fun initView() {
         binding.viewModel = viewModel
-        initPrimaryNotificationRecyclerView()
-    }
-
-    private fun initPrimaryNotificationRecyclerView() {
-        binding.rvPrimaryNotification.adapter = primaryNotificationAdapter
-        binding.rvPrimaryNotification.setHasFixedSize(true)
-        binding.rvPrimaryNotification.itemAnimator = null
     }
 
     private fun setupObservers() {
-        setupRecentNotificationsObserver()
-        setupPastNotificationsObserver()
         setupUiEvent()
-    }
-
-    private fun setupRecentNotificationsObserver() {
-        viewModel.recentNotifications.observe(viewLifecycleOwner) { recentNotifications ->
-            if (!recentNotifications.isLoading) {
-                recentNotificationAdapter.submitList(recentNotifications.notifications)
-            }
-        }
-    }
-
-    private fun setupPastNotificationsObserver() {
-        viewModel.pastNotifications.observe(viewLifecycleOwner) { pastNotifications ->
-            when {
-                !pastNotifications.isLoading -> pastNotificationAdapter.submitList(pastNotifications.notifications)
-            }
-        }
     }
 
     private fun setupUiEvent() {
