@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.emmsale.presentation.common.extension.LocalDateTimeExt" />
+
+        <variable
+            name="notification"
+            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState1" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_primarynotification_interest_event_notification"
+            android:id="@+id/iv_interesteventnotification_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginBottom="18dp"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_interesteventnotification_title"
+            app:layout_constraintStart_toEndOf="@+id/iv_interesteventnotification_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_interesteventnotification_icon"
+            android:textStyle="bold"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="15dp"
+            android:text="@string/primarynotification_interest_event_message" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_interesteventnotification_created_at"
+            app:layout_constraintStart_toStartOf="@+id/tv_interesteventnotification_title"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_interesteventnotification_icon"
+            android:text="@{LocalDateTimeExt.compareToString(notification.createdAt, context)}"
+            tools:text="08.01"
+            android:textColor="@color/dark_gray"
+            android:textSize="12sp"
+            android:layout_marginBottom="3dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_primarynotification_delete"
+            android:id="@+id/iv_interesteventnotification_delete_button"
+            android:padding="4dp"
+            android:visibility="@{notification.isRead ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/primarynotification_past_notification_delete" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

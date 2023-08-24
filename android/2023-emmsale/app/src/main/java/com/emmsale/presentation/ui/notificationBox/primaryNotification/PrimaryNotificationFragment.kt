@@ -7,6 +7,8 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.views.WarningDialog
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PrimaryNotificationsAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState1
 
 class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBinding>() {
     override val layoutResId: Int = R.layout.fragment_primary_notification
@@ -17,6 +19,8 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDataBinding()
+        initRecyclerViews()
+        setupUiState()
     }
 
     private fun initDataBinding() {
@@ -33,5 +37,49 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
             negativeButtonLabel = getString(R.string.all_cancel),
             onPositiveButtonClick = { viewModel.deleteAllPastNotifications() },
         ).show()
+    }
+
+    private fun initRecyclerViews() {
+        binding.rvPrimarynotificationRecentNotifications.apply {
+            adapter = PrimaryNotificationsAdapter(
+                readNotification = ::readNotification,
+                showEvent = ::showEvent,
+                showChildComments = ::showChildComments,
+                deleteNotification = {},
+            )
+            itemAnimator = null
+        }
+        binding.rvPrimarynotificationPastNotifications.apply {
+            adapter = PrimaryNotificationsAdapter(
+                readNotification = {},
+                showEvent = ::showEvent,
+                showChildComments = ::showChildComments,
+                deleteNotification = ::deleteNotification,
+            )
+        }
+    }
+
+    private fun readNotification(notificationId: Long) {
+    }
+
+    private fun showEvent(eventId: Long) {
+    }
+
+    private fun showChildComments(eventId: Long, parentCommentId: Long) {
+    }
+
+    private fun deleteNotification(notificationId: Long) {
+    }
+
+    private fun setupUiState() {
+        viewModel.uiState.observe(viewLifecycleOwner) {
+            if (it !is PrimaryNotificationScreenUiState1.Success) return@observe
+            val recentNotificationsAdapter =
+                binding.rvPrimarynotificationRecentNotifications.adapter as PrimaryNotificationsAdapter
+            recentNotificationsAdapter.submitList(it.recentNotifications)
+            val pastNotificationsAdapter =
+                binding.rvPrimarynotificationPastNotifications.adapter as PrimaryNotificationsAdapter
+            pastNotificationsAdapter.submitList(it.pastNotifications)
+        }
     }
 }
