@@ -1,7 +1,5 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
@@ -10,6 +8,7 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.notification.NotificationRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.RefreshableViewModel
@@ -27,8 +26,8 @@ class PrimaryNotificationViewModel(
         NotNullMutableLiveData<PrimaryNotificationScreenUiState>(PrimaryNotificationScreenUiState.Loading)
     val uiState: NotNullLiveData<PrimaryNotificationScreenUiState> = _uiState
 
-    private val _uiEvent = MutableLiveData<PrimaryNotificationsUiEvent?>(null)
-    val uiEvent: LiveData<PrimaryNotificationsUiEvent?> = _uiEvent
+    private val _uiEvent = NotNullMutableLiveData(Event(PrimaryNotificationsUiEvent.NONE))
+    val uiEvent: NotNullLiveData<Event<PrimaryNotificationsUiEvent>> = _uiEvent
 
     init {
         refresh()
@@ -60,7 +59,7 @@ class PrimaryNotificationViewModel(
             val pastNotificationIds = currentUiState.pastNotifications.map { it.notificationId }
             when (notificationRepository.deleteUpdatedNotifications(pastNotificationIds)) {
                 is ApiError, is ApiException ->
-                    _uiEvent.value = PrimaryNotificationsUiEvent.DELETE_ERROR
+                    _uiEvent.value = Event(PrimaryNotificationsUiEvent.DELETE_FAIL)
 
                 is ApiSuccess -> refresh()
             }
@@ -81,15 +80,11 @@ class PrimaryNotificationViewModel(
         viewModelScope.launch {
             when (notificationRepository.deleteUpdatedNotifications(listOf(notificationId))) {
                 is ApiError, is ApiException ->
-                    _uiEvent.value = PrimaryNotificationsUiEvent.DELETE_ERROR
+                    _uiEvent.value = Event(PrimaryNotificationsUiEvent.DELETE_FAIL)
 
                 is ApiSuccess -> refresh()
             }
         }
-    }
-
-    fun resetUiEvent() {
-        _uiEvent.value = null
     }
 
     companion object {
