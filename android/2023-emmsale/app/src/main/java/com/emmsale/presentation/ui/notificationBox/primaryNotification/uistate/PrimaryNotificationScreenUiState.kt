@@ -8,12 +8,11 @@ sealed interface PrimaryNotificationScreenUiState {
         val pastNotifications: List<PrimaryNotificationUiState>,
     ) : PrimaryNotificationScreenUiState {
         companion object {
-            fun create(
-                recentNotifications: List<UpdatedNotification>,
-                pastNotifications: List<UpdatedNotification>,
-            ) = Success(
-                recentNotifications = recentNotifications.map(PrimaryNotificationUiState::from),
-                pastNotifications = pastNotifications.map(PrimaryNotificationUiState::from),
+            fun from(notifications: List<UpdatedNotification>) = Success(
+                recentNotifications = notifications.filterNot { it.isRead }
+                    .map(PrimaryNotificationUiState::from),
+                pastNotifications = notifications.filter { it.isRead }
+                    .map(PrimaryNotificationUiState::from),
             )
         }
     }

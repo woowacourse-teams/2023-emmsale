@@ -40,14 +40,8 @@ class PrimaryNotificationViewModel(
                 is ApiError, is ApiException ->
                     _uiState.value = PrimaryNotificationScreenUiState.Error
 
-                is ApiSuccess -> {
-                    val recentNotifications = result.data.filterNot { it.isRead }
-                    val pastNotifications = result.data.filter { it.isRead }
-                    _uiState.value = PrimaryNotificationScreenUiState.Success.create(
-                        recentNotifications,
-                        pastNotifications,
-                    )
-                }
+                is ApiSuccess ->
+                    _uiState.value = PrimaryNotificationScreenUiState.Success.from(result.data)
             }
         }
     }
