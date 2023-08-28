@@ -11,21 +11,16 @@ import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.TokenResponse;
 import com.emmsale.login.exception.LoginException;
 import com.emmsale.login.exception.LoginExceptionType;
-import com.emmsale.login.utils.GithubClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
 class LoginServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
   private LoginService loginService;
-
-  @MockBean
-  private GithubClient githubClient;
 
   @Test
   @DisplayName("깃허브 id로부터 사용자를 조회하여 토큰을 생성한다.")

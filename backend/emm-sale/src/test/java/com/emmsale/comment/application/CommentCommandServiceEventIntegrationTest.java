@@ -17,20 +17,16 @@ import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.notification.application.FirebaseCloudMessageClient;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
 
   @Autowired
   private CommentCommandService commentCommandService;
-  @MockBean
-  private FirebaseCloudMessageClient firebaseCloudMessageClient;
   @Autowired
   private EventRepository eventRepository;
   @Autowired
@@ -59,7 +55,8 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
 
     //then
     assertAll(
-        () -> verify(firebaseCloudMessageClient, times(1)).sendMessageTo(any(UpdateNotification.class)),
+        () -> verify(firebaseCloudMessageClient, times(1)).sendMessageTo(
+            any(UpdateNotification.class)),
         () -> assertEquals(1, updateNotificationRepository.findAll().size())
     );
   }
@@ -84,7 +81,8 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
 
     //then
     assertAll(
-        () -> verify(firebaseCloudMessageClient, times(1)).sendMessageTo(any(UpdateNotification.class)),
+        () -> verify(firebaseCloudMessageClient, times(1)).sendMessageTo(
+            any(UpdateNotification.class)),
         () -> assertEquals(1, updateNotificationRepository.findAll().size())
     );
   }

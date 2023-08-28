@@ -39,8 +39,8 @@ import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
-import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
@@ -59,7 +59,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
@@ -89,8 +88,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private EventTagRepository eventTagRepository;
   @Autowired
   private TagRepository tagRepository;
-  @MockBean
-  private EventPublisher eventPublisher;
 
   @BeforeEach
   void init() {
@@ -503,7 +500,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type
       );
 
-      doNothing().when(eventPublisher).publish((Event) any());
+      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
 
       //when
       final EventDetailResponse response = eventService.addEvent(request, now);
@@ -545,7 +542,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type
       );
 
-      doNothing().when(eventPublisher).publish((Event) any());
+      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
@@ -577,7 +574,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type
       );
 
-      doNothing().when(eventPublisher).publish((Event) any());
+      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
