@@ -9,7 +9,7 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 @SpringBootTest
 @Sql(value = "/data-test.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
-public class ServiceIntegrationTestHelper {
+public abstract class ServiceIntegrationTestHelper {
 
   @MockBean
   protected GithubClient githubClient;

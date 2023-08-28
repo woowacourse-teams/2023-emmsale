@@ -2,20 +2,14 @@ package com.emmsale.notification.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.emmsale.helper.JpaRepositorySliceTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.jdbc.Sql;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-@Sql("/data-test.sql")
-class RequestNotificationRepositoryTest {
+class RequestNotificationRepositoryTest extends JpaRepositorySliceTestHelper {
 
   @Autowired
   private RequestNotificationRepository requestNotificationRepository;
