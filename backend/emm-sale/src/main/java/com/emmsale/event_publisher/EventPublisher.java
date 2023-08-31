@@ -1,11 +1,13 @@
 package com.emmsale.event_publisher;
 
-import com.emmsale.comment.event.UpdateNotificationEvent;
+import com.emmsale.comment.domain.Comment;
+import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,14 +19,37 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EventPublisher {
 
-  private static final String UPDATE_NOTIFICATION_EVENT_TYPE = "event";
 
   private final ApplicationEventPublisher applicationEventPublisher;
   private final InterestTagRepository interestTagRepository;
   private final MemberRepository memberRepository;
+  private final CommentRepository commentRepository;
 
-  public void publish(final UpdateNotificationEvent event) {
-    applicationEventPublisher.publishEvent(event);
+  public void publish(final Comment trigger, final Member loginMember) {
+    final Set<Comment> notificationCommentCandidates = trigger.getParent()
+        .map(parent -> findRelatedCommentsExcludingLoginMember(loginMember, parent))
+        .orElse(Collections.emptySet());
+
+    notificationCommentCandidates.stream()
+        .map(it -> UpdateNotificationEvent.of(it, trigger.getId()))
+        .forEach(applicationEventPublisher::publishEvent);
+  }
+
+  private Set<Comment> findRelatedCommentsExcludingLoginMember(
+      final Member loginMember,
+      final Comment parent
+  ) {
+    return new HashSet<>(
+        commentRepository.findParentAndChildrenByParentId(parent.getId())
+            .stream()
+            .filter(it -> it.isNotMyComment(loginMember))
+            .filter(Comment::isNotDeleted)
+            .collect(Collectors.toMap(
+                comment -> comment.getMember().getId(),
+                comment -> comment, (existed, replaces) -> existed)
+            )
+            .values()
+    );
   }
 
   public void publish(final Event event) {
@@ -44,15 +69,10 @@ public class EventPublisher {
   }
 
   private void publishEvent(final Event event, final List<Member> members) {
-    for (Member member : members) {
-      final UpdateNotificationEvent updateNotificationEvent = new UpdateNotificationEvent(
-          member.getId(),
-          event.getId(),
-          UPDATE_NOTIFICATION_EVENT_TYPE,
-          LocalDateTime.now()
-      );
-
-      applicationEventPublisher.publishEvent(updateNotificationEvent);
-    }
+    members.forEach(
+        it -> applicationEventPublisher.publishEvent(
+            UpdateNotificationEvent.of(event, it.getId())
+        )
+    );
   }
 }
