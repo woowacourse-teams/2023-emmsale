@@ -32,7 +32,6 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
 
     private fun initBinding() {
         binding.vm = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
         binding.rvScrappedEvents.adapter = scrappedEventsAdapter
     }
 

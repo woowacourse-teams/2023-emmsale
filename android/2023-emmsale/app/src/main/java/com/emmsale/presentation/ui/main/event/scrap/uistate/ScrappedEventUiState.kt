@@ -8,7 +8,7 @@ data class ScrappedEventUiState(
     val eventId: Long = DEFAULT_ID,
     val name: String = "",
     val status: String = "",
-    val imageUrl: String = "",
+    val imageUrl: String?,
     val tags: List<String> = listOf(),
 ) {
     companion object {

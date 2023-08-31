@@ -4,14 +4,16 @@ import com.emmsale.data.conferenceStatus.ConferenceStatus
 import com.emmsale.data.scrap.ScrappedEvent
 import com.emmsale.data.scrap.dto.ScrappedEventApiModel
 
-fun ScrappedEventApiModel.toData(): ScrappedEvent = ScrappedEvent(
-    scrapId = scrapId,
-    eventId = eventId,
-    name = name,
-    status = status.toConferenceStatusData(),
-    imageUrl = imageUrl,
-    tags = tags,
-)
+fun ScrappedEventApiModel.toData(): ScrappedEvent {
+    return ScrappedEvent(
+        scrapId = scrapId,
+        eventId = eventId,
+        name = name,
+        status = status.toConferenceStatusData(),
+        imageUrl = imageUrl,
+        tags = tags,
+    )
+}
 
 fun List<ScrappedEventApiModel>.toData(): List<ScrappedEvent> = map {
     it.toData()
