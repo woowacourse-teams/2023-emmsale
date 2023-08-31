@@ -13,6 +13,8 @@ drop table if exists kerdy.block;
 drop table if exists kerdy.update_notification;
 drop table if exists kerdy.report;
 drop table if exists kerdy.scrap;
+drop table if exists kerdy.message;
+drop table if exists kerdy.room;
 
 create table activity
 (
@@ -185,3 +187,25 @@ create table report
 
 alter table member
     add column github_username varchar(40) not null default '';
+
+-- 2023-08-31 19:57
+
+create table room
+(
+    id                       bigint      not null auto_increment,
+    member1_id               bigint      not null,
+    member1_last_exited_time datetime(6) not null,
+    member2_id               bigint      not null,
+    member2_last_exited_time datetime(6) not null,
+    primary key (id)
+);
+
+create table message
+(
+    id         bigint       not null auto_increment,
+    content    varchar(255) not null,
+    created_at datetime(6),
+    sender_id  bigint       not null,
+    room_id    bigint       not null,
+    primary key (id)
+);

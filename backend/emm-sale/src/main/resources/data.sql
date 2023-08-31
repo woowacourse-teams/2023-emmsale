@@ -13,6 +13,8 @@ truncate table update_notification;
 truncate table block;
 truncate table report;
 truncate table scrap;
+truncate table message;
+truncate table room;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');
