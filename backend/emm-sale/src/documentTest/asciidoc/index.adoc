@@ -609,3 +609,19 @@ include::{snippets}/delete-scrap/http-request.adoc[]
 
 .HTTP response
 include::{snippets}/delete-scrap/http-response.adoc[]
+
+== 피드
+
+=== `POST`: 피드 등록
+
+.HTTP request
+include::{snippets}/post-feed/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/post-feed/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/post-feed/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/post-feed/response-fields.adoc[]

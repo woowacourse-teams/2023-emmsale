@@ -32,4 +32,11 @@ public class Feed extends BaseEntity {
   @Column(nullable = false, length = 1000)
   private String content;
   // TODO: 2023/08/31 이미지 추가
+
+  public Feed(final Long eventId, final Member writer, final String title, final String content) {
+    this.eventId = eventId;
+    this.writer = writer;
+    this.title = title;
+    this.content = content;
+  }
 }
