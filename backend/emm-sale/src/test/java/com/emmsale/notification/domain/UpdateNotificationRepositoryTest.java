@@ -3,6 +3,8 @@ package com.emmsale.notification.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -69,6 +71,7 @@ class UpdateNotificationRepositoryTest {
   void test_findAllByIdsIn() throws Exception {
     //given
     final List<UpdateNotification> expected = List.of(notification1, notification2);
+
     final List<Long> notificationIds = List.of(notification1.getId(), notification2.getId());
 
     //when
@@ -76,6 +79,33 @@ class UpdateNotificationRepositoryTest {
         updateNotificationRepository.findAllByIdIn(notificationIds);
 
     //then
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .ignoringCollectionOrder()
+        .ignoringFields("createdAt")
+        .isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("deleteBatchByIdsIn() : IN 쿼리를 통해 알림들을 배치 삭제할 수 있다.")
+  void test_deleteBatchByIdsIn() throws Exception {
+    //given
+    //존재하지 않는 알림 ID
+    final List<Long> nonExistedNotificationIds = List.of(3L, 4L, 5L);
+    final List<Long> existedNotificationIds = List.of(notification1.getId(), notification2.getId());
+    final List<Long> deleteIds = new ArrayList<>();
+    deleteIds.addAll(nonExistedNotificationIds);
+    deleteIds.addAll(existedNotificationIds);
+
+    final List<Long> actual = Collections.emptyList();
+
+    //when
+    updateNotificationRepository.deleteBatchByIdsIn(deleteIds);
+
+    //then
+    final List<UpdateNotification> expected =
+        updateNotificationRepository.findAllByIdIn(deleteIds);
+
     assertThat(actual)
         .usingRecursiveComparison()
         .ignoringCollectionOrder()

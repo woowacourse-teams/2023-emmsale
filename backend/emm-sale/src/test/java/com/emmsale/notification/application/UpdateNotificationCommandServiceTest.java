@@ -19,6 +19,7 @@ import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
 import com.emmsale.notification.domain.UpdateNotificationType;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +39,7 @@ class UpdateNotificationCommandServiceTest extends ServiceIntegrationTestHelper 
 
   private UpdateNotification 이벤트_알림;
   private Member member;
+  private UpdateNotification notification1, notification2, notification3;
 
   @BeforeEach
   void setUp() {
@@ -52,6 +54,23 @@ class UpdateNotificationCommandServiceTest extends ServiceIntegrationTestHelper 
             LocalDateTime.now()
         )
     );
+
+    final Long receiverId = member.getId();
+
+    notification1 = new UpdateNotification(
+        receiverId, 2L,
+        UpdateNotificationType.COMMENT, LocalDateTime.now()
+    );
+    notification2 = new UpdateNotification(
+        receiverId, 3L,
+        UpdateNotificationType.EVENT, LocalDateTime.now()
+    );
+    notification3 = new UpdateNotification(
+        2L, 4L,
+        UpdateNotificationType.COMMENT, LocalDateTime.now()
+    );
+
+    updateNotificationRepository.saveAll(List.of(notification1, notification2, notification3));
   }
 
   @Test
@@ -87,30 +106,17 @@ class UpdateNotificationCommandServiceTest extends ServiceIntegrationTestHelper 
   @DisplayName("deleteBatch() : 댓글 & 행사 알림을 삭제할 ID로 본인의 알림들만을 삭제할 수 있다.")
   void test_deleteBatch() throws Exception {
     //given
-    final Long receiverId = member.getId();
-
-    final UpdateNotification notification1 = new UpdateNotification(
-        receiverId, 2L,
-        UpdateNotificationType.COMMENT, LocalDateTime.now()
-    );
-    final UpdateNotification notification2 = new UpdateNotification(
-        receiverId, 3L,
-        UpdateNotificationType.EVENT, LocalDateTime.now()
-    );
-    final UpdateNotification notification3 = new UpdateNotification(
-        2L, 4L,
-        UpdateNotificationType.COMMENT, LocalDateTime.now()
-    );
-    updateNotificationRepository.saveAll(List.of(notification1, notification2, notification3));
+    final List<Long> nonExistedNotificationIds = List.of(4L, 5L, 6L);
+    final List<Long> deletedIds = new ArrayList<>();
+    deletedIds.addAll(nonExistedNotificationIds);
+    deletedIds.addAll(List.of(
+        notification1.getId(),
+        notification2.getId(),
+        notification3.getId()
+    ));
 
     final UpdateNotificationDeleteRequest request =
-        new UpdateNotificationDeleteRequest(
-            List.of(
-                notification1.getId(),
-                notification2.getId(),
-                notification3.getId()
-            )
-        );
+        new UpdateNotificationDeleteRequest(deletedIds);
 
     final List<UpdateNotification> expected = List.of(notification3);
 
