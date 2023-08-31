@@ -1,4 +1,4 @@
-package com.emmsale.message.domain;
+package com.emmsale.message_room.domain;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;
