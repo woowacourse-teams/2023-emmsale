@@ -7,6 +7,6 @@ data class ScrappedEvent(
     val eventId: Long,
     val name: String,
     val status: ConferenceStatus,
-    val imageUrl: String,
+    val imageUrl: String?,
     val tags: List<String> = listOf(),
 )

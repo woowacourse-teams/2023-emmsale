@@ -14,7 +14,7 @@ data class ScrappedEventApiModel(
     @SerialName("status")
     val status: String,
     @SerialName("imageUrl")
-    val imageUrl: String,
+    val imageUrl: String?,
     @SerialName("tags")
     val tags: List<String> = listOf(),
 )
