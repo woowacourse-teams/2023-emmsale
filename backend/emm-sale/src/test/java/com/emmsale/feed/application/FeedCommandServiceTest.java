@@ -11,14 +11,19 @@ import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.feed.application.dto.FeedPostRequest;
 import com.emmsale.feed.application.dto.FeedPostResponse;
+import com.emmsale.feed.application.dto.FeedUpdateRequest;
+import com.emmsale.feed.application.dto.FeedUpdateResponse;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
+import com.emmsale.feed.exception.FeedException;
+import com.emmsale.feed.exception.FeedExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.MemberFixture;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,12 +39,14 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
   private EventRepository eventRepository;
 
   private Member 작성자;
-  private Event 이벤트;
+  private Event 이벤트1;
+  private Event 이벤트2;
 
   @BeforeEach
   void setUp() {
     작성자 = memberRepository.save(MemberFixture.memberFixture());
-    이벤트 = eventRepository.save(EventFixture.인프콘_2023());
+    이벤트1 = eventRepository.save(EventFixture.인프콘_2023());
+    이벤트2 = eventRepository.save(EventFixture.구름톤());
   }
 
   @Test
@@ -48,7 +55,7 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
     //given
     final String feedTitle = "피드 제목";
     final String feedContent = "피드 내용";
-    final FeedPostRequest request = new FeedPostRequest(이벤트.getId(), feedTitle, feedContent);
+    final FeedPostRequest request = new FeedPostRequest(이벤트1.getId(), feedTitle, feedContent);
 
     //when
     final FeedPostResponse expectResponse = feedCommandService.postFeed(작성자, request);
@@ -78,5 +85,78 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
 
     //then
     assertEquals(expectExceptionType, actualException.exceptionType());
+  }
+
+  @Nested
+  @DisplayName("피드 업데이트 테스트")
+  class UpdateFeed {
+
+    private Feed 피드;
+    private Long newEventId;
+    private String newTitle;
+    private String newContent;
+
+    @BeforeEach
+    void setUp() {
+      피드 = feedRepository.save(new Feed(이벤트1.getId(), 작성자, "피드 제목", "피드 내용"));
+      newEventId = 이벤트1.getId();
+      newTitle = "새로운 제목";
+      newContent = "새로운 내용";
+    }
+
+    @Test
+    @DisplayName("피드를 성공적으로 업데이트한다.")
+    void updateFeedTest() {
+      //given
+      final Long newEventId = 이벤트2.getId();
+
+      final FeedUpdateRequest request = new FeedUpdateRequest(newEventId, newTitle, newContent);
+
+      //when
+      final FeedUpdateResponse expect = feedCommandService.updateFeed(작성자, 피드.getId(),
+          request);
+      final Feed updatedFeed = feedRepository.findById(피드.getId()).get();
+      final FeedUpdateResponse actual = FeedUpdateResponse.from(updatedFeed);
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
+
+    @Test
+    @DisplayName("피드의 작성자와 업데이트하려는 유저가 다를 경우 FORBIDDEN_NOT_OWNER 타입의 FeedException이 발생한다.")
+    void postFeedWithNotFeedWriterTest() {
+      //given
+      final Member 작성자가_아닌_사용자 = memberRepository.save(
+          new Member(111L, "image-url", "github-username"));
+      final FeedUpdateRequest request = new FeedUpdateRequest(newEventId, newTitle, newContent);
+
+      final FeedExceptionType expect = FeedExceptionType.FORBIDDEN_NOT_OWNER;
+
+      //when
+      final FeedException actualException = assertThrowsExactly(FeedException.class,
+          () -> feedCommandService.updateFeed(작성자가_아닌_사용자, 피드.getId(), request));
+
+      //then
+      assertEquals(expect, actualException.exceptionType());
+    }
+
+    @Test
+    @DisplayName("피드의 업데이트하려는 이벤트가 존재하지 않을 경우 EventException 타입의 NOT_FOUND_EVENT이 발생한다.")
+    void postFeedWithNotExistEventTest() {
+      //given
+      final long 존재하지_않는_이벤트_id = 0L;
+      final FeedUpdateRequest request = new FeedUpdateRequest(존재하지_않는_이벤트_id, newTitle, newContent);
+
+      final EventExceptionType expect = EventExceptionType.NOT_FOUND_EVENT;
+
+      //when
+      final EventException actualException = assertThrowsExactly(EventException.class,
+          () -> feedCommandService.updateFeed(작성자, 피드.getId(), request));
+
+      //then
+      assertEquals(expect, actualException.exceptionType());
+    }
   }
 }

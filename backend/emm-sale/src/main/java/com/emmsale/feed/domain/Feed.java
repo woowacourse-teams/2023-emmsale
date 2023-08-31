@@ -39,4 +39,14 @@ public class Feed extends BaseEntity {
     this.title = title;
     this.content = content;
   }
+
+  public void updateFeed(final Long eventId, final String title, final String content) {
+    this.eventId = eventId;
+    this.title = title;
+    this.content = content;
+  }
+
+  public boolean isNotOwner(final Long memberId) {
+    return !this.writer.getId().equals(memberId);
+  }
 }
