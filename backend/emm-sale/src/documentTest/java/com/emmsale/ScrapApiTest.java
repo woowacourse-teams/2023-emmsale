@@ -1,9 +1,5 @@
-package com.emmsale.scrap.api;
+package com.emmsale;
 
-import static com.emmsale.tag.TagFixture.IOS;
-import static com.emmsale.tag.TagFixture.백엔드;
-import static com.emmsale.tag.TagFixture.안드로이드;
-import static com.emmsale.tag.TagFixture.프론트엔드;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -16,16 +12,14 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.helper.MockMvcTestHelper;
-import com.emmsale.scrap.application.ScrapCommandService;
-import com.emmsale.scrap.application.ScrapQueryService;
+import com.emmsale.scrap.api.ScrapApi;
 import com.emmsale.scrap.application.dto.ScrapRequest;
 import com.emmsale.scrap.application.dto.ScrapResponse;
+import com.emmsale.tag.TagFixture;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -34,11 +28,6 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
 @WebMvcTest(ScrapApi.class)
 class ScrapApiTest extends MockMvcTestHelper {
-
-  @MockBean
-  private ScrapQueryService scrapQueryService;
-  @MockBean
-  private ScrapCommandService scrapCommandService;
 
   @Test
   @DisplayName("스크랩 목록을 성공적으로 조회하면 200 OK를 반환한다.")
@@ -51,7 +40,8 @@ class ScrapApiTest extends MockMvcTestHelper {
             "인프콘 2023",
             "진행 예정",
             "https://infcon-image.com",
-            List.of(백엔드().getName(), 안드로이드().getName(), 프론트엔드().getName(), IOS().getName())
+            List.of(TagFixture.백엔드().getName(), TagFixture.안드로이드().getName(),
+                TagFixture.프론트엔드().getName(), TagFixture.IOS().getName())
         ),
         new ScrapResponse(
             2L,
@@ -59,7 +49,7 @@ class ScrapApiTest extends MockMvcTestHelper {
             "구름톤",
             "종료된 행사",
             "https://goormthon-image.com",
-            List.of(백엔드().getName(), 프론트엔드().getName())
+            List.of(TagFixture.백엔드().getName(), TagFixture.프론트엔드().getName())
         )
     );
 

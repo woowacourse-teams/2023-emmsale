@@ -1,6 +1,5 @@
-package com.emmsale.event.api;
+package com.emmsale;
 
-import static java.lang.String.format;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -16,19 +15,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.event.application.RecruitmentPostCommandService;
-import com.emmsale.event.application.RecruitmentPostQueryService;
+import com.emmsale.event.api.RecruitmentPostApi;
 import com.emmsale.event.application.dto.RecruitmentPostQueryResponse;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.application.dto.RecruitmentPostResponse;
 import com.emmsale.event.application.dto.RecruitmentPostUpdateRequest;
-import com.emmsale.helper.MockMvcTestHelper;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -37,11 +33,6 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
 @WebMvcTest(RecruitmentPostApi.class)
 class RecruitmentPostApiTest extends MockMvcTestHelper {
-
-  @MockBean
-  private RecruitmentPostQueryService postQueryService;
-  @MockBean
-  private RecruitmentPostCommandService postCommandService;
 
   @Test
   @DisplayName("Event에 참여게시글을 추가할 수 있다.")
@@ -60,17 +51,17 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
             .description("함께 해요 게시글의 내용(공백 불가, 255자 최대)")
     );
 
-    when(postCommandService.createRecruitmentPost(any(), any(), any())).thenReturn(postId);
+    when(postCommandService.createRecruitmentPost(any(), any(), any()))
+        .thenReturn(postId);
 
     //when
-    mockMvc.perform(
-            post("/events/{eventId}/recruitment-posts", eventId).header("Authorization",
-                    fakeAccessToken)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+    mockMvc.perform(post("/events/{eventId}/recruitment-posts", eventId)
+            .header("Authorization", fakeAccessToken)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andExpect(header().string("Location",
-            format("/events/%s/recruitment-posts/%s", eventId, postId)))
+            String.format("/events/%s/recruitment-posts/%s", eventId, postId)))
         .andDo(document("create-recruitment-post", requestFields));
   }
 
@@ -84,7 +75,8 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(delete("/events/{event-id}/recruitment-posts/{recruitment-post-id}",
-            eventId, recruitmentPostId)
+            eventId,
+            recruitmentPostId)
             .header("Authorization", fakeAccessToken))
         .andExpect(status().isNoContent())
         .andDo(document("delete-recruitment-post"));
@@ -115,7 +107,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     when(postQueryService.findRecruitmentPosts(eventId)).thenReturn(responses);
 
     //when && then
-    mockMvc.perform(get(format("/events/%s/recruitment-posts", eventId)))
+    mockMvc.perform(get(String.format("/events/%s/recruitment-posts", eventId)))
         .andExpect(status().isOk())
         .andDo(document("find-recruitment-posts", responseFields));
   }
@@ -141,7 +133,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     when(postQueryService.findRecruitmentPost(eventId, postId)).thenReturn(response);
 
     //when && then
-    mockMvc.perform(get(format("/events/%s/recruitment-posts/%s", eventId, postId)))
+    mockMvc.perform(get(String.format("/events/%s/recruitment-posts/%s", eventId, postId)))
         .andExpect(status().isOk())
         .andDo(document("find-recruitment-post", responseFields));
   }
@@ -162,11 +154,11 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     );
 
     //when
-    mockMvc.perform(
-            put("/events/{eventId}/recruitment-posts/{recruitment-post-id}", eventId, recruitmentPostId)
-                .header("Authorization", fakeAccessToken)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+    mockMvc.perform(put("/events/{eventId}/recruitment-posts/{recruitment-post-id}",
+            eventId, recruitmentPostId)
+            .header("Authorization", fakeAccessToken)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andDo(document("update-recruitment-post", requestFields));
 
@@ -212,13 +204,15 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     );
 
     //when
-    given(postQueryService.findRecruitmentPostsByMemberId(any(), any()))
-        .willReturn(response);
+    given(postQueryService.findRecruitmentPostsByMemberId(any(), any())).willReturn(response);
 
     //then
-    mockMvc.perform(get("/events/recruitment-posts?member-id={memberId}", memberId)
-            .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
+    mockMvc.perform(
+            get("/events/recruitment-posts?member-id={memberId}",
+                memberId)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
         .andExpect(status().isOk())
-        .andDo(document("find-all-by-member-id-recruitment-post", responseFields));
+        .andDo(document("find-all-by-member-id-recruitment-post",
+            responseFields));
   }
 }

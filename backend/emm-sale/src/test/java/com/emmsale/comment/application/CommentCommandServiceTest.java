@@ -18,17 +18,16 @@ import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.repository.EventRepository;
-import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.notification.domain.UpdateNotification;
 import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
 
@@ -40,8 +39,6 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
   private MemberRepository memberRepository;
   @Autowired
   private CommentRepository commentRepository;
-  @MockBean
-  private EventPublisher eventPublisher;
 
   private Event event;
   private Member 댓글_작성자;
@@ -74,7 +71,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
 
     final CommentAddRequest 부모_댓글_요청 = new CommentAddRequest(content, event.getId(), null);
 
-    doNothing().when(eventPublisher).publish(any(), any());
+    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
 
     //when
     final CommentResponse 부모_댓글_응답 = commentCommandService.create(부모_댓글_요청, 댓글_작성자);
@@ -98,7 +95,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final CommentResponse 부모_댓글_응답 = commentCommandService.create(부모_댓글_요청, 댓글_작성자);
     final CommentAddRequest 자식_댓글_요청 = new CommentAddRequest(content, eventId, 1L);
 
-    doNothing().when(eventPublisher).publish(any(), any());
+    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
 
     //when
     final CommentResponse 자식_댓글_응답 = commentCommandService.create(자식_댓글_요청, 댓글_작성자);

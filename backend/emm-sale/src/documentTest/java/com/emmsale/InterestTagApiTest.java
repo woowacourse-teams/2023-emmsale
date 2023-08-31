@@ -1,10 +1,7 @@
-package com.emmsale.member.api;
+package com.emmsale;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -16,8 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.helper.MockMvcTestHelper;
-import com.emmsale.member.application.InterestTagService;
+import com.emmsale.member.api.InterestTagApi;
 import com.emmsale.member.application.dto.InterestTagAddRequest;
 import com.emmsale.member.application.dto.InterestTagDeleteRequest;
 import com.emmsale.member.application.dto.InterestTagResponse;
@@ -25,7 +21,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
@@ -41,8 +38,6 @@ class InterestTagApiTest extends MockMvcTestHelper {
   private static final RequestFieldsSnippet INTEREST_TAG_REQUEST_FIELDS = requestFields(
       fieldWithPath("tagIds").description("태그 id들"));
 
-  @MockBean
-  private InterestTagService interestTagService;
 
   @Test
   @DisplayName("행사 관심 태그들을 성공적으로 추가하면, 201 Created를 반환해줄 수 있다.")
@@ -65,7 +60,7 @@ class InterestTagApiTest extends MockMvcTestHelper {
     //when & then
     mockMvc.perform(post("/interest-tags")
             .header("Authorization", accessToken)
-            .contentType(APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
@@ -91,8 +86,8 @@ class InterestTagApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(put("/interest-tags")
-            .header(AUTHORIZATION, accessToken)
-            .contentType(APPLICATION_JSON_VALUE)
+            .header(HttpHeaders.AUTHORIZATION, accessToken)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andDo(print())
@@ -120,7 +115,7 @@ class InterestTagApiTest extends MockMvcTestHelper {
     //when & then
     mockMvc.perform(delete("/interest-tags")
             .header("Authorization", accessToken)
-            .contentType(APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andDo(print())
@@ -144,7 +139,7 @@ class InterestTagApiTest extends MockMvcTestHelper {
     //then
     mockMvc.perform(get("/interest-tags")
             .queryParam("member_id", "1")
-            .contentType(APPLICATION_JSON))
+            .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-interest-tags", INTEREST_TAG_RESPONSE_FIELDS));

@@ -1,9 +1,8 @@
-package com.emmsale.notification.api;
+package com.emmsale;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -11,15 +10,11 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.helper.MockMvcTestHelper;
-import com.emmsale.notification.application.UpdateNotificationCommandService;
-import com.emmsale.notification.application.UpdateNotificationQueryService;
+import com.emmsale.notification.api.UpdateNotificationApi;
 import com.emmsale.notification.application.dto.UpdateNotificationDeleteRequest;
 import com.emmsale.notification.application.dto.UpdateNotificationResponse;
 import com.emmsale.notification.application.dto.UpdateNotificationResponse.CommentTypeNotification;
@@ -28,21 +23,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
 @WebMvcTest(UpdateNotificationApi.class)
 class UpdateNotificationApiTest extends MockMvcTestHelper {
-
-  @MockBean
-  private UpdateNotificationQueryService updateNotificationQueryService;
-  @MockBean
-  private UpdateNotificationCommandService updateNotificationCommandService;
 
   @Test
   @DisplayName("find() : 현재 로그인 한 사용자가 받은 댓글 & 행사 알림들을 성공적으로 조회한다면 200 OK를 반환할 수 있다.")
@@ -51,7 +42,7 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
     final String accessToken = "Bearer Token";
 
     final RequestParametersSnippet requestParam = requestParameters(
-        parameterWithName("member-id").description("알림을 조회할 멤버 ID"));
+        RequestDocumentation.parameterWithName("member-id").description("알림을 조회할 멤버 ID"));
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].updateNotificationId").description("알림 ID"),
@@ -98,7 +89,7 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
     );
 
     //when
-    when(updateNotificationQueryService.findAll(any(), anyLong()))
+    Mockito.when(updateNotificationQueryService.findAll(any(), anyLong()))
         .thenReturn(responses);
 
     //then
@@ -114,8 +105,9 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
   @DisplayName("read() : 댓글 & 행사 알림의 읽음 상태를 성공적으로 변경시켰다면 204 No Content를 반환할 수 있다.")
   void test_read() throws Exception {
     //given
-    final PathParametersSnippet pathParams = pathParameters(
-        parameterWithName("update-notifications-id").description("읽음 상태 변경 시킬 알림 ID")
+    final PathParametersSnippet pathParams = RequestDocumentation.pathParameters(
+        RequestDocumentation.parameterWithName("update-notifications-id")
+            .description("읽음 상태 변경 시킬 알림 ID")
     );
     final String accessToken = "Bearer Token";
 

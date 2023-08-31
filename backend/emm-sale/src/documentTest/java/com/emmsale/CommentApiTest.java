@@ -1,8 +1,7 @@
-package com.emmsale.comment.api;
+package com.emmsale;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -11,32 +10,30 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.comment.application.CommentCommandService;
-import com.emmsale.comment.application.CommentQueryService;
+import com.emmsale.comment.api.CommentApi;
 import com.emmsale.comment.application.dto.CommentAddRequest;
 import com.emmsale.comment.application.dto.CommentHierarchyResponse;
 import com.emmsale.comment.application.dto.CommentModifyRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
-import com.emmsale.helper.MockMvcTestHelper;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.request.RequestParametersSnippet;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(CommentApi.class)
 class CommentApiTest extends MockMvcTestHelper {
@@ -60,10 +57,6 @@ class CommentApiTest extends MockMvcTestHelper {
       fieldWithPath("memberImageUrl").description("댓글 작성자 이미지 Url"),
       fieldWithPath("memberName").description("댓글 작성자 이름")
   );
-  @MockBean
-  private CommentCommandService commentCommandService;
-  @MockBean
-  private CommentQueryService commentQueryService;
 
   @Test
   @DisplayName("create() : 댓글에 제대로 저장이 되면 200 OK를 반환해줄 수 있다.")
@@ -72,14 +65,15 @@ class CommentApiTest extends MockMvcTestHelper {
     final String content = "내용";
     final CommentAddRequest request = new CommentAddRequest(content, 1L, null);
 
-    final CommentResponse commentResponse = new CommentResponse(content, 2L, 1L, 1L, "eventName",  false,
+    final CommentResponse commentResponse = new CommentResponse(content, 2L, 1L, 1L, "eventName",
+        false,
         LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1");
 
-    when(commentCommandService.create(any(), any()))
+    Mockito.when(commentCommandService.create(any(), any()))
         .thenReturn(commentResponse);
 
     //when & then
-    mockMvc.perform(post("/comments")
+    mockMvc.perform(MockMvcRequestBuilders.post("/comments")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
@@ -132,17 +126,17 @@ class CommentApiTest extends MockMvcTestHelper {
             Collections.emptyList()
         ),
         new CommentHierarchyResponse(
-            new CommentResponse("부모댓글1", 5L, null, 1L, "eventName",  false,
+            new CommentResponse("부모댓글1", 5L, null, 1L, "eventName", false,
                 LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
             List.of(
-                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L,  "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, "eventName", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
-                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L,  "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, "eventName", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"
                 ))
         ));
 
-    when(commentQueryService.findAllComments(any(), any()))
+    Mockito.when(commentQueryService.findAllComments(any(), any()))
         .thenReturn(result);
 
     //when & then
@@ -158,7 +152,7 @@ class CommentApiTest extends MockMvcTestHelper {
   @DisplayName("findParentWithChildren() : 부모, 자식 댓글들이 성공적으로 조회되면 200 OK 를 반환할 수 있다.")
   void test_findChildren() throws Exception {
     //given
-    final PathParametersSnippet pathParams = pathParameters(
+    final PathParametersSnippet pathParams = RequestDocumentation.pathParameters(
         parameterWithName("comment-id").description("댓글 ID")
     );
 
@@ -190,18 +184,18 @@ class CommentApiTest extends MockMvcTestHelper {
 
     final CommentHierarchyResponse result =
         new CommentHierarchyResponse(
-            new CommentResponse("부모댓글1", 5L, null, 1L,  "eventName", false,
+            new CommentResponse("부모댓글1", 5L, null, 1L, "eventName", false,
                 LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
             List.of(
-                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L,  "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, "eventName", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
-                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L,  "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, "eventName", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1")
             )
         );
 
     //when
-    when(commentQueryService.findParentWithChildren(anyLong(), any()))
+    Mockito.when(commentQueryService.findParentWithChildren(anyLong(), any()))
         .thenReturn(result);
 
     //then
@@ -216,7 +210,7 @@ class CommentApiTest extends MockMvcTestHelper {
   @DisplayName("delete() : 댓글이 정상적으로 삭제되면 204 No Content를 반환할 수 있다.")
   void test_delete() throws Exception {
     //given
-    final PathParametersSnippet pathParams = pathParameters(
+    final PathParametersSnippet pathParams = RequestDocumentation.pathParameters(
         parameterWithName("comment-id").description("삭제할 댓글의 ID")
     );
 
@@ -234,17 +228,17 @@ class CommentApiTest extends MockMvcTestHelper {
     final String modifiedContent = "변경된 내용";
     final CommentModifyRequest request = new CommentModifyRequest(modifiedContent);
 
-    final CommentResponse response = new CommentResponse("댓", 5L, null, 1L,  "eventName", false,
+    final CommentResponse response = new CommentResponse("댓", 5L, null, 1L, "eventName", false,
         LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1");
 
-    when(commentCommandService.modify(anyLong(), any(), any()))
+    Mockito.when(commentCommandService.modify(anyLong(), any(), any()))
         .thenReturn(response);
 
     final RequestFieldsSnippet requestFields = requestFields(
         fieldWithPath("content").type(JsonFieldType.STRING).description("변경할 댓글 내용")
     );
 
-    final PathParametersSnippet pathParams = pathParameters(
+    final PathParametersSnippet pathParams = RequestDocumentation.pathParameters(
         parameterWithName("comment-id").description("수정할 댓글의 ID")
     );
 
