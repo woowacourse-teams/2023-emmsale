@@ -13,6 +13,7 @@ drop table if exists kerdy.block;
 drop table if exists kerdy.update_notification;
 drop table if exists kerdy.report;
 drop table if exists kerdy.scrap;
+drop table if exists kerdy.feed;
 
 create table activity
 (
@@ -185,3 +186,15 @@ create table report
 
 alter table member
     add column github_username varchar(40) not null default '';
+
+-- 2023-08-31 16:15
+create table feed
+(
+    id         bigint auto_increment primary key,
+    event_id   bigint        not null,
+    writer_id  bigint        not null,
+    content    varchar(1000) not null,
+    title      varchar(50)   not null,
+    created_at datetime(6)   null,
+    updated_at datetime(6)   null
+);
