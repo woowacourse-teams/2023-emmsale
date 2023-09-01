@@ -7,6 +7,8 @@ import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
+import com.emmsale.feed.domain.Feed;
+import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -33,19 +35,21 @@ class UpdateNotificationQueryServiceTest extends ServiceIntegrationTestHelper {
   @Autowired
   private EventRepository eventRepository;
   @Autowired
+  private FeedRepository feedRepository;
+  @Autowired
   private CommentRepository commentRepository;
 
   private UpdateNotification 이벤트_알림;
   private UpdateNotification 댓글_알림;
   private Member member;
-  private Event event;
   private Comment comment;
+  private Feed feed;
 
   @BeforeEach
   void setUp() {
+    final Event event = eventRepository.save(EventFixture.인프콘_2023());
     member = memberRepository.findById(1L).get();
-
-    event = eventRepository.save(EventFixture.인프콘_2023());
+    feed = feedRepository.save(new Feed(event, member, "피드 제목", "피드 내용"));
 
     이벤트_알림 = updateNotificationRepository.save(
         new UpdateNotification(
@@ -57,7 +61,7 @@ class UpdateNotificationQueryServiceTest extends ServiceIntegrationTestHelper {
     );
 
     comment = commentRepository.save(
-        Comment.createRoot(event, member, "내용")
+        Comment.createRoot(feed, member, "내용")
     );
 
     댓글_알림 = updateNotificationRepository.save(
@@ -86,10 +90,10 @@ class UpdateNotificationQueryServiceTest extends ServiceIntegrationTestHelper {
             UpdateNotificationType.COMMENT, false,
             new CommentTypeNotification(
                 comment.getContent(),
-                comment.getEvent().getName(),
+                comment.getFeed().getTitle(),
                 comment.getMember().getImageUrl(),
                 comment.getParentIdOrSelfId(),
-                comment.getEvent().getId()
+                comment.getFeed().getId()
             )
         )
     );

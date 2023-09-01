@@ -1,5 +1,6 @@
 package com.emmsale.feed.application;
 
+import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
@@ -25,10 +26,10 @@ public class FeedCommandService {
   private final EventRepository eventRepository;
 
   public FeedPostResponse postFeed(final Member member, final FeedPostRequest request) {
-    final Long eventId = request.getEventId();
-    validateEventExists(eventId);
+    final Event event = eventRepository.findById(request.getEventId())
+        .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_EVENT));
 
-    final Feed feed = new Feed(eventId, member, request.getTitle(), request.getContent());
+    final Feed feed = new Feed(event, member, request.getTitle(), request.getContent());
     final Feed savedFeed = feedRepository.save(feed);
 
     return FeedPostResponse.from(savedFeed);
@@ -41,19 +42,13 @@ public class FeedCommandService {
   ) {
     final Feed feed = feedRepository.findById(id)
         .orElseThrow(() -> new FeedException(FeedExceptionType.NOT_FOUND_FEED));
+    final Event event = eventRepository.findById(request.getEventId())
+        .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_EVENT));
     validateFeedOwner(member, feed);
-    validateEventExists(request.getEventId());
 
-    feed.updateFeed(request.getEventId(), request.getTitle(), request.getContent());
+    feed.updateFeed(event, request.getTitle(), request.getContent());
 
     return FeedUpdateResponse.from(feed);
-  }
-
-  private void validateEventExists(final Long eventId) {
-    final boolean isExistsEvent = eventRepository.existsById(eventId);
-    if (!isExistsEvent) {
-      throw new EventException(EventExceptionType.NOT_FOUND_EVENT);
-    }
   }
 
   private void validateFeedOwner(final Member member, final Feed feed) {

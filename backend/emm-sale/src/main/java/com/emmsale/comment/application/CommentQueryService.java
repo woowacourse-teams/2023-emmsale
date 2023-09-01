@@ -40,7 +40,7 @@ public class CommentQueryService {
 
     final List<Comment> comments = optionalMemberId
         .map(commentRepository::findByMemberId)
-        .orElse(commentRepository.findByEventId(eventId));
+        .orElse(commentRepository.findByFeedId(eventId));
 
     return CommentHierarchyResponse.convertAllFrom(comments, blockedMemberIds);
   }

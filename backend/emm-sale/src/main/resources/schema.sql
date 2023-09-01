@@ -187,14 +187,16 @@ create table report
 alter table member
     add column github_username varchar(40) not null default '';
 
--- 2023-08-31 16:15
+-- 2023-09-01 13:46
 create table feed
 (
     id         bigint auto_increment primary key,
-    event_id   bigint        not null,
     writer_id  bigint        not null,
-    content    varchar(1000) not null,
     title      varchar(50)   not null,
+    content    varchar(1000) not null,
+    event_id   bigint        not null,
     created_at datetime(6)   null,
     updated_at datetime(6)   null
 );
+
+alter table comment rename column event_id to feed_id;

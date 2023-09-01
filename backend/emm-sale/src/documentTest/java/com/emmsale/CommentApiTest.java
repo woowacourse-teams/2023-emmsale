@@ -40,7 +40,7 @@ class CommentApiTest extends MockMvcTestHelper {
 
   private static final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
       fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용"),
-      fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("댓글을 생성할 행사 id"),
+      fieldWithPath("feedId").type(JsonFieldType.NUMBER).description("댓글을 생성할 피드 id"),
       fieldWithPath("parentId").type(JsonFieldType.NUMBER)
           .description("대댓글일 경우 부모 댓글 id (부모 댓글일 경우 id null)").optional()
   );
@@ -48,8 +48,8 @@ class CommentApiTest extends MockMvcTestHelper {
       fieldWithPath("content").description("저장된 댓글 내용"),
       fieldWithPath("commentId").description("저장된 댓글 id"),
       fieldWithPath("parentId").description("대댓글일 경우 부모 댓글 id").optional(),
-      fieldWithPath("eventId").description("행사 id"),
-      fieldWithPath("eventName").description("행사 이름"),
+      fieldWithPath("feedId").description("피드 id"),
+      fieldWithPath("feedTitle").description("피드 제목"),
       fieldWithPath("createdAt").description("댓글 생성 시간"),
       fieldWithPath("updatedAt").description("댓글 최근 수정 시간"),
       fieldWithPath("deleted").description("댓글 삭제 여부"),
@@ -65,7 +65,7 @@ class CommentApiTest extends MockMvcTestHelper {
     final String content = "내용";
     final CommentAddRequest request = new CommentAddRequest(content, 1L, null);
 
-    final CommentResponse commentResponse = new CommentResponse(content, 2L, 1L, 1L, "eventName",
+    final CommentResponse commentResponse = new CommentResponse(content, 2L, 1L, 1L, "feedTitle",
         false,
         LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1");
 
@@ -82,13 +82,13 @@ class CommentApiTest extends MockMvcTestHelper {
   }
 
   @Test
-  @DisplayName("findAll() : 행사에 있는 모든 댓글을 성공적으로 조회하면 200 OK를 반환할 수 있다.")
+  @DisplayName("findAll() : 피드에 있는 모든 댓글을 성공적으로 조회하면 200 OK를 반환할 수 있다.")
   void test_findAll() throws Exception {
     //given
     final String accessToken = "Bearer AccessToken";
 
     final RequestParametersSnippet requestParam = requestParameters(
-        parameterWithName("eventId").description("댓글을 볼 행사 id(빈 값 가능)").optional(),
+        parameterWithName("feedId").description("댓글을 볼 피드 id(빈 값 가능)").optional(),
         parameterWithName("memberId").description("조회할 댓글을 작성한 사용자 ID(빈 값 가능) [둘 다 빈 값 X]")
             .optional()
     );
@@ -97,8 +97,8 @@ class CommentApiTest extends MockMvcTestHelper {
         fieldWithPath("[].parentComment.content").description("댓글 내용"),
         fieldWithPath("[].parentComment.commentId").description("댓글 ID"),
         fieldWithPath("[].parentComment.parentId").description("부모 댓글 ID").optional(),
-        fieldWithPath("[].parentComment.eventId").description("행사 ID"),
-        fieldWithPath("[].parentComment.eventName").description("행사 이름"),
+        fieldWithPath("[].parentComment.feedId").description("피드 ID"),
+        fieldWithPath("[].parentComment.feedTitle").description("피드 이름"),
         fieldWithPath("[].parentComment.deleted").description("댓글 삭제 여부"),
         fieldWithPath("[].parentComment.createdAt").description("댓글 생성 날짜"),
         fieldWithPath("[].parentComment.updatedAt").description("댓글 수정 날짜"),
@@ -109,8 +109,8 @@ class CommentApiTest extends MockMvcTestHelper {
         fieldWithPath("[].childComments[].content").description("댓글 내용"),
         fieldWithPath("[].childComments[].commentId").description("댓글 ID"),
         fieldWithPath("[].childComments[].parentId").description("부모 댓글 ID").optional(),
-        fieldWithPath("[].childComments[].eventId").description("행사 ID"),
-        fieldWithPath("[].childComments[].eventName").description("행사 이름"),
+        fieldWithPath("[].childComments[].feedId").description("피드 ID"),
+        fieldWithPath("[].childComments[].feedTitle").description("피드 이름"),
         fieldWithPath("[].childComments[].deleted").description("댓글 삭제 여부"),
         fieldWithPath("[].childComments[].createdAt").description("댓글 생성 날짜"),
         fieldWithPath("[].childComments[].updatedAt").description("댓글 수정 날짜"),
@@ -121,17 +121,17 @@ class CommentApiTest extends MockMvcTestHelper {
 
     final List<CommentHierarchyResponse> result = List.of(
         new CommentHierarchyResponse(
-            new CommentResponse("부모댓글2", 4L, null, 1L, "eventName", false,
+            new CommentResponse("부모댓글2", 4L, null, 1L, "feedTitle", false,
                 LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
             Collections.emptyList()
         ),
         new CommentHierarchyResponse(
-            new CommentResponse("부모댓글1", 5L, null, 1L, "eventName", false,
+            new CommentResponse("부모댓글1", 5L, null, 1L, "feedTitle", false,
                 LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
             List.of(
-                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, "feedTitle", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
-                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, "feedTitle", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"
                 ))
         ));
@@ -141,7 +141,7 @@ class CommentApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(get("/comments")
-            .queryParam("eventId", "1")
+            .queryParam("feedId", "1")
             .header("Authorization", accessToken))
         .andExpect(status().isOk())
         .andDo(print())
@@ -160,8 +160,8 @@ class CommentApiTest extends MockMvcTestHelper {
         fieldWithPath("parentComment.content").description("댓글 내용"),
         fieldWithPath("parentComment.commentId").description("댓글 ID"),
         fieldWithPath("parentComment.parentId").description("부모 댓글 ID").optional(),
-        fieldWithPath("parentComment.eventId").description("행사 ID"),
-        fieldWithPath("parentComment.eventName").description("행사 제목"),
+        fieldWithPath("parentComment.feedId").description("피드 ID"),
+        fieldWithPath("parentComment.feedTitle").description("피드 제목"),
         fieldWithPath("parentComment.deleted").description("댓글 삭제 여부"),
         fieldWithPath("parentComment.createdAt").description("댓글 생성 날짜"),
         fieldWithPath("parentComment.updatedAt").description("댓글 수정 날짜"),
@@ -172,8 +172,8 @@ class CommentApiTest extends MockMvcTestHelper {
         fieldWithPath("childComments[].content").description("댓글 내용"),
         fieldWithPath("childComments[].commentId").description("댓글 ID"),
         fieldWithPath("childComments[].parentId").description("부모 댓글 ID").optional(),
-        fieldWithPath("childComments[].eventId").description("행사 ID"),
-        fieldWithPath("childComments[].eventName").description("행사 이름"),
+        fieldWithPath("childComments[].feedId").description("피드 ID"),
+        fieldWithPath("childComments[].feedTitle").description("피드 이름"),
         fieldWithPath("childComments[].deleted").description("댓글 삭제 여부"),
         fieldWithPath("childComments[].createdAt").description("댓글 생성 날짜"),
         fieldWithPath("childComments[].updatedAt").description("댓글 수정 날짜"),
@@ -184,12 +184,12 @@ class CommentApiTest extends MockMvcTestHelper {
 
     final CommentHierarchyResponse result =
         new CommentHierarchyResponse(
-            new CommentResponse("부모댓글1", 5L, null, 1L, "eventName", false,
+            new CommentResponse("부모댓글1", 5L, null, 1L, "feedTitle", false,
                 LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
             List.of(
-                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, "feedTitle", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
-                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, "eventName", false,
+                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, "feedTitle", false,
                     LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1")
             )
         );
@@ -228,7 +228,7 @@ class CommentApiTest extends MockMvcTestHelper {
     final String modifiedContent = "변경된 내용";
     final CommentModifyRequest request = new CommentModifyRequest(modifiedContent);
 
-    final CommentResponse response = new CommentResponse("댓", 5L, null, 1L, "eventName", false,
+    final CommentResponse response = new CommentResponse("댓", 5L, null, 1L, "feedTitle", false,
         LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1");
 
     Mockito.when(commentCommandService.modify(anyLong(), any(), any()))

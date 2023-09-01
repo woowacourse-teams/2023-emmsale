@@ -36,7 +36,7 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 class UpdateNotificationApiTest extends MockMvcTestHelper {
 
   @Test
-  @DisplayName("find() : 현재 로그인 한 사용자가 받은 댓글 & 행사 알림들을 성공적으로 조회한다면 200 OK를 반환할 수 있다.")
+  @DisplayName("find() : 현재 로그인 한 사용자가 받은 댓글 & 피드 알림들을 성공적으로 조회한다면 200 OK를 반환할 수 있다.")
   void test_find() throws Exception {
     //given
     final String accessToken = "Bearer Token";
@@ -51,15 +51,15 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
         fieldWithPath("[].createdAt").description("알림 생성 날짜"),
         fieldWithPath("[].type").description("알림 타입"),
         fieldWithPath("[].isRead").description("읽음 상태 유무"),
-        fieldWithPath("[].commentTypeNotification").description("행사 알림일 경우 null, 댓글 알림일 경우 내용 존재")
+        fieldWithPath("[].commentTypeNotification").description("피드 알림일 경우 null, 댓글 알림일 경우 내용 존재")
             .optional(),
         fieldWithPath("[].commentTypeNotification.content").description("(댓글 알림일 경우) 댓글 내용")
             .optional(),
-        fieldWithPath("[].commentTypeNotification.eventName").description("(댓글 알림일 경우)이벤트 이름")
+        fieldWithPath("[].commentTypeNotification.feedTitle").description("(댓글 알림일 경우)피드 제목")
             .optional(),
         fieldWithPath("[].commentTypeNotification.parentId").description("(댓글 알림일 경우)부모 댓글 ID")
             .optional(),
-        fieldWithPath("[].commentTypeNotification.eventId").description("(댓글 알림일 경우)이벤트 ID")
+        fieldWithPath("[].commentTypeNotification.feedId").description("(댓글 알림일 경우)피드 ID")
             .optional(),
         fieldWithPath("[].commentTypeNotification.commenterImageUrl").description(
                 "(댓글 알림일 경우) 댓글 작성자 이미지 Url")
@@ -68,7 +68,7 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
 
     final CommentTypeNotification commentTypeNotification = new CommentTypeNotification(
         "대댓글 내용",
-        "이벤트 이름",
+        "피드 제목",
         "대댓글 단 사용자의 이미지 URL",
         3L,
         5L
@@ -102,7 +102,7 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
   }
 
   @Test
-  @DisplayName("read() : 댓글 & 행사 알림의 읽음 상태를 성공적으로 변경시켰다면 204 No Content를 반환할 수 있다.")
+  @DisplayName("read() : 댓글 & 피드 알림의 읽음 상태를 성공적으로 변경시켰다면 204 No Content를 반환할 수 있다.")
   void test_read() throws Exception {
     //given
     final PathParametersSnippet pathParams = RequestDocumentation.pathParameters(
@@ -123,11 +123,11 @@ class UpdateNotificationApiTest extends MockMvcTestHelper {
   }
 
   @Test
-  @DisplayName("deleteBatch() : 댓글 & 행사 알림을 성공적으로 삭제했다면 204 No Content 를 반환할 수 있다.")
+  @DisplayName("deleteBatch() : 댓글 & 피드 알림을 성공적으로 삭제했다면 204 No Content 를 반환할 수 있다.")
   void test_deleteBatch() throws Exception {
     //given
     final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("deleteIds").description("삭제할 댓글 & 행사 알림 ID들")
+        fieldWithPath("deleteIds").description("삭제할 댓글 & 피드 알림 ID들")
     );
 
     final UpdateNotificationDeleteRequest request =

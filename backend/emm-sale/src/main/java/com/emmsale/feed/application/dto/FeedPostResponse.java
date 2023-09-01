@@ -17,7 +17,7 @@ public class FeedPostResponse {
   public static FeedPostResponse from(final Feed feed) {
     return new FeedPostResponse(
         feed.getId(),
-        feed.getEventId(),
+        feed.getEvent().getId(),
         feed.getWriter().getId(),
         feed.getTitle(),
         feed.getContent()

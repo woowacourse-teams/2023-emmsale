@@ -98,7 +98,7 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
 
     @BeforeEach
     void setUp() {
-      피드 = feedRepository.save(new Feed(이벤트1.getId(), 작성자, "피드 제목", "피드 내용"));
+      피드 = feedRepository.save(new Feed(이벤트1, 작성자, "피드 제목", "피드 내용"));
       newEventId = 이벤트1.getId();
       newTitle = "새로운 제목";
       newContent = "새로운 내용";
