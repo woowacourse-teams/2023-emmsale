@@ -38,6 +38,7 @@ public class Feed extends BaseEntity {
   private String content;
   @OneToMany(mappedBy = "feed")
   private List<Comment> comments;
+  private boolean isDeleted = false;
   // TODO: 2023/08/31 이미지 추가
 
   public Feed(final Event event, final Member writer, final String title, final String content) {
@@ -55,5 +56,9 @@ public class Feed extends BaseEntity {
 
   public boolean isNotOwner(final Long memberId) {
     return !this.writer.getId().equals(memberId);
+  }
+
+  public void delete() {
+    this.isDeleted = true;
   }
 }

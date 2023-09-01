@@ -3,6 +3,7 @@ package com.emmsale.feed.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
@@ -154,6 +155,70 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
       //when
       final EventException actualException = assertThrowsExactly(EventException.class,
           () -> feedCommandService.updateFeed(작성자, 피드.getId(), request));
+
+      //then
+      assertEquals(expect, actualException.exceptionType());
+    }
+  }
+
+  @Nested
+  @DisplayName("피드 삭제 테스트")
+  class FeedDelete {
+
+    private Feed 피드;
+
+    @BeforeEach
+    void setUp() {
+      피드 = feedRepository.save(new Feed(이벤트1, 작성자, "피드 제목", "피드 내용"));
+    }
+
+    @Test
+    @DisplayName("피드를 삭제한다.")
+    void deleteFeedTest() {
+      //given
+      final Long feedId = 피드.getId();
+
+      //when
+      feedCommandService.deleteFeed(feedId, 작성자);
+
+      //then
+      final Feed actualFeed = feedRepository.findById(feedId).get();
+      assertTrue(actualFeed.isDeleted());
+    }
+
+    @Test
+    @DisplayName("삭제하려는 피드의 id가 존재하지 않을 경우 NOT_FOUND_FEED 타입의 FeedException이 발생한다.")
+    void deleteFeedWithNotExistIdTest() {
+      //given
+      final long 존재하지_않는_피드_id = 0L;
+
+      final FeedExceptionType expect = FeedExceptionType.NOT_FOUND_FEED;
+
+      //when
+      final FeedException actualException = assertThrowsExactly(
+          FeedException.class,
+          () -> feedCommandService.deleteFeed(존재하지_않는_피드_id, 작성자)
+      );
+
+      //then
+      assertEquals(expect, actualException.exceptionType());
+    }
+
+    @Test
+    @DisplayName("피드의 작성자와 삭제하려는 유저가 다를 경우 FORBIDDEN_NOT_OWNER 타입의 FeedException이 발생한다.")
+    void deleteFeedWithNotFeedWriterTest() {
+      //given
+      final Member 작성자가_아닌_사용자 = memberRepository.save(
+          new Member(111L, "image-url", "github-username")
+      );
+
+      final FeedExceptionType expect = FeedExceptionType.FORBIDDEN_NOT_OWNER;
+
+      //when
+      final FeedException actualException = assertThrowsExactly(
+          FeedException.class,
+          () -> feedCommandService.deleteFeed(피드.getId(), 작성자가_아닌_사용자)
+      );
 
       //then
       assertEquals(expect, actualException.exceptionType());

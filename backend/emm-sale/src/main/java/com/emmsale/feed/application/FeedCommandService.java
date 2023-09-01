@@ -51,6 +51,14 @@ public class FeedCommandService {
     return FeedUpdateResponse.from(feed);
   }
 
+  public void deleteFeed(final Long id, final Member member) {
+    final Feed feed = feedRepository.findById(id)
+        .orElseThrow(() -> new FeedException(FeedExceptionType.NOT_FOUND_FEED));
+    validateFeedOwner(member, feed);
+
+    feed.delete();
+  }
+
   private void validateFeedOwner(final Member member, final Feed feed) {
     if (feed.isNotOwner(member.getId())) {
       throw new FeedException(FeedExceptionType.FORBIDDEN_NOT_OWNER);

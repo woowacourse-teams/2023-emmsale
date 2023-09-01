@@ -11,6 +11,7 @@ import com.emmsale.feed.application.dto.FeedUpdateResponse;
 import com.emmsale.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,5 +55,11 @@ public class FeedApi {
       @RequestBody final FeedUpdateRequest request
   ) {
     return feedCommandService.updateFeed(member, id, request);
+  }
+
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteFeed(final Member member, @PathVariable final Long id) {
+    feedCommandService.deleteFeed(id, member);
   }
 }
