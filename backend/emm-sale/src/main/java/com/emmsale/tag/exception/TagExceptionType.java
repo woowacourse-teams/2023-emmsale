@@ -8,6 +8,10 @@ public enum TagExceptionType implements BaseExceptionType {
   NOT_FOUND_TAG(
       HttpStatus.NOT_FOUND,
       "해당 태그가 존재하지 않습니다."
+  ),
+  ALEADY_EXIST_TAG(
+      HttpStatus.BAD_REQUEST,
+      "이미 존재하는 태그입니다."
   );
 
   private final HttpStatus httpStatus;
