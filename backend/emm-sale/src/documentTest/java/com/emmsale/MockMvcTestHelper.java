@@ -26,6 +26,7 @@ import com.emmsale.report.application.ReportQueryService;
 import com.emmsale.resolver.MemberArgumentResolver;
 import com.emmsale.scrap.application.ScrapCommandService;
 import com.emmsale.scrap.application.ScrapQueryService;
+import com.emmsale.tag.application.TagCommandService;
 import com.emmsale.tag.application.TagQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,6 +53,8 @@ abstract class MockMvcTestHelper {
   private MemberArgumentResolver memberArgumentResolver;
   @MockBean
   protected TagQueryService tagQueryService;
+  @MockBean
+  protected TagCommandService tagCommandService;
   @MockBean
   protected ScrapQueryService scrapQueryService;
   @MockBean
