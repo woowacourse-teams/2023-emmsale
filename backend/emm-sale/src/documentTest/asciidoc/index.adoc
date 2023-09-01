@@ -19,6 +19,20 @@ include::{snippets}/find-all-activities/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-all-activities/response-fields.adoc[]
 
+=== `POST`: 새로운 Activity 추가
+
+.HTTP request
+include::{snippets}/add-activity/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/add-activity/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/add-activity/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-activity/response-fields.adoc[]
+
 == Member
 
 === `POST`: 초기 사용자 등록

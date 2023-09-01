@@ -26,4 +26,9 @@ public class Activity {
 
   @Column(nullable = false)
   private String name;
+
+  public Activity(final ActivityType activityType, final String name) {
+    this.activityType = activityType;
+    this.name = name;
+  }
 }
