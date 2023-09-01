@@ -3,6 +3,7 @@ package com.emmsale.message_room.domain;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,7 +36,7 @@ public class Room {
   @Column(nullable = false)
   private LocalDateTime receiverLastExitedTime;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "room", cascade = CascadeType.PERSIST)
   private List<Message> messages = new ArrayList<>();
 
   public Room(
@@ -48,5 +49,10 @@ public class Room {
     this.requesterLastExitedTime = requesterLastExitedTime;
     this.receiverId = receiverId;
     this.receiverLastExitedTime = receiverLastExitedTime;
+  }
+
+  public void addMessage(final Message message) {
+    messages.add(message);
+    message.updateRoom(this);
   }
 }

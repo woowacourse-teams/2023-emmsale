@@ -37,6 +37,16 @@ public class Message {
   public Message(
       final String content,
       final Long senderId,
+      final LocalDateTime createdAt
+  ) {
+    this.content = content;
+    this.senderId = senderId;
+    this.createdAt = createdAt;
+  }
+
+  public Message(
+      final String content,
+      final Long senderId,
       final Room room,
       final LocalDateTime createdAt
   ) {
@@ -44,5 +54,9 @@ public class Message {
     this.senderId = senderId;
     this.room = room;
     this.createdAt = createdAt;
+  }
+
+  public void updateRoom(final Room room) {
+    this.room = room;
   }
 }
