@@ -65,7 +65,7 @@ class ActivityApiTest extends MockMvcTestHelper {
             ))
     );
 
-    Mockito.when(activityService.findAll()).thenReturn(activityResponses);
+    Mockito.when(activityQueryService.findAll()).thenReturn(activityResponses);
 
     // when & then
 
@@ -86,7 +86,7 @@ class ActivityApiTest extends MockMvcTestHelper {
     final ActivityAddRequest request = new ActivityAddRequest(ActivityType.CLUB, "DND");
     final ActivityResponse response = new ActivityResponse(3L, "DND");
 
-    when(activityService.addActivity(any())).thenReturn(response);
+    when(activityCommandService.addActivity(any())).thenReturn(response);
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("id").type(JsonFieldType.NUMBER).description("활동 식별자"),

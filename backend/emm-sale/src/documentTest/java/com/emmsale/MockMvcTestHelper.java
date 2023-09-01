@@ -3,7 +3,8 @@ package com.emmsale;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
-import com.emmsale.activity.application.ActivityService;
+import com.emmsale.activity.application.ActivityCommandService;
+import com.emmsale.activity.application.ActivityQueryService;
 import com.emmsale.block.application.BlockCommandService;
 import com.emmsale.block.application.BlockQueryService;
 import com.emmsale.comment.application.CommentCommandService;
@@ -94,7 +95,9 @@ abstract class MockMvcTestHelper {
   @MockBean
   protected BlockQueryService blockQueryService;
   @MockBean
-  protected ActivityService activityService;
+  protected ActivityQueryService activityQueryService;
+  @MockBean
+  protected ActivityCommandService activityCommandService;
   @MockBean
   protected RecruitmentPostQueryService postQueryService;
   @MockBean

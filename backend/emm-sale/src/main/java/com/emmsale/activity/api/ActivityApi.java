@@ -1,6 +1,7 @@
 package com.emmsale.activity.api;
 
-import com.emmsale.activity.application.ActivityService;
+import com.emmsale.activity.application.ActivityCommandService;
+import com.emmsale.activity.application.ActivityQueryService;
 import com.emmsale.activity.application.dto.ActivityAddRequest;
 import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.application.dto.ActivityResponses;
@@ -18,17 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ActivityApi {
 
-  private final ActivityService activityService;
+  private final ActivityQueryService activityQueryService;
+  private final ActivityCommandService activityCommandService;
 
   @GetMapping
   public ResponseEntity<List<ActivityResponses>> findAll() {
-    return ResponseEntity.ok(activityService.findAll());
+    return ResponseEntity.ok(activityQueryService.findAll());
   }
 
   @PostMapping
   public ResponseEntity<ActivityResponse> addActivity(
       @RequestBody final ActivityAddRequest request) {
-    return ResponseEntity.ok(activityService.addActivity(request));
+    return ResponseEntity.ok(activityCommandService.addActivity(request));
   }
 }
 

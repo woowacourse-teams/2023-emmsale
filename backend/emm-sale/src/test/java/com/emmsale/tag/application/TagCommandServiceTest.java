@@ -40,7 +40,7 @@ public class TagCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Test
   @DisplayName("이미 존재하는 태그를 추가하면 예외를 반환한다.")
-  void findAll_duplicate_fail() {
+  void addTag_duplicate_fail() {
     //given
     final String tagName = "프론트엔드";
     final TagRequest request = new TagRequest(tagName);

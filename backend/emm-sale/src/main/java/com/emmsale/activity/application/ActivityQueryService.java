@@ -4,7 +4,6 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-import com.emmsale.activity.application.dto.ActivityAddRequest;
 import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.application.dto.ActivityResponses;
 import com.emmsale.activity.domain.Activity;
@@ -21,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ActivityService {
+public class ActivityQueryService {
 
   private final ActivityRepository activityRepository;
 
@@ -45,10 +44,5 @@ public class ActivityService {
     }
 
     return responses;
-  }
-
-  public ActivityResponse addActivity(final ActivityAddRequest request) {
-    final Activity activity = new Activity(request.getActivityType(), request.getName());
-    return ActivityResponse.from(activityRepository.save(activity));
   }
 }
