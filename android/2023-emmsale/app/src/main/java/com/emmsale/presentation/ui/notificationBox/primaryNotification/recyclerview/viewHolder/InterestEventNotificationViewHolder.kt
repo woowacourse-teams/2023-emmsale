@@ -2,46 +2,32 @@ package com.emmsale.presentation.ui.notificationBox.primaryNotification.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.emmsale.databinding.ItemPrimarynotificationInterestEventNotificationBinding
+import com.emmsale.R
+import com.emmsale.databinding.ItemPrimaryNotificationBinding
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 
 class InterestEventNotificationViewHolder(
-    private val binding: ItemPrimarynotificationInterestEventNotificationBinding,
-    private val readNotification: (notificationId: Long) -> Unit,
-    private val showEvent: (eventId: Long) -> Unit,
-    private val deleteNotification: (notificationId: Long) -> Unit,
-) : PrimaryNotificationViewHolder(binding.root as ViewGroup) {
+    parent: ViewGroup,
+    onNotificationClick: (notification: PrimaryNotificationUiState) -> Unit = {},
+    onDeleteClick: (notificationId: Long) -> Unit = {},
+) : PrimaryNotificationViewHolder(
+    LayoutInflater.from(parent.context).inflate(
+        R.layout.item_primary_notification,
+        parent,
+        false,
+    ),
+) {
+    private val binding = ItemPrimaryNotificationBinding.bind(itemView)
 
     init {
-        binding.root.setOnClickListener {
-            readNotification(binding.notification?.notificationId ?: return@setOnClickListener)
-            showEvent(binding.notification?.eventId ?: return@setOnClickListener)
-        }
-        binding.ivInteresteventnotificationDeleteButton.setOnClickListener {
-            deleteNotification(binding.notification?.notificationId ?: return@setOnClickListener)
-        }
+        binding.onNotificationClick = onNotificationClick
+        binding.onDeleteClick = onDeleteClick
     }
 
-    fun bind(notification: InterestEventNotificationUiState) {
-        binding.notification = notification
-    }
+    override fun bind(item: PrimaryNotificationUiState) {
+        if (item !is InterestEventNotificationUiState) return
 
-    companion object {
-        fun create(
-            parent: ViewGroup,
-            readNotification: (notificationId: Long) -> Unit,
-            showEvent: (eventId: Long) -> Unit,
-            deleteNotification: (notificationId: Long) -> Unit,
-        ): InterestEventNotificationViewHolder {
-            val binding = ItemPrimarynotificationInterestEventNotificationBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
-
-            return InterestEventNotificationViewHolder(
-                binding = binding,
-                readNotification = readNotification,
-                showEvent = showEvent,
-                deleteNotification = deleteNotification,
-            )
-        }
+        binding.interestEventNotification = item
     }
 }

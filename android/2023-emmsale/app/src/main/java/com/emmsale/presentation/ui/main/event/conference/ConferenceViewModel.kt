@@ -38,10 +38,10 @@ class ConferenceViewModel(
     val selectedFilter: NotNullLiveData<ConferenceSelectedFilteringUiState> = _selectedFilter
 
     init {
-        refresh()
+        refreshNotifications()
     }
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         _selectedFilter.value = ConferenceSelectedFilteringUiState()
         fetchConferences()
     }

@@ -13,7 +13,7 @@ class ChildCommentNotificationUiState(
     val parentCommentId: Long,
     val eventId: Long,
     val eventName: String,
-    val authorImageUrl: String,
+    val commenterProfileImageUrl: String,
 ) : PrimaryNotificationUiState(
     notificationId = notificationId,
     receiverId = receiverId,
@@ -29,7 +29,7 @@ class ChildCommentNotificationUiState(
             parentCommentId == other.parentCommentId &&
             eventId == other.eventId &&
             eventName == other.eventName &&
-            authorImageUrl == other.authorImageUrl
+            commenterProfileImageUrl == other.commenterProfileImageUrl
     }
 
     override fun hashCode(): Int {
@@ -39,7 +39,7 @@ class ChildCommentNotificationUiState(
         result = PRIME * result + parentCommentId.hashCode()
         result = PRIME * result + eventId.hashCode()
         result = PRIME * result + eventName.hashCode()
-        result = PRIME * result + authorImageUrl.hashCode()
+        result = PRIME * result + commenterProfileImageUrl.hashCode()
         return result
     }
 
@@ -54,7 +54,7 @@ class ChildCommentNotificationUiState(
             parentCommentId = notification.parentCommentId,
             eventId = notification.eventId,
             eventName = notification.eventName,
-            authorImageUrl = notification.commentProfileImageUrl,
+            commenterProfileImageUrl = notification.commentProfileImageUrl,
         )
     }
 }

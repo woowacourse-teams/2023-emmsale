@@ -1,8 +1,9 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.viewHolder
 
-import android.view.ViewGroup
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 
-sealed class PrimaryNotificationViewHolder(
-    parent: ViewGroup,
-) : RecyclerView.ViewHolder(parent)
+abstract class PrimaryNotificationViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    abstract fun bind(item: PrimaryNotificationUiState)
+}

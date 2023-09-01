@@ -28,7 +28,7 @@ class MyPostActivity : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult(),
         ) { result ->
             if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
-            viewModel.refresh()
+            viewModel.refreshNotifications()
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -32,10 +32,10 @@ class EventRecruitmentViewModel(
     val hasWritingPermission: LiveData<Boolean> = _hasWritingPermission
 
     init {
-        refresh()
+        refreshNotifications()
     }
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         fetchRecruitments()
         fetchHasWritingPermission()
     }

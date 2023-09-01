@@ -28,10 +28,10 @@ class EventInfoViewModel(
     val event: LiveData<EventInfoUiEvent?> = _event
 
     init {
-        refresh()
+        refreshNotifications()
     }
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         viewModelScope.launch {
             when (val response = scrappedEventRepository.isScraped(eventId)) {
                 is ApiSuccess -> _isScraped.value = response.data

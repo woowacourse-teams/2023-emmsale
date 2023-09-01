@@ -90,8 +90,8 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.main.MainActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.onboarding.OnboardingActivity"
@@ -103,9 +103,9 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.login.LoginActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Emmsale.FullScreen"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>

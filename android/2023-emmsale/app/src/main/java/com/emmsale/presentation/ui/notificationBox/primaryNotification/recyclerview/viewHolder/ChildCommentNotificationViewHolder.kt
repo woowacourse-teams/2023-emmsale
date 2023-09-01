@@ -2,49 +2,32 @@ package com.emmsale.presentation.ui.notificationBox.primaryNotification.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.emmsale.databinding.ItemPrimarynotificationChildCommentNotificationBinding
+import com.emmsale.R
+import com.emmsale.databinding.ItemCommentNotificationBodyBinding
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 
 class ChildCommentNotificationViewHolder(
-    private val binding: ItemPrimarynotificationChildCommentNotificationBinding,
-    private val readNotification: (notificationId: Long) -> Unit,
-    private val showChildComments: (eventId: Long, parentCommentId: Long) -> Unit,
-    private val deleteNotification: (notificationId: Long) -> Unit,
-) : PrimaryNotificationViewHolder(binding.root as ViewGroup) {
+    parent: ViewGroup,
+    onNotificationClick: (notification: PrimaryNotificationUiState) -> Unit = {},
+    onDeleteNotificationClick: (notificationId: Long) -> Unit = {},
+) : PrimaryNotificationViewHolder(
+    LayoutInflater.from(parent.context).inflate(
+        R.layout.item_comment_notification_body,
+        parent,
+        false,
+    ),
+) {
+    private val binding = ItemCommentNotificationBodyBinding.bind(itemView)
 
     init {
-        binding.root.setOnClickListener {
-            readNotification(binding.notification?.notificationId ?: return@setOnClickListener)
-            showChildComments(
-                binding.notification?.eventId ?: return@setOnClickListener,
-                binding.notification?.parentCommentId ?: return@setOnClickListener,
-            )
-        }
-        binding.ivChildcommentnotificationDeleteButton.setOnClickListener {
-            deleteNotification(binding.notification?.notificationId ?: return@setOnClickListener)
-        }
+        binding.onNotificationClick = onNotificationClick
+        binding.onDeleteClick = onDeleteNotificationClick
     }
 
-    fun bind(notification: ChildCommentNotificationUiState) {
-        binding.notification = notification
-    }
+    override fun bind(item: PrimaryNotificationUiState) {
+        if (item !is ChildCommentNotificationUiState) return
 
-    companion object {
-        fun create(
-            parent: ViewGroup,
-            readNotification: (notificationId: Long) -> Unit,
-            showChildComments: (eventId: Long, parentCommentId: Long) -> Unit,
-            deleteNotification: (notificationId: Long) -> Unit,
-        ): ChildCommentNotificationViewHolder {
-            val binding = ItemPrimarynotificationChildCommentNotificationBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
-
-            return ChildCommentNotificationViewHolder(
-                binding = binding,
-                readNotification = readNotification,
-                showChildComments = showChildComments,
-                deleteNotification = deleteNotification,
-            )
-        }
+        binding.commentNotification = item
     }
 }

@@ -28,7 +28,7 @@ class MyProfileViewModel(
     private val _myProfile = NotNullMutableLiveData(MyProfileUiState())
     val myProfile: NotNullLiveData<MyProfileUiState> = _myProfile
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         _myProfile.value = _myProfile.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()

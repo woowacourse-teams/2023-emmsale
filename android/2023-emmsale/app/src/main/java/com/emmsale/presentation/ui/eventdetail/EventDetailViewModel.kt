@@ -26,10 +26,10 @@ class EventDetailViewModel(
     val eventDetail: NotNullLiveData<EventDetailUiState> = _eventDetail
 
     init {
-        refresh()
+        refreshNotifications()
     }
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         setLoadingState(true)
         viewModelScope.launch {
             when (val result = eventDetailRepository.getEventDetail(eventId)) {

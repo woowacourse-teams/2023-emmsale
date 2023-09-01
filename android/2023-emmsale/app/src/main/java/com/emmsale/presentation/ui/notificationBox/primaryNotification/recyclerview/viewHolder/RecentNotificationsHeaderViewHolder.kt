@@ -3,17 +3,12 @@ package com.emmsale.presentation.ui.notificationBox.primaryNotification.recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.databinding.ItemPrimarynotificationRecentNotificationsHeaderBinding
+import com.emmsale.R
 
-class RecentNotificationsHeaderViewHolder(
-    binding: ItemPrimarynotificationRecentNotificationsHeaderBinding,
-) : RecyclerView.ViewHolder(binding.root) {
-    companion object {
-        fun create(parent: ViewGroup): RecentNotificationsHeaderViewHolder {
-            val binding = ItemPrimarynotificationRecentNotificationsHeaderBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
-
-            return RecentNotificationsHeaderViewHolder(binding)
-        }
-    }
-}
+class RecentNotificationsHeaderViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+    LayoutInflater.from(parent.context).inflate(
+        R.layout.item_recent_notification_header,
+        parent,
+        false,
+    ),
+)

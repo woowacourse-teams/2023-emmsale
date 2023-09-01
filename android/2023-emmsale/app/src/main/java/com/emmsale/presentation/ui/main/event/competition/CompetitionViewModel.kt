@@ -38,10 +38,10 @@ class CompetitionViewModel(
     val selectedFilter: NotNullLiveData<CompetitionSelectedFilteringUiState> = _selectedFilter
 
     init {
-        refresh()
+        refreshNotifications()
     }
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         _selectedFilter.value = CompetitionSelectedFilteringUiState()
         fetchCompetitions()
     }

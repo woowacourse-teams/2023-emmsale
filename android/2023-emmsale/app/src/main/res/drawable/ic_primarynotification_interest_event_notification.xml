@@ -2,8 +2,8 @@
     <item>
         <shape android:shape="oval">
             <size
-                android:height="48dp"
-                android:width="48dp" />
+                android:width="48dp"
+                android:height="48dp" />
             <solid android:color="@color/light_gray" />
         </shape>
     </item>
@@ -16,14 +16,14 @@
             <group>
                 <clip-path android:pathData="M0,0h22v26h-22z" />
                 <path
+                    android:fillColor="#00000000"
                     android:pathData="M21,8.9V19.2C21,22.4 18.7,25 15.8,25H6.2C3.3,25 1,22.4 1,19.2V6.8C1,3.6 3.3,1 6.2,1H13.8C13.9,1 21,8.9 21,8.9Z"
                     android:strokeWidth="2"
-                    android:fillColor="#00000000"
                     android:strokeColor="#ffffff" />
                 <path
+                    android:fillColor="#00000000"
                     android:pathData="M21,8.9H17.3C15.4,8.9 13.8,7.2 13.8,5.1V1"
                     android:strokeWidth="2"
-                    android:fillColor="#00000000"
                     android:strokeColor="#ffffff" />
             </group>
         </vector>

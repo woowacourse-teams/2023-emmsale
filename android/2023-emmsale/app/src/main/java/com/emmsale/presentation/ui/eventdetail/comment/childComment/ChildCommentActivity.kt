@@ -52,7 +52,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.refresh()
+        viewModel.refreshNotifications()
     }
 
     private fun initDataBinding() {

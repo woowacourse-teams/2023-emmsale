@@ -3,31 +3,22 @@ package com.emmsale.presentation.ui.notificationBox.primaryNotification.recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.databinding.ItemPrimarynotificationPastNotificationsHeaderBinding
+import com.emmsale.R
+import com.emmsale.databinding.ItemPastNotificationHeaderBinding
 
 class PastNotificationsHeaderViewHolder(
-    binding: ItemPrimarynotificationPastNotificationsHeaderBinding,
-    private val deleteAllPastNotifications: () -> Unit,
-) : RecyclerView.ViewHolder(binding.root) {
+    parent: ViewGroup,
+    onDeleteAllNotificationClick: () -> Unit = {},
+) : RecyclerView.ViewHolder(
+    LayoutInflater.from(parent.context).inflate(
+        R.layout.item_past_notification_header,
+        parent,
+        false,
+    ),
+) {
+    private val binding = ItemPastNotificationHeaderBinding.bind(itemView)
 
     init {
-        binding.tvPrimarynotificationAllDeleteButton.setOnClickListener {
-            deleteAllPastNotifications()
-        }
-    }
-
-    companion object {
-        fun create(
-            parent: ViewGroup,
-            deleteAllPastNotifications: () -> Unit,
-        ): PastNotificationsHeaderViewHolder {
-            val binding = ItemPrimarynotificationPastNotificationsHeaderBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
-
-            return PastNotificationsHeaderViewHolder(
-                binding = binding,
-                deleteAllPastNotifications = deleteAllPastNotifications,
-            )
-        }
+        binding.onDeleteAllClick = onDeleteAllNotificationClick
     }
 }

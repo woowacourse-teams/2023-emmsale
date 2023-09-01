@@ -11,11 +11,14 @@ import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.PastNotificationsHeaderAdapter
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.PrimaryNotificationsAdapter
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.RecentNotificationsHeaderAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.PastNotificationHeaderAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.PrimaryNotificationAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.RecentNotificationHeaderAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uievent.PrimaryNotificationsUiEvent
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiEvent
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
 
 class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBinding>() {
     override val layoutResId: Int = R.layout.fragment_primary_notification
@@ -23,23 +26,21 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         PrimaryNotificationViewModel.factory
     }
 
-    private val recentNotificationsHeaderAdapter = RecentNotificationsHeaderAdapter()
-
-    private val recentNotificationsAdapter = PrimaryNotificationsAdapter(
-        readNotification = ::readNotification,
-        showEvent = ::showEvent,
-        showChildComments = ::showChildComments,
-        deleteNotification = {},
+    private val recentNotificationHeaderAdapter = RecentNotificationHeaderAdapter()
+    private val recentNotificationAdapter = PrimaryNotificationAdapter(
+        onNotificationClick = { notification ->
+            readNotification(notification.notificationId)
+            navigateToDetailScreen(notification)
+        },
+        onDeleteClick = ::deleteNotification,
     )
 
-    private val pastNotificationsHeaderAdapter =
-        PastNotificationsHeaderAdapter(::showNotificationDeleteConfirmDialog)
-
-    private val pastNotificationsAdapter = PrimaryNotificationsAdapter(
-        readNotification = {},
-        showEvent = ::showEvent,
-        showChildComments = ::showChildComments,
-        deleteNotification = ::deleteNotification,
+    private val pastNotificationHeaderAdapter = PastNotificationHeaderAdapter(
+        onDeleteAllNotificationClick = ::showNotificationDeleteConfirmDialog,
+    )
+    private val pastNotificationAdapter = PrimaryNotificationAdapter(
+        onNotificationClick = ::navigateToDetailScreen,
+        onDeleteClick = ::deleteNotification,
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,14 +67,18 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     }
 
     private fun initRecyclerView() {
+        val concatAdapterConfig = ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
+
         binding.rvPrimarynotificationNotifications.apply {
             adapter = ConcatAdapter(
-                recentNotificationsHeaderAdapter,
-                recentNotificationsAdapter,
-                pastNotificationsHeaderAdapter,
-                pastNotificationsAdapter,
+                concatAdapterConfig,
+                recentNotificationHeaderAdapter,
+                recentNotificationAdapter,
+                pastNotificationHeaderAdapter,
+                pastNotificationAdapter,
             )
             itemAnimator = null
+            setHasFixedSize(false)
         }
     }
 
@@ -81,11 +86,21 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         viewModel.readNotification(notificationId)
     }
 
-    private fun showEvent(eventId: Long) {
+    private fun navigateToDetailScreen(notification: PrimaryNotificationUiState) {
+        when (notification) {
+            is InterestEventNotificationUiState -> navigateToEventScreen(notification.eventId)
+            is ChildCommentNotificationUiState -> navigateToCommentScreen(
+                eventId = notification.eventId,
+                parentCommentId = notification.parentCommentId,
+            )
+        }
+    }
+
+    private fun navigateToEventScreen(eventId: Long) {
         EventDetailActivity.startActivity(requireContext(), eventId)
     }
 
-    private fun showChildComments(eventId: Long, parentCommentId: Long) {
+    private fun navigateToCommentScreen(eventId: Long, parentCommentId: Long) {
         ChildCommentActivity.startActivity(requireContext(), eventId, parentCommentId)
     }
 
@@ -94,10 +109,10 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     }
 
     private fun setupUiState() {
-        viewModel.uiState.observe(viewLifecycleOwner) {
-            if (it !is PrimaryNotificationScreenUiState.Success) return@observe
-            recentNotificationsAdapter.submitList(it.recentNotifications)
-            pastNotificationsAdapter.submitList(it.pastNotifications)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            if (uiState !is PrimaryNotificationScreenUiState.Success) return@observe
+            recentNotificationAdapter.submitList(uiState.recentNotifications)
+            pastNotificationAdapter.submitList(uiState.pastNotifications)
         }
     }
 

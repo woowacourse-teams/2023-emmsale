@@ -22,10 +22,10 @@ class MyPostViewModel(
     val myPosts: NotNullLiveData<MyPostsUiState> = _myPosts
 
     init {
-        refresh()
+        refreshNotifications()
     }
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         _myPosts.value = _myPosts.value.copy(isLoading = true)
         viewModelScope.launch {
             when (val response = myPostRepository.getMyPosts()) {

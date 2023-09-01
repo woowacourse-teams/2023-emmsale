@@ -20,7 +20,7 @@ class ScrappedEventViewModel(
     private val _scrappedEvents = NotNullMutableLiveData(ScrappedEventsUiState())
     val scrappedEvents: NotNullLiveData<ScrappedEventsUiState> = _scrappedEvents
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         changeToLoadingState()
         viewModelScope.launch {
             when (val response = scrappedEventRepository.getScrappedEvents()) {

@@ -27,10 +27,10 @@ class MemberBlockViewModel(
     val event: LiveData<BlockedMembersUiEvent?> = _event
 
     init {
-        refresh()
+        refreshNotifications()
     }
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         fetchBlockedMembers()
     }
 

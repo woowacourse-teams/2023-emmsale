@@ -238,11 +238,11 @@
             android:background="@color/white"
             android:clickable="true"
             android:visibility="@{vm.eventDetail.isError ? View.VISIBLE : View.GONE}"
-            bind:viewModel="@{vm}"
-            app:layout_constraintTop_toBottomOf="@id/appbarlayout_eventdetail"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appbarlayout_eventdetail"
+            bind:viewModel="@{vm}"
             tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -41,10 +41,10 @@ class ProfileViewModel(
     val event: LiveData<ProfileEvent?> = _event
 
     init {
-        refresh()
+        refreshNotifications()
     }
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         _profile.value = _profile.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
@@ -92,7 +92,7 @@ class ProfileViewModel(
                 is ApiError, is ApiException -> _event.value = ProfileEvent.BLOCK_FAIL
                 is ApiSuccess -> {
                     _event.value = ProfileEvent.BLOCK_COMPLETE
-                    refresh()
+                    refreshNotifications()
                 }
             }
         }
@@ -106,7 +106,7 @@ class ProfileViewModel(
                 is ApiError, is ApiException -> _event.value = ProfileEvent.UNBLOCK_FAIL
                 is ApiSuccess -> {
                     _event.value = ProfileEvent.UNBLOCK_SUCCESS
-                    refresh()
+                    refreshNotifications()
                 }
             }
         }

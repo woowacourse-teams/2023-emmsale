@@ -41,10 +41,10 @@ class RecruitmentNotificationViewModel(
     val event: LiveData<RecruitmentNotificationUiEvent?> = _event
 
     init {
-        refresh()
+        refreshNotifications()
     }
 
-    override fun refresh() {
+    override fun refreshNotifications() {
         viewModelScope.launch {
             _notifications.value = _notifications.value.copy(isLoading = true)
             val uid = tokenRepository.getToken()?.uid ?: return@launch

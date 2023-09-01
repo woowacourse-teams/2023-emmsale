@@ -48,15 +48,15 @@
             android:id="@+id/tv_mycomment_last_modified_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="17dp"
             android:text="@{comment.lastModifiedDate}"
             android:textColor="@color/gray"
             android:textSize="11sp"
-            tools:text="2023.08.11"
-            app:layout_constraintTop_toBottomOf="@+id/tv_mycomments_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/tv_mycomments_event_name"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="17dp" />
+            app:layout_constraintStart_toStartOf="@+id/tv_mycomments_event_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mycomments_content"
+            tools:text="2023.08.11" />
 
         <TextView
             android:id="@+id/tv_mycomments_modified_label"
