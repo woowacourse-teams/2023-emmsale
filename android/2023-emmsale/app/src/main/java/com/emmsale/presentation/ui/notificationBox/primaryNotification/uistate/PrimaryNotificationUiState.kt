@@ -6,37 +6,37 @@ import com.emmsale.data.notification.updated.UpdatedNotification
 import java.time.LocalDateTime
 
 abstract class PrimaryNotificationUiState(
-    val id: Long,
+    val notificationId: Long,
     val receiverId: Long,
     val createdAt: LocalDateTime,
     val isRead: Boolean,
 ) {
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
         if (other !is PrimaryNotificationUiState) return false
-
-        if (id != other.id) return false
-        if (receiverId != other.receiverId) return false
-        if (createdAt != other.createdAt) return false
-        if (isRead != other.isRead) return false
-
-        return true
+        return notificationId == other.notificationId &&
+            receiverId == other.receiverId &&
+            createdAt == other.createdAt &&
+            isRead == other.isRead
     }
 
     override fun hashCode(): Int {
-        var result = id
-        result = 31 * result + receiverId
-        result = 31 * result + createdAt.hashCode()
-        result = 31 * result + isRead.hashCode()
-        return result.toInt()
+        var result = 1
+        result = PRIME * result + notificationId.hashCode()
+        result = PRIME * result + receiverId.hashCode()
+        result = PRIME * result + createdAt.hashCode()
+        result = PRIME * result + isRead.hashCode()
+        return result
     }
 
     companion object {
+        @JvmStatic
+        protected val PRIME = 31
+
         fun from(notification: UpdatedNotification): PrimaryNotificationUiState =
             when (notification) {
-                is InterestEventNotification -> InterestEventNotificationUiState.from(notification)
                 is ChildCommentNotification -> ChildCommentNotificationUiState.from(notification)
-                else -> throw IllegalArgumentException("${notification::javaClass.name} 타입이 아닙니다.")
+                is InterestEventNotification -> InterestEventNotificationUiState.from(notification)
+                else -> throw IllegalArgumentException("${PrimaryNotificationUiState::class.simpleName} 타입이 아닙니다.")
             }
     }
 }

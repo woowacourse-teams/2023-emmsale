@@ -7,16 +7,19 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentActivity
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.PastNotificationAdapter
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.RecentNotificationAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.PastNotificationHeaderAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.PrimaryNotificationAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.recyclerview.adapter.RecentNotificationHeaderAdapter
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uievent.PrimaryNotificationsUiEvent
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.ChildCommentNotificationUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState
+import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState
-import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationsUiEvent
 
 class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBinding>() {
     override val layoutResId: Int = R.layout.fragment_primary_notification
@@ -24,90 +27,67 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         PrimaryNotificationViewModel.factory
     }
 
-    private val recentNotificationAdapter by lazy {
-        RecentNotificationAdapter(
-            onNotificationClick = { notification ->
-                viewModel.changeToRead(notification.id)
-                navigateToDetail(notification)
-            },
-            onDeleteClick = viewModel::deleteNotification,
-        )
-    }
-    private val pastNotificationAdapter by lazy {
-        PastNotificationAdapter(
-            onNotificationClick = ::navigateToDetail,
-            onDeleteClick = viewModel::deleteNotification,
-            onDeleteAllClick = { showNotificationDeleteConfirmDialog() },
-        )
-    }
-    private val primaryNotificationAdapter: ConcatAdapter by lazy {
-        val config = ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
+    private val recentNotificationHeaderAdapter = RecentNotificationHeaderAdapter()
+    private val recentNotificationAdapter = PrimaryNotificationAdapter(
+        onNotificationClick = { notification ->
+            readNotification(notification.notificationId)
+            navigateToDetailScreen(notification)
+        },
+        onDeleteClick = ::deleteNotification,
+    )
 
-        ConcatAdapter(
-            config,
-            recentNotificationAdapter,
-            pastNotificationAdapter,
-        )
-    }
+    private val pastNotificationHeaderAdapter = PastNotificationHeaderAdapter(
+        onDeleteAllNotificationClick = ::showNotificationDeleteConfirmDialog,
+    )
+    private val pastNotificationAdapter = PrimaryNotificationAdapter(
+        onNotificationClick = ::navigateToDetailScreen,
+        onDeleteClick = ::deleteNotification,
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
-        setupObservers()
-    }
-
-    private fun initView() {
-        binding.viewModel = viewModel
-        initPrimaryNotificationRecyclerView()
-    }
-
-    private fun initPrimaryNotificationRecyclerView() {
-        binding.rvPrimaryNotification.adapter = primaryNotificationAdapter
-        binding.rvPrimaryNotification.setHasFixedSize(true)
-        binding.rvPrimaryNotification.itemAnimator = null
-    }
-
-    private fun setupObservers() {
-        setupRecentNotificationsObserver()
-        setupPastNotificationsObserver()
+        initDataBinding()
+        initRecyclerView()
+        setupUiState()
         setupUiEvent()
     }
 
-    private fun setupRecentNotificationsObserver() {
-        viewModel.recentNotifications.observe(viewLifecycleOwner) { recentNotifications ->
-            if (!recentNotifications.isLoading) {
-                recentNotificationAdapter.submitList(recentNotifications.notifications)
-            }
+    private fun initDataBinding() {
+        binding.viewModel = viewModel
+    }
+
+    private fun showNotificationDeleteConfirmDialog() {
+        WarningDialog(
+            context = context ?: return,
+            title = getString(R.string.primarynotification_delete_notification_confirm_title),
+            message = getString(R.string.primarynotification_delete_notification_confirm_message),
+            positiveButtonLabel = getString(R.string.all_okay),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { viewModel.deleteAllPastNotifications() },
+        ).show()
+    }
+
+    private fun initRecyclerView() {
+        val concatAdapterConfig = ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
+
+        binding.rvPrimarynotificationNotifications.apply {
+            adapter = ConcatAdapter(
+                concatAdapterConfig,
+                recentNotificationHeaderAdapter,
+                recentNotificationAdapter,
+                pastNotificationHeaderAdapter,
+                pastNotificationAdapter,
+            )
+            itemAnimator = null
+            setHasFixedSize(false)
         }
     }
 
-    private fun setupPastNotificationsObserver() {
-        viewModel.pastNotifications.observe(viewLifecycleOwner) { pastNotifications ->
-            when {
-                !pastNotifications.isLoading -> pastNotificationAdapter.submitList(pastNotifications.notifications)
-            }
-        }
+    private fun readNotification(notificationId: Long) {
+        viewModel.readNotification(notificationId)
     }
 
-    private fun setupUiEvent() {
-        viewModel.event.observe(viewLifecycleOwner) {
-            handleEvent(it)
-        }
-    }
-
-    private fun handleEvent(event: PrimaryNotificationsUiEvent?) {
-        if (event == null) return
-        when (event) {
-            PrimaryNotificationsUiEvent.DELETE_ERROR -> showNotificationDeleteConfirmDialog()
-        }
-        viewModel.resetEvent()
-    }
-
-    private fun showNotificationDeleteFailedMessage() {
-        binding.root.showSnackBar(R.string.primarynotification_delete_notification_failed_message)
-    }
-
-    private fun navigateToDetail(notification: PrimaryNotificationUiState) {
+    private fun navigateToDetailScreen(notification: PrimaryNotificationUiState) {
         when (notification) {
             is InterestEventNotificationUiState -> navigateToEventScreen(notification.eventId)
             is ChildCommentNotificationUiState -> navigateToCommentScreen(
@@ -125,14 +105,30 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         ChildCommentActivity.startActivity(requireContext(), eventId, parentCommentId)
     }
 
-    private fun showNotificationDeleteConfirmDialog() {
-        WarningDialog(
-            context = context ?: return,
-            title = getString(R.string.primarynotification_delete_notification_confirm_title),
-            message = getString(R.string.primarynotification_delete_notification_confirm_message),
-            positiveButtonLabel = getString(R.string.all_okay),
-            negativeButtonLabel = getString(R.string.all_cancel),
-            onPositiveButtonClick = { viewModel.deleteAllPastNotifications() },
-        ).show()
+    private fun deleteNotification(notificationId: Long) {
+        viewModel.deleteNotification(notificationId)
+    }
+
+    private fun setupUiState() {
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            if (uiState !is PrimaryNotificationScreenUiState.Success) return@observe
+            recentNotificationAdapter.submitList(uiState.recentNotifications)
+            pastNotificationAdapter.submitList(uiState.pastNotifications)
+        }
+    }
+
+    private fun setupUiEvent() {
+        viewModel.uiEvent.observe(viewLifecycleOwner) {
+            handleUiEvent(it)
+        }
+    }
+
+    private fun handleUiEvent(event: Event<PrimaryNotificationsUiEvent>) {
+        val content = event.getContentIfNotHandled() ?: return
+
+        when (content) {
+            PrimaryNotificationsUiEvent.NONE -> {}
+            PrimaryNotificationsUiEvent.DELETE_FAIL -> binding.root.showSnackBar(R.string.primarynotification_delete_notification_failed_message)
+        }
     }
 }

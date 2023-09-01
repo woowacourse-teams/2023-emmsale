@@ -8,6 +8,8 @@
 
         <import type="android.view.View" />
 
+        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState" />
+
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.notificationBox.primaryNotification.PrimaryNotificationViewModel" />
@@ -20,7 +22,7 @@
         tools:context=".presentation.ui.notificationBox.primaryNotification.PrimaryNotificationFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_primary_notification"
+            android:id="@+id/rv_primarynotification_notifications"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -30,22 +32,23 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
-            android:id="@+id/progressBar5"
+            android:id="@+id/pb_primarynotification_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.recentNotifications.isLoading || viewModel.pastNotifications.isLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState == PrimaryNotificationScreenUiState.Loading.INSTANCE ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <include
+            android:id="@+id/include_primarynotification_error_screen"
             layout="@layout/layout_all_error_screen"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/white"
             android:clickable="true"
-            android:visibility="@{viewModel.pastNotifications.isError || viewModel.recentNotifications.isError ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState == PrimaryNotificationScreenUiState.Error.INSTANCE ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

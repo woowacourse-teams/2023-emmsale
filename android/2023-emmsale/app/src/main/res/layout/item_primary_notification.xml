@@ -81,12 +81,13 @@
 
         <ImageView
             android:id="@+id/btn_delete"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:clickable="true"
             android:contentDescription="@string/primarynotification_past_notification_delete"
             android:focusable="true"
-            android:onClick="@{() -> onDeleteClick.invoke(interestEventNotification.id)}"
+            android:onClick="@{() -> onDeleteClick.invoke(interestEventNotification.notificationId)}"
+            android:padding="4dp"
             android:src="@drawable/ic_primarynotification_delete"
             app:layout_constraintBottom_toBottomOf="@+id/tv_comment"
             app:layout_constraintDimensionRatio="1"

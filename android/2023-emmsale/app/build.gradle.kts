@@ -28,7 +28,6 @@ android {
             "GITHUB_CLIENT_ID",
             getApiKey("GH_CLIENT_ID"),
         )
-        signingConfig = signingConfigs.getByName("debug")
     }
     buildFeatures {
         buildConfig = true
