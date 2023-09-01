@@ -4,9 +4,12 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
+import com.emmsale.feed.application.dto.FeedDetailResponse;
 import com.emmsale.feed.application.dto.FeedListResponse;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
+import com.emmsale.feed.exception.FeedException;
+import com.emmsale.feed.exception.FeedExceptionType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,5 +30,12 @@ public class FeedQueryService {
     final List<Feed> feeds = feedRepository.findAllByEvent(event);
 
     return FeedListResponse.from(eventId, feeds);
+  }
+
+  public FeedDetailResponse findFeed(final Long id) {
+    final Feed feed = feedRepository.findById(id)
+        .orElseThrow(() -> new FeedException(FeedExceptionType.NOT_FOUND_FEED));
+
+    return FeedDetailResponse.from(feed);
   }
 }

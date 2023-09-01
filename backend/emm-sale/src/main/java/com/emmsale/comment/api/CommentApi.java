@@ -37,7 +37,7 @@ public class CommentApi {
 
   @GetMapping("/comments")
   public List<CommentHierarchyResponse> findAll(
-      final CommentFindRequest commentFindRequest,
+      @RequestBody final CommentFindRequest commentFindRequest,
       final Member member
   ) {
     return commentQueryService.findAllComments(commentFindRequest, member);

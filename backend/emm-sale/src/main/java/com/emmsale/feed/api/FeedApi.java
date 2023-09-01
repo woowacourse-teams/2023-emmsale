@@ -2,6 +2,7 @@ package com.emmsale.feed.api;
 
 import com.emmsale.feed.application.FeedCommandService;
 import com.emmsale.feed.application.FeedQueryService;
+import com.emmsale.feed.application.dto.FeedDetailResponse;
 import com.emmsale.feed.application.dto.FeedListResponse;
 import com.emmsale.feed.application.dto.FeedPostRequest;
 import com.emmsale.feed.application.dto.FeedPostResponse;
@@ -31,6 +32,11 @@ public class FeedApi {
   @GetMapping
   public FeedListResponse findAllFeeds(@RequestParam("event-id") final Long eventId) {
     return feedQueryService.findAllFeeds(eventId);
+  }
+
+  @GetMapping("/{id}")
+  public FeedDetailResponse findDetailFeed(@PathVariable final Long id) {
+    return feedQueryService.findFeed(id);
   }
 
   @PostMapping

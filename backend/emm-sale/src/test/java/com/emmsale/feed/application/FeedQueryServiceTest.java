@@ -2,20 +2,23 @@ package com.emmsale.feed.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
+import com.emmsale.feed.application.dto.FeedDetailResponse;
 import com.emmsale.feed.application.dto.FeedListResponse;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
+import com.emmsale.feed.exception.FeedException;
+import com.emmsale.feed.exception.FeedExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,9 +73,45 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
     final EventExceptionType expect = EventExceptionType.NOT_FOUND_EVENT;
 
     //when
-    final EventException actualException = Assertions.assertThrowsExactly(
+    final EventException actualException = assertThrowsExactly(
         EventException.class,
         () -> feedQueryService.findAllFeeds(존재하지_않는_이벤트_id)
+    );
+
+    //then
+    assertEquals(expect, actualException.exceptionType());
+  }
+
+  @Test
+  @DisplayName("피드의 상세 내용을 조회한다.")
+  void findFeedTest() {
+    //given
+    final Feed feed = feed1;
+    final Long feedId = feed.getId();
+
+    final FeedDetailResponse expect = FeedDetailResponse.from(feed);
+
+    //when
+    final FeedDetailResponse actual = feedQueryService.findFeed(feedId);
+
+    //then
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .isEqualTo(expect);
+  }
+
+  @Test
+  @DisplayName("존재하지 않는 피드를 조회하면 NOT_FOUND_FEED 타입의 FeedException이 발생한다.")
+  void findFeedWithNotExistsFeedIdTest() {
+    //given;
+    final long notExistsFeedId = 0L;
+
+    final FeedExceptionType expect = FeedExceptionType.NOT_FOUND_FEED;
+
+    //when
+    final FeedException actualException = assertThrowsExactly(
+        FeedException.class,
+        () -> feedQueryService.findFeed(notExistsFeedId)
     );
 
     //then
