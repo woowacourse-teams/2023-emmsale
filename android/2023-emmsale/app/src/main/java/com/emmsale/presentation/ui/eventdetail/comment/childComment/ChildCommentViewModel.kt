@@ -42,7 +42,7 @@ class ChildCommentViewModel(
     private val _event = MutableLiveData<ChildCommentsUiEvent?>(null)
     val event: LiveData<ChildCommentsUiEvent?> = _event
 
-    override fun refreshNotifications() {
+    override fun refresh() {
         _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
@@ -66,7 +66,7 @@ class ChildCommentViewModel(
         viewModelScope.launch {
             when (commentRepository.saveComment(content, eventId, parentCommentId)) {
                 is ApiError, is ApiException -> _event.value = ChildCommentsUiEvent.POST_ERROR
-                is ApiSuccess -> refreshNotifications()
+                is ApiSuccess -> refresh()
             }
         }
     }
@@ -77,7 +77,7 @@ class ChildCommentViewModel(
                 is ApiError, is ApiException -> _event.value = ChildCommentsUiEvent.UPDATE_ERROR
                 is ApiSuccess -> {
                     _editingCommentId.value = null
-                    refreshNotifications()
+                    refresh()
                 }
             }
         }
@@ -87,7 +87,7 @@ class ChildCommentViewModel(
         viewModelScope.launch {
             when (commentRepository.deleteComment(commentId)) {
                 is ApiError, is ApiException -> _event.value = ChildCommentsUiEvent.DELETE_ERROR
-                is ApiSuccess -> refreshNotifications()
+                is ApiSuccess -> refresh()
             }
         }
     }

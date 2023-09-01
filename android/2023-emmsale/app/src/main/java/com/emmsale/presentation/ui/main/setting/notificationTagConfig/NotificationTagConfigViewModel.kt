@@ -36,10 +36,10 @@ class NotificationTagConfigViewModel(
     val event: LiveData<NotificationTagConfigUiEvent?> = _event
 
     init {
-        refreshNotifications()
+        refresh()
     }
 
-    override fun refreshNotifications() {
+    override fun refresh() {
         _notificationTags.value = notificationTags.value.copy(isLoading = true)
 
         viewModelScope.launch {

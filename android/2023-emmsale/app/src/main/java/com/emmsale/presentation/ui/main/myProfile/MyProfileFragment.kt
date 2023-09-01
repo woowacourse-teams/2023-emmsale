@@ -29,7 +29,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.refreshNotifications()
+        viewModel.refresh()
     }
 
     private fun initDataBinding() {

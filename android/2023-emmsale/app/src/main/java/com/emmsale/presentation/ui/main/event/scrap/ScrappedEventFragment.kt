@@ -27,7 +27,7 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.refreshNotifications()
+        viewModel.refresh()
     }
 
     private fun initBinding() {

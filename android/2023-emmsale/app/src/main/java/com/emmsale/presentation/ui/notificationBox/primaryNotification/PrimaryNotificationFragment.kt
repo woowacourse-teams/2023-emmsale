@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
@@ -122,11 +123,12 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         }
     }
 
-    private fun handleUiEvent(event: PrimaryNotificationsUiEvent?) {
-        if (event == null) return
-        when (event) {
-            PrimaryNotificationsUiEvent.DELETE_ERROR -> binding.root.showSnackBar(R.string.primarynotification_delete_notification_failed_message)
+    private fun handleUiEvent(event: Event<PrimaryNotificationsUiEvent>) {
+        val content = event.getContentIfNotHandled() ?: return
+
+        when (content) {
+            PrimaryNotificationsUiEvent.NONE -> {}
+            PrimaryNotificationsUiEvent.DELETE_FAIL -> binding.root.showSnackBar(R.string.primarynotification_delete_notification_failed_message)
         }
-        viewModel.resetUiEvent()
     }
 }

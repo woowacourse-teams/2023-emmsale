@@ -40,7 +40,7 @@ class CommentViewModel(
     private val _event = MutableLiveData<CommentsUiEvent?>(null)
     val event: LiveData<CommentsUiEvent?> = _event
 
-    override fun refreshNotifications() {
+    override fun refresh() {
         _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
             val token = tokenRepository.getToken()
@@ -67,7 +67,7 @@ class CommentViewModel(
                     logComment(content, eventId)
                 }
 
-                is ApiSuccess -> refreshNotifications()
+                is ApiSuccess -> refresh()
             }
         }
     }
@@ -79,7 +79,7 @@ class CommentViewModel(
 
                 is ApiSuccess -> {
                     _editingCommentId.value = null
-                    refreshNotifications()
+                    refresh()
                 }
             }
         }
@@ -90,7 +90,7 @@ class CommentViewModel(
             when (commentRepository.deleteComment(commentId)) {
                 is ApiError, is ApiException -> _event.value = CommentsUiEvent.DELETE_ERROR
 
-                is ApiSuccess -> refreshNotifications()
+                is ApiSuccess -> refresh()
             }
         }
     }

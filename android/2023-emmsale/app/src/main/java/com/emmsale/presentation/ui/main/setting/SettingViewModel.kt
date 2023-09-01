@@ -31,10 +31,10 @@ class SettingViewModel(
     val appVersion: NotNullLiveData<String> = _appVersion
 
     init {
-        refreshNotifications()
+        refresh()
     }
 
-    override fun refreshNotifications() {
+    override fun refresh() {
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {

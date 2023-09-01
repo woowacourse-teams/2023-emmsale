@@ -65,10 +65,10 @@ class EditMyProfileViewModel(
     val selectedClubsSize = _selectableClubs.map { clubs -> clubs.count { it.isSelected } }
 
     init {
-        refreshNotifications()
+        refresh()
     }
 
-    override fun refreshNotifications() {
+    override fun refresh() {
         _isLoading.value = true
         viewModelScope.launch {
             val token = tokenRepository.getToken()
@@ -139,7 +139,7 @@ class EditMyProfileViewModel(
                     _errorEvents.value =
                         EditMyProfileErrorEvent.ACTIVITY_REMOVE
 
-                is ApiSuccess -> refreshNotifications()
+                is ApiSuccess -> refresh()
             }
         }
     }
@@ -152,7 +152,7 @@ class EditMyProfileViewModel(
                     _errorEvents.value =
                         EditMyProfileErrorEvent.ACTIVITIES_ADD
 
-                is ApiSuccess -> refreshNotifications()
+                is ApiSuccess -> refresh()
             }
         }
     }
@@ -166,7 +166,7 @@ class EditMyProfileViewModel(
                     _errorEvents.value =
                         EditMyProfileErrorEvent.ACTIVITIES_ADD
 
-                is ApiSuccess -> refreshNotifications()
+                is ApiSuccess -> refresh()
             }
         }
     }
@@ -179,7 +179,7 @@ class EditMyProfileViewModel(
                     _errorEvents.value =
                         EditMyProfileErrorEvent.ACTIVITIES_ADD
 
-                is ApiSuccess -> refreshNotifications()
+                is ApiSuccess -> refresh()
             }
         }
     }

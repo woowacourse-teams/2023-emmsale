@@ -54,10 +54,10 @@ class RecruitmentPostDetailViewModel(
     private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
 
     init {
-        refreshNotifications()
+        refresh()
     }
 
-    override fun refreshNotifications() {
+    override fun refresh() {
         changeRecruitmentPostToLoadingState()
         viewModelScope.launch {
             val response = recruitmentRepository.getEventRecruitment(eventId, recruitmentId)

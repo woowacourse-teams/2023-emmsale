@@ -64,7 +64,7 @@ class CommentFragment :
     override fun onStart() {
         super.onStart()
 
-        viewModel.refreshNotifications()
+        viewModel.refresh()
     }
 
     override fun onResume() {

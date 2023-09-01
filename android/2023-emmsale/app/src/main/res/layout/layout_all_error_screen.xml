@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="21dp"
                 android:background="@drawable/bg_all_middle_primary_button"
-                android:onClick="@{() -> viewModel.refreshNotifications()}"
+                android:onClick="@{() -> viewModel.refresh()}"
                 android:paddingHorizontal="41dp"
                 android:paddingVertical="9dp"
                 android:text="@string/all_retry"

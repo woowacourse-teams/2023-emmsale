@@ -27,10 +27,10 @@ class MyCommentsViewModel(
     val comments: NotNullLiveData<MyCommentsUiState> = _comments
 
     init {
-        refreshNotifications()
+        refresh()
     }
 
-    override fun refreshNotifications() {
+    override fun refresh() {
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
