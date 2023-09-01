@@ -100,7 +100,7 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
     @BeforeEach
     void setUp() {
       피드 = feedRepository.save(new Feed(이벤트1, 작성자, "피드 제목", "피드 내용"));
-      newEventId = 이벤트1.getId();
+      newEventId = 이벤트2.getId();
       newTitle = "새로운 제목";
       newContent = "새로운 내용";
     }
@@ -109,8 +109,6 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("피드를 성공적으로 업데이트한다.")
     void updateFeedTest() {
       //given
-      final Long newEventId = 이벤트2.getId();
-
       final FeedUpdateRequest request = new FeedUpdateRequest(newEventId, newTitle, newContent);
 
       //when
@@ -126,8 +124,49 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
     }
 
     @Test
+    @DisplayName("업데이트하려는 피드의 id가 존재하지 않을 경우 NOT_FOUND_FEED 타입의 FeedException이 발생한다.")
+    void updateFeedWithNotExistFeedIdTest() {
+      //given
+      final long 존재하지_않는_피드_id = 0L;
+      final FeedUpdateRequest request = new FeedUpdateRequest(newEventId, newTitle, newContent);
+
+      final FeedExceptionType expect = FeedExceptionType.NOT_FOUND_FEED;
+
+      //when
+      final FeedException actualException = assertThrowsExactly(
+          FeedException.class,
+          () -> feedCommandService.updateFeed(작성자, 존재하지_않는_피드_id, request)
+      );
+
+      //then
+      assertEquals(expect, actualException.exceptionType());
+    }
+
+    @Test
+    @DisplayName("업데이트하려는 피드가 삭제되었 경우 FORBIDDEN_DELETED_FEED 타입의 FeedException이 발생한다.")
+    void updateFeedWithDeletedFeedIdTest() {
+      //given
+      피드.delete();
+      feedRepository.save(피드);
+
+      final long 삭제된_피드_id = 피드.getId();
+      final FeedUpdateRequest request = new FeedUpdateRequest(newEventId, newTitle, newContent);
+
+      final FeedExceptionType expect = FeedExceptionType.FORBIDDEN_DELETED_FEED;
+
+      //when
+      final FeedException actualException = assertThrowsExactly(
+          FeedException.class,
+          () -> feedCommandService.updateFeed(작성자, 삭제된_피드_id, request)
+      );
+
+      //then
+      assertEquals(expect, actualException.exceptionType());
+    }
+
+    @Test
     @DisplayName("피드의 작성자와 업데이트하려는 유저가 다를 경우 FORBIDDEN_NOT_OWNER 타입의 FeedException이 발생한다.")
-    void postFeedWithNotFeedWriterTest() {
+    void updateFeedWithNotFeedWriterTest() {
       //given
       final Member 작성자가_아닌_사용자 = memberRepository.save(
           new Member(111L, "image-url", "github-username"));
@@ -145,7 +184,7 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
 
     @Test
     @DisplayName("피드의 업데이트하려는 이벤트가 존재하지 않을 경우 EventException 타입의 NOT_FOUND_EVENT이 발생한다.")
-    void postFeedWithNotExistEventTest() {
+    void updateFeedWithNotExistEventTest() {
       //given
       final long 존재하지_않는_이벤트_id = 0L;
       final FeedUpdateRequest request = new FeedUpdateRequest(존재하지_않는_이벤트_id, newTitle, newContent);

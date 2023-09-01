@@ -42,9 +42,11 @@ public class FeedCommandService {
   ) {
     final Feed feed = feedRepository.findById(id)
         .orElseThrow(() -> new FeedException(FeedExceptionType.NOT_FOUND_FEED));
+    validateFeedOwner(member, feed);
+    validateDeletedFeed(feed);
+
     final Event event = eventRepository.findById(request.getEventId())
         .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_EVENT));
-    validateFeedOwner(member, feed);
 
     feed.updateFeed(event, request.getTitle(), request.getContent());
 
@@ -62,6 +64,12 @@ public class FeedCommandService {
   private void validateFeedOwner(final Member member, final Feed feed) {
     if (feed.isNotOwner(member.getId())) {
       throw new FeedException(FeedExceptionType.FORBIDDEN_NOT_OWNER);
+    }
+  }
+
+  private void validateDeletedFeed(final Feed feed) {
+    if (feed.isDeleted()) {
+      throw new FeedException(FeedExceptionType.FORBIDDEN_DELETED_FEED);
     }
   }
 }
