@@ -1,12 +1,11 @@
 package com.emmsale.tag.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.application.dto.TagResponse;
-import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
 import com.emmsale.tag.exception.TagExceptionType;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -14,12 +13,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TagCommandServiceTest extends ServiceIntegrationTestHelper {
+class TagCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
   private TagCommandService commandService;
-  @Autowired
-  private TagRepository tagRepository;
 
   @Test
   @DisplayName("새로운 태그를 추가할 수 있다.")
