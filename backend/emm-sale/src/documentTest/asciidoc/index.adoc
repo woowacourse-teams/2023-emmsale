@@ -609,3 +609,16 @@ include::{snippets}/delete-scrap/http-request.adoc[]
 
 .HTTP response
 include::{snippets}/delete-scrap/http-response.adoc[]
+
+== MESSAGES
+
+=== `POST` : 메시지 보내기
+
+.HTTP request 설명
+include::{snippets}/send-message/request-fields.adoc[]
+
+.HTTP request
+include::{snippets}/send-message/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/send-message/http-response.adoc[]
