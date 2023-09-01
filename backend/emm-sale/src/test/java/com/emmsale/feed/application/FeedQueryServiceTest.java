@@ -21,6 +21,7 @@ import com.emmsale.member.domain.MemberRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -48,73 +49,125 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
     feed2 = feedRepository.save(new Feed(event, writer, "피드2 제목", "피드2 내용"));
   }
 
-  @Test
-  @DisplayName("이벤트를 기준으로 모든 피드를 조회한다.")
-  void findAllFeedsTest() {
-    //given
-    final Long eventId = event.getId();
-    final List<Feed> feeds = List.of(feed1, feed2);
-    final FeedListResponse expect = FeedListResponse.from(eventId, feeds);
+  @Nested
+  @DisplayName("피드 목록 조회 테스트")
+  class FindAll {
 
-    //when
-    final FeedListResponse actual = feedQueryService.findAllFeeds(eventId);
+    @Test
+    @DisplayName("이벤트를 기준으로 모든 피드를 조회한다.")
+    void findAllFeedsTest() {
+      //given
+      final Long eventId = event.getId();
+      final List<Feed> feeds = List.of(feed1, feed2);
+      final FeedListResponse expect = FeedListResponse.from(eventId, feeds);
 
-    //then
-    assertThat(actual)
-        .usingRecursiveComparison()
-        .isEqualTo(expect);
+      //when
+      final FeedListResponse actual = feedQueryService.findAllFeeds(eventId);
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
+
+    @Test
+    @DisplayName("이벤트를 기준으로 모든 피드를 조회할 때 삭제된 피드는 조회되지 않는다.")
+    void findAllFeedsWithWithDeletedFeedTest() {
+      //given
+      feed1.delete();
+      feedRepository.save(feed1);
+
+      final Long eventId = event.getId();
+      final List<Feed> feeds = List.of(feed2);
+      final FeedListResponse expect = FeedListResponse.from(eventId, feeds);
+
+      //when
+      final FeedListResponse actual = feedQueryService.findAllFeeds(eventId);
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 이벤트의 피드를 조회하면 NOT_FOUND_EVENT 타입의 EventException이 발생한다.")
+    void findAllFeedsWithNotExistsEventTest() {
+      //given
+      final long 존재하지_않는_이벤트_id = 0L;
+      final EventExceptionType expect = EventExceptionType.NOT_FOUND_EVENT;
+
+      //when
+      final EventException actualException = assertThrowsExactly(
+          EventException.class,
+          () -> feedQueryService.findAllFeeds(존재하지_않는_이벤트_id)
+      );
+
+      //then
+      assertEquals(expect, actualException.exceptionType());
+    }
+
   }
 
-  @Test
-  @DisplayName("존재하지 않는 이벤트의 피드를 조회하면 NOT_FOUND_EVENT 타입의 EventException이 발생한다.")
-  void findAllFeedsWithNotExistsEventTest() {
-    //given
-    final long 존재하지_않는_이벤트_id = 0L;
-    final EventExceptionType expect = EventExceptionType.NOT_FOUND_EVENT;
+  @Nested
+  @DisplayName("피드 상세 조회 테스트")
+  class FindFeed {
 
-    //when
-    final EventException actualException = assertThrowsExactly(
-        EventException.class,
-        () -> feedQueryService.findAllFeeds(존재하지_않는_이벤트_id)
-    );
+    @Test
+    @DisplayName("피드의 상세 내용을 조회한다.")
+    void findFeedTest() {
+      //given
+      final Feed feed = feed1;
+      final Long feedId = feed.getId();
 
-    //then
-    assertEquals(expect, actualException.exceptionType());
-  }
+      final FeedDetailResponse expect = FeedDetailResponse.from(feed);
 
-  @Test
-  @DisplayName("피드의 상세 내용을 조회한다.")
-  void findFeedTest() {
-    //given
-    final Feed feed = feed1;
-    final Long feedId = feed.getId();
+      //when
+      final FeedDetailResponse actual = feedQueryService.findFeed(feedId);
 
-    final FeedDetailResponse expect = FeedDetailResponse.from(feed);
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
 
-    //when
-    final FeedDetailResponse actual = feedQueryService.findFeed(feedId);
+    @Test
+    @DisplayName("존재하지 않는 피드를 조회하면 NOT_FOUND_FEED 타입의 FeedException이 발생한다.")
+    void findFeedWithNotExistsFeedIdTest() {
+      //given;
+      final long notExistsFeedId = 0L;
 
-    //then
-    assertThat(actual)
-        .usingRecursiveComparison()
-        .isEqualTo(expect);
-  }
+      final FeedExceptionType expect = FeedExceptionType.NOT_FOUND_FEED;
 
-  @Test
-  @DisplayName("존재하지 않는 피드를 조회하면 NOT_FOUND_FEED 타입의 FeedException이 발생한다.")
-  void findFeedWithNotExistsFeedIdTest() {
-    //given;
-    final long notExistsFeedId = 0L;
+      //when
+      final FeedException actualException = assertThrowsExactly(
+          FeedException.class,
+          () -> feedQueryService.findFeed(notExistsFeedId)
+      );
 
-    final FeedExceptionType expect = FeedExceptionType.NOT_FOUND_FEED;
+      //then
+      assertEquals(expect, actualException.exceptionType());
+    }
 
-    //when
-    final FeedException actualException = assertThrowsExactly(
-        FeedException.class,
-        () -> feedQueryService.findFeed(notExistsFeedId)
-    );
+    @Test
+    @DisplayName("삭제된 피드를 조회하면 FORBIDDEN_DELETED_FEED 타입의 FeedException이 발생한다.")
+    void findFeedWithDeletedFeedIdTest() {
+      //given;
+      feed1.delete();
+      feedRepository.save(feed1);
 
-    //then
-    assertEquals(expect, actualException.exceptionType());
+      final long 삭제된_피드_id = feed1.getId();
+
+      final FeedExceptionType expect = FeedExceptionType.FORBIDDEN_DELETED_FEED;
+
+      //when
+      final FeedException actualException = assertThrowsExactly(
+          FeedException.class,
+          () -> feedQueryService.findFeed(삭제된_피드_id)
+      );
+
+      //then
+      assertEquals(expect, actualException.exceptionType());
+    }
   }
 }

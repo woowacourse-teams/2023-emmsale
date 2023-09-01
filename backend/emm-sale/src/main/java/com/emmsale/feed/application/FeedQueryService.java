@@ -27,7 +27,7 @@ public class FeedQueryService {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_EVENT));
 
-    final List<Feed> feeds = feedRepository.findAllByEvent(event);
+    final List<Feed> feeds = feedRepository.findAllByEventAndNotDeleted(event);
 
     return FeedListResponse.from(eventId, feeds);
   }
@@ -36,6 +36,14 @@ public class FeedQueryService {
     final Feed feed = feedRepository.findById(id)
         .orElseThrow(() -> new FeedException(FeedExceptionType.NOT_FOUND_FEED));
 
+    validateDeletedFeed(feed);
+
     return FeedDetailResponse.from(feed);
+  }
+
+  private void validateDeletedFeed(final Feed feed) {
+    if (feed.isDeleted()) {
+      throw new FeedException(FeedExceptionType.FORBIDDEN_DELETED_FEED);
+    }
   }
 }
