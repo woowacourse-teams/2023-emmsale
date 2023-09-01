@@ -37,11 +37,12 @@ public class Message {
   public Message(
       final String content,
       final Long senderId,
-      final Room room
+      final Room room,
+      final LocalDateTime createdAt
   ) {
     this.content = content;
     this.senderId = senderId;
     this.room = room;
-    this.createdAt = LocalDateTime.now();
+    this.createdAt = createdAt;
   }
 }
