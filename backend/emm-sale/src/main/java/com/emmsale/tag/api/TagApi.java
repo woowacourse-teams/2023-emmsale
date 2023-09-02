@@ -6,6 +6,7 @@ import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.application.dto.TagResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,7 @@ public class TagApi {
   }
 
   @PostMapping
-  public ResponseEntity<TagResponse> addTag(@RequestBody final TagRequest tagRequest){
-    return ResponseEntity.ok(commandService.addTag(tagRequest));
+  public ResponseEntity<TagResponse> addTag(@RequestBody final TagRequest tagRequest) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(commandService.addTag(tagRequest));
   }
 }

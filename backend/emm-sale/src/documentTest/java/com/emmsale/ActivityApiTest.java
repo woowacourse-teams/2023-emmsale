@@ -97,7 +97,7 @@ class ActivityApiTest extends MockMvcTestHelper {
     mockMvc.perform(post("/activities")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isOk())
+        .andExpect(status().isCreated())
         .andDo(document("add-activity", requestFields, responseFields));
   }
 }

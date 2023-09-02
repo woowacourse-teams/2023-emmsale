@@ -58,7 +58,6 @@ class TagApiTest extends MockMvcTestHelper {
     final TagRequest request = new TagRequest("프론트");
     final TagResponse response = new TagResponse(3L, "프론트");
 
-
     when(tagCommandService.addTag(any())).thenReturn(response);
 
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -70,7 +69,7 @@ class TagApiTest extends MockMvcTestHelper {
     mockMvc.perform(post("/tags")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isOk())
+        .andExpect(status().isCreated())
         .andDo(document("add-tag", requestFields, responseFields));
   }
 }

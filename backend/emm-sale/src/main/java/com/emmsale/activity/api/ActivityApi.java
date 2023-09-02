@@ -7,6 +7,7 @@ import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.application.dto.ActivityResponses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,8 @@ public class ActivityApi {
   @PostMapping
   public ResponseEntity<ActivityResponse> addActivity(
       @RequestBody final ActivityAddRequest request) {
-    return ResponseEntity.ok(activityCommandService.addActivity(request));
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(activityCommandService.addActivity(request));
   }
 }
 
