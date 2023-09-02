@@ -19,8 +19,8 @@ public class ActivityCommandService {
 
   public ActivityResponse addActivity(final ActivityAddRequest request) {
     final String name = request.getName();
-    final Activity activity = new Activity(request.getActivityType(), name);
     validateAlreadyExist(name);
+    final Activity activity = new Activity(request.getActivityType(), name);
     return ActivityResponse.from(activityRepository.save(activity));
   }
 
