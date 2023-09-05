@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public class FeedUpdateResponse {
 
   private final Long id;
-  private final Long eventd;
+  private final Long eventId;
   private final Long writerId;
   private final String title;
   private final String content;

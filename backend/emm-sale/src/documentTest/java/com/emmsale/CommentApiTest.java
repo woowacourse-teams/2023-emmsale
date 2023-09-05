@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.comment.api.CommentApi;
 import com.emmsale.comment.application.dto.CommentAddRequest;
+import com.emmsale.comment.application.dto.CommentFindRequest;
 import com.emmsale.comment.application.dto.CommentHierarchyResponse;
 import com.emmsale.comment.application.dto.CommentModifyRequest;
 import com.emmsale.comment.application.dto.CommentResponse;
@@ -119,20 +120,23 @@ class CommentApiTest extends MockMvcTestHelper {
         fieldWithPath("[].childComments[].memberName").description("댓글 작성자 이름")
     );
 
+    final long feedId = 1L;
+    final CommentFindRequest request = new CommentFindRequest(feedId, null);
+
     final List<CommentHierarchyResponse> result = List.of(
         new CommentHierarchyResponse(
-            new CommentResponse("부모댓글2", 4L, null, 1L, "feedTitle", false,
-                LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
+            new CommentResponse("부모댓글2", 4L, null, feedId, "feedTitle", false,
+                LocalDateTime.now(), LocalDateTime.now(), feedId, "이미지", "이름1"),
             Collections.emptyList()
         ),
         new CommentHierarchyResponse(
-            new CommentResponse("부모댓글1", 5L, null, 1L, "feedTitle", false,
-                LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
+            new CommentResponse("부모댓글1", 5L, null, feedId, "feedTitle", false,
+                LocalDateTime.now(), LocalDateTime.now(), feedId, "이미지", "이름1"),
             List.of(
-                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, 1L, 1L, "feedTitle", false,
-                    LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"),
-                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, 1L, 1L, "feedTitle", false,
-                    LocalDateTime.now(), LocalDateTime.now(), 1L, "이미지", "이름1"
+                new CommentResponse("부모댓글1에 대한 자식댓글1", 2L, feedId, feedId, "feedTitle", false,
+                    LocalDateTime.now(), LocalDateTime.now(), feedId, "이미지", "이름1"),
+                new CommentResponse("부모댓글1에 대한 자식댓글2", 3L, feedId, feedId, "feedTitle", false,
+                    LocalDateTime.now(), LocalDateTime.now(), feedId, "이미지", "이름1"
                 ))
         ));
 
@@ -141,8 +145,9 @@ class CommentApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(get("/comments")
-            .queryParam("feedId", "1")
-            .header("Authorization", accessToken))
+            .header("Authorization", accessToken)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("get-comments", requestParam, responseFieldsSnippet));
