@@ -143,4 +143,7 @@ dependencies {
 
     // imageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    // Google Play In-App Update
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 }
