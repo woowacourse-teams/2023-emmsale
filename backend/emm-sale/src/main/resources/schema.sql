@@ -193,12 +193,10 @@ alter table member
 
 create table room
 (
-    id                         bigint not null auto_increment,
-    requester_id               bigint not null,
-    requester_last_exited_time datetime(6) not null,
-    receiver_id                bigint not null,
-    receiver_last_exited_time  datetime(6) not null,
-    primary key (id)
+    uuid             varchar(40) not null,
+    user_id          bigint      not null,
+    last_exited_time datetime(6),
+    primary key (uuid, user_id)
 );
 
 create table message
@@ -207,6 +205,6 @@ create table message
     content    varchar(255) not null,
     created_at datetime(6),
     sender_id  bigint       not null,
-    room_id    bigint       not null,
+    room_id    varchar(40)  not null,
     primary key (id)
 );
