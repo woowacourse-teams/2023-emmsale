@@ -28,7 +28,7 @@ public class TagApi {
   }
 
   @PostMapping
-  public ResponseEntity<TagResponse> addTag(@RequestBody final TagRequest tagRequest) {
+  public ResponseEntity<TagResponse> create(@RequestBody final TagRequest tagRequest) {
     return ResponseEntity.status(HttpStatus.CREATED).body(commandService.addTag(tagRequest));
   }
 }

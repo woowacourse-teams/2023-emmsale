@@ -86,7 +86,7 @@ class ActivityApiTest extends MockMvcTestHelper {
     final ActivityAddRequest request = new ActivityAddRequest(ActivityType.CLUB, "DND");
     final ActivityResponse response = new ActivityResponse(3L, "DND");
 
-    when(activityCommandService.addActivity(any())).thenReturn(response);
+    when(activityCommandService.addActivity(any(ActivityAddRequest.class))).thenReturn(response);
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("id").type(JsonFieldType.NUMBER).description("활동 식별자"),

@@ -58,7 +58,7 @@ class TagApiTest extends MockMvcTestHelper {
     final TagRequest request = new TagRequest("프론트");
     final TagResponse response = new TagResponse(3L, "프론트");
 
-    when(tagCommandService.addTag(any())).thenReturn(response);
+    when(tagCommandService.addTag(any(TagRequest.class))).thenReturn(response);
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("id").type(JsonFieldType.NUMBER).description("태그 식별자"),

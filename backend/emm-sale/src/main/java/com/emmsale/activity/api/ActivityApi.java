@@ -29,7 +29,7 @@ public class ActivityApi {
   }
 
   @PostMapping
-  public ResponseEntity<ActivityResponse> addActivity(
+  public ResponseEntity<ActivityResponse> create(
       @RequestBody final ActivityAddRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(activityCommandService.addActivity(request));
