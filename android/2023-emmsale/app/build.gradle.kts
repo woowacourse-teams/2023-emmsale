@@ -18,7 +18,7 @@ android {
         applicationId = "com.emmsale"
         minSdk = 28
         targetSdk = 33
-        versionCode = 2
+        versionCode = 33
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -143,4 +143,7 @@ dependencies {
 
     // imageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    // Google Play In-App Update
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 }
