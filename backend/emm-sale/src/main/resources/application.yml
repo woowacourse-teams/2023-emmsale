@@ -46,6 +46,8 @@ firebase:
   project:
     id: kerdy
 
+data:
+  admin-url: http://localhost:3000
 
 ---
 

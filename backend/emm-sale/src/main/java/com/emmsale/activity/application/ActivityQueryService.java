@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ActivityService {
+public class ActivityQueryService {
 
   private final ActivityRepository activityRepository;
 
