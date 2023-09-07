@@ -1,6 +1,5 @@
 package com.emmsale.feed.application;
 
-import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
@@ -24,10 +23,9 @@ public class FeedQueryService {
   private final EventRepository eventRepository;
 
   public FeedListResponse findAllFeeds(final Long eventId) {
-    final Event event = eventRepository.findById(eventId)
-        .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_EVENT));
+    validateEvent(eventId);
 
-    final List<Feed> feeds = feedRepository.findAllByEventAndNotDeleted(event);
+    final List<Feed> feeds = feedRepository.findAllByEventIdAndNotDeleted(eventId);
 
     return FeedListResponse.from(eventId, feeds);
   }
@@ -39,6 +37,12 @@ public class FeedQueryService {
     validateDeletedFeed(feed);
 
     return FeedDetailResponse.from(feed);
+  }
+
+  private void validateEvent(final Long eventId) {
+    if (!eventRepository.existsById(eventId)) {
+      throw new EventException(EventExceptionType.NOT_FOUND_EVENT);
+    }
   }
 
   private void validateDeletedFeed(final Feed feed) {
