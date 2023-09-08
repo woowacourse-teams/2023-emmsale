@@ -19,7 +19,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.annotation.Rollback;
 
 class MessageDaoTest extends JpaRepositorySliceTestHelper {
 
@@ -41,7 +40,6 @@ class MessageDaoTest extends JpaRepositorySliceTestHelper {
   }
 
   @Test
-  @Rollback(value = false)
   @DisplayName("findRecentlyMessages() : 사용자가 참여하고 있는 Room 중에서 가장 최근에 받은 메시지들을 조회할 수 있다.")
   void test_findRecentlyMessages() throws Exception {
     //given
