@@ -194,9 +194,9 @@ alter table member
 create table room
 (
     uuid             varchar(40) not null,
-    user_id          bigint      not null,
+    member_id        bigint      not null,
     last_exited_time datetime(6),
-    primary key (uuid, user_id)
+    primary key (uuid, member_id)
 );
 
 create table message
