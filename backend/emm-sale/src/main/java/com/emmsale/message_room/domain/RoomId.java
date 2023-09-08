@@ -14,11 +14,11 @@ public class RoomId implements Serializable {
 
   private String uuid;
 
-  private Long userId;
+  private Long memberId;
 
-  public RoomId(final String uuid, final Long userId) {
+  public RoomId(final String uuid, final Long memberId) {
     this.uuid = uuid;
-    this.userId = userId;
+    this.memberId = memberId;
   }
 
   @Override
@@ -31,11 +31,11 @@ public class RoomId implements Serializable {
     }
     final RoomId roomId = (RoomId) o;
     return Objects.equals(uuid, roomId.uuid)
-        && Objects.equals(userId, roomId.userId);
+        && Objects.equals(memberId, roomId.memberId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(uuid, userId);
+    return Objects.hash(uuid, memberId);
   }
 }
