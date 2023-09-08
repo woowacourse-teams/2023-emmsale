@@ -55,6 +55,8 @@ data:
 
 cloud:
   aws:
+    credentials:
+      instance-profile: true
     s3:
       bucket: test
     region:

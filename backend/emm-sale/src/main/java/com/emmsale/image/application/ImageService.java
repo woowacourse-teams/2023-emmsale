@@ -36,14 +36,14 @@ public class ImageService {
     multipartFiles.forEach(file -> {
       final String fileExtension = extractFileExtension(file);
       
-      String newFileName = UUID.randomUUID().toString().concat(fileExtension); // 파일명 난수화
+      String newFileName = UUID.randomUUID().toString().concat(fileExtension);
       ObjectMetadata objectMetadata = new ObjectMetadata();
       objectMetadata.setContentLength(file.getSize());
       objectMetadata.setContentType(file.getContentType());
       
       try (InputStream inputStream = file.getInputStream()) {
         amazonS3.putObject(new PutObjectRequest(bucket, newFileName, inputStream, objectMetadata)
-            .withCannedAcl(CannedAccessControlList.PublicRead));    //public read 권한으로 업로드
+            .withCannedAcl(CannedAccessControlList.PublicRead));
       } catch (IOException e) {
         throw new ImageException(ImageExceptionType.FAIL_UPLOAD_IMAGE);
       }
@@ -65,7 +65,7 @@ public class ImageService {
   }
   
   public void deleteImages(final List<String> fileNames) {
-    fileNames.forEach((fileName) ->
+    fileNames.forEach(fileName ->
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName)));
   }
 }
