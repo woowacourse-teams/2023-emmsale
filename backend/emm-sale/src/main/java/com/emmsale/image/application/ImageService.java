@@ -1,7 +1,6 @@
 package com.emmsale.image.application;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -42,8 +41,7 @@ public class ImageService {
       objectMetadata.setContentType(file.getContentType());
       
       try (InputStream inputStream = file.getInputStream()) {
-        amazonS3.putObject(new PutObjectRequest(bucket, newFileName, inputStream, objectMetadata)
-            .withCannedAcl(CannedAccessControlList.PublicRead));
+        amazonS3.putObject(new PutObjectRequest(bucket, newFileName, inputStream, objectMetadata));
       } catch (IOException e) {
         throw new ImageException(ImageExceptionType.FAIL_UPLOAD_IMAGE);
       }
