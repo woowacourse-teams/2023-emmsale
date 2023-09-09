@@ -11,7 +11,6 @@ import com.emmsale.message_room.domain.RoomRepository;
 import com.emmsale.message_room.infrastructure.persistence.dto.MessageOverview;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +30,6 @@ class MessageDaoTest extends JpaRepositorySliceTestHelper {
   @Autowired
   private DataSource dataSource;
   private MessageDao messageDao;
-  @Autowired
-  private EntityManager entityManager;
 
   @BeforeEach
   void init() {
@@ -43,8 +40,13 @@ class MessageDaoTest extends JpaRepositorySliceTestHelper {
   @DisplayName("findRecentlyMessages() : 사용자가 참여하고 있는 Room 중에서 가장 최근에 받은 메시지들을 조회할 수 있다.")
   void test_findRecentlyMessages() throws Exception {
     //given
-    final Member member = memberRepository.findById(1L).get();
-    member.updateName("member1");
+    final Member unsavedMember = new Member(
+        3333L,
+        "imageUrl",
+        "asdfdfas"
+    );
+    unsavedMember.updateName("member1");
+    final Member member = memberRepository.save(unsavedMember);
 
     roomRepository.saveAll(List.of(
         new Room(new RoomId("feed014c-33f7-418c-8841-5553db5f22c1", member.getId()),
@@ -92,9 +94,6 @@ class MessageDaoTest extends JpaRepositorySliceTestHelper {
         .updateName("member4");
     memberRepository.save(new Member(5L, "image", "username3"))
         .updateName("member5");
-
-    entityManager.flush();
-    entityManager.clear();
 
     final Member recentlyMessage1Owner =
         memberRepository.findById(resultMessage1.getSenderId()).get();
