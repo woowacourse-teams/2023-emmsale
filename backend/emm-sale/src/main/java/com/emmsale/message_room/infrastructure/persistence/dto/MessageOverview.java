@@ -11,7 +11,5 @@ public class MessageOverview {
   private final Long id;
   private final String content;
   private final LocalDateTime createdAt;
-  private final Long senderId;
-  private final String roomId;
-  private final String senderName;
+  private final String roomUUID;
 }

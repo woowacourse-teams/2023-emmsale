@@ -18,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.Rollback;
 
 class MessageDaoTest extends JpaRepositorySliceTestHelper {
 
@@ -46,73 +47,82 @@ class MessageDaoTest extends JpaRepositorySliceTestHelper {
         "asdfdfas"
     );
     unsavedMember.updateName("member1");
-    final Member member = memberRepository.save(unsavedMember);
+    final Member loginMember = memberRepository.save(unsavedMember);
+
+    final Member member1 = new Member(3L, "image", "username3");
+    member1.updateName("member3");
+    final Member room1Interlocutor = memberRepository.save(member1);
+
+    final Member member2 = new Member(4L, "image", "username3");
+    member2.updateName("member4");
+    final Member room2Interlocutor = memberRepository.save(member2);
+
+    final Member member3 = new Member(5L, "image", "username3");
+    member3.updateName("member5");
+    final Member room3Interlocutor = memberRepository.save(member3);
+
+    final String room1UUID = "feed014c-33f7-418c-8841-5553db5f22c1";
+    final String room2UUID = "feed014c-33f7-418c-8841-5553db5f22c2";
+    final String room3UUID = "feed014c-33f7-418c-8841-5553db5f22c3";
 
     roomRepository.saveAll(List.of(
-        new Room(new RoomId("feed014c-33f7-418c-8841-5553db5f22c1", member.getId()),
+        new Room(new RoomId(room1UUID, loginMember.getId()),
             LocalDateTime.parse("2023-09-05T16:26:20.751352")),
-        new Room(new RoomId("feed014c-33f7-418c-8841-5553db5f22c1", 2L),
+        new Room(new RoomId(room1UUID, room1Interlocutor.getId()),
             LocalDateTime.parse("2023-09-07T16:48:24")),
-        new Room(new RoomId("feed014c-33f7-418c-8841-5553db5f22c2", member.getId()),
+        new Room(new RoomId(room2UUID, loginMember.getId()),
             LocalDateTime.parse("2023-09-07T16:48:24")),
-        new Room(new RoomId("feed014c-33f7-418c-8841-5553db5f22c2", 3L),
+        new Room(new RoomId(room2UUID, room2Interlocutor.getId()),
             LocalDateTime.parse("2023-09-07T16:48:24")),
-        new Room(new RoomId("feed014c-33f7-418c-8841-5553db5f22c3", member.getId()),
+        new Room(new RoomId(room3UUID, loginMember.getId()),
             LocalDateTime.parse("2023-10-07T16:48:24")),
-        new Room(new RoomId("feed014c-33f7-418c-8841-5553db5f22c3", 4L),
+        new Room(new RoomId(room3UUID, room3Interlocutor.getId()),
             LocalDateTime.parse("2023-08-07T16:45:39"))
     ));
 
     final Message resultMessage1 = new Message(
         "방1메시지3",
-        member.getId(),
-        "feed014c-33f7-418c-8841-5553db5f22c1",
+        loginMember.getId(),
+        room1UUID,
         LocalDateTime.parse("2023-10-07T16:45:39")
     );
     final Message resultMessage2 = new Message(
         "방2메시지4",
-        3L,
-        "feed014c-33f7-418c-8841-5553db5f22c2",
+        room2Interlocutor.getId(),
+        room2UUID,
         LocalDateTime.parse("2023-10-07T16:45:39")
     );
+
     messageRepository.saveAll(
         List.of(
-            new Message("방1메시지1", member.getId(), "feed014c-33f7-418c-8841-5553db5f22c1",
+            new Message("방1메시지1", loginMember.getId(), room1UUID,
                 LocalDateTime.parse("2023-05-07T16:45:39")),
-            new Message("방1메시지2", member.getId(), "feed014c-33f7-418c-8841-5553db5f22c1",
+            new Message("방1메시지2", loginMember.getId(), room1UUID,
                 LocalDateTime.parse("2023-06-07T16:45:39")),
             resultMessage1,
             resultMessage2,
-            new Message("방3메시지5", member.getId(), "feed014c-33f7-418c-8841-5553db5f22c3",
+            new Message("방3메시지5", loginMember.getId(), room3UUID,
                 LocalDateTime.parse("2023-08-07T16:45:39"))
         )
     );
 
-    memberRepository.save(new Member(3L, "image", "username3"))
-        .updateName("member3");
-    memberRepository.save(new Member(4L, "image", "username3"))
-        .updateName("member4");
-    memberRepository.save(new Member(5L, "image", "username3"))
-        .updateName("member5");
-
-    final Member recentlyMessage1Owner =
-        memberRepository.findById(resultMessage1.getSenderId()).get();
-    final Member recentlyMessage2Owner =
-        memberRepository.findById(resultMessage2.getSenderId()).get();
-
     final List<MessageOverview> actual = List.of(
         new MessageOverview(
-            resultMessage1.getId(), resultMessage1.getContent(),
-            resultMessage1.getCreatedAt(), resultMessage1.getSenderId(),
-            resultMessage1.getRoomId(), recentlyMessage1Owner.getName()),
+            resultMessage1.getId(),
+            resultMessage1.getContent(),
+            resultMessage1.getCreatedAt(),
+            resultMessage1.getRoomId()
+        ),
         new MessageOverview(
-            resultMessage2.getId(), resultMessage2.getContent(),
-            resultMessage2.getCreatedAt(), resultMessage2.getSenderId(),
-            resultMessage2.getRoomId(), recentlyMessage2Owner.getName())
+            resultMessage2.getId(),
+            resultMessage2.getContent(),
+            resultMessage2.getCreatedAt(),
+            resultMessage2.getRoomId()
+        )
     );
 
     //when
-    final List<MessageOverview> expect = messageDao.findRecentlyMessages(member.getId());
+    final List<MessageOverview> expect = messageDao.findRecentlyMessages(loginMember.getId());
 
     //then
     Assertions.assertThat(actual)
