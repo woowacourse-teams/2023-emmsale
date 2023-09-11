@@ -107,7 +107,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="7dp"
-            android:background="@drawable/bg_event_recyclerview"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
