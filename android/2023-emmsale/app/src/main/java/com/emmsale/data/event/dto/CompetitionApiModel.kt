@@ -25,4 +25,6 @@ data class CompetitionApiModel(
     val dDay: Int,
     @SerialName("applyRemainingDays")
     val applyRemainingDays: Int,
+    @SerialName("isOnline")
+    val isOnline: Boolean = false,
 )

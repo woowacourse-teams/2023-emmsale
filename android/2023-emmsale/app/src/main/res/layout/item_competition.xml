@@ -69,47 +69,26 @@
             tools:text="2023 인프콘" />
 
         <TextView
-            android:id="@+id/tv_is_free"
+            android:id="@+id/tv_is_online"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:text="@{event.online ? @string/event_online : @string/event_offline}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
-            tools:text="무료" />
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="6dp"
-            android:background="@color/light_gray"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_is_free"
-            app:layout_constraintStart_toEndOf="@+id/tv_is_free"
-            app:layout_constraintTop_toTopOf="@+id/tv_is_free" />
-
-        <TextView
-            android:id="@+id/tv_is_online"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:textColor="@color/dark_gray"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_is_free"
-            app:layout_constraintStart_toStartOf="@+id/divider"
-            app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
-            app:layout_constraintTop_toTopOf="@+id/tv_is_free"
             tools:text="온라인" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cg_event_tags"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="10dp"
             app:layout_constraintEnd_toEndOf="@+id/iv_event_poster"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
-            app:layout_constraintTop_toBottomOf="@+id/tv_is_free" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_is_online" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
