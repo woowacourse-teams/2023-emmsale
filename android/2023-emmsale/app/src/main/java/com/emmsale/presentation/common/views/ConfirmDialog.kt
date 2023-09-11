@@ -27,6 +27,7 @@ class ConfirmDialog(
 
         initDialogWindow()
         initDataBinding()
+        this.setOnCancelListener { onNegativeButtonClick() }
     }
 
     private fun initDialogWindow() {
