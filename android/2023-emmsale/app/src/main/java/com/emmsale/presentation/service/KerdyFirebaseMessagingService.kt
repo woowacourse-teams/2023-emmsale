@@ -30,21 +30,15 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
 
         when (message.data["notificationType"]) {
             FOLLOW_NOTIFICATION_TYPE -> {
-                if (config.isFollowNotificationReceive) {
-                    showFollowNotification(message)
-                }
+                if (config.isFollowNotificationReceive) showFollowNotification(message)
             }
 
             CHILD_COMMENT_NOTIFICATION_TYPE -> {
-                if (config.isCommentNotificationReceive) {
-                    showChildCommentNotification(message)
-                }
+                if (config.isCommentNotificationReceive) showChildCommentNotification(message)
             }
 
             EVENT_NOTIFICATION_TYPE -> {
-                if (config.isInterestEventNotificationReceive) {
-                    showInterestEventNotification(message)
-                }
+                if (config.isInterestEventNotificationReceive) showInterestEventNotification(message)
             }
         }
     }
