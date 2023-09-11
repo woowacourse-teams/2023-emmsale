@@ -13,7 +13,6 @@ import com.emmsale.presentation.common.views.FilterTag
 import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewAdapter
-import com.emmsale.presentation.ui.main.event.conference.recyclerview.ConferenceRecyclerViewDivider
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState
@@ -68,7 +67,6 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
 
     private fun initEventRecyclerView() {
         binding.rvEvents.adapter = eventAdapter
-        binding.rvEvents.addItemDecoration(ConferenceRecyclerViewDivider(requireContext()))
     }
 
     private fun setupEventsObserver() {
