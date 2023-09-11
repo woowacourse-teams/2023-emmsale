@@ -13,7 +13,6 @@ import com.emmsale.presentation.common.views.FilterTag
 import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.main.event.competition.recyclerview.CompetitionRecyclerViewAdapter
-import com.emmsale.presentation.ui.main.event.competition.recyclerview.CompetitionRecyclerViewDivider
 import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionUiState
@@ -68,7 +67,6 @@ class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
 
     private fun initEventRecyclerView() {
         binding.rvEvents.adapter = eventAdapter
-        binding.rvEvents.addItemDecoration(CompetitionRecyclerViewDivider(requireContext()))
     }
 
     private fun setupEventsObserver() {
