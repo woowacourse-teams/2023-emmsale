@@ -8,10 +8,12 @@ import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.message_room.application.dto.MessageResponse;
 import com.emmsale.message_room.application.dto.RoomResponse;
+import com.emmsale.message_room.domain.MessageRepository;
 import com.emmsale.message_room.domain.Room;
 import com.emmsale.message_room.domain.RoomRepository;
 import com.emmsale.message_room.infrastructure.persistence.MessageDao;
 import com.emmsale.message_room.infrastructure.persistence.dto.MessageOverview;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,6 +30,7 @@ public class RoomQueryService {
   private final RoomRepository roomRepository;
   private final MessageDao messageDao;
   private final MemberRepository memberRepository;
+  private final MessageRepository messageRepository;
 
   public List<RoomResponse> findAll(final Member loginMember, final Long memberId) {
     validateSameMember(loginMember, memberId);
@@ -83,10 +86,16 @@ public class RoomQueryService {
   }
 
   public List<MessageResponse> findByRoomId(
-      final Member member,
-      final Long roomId,
+      final Member loginMember,
+      final String roomId,
       final Long memberId
   ) {
-    return List.of();
+    validateSameMember(loginMember, memberId);
+
+    return messageRepository.findByRoomUUID(roomId)
+        .stream()
+        .map(MessageResponse::from)
+        .sorted(Comparator.comparing(MessageResponse::getCreatedAt))
+        .collect(Collectors.toList());
   }
 }

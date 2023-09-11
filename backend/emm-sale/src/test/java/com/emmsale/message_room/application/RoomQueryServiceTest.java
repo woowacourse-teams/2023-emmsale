@@ -2,9 +2,13 @@ package com.emmsale.message_room.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.emmsale.fixture.MessageFixture;
+import com.emmsale.fixture.RoomFixture;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.member.MemberFixture;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.message_room.application.dto.MessageResponse;
 import com.emmsale.message_room.application.dto.RoomResponse;
 import com.emmsale.message_room.domain.Message;
 import com.emmsale.message_room.domain.MessageRepository;
@@ -14,6 +18,7 @@ import com.emmsale.message_room.domain.RoomRepository;
 import com.emmsale.message_room.infrastructure.persistence.dto.MessageOverview;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +41,13 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     loginMember.updateName("member1");
     memberRepository.save(loginMember);
 
-    final Member room1Interlocutor = new Member(3L, "image", "username3");
-    room1Interlocutor.updateName("room1Interlocutor");
+    final Member room1Interlocutor = MemberFixture.create(3L, "username3", "room1Interlocutor");
     memberRepository.save(room1Interlocutor);
 
-    final Member room2Interlocutor = new Member(4L, "image", "username4");
-    room2Interlocutor.updateName("room2Interlocutor");
+    final Member room2Interlocutor = MemberFixture.create(4L, "username4", "room2Interlocutor");
     memberRepository.save(room2Interlocutor);
 
-    final Member room3Interlocutor = new Member(5L, "image", "username5");
-    room3Interlocutor.updateName("room3Interlocutor");
+    final Member room3Interlocutor = MemberFixture.create(5L, "username5", "room3Interlocutor");
     memberRepository.save(room3Interlocutor);
 
     final String room1UUID = "feed014c-33f7-418c-8841-5553db5f22c1";
@@ -53,29 +55,29 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     final String room3UUID = "feed014c-33f7-418c-8841-5553db5f22c3";
 
     roomRepository.saveAll(List.of(
-        new Room(new RoomId(room1UUID, loginMember.getId()),
+        RoomFixture.create(room1UUID, loginMember.getId(),
             LocalDateTime.parse("2023-09-05T16:26:20.751352")),
-        new Room(new RoomId(room1UUID, room1Interlocutor.getId()),
+        RoomFixture.create(room1UUID, room1Interlocutor.getId(),
             LocalDateTime.parse("2023-09-07T16:48:24")),
 
-        new Room(new RoomId(room2UUID, loginMember.getId()),
+        RoomFixture.create(room2UUID, loginMember.getId(),
             LocalDateTime.parse("2023-09-07T16:48:24")),
-        new Room(new RoomId(room2UUID, room2Interlocutor.getId()),
+        RoomFixture.create(room2UUID, room2Interlocutor.getId(),
             LocalDateTime.parse("2023-09-07T16:48:24")),
 
-        new Room(new RoomId(room3UUID, loginMember.getId()),
+        RoomFixture.create(room3UUID, loginMember.getId(),
             LocalDateTime.parse("2023-10-07T16:48:24")),
-        new Room(new RoomId(room3UUID, room3Interlocutor.getId()),
+        RoomFixture.create(room3UUID, room3Interlocutor.getId(),
             LocalDateTime.parse("2023-08-07T16:45:39"))
     ));
 
-    final Message resultMessage1 = new Message(
+    final Message resultMessage1 = MessageFixture.create(
         "방1메시지3",
         loginMember.getId(),
         room1UUID,
         LocalDateTime.parse("2023-10-07T16:45:39")
     );
-    final Message resultMessage2 = new Message(
+    final Message resultMessage2 = MessageFixture.create(
         "방2메시지4",
         room2Interlocutor.getId(),
         room2UUID,
@@ -84,13 +86,13 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
 
     messageRepository.saveAll(
         List.of(
-            new Message("방1메시지1", loginMember.getId(), room1UUID,
+            MessageFixture.create("방1메시지1", loginMember.getId(), room1UUID,
                 LocalDateTime.parse("2023-05-07T16:45:39")),
-            new Message("방1메시지2", loginMember.getId(), room1UUID,
+            MessageFixture.create("방1메시지2", loginMember.getId(), room1UUID,
                 LocalDateTime.parse("2023-06-07T16:45:39")),
             resultMessage1,
             resultMessage2,
-            new Message("방3메시지5", loginMember.getId(), room3UUID,
+            MessageFixture.create("방3메시지5", loginMember.getId(), room3UUID,
                 LocalDateTime.parse("2023-08-07T16:45:39"))
         )
     );
@@ -121,6 +123,59 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
 
     //then
     assertThat(actual)
+        .usingRecursiveComparison()
+        .isEqualTo(expect);
+  }
+
+  @Test
+  @DisplayName("findByRoomId() : Room UUID를 통해 Room에 있는 메시지들을 조회할 수 있다.")
+  void test_findByRoomId() throws Exception {
+    //given
+    final Member loginMember = memberRepository.findById(1L).get();
+    final Member room1Interlocutor = memberRepository.findById(2L).get();
+    final Member room2Interlocutor = memberRepository.save(new Member(333L, "image", "usdafkl"));
+
+    final String room1UUID = "feed014c-33f7-418c-8841-5553db5f22c1";
+    final String room2UUID = "feed014c-33f7-418c-8841-5553db5f22c2";
+
+    final Room member1Room1 = new Room(new RoomId(room1UUID, loginMember.getId()),
+        LocalDateTime.parse("2023-09-05T16:26:20.751352"));
+    final Room member2Room1 = new Room(new RoomId(room1UUID, room1Interlocutor.getId()),
+        LocalDateTime.parse("2023-09-07T16:48:24"));
+    final Room member1Room2 = new Room(new RoomId(room2UUID, loginMember.getId()),
+        LocalDateTime.parse("2023-09-07T16:48:24"));
+    final Room member3Room2 = new Room(new RoomId(room2UUID, room2Interlocutor.getId()),
+        LocalDateTime.parse("2023-09-07T16:48:24"));
+
+    final Message room1Message1 = new Message("방1메시지1", loginMember.getId(), room1UUID,
+        LocalDateTime.parse("2023-05-07T16:45:39"));
+    final Message room1Message2 = new Message("방1메시지2", loginMember.getId(), room1UUID,
+        LocalDateTime.parse("2023-06-07T16:45:38"));
+
+    messageRepository.saveAll(
+        List.of(
+            room1Message1,
+            room1Message2,
+            new Message("방2메시지3", loginMember.getId(), room2UUID,
+                LocalDateTime.parse("2023-10-07T16:45:39")),
+            new Message("방2메시지4", room1Interlocutor.getId(), room2UUID,
+                LocalDateTime.parse("2023-10-07T16:45:39"))
+        )
+    );
+
+    final List<MessageResponse> expect = List.of(
+        new MessageResponse(room1Message1.getSenderId(), room1Message1.getContent(),
+            room1Message1.getCreatedAt()),
+        new MessageResponse(room1Message2.getSenderId(), room1Message2.getContent(),
+            room1Message2.getCreatedAt())
+    );
+
+    //when
+    final List<MessageResponse> actual = roomQueryService.findByRoomId(loginMember, room1UUID,
+        loginMember.getId());
+
+    //then
+    Assertions.assertThat(actual)
         .usingRecursiveComparison()
         .isEqualTo(expect);
   }
