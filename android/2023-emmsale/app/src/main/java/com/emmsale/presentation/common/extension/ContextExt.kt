@@ -45,6 +45,7 @@ fun AppCompatActivity.showPermissionRequestDialog(
         message = getString(R.string.login_post_notification_permission_needed_message),
         onPositiveButtonClick = onConfirm,
         onNegativeButtonClick = onDenied,
+        onCancel = onDenied,
     ).show()
 }
 
