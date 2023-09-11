@@ -1,8 +1,8 @@
 package com.emmsale.presentation.ui.eventdetail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.eventdetail.EventDetail
 import com.emmsale.data.eventdetail.EventDetailRepository
 import io.mockk.coEvery
@@ -65,7 +65,7 @@ class EventDetailViewModelTest {
         coEvery {
             eventDetailRepository.getEventDetail(1L)
         } answers {
-            ApiSuccess(testEventDetail, Headers.headersOf("Auth", "hi"))
+            Success(testEventDetail, Headers.headersOf("Auth", "hi"))
         }
 
         // when
@@ -86,7 +86,7 @@ class EventDetailViewModelTest {
         coEvery {
             eventDetailRepository.getEventDetail(1L)
         } answers {
-            ApiError(code = 4548, message = null)
+            Failure(code = 4548, message = null)
         }
 
         // when

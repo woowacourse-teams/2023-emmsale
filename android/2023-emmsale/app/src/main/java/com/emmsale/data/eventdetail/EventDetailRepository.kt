@@ -1,7 +1,7 @@
 package com.emmsale.data.eventdetail
 
-import com.emmsale.data.common.ApiResult
+import com.emmsale.data.common.callAdapter.ApiResponse
 
 interface EventDetailRepository {
-    suspend fun getEventDetail(eventId: Long): ApiResult<EventDetail>
+    suspend fun getEventDetail(eventId: Long): ApiResponse<EventDetail>
 }
