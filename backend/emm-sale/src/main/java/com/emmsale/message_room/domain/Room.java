@@ -21,4 +21,8 @@ public class Room {
     this.roomId = roomId;
     this.lastExitedTime = lastExitedTime;
   }
+
+  public boolean isInterlocutorWith(final Long loginMemberId) {
+    return roomId.isInterlocutors(loginMemberId);
+  }
 }

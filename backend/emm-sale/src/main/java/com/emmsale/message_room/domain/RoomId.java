@@ -21,6 +21,10 @@ public class RoomId implements Serializable {
     this.memberId = memberId;
   }
 
+  public boolean isInterlocutors(final Long loginMemberId) {
+    return !memberId.equals(loginMemberId);
+  }
+
   @Override
   public boolean equals(final Object o) {
     if (this == o) {

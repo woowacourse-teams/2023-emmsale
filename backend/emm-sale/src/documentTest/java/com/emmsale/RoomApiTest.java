@@ -39,15 +39,16 @@ class RoomApiTest extends MockMvcTestHelper {
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].roomId").description("Room Id(String 타입의 UUID입니다)"),
-        fieldWithPath("[].senderName").description("최근 메시지를 보낸 사람 이름"),
-        fieldWithPath("[].recentlyMessage").description("최근 메시지"),
+        fieldWithPath("[].interlocutorId").description("쪽지를 주고받는 상대방 ID"),
+        fieldWithPath("[].interlocutorName").description("쪽지를 주고받는 상대방의 이름"),
+        fieldWithPath("[].recentlyMessage").description("최근 메시지 내용"),
         fieldWithPath("[].recentlyMessageTime").description("최근 메시지 시간")
     );
 
     final List<RoomResponse> roomResponses = List.of(
-        new RoomResponse(UUID.randomUUID().toString(), "receiver1", "최근 메시지1", LocalDateTime.now()),
-        new RoomResponse(UUID.randomUUID().toString(), "receiver2", "최근 메시지2", LocalDateTime.now().minusDays(2)),
-        new RoomResponse(UUID.randomUUID().toString(), "receiver3", "최근 메시지3", LocalDateTime.now().minusDays(3))
+        new RoomResponse(UUID.randomUUID().toString(), 1L,"receiver1", "최근 메시지1", LocalDateTime.now()),
+        new RoomResponse(UUID.randomUUID().toString(), 1L,"receiver2", "최근 메시지2", LocalDateTime.now().minusDays(2)),
+        new RoomResponse(UUID.randomUUID().toString(), 1L,"receiver3", "최근 메시지3", LocalDateTime.now().minusDays(3))
     );
 
     when(roomQueryService.findAll(any(), anyLong()))
