@@ -25,16 +25,15 @@ class NotificationConfigViewModel(
     private val eventTagRepository: EventTagRepository,
     private val configRepository: ConfigRepository,
 ) : ViewModel(), Refreshable {
-    private val _notificationConfig: NotNullMutableLiveData<Config> =
-        NotNullMutableLiveData(
-            Config(
-                isNotificationReceive = false,
-                isFollowNotificationReceive = false,
-                isCommentNotificationReceive = false,
-                isInterestEventNotificationReceive = false,
-                isAutoLogin = false,
-            ),
-        )
+    private val _notificationConfig: NotNullMutableLiveData<Config> = NotNullMutableLiveData(
+        Config(
+            isNotificationReceive = false,
+            isFollowNotificationReceive = false,
+            isCommentNotificationReceive = false,
+            isInterestEventNotificationReceive = false,
+            isAutoLogin = false,
+        ),
+    )
     val notificationConfig: NotNullLiveData<Config> = _notificationConfig
 
     private val _notificationTags: NotNullMutableLiveData<NotificationTagsUiState> =
