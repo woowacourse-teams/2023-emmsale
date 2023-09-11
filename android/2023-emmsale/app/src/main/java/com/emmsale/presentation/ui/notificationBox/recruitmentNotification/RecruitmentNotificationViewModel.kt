@@ -7,6 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.eventdetail.EventDetailRepository
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.notification.NotificationRepository
@@ -109,8 +113,8 @@ class RecruitmentNotificationViewModel(
     private suspend fun getConferenceNameAsync(conferenceId: Long): Deferred<String?> =
         viewModelScope.async {
             when (val conference = eventDetailRepository.getEventDetail(conferenceId)) {
-                is ApiSuccess -> conference.data.name
-                is ApiException, is ApiError -> null
+                is Success -> conference.data.name
+                is Failure, NetworkError, is Unexpected -> null
             }
         }
 

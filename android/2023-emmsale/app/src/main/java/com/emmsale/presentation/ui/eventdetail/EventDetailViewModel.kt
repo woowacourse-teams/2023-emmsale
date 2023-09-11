@@ -2,9 +2,10 @@ package com.emmsale.presentation.ui.eventdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.eventdetail.EventDetail
 import com.emmsale.data.eventdetail.EventDetailRepository
 import com.emmsale.presentation.KerdyApplication
@@ -33,9 +34,8 @@ class EventDetailViewModel(
         setLoadingState(true)
         viewModelScope.launch {
             when (val result = eventDetailRepository.getEventDetail(eventId)) {
-                is ApiSuccess -> fetchSuccessEventDetail(result.data)
-                is ApiError -> changeToErrorState()
-                is ApiException -> changeToErrorState()
+                is Success -> fetchSuccessEventDetail(result.data)
+                is Failure, NetworkError, is Unexpected -> changeToErrorState()
             }
         }
     }
