@@ -95,7 +95,7 @@ class RoomApiTest extends MockMvcTestHelper {
         new MessageResponse(1L, "내용3", LocalDateTime.now())
     );
 
-    when(roomQueryService.findByRoomId(any(), anyLong(), anyLong()))
+    when(roomQueryService.findByRoomId(any(), any(), anyLong()))
         .thenReturn(messageResponses);
 
     //when & then

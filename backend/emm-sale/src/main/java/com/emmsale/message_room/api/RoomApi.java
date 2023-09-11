@@ -28,7 +28,7 @@ public class RoomApi {
   @GetMapping("/rooms/{room-id}")
   public List<MessageResponse> findByRoomId(
       final Member member,
-      @PathVariable("room-id") final Long roomId,
+      @PathVariable("room-id") final String roomId,
       @RequestParam("member-id") final Long memberId
   ) {
     return roomQueryService.findByRoomId(member, roomId, memberId);
