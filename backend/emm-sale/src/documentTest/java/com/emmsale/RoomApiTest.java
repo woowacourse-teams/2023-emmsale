@@ -86,7 +86,7 @@ class RoomApiTest extends MockMvcTestHelper {
     );
 
     final PathParametersSnippet pathParams = pathParameters(
-        parameterWithName("room-id").description("조회할 Room ID")
+        parameterWithName("room-id").description("조회할 Room UUID")
     );
 
     final List<MessageResponse> messageResponses = List.of(

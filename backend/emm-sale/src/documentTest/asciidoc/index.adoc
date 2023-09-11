@@ -626,7 +626,7 @@ include::{snippets}/get-rooms/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/get-rooms/response-fields.adoc[]
 
-=== `GET` : Room ID로 쪽지방 조회
+=== `GET` : Room UUID로 쪽지방 조회
 
 /rooms/{room-id}?member-id=1
 
