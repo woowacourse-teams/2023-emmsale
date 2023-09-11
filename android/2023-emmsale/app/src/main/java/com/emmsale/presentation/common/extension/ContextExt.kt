@@ -49,12 +49,9 @@ fun AppCompatActivity.showPermissionRequestDialog(
 }
 
 fun AppCompatActivity.navigateToNotificationSettings(launcher: ActivityResultLauncher<Intent>) {
-    val intent = Intent(
-        Settings.ACTION_APP_NOTIFICATION_SETTINGS,
-    ).apply {
+    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
         putExtra(Settings.EXTRA_APP_PACKAGE, baseContext.packageName)
     }
-
     launcher.launch(intent)
 }
 
