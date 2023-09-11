@@ -1,6 +1,7 @@
 package com.emmsale.data.common
 
 import com.emmsale.BuildConfig
+import com.emmsale.data.common.callAdapter.KerdyCallAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -33,6 +34,7 @@ class ServiceFactory {
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(jsonConverterFactory)
+        .addCallAdapterFactory(KerdyCallAdapterFactory())
         .client(okhttpClient)
         .build()
 
