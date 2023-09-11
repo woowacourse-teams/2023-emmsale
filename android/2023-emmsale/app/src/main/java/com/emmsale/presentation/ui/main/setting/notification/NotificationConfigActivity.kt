@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationConfigBinding
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
-import com.emmsale.presentation.common.extension.navigateToApplicationSettings
+import com.emmsale.presentation.common.extension.navigateToNotificationSettings
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
@@ -84,7 +84,7 @@ class NotificationConfigActivity :
 
     private fun showPermissionRequestDialog() {
         showPermissionRequestDialog(
-            onConfirm = { navigateToApplicationSettings(settingLauncher) },
+            onConfirm = { navigateToNotificationSettings(settingLauncher) },
             onDenied = { binding.switchNotificationReceiveConfig.isChecked = false },
         )
     }

@@ -60,6 +60,16 @@ fun AppCompatActivity.navigateToApplicationSettings(launcher: ActivityResultLaun
     launcher.launch(settingIntent)
 }
 
+fun AppCompatActivity.navigateToNotificationSettings(launcher: ActivityResultLauncher<Intent>) {
+    val intent = Intent(
+        Settings.ACTION_APP_NOTIFICATION_SETTINGS,
+    ).apply {
+        putExtra(Settings.EXTRA_APP_PACKAGE, baseContext.packageName)
+    }
+
+    launcher.launch(intent)
+}
+
 fun Context.showDatePickerDialog(block: (date: LocalDate) -> Unit) {
     val todayDate = LocalDate.now()
     DatePickerDialog(
