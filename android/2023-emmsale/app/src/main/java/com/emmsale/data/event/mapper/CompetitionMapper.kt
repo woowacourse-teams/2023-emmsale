@@ -23,6 +23,7 @@ fun CompetitionApiModel.toData(): Competition = Competition(
     eventApplyStatus = applyStatus.mapToApplyStatus(),
     applyRemainingDays = applyRemainingDays,
     isOnline = isOnline,
+    isFree = isFree,
 )
 
 private fun parseDate(date: String): LocalDateTime {

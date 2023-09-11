@@ -9,6 +9,7 @@ data class CompetitionUiState(
     val tags: List<String>,
     val status: String,
     val posterUrl: String?,
+    val isFree: Boolean,
     val isOnline: Boolean,
 ) {
     companion object {
@@ -19,6 +20,7 @@ data class CompetitionUiState(
             status = getStatus(competition),
             posterUrl = competition.posterUrl,
             isOnline = competition.isOnline,
+            isFree = competition.isFree,
         )
 
         private fun getStatus(competition: Competition): String = when (competition.status) {

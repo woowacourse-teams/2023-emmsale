@@ -15,5 +15,6 @@ data class Competition(
     val dDay: Int,
     val eventApplyStatus: EventApplyStatus,
     val applyRemainingDays: Int,
+    val isFree: Boolean,
     val isOnline: Boolean,
 )
