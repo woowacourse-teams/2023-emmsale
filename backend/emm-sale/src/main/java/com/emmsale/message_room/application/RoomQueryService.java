@@ -6,6 +6,7 @@ import static com.emmsale.member.exception.MemberExceptionType.NOT_MATCHING_TOKE
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
+import com.emmsale.message_room.application.dto.MessageResponse;
 import com.emmsale.message_room.application.dto.RoomResponse;
 import com.emmsale.message_room.domain.Room;
 import com.emmsale.message_room.domain.RoomRepository;
@@ -79,5 +80,13 @@ public class RoomQueryService {
   private Member findInterlocutor(final Long interlocutorId) {
     return memberRepository.findById(interlocutorId)
         .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
+  }
+
+  public List<MessageResponse> findByRoomId(
+      final Member member,
+      final Long roomId,
+      final Long memberId
+  ) {
+    return List.of();
   }
 }

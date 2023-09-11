@@ -625,3 +625,22 @@ include::{snippets}/get-rooms/http-response.adoc[]
 
 .HTTP response 설명
 include::{snippets}/get-rooms/response-fields.adoc[]
+
+=== `GET` : Room ID로 쪽지방 조회
+
+/rooms/{room-id}?member-id=1
+
+.HTTP request
+include::{snippets}/get-room-roomId/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/get-rooms/request-parameters.adoc[]
+
+.path parameter 설명
+include::{snippets}/get-room-roomId/path-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/get-room-roomId/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/get-room-roomId/response-fields.adoc[]
