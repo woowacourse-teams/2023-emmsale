@@ -24,24 +24,25 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         val configRepository = KerdyApplication.repositoryContainer.configRepository
-        val isNotificationReceive = configRepository.getConfig().isNotificationReceive
+        val config = configRepository.getConfig()
+        val isNotificationReceive = config.isNotificationReceive
         if (!isNotificationReceive) return
 
         when (message.data["notificationType"]) {
             FOLLOW_NOTIFICATION_TYPE -> {
-                if (configRepository.getFollowNotificationReceiveConfig()) {
+                if (config.isFollowNotificationReceive) {
                     showFollowNotification(message)
                 }
             }
 
             CHILD_COMMENT_NOTIFICATION_TYPE -> {
-                if (configRepository.getChildCommentNotificationReceiveConfig()) {
+                if (config.isCommentNotificationReceive) {
                     showChildCommentNotification(message)
                 }
             }
 
             EVENT_NOTIFICATION_TYPE -> {
-                if (configRepository.getInterestEventNotificationReceiveConfig()) {
+                if (config.isInterestEventNotificationReceive) {
                     showInterestEventNotification(message)
                 }
             }

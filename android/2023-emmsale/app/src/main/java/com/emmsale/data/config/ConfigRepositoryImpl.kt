@@ -12,6 +12,18 @@ class ConfigRepositoryImpl(
             KEY_NOTIFICATION_RECEIVE,
             DEFAULT_VALUE_NOTIFICATION_RECEIVE,
         ),
+        isFollowNotificationReceive = preference.getBoolean(
+            KEY_FOLLOW_NOTIFICATION_RECEIVE,
+            DEFAULT_VALUE_FOLLOW_NOTIFICATION_RECEIVE,
+        ),
+        isCommentNotificationReceive = preference.getBoolean(
+            KEY_CHILD_COMMENT_NOTIFICATION_RECEIVE,
+            DEFAULT_VALUE_CHILD_COMMENT_NOTIFICATION_RECEIVE,
+        ),
+        isInterestEventNotificationReceive = preference.getBoolean(
+            KEY_INTEREST_EVENT_NOTIFICATION_RECEIVE,
+            DEFAULT_VALUE_INTEREST_EVENT_NOTIFIACTION_RECEIVE,
+        ),
         isAutoLogin = preference.getBoolean(
             KEY_AUTO_LOGIN,
             DEFAULT_VALUE_AUTO_LOGIN,
@@ -22,28 +34,13 @@ class ConfigRepositoryImpl(
         preferenceEditor.putBoolean(KEY_NOTIFICATION_RECEIVE, isReceive).apply()
     }
 
-    override fun getFollowNotificationReceiveConfig(): Boolean = preference.getBoolean(
-        KEY_FOLLOW_NOTIFICATION_RECEIVE,
-        DEFAULT_VALUE_FOLLOW_NOTIFICATION_RECEIVE,
-    )
-
     override fun saveFollowNotificationReceiveConfig(isReceive: Boolean) {
         preferenceEditor.putBoolean(KEY_FOLLOW_NOTIFICATION_RECEIVE, isReceive).apply()
     }
 
-    override fun getChildCommentNotificationReceiveConfig(): Boolean = preference.getBoolean(
-        KEY_CHILD_COMMENT_NOTIFICATION_RECEIVE,
-        DEFAULT_VALUE_CHILD_COMMENT_NOTIFICATION_RECEIVE,
-    )
-
     override fun saveChildNotificationReceiveConfig(isReceive: Boolean) {
         preferenceEditor.putBoolean(KEY_CHILD_COMMENT_NOTIFICATION_RECEIVE, isReceive).apply()
     }
-
-    override fun getInterestEventNotificationReceiveConfig(): Boolean = preference.getBoolean(
-        KEY_INTEREST_EVENT_NOTIFICATION_RECEIVE,
-        DEFAULT_VALUE_INTEREST_EVENT_NOTIFIACTION_RECEIVE,
-    )
 
     override fun saveInterestEventNotificationReceiveConfig(isReceive: Boolean) {
         preferenceEditor.putBoolean(KEY_INTEREST_EVENT_NOTIFICATION_RECEIVE, isReceive).apply()
