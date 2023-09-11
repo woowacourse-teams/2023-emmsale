@@ -35,13 +35,12 @@ class KerdyApplication : Application() {
     private fun initNotificationChannels() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-        notificationManager.createNotificationChannels(
-            listOf(
-                createFollowNotificationChannel(),
-                createChildCommentNotificationChannel(),
-                createInterestEventNotificationChannel(),
-            ),
+        val notificationChannels = listOf(
+            createFollowNotificationChannel(),
+            createChildCommentNotificationChannel(),
+            createInterestEventNotificationChannel(),
         )
+        notificationManager.createNotificationChannels(notificationChannels)
     }
 
     private fun createFollowNotificationChannel(): NotificationChannel {
