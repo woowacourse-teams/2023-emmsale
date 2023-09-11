@@ -4,13 +4,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.message_room.api.RoomApi;
@@ -30,12 +30,12 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 @WebMvcTest(RoomApi.class)
 class RoomApiTest extends MockMvcTestHelper {
 
+  private String accessToken = "Bearer AccessToken";
+
   @Test
   @DisplayName("findAllRoom() : 사용자의 쪽지함을 성공적으로 조회하면 200 OK를 반환할 수 있다.")
   void test_findAllRoom() throws Exception {
     //given
-    final String accessToken = "Bearer AccessToken";
-
     final RequestParametersSnippet requestParam = requestParameters(
         parameterWithName("member-id").description("조회할 사용자의 ID")
     );
@@ -61,20 +61,18 @@ class RoomApiTest extends MockMvcTestHelper {
         .thenReturn(roomResponses);
 
     //when & then
-    mockMvc.perform(get("/rooms")
+    mockMvc.perform(get("/rooms/overview")
             .queryParam("member-id", "1")
             .header(HttpHeaders.AUTHORIZATION, accessToken))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("get-rooms", requestParam, responseFields));
+        .andDo(document("get-rooms-overview", requestParam, responseFields));
   }
 
   @Test
   @DisplayName("findByRoomId() : Room Id로 쪽지방을 성공적으로 조회하면 200 OK를 반환할 수 있다.")
   void test_findByRoomId() throws Exception {
     //given
-    final String accessToken = "Bearer AccessToken";
-
     final RequestParametersSnippet requestParam = requestParameters(
         parameterWithName("member-id").description("로그인 한 사용자 ID")
     );
@@ -104,6 +102,42 @@ class RoomApiTest extends MockMvcTestHelper {
             .header(HttpHeaders.AUTHORIZATION, accessToken))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("get-room-roomId", requestParam, responseFields, pathParams));
+        .andDo(document("get-rooms-roomId", requestParam, responseFields, pathParams));
+  }
+
+  @Test
+  @DisplayName("findByInterlocutorIds() : 쪽지방 참여자들의 ID를 통해 Room을 성공적으로 조회하면 200 OK를 반환할 수 있다.")
+  void test_findByInterlocutorIds() throws Exception {
+    //given
+    final RequestParametersSnippet requestParam = requestParameters(
+        parameterWithName("member-id").description("로그인 한 사용자 ID"),
+        parameterWithName("sender-id").description("쪽지방 참여자 ID1"),
+        parameterWithName("receiver-id").description("쪽지방 참여자 ID2")
+    );
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("[].senderId").description("메시지를 보낸 사람 ID"),
+        fieldWithPath("[].content").description("메시지 내용"),
+        fieldWithPath("[].createdAt").description("메시지 보낸 시간")
+    );
+
+    final List<MessageResponse> messageResponses = List.of(
+        new MessageResponse(1L, "내용1", LocalDateTime.now()),
+        new MessageResponse(2L, "내용2", LocalDateTime.now()),
+        new MessageResponse(1L, "내용3", LocalDateTime.now())
+    );
+
+    when(roomQueryService.findByInterlocutorIds(anyLong(), anyLong(), anyLong(), any()))
+        .thenReturn(messageResponses);
+
+    //when & then
+    mockMvc.perform(get("/rooms")
+            .queryParam("member-id", "1")
+            .queryParam("sender-id", "2")
+            .queryParam("receiver-id", "1")
+            .header(HttpHeaders.AUTHORIZATION, accessToken))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("get-rooms-interlocutorId", requestParam, responseFields));
   }
 }

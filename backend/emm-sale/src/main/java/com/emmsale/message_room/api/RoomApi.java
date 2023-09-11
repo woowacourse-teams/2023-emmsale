@@ -17,7 +17,7 @@ public class RoomApi {
 
   private final RoomQueryService roomQueryService;
 
-  @GetMapping("/rooms")
+  @GetMapping("/rooms/overview")
   public List<RoomResponse> findAllRoom(
       final Member loginMember,
       @RequestParam("member-id") final Long memberId
@@ -32,5 +32,15 @@ public class RoomApi {
       @RequestParam("member-id") final Long memberId
   ) {
     return roomQueryService.findByRoomId(member, roomId, memberId);
+  }
+
+  @GetMapping("/rooms")
+  public List<MessageResponse> findByInterlocutorIds(
+      @RequestParam("sender-id") final Long senderId,
+      @RequestParam("receiver-id") final Long receiverId,
+      @RequestParam("member-id") final Long memberId,
+      final Member loginMember
+  ) {
+    return roomQueryService.findByInterlocutorIds(senderId, receiverId, memberId, loginMember);
   }
 }
