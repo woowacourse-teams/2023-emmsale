@@ -30,7 +30,7 @@ class ConfigRepositoryImpl(
         ),
     )
 
-    override fun saveNotificationReceiveConfig(isReceive: Boolean) {
+    override fun saveAllNotificationReceiveConfig(isReceive: Boolean) {
         preferenceEditor.putBoolean(KEY_NOTIFICATION_RECEIVE, isReceive).apply()
     }
 
@@ -38,7 +38,7 @@ class ConfigRepositoryImpl(
         preferenceEditor.putBoolean(KEY_FOLLOW_NOTIFICATION_RECEIVE, isReceive).apply()
     }
 
-    override fun saveChildNotificationReceiveConfig(isReceive: Boolean) {
+    override fun saveCommentNotificationReceiveConfig(isReceive: Boolean) {
         preferenceEditor.putBoolean(KEY_CHILD_COMMENT_NOTIFICATION_RECEIVE, isReceive).apply()
     }
 

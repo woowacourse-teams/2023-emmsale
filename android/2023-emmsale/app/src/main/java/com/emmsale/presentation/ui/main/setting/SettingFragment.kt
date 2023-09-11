@@ -58,7 +58,7 @@ class SettingFragment :
     }
 
     private fun navigateToNotificationConfig() {
-        startActivity(NotificationConfigActivity.getIntent(requireContext()))
+        NotificationConfigActivity.startActivity(requireContext())
     }
 
     private fun showBlocks() {
