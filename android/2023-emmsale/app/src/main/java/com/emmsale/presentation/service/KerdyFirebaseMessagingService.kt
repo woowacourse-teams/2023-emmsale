@@ -28,9 +28,23 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         if (!isNotificationReceive) return
 
         when (message.data["notificationType"]) {
-            FOLLOW_NOTIFICATION_TYPE -> showFollowNotification(message)
-            CHILD_COMMENT_NOTIFICATION_TYPE -> showChildCommentNotification(message)
-            EVENT_NOTIFICATION_TYPE -> showInterestEventNotification(message)
+            FOLLOW_NOTIFICATION_TYPE -> {
+                if (configRepository.getFollowNotificationReceiveConfig()) {
+                    showFollowNotification(message)
+                }
+            }
+
+            CHILD_COMMENT_NOTIFICATION_TYPE -> {
+                if (configRepository.getChildCommentNotificationReceiveConfig()) {
+                    showChildCommentNotification(message)
+                }
+            }
+
+            EVENT_NOTIFICATION_TYPE -> {
+                if (configRepository.getInterestEventNotificationReceiveConfig()) {
+                    showInterestEventNotification(message)
+                }
+            }
         }
     }
 
@@ -46,9 +60,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             message = getString(R.string.kerdyfirebasemessaging_follow_notification_message_format).format(
                 senderName,
             ),
-            channelId = FOLLOW_CHANNEL_ID,
-            channelName = getString(R.string.kerdyfirebasemessaging_follow_notification_channel_name),
-            channelDescription = getString(R.string.kerdyfirebasemessaging_follow_notification_channel_description),
+            channelId = R.id.id_all_follow_notification_channel,
             intent = NotificationBoxActivity.getIntent(this),
         )
     }
@@ -79,9 +91,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         baseContext.showNotification(
             title = getString(R.string.kerdyfirebasemessaging_child_comment_notification_title_format),
             message = createdAt.toTimeMessage(),
-            channelId = CHILD_COMMENT_POSTING_CHANNEL_ID,
-            channelName = getString(R.string.kerdyfirebasemessaging_child_comment_notification_channel_name),
-            channelDescription = getString(R.string.kerdyfirebasemessaging_child_comment_notification_channel_description),
+            channelId = R.id.id_all_child_comment_notification_channel,
             intent = ChildCommentActivity.getIntent(this, eventId, parentCommentId, true),
         )
     }
@@ -95,9 +105,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         baseContext.showNotification(
             title = getString(R.string.kerdyfirebasemessaging_interest_event_notification_title_format),
             message = createdAt.toTimeMessage(),
-            channelId = INTEREST_EVENT_CHANNEL_ID,
-            channelName = getString(R.string.kerdyfirebasemessaging_interest_event_notification_channel_name),
-            channelDescription = getString(R.string.kerdyfirebasemessaging_interest_event_notification_channel_description),
+            channelId = R.id.id_all_interest_event_notification_channel,
             intent = EventDetailActivity.getIntent(this, eventId),
         )
     }
@@ -113,10 +121,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         private const val FOLLOW_NOTIFICATION_TYPE = "REQUEST"
         private const val CHILD_COMMENT_NOTIFICATION_TYPE = "COMMENT"
         private const val EVENT_NOTIFICATION_TYPE = "EVENT"
-
-        private const val FOLLOW_CHANNEL_ID = "follow_channel_id"
-        private const val CHILD_COMMENT_POSTING_CHANNEL_ID = "child_comment_posting_channel_id"
-        private const val INTEREST_EVENT_CHANNEL_ID = "interest_event_channel_id"
 
         private val commentService: CommentService =
             ServiceFactory().create(CommentService::class.java)

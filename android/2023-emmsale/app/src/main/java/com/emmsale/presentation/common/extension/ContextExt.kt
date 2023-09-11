@@ -2,13 +2,10 @@ package com.emmsale.presentation.common.extension
 
 import android.Manifest
 import android.app.DatePickerDialog
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
@@ -51,15 +48,6 @@ fun AppCompatActivity.showPermissionRequestDialog(
     ).show()
 }
 
-fun AppCompatActivity.navigateToApplicationSettings(launcher: ActivityResultLauncher<Intent>) {
-    val settingIntent = Intent(
-        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.parse("package:$packageName"),
-    ).addCategory(Intent.CATEGORY_DEFAULT)
-
-    launcher.launch(settingIntent)
-}
-
 fun AppCompatActivity.navigateToNotificationSettings(launcher: ActivityResultLauncher<Intent>) {
     val intent = Intent(
         Settings.ACTION_APP_NOTIFICATION_SETTINGS,
@@ -88,45 +76,24 @@ fun Context.showNotification(
     title: String,
     message: String,
     notificationId: Int = System.currentTimeMillis().toInt(),
-    channelId: String,
-    channelName: String,
-    channelDescription: String,
+    channelId: Int,
     intent: Intent? = null,
 ) {
     val notificationManager = NotificationManagerCompat.from(this)
 
-    if (checkPostNotificationPermission()) {
-        createNotificationChannel(
-            notificationManager,
-            channelId,
-            channelName,
-            channelDescription,
-        )
-        val notification = createNotification(channelId, title, message, notificationId, intent)
-        notificationManager.notify(notificationId, notification)
-    }
-}
+    if (!checkPostNotificationPermission()) return
 
-private fun createNotificationChannel(
-    notificationManager: NotificationManagerCompat,
-    channelId: String,
-    channelName: String,
-    channelDescription: String,
-) {
-    val importance = NotificationManager.IMPORTANCE_HIGH
-    val channel = NotificationChannel(channelId, channelName, importance).apply {
-        description = channelDescription
-    }
-    notificationManager.createNotificationChannel(channel)
+    val notification = createNotification(channelId, title, message, notificationId, intent)
+    notificationManager.notify(notificationId, notification)
 }
 
 private fun Context.createNotification(
-    channelId: String,
+    channelId: Int,
     title: String,
     message: String,
     notificationId: Int,
     intent: Intent? = null,
-) = NotificationCompat.Builder(this, channelId)
+) = NotificationCompat.Builder(this, channelId.toString())
     .setSmallIcon(R.drawable.ic_all_notification)
     .setContentTitle(title)
     .setContentText(message)
