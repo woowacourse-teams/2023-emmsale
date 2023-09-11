@@ -45,14 +45,15 @@ class FeedApiTest extends MockMvcTestHelper {
         fieldWithPath("feeds[].id").type(JsonFieldType.NUMBER).description("피드 id"),
         fieldWithPath("feeds[].title").type(JsonFieldType.STRING).description("피드 제목"),
         fieldWithPath("feeds[].writerId").type(JsonFieldType.NUMBER).description("피드 작성자 id"),
+        fieldWithPath("feeds[].commentsCount").type(JsonFieldType.NUMBER).description("피드의 댓글 개수"),
         fieldWithPath("feeds[].createdAt").type(JsonFieldType.STRING).description("피드 작성 일시")
     );
 
     final long eventId = 11L;
     final List<FeedSimpleResponse> feeds = List.of(
-        new FeedSimpleResponse(34L, "피드1 제목", 23L,
+        new FeedSimpleResponse(34L, "피드1 제목", 23L, 0L,
             LocalDateTime.of(LocalDate.of(2023, 7, 13), LocalTime.of(11, 43, 11))),
-        new FeedSimpleResponse(35L, "피드2 제목", 43L,
+        new FeedSimpleResponse(35L, "피드2 제목", 43L, 3L,
             LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)))
     );
     final FeedListResponse response = new FeedListResponse(eventId, feeds);

@@ -11,6 +11,7 @@ import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.feed.application.dto.FeedDetailResponse;
 import com.emmsale.feed.application.dto.FeedListResponse;
+import com.emmsale.feed.application.dto.FeedSimpleResponse;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
@@ -19,6 +20,8 @@ import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -58,11 +61,16 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
     void findAllFeedsTest() {
       //given
       final Long eventId = event.getId();
-      final List<Feed> feeds = List.of(feed1, feed2);
-      final FeedListResponse expect = FeedListResponse.from(eventId, feeds);
+      final Map<Feed, Long> feedCommentCountMap = Map.of(feed1, 0L, feed2, 0L);
+      final List<FeedSimpleResponse> feedSimpleResponses = feedCommentCountMap.entrySet().stream()
+          .map(FeedSimpleResponse::from)
+          .collect(Collectors.toList());
+      final FeedListResponse expect = new FeedListResponse(eventId, feedSimpleResponses);
+      expect.getFeeds().sort((o1, o2) -> o2.getId().compareTo(o1.getId()));
 
       //when
       final FeedListResponse actual = feedQueryService.findAllFeeds(eventId);
+      actual.getFeeds().sort((o1, o2) -> o2.getId().compareTo(o1.getId()));
 
       //then
       assertThat(actual)
@@ -78,8 +86,11 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       feedRepository.save(feed1);
 
       final Long eventId = event.getId();
-      final List<Feed> feeds = List.of(feed2);
-      final FeedListResponse expect = FeedListResponse.from(eventId, feeds);
+      final Map<Feed, Long> feedCommentCountMap = Map.of(feed2, 0L);
+      final List<FeedSimpleResponse> feedSimpleResponses = feedCommentCountMap.entrySet().stream()
+          .map(FeedSimpleResponse::from)
+          .collect(Collectors.toList());
+      final FeedListResponse expect = new FeedListResponse(eventId, feedSimpleResponses);
 
       //when
       final FeedListResponse actual = feedQueryService.findAllFeeds(eventId);
