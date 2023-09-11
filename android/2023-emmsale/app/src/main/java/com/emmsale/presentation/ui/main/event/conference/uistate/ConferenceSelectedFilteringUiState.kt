@@ -14,6 +14,8 @@ data class ConferenceSelectedFilteringUiState(
         .map { it.id }
         .toTypedArray()
 
+    val selectedFilterSize = statusFilteringOptions.size + tagFilteringOptions.size
+
     fun removeFilteringOptionBy(filterId: Long): ConferenceSelectedFilteringUiState = copy(
         statusFilteringOptions = statusFilteringOptions.filterNot { filterOption ->
             filterOption.id == filterId
