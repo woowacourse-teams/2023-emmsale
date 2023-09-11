@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationConfigBinding
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
@@ -100,6 +101,9 @@ class NotificationConfigActivity :
             val isNotificationReceive = uiState.isNotificationReceive
 
             binding.switchNotificationReceiveConfig.isChecked =
+                isNotificationPermissionChecked && isNotificationReceive
+
+            binding.clNotificationChannelSetting.isVisible =
                 isNotificationPermissionChecked && isNotificationReceive
         }
     }
