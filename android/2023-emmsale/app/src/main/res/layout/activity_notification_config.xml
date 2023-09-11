@@ -30,91 +30,178 @@
             app:titleCentered="true"
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
-        <LinearLayout
-            android:id="@+id/layout_notification_receive_config"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_notificationconfig_config"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="17dp"
-            android:paddingVertical="23dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_notification_config">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/notificationconfig_config_all_notification_label"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
-            <Switch
-                android:id="@+id/switch_notification_receive_config"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:thumb="@drawable/bg_notificationconfig_switch_thumb"
-                android:track="@drawable/bg_notificationconfig_switch_track"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_notification_channel_setting"
+        <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_notification_receive_config">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_notification_config">
 
-            <TextView
-                android:id="@+id/tv_notification_tag_title"
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="17dp"
-                android:layout_marginTop="25dp"
-                android:text="@string/notificationconfig_notification_tag_title"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tv_notification_tag_desc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="@string/notificationconfig_notification_tag_desc"
-                android:textColor="@color/gray"
-                android:textSize="11sp"
-                app:layout_constraintEnd_toEndOf="@+id/tv_notification_tag_title"
-                app:layout_constraintStart_toStartOf="@+id/tv_notification_tag_title"
-                app:layout_constraintTop_toBottomOf="@+id/tv_notification_tag_title" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/notificationconfig_config_all_notification_label"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginStart="17dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:id="@+id/tv_notification_all_receive_label"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_all_notification_receive_config" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_notification_tag"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                app:layout_constraintEnd_toEndOf="@+id/tv_notification_tag_title"
-                app:layout_constraintStart_toStartOf="@+id/tv_notification_tag_title"
-                app:layout_constraintTop_toBottomOf="@+id/tv_notification_tag_desc">
+                <Switch
+                    android:id="@+id/switch_all_notification_receive_config"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:thumb="@drawable/bg_notificationconfig_switch_thumb"
+                    android:track="@drawable/bg_notificationconfig_switch_track"
+                    tools:ignore="UseSwitchCompatOrMaterialXml"
+                    android:layout_marginEnd="17dp"
+                    app:layout_constraintTop_toTopOf="@+id/tv_notification_all_receive_label"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_notification_all_receive_label"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-                <ImageView
-                    android:id="@+id/btn_tag_add"
-                    android:layout_width="60dp"
-                    android:layout_height="32dp"
-                    android:layout_marginTop="22dp"
-                    android:background="@drawable/bg_notificationconfig_add"
-                    android:contentDescription="@string/notificationconfig_add_notification_tag" />
+                <com.emmsale.presentation.common.views.VerticalDivider
+                    android:id="@+id/vertical_divider"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="23dp"
+                    android:background="@color/light_gray"
+                    app:layout_constraintTop_toBottomOf="@id/tv_notification_all_receive_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-            </com.google.android.material.chip.ChipGroup>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_notification_channel_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/vertical_divider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" >
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/tv_notification_tag_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="17dp"
+                        android:layout_marginTop="25dp"
+                        android:text="@string/notificationconfig_notification_tag_title"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/switch_interest_tag_notification_receive_config" />
+
+                    <Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tv_notification_tag_title"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_notification_tag_title"
+                        android:layout_marginEnd="17dp"
+                        android:thumb="@drawable/bg_notificationconfig_switch_thumb"
+                        android:track="@drawable/bg_notificationconfig_switch_track"
+                        android:id="@+id/switch_interest_tag_notification_receive_config"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <TextView
+                        android:id="@+id/tv_notification_tag_desc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/notificationconfig_notification_tag_desc"
+                        android:textColor="@color/gray"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="@+id/switch_interest_tag_notification_receive_config"
+                        app:layout_constraintStart_toStartOf="@+id/tv_notification_tag_title"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_notification_tag_title" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_notification_tag"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="22dp"
+                        app:layout_constraintEnd_toEndOf="@+id/switch_interest_tag_notification_receive_config"
+                        app:layout_constraintStart_toStartOf="@+id/tv_notification_tag_title"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_notification_tag_desc">
+
+                        <ImageView
+                            android:id="@+id/btn_tag_add"
+                            android:layout_width="60dp"
+                            android:layout_height="32dp"
+                            android:layout_marginTop="22dp"
+                            android:background="@drawable/bg_notificationconfig_add"
+                            android:contentDescription="@string/notificationconfig_add_notification_tag" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                        android:text="@string/notificationconfig_notification_comment_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_notification_child_comment_title"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_notification_tag"
+                        app:layout_constraintStart_toStartOf="@+id/tv_notification_tag_title"
+                        android:layout_marginTop="25dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/switch_child_comment_notification_receive_config" />
+
+                    <Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tv_notification_child_comment_title"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_notification_child_comment_title"
+                        android:layout_marginEnd="17dp"
+                        android:thumb="@drawable/bg_notificationconfig_switch_thumb"
+                        android:track="@drawable/bg_notificationconfig_switch_track"
+                        android:id="@+id/switch_child_comment_notification_receive_config"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <TextView
+                        android:text="@string/notificationconfig_notification_follow_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_notification_follow_title"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_notification_child_comment_title"
+                        app:layout_constraintStart_toStartOf="@+id/tv_notification_tag_title"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginVertical="25dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/switch_child_comment_notification_receive_config" />
+
+                    <Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tv_notification_follow_title"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_notification_follow_title"
+                        android:layout_marginEnd="17dp"
+                        android:thumb="@drawable/bg_notificationconfig_switch_thumb"
+                        android:track="@drawable/bg_notificationconfig_switch_track"
+                        android:id="@+id/switch_follow_notification_receive_config"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

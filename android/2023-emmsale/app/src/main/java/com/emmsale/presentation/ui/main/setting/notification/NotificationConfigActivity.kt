@@ -74,7 +74,7 @@ class NotificationConfigActivity :
     }
 
     private fun initNotificationConfigSwitch() {
-        binding.switchNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
+        binding.switchAllNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
             if (!checkPostNotificationPermission() && isChecked) {
                 showPermissionRequestDialog()
                 return@setOnCheckedChangeListener
@@ -86,7 +86,7 @@ class NotificationConfigActivity :
     private fun showPermissionRequestDialog() {
         showPermissionRequestDialog(
             onConfirm = { navigateToNotificationSettings(settingLauncher) },
-            onDenied = { binding.switchNotificationReceiveConfig.isChecked = false },
+            onDenied = { binding.switchAllNotificationReceiveConfig.isChecked = false },
         )
     }
 
@@ -100,7 +100,7 @@ class NotificationConfigActivity :
             val isNotificationPermissionChecked = checkPostNotificationPermission()
             val isNotificationReceive = uiState.isNotificationReceive
 
-            binding.switchNotificationReceiveConfig.isChecked =
+            binding.switchAllNotificationReceiveConfig.isChecked =
                 isNotificationPermissionChecked && isNotificationReceive
 
             binding.clNotificationChannelSetting.isVisible =
