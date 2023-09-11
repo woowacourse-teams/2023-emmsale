@@ -25,4 +25,8 @@ data class ConferenceApiModel(
     val dDay: Int,
     @SerialName("applyRemainingDays")
     val applyRemainingDays: Int,
+    @SerialName("isOnline")
+    val isOnline: Boolean = false,
+    @SerialName("isFree")
+    val isFree: Boolean = false,
 )

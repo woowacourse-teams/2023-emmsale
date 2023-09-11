@@ -22,6 +22,8 @@ fun ConferenceApiModel.toData(): Conference = Conference(
     dDay = dDay,
     eventApplyStatus = applyStatus.mapToApplyStatus(),
     applyRemainingDays = applyRemainingDays,
+    isOnline = isOnline,
+    isFree = isFree,
 )
 
 private fun parseDate(date: String): LocalDateTime {

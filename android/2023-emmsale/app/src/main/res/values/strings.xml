@@ -112,6 +112,10 @@
     <string name="event_search_conference_description">컨퍼런스 검색 화면</string>
     <string name="event_competition">대회</string>
     <string name="event_conference">컨퍼런스</string>
+    <string name="event_free">무료</string>
+    <string name="event_paid">유료</string>
+    <string name="현event_online">온라인</string>
+    <string name="event_offline">오프라인</string>
 
     <string name="comment_menu_button">댓글의 메뉴 버튼</string>
     <string name="comment_deleted_comment_author_name">삭제</string>

@@ -15,4 +15,6 @@ data class Conference(
     val dDay: Int,
     val eventApplyStatus: EventApplyStatus,
     val applyRemainingDays: Int,
+    val isOnline: Boolean,
+    val isFree: Boolean,
 )
