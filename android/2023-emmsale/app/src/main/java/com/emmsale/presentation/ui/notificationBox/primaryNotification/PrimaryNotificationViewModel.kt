@@ -11,7 +11,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uievent.PrimaryNotificationsUiEvent
 import com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class PrimaryNotificationViewModel(
     private val tokenRepository: TokenRepository,
     private val notificationRepository: NotificationRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
 
     private val _uiState =
         NotNullMutableLiveData<PrimaryNotificationScreenUiState>(PrimaryNotificationScreenUiState.Loading)

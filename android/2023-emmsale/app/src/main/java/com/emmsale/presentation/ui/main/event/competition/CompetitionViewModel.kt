@@ -19,7 +19,7 @@ import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionSelectedFilteringOptionUiState
@@ -33,7 +33,7 @@ class CompetitionViewModel(
     private val eventRepository: EventRepository,
     private val competitionStatusRepository: CompetitionStatusRepository,
     private val eventTagRepository: EventTagRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
     private val _competitions = NotNullMutableLiveData(CompetitionsUiState())
     val competitions: NotNullLiveData<CompetitionsUiState> = _competitions
 

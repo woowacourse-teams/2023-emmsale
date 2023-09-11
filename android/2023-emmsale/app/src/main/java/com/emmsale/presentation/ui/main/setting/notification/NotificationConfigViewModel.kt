@@ -14,7 +14,7 @@ import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.firebase.analytics.logChangeConfig
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationConfigUiEvent
 import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationTagsUiState
@@ -24,7 +24,7 @@ class NotificationConfigViewModel(
     private val tokenRepository: TokenRepository,
     private val eventTagRepository: EventTagRepository,
     private val configRepository: ConfigRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
     private val _notificationConfig: NotNullMutableLiveData<Config> =
         NotNullMutableLiveData(
             Config(

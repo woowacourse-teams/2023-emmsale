@@ -11,7 +11,7 @@ import com.emmsale.data.common.ApiSuccess
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.setting.block.uistate.BlockedMembersUiEvent
 import com.emmsale.presentation.ui.main.setting.block.uistate.BlockedMembersUiState
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class MemberBlockViewModel(
     private val blockedMemberRepository: BlockedMemberRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
     private val _blockedMembers = NotNullMutableLiveData(BlockedMembersUiState())
     val blockedMembers: NotNullLiveData<BlockedMembersUiState> = _blockedMembers
 

@@ -14,7 +14,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiEvent
 import com.emmsale.presentation.ui.eventdetail.comment.uiState.CommentsUiState
@@ -24,7 +24,7 @@ class CommentViewModel(
     private val eventId: Long,
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
