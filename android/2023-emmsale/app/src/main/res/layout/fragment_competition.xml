@@ -88,17 +88,19 @@
             android:overScrollMode="never"
             android:paddingHorizontal="17dp"
             android:scrollbars="none"
+            android:visibility="@{viewModel.selectedFilter.selectedFilterSize > 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_event_filter">
 
             <LinearLayout
-                android:id="@+id/layout_competition_filters"
+                android:id="@+id/layout_conference_filters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
 
         </HorizontalScrollView>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_events"
@@ -131,7 +133,8 @@
             android:background="@color/white"
             android:clickable="true"
             android:visibility="@{viewModel.competitions.isError ? View.VISIBLE : View.GONE}"
-            bind:viewModel="@{viewModel}" />
+            bind:viewModel="@{viewModel}"
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

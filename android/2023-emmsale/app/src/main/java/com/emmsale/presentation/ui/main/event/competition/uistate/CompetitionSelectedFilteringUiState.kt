@@ -14,6 +14,9 @@ data class CompetitionSelectedFilteringUiState(
         .map { it.id }
         .toTypedArray()
 
+    val selectedFilterSize: Int =
+        competitionStatusFilteringOptions.size + competitionTagFilteringOptions.size
+
     fun removeFilteringOptionBy(filterId: Long): CompetitionSelectedFilteringUiState = copy(
         competitionStatusFilteringOptions = competitionStatusFilteringOptions.filterNot { filterOption ->
             filterOption.id == filterId
