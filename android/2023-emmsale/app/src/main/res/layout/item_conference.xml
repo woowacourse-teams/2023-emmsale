@@ -23,52 +23,8 @@
         android:layout_height="wrap_content"
         android:minHeight="180dp"
         android:onClick="@{() -> onClickConference.invoke(event)}"
-        android:paddingHorizontal="18dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_event_tags"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="32dp"
-            app:layout_constraintEnd_toStartOf="@+id/iv_event_poster"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_event_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@{event.name}"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tv_event_status"
-            app:layout_constraintEnd_toEndOf="@id/cg_event_tags"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cg_event_tags"
-            app:layout_constraintVertical_chainStyle="spread_inside"
-            tools:text="2023 인프콘" />
-
-        <TextView
-            android:id="@+id/tv_event_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@{event.status}"
-            android:textColor="@{event.status == `마감` ? @color/gray : @color/primary_color}"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_event_poster"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
-            app:layout_constraintVertical_chainStyle="spread_inside"
-            app:layout_goneMarginTop="9dp"
-            tools:text="D-21"
-            tools:textColor="@color/primary_color" />
+        android:paddingHorizontal="17dp"
+        android:paddingVertical="10dp">
 
         <ImageView
             android:id="@+id/iv_event_poster"
@@ -76,12 +32,86 @@
             android:layout_height="0dp"
             android:contentDescription="@string/event_poster_description"
             app:imageUrl="@{event.posterUrl}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="W,100:126"
+            app:layout_constraintDimensionRatio="326:180"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:roundedImageRadius="@{15}"
             tools:src="@drawable/img_all_loading" />
+
+        <TextView
+            android:id="@+id/tv_event_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/nanum_square_extra_bold"
+            android:text="@{event.status}"
+            android:textColor="@{event.status == `마감` ? @color/gray : @color/primary_color}"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
+            app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
+            app:layout_goneMarginTop="9dp"
+            tools:text="D-21"
+            tools:textColor="@color/primary_color" />
+
+        <TextView
+            android:id="@+id/tv_event_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:text="@{event.name}"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
+            app:layout_constraintTop_toBottomOf="@+id/tv_event_status"
+            tools:text="2023 인프콘" />
+
+        <TextView
+            android:id="@+id/tv_is_free"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@{event.free ? @string/event_free : @string/event_paid}"
+            android:textColor="@color/dark_gray"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
+            app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
+            tools:text="무료" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="6dp"
+            android:background="@color/light_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_is_free"
+            app:layout_constraintStart_toEndOf="@+id/tv_is_free"
+            app:layout_constraintTop_toTopOf="@+id/tv_is_free" />
+
+        <TextView
+            android:id="@+id/tv_is_online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="@{event.online ? @string/event_online : @string/event_offline}"
+            android:textColor="@color/dark_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_is_free"
+            app:layout_constraintStart_toStartOf="@+id/divider"
+            app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
+            app:layout_constraintTop_toTopOf="@+id/tv_is_free"
+            tools:text="온라인" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_event_tags"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_event_poster"
+            app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
+            app:layout_constraintTop_toBottomOf="@+id/tv_is_free" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

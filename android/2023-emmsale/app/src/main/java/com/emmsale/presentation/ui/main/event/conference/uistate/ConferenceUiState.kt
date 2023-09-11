@@ -9,6 +9,8 @@ data class ConferenceUiState(
     val tags: List<String>,
     val status: String,
     val posterUrl: String?,
+    val isFree: Boolean,
+    val isOnline: Boolean,
 ) {
     companion object {
         fun from(conference: Conference): ConferenceUiState = ConferenceUiState(
@@ -17,6 +19,8 @@ data class ConferenceUiState(
             tags = conference.tags,
             status = getStatus(conference),
             posterUrl = conference.posterUrl,
+            isFree = conference.isFree,
+            isOnline = conference.isOnline,
         )
 
         private fun getStatus(conference: Conference): String = when (conference.status) {
