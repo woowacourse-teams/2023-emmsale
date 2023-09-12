@@ -16,3 +16,13 @@ data class MessageRoomResponse(
     @SerialName("recentlyMessage")
     val recentMessageTime: String,
 )
+
+@Serializable
+data class MessageResponse(
+    @SerialName("senderId")
+    val senderId: Long,
+    @SerialName("content")
+    val message: String,
+    @SerialName("createdAt")
+    val createdAt: String,
+)
