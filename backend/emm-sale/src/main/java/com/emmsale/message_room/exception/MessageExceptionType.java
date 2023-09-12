@@ -18,11 +18,11 @@ public enum MessageExceptionType implements BaseExceptionType {
 
   @Override
   public HttpStatus httpStatus() {
-    return null;
+    return httpStatus;
   }
 
   @Override
   public String errorMessage() {
-    return null;
+    return errorMessage;
   }
 }
