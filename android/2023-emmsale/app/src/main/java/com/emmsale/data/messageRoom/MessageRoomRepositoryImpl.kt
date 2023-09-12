@@ -1,0 +1,33 @@
+package com.emmsale.data.messageRoom
+
+import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.message.Message
+import com.emmsale.data.message.mapper.toData
+import com.emmsale.data.messageRoom.dto.MessageResponse
+import com.emmsale.data.messageRoom.dto.MessageRoomResponse
+import com.emmsale.data.messageRoom.mapper.toData
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+class MessageRoomRepositoryImpl(
+    private val messageRoomService: MessageRoomService,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : MessageRoomRepository {
+    override suspend fun getMessageRooms(
+        memberId: Long,
+    ): ApiResponse<List<MessageRoom>> = withContext(dispatcher) {
+        messageRoomService
+            .getMessageRooms(memberId)
+            .map(List<MessageRoomResponse>::toData)
+    }
+
+    override suspend fun getMessagesByRoomId(
+        roomId: Long,
+        memberId: Long,
+    ): ApiResponse<List<Message>> = withContext(dispatcher) {
+        messageRoomService
+            .getMessagesByRoomId(roomId, memberId)
+            .map(List<MessageResponse>::toData)
+    }
+}
