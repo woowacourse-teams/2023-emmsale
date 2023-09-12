@@ -20,7 +20,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +41,7 @@ public class RoomQueryService {
 
     final List<MessageOverview> messageOverviews = messageDao.findRecentlyMessages(loginMemberId);
 
-    final Map<String, Long> interlocutorIdPerRoomExceptMe = groupingPartnerIdByRoom(
+    final Map<String, Long> interlocutorIdPerRoomExceptMe = groupingInterlocutorIdByRoom(
         messageOverviews,
         loginMemberId
     );
@@ -56,25 +55,21 @@ public class RoomQueryService {
         .collect(Collectors.toList());
   }
 
-  private Map<String, Long> groupingPartnerIdByRoom(
+  private Map<String, Long> groupingInterlocutorIdByRoom(
       final List<MessageOverview> messageOverviews,
       final Long loginMemberId
   ) {
-    return messageOverviews.stream()
-        .flatMap(messageOverview -> findInterlocutorInRoom(messageOverview, loginMemberId))
+    final List<String> roomUUIDs = messageOverviews.stream()
+        .map(MessageOverview::getRoomUUID)
+        .collect(Collectors.toList());
+
+    return roomRepository.findAllByUUIDsIn(roomUUIDs)
+        .stream()
+        .filter(room -> room.isInterlocutorWith(loginMemberId))
         .collect(Collectors.toMap(
             room -> room.getRoomId().getUuid(),
             room -> room.getRoomId().getMemberId())
         );
-  }
-
-  private Stream<Room> findInterlocutorInRoom(
-      final MessageOverview messageOverview,
-      final Long loginMemberId
-  ) {
-    return roomRepository.findByUUID(messageOverview.getRoomUUID())
-        .stream()
-        .filter(room -> room.isInterlocutorWith(loginMemberId));
   }
 
   private void validateSameMember(final Member loginMember, final Long memberId) {

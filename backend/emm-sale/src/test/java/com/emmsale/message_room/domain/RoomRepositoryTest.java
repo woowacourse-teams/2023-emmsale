@@ -25,7 +25,7 @@ class RoomRepositoryTest extends JpaRepositorySliceTestHelper {
 
   @Test
   @Rollback(value = false)
-  @DisplayName("findByUUID() : UUID를 통해서 Room을 조회할 수 있다.")
+  @DisplayName("findAllByUUIDsIn() : UUID들을 통해서 Room들을 조회할 수 있다.")
   void test_findByUUID() throws Exception {
     //given
     final Member member1 = memberRepository.findById(1L).get();
@@ -46,10 +46,14 @@ class RoomRepositoryTest extends JpaRepositorySliceTestHelper {
 
     roomRepository.saveAll(List.of(member1Room1, member2Room1, member1Room2, member3Room2));
 
-    final List<Room> actual = List.of(member1Room1, member2Room1);
+    final List<String> roomUUIDs = List.of(
+        member1Room1.getRoomId().getUuid(),
+        member1Room2.getRoomId().getUuid()
+    );
+    final List<Room> actual = List.of(member1Room1, member2Room1, member1Room2, member3Room2);
 
     //when
-    final List<Room> expect = roomRepository.findByUUID(room1UUID);
+    final List<Room> expect = roomRepository.findAllByUUIDsIn(roomUUIDs);
 
     //then
     Assertions.assertThat(actual)

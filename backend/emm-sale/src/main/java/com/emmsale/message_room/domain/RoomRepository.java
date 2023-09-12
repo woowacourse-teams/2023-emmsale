@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface RoomRepository extends JpaRepository<Room, RoomId> {
 
-  @Query("select r from Room r where r.roomId.uuid = :uuid")
-  List<Room> findByUUID(final String uuid);
+  @Query("select r from Room r where r.roomId.uuid in :uuids")
+  List<Room> findAllByUUIDsIn(final List<String> uuids);
 
   @Query("select r1 from Room r1 "
       + "inner join Room r2 "
