@@ -6,6 +6,7 @@ import com.emmsale.message_room.application.dto.MessageSendRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -15,7 +16,10 @@ public class MessagesApi {
   private final MessageCommandService messageCommandService;
 
   @PostMapping("/messages")
-  public ResponseEntity<Void> sendMessage(final MessageSendRequest request, final Member member) {
+  public ResponseEntity<Void> sendMessage(
+      @RequestBody final MessageSendRequest request,
+      final Member member
+  ) {
     messageCommandService.sendMessage(request, member);
     return ResponseEntity.ok().build();
   }
