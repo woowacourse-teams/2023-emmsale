@@ -112,15 +112,15 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
         resultMessage2.getRoomId()
     );
 
-    final List<RoomResponse> actual = List.of(
+    final List<RoomResponse> expect = List.of(
         RoomResponse.from(messageOverview1,
             memberRepository.findById(room1Interlocutor.getId()).get()),
         RoomResponse.from(messageOverview2,
-            memberRepository.findById(room2Interlocutor.getId()).get()
-        ));
+            memberRepository.findById(room2Interlocutor.getId()).get())
+    );
 
     //when
-    final List<RoomResponse> expect = roomQueryService.findAll(loginMember, loginMember.getId());
+    final List<RoomResponse> actual = roomQueryService.findAll(loginMember, loginMember.getId());
 
     //then
     assertThat(actual)

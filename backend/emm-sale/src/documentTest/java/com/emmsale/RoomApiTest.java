@@ -51,7 +51,7 @@ class RoomApiTest extends MockMvcTestHelper {
     final List<RoomResponse> roomResponses = List.of(
         new RoomResponse(UUID.randomUUID().toString(), 1L, "receiver1", "최근 메시지1",
             LocalDateTime.now()),
-        new RoomResponse(UUID.randomUUID().toString(), 1L, "receiver2", "최근 메시지2",
+        new RoomResponse(UUID.randomUUID().toString(), 2L, "receiver2", "최근 메시지2",
             LocalDateTime.now().minusDays(2)),
         new RoomResponse(UUID.randomUUID().toString(), 1L, "receiver3", "최근 메시지3",
             LocalDateTime.now().minusDays(3))
