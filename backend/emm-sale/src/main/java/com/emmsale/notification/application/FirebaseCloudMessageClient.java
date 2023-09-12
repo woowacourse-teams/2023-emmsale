@@ -6,7 +6,6 @@ import static com.emmsale.notification.exception.NotificationExceptionType.NOT_F
 
 import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.message_room.domain.Message;
 import com.emmsale.notification.application.generator.MessageNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.NotificationMessageGenerator;
 import com.emmsale.notification.application.generator.RequestNotificationMessageGenerator;
