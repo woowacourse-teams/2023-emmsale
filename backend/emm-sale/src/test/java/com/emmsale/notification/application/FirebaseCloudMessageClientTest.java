@@ -62,10 +62,8 @@ class FirebaseCloudMessageClientTest extends ServiceIntegrationTestHelper {
     fcmTokenRepository.save(new FcmToken("fcm-token", receiver.getId()));
 
     final String uuid = "uuid-str";
-    roomRepository.save(
-        new Room(new RoomId(uuid, sender.getId()), LocalDateTime.now()));
-    roomRepository.save(
-        new Room(new RoomId(uuid, receiver.getId()), LocalDateTime.now()));
+    roomRepository.save(new Room(new RoomId(uuid, sender.getId()), LocalDateTime.now()));
+    roomRepository.save(new Room(new RoomId(uuid, receiver.getId()), LocalDateTime.now()));
 
     final LocalDateTime messageSendTime = LocalDateTime.now().plusDays(10);
     final MessageNotificationEvent messageNotificationEvent = new MessageNotificationEvent(
