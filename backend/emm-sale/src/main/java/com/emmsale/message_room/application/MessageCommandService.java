@@ -2,6 +2,7 @@ package com.emmsale.message_room.application;
 
 import static com.emmsale.message_room.exception.MessageExceptionType.SENDER_IS_NOT_EQUAL_REQUEST_MEMBER;
 
+import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.member.domain.Member;
 import com.emmsale.message_room.application.dto.MessageSendRequest;
 import com.emmsale.message_room.domain.Message;
@@ -10,6 +11,7 @@ import com.emmsale.message_room.domain.Room;
 import com.emmsale.message_room.domain.RoomId;
 import com.emmsale.message_room.domain.RoomRepository;
 import com.emmsale.message_room.exception.MessageException;
+import com.emmsale.notification.application.NotificationEventListener;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class MessageCommandService {
 
   private final MessageRepository messageRepository;
   private final RoomRepository roomRepository;
+  private final NotificationEventListener notificationEventListener;
 
   public void sendMessage(final MessageSendRequest request, final Member member) {
     //TODO: Room을 조회하는 기능 완성 후, 이미 있는 Room 조회해서 메시지보내는 기능 추가
@@ -36,6 +39,9 @@ public class MessageCommandService {
     final Message message = new Message(request.getContent(), request.getSenderId(),
         roomId, LocalDateTime.now());
     messageRepository.save(message);
+    final MessageNotificationEvent messageNotificationEvent =
+        MessageNotificationEvent.of(message, request.getReceiverId());
+    notificationEventListener.createMessageNotification(messageNotificationEvent);
   }
 
   private void saveRooms(final MessageSendRequest request, final String roomId) {

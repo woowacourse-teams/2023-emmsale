@@ -4,7 +4,12 @@ import static com.emmsale.member.MemberFixture.memberFixture;
 import static com.emmsale.message_room.exception.MessageExceptionType.SENDER_IS_NOT_EQUAL_REQUEST_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
+import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -74,9 +79,14 @@ class MessageCommandServiceTest extends ServiceIntegrationTestHelper {
       messageCommandService.sendMessage(request, member);
 
       //then
-      assertThat(messageRepository.findAll())
-          .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "createdAt", "roomId")
-          .containsExactly(expected);
+      assertAll(
+          () -> assertThat(messageRepository.findAll())
+              .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "createdAt",
+                  "roomId")
+              .containsExactly(expected),
+          () -> verify(firebaseCloudMessageClient, times(1))
+              .sendMessageTo(any(MessageNotificationEvent.class))
+      );
     }
 
     @Test
