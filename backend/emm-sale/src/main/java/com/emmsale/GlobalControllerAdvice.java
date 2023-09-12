@@ -29,6 +29,7 @@ public class GlobalControllerAdvice {
     }
 
     log.warn("[WARN] MESSAGE: {}", type.errorMessage());
+    log.debug("stackTrace : ", e);
     return new ResponseEntity<>(ExceptionResponse.from(e), type.httpStatus());
   }
 
