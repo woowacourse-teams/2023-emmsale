@@ -12,7 +12,6 @@ import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.message_room.domain.MessageRepository;
 import com.emmsale.message_room.domain.Room;
 import com.emmsale.message_room.domain.RoomId;
 import com.emmsale.message_room.domain.RoomRepository;
@@ -33,8 +32,6 @@ import org.springframework.web.client.RestTemplate;
 class FirebaseCloudMessageClientTest extends ServiceIntegrationTestHelper {
 
   @Autowired
-  private MessageRepository messageRepository;
-  @Autowired
   private FcmTokenRepository fcmTokenRepository;
   @Autowired
   private MemberRepository memberRepository;
@@ -53,7 +50,6 @@ class FirebaseCloudMessageClientTest extends ServiceIntegrationTestHelper {
         = new FirebaseCloudMessageClient(objectMapper, memberRepository,
         restTemplate, fcmTokenRepository);
   }
-
 
   @Test
   @DisplayName("sendMessageTo() : Message와 receiverId를 받아, 메시지 알림을 보낸다.")
