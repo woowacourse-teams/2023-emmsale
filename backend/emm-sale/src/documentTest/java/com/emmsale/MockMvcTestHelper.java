@@ -17,6 +17,7 @@ import com.emmsale.member.application.InterestTagService;
 import com.emmsale.member.application.MemberActivityService;
 import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.MemberUpdateService;
+import com.emmsale.message_room.application.RoomQueryService;
 import com.emmsale.notification.application.FcmTokenRegisterService;
 import com.emmsale.notification.application.RequestNotificationCommandService;
 import com.emmsale.notification.application.RequestNotificationQueryService;
@@ -102,6 +103,8 @@ abstract class MockMvcTestHelper {
   protected RecruitmentPostQueryService postQueryService;
   @MockBean
   protected RecruitmentPostCommandService postCommandService;
+  @MockBean
+  protected RoomQueryService roomQueryService;
 
   @BeforeEach
   void setUp(final WebApplicationContext applicationContext,

@@ -13,6 +13,8 @@ drop table if exists kerdy.block;
 drop table if exists kerdy.update_notification;
 drop table if exists kerdy.report;
 drop table if exists kerdy.scrap;
+drop table if exists kerdy.message;
+drop table if exists kerdy.room;
 
 create table activity
 (
@@ -26,11 +28,11 @@ create table event
     id              bigint auto_increment primary key,
     created_at      datetime(6),
     updated_at      datetime(6),
-    end_date        datetime(6)  not null,
+    end_date        datetime(6) not null,
     information_url varchar(255) not null,
     location        varchar(255) not null,
     name            varchar(255) not null,
-    start_date      datetime(6)  not null,
+    start_date      datetime(6) not null,
     image_url       varchar(255),
     type            varchar(20)  not null
 );
@@ -56,7 +58,7 @@ create table comment
     is_deleted bit          not null,
     event_id   bigint       not null,
     member_id  bigint       not null,
-    parent_id  bigint       null
+    parent_id  bigint null
 );
 
 create table member_activity
@@ -124,7 +126,8 @@ alter table event_member
     add column updated_at datetime(6);
 
 -- 2023.08.08 17:04
-rename table notification TO request_notification;
+rename
+table notification TO request_notification;
 
 create table update_notification
 (
@@ -139,8 +142,8 @@ create table update_notification
 create table block
 (
     id                bigint auto_increment primary key,
-    block_member_id   bigint      not null,
-    request_member_id bigint      not null,
+    block_member_id   bigint not null,
+    request_member_id bigint not null,
     created_at        datetime(6) null,
     updated_at        datetime(6) null
 );
@@ -185,3 +188,23 @@ create table report
 
 alter table member
     add column github_username varchar(40) not null default '';
+
+-- 2023-08-31 19:57
+
+create table room
+(
+    uuid             varchar(40) not null,
+    member_id        bigint      not null,
+    last_exited_time datetime(6),
+    primary key (uuid, member_id)
+);
+
+create table message
+(
+    id         bigint       not null auto_increment,
+    content    varchar(255) not null,
+    created_at datetime(6),
+    sender_id  bigint       not null,
+    room_id    varchar(40)  not null,
+    primary key (id)
+);
