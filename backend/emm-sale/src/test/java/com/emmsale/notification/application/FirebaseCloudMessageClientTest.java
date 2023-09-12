@@ -1,9 +1,12 @@
 package com.emmsale.notification.application;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,10 +21,13 @@ import com.emmsale.message_room.domain.RoomRepository;
 import com.emmsale.notification.domain.FcmToken;
 import com.emmsale.notification.domain.FcmTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.auth.oauth2.GoogleCredentials;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -53,7 +59,7 @@ class FirebaseCloudMessageClientTest extends ServiceIntegrationTestHelper {
 
   @Test
   @DisplayName("sendMessageTo() : Message와 receiverId를 받아, 메시지 알림을 보낸다.")
-  void sendMessageToMessageNotification() {
+  void sendMessageToMessageNotification() throws IOException {
     //given
     final Member sender
         = memberRepository.save(new Member(123L, "member1 image", "sender"));
@@ -71,9 +77,7 @@ class FirebaseCloudMessageClientTest extends ServiceIntegrationTestHelper {
     );
     final ResponseEntity<String> responseEntity = new ResponseEntity<>(HttpStatus.OK);
 
-    when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class),
-        eq(String.class)))
-        .thenReturn(responseEntity);
+    final MockedStatic<GoogleCredentials> mockGoogle = mockingDependency(responseEntity);
 
     //when
     firebaseCloudMessageClient.sendMessageTo(messageNotificationEvent);
@@ -81,5 +85,21 @@ class FirebaseCloudMessageClientTest extends ServiceIntegrationTestHelper {
     //then
     verify(restTemplate, times(1))
         .exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(String.class));
+    mockGoogle.close();
+  }
+
+  private MockedStatic<GoogleCredentials> mockingDependency(
+      final ResponseEntity<String> responseEntity) throws IOException {
+    when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class),
+        eq(String.class)))
+        .thenReturn(responseEntity);
+    final MockedStatic<GoogleCredentials> mockGoogle = mockStatic(
+        GoogleCredentials.class);
+    final GoogleCredentials mock = mock(GoogleCredentials.class);
+    given(GoogleCredentials.fromStream(any()).createScoped(anyList()))
+        .willReturn(mock);
+    given(mock.getAccessToken().getTokenValue())
+        .willReturn("token");
+    return mockGoogle;
   }
 }
