@@ -30,17 +30,17 @@ public class MessageCommandService {
       throw new MessageException(SENDER_IS_NOT_EQUAL_REQUEST_MEMBER);
     }
 
-    final UUID roomId = UUID.randomUUID();
+    final String roomId = UUID.randomUUID().toString();
     saveRooms(request, roomId);
 
     final Message message = new Message(request.getContent(), request.getSenderId(),
-        roomId.toString(), LocalDateTime.now());
+        roomId, LocalDateTime.now());
     messageRepository.save(message);
   }
 
-  private void saveRooms(final MessageSendRequest request, final UUID roomId) {
-    final RoomId senderRoomId = new RoomId(roomId.toString(), request.getSenderId());
-    final RoomId receiverRoomId = new RoomId(roomId.toString(), request.getReceiverId());
+  private void saveRooms(final MessageSendRequest request, final String roomId) {
+    final RoomId senderRoomId = new RoomId(roomId, request.getSenderId());
+    final RoomId receiverRoomId = new RoomId(roomId, request.getReceiverId());
 
     final Room senderRoom = new Room(senderRoomId, LocalDateTime.now());
     final Room receiverRoom = new Room(receiverRoomId, LocalDateTime.now());
