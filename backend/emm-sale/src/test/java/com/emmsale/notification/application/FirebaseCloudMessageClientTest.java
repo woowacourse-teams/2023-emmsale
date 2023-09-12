@@ -8,10 +8,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.message_room.domain.Message;
 import com.emmsale.message_room.domain.MessageRepository;
 import com.emmsale.message_room.domain.Room;
 import com.emmsale.message_room.domain.RoomId;
@@ -72,8 +72,9 @@ class FirebaseCloudMessageClientTest extends ServiceIntegrationTestHelper {
         new Room(new RoomId(uuid, receiver.getId()), LocalDateTime.now()));
 
     final LocalDateTime messageSendTime = LocalDateTime.now().plusDays(10);
-    final Message message = messageRepository.save(
-        new Message("메시지", sender.getId(), uuid, messageSendTime));
+    final MessageNotificationEvent messageNotificationEvent = new MessageNotificationEvent(
+        uuid, "message", sender.getId(), receiver.getId(), messageSendTime
+    );
     final ResponseEntity<String> responseEntity = new ResponseEntity<>(HttpStatus.OK);
 
     when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class),
@@ -81,7 +82,7 @@ class FirebaseCloudMessageClientTest extends ServiceIntegrationTestHelper {
         .thenReturn(responseEntity);
 
     //when
-    firebaseCloudMessageClient.sendMessageTo(message, receiver.getId());
+    firebaseCloudMessageClient.sendMessageTo(messageNotificationEvent);
 
     //then
     verify(restTemplate, times(1))

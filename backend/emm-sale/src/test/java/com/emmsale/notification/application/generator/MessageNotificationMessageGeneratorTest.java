@@ -4,10 +4,10 @@ import static com.emmsale.notification.application.generator.NotificationMessage
 import static com.emmsale.notification.application.generator.NotificationMessageGenerator.DEFAULT_VALIDATE_ONLY;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.message_room.domain.Message;
 import com.emmsale.notification.application.dto.MessageNotificationMessage;
 import com.emmsale.notification.application.dto.MessageNotificationMessage.Data;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,12 +29,19 @@ class MessageNotificationMessageGeneratorTest extends ServiceIntegrationTestHelp
   void makeMessage() throws JsonProcessingException {
     //given
     final Member sender = memberRepository.save(new Member(123L, "image", "hong-sile"));
+    final Long receiverId = 3L;
     final String roomId = "2131405-abdsL";
     final String token = "token";
 
-    final Message message = new Message("메시지", sender.getId(), roomId, LocalDateTime.now());
+    final LocalDateTime messageTime = LocalDateTime.now();
+    final String messageContent = "message";
+
+    final MessageNotificationEvent event = new MessageNotificationEvent(
+        roomId, messageContent, sender.getId(), receiverId, messageTime
+    );
+
     final MessageNotificationMessageGenerator messageGenerator
-        = new MessageNotificationMessageGenerator(message);
+        = new MessageNotificationMessageGenerator(event);
 
     //when
     final String notificationMessage =
@@ -44,8 +51,8 @@ class MessageNotificationMessageGeneratorTest extends ServiceIntegrationTestHelp
     final MessageNotificationMessage actual = objectMapper.readValue(
         notificationMessage, MessageNotificationMessage.class
     );
-    final MessageNotificationMessage expected = generateExpectedValue(sender, roomId, token,
-        message);
+    final MessageNotificationMessage expected =
+        generateExpectedValue(sender, roomId, token, messageTime, messageContent);
 
     assertThat(actual)
         .usingRecursiveComparison()
@@ -54,14 +61,15 @@ class MessageNotificationMessageGeneratorTest extends ServiceIntegrationTestHelp
 
   private static MessageNotificationMessage generateExpectedValue(final Member sender,
       final String roomId, final String token,
-      final Message message) {
+      final LocalDateTime messageTime, final String content) {
+
     final Data Data = new Data(
         roomId,
         sender.getId().toString(),
         sender.getName(),
         sender.getImageUrl(),
-        message.getContent(),
-        message.getCreatedAt().format(DATE_TIME_FORMATTER)
+        content,
+        messageTime.format(DATE_TIME_FORMATTER)
     );
 
     return new MessageNotificationMessage(
