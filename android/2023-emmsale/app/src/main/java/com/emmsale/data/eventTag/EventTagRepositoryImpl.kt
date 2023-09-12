@@ -2,8 +2,8 @@ package com.emmsale.data.eventTag
 
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.common.handleApi
-import com.emmsale.data.event.EventCategory
 import com.emmsale.data.eventTag.local.EventTagLocalDataSource
 import com.emmsale.data.eventTag.mapper.toData
 import com.emmsale.data.eventTag.remote.EventTagRemoteDataSource
@@ -19,23 +19,21 @@ class EventTagRepositoryImpl(
     private val eventTagRemoteDataSource: EventTagRemoteDataSource,
 ) : EventTagRepository {
 
-    override suspend fun getEventTags(category: EventCategory): ApiResult<List<EventTag>> =
-        withContext(dispatcher) {
-            handleApi(
-                execute = { eventTagLocalDataSource.getEventTags(category.text) },
-                mapToDomain = List<EventTagApiModel>::toData,
-            )
-        }
-
-    override suspend fun getEventTagByIds(
-        category: EventCategory,
-        ids: Array<Long>,
-    ): ApiResult<List<EventTag>> = withContext(dispatcher) {
-        handleApi(
-            execute = { eventTagLocalDataSource.getEventTagByIds(category.text, ids) },
-            mapToDomain = List<EventTagApiModel>::toData,
-        )
+    override suspend fun getEventTags(): ApiResponse<List<EventTag>> = withContext(dispatcher) {
+        eventTagRemoteDataSource
+            .getEventTags()
+            .map(List<EventTagApiModel>::toData)
     }
+
+    override suspend fun getEventTagByIds(ids: Array<Long>): ApiResponse<List<EventTag>> =
+        withContext(dispatcher) {
+            eventTagRemoteDataSource
+                .getEventTags()
+                .map { eventTags ->
+                    eventTags.filter { eventTag -> ids.contains(eventTag.id) }
+                }
+                .map(List<EventTagApiModel>::toData)
+        }
 
     override suspend fun getInterestEventTags(memberId: Long): ApiResult<List<EventTag>> {
         val cachedInterestEventTag = eventTagLocalDataSource.getInterestEventTags()

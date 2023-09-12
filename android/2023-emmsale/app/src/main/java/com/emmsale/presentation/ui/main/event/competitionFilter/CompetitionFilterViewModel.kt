@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.competitionStatus.CompetitionStatusRepository
-import com.emmsale.data.event.EventCategory
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -59,9 +59,9 @@ class CompetitionFilterViewModel(
 
     private suspend fun fetchCompetitionTags(): List<CompetitionFilteringOptionUiState> =
         withContext(Dispatchers.IO) {
-            when (val competitionTag = eventTagRepository.getEventTags(EventCategory.COMPETITION)) {
-                is ApiSuccess -> competitionTag.data.map(CompetitionFilteringOptionUiState::from)
-                is ApiError, is ApiException -> {
+            when (val result = eventTagRepository.getEventTags()) {
+                is Success -> result.data.map(CompetitionFilteringOptionUiState::from)
+                is Unexpected, is Failure, NetworkError -> {
                     _competitionFilter.value =
                         _competitionFilter.value.copy(isLoadingCompetitionFilterFailed = true)
                     emptyList()

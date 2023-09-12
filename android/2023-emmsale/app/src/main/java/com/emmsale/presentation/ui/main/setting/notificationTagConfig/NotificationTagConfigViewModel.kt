@@ -7,7 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.event.EventCategory
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.eventTag.EventTag
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.data.token.TokenRepository
@@ -63,10 +66,9 @@ class NotificationTagConfigViewModel(
     }
 
     private suspend fun getEventTagsAsync(): Deferred<List<EventTag>?> = viewModelScope.async {
-        // TODO(추후 컨퍼런스와 대회 태그가 분리될 예정이지만 일단 동일하기 때문에 임시로 컨퍼런스 태그만 가져옴)
-        when (val result = eventTagRepository.getEventTags(EventCategory.CONFERENCE)) {
-            is ApiSuccess -> result.data
-            is ApiError, is ApiException -> null
+        when (val result = eventTagRepository.getEventTags()) {
+            is Success -> result.data
+            is Unexpected, is Failure, NetworkError -> null
         }
     }
 

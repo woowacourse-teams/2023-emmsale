@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
-import com.emmsale.data.event.EventCategory
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -59,9 +59,9 @@ class ConferenceFilterViewModel(
 
     private suspend fun fetchConferenceTags(): List<ConferenceFilteringOptionUiState> =
         withContext(Dispatchers.IO) {
-            when (val conferenceTag = eventTagRepository.getEventTags(EventCategory.CONFERENCE)) {
-                is ApiSuccess -> conferenceTag.data.map(ConferenceFilteringOptionUiState::from)
-                is ApiError, is ApiException -> {
+            when (val conferenceTag = eventTagRepository.getEventTags()) {
+                is Success -> conferenceTag.data.map(ConferenceFilteringOptionUiState::from)
+                is Unexpected, is Failure, NetworkError -> {
                     _conferenceFilter.value =
                         _conferenceFilter.value.copy(isLoadingConferenceFilterFailed = true)
                     emptyList()

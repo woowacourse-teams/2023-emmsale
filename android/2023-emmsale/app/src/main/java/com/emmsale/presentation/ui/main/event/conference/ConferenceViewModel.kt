@@ -6,9 +6,12 @@ import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.conferenceStatus.ConferenceStatus
 import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
-import com.emmsale.data.event.EventCategory
 import com.emmsale.data.event.EventRepository
 import com.emmsale.data.event.model.Conference
 import com.emmsale.data.eventTag.EventTag
@@ -128,12 +131,9 @@ class ConferenceViewModel(
         conferenceStatusRepository.getConferenceStatusByIds(tagFilterIds)
 
     private suspend fun getEventTagByIds(statusFilterIds: Array<Long>): List<EventTag> =
-        when (
-            val eventTagResult =
-                eventTagRepository.getEventTagByIds(EventCategory.CONFERENCE, statusFilterIds)
-        ) {
-            is ApiSuccess -> eventTagResult.data
-            is ApiError, is ApiException -> emptyList()
+        when (val result = eventTagRepository.getEventTagByIds(statusFilterIds)) {
+            is Success -> result.data
+            is Unexpected, is Failure, NetworkError -> emptyList()
         }
 
     fun removeFilteringOptionBy(filterOptionId: Long) {
