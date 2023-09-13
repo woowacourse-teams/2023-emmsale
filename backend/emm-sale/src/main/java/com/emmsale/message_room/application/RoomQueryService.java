@@ -2,7 +2,6 @@ package com.emmsale.message_room.application;
 
 import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 import static com.emmsale.member.exception.MemberExceptionType.NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER;
-import static com.emmsale.message_room.exception.MessageRoomExceptionType.FORBIDDEN_NOT_INTERLOCUTORS;
 import static com.emmsale.message_room.exception.MessageRoomExceptionType.NOT_FOUND_MESSAGE_ROOM;
 
 import com.emmsale.member.domain.Member;
@@ -102,28 +101,15 @@ public class RoomQueryService {
   }
 
   public List<MessageResponse> findByInterlocutorIds(
-      final Long senderId,
       final Long receiverId,
-      final Long memberId,
+      final Long senderId,
       final Member loginMember
   ) {
-    validateSameMember(loginMember, memberId);
-    validateRoomInterlocutors(senderId, receiverId, loginMember);
+    validateSameMember(loginMember, senderId);
 
     final Room room = roomRepository.findByInterlocutorIds(senderId, receiverId)
         .orElseThrow(() -> new MessageRoomException(NOT_FOUND_MESSAGE_ROOM));
 
     return findMessageByRoomUUID(room.getRoomId().getUuid());
-  }
-
-  private void validateRoomInterlocutors(
-      final Long senderId,
-      final Long receiverId,
-      final Member loginMember
-  ) {
-    final Long memberId = loginMember.getId();
-    if (!(senderId.equals(memberId) || receiverId.equals(memberId))) {
-      throw new MessageRoomException(FORBIDDEN_NOT_INTERLOCUTORS);
-    }
   }
 }

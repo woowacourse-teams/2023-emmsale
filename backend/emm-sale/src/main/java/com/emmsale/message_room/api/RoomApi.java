@@ -36,11 +36,10 @@ public class RoomApi {
 
   @GetMapping("/rooms")
   public List<MessageResponse> findByInterlocutorIds(
-      @RequestParam("sender-id") final Long senderId,
       @RequestParam("receiver-id") final Long receiverId,
       @RequestParam("member-id") final Long memberId,
       final Member loginMember
   ) {
-    return roomQueryService.findByInterlocutorIds(senderId, receiverId, memberId, loginMember);
+    return roomQueryService.findByInterlocutorIds(receiverId, memberId, loginMember);
   }
 }

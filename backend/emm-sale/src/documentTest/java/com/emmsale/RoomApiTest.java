@@ -111,8 +111,7 @@ class RoomApiTest extends MockMvcTestHelper {
     //given
     final RequestParametersSnippet requestParam = requestParameters(
         parameterWithName("member-id").description("로그인 한 사용자 ID"),
-        parameterWithName("sender-id").description("쪽지방 참여자 ID1"),
-        parameterWithName("receiver-id").description("쪽지방 참여자 ID2")
+        parameterWithName("receiver-id").description("쪽지방 참여 상대방 ID")
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
@@ -127,13 +126,12 @@ class RoomApiTest extends MockMvcTestHelper {
         new MessageResponse(1L, "내용3", LocalDateTime.now())
     );
 
-    when(roomQueryService.findByInterlocutorIds(anyLong(), anyLong(), anyLong(), any()))
+    when(roomQueryService.findByInterlocutorIds(anyLong(), anyLong(), any()))
         .thenReturn(messageResponses);
 
     //when & then
     mockMvc.perform(get("/rooms")
             .queryParam("member-id", "1")
-            .queryParam("sender-id", "2")
             .queryParam("receiver-id", "1")
             .header(HttpHeaders.AUTHORIZATION, accessToken))
         .andExpect(status().isOk())

@@ -10,11 +10,6 @@ public enum MessageRoomExceptionType implements BaseExceptionType {
       "해당 쪽지방은 존재하지 않습니다."
   ),
 
-  FORBIDDEN_NOT_INTERLOCUTORS(
-      HttpStatus.FORBIDDEN,
-      "해당 쪽지방에 참여하지 않았습니다."
-  )
-
   ;
 
   private final HttpStatus httpStatus;
