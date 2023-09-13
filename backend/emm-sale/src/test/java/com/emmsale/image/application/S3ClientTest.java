@@ -24,15 +24,15 @@ import org.mockito.BDDMockito;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-class ImageServiceTest extends ServiceIntegrationTestHelper {
+class S3ClientTest extends ServiceIntegrationTestHelper {
   
-  private ImageService imageService;
+  private S3Client s3Client;
   private AmazonS3 mockingAmazonS3;
   
   @BeforeEach
   void setUp() {
     mockingAmazonS3 = mock(AmazonS3.class);
-    imageService = new ImageService(mockingAmazonS3);
+    s3Client = new S3Client(mockingAmazonS3);
   }
   
   @Test
@@ -47,7 +47,7 @@ class ImageServiceTest extends ServiceIntegrationTestHelper {
         .willReturn(new PutObjectResult());
     
     //when
-    imageService.uploadImages(files);
+    s3Client.uploadImages(files);
     
     //then
     verify(mockingAmazonS3, times(3))
@@ -64,7 +64,7 @@ class ImageServiceTest extends ServiceIntegrationTestHelper {
         new MockMultipartFile("test", fileName, "", new byte[]{}));
     
     //when
-    final ThrowingCallable actual = () -> imageService.uploadImages(files);
+    final ThrowingCallable actual = () -> s3Client.uploadImages(files);
     
     //then
     Assertions.assertThatThrownBy(actual)
@@ -79,7 +79,7 @@ class ImageServiceTest extends ServiceIntegrationTestHelper {
     final List<String> fileNames = List.of("test1", "test2", "test3");
     
     //when
-    imageService.deleteImages(fileNames);
+    s3Client.deleteImages(fileNames);
     
     //then
     verify(mockingAmazonS3, times(3))
