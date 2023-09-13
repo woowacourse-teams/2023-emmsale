@@ -18,4 +18,10 @@ interface MessageRoomService {
         @Path("roomId") roomId: Long,
         @Query("member-id") memberId: Long,
     ): ApiResponse<List<MessageResponse>>
+
+    @GET("/rooms")
+    suspend fun getMessagesByMemberIds(
+        @Query("member-id") myUid: Long,
+        @Query("receiver-id") otherUid: Long,
+    ): ApiResponse<List<MessageResponse>>
 }
