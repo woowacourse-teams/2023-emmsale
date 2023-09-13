@@ -51,11 +51,16 @@ public class ImageService {
     final String originalFileName = file.getOriginalFilename();
     final int extensionIndex = Objects.requireNonNull(originalFileName)
         .lastIndexOf(EXTENSION_DELIMITER);
-    if (extensionIndex == -1 || !ALLOWED_FILE_EXTENSIONS.contains(
-        originalFileName.substring(extensionIndex))) {
-      throw new ImageException(ImageExceptionType.INVALID_FILE_FORMAT);
-    }
+    validateExtension(extensionIndex, originalFileName);
     return originalFileName.substring(extensionIndex);
+  }
+  
+  private static void validateExtension(int extensionIndex, String originalFileName) {
+    if (extensionIndex >= 0 && ALLOWED_FILE_EXTENSIONS.contains(
+        originalFileName.substring(extensionIndex))) {
+      return;
+    }
+    throw new ImageException(ImageExceptionType.INVALID_FILE_FORMAT);
   }
   
   private ObjectMetadata configureObjectMetadata(MultipartFile file) {

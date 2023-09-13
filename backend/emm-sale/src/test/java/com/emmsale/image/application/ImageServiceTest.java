@@ -18,6 +18,8 @@ import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.BDDMockito;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,12 +55,13 @@ class ImageServiceTest extends ServiceIntegrationTestHelper {
     
   }
   
-  @Test
+  @ParameterizedTest
+  @ValueSource(strings = {"test.txt", "test"})
   @DisplayName("uploadImages(): 지원하지 않는 확장자를 갖는 파일을 입력받으면 예외를 반환한다.")
-  void uploadImages_fail_extension() {
+  void uploadImages_fail_extension(final String fileName) {
     //given
     final List<MultipartFile> files = List.of(
-        new MockMultipartFile("test", "test.txt", "", new byte[]{}));
+        new MockMultipartFile("test", fileName, "", new byte[]{}));
     
     //when
     final ThrowingCallable actual = () -> imageService.uploadImages(files);
