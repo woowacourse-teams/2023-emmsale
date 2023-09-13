@@ -19,6 +19,7 @@ import com.emmsale.feed.exception.FeedExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,11 +67,10 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
           .map(FeedSimpleResponse::from)
           .collect(Collectors.toList());
       final FeedListResponse expect = new FeedListResponse(eventId, feedSimpleResponses);
-      expect.getFeeds().sort((o1, o2) -> o2.getId().compareTo(o1.getId()));
+      expect.getFeeds().sort(Comparator.comparing(FeedSimpleResponse::getCreatedAt).reversed());
 
       //when
       final FeedListResponse actual = feedQueryService.findAllFeeds(eventId);
-      actual.getFeeds().sort((o1, o2) -> o2.getId().compareTo(o1.getId()));
 
       //then
       assertThat(actual)

@@ -12,6 +12,7 @@ import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
 import com.emmsale.feed.exception.FeedExceptionType;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,14 +38,11 @@ public class FeedQueryService {
     final Map<Feed, Long> feedCommentCountMap = commentRepository.countByFeedIn(feeds).stream()
         .collect(Collectors.toMap(FeedCommentCount::getFeed, FeedCommentCount::getCount));
 
-    feeds.forEach(feed -> {
-      if (!feedCommentCountMap.containsKey(feed)) {
-        feedCommentCountMap.put(feed, DEFAULT_COMMENT_COUNT);
-      }
-    });
+    feeds.forEach(feed -> feedCommentCountMap.putIfAbsent(feed, DEFAULT_COMMENT_COUNT));
 
     final List<FeedSimpleResponse> feedSimpleResponses = feedCommentCountMap.entrySet().stream()
         .map(FeedSimpleResponse::from)
+        .sorted(Comparator.comparing(FeedSimpleResponse::getCreatedAt).reversed())
         .collect(Collectors.toList());
 
     return new FeedListResponse(eventId, feedSimpleResponses);
