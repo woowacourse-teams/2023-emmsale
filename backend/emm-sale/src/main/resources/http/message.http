@@ -1,0 +1,11 @@
+### 메시지를 보내는 경우
+
+POST http://localhost:8080/messages
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
+
+{
+  "senderId": 1,
+  "receiverId": 4,
+  "content": "테스트용 메시지"
+}
