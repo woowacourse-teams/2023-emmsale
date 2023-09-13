@@ -64,7 +64,7 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
     final FeedPostResponse actualResponse = FeedPostResponse.from(actual);
 
     //then
-    assertThat(actualResponse)
+    assertThat(expectResponse)
         .usingRecursiveComparison()
         .isEqualTo(actualResponse);
   }
