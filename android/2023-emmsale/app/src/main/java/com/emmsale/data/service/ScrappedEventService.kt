@@ -10,15 +10,15 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ScrappedEventService {
-    @GET("scraps")
+    @GET("/scraps")
     suspend fun getScrappedEvents(): Response<List<ScrappedEventApiModel>>
 
-    @POST("scraps")
+    @POST("/scraps")
     suspend fun scrapEvent(
         @Body scrappedEventCreateRequest: ScrappedEventCreateRequest,
     ): Response<Unit>
 
-    @DELETE("scraps")
+    @DELETE("/scraps")
     suspend fun deleteScrap(
         @Query("event-id") eventId: Long,
     ): Response<Unit>

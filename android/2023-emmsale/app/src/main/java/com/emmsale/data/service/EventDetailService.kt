@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface EventDetailService {
-    @GET("events/{eventId}")
+    @GET("/events/{eventId}")
     suspend fun getEventDetail(
         @Path("eventId") eventId: Long,
     ): ApiResponse<EventDetailApiModel>

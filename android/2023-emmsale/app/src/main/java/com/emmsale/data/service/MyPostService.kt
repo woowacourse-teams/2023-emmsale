@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface MyPostService {
-    @GET("events/recruitment-posts")
+    @GET("/events/recruitment-posts")
     suspend fun getMyPosts(
         @Query("member-id") memberId: Long,
     ): Response<List<MyPostApiModel>>

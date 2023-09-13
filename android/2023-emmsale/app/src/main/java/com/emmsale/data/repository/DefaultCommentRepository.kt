@@ -1,7 +1,7 @@
 package com.emmsale.data.repository
 
 import com.emmsale.data.apiModel.request.ChildCommentCreateRequest
-import com.emmsale.data.apiModel.request.CommentReportRequest
+import com.emmsale.data.apiModel.request.CommentReportCreateRequest
 import com.emmsale.data.apiModel.request.CommentUpdateRequest
 import com.emmsale.data.apiModel.response.CommentFamilyApiModel
 import com.emmsale.data.common.ApiResult
@@ -94,7 +94,7 @@ class DefaultCommentRepository(
         handleApi(
             execute = {
                 commentService.reportComment(
-                    CommentReportRequest.createCommentReport(
+                    CommentReportCreateRequest.createCommentReport(
                         commentId = commentId,
                         authorId = authorId,
                         reporterId = reporterId,

@@ -2,7 +2,7 @@ package com.emmsale.data.repository
 
 import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
-import com.emmsale.data.apiModel.request.RecruitmentReportRequest
+import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentRequestCreateRequest
 import com.emmsale.data.apiModel.response.RecruitmentApiModel
 import com.emmsale.data.common.ApiResult
@@ -140,7 +140,7 @@ class DefaultRecruitmentRepository(
         return handleApi(
             execute = {
                 recruitmentService.reportRecruitment(
-                    RecruitmentReportRequest.create(
+                    RecruitmentReportCreateRequest.create(
                         recruitmentId = recruitmentId,
                         authorId = authorId,
                         reporterId = reporterId,

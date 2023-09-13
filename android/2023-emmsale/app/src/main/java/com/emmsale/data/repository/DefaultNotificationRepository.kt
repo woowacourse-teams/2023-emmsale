@@ -1,7 +1,7 @@
 package com.emmsale.data.repository
 
 import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
-import com.emmsale.data.apiModel.request.RecruitmentNotificationReportRequest
+import com.emmsale.data.apiModel.request.RecruitmentNotificationReportCreateRequest
 import com.emmsale.data.apiModel.response.RecruitmentNotificationApiModel
 import com.emmsale.data.apiModel.response.UpdatedNotificationApiModel
 import com.emmsale.data.common.ApiResult
@@ -91,7 +91,7 @@ class DefaultNotificationRepository(
         handleApi(
             execute = {
                 notificationService.reportRecruitmentNotification(
-                    RecruitmentNotificationReportRequest.create(
+                    RecruitmentNotificationReportCreateRequest.create(
                         recruitmentNotificationId = recruitmentNotificationId,
                         senderId = senderId,
                         reporterId = reporterId,

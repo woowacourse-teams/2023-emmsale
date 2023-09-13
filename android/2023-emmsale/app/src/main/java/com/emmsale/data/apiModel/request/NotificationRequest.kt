@@ -16,7 +16,7 @@ data class NotificationListDeleteRequest(
 )
 
 @Serializable
-data class RecruitmentNotificationReportRequest(
+data class RecruitmentNotificationReportCreateRequest(
     @SerialName("reporterId")
     val reporterId: Long,
     @SerialName("reportedId")
@@ -33,7 +33,7 @@ data class RecruitmentNotificationReportRequest(
             recruitmentNotificationId: Long,
             senderId: Long,
             reporterId: Long,
-        ): RecruitmentNotificationReportRequest = RecruitmentNotificationReportRequest(
+        ): RecruitmentNotificationReportCreateRequest = RecruitmentNotificationReportCreateRequest(
             reporterId = reporterId,
             reportedId = senderId,
             type = REPORT_TYPE,

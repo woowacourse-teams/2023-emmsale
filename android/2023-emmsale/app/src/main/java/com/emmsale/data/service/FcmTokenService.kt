@@ -7,5 +7,7 @@ import retrofit2.http.POST
 
 interface FcmTokenService {
     @POST("/notifications/token")
-    suspend fun saveFcmToken(@Body fcmToken: FcmTokenApiModel): Response<Unit>
+    suspend fun saveFcmToken(
+        @Body fcmToken: FcmTokenApiModel,
+    ): Response<Unit>
 }

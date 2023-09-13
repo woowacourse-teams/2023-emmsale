@@ -18,14 +18,20 @@ import retrofit2.http.Query
 
 interface MemberService {
 
-    @GET("members/{memberId}")
-    suspend fun getMember(@Path("memberId") memberId: Long): Response<MemberApiModel>
+    @GET("/members/{memberId}")
+    suspend fun getMember(
+        @Path("memberId") memberId: Long,
+    ): Response<MemberApiModel>
 
     @POST("/members")
-    suspend fun updateMember(@Body member: MemberCreateRequest): Response<Unit>
+    suspend fun updateMember(
+        @Body member: MemberCreateRequest,
+    ): Response<Unit>
 
     @PUT("/members/description")
-    suspend fun updateMemberDescription(@Body memberDescriptionUpdateRequest: MemberDescriptionUpdateRequest): Response<Unit>
+    suspend fun updateMemberDescription(
+        @Body memberDescriptionUpdateRequest: MemberDescriptionUpdateRequest,
+    ): Response<Unit>
 
     @PUT("/members/open-profile-url")
     suspend fun updateMemberOpenProfileUrl(
@@ -33,14 +39,22 @@ interface MemberService {
     ): Response<Unit>
 
     @POST("/members/activities")
-    suspend fun addMemberActivities(@Body memberActivitiesUpdateRequest: MemberActivitiesUpdateRequest): Response<Unit>
+    suspend fun addMemberActivities(
+        @Body memberActivitiesUpdateRequest: MemberActivitiesUpdateRequest,
+    ): Response<Unit>
 
     @DELETE("/members/activities")
-    suspend fun deleteMemberActivities(@Query("activity-ids") ids: List<Long>): Response<List<MemberActivitiesApiModel>>
+    suspend fun deleteMemberActivities(
+        @Query("activity-ids") ids: List<Long>,
+    ): Response<List<MemberActivitiesApiModel>>
 
     @DELETE("/members/{memberId}")
-    suspend fun deleteMember(@Path("memberId") memberId: Long): Response<Unit>
+    suspend fun deleteMember(
+        @Path("memberId") memberId: Long,
+    ): Response<Unit>
 
     @POST("/blocks")
-    suspend fun blockMember(@Body blockRequestBody: BlockRequestBody): Response<Unit>
+    suspend fun blockMember(
+        @Body blockRequestBody: BlockRequestBody,
+    ): Response<Unit>
 }

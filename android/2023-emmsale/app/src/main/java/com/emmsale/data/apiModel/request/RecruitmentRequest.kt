@@ -30,7 +30,7 @@ data class RecruitmentRequestCreateRequest(
 )
 
 @Serializable
-data class RecruitmentReportRequest(
+data class RecruitmentReportCreateRequest(
     @SerialName("reporterId")
     val reporterId: Long,
     @SerialName("reportedId")
@@ -47,7 +47,7 @@ data class RecruitmentReportRequest(
             recruitmentId: Long,
             authorId: Long,
             reporterId: Long,
-        ): RecruitmentReportRequest = RecruitmentReportRequest(
+        ): RecruitmentReportCreateRequest = RecruitmentReportCreateRequest(
             reporterId = reporterId,
             reportedId = authorId,
             type = REPORT_TYPE,

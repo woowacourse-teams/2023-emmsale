@@ -1,7 +1,7 @@
 package com.emmsale.data.service
 
 import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
-import com.emmsale.data.apiModel.request.RecruitmentNotificationReportRequest
+import com.emmsale.data.apiModel.request.RecruitmentNotificationReportCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentNotificationStatusUpdateRequest
 import com.emmsale.data.apiModel.response.RecruitmentNotificationApiModel
 import com.emmsale.data.apiModel.response.ReportApiModel
@@ -50,6 +50,6 @@ interface NotificationService {
 
     @POST("/reports")
     suspend fun reportRecruitmentNotification(
-        @Body recruitmentNotificationReportRequest: RecruitmentNotificationReportRequest,
+        @Body recruitmentNotificationReportCreateRequest: RecruitmentNotificationReportCreateRequest,
     ): Response<ReportApiModel>
 }

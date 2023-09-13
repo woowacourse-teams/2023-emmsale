@@ -20,7 +20,7 @@ data class ChildCommentCreateRequest(
 )
 
 @Serializable
-data class CommentReportRequest(
+data class CommentReportCreateRequest(
     @SerialName("reporterId")
     val reporterId: Long,
     @SerialName("reportedId")
@@ -37,7 +37,7 @@ data class CommentReportRequest(
             commentId: Long,
             authorId: Long,
             reporterId: Long,
-        ): CommentReportRequest = CommentReportRequest(
+        ): CommentReportCreateRequest = CommentReportCreateRequest(
             reporterId = reporterId,
             reportedId = authorId,
             type = REPORT_TYPE,
