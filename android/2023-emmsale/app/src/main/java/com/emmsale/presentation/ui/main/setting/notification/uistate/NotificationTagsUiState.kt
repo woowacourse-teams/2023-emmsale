@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.main.setting.notification.uistate
 
-import com.emmsale.data.eventTag.EventTag
+import com.emmsale.data.model.EventTag
 
 sealed interface NotificationTagsUiState {
     data class Success(val tags: List<EventTag>) : NotificationTagsUiState

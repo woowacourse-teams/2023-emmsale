@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.main.event.scrap.uistate
 
-import com.emmsale.data.conferenceStatus.ConferenceStatus
-import com.emmsale.data.scrap.ScrappedEvent
+import com.emmsale.data.model.ConferenceStatus
+import com.emmsale.data.model.ScrappedEvent
 
 data class ScrappedEventUiState(
     val scrapId: Long = DEFAULT_ID,

@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate
 
-import com.emmsale.data.notification.recruitment.RecruitmentStatus
+import com.emmsale.data.model.RecruitmentStatus
 
 enum class RecruitmentNotificationStatusUiState {
     ACCEPTED,

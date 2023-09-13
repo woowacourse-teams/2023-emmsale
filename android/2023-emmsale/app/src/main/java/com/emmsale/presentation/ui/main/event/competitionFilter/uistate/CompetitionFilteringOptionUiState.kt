@@ -1,8 +1,8 @@
 package com.emmsale.presentation.ui.main.event.competitionFilter.uistate
 
 import android.os.Parcelable
-import com.emmsale.data.competitionStatus.CompetitionStatus
-import com.emmsale.data.eventTag.EventTag
+import com.emmsale.data.model.CompetitionStatus
+import com.emmsale.data.model.EventTag
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

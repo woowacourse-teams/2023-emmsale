@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.member.MemberRepository
-import com.emmsale.data.recruitment.Recruitment
-import com.emmsale.data.recruitment.RecruitmentRepository
-import com.emmsale.data.token.TokenRepository
+import com.emmsale.data.model.Recruitment
+import com.emmsale.data.repository.MemberRepository
+import com.emmsale.data.repository.RecruitmentRepository
+import com.emmsale.data.repository.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logRecruitment
 import com.emmsale.presentation.common.livedata.NotNullLiveData

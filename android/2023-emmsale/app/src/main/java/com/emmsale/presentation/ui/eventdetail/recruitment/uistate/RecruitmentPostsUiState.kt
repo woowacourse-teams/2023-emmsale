@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.eventdetail.recruitment.uistate
 
-import com.emmsale.data.recruitment.Recruitment
+import com.emmsale.data.model.Recruitment
 
 data class RecruitmentPostsUiState(
     val list: List<RecruitmentPostUiState> = listOf(),

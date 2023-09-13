@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate
 
-import com.emmsale.data.notification.updated.InterestEventNotification
+import com.emmsale.data.model.updatedNotification.InterestEventNotification
 import java.time.LocalDateTime
 
 class InterestEventNotificationUiState(

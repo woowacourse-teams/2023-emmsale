@@ -1,12 +1,12 @@
 package com.emmsale.presentation.service
 
 import com.emmsale.R
-import com.emmsale.data.comment.CommentService
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.ServiceFactory
 import com.emmsale.data.common.handleApi
+import com.emmsale.data.service.CommentService
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity

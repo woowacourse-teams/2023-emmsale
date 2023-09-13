@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.main.setting.uiState
 
-import com.emmsale.data.member.Member
+import com.emmsale.data.model.Member
 
 data class MemberUiState(
     val isLoading: Boolean,

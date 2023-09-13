@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.main.setting.myPost.uiState
 
-import com.emmsale.data.myPost.MyPost
+import com.emmsale.data.model.MyPost
 
 data class MyPostsUiState(
     val list: List<MyPostUiState> = listOf(),

@@ -3,8 +3,8 @@ package com.emmsale.presentation.ui.eventdetail
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.Success
-import com.emmsale.data.eventdetail.EventDetail
-import com.emmsale.data.eventdetail.EventDetailRepository
+import com.emmsale.data.model.EventDetail
+import com.emmsale.data.repository.EventDetailRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

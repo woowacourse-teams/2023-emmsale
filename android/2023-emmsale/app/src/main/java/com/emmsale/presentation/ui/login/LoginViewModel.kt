@@ -7,11 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.config.ConfigRepository
-import com.emmsale.data.fcmToken.FcmTokenRepository
-import com.emmsale.data.login.Login
-import com.emmsale.data.login.LoginRepository
-import com.emmsale.data.token.TokenRepository
+import com.emmsale.data.model.Login
+import com.emmsale.data.repository.ConfigRepository
+import com.emmsale.data.repository.FcmTokenRepository
+import com.emmsale.data.repository.LoginRepository
+import com.emmsale.data.repository.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.login.uistate.LoginUiState

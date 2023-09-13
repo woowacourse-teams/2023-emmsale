@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.main.event.conference.uistate
 
-import com.emmsale.data.conferenceStatus.ConferenceStatus
-import com.emmsale.data.eventTag.EventTag
+import com.emmsale.data.model.ConferenceStatus
+import com.emmsale.data.model.EventTag
 
 data class ConferenceSelectedFilteringOptionUiState(
     val id: Long,

@@ -1,8 +1,8 @@
 package com.emmsale.presentation.ui.main.myProfile.editMyProfile.uiState
 
-import com.emmsale.data.activity.Activity
-import com.emmsale.data.activity.ActivityType
-import com.emmsale.data.member.Member
+import com.emmsale.data.model.Activity
+import com.emmsale.data.model.ActivityType
+import com.emmsale.data.model.Member
 
 data class EditMyProfileUiState(
     val id: Long,

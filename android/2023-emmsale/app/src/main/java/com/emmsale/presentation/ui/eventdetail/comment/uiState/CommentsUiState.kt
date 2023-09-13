@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.eventdetail.comment.uiState
 
-import com.emmsale.data.comment.Comment
+import com.emmsale.data.model.Comment
 
 data class CommentsUiState(
     val isLoading: Boolean,

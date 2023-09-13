@@ -1,8 +1,8 @@
 package com.emmsale.presentation.ui.main.event.conferenceFilter.uistate
 
 import android.os.Parcelable
-import com.emmsale.data.conferenceStatus.ConferenceStatus
-import com.emmsale.data.eventTag.EventTag
+import com.emmsale.data.model.ConferenceStatus
+import com.emmsale.data.model.EventTag
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

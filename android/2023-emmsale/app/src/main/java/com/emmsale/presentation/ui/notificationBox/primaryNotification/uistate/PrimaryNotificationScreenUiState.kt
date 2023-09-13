@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate
 
-import com.emmsale.data.notification.updated.UpdatedNotification
+import com.emmsale.data.model.updatedNotification.UpdatedNotification
 
 sealed interface PrimaryNotificationScreenUiState {
     data class Success(

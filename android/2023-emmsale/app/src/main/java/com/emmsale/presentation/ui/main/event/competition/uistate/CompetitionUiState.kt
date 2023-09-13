@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.main.event.competition.uistate
 
-import com.emmsale.data.competitionStatus.CompetitionStatus
-import com.emmsale.data.event.model.Competition
+import com.emmsale.data.model.Competition
+import com.emmsale.data.model.CompetitionStatus
 
 data class CompetitionUiState(
     val id: Long,

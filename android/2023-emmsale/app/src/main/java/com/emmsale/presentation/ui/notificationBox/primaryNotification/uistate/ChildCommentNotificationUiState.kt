@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate
 
-import com.emmsale.data.notification.updated.ChildCommentNotification
+import com.emmsale.data.model.updatedNotification.ChildCommentNotification
 import java.time.LocalDateTime
 
 class ChildCommentNotificationUiState(

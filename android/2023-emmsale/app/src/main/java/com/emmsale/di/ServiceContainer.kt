@@ -1,19 +1,19 @@
 package com.emmsale.di
 
-import com.emmsale.data.activity.ActivityService
-import com.emmsale.data.blockedMember.BlockedMemberService
-import com.emmsale.data.comment.CommentService
 import com.emmsale.data.common.ServiceFactory
-import com.emmsale.data.event.EventService
-import com.emmsale.data.eventTag.remote.EventTagService
-import com.emmsale.data.eventdetail.EventDetailService
-import com.emmsale.data.fcmToken.FcmTokenService
-import com.emmsale.data.login.LoginService
-import com.emmsale.data.member.MemberService
-import com.emmsale.data.myPost.MyPostService
-import com.emmsale.data.notification.NotificationService
-import com.emmsale.data.recruitment.RecruitmentService
-import com.emmsale.data.scrap.ScrappedEventService
+import com.emmsale.data.service.ActivityService
+import com.emmsale.data.service.BlockedMemberService
+import com.emmsale.data.service.CommentService
+import com.emmsale.data.service.EventDetailService
+import com.emmsale.data.service.EventService
+import com.emmsale.data.service.EventTagService
+import com.emmsale.data.service.FcmTokenService
+import com.emmsale.data.service.LoginService
+import com.emmsale.data.service.MemberService
+import com.emmsale.data.service.MyPostService
+import com.emmsale.data.service.NotificationService
+import com.emmsale.data.service.RecruitmentService
+import com.emmsale.data.service.ScrappedEventService
 
 class ServiceContainer(serviceFactory: ServiceFactory) {
     val loginService: LoginService by lazy { serviceFactory.create(LoginService::class.java) }

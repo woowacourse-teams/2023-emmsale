@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.scrap.ScrappedEventRepository
+import com.emmsale.data.repository.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.main.event.conference.uistate
 
-import com.emmsale.data.conferenceStatus.ConferenceStatus
-import com.emmsale.data.event.model.Conference
+import com.emmsale.data.model.Conference
+import com.emmsale.data.model.ConferenceStatus
 
 data class ConferenceUiState(
     val id: Long,

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.myPost.MyPostRepository
+import com.emmsale.data.repository.MyPostRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

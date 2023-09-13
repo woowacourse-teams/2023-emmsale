@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.config.Config
-import com.emmsale.data.config.ConfigRepository
-import com.emmsale.data.eventTag.EventTagRepository
-import com.emmsale.data.token.TokenRepository
+import com.emmsale.data.model.Config
+import com.emmsale.data.repository.ConfigRepository
+import com.emmsale.data.repository.EventTagRepository
+import com.emmsale.data.repository.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.firebase.analytics.logChangeConfig

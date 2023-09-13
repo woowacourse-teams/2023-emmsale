@@ -1,39 +1,39 @@
 package com.emmsale.di
 
-import com.emmsale.data.activity.ActivityRepository
-import com.emmsale.data.activity.ActivityRepositoryImpl
-import com.emmsale.data.blockedMember.BlockedMemberRepository
-import com.emmsale.data.blockedMember.BlockedMemberRepositoryImpl
-import com.emmsale.data.comment.CommentRepository
-import com.emmsale.data.comment.CommentRepositoryImpl
-import com.emmsale.data.competitionStatus.CompetitionStatusRepository
-import com.emmsale.data.competitionStatus.CompetitionStatusRepositoryImpl
-import com.emmsale.data.conferenceStatus.ConferenceStatusRepository
-import com.emmsale.data.conferenceStatus.ConferenceStatusRepositoryImpl
-import com.emmsale.data.config.ConfigRepository
-import com.emmsale.data.config.ConfigRepositoryImpl
-import com.emmsale.data.event.EventRepository
-import com.emmsale.data.event.EventRepositoryImpl
-import com.emmsale.data.eventTag.EventTagRepository
-import com.emmsale.data.eventTag.EventTagRepositoryImpl
-import com.emmsale.data.eventdetail.EventDetailRepository
-import com.emmsale.data.eventdetail.EventDetailRepositoryImpl
-import com.emmsale.data.fcmToken.FcmTokenRepository
-import com.emmsale.data.fcmToken.FcmTokenRepositoryImpl
-import com.emmsale.data.login.LoginRepository
-import com.emmsale.data.login.LoginRepositoryImpl
-import com.emmsale.data.member.MemberRepository
-import com.emmsale.data.member.MemberRepositoryImpl
-import com.emmsale.data.myPost.MyPostRepository
-import com.emmsale.data.myPost.MyPostRepositoryImpl
-import com.emmsale.data.notification.NotificationRepository
-import com.emmsale.data.notification.NotificationRepositoryImpl
-import com.emmsale.data.recruitment.RecruitmentRepository
-import com.emmsale.data.recruitment.RecruitmentRepositoryImpl
-import com.emmsale.data.scrap.ScrappedEventRepository
-import com.emmsale.data.scrap.ScrappedEventRepositoryImpl
-import com.emmsale.data.token.TokenRepository
-import com.emmsale.data.token.TokenRepositoryImpl
+import com.emmsale.data.repository.ActivityRepository
+import com.emmsale.data.repository.BlockedMemberRepository
+import com.emmsale.data.repository.CommentRepository
+import com.emmsale.data.repository.CompetitionStatusRepository
+import com.emmsale.data.repository.ConferenceStatusRepository
+import com.emmsale.data.repository.ConfigRepository
+import com.emmsale.data.repository.DefaultActivityRepository
+import com.emmsale.data.repository.DefaultBlockedMemberRepository
+import com.emmsale.data.repository.DefaultCommentRepository
+import com.emmsale.data.repository.DefaultCompetitionStatusRepository
+import com.emmsale.data.repository.DefaultConferenceStatusRepository
+import com.emmsale.data.repository.DefaultConfigRepository
+import com.emmsale.data.repository.DefaultEventDetailRepository
+import com.emmsale.data.repository.DefaultEventRepository
+import com.emmsale.data.repository.DefaultEventTagRepository
+import com.emmsale.data.repository.DefaultFcmTokenRepository
+import com.emmsale.data.repository.DefaultLoginRepository
+import com.emmsale.data.repository.DefaultMemberRepository
+import com.emmsale.data.repository.DefaultMyPostRepository
+import com.emmsale.data.repository.DefaultNotificationRepository
+import com.emmsale.data.repository.DefaultRecruitmentRepository
+import com.emmsale.data.repository.DefaultScrappedEventRepository
+import com.emmsale.data.repository.DefaultTokenRepository
+import com.emmsale.data.repository.EventDetailRepository
+import com.emmsale.data.repository.EventRepository
+import com.emmsale.data.repository.EventTagRepository
+import com.emmsale.data.repository.FcmTokenRepository
+import com.emmsale.data.repository.LoginRepository
+import com.emmsale.data.repository.MemberRepository
+import com.emmsale.data.repository.MyPostRepository
+import com.emmsale.data.repository.NotificationRepository
+import com.emmsale.data.repository.RecruitmentRepository
+import com.emmsale.data.repository.ScrappedEventRepository
+import com.emmsale.data.repository.TokenRepository
 
 class RepositoryContainer(
     serviceContainer: ServiceContainer,
@@ -43,58 +43,58 @@ class RepositoryContainer(
     ),
 ) {
     val loginRepository: LoginRepository by lazy {
-        LoginRepositoryImpl(loginService = serviceContainer.loginService)
+        DefaultLoginRepository(loginService = serviceContainer.loginService)
     }
     val tokenRepository: TokenRepository by lazy {
-        TokenRepositoryImpl(preference = preferenceContainer.preference)
+        DefaultTokenRepository(preference = preferenceContainer.preference)
     }
     val activityRepository: ActivityRepository by lazy {
-        ActivityRepositoryImpl(activityService = serviceContainer.activityService)
+        DefaultActivityRepository(activityService = serviceContainer.activityService)
     }
     val memberRepository: MemberRepository by lazy {
-        MemberRepositoryImpl(memberService = serviceContainer.memberService)
+        DefaultMemberRepository(memberService = serviceContainer.memberService)
     }
     val eventRepository: EventRepository by lazy {
-        EventRepositoryImpl(eventService = serviceContainer.conferenceService)
+        DefaultEventRepository(eventService = serviceContainer.conferenceService)
     }
     val fcmTokenRepository: FcmTokenRepository by lazy {
-        FcmTokenRepositoryImpl(fcmTokenService = serviceContainer.fcmTokenService)
+        DefaultFcmTokenRepository(fcmTokenService = serviceContainer.fcmTokenService)
     }
     val commentRepository: CommentRepository by lazy {
-        CommentRepositoryImpl(
+        DefaultCommentRepository(
             commentService = serviceContainer.commentService,
         )
     }
-    val conferenceStatusRepository: ConferenceStatusRepository by lazy { ConferenceStatusRepositoryImpl() }
-    val competitionStatusRepository: CompetitionStatusRepository by lazy { CompetitionStatusRepositoryImpl() }
+    val conferenceStatusRepository: ConferenceStatusRepository by lazy { DefaultConferenceStatusRepository() }
+    val competitionStatusRepository: CompetitionStatusRepository by lazy { DefaultCompetitionStatusRepository() }
     val eventTagRepository: EventTagRepository by lazy {
-        EventTagRepositoryImpl(remoteDataSourceContainer.eventTagRemoteDataSource)
+        DefaultEventTagRepository(remoteDataSourceContainer.eventTagRemoteDataSource)
     }
     val eventDetailRepository: EventDetailRepository by lazy {
-        EventDetailRepositoryImpl(
+        DefaultEventDetailRepository(
             eventDetailService = serviceContainer.eventDetailService,
         )
     }
     val recruitmentRepository: RecruitmentRepository by lazy {
-        RecruitmentRepositoryImpl(
+        DefaultRecruitmentRepository(
             tokenRepository = tokenRepository,
             recruitmentService = serviceContainer.recruitmentService,
         )
     }
     val notificationRepository: NotificationRepository by lazy {
-        NotificationRepositoryImpl(notificationService = serviceContainer.notificationService)
+        DefaultNotificationRepository(notificationService = serviceContainer.notificationService)
     }
     val scrappedEventRepository: ScrappedEventRepository by lazy {
-        ScrappedEventRepositoryImpl(scrappedEventService = serviceContainer.scrappedEventService)
+        DefaultScrappedEventRepository(scrappedEventService = serviceContainer.scrappedEventService)
     }
     val blockedMemberRepository: BlockedMemberRepository by lazy {
-        BlockedMemberRepositoryImpl(blockedMemberService = serviceContainer.blockedMemberService)
+        DefaultBlockedMemberRepository(blockedMemberService = serviceContainer.blockedMemberService)
     }
     val configRepository: ConfigRepository by lazy {
-        ConfigRepositoryImpl(preference = preferenceContainer.preference)
+        DefaultConfigRepository(preference = preferenceContainer.preference)
     }
     val myPostRepository: MyPostRepository by lazy {
-        MyPostRepositoryImpl(
+        DefaultMyPostRepository(
             myPostService = serviceContainer.myPostService,
             tokenRepository = tokenRepository,
         )

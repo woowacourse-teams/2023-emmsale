@@ -3,12 +3,12 @@ package com.emmsale.presentation.ui.onboarding
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.activity.ActivityRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.config.ConfigRepository
-import com.emmsale.data.member.MemberRepository
+import com.emmsale.data.repository.ActivityRepository
+import com.emmsale.data.repository.ConfigRepository
+import com.emmsale.data.repository.MemberRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

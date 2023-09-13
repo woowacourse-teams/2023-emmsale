@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.profile.uiState
 
-import com.emmsale.data.blockedMember.BlockedMember
+import com.emmsale.data.model.BlockedMember
 
 data class BlockedMemberUiState(
     val blockedMemberId: Long,

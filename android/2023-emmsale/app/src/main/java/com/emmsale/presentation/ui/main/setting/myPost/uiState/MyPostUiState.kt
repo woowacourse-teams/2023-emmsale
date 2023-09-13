@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.main.setting.myPost.uiState
 
-import com.emmsale.data.myPost.MyPost
+import com.emmsale.data.model.MyPost
 
 data class MyPostUiState(
     val postId: Long = DEFAULT_ID,
@@ -15,7 +15,7 @@ data class MyPostUiState(
         fun from(myPost: MyPost): MyPostUiState = MyPostUiState(
             postId = myPost.postId,
             eventId = myPost.eventId,
-            eventName = myPost.eventName ?: "",
+            eventName = myPost.eventName,
             content = myPost.content ?: "",
             updatedAt = myPost.updatedAt.toString(),
         )

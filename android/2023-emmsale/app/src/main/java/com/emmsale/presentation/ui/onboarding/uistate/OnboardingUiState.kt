@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.onboarding.uistate
 
-import com.emmsale.data.activity.Activity
-import com.emmsale.data.activity.ActivityType
+import com.emmsale.data.model.Activity
+import com.emmsale.data.model.ActivityType
 
 data class OnboardingUiState(
     val fields: List<ActivityUiState> = emptyList(),

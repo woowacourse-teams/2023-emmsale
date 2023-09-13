@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.eventdetail.uistate
 
-import com.emmsale.data.eventdetail.EventDetail
+import com.emmsale.data.model.EventDetail
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

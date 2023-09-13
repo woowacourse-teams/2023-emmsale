@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.emmsale.R
-import com.emmsale.data.eventTag.EventTag
+import com.emmsale.data.model.EventTag
 import com.emmsale.databinding.ActivityNotificationConfigBinding
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission

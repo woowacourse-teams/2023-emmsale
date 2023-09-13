@@ -1,6 +1,7 @@
 package com.emmsale.data.member
 
-import com.emmsale.data.member.dto.MemberApiModel
+import com.emmsale.data.apiModel.response.MemberApiModel
+import com.emmsale.data.service.MemberService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json

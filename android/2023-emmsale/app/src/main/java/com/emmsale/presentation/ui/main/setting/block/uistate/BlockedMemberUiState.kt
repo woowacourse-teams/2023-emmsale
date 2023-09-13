@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.main.setting.block.uistate
 
-import com.emmsale.data.blockedMember.BlockedMember
+import com.emmsale.data.model.BlockedMember
 
 data class BlockedMemberUiState(
     val id: Long,

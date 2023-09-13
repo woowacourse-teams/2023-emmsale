@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.eventdetail.comment.childComment.uiState
 
-import com.emmsale.data.comment.Comment
+import com.emmsale.data.model.Comment
 import java.time.format.DateTimeFormatter
 
 data class CommentUiState(

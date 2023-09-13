@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.eventdetail.information
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.scrap.ScrappedEventRepository
+import com.emmsale.data.repository.ScrappedEventRepository
 import com.emmsale.presentation.ui.eventdetail.information.uiState.EventInfoUiEvent
 import io.mockk.coEvery
 import io.mockk.mockk

@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.comment.CommentRepository
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.token.TokenRepository
+import com.emmsale.data.repository.CommentRepository
+import com.emmsale.data.repository.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData

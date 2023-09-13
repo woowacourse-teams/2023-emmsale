@@ -22,5 +22,5 @@
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
 # Keep the InterestEventTagUpdateResponseApiModel class itself and its fields from obfuscation
--keep class com.emmsale.data.eventTag.remote.dto.InterestEventTagUpdateResponseApiModel { *; }
+-keep class com.emmsale.data.apiModel.response.InterestEventTagUpdateResponseApiModel { *; }
 -keep class com.emmsale.data.common.callAdapter.* { *; }
