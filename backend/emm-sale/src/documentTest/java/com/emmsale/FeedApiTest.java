@@ -1,7 +1,6 @@
 package com.emmsale;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -173,8 +172,6 @@ class FeedApiTest extends MockMvcTestHelper {
   void deleteFeed() throws Exception {
     //given
     final long feedId = 134L;
-
-    doNothing().when(feedCommandService).deleteFeed(any(), any());
 
     //when & then
     mockMvc.perform(delete("/feeds/{feedId}", feedId))
