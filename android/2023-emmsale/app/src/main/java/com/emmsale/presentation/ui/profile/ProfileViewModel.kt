@@ -14,7 +14,7 @@ import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.profile.uiState.BlockedMemberUiState
 import com.emmsale.presentation.ui.profile.uiState.ProfileEvent
@@ -27,7 +27,7 @@ class ProfileViewModel(
     private val memberRepository: MemberRepository,
     private val activityRepository: ActivityRepository,
     private val blockedMemberRepository: BlockedMemberRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin

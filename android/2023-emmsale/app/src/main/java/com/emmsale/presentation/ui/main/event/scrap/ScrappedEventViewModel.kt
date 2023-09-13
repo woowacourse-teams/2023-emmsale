@@ -9,14 +9,14 @@ import com.emmsale.data.scrap.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.event.scrap.uistate.ScrappedEventsUiState
 import kotlinx.coroutines.launch
 
 class ScrappedEventViewModel(
     private val scrappedEventRepository: ScrappedEventRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
     private val _scrappedEvents = NotNullMutableLiveData(ScrappedEventsUiState())
     val scrappedEvents: NotNullLiveData<ScrappedEventsUiState> = _scrappedEvents
 

@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.common.viewModel.RefreshableViewModel" />
+            type="com.emmsale.presentation.common.viewModel.Refreshable" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
