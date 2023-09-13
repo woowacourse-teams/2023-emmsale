@@ -4,6 +4,7 @@ import com.emmsale.data.common.ApiResult
 import com.emmsale.data.model.ScrappedEvent
 
 interface ScrappedEventRepository {
+
     suspend fun getScrappedEvents(): ApiResult<List<ScrappedEvent>>
 
     suspend fun scrapEvent(eventId: Long): ApiResult<Unit>

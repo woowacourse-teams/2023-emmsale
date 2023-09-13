@@ -17,8 +17,8 @@ class DefaultConferenceStatusRepository(
         )
     }
 
-    override suspend fun getConferenceStatusByIds(ids: Array<Long>): List<ConferenceStatus> =
+    override suspend fun getConferenceStatusByIds(tagIds: Array<Long>): List<ConferenceStatus> =
         withContext(dispatcher) {
-            getConferenceStatuses().filter { it.id in ids }
+            getConferenceStatuses().filter { it.id in tagIds }
         }
 }

@@ -11,6 +11,7 @@ import com.emmsale.data.model.EventTag
 import java.time.LocalDate
 
 interface EventRepository {
+
     suspend fun getConferences(
         statuses: List<ConferenceStatus> = emptyList(),
         tags: List<EventTag> = emptyList(),
@@ -25,7 +26,5 @@ interface EventRepository {
         endDate: LocalDate? = null,
     ): ApiResult<List<Competition>>
 
-    suspend fun getEventDetail(
-        eventId: Long,
-    ): ApiResponse<EventDetail>
+    suspend fun getEventDetail(eventId: Long): ApiResponse<EventDetail>
 }

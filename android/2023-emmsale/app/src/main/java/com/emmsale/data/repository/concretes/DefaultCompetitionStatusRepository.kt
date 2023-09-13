@@ -18,8 +18,8 @@ class DefaultCompetitionStatusRepository(
             )
         }
 
-    override suspend fun getCompetitionStatusByIds(ids: Array<Long>): List<CompetitionStatus> =
+    override suspend fun getCompetitionStatusByIds(tagIds: Array<Long>): List<CompetitionStatus> =
         withContext(dispatcher) {
-            getCompetitionStatuses().filter { it.id in ids }
+            getCompetitionStatuses().filter { it.id in tagIds }
         }
 }
