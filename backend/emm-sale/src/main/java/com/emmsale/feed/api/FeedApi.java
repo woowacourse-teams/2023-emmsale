@@ -36,7 +36,7 @@ public class FeedApi {
   }
 
   @GetMapping("/{id}")
-  public FeedDetailResponse findDetailFeed(@PathVariable final Long id) {
+  public FeedDetailResponse findFeed(@PathVariable final Long id) {
     return feedQueryService.findFeed(id);
   }
 
