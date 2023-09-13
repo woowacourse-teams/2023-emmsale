@@ -1,10 +1,7 @@
 package com.emmsale.message_room.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.emmsale.fixture.MessageFixture;
-import com.emmsale.fixture.RoomFixture;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.MemberFixture;
 import com.emmsale.member.domain.Member;
@@ -13,9 +10,9 @@ import com.emmsale.message_room.application.dto.MessageResponse;
 import com.emmsale.message_room.application.dto.RoomResponse;
 import com.emmsale.message_room.domain.Message;
 import com.emmsale.message_room.domain.MessageRepository;
+import com.emmsale.message_room.domain.Room;
+import com.emmsale.message_room.domain.RoomId;
 import com.emmsale.message_room.domain.RoomRepository;
-import com.emmsale.message_room.exception.MessageRoomException;
-import com.emmsale.message_room.exception.MessageRoomExceptionType;
 import com.emmsale.message_room.infrastructure.persistence.dto.MessageOverview;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,19 +56,19 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     memberRepository.save(room3Interlocutor);
 
     roomRepository.saveAll(List.of(
-        RoomFixture.create(room1UUID, loginMember.getId(),
+        new Room(new RoomId(room1UUID, loginMember.getId()),
             LocalDateTime.parse("2023-09-05T16:26:20.751352")),
-        RoomFixture.create(room1UUID, room1Interlocutor.getId(),
+        new Room(new RoomId(room1UUID, room1Interlocutor.getId()),
             LocalDateTime.parse("2023-09-07T16:48:24")),
 
-        RoomFixture.create(room2UUID, loginMember.getId(),
+        new Room(new RoomId(room2UUID, loginMember.getId()),
             LocalDateTime.parse("2023-09-07T16:48:24")),
-        RoomFixture.create(room2UUID, room2Interlocutor.getId(),
+        new Room(new RoomId(room2UUID, room2Interlocutor.getId()),
             LocalDateTime.parse("2023-09-07T16:48:24")),
 
-        RoomFixture.create(room3UUID, loginMember.getId(),
+        new Room(new RoomId(room3UUID, loginMember.getId()),
             LocalDateTime.parse("2023-10-07T16:48:24")),
-        RoomFixture.create(room3UUID, room3Interlocutor.getId(),
+        new Room(new RoomId(room3UUID, room3Interlocutor.getId()),
             LocalDateTime.parse("2023-08-07T16:45:39"))
     ));
   }
@@ -80,13 +77,13 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("findAll() : 사용자가 중도에 나가는 Room에 상관없이 참여하고 있는 Room 중에서 가장 최근에 받은 메시지들을 조회할 수 있다.")
   void test_findAll() throws Exception {
     //given
-    final Message resultMessage1 = MessageFixture.create(
+    final Message resultMessage1 = new Message(
         "방1메시지3",
         loginMember.getId(),
         room1UUID,
         LocalDateTime.parse("2023-10-07T16:45:39")
     );
-    final Message resultMessage2 = MessageFixture.create(
+    final Message resultMessage2 = new Message(
         "방2메시지4",
         room2Interlocutor.getId(),
         room2UUID,
@@ -95,13 +92,13 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
 
     messageRepository.saveAll(
         List.of(
-            MessageFixture.create("방1메시지1", loginMember.getId(), room1UUID,
+            new Message("방1메시지1", loginMember.getId(), room1UUID,
                 LocalDateTime.parse("2023-05-07T16:45:39")),
-            MessageFixture.create("방1메시지2", loginMember.getId(), room1UUID,
+            new Message("방1메시지2", loginMember.getId(), room1UUID,
                 LocalDateTime.parse("2023-06-07T16:45:39")),
             resultMessage1,
             resultMessage2,
-            MessageFixture.create("방3메시지5", loginMember.getId(), room3UUID,
+            new Message("방3메시지5", loginMember.getId(), room3UUID,
                 LocalDateTime.parse("2023-08-07T16:45:39"))
         )
     );
@@ -202,7 +199,6 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
 
     //when
     final List<MessageResponse> actual = roomQueryService.findByInterlocutorIds(
-        loginMember.getId(),
         room1Interlocutor.getId(),
         loginMember.getId(),
         loginMember
@@ -212,33 +208,5 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     Assertions.assertThat(actual)
         .usingRecursiveComparison()
         .isEqualTo(expect);
-  }
-
-  @Test
-  @DisplayName("findByInterlocutorIds() : Room 에 참여한 사용자의 ID를 통해 쪽지방을 조회할 수 있다.")
-  void test_findByInterlocutorIds_() throws Exception {
-    //given
-    final Message room1Message1 = new Message("방1메시지1", loginMember.getId(), room1UUID,
-        LocalDateTime.parse("2023-05-07T16:45:39"));
-    final Message room1Message2 = new Message("방1메시지2", loginMember.getId(), room1UUID,
-        LocalDateTime.parse("2023-06-07T16:45:38"));
-
-    messageRepository.saveAll(
-        List.of(
-            room1Message1,
-            room1Message2,
-            new Message("방2메시지3", loginMember.getId(), room2UUID,
-                LocalDateTime.parse("2023-10-07T16:45:39")),
-            new Message("방2메시지4", room1Interlocutor.getId(), room2UUID,
-                LocalDateTime.parse("2023-10-07T16:45:39"))
-        )
-    );
-
-    //when & then
-    assertThatThrownBy(
-        () -> roomQueryService.findByInterlocutorIds(
-            room2Interlocutor.getId(), room1Interlocutor.getId(), loginMember.getId(), loginMember))
-        .isInstanceOf(MessageRoomException.class)
-        .hasMessage(MessageRoomExceptionType.FORBIDDEN_NOT_INTERLOCUTORS.errorMessage());
   }
 }
