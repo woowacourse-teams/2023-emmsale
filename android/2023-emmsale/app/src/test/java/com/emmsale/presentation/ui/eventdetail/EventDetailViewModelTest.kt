@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.model.EventDetail
-import com.emmsale.data.repository.interfaces.EventDetailRepository
+import com.emmsale.data.repository.interfaces.EventRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ import java.time.LocalDateTime
 class EventDetailViewModelTest {
 
     private lateinit var vm: EventDetailViewModel
-    private lateinit var eventDetailRepository: EventDetailRepository
+    private lateinit var eventRepository: EventRepository
 
     private val testEventDetail = EventDetail(
         id = 1L,
@@ -50,8 +50,8 @@ class EventDetailViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        eventDetailRepository = mockk(relaxed = true)
-        vm = EventDetailViewModel(1L, eventDetailRepository)
+        eventRepository = mockk(relaxed = true)
+        vm = EventDetailViewModel(1L, eventRepository)
     }
 
     @After
@@ -63,7 +63,7 @@ class EventDetailViewModelTest {
     fun `정상적으로 상세정보를 받아온다면, id가 1인 상세정보를 요청했을 때, eventDetail 은 Error와 Loading 상태가 false 이고 id가 1이다 `() {
         // given
         coEvery {
-            eventDetailRepository.getEventDetail(1L)
+            eventRepository.getEventDetail(1L)
         } answers {
             Success(testEventDetail, Headers.headersOf("Auth", "hi"))
         }
@@ -84,7 +84,7 @@ class EventDetailViewModelTest {
     fun `정상적으로 상세정보를 받아올 수 없다면, id가 1인 상세정보를 요청했을 때, eventDetail은 Error 상태가 된다 `() {
         // given
         coEvery {
-            eventDetailRepository.getEventDetail(1L)
+            eventRepository.getEventDetail(1L)
         } answers {
             Failure(code = 4548, message = null)
         }

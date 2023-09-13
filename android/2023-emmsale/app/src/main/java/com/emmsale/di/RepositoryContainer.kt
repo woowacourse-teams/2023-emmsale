@@ -6,7 +6,6 @@ import com.emmsale.data.repository.concretes.DefaultCommentRepository
 import com.emmsale.data.repository.concretes.DefaultCompetitionStatusRepository
 import com.emmsale.data.repository.concretes.DefaultConferenceStatusRepository
 import com.emmsale.data.repository.concretes.DefaultConfigRepository
-import com.emmsale.data.repository.concretes.DefaultEventDetailRepository
 import com.emmsale.data.repository.concretes.DefaultEventRepository
 import com.emmsale.data.repository.concretes.DefaultEventTagRepository
 import com.emmsale.data.repository.concretes.DefaultFcmTokenRepository
@@ -23,7 +22,6 @@ import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.CompetitionStatusRepository
 import com.emmsale.data.repository.interfaces.ConferenceStatusRepository
 import com.emmsale.data.repository.interfaces.ConfigRepository
-import com.emmsale.data.repository.interfaces.EventDetailRepository
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
 import com.emmsale.data.repository.interfaces.FcmTokenRepository
@@ -55,7 +53,7 @@ class RepositoryContainer(
         DefaultMemberRepository(memberService = serviceContainer.memberService)
     }
     val eventRepository: EventRepository by lazy {
-        DefaultEventRepository(eventService = serviceContainer.conferenceService)
+        DefaultEventRepository(eventService = serviceContainer.eventService)
     }
     val fcmTokenRepository: FcmTokenRepository by lazy {
         DefaultFcmTokenRepository(fcmTokenService = serviceContainer.fcmTokenService)
@@ -69,11 +67,6 @@ class RepositoryContainer(
     val competitionStatusRepository: CompetitionStatusRepository by lazy { DefaultCompetitionStatusRepository() }
     val eventTagRepository: EventTagRepository by lazy {
         DefaultEventTagRepository(remoteDataSourceContainer.eventTagRemoteDataSource)
-    }
-    val eventDetailRepository: EventDetailRepository by lazy {
-        DefaultEventDetailRepository(
-            eventDetailService = serviceContainer.eventDetailService,
-        )
     }
     val recruitmentRepository: RecruitmentRepository by lazy {
         DefaultRecruitmentRepository(

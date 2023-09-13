@@ -7,7 +7,7 @@ import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.EventDetail
-import com.emmsale.data.repository.interfaces.EventDetailRepository
+import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logEventClick
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class EventDetailViewModel(
     private val eventId: Long,
-    private val eventDetailRepository: EventDetailRepository,
+    private val eventRepository: EventRepository,
 ) : ViewModel(), Refreshable {
 
     private val _eventDetail: NotNullMutableLiveData<EventDetailUiState> =
@@ -33,7 +33,7 @@ class EventDetailViewModel(
     override fun refresh() {
         setLoadingState(true)
         viewModelScope.launch {
-            when (val result = eventDetailRepository.getEventDetail(eventId)) {
+            when (val result = eventRepository.getEventDetail(eventId)) {
                 is Success -> fetchSuccessEventDetail(result.data)
                 is Failure, NetworkError, is Unexpected -> changeToErrorState()
             }
@@ -60,7 +60,7 @@ class EventDetailViewModel(
         fun factory(eventId: Long) = ViewModelFactory {
             EventDetailViewModel(
                 eventId,
-                eventDetailRepository = KerdyApplication.repositoryContainer.eventDetailRepository,
+                eventRepository = KerdyApplication.repositoryContainer.eventRepository,
             )
         }
     }

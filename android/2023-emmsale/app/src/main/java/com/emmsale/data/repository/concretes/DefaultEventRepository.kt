@@ -2,7 +2,9 @@ package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.response.CompetitionResponse
 import com.emmsale.data.apiModel.response.ConferenceResponse
+import com.emmsale.data.apiModel.response.EventDetailResponse
 import com.emmsale.data.common.ApiResult
+import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.mapper.toApiModel
 import com.emmsale.data.mapper.toData
@@ -11,6 +13,7 @@ import com.emmsale.data.model.CompetitionStatus
 import com.emmsale.data.model.Conference
 import com.emmsale.data.model.ConferenceStatus
 import com.emmsale.data.model.EventCategory
+import com.emmsale.data.model.EventDetail
 import com.emmsale.data.model.EventTag
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.service.EventService
@@ -62,6 +65,12 @@ class DefaultEventRepository(
             },
             mapToDomain = List<CompetitionResponse>::toData,
         )
+    }
+
+    override suspend fun getEventDetail(eventId: Long): ApiResponse<EventDetail> {
+        return eventService
+            .getEventDetail(eventId)
+            .map(EventDetailResponse::toData)
     }
 
     private fun EventCategory.toApiModel(): String = when (this) {

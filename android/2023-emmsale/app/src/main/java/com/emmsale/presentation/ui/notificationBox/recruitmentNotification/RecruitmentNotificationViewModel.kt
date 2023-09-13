@@ -13,7 +13,7 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.RecruitmentNotification
 import com.emmsale.data.model.RecruitmentStatus
-import com.emmsale.data.repository.interfaces.EventDetailRepository
+import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.NotificationRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 class RecruitmentNotificationViewModel(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
-    private val eventDetailRepository: EventDetailRepository,
+    private val eventRepository: EventRepository,
     private val notificationRepository: NotificationRepository,
 ) : ViewModel(), Refreshable {
     private val _notifications = NotNullMutableLiveData(RecruitmentNotificationUiState())
@@ -112,7 +112,7 @@ class RecruitmentNotificationViewModel(
 
     private suspend fun getConferenceNameAsync(conferenceId: Long): Deferred<String?> =
         viewModelScope.async {
-            when (val conference = eventDetailRepository.getEventDetail(conferenceId)) {
+            when (val conference = eventRepository.getEventDetail(conferenceId)) {
                 is Success -> conference.data.name
                 is Failure, NetworkError, is Unexpected -> null
             }
@@ -217,7 +217,7 @@ class RecruitmentNotificationViewModel(
             RecruitmentNotificationViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
-                eventDetailRepository = KerdyApplication.repositoryContainer.eventDetailRepository,
+                eventRepository = KerdyApplication.repositoryContainer.eventRepository,
                 notificationRepository = KerdyApplication.repositoryContainer.notificationRepository,
             )
         }
