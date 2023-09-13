@@ -23,7 +23,7 @@ public class S3Client {
   
   private static final String EXTENSION_DELIMITER = ".";
   private static final List<String> ALLOWED_FILE_EXTENSIONS = List.of(".jpg", ".png", ".jpeg");
-  public static final int MIN_EXTENSION_SEPARATOR_INDEX = 0;
+  private static final int MIN_EXTENSION_SEPARATOR_INDEX = 0;
   
   @Value("${cloud.aws.s3.bucket}")
   private String bucket;
