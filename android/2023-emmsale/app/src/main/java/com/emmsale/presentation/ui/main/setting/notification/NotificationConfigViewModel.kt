@@ -5,16 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.config.Config
 import com.emmsale.data.config.ConfigRepository
-import com.emmsale.data.eventTag.EventTag
 import com.emmsale.data.eventTag.EventTagRepository
 import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.firebase.analytics.logChangeConfig
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
-import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationConfigUiState
+import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationConfigUiEvent
 import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationTagsUiState
 import kotlinx.coroutines.launch
 
@@ -22,16 +24,34 @@ class NotificationConfigViewModel(
     private val tokenRepository: TokenRepository,
     private val eventTagRepository: EventTagRepository,
     private val configRepository: ConfigRepository,
-) : ViewModel() {
-    private val _notificationConfig = NotNullMutableLiveData(NotificationConfigUiState())
-    val notificationConfig: NotNullLiveData<NotificationConfigUiState> = _notificationConfig
+) : ViewModel(), Refreshable {
+    private val _notificationConfig: NotNullMutableLiveData<Config> = NotNullMutableLiveData(
+        Config(
+            isNotificationReceive = false,
+            isFollowNotificationReceive = false,
+            isCommentNotificationReceive = false,
+            isInterestEventNotificationReceive = false,
+            isAutoLogin = false,
+        ),
+    )
+    val notificationConfig: NotNullLiveData<Config> = _notificationConfig
 
-    private val _notificationTags = NotNullMutableLiveData(NotificationTagsUiState())
+    private val _notificationTags: NotNullMutableLiveData<NotificationTagsUiState> =
+        NotNullMutableLiveData(NotificationTagsUiState.Loading)
     val notificationTags: NotNullLiveData<NotificationTagsUiState> = _notificationTags
+
+    private val _uiEvent: NotNullMutableLiveData<Event<NotificationConfigUiEvent>> =
+        NotNullMutableLiveData(Event(NotificationConfigUiEvent.NONE))
+    val uiEvent: NotNullLiveData<Event<NotificationConfigUiEvent>> = _uiEvent
 
     init {
         fetchNotificationTags()
         fetchNotificationConfig()
+    }
+
+    override fun refresh() {
+        fetchNotificationConfig()
+        fetchNotificationTags()
     }
 
     fun fetchNotificationTags() {
@@ -39,58 +59,63 @@ class NotificationConfigViewModel(
             val memberId = tokenRepository.getToken()?.uid ?: return@launch
 
             when (val result = eventTagRepository.getInterestEventTags(memberId)) {
-                is ApiSuccess -> _notificationTags.value = NotificationTagsUiState.from(result.data)
-                is ApiError, is ApiException -> changeToInterestTagFetchingErrorState()
+                is ApiSuccess ->
+                    _notificationTags.value = NotificationTagsUiState.Success(result.data)
+
+                is ApiError, is ApiException ->
+                    _notificationTags.value = NotificationTagsUiState.Error
             }
         }
-    }
-
-    private fun changeToInterestTagFetchingErrorState() {
-        _notificationTags.value = _notificationTags.value.copy(
-            isLoading = false,
-            isTagFetchingError = true,
-        )
     }
 
     private fun fetchNotificationConfig() {
         viewModelScope.launch {
-            val config = configRepository.getConfig()
-            _notificationConfig.value = NotificationConfigUiState.from(config)
+            _notificationConfig.value = configRepository.getConfig()
         }
     }
 
-    fun setNotificationReceiveConfig(isReceive: Boolean) {
+    fun setAllNotificationReceiveConfig(isReceive: Boolean) {
         viewModelScope.launch {
-            configRepository.saveNotificationReceiveConfig(isReceive)
-            updateNotificationReceiveConfig(isReceive)
+            configRepository.saveAllNotificationReceiveConfig(isReceive)
+            fetchNotificationConfig()
             logChangeConfig("notification_receive", isReceive)
         }
     }
 
-    private fun updateNotificationReceiveConfig(isReceive: Boolean) {
-        _notificationConfig.value = notificationConfig.value.copy(
-            isNotificationReceive = isReceive,
-        )
-    }
-
-    fun removeInterestTagById(eventId: Long) {
+    fun setFollowNotificationReceiveConfig(isReceive: Boolean) {
         viewModelScope.launch {
-            val removedInterestEventTags = notificationTags.value.conferenceTags
-                .filterNot { it.id == eventId }
-                .map { EventTag(id = it.id, name = it.tagName) }
-
-            when (eventTagRepository.updateInterestEventTags(removedInterestEventTags)) {
-                is ApiSuccess -> fetchNotificationTags()
-                is ApiError, is ApiException -> changeToInterestTagRemoveErrorState()
-            }
+            configRepository.saveFollowNotificationReceiveConfig(isReceive)
+            fetchNotificationConfig()
         }
     }
 
-    private fun changeToInterestTagRemoveErrorState() {
-        _notificationTags.value = _notificationTags.value.copy(
-            isLoading = false,
-            isTagRemoveError = true,
-        )
+    fun setCommentNotificationReceiveConfig(isReceive: Boolean) {
+        viewModelScope.launch {
+            configRepository.saveCommentNotificationReceiveConfig(isReceive)
+            fetchNotificationConfig()
+        }
+    }
+
+    fun setInterestEventNotificationReceiveConfig(isReceive: Boolean) {
+        viewModelScope.launch {
+            configRepository.saveInterestEventNotificationReceiveConfig(isReceive)
+            fetchNotificationConfig()
+        }
+    }
+
+    fun removeInterestTagById(eventTagId: Long) {
+        viewModelScope.launch {
+            val notificationTags = _notificationTags.value
+            if (notificationTags !is NotificationTagsUiState.Success) return@launch
+            val removedInterestEventTag =
+                notificationTags.tags.filter { tag -> tag.id != eventTagId }
+
+            when (eventTagRepository.updateInterestEventTags(removedInterestEventTag)) {
+                is ApiSuccess -> fetchNotificationTags()
+                is ApiError, is ApiException ->
+                    _uiEvent.value = Event(NotificationConfigUiEvent.INTEREST_TAG_REMOVE_ERROR)
+            }
+        }
     }
 
     companion object {

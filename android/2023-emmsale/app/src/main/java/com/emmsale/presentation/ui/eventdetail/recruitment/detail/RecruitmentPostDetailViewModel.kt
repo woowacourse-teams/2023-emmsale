@@ -15,7 +15,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logRecruitment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.HasOpenUrlUiState
 import com.emmsale.presentation.ui.eventdetail.recruitment.detail.uiState.RecruitmentPostDetailUiEvent
@@ -29,7 +29,7 @@ class RecruitmentPostDetailViewModel(
     private val recruitmentRepository: RecruitmentRepository,
     private val memberRepository: MemberRepository,
     tokenRepository: TokenRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
 
     private val _recruitmentPost: NotNullMutableLiveData<RecruitmentPostUiState> =
         NotNullMutableLiveData(RecruitmentPostUiState())

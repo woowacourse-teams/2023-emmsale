@@ -18,7 +18,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logInterestTags
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.setting.notificationTagConfig.uistate.NotificationTagConfigUiEvent
 import com.emmsale.presentation.ui.main.setting.notificationTagConfig.uistate.NotificationTagConfigUiState
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 class NotificationTagConfigViewModel(
     private val tokenRepository: TokenRepository,
     private val eventTagRepository: EventTagRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
     private val _notificationTags = NotNullMutableLiveData(NotificationTagsConfigUiState())
     val notificationTags: NotNullLiveData<NotificationTagsConfigUiState> = _notificationTags
 

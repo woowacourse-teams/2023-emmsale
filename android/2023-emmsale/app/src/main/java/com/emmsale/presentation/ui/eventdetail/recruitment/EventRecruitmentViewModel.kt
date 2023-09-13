@@ -12,7 +12,7 @@ import com.emmsale.data.recruitment.RecruitmentRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostsUiState
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class EventRecruitmentViewModel(
     private val eventId: Long,
     private val recruitmentRepository: RecruitmentRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
 
     private val _recruitments: NotNullMutableLiveData<RecruitmentPostsUiState> =
         NotNullMutableLiveData(

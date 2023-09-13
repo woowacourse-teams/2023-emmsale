@@ -6,10 +6,13 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.emmsale.R
+import com.emmsale.data.eventTag.EventTag
 import com.emmsale.databinding.ActivityNotificationConfigBinding
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
-import com.emmsale.presentation.common.extension.navigateToApplicationSettings
+import com.emmsale.presentation.common.extension.navigateToNotificationSettings
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
@@ -17,7 +20,7 @@ import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDeleg
 import com.emmsale.presentation.common.views.CancelablePrimaryTag
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.cancelablePrimaryChipOf
-import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationTagUiState
+import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationConfigUiEvent
 import com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationTagsUiState
 import com.emmsale.presentation.ui.main.setting.notificationTagConfig.NotificationTagConfigActivity
 
@@ -32,7 +35,7 @@ class NotificationConfigActivity :
         viewModel.fetchNotificationTags()
     }
     private val settingLauncher = registerForActivityResult(StartActivityForResult()) {
-        viewModel.setNotificationReceiveConfig(checkPostNotificationPermission())
+        viewModel.setAllNotificationReceiveConfig(checkPostNotificationPermission())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,62 +76,87 @@ class NotificationConfigActivity :
     }
 
     private fun initNotificationConfigSwitch() {
-        binding.switchNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
+        binding.switchAllNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
             if (!checkPostNotificationPermission() && isChecked) {
                 showPermissionRequestDialog()
                 return@setOnCheckedChangeListener
             }
-            viewModel.setNotificationReceiveConfig(isChecked)
+            viewModel.setAllNotificationReceiveConfig(isChecked)
+        }
+        binding.switchFollowNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setFollowNotificationReceiveConfig(isChecked)
+        }
+        binding.switchCommentNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setCommentNotificationReceiveConfig(isChecked)
+        }
+        binding.switchInterestTagNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setInterestEventNotificationReceiveConfig(isChecked)
         }
     }
 
     private fun showPermissionRequestDialog() {
         showPermissionRequestDialog(
-            onConfirm = { navigateToApplicationSettings(settingLauncher) },
-            onDenied = { binding.switchNotificationReceiveConfig.isChecked = false },
+            onConfirm = { navigateToNotificationSettings(settingLauncher) },
+            onDenied = { binding.switchAllNotificationReceiveConfig.isChecked = false },
         )
     }
 
     private fun setupObservers() {
         setupConfigObserver()
         setupNotificationTagsObserver()
+        setupNotificationConfigUiEventObserver()
     }
 
     private fun setupConfigObserver() {
-        viewModel.notificationConfig.observe(this) { uiState ->
+        viewModel.notificationConfig.observe(this) { config ->
             val isNotificationPermissionChecked = checkPostNotificationPermission()
-            val isNotificationReceive = uiState.isNotificationReceive
+            val isNotificationReceive = config.isNotificationReceive
 
-            binding.switchNotificationReceiveConfig.isChecked =
+            binding.switchAllNotificationReceiveConfig.isChecked =
                 isNotificationPermissionChecked && isNotificationReceive
+
+            binding.clNotificationChannelSetting.isVisible =
+                isNotificationPermissionChecked && isNotificationReceive
+
+            binding.switchFollowNotificationReceiveConfig.isChecked =
+                config.isFollowNotificationReceive
+
+            binding.switchCommentNotificationReceiveConfig.isChecked =
+                config.isCommentNotificationReceive
+
+            binding.switchInterestTagNotificationReceiveConfig.isChecked =
+                config.isInterestEventNotificationReceive
         }
     }
 
     private fun setupNotificationTagsObserver() {
         viewModel.notificationTags.observe(this) { uiState ->
-            handleNotificationTagsErrors(uiState)
-            if (uiState.isTagFetchingSuccess) updateNotificationTagViews(uiState.conferenceTags)
+            if (uiState !is NotificationTagsUiState.Success) return@observe
+            updateNotificationTagViews(uiState.tags)
         }
     }
 
-    private fun handleNotificationTagsErrors(uiState: NotificationTagsUiState) {
-        when {
-            uiState.isTagFetchingError -> showTagFetchingErrorMessage()
-            uiState.isTagRemoveError -> showTagRemovingErrorMessage()
+    private fun setupNotificationConfigUiEventObserver() {
+        viewModel.uiEvent.observe(this) { event ->
+            handleNotificationTagsErrors(event)
         }
     }
 
-    private fun showTagFetchingErrorMessage() {
-        binding.root.showSnackBar(R.string.notificationconfig_tag_fetching_error_message)
+    private fun handleNotificationTagsErrors(event: Event<NotificationConfigUiEvent>) {
+        val content = event.getContentIfNotHandled() ?: return
+        when (content) {
+            NotificationConfigUiEvent.INTEREST_TAG_REMOVE_ERROR -> showTagRemovingErrorMessage()
+            NotificationConfigUiEvent.NONE -> {}
+        }
     }
 
     private fun showTagRemovingErrorMessage() {
         binding.root.showSnackBar(R.string.notificationconfig_tag_removing_error_message)
     }
 
-    private fun updateNotificationTagViews(conferenceTags: List<NotificationTagUiState>) {
+    private fun updateNotificationTagViews(conferenceTags: List<EventTag>) {
         clearNotificationTagViews()
-        addConferenceTags(conferenceTags)
+        addEventTags(conferenceTags)
     }
 
     private fun clearNotificationTagViews() {
@@ -140,17 +168,17 @@ class NotificationConfigActivity :
         )
     }
 
-    private fun addConferenceTags(conferenceTags: List<NotificationTagUiState>) {
-        conferenceTags.forEach(::addConferenceTag)
+    private fun addEventTags(eventTags: List<EventTag>) {
+        eventTags.forEach(::addEventTag)
     }
 
-    private fun addConferenceTag(conferenceTag: NotificationTagUiState) {
-        binding.cgNotificationTag.addView(createEventTag(conferenceTag))
+    private fun addEventTag(eventTag: EventTag) {
+        binding.cgNotificationTag.addView(createEventTag(eventTag))
     }
 
-    private fun createEventTag(eventTag: NotificationTagUiState): CancelablePrimaryTag =
+    private fun createEventTag(eventTag: EventTag): CancelablePrimaryTag =
         cancelablePrimaryChipOf {
-            text = eventTag.tagName
+            text = eventTag.name
             setOnClickListener { showTagRemoveConfirmDialog(eventTag.id) }
         }
 
@@ -164,7 +192,8 @@ class NotificationConfigActivity :
     }
 
     companion object {
-        fun getIntent(context: Context): Intent =
-            Intent(context, NotificationConfigActivity::class.java)
+        fun startActivity(context: Context) {
+            context.startActivity(Intent(context, NotificationConfigActivity::class.java))
+        }
     }
 }

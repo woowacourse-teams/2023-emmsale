@@ -1,5 +1,5 @@
 package com.emmsale.presentation.common.viewModel
 
-interface RefreshableViewModel {
+interface Refreshable {
     fun refresh()
 }

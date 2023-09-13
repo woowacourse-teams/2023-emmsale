@@ -9,7 +9,7 @@ import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.scrap.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventdetail.information.uiState.EventInfoUiEvent
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class EventInfoViewModel(
     private val eventId: Long,
     private val scrappedEventRepository: ScrappedEventRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
     private val _isScraped: MutableLiveData<Boolean> = MutableLiveData(false)
     val isScraped: LiveData<Boolean> = _isScraped
 

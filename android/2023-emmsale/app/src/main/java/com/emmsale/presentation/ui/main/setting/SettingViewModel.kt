@@ -11,7 +11,7 @@ import com.emmsale.data.token.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.RefreshableViewModel
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.main.setting.uiState.MemberUiState
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class SettingViewModel(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
-) : ViewModel(), RefreshableViewModel {
+) : ViewModel(), Refreshable {
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
