@@ -4,6 +4,7 @@ import static com.emmsale.tag.TagFixture.IOS;
 import static com.emmsale.tag.TagFixture.백엔드;
 import static com.emmsale.tag.TagFixture.안드로이드;
 import static com.emmsale.tag.TagFixture.프론트엔드;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -19,11 +20,12 @@ import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.message_room.domain.Message;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -95,7 +97,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
         .map(UpdateNotificationEvent::getReceiverId)
         .collect(Collectors.toList());
 
-    Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
+    assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
   }
 
   @Test
@@ -288,5 +290,35 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     //then
     verify(applicationEventPublisher, times(2))
         .publishEvent(any(UpdateNotificationEvent.class));
+  }
+
+  @Test
+  @DisplayName("publish() : message를 받아서, Event로 변환 후 publish한다.")
+  void publishMessageEvent() {
+    //given
+    final Message message = new Message("content", 1L, "roomId", LocalDateTime.now());
+    final Long receiverId = 2L;
+
+    //when
+    eventPublisher.publish(message, receiverId);
+
+    //then
+    final ArgumentCaptor<MessageNotificationEvent> argumentCaptor
+        = ArgumentCaptor.forClass(MessageNotificationEvent.class);
+    verify(applicationEventPublisher, times(1))
+        .publishEvent(argumentCaptor.capture());
+
+    final MessageNotificationEvent actualEvent = argumentCaptor.getValue();
+    final MessageNotificationEvent expectedEvent = new MessageNotificationEvent(
+        message.getRoomId(),
+        message.getContent(),
+        message.getSenderId(),
+        receiverId,
+        message.getCreatedAt()
+    );
+
+    assertThat(actualEvent)
+        .usingRecursiveComparison()
+        .isEqualTo(expectedEvent);
   }
 }
