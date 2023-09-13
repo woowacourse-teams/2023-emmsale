@@ -1,9 +1,9 @@
 package com.emmsale.data.service
 
-import com.emmsale.data.apiModel.request.CompanionRequestBody
-import com.emmsale.data.apiModel.request.RecruitmentDeletionRequestBody
-import com.emmsale.data.apiModel.request.RecruitmentPostingRequestBody
-import com.emmsale.data.apiModel.request.ReportRequestBody
+import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
+import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
+import com.emmsale.data.apiModel.request.RecruitmentReportRequest
+import com.emmsale.data.apiModel.request.RecruitmentRequestCreateRequest
 import com.emmsale.data.apiModel.response.RecruitmentApiModel
 import com.emmsale.data.apiModel.response.ReportApiModel
 import retrofit2.Response
@@ -31,14 +31,14 @@ interface RecruitmentService {
     @POST("events/{eventId}/recruitment-posts")
     suspend fun postRecruitment(
         @Path("eventId") eventId: Long,
-        @Body recruitmentPostingRequestBody: RecruitmentPostingRequestBody,
+        @Body recruitmentCreateRequest: RecruitmentCreateRequest,
     ): Response<Unit>
 
     @PUT("events/{eventId}/recruitment-posts/{recruitment-post-id}")
     suspend fun editRecruitment(
         @Path("eventId") eventId: Long,
         @Path("recruitment-post-id") recruitmentId: Long,
-        @Body recruitmentDeletionRequestBody: RecruitmentDeletionRequestBody,
+        @Body recruitmentDeleteRequest: RecruitmentDeleteRequest,
     ): Response<Unit>
 
     @DELETE("events/{eventId}/recruitment-posts/{post-id}")
@@ -55,7 +55,7 @@ interface RecruitmentService {
 
     @POST("request-notifications")
     suspend fun postCompanion(
-        @Body companionRequestBody: CompanionRequestBody,
+        @Body recruitmentRequestCreateRequest: RecruitmentRequestCreateRequest,
     ): Response<Unit>
 
     @GET("request-notifications/existed")
@@ -66,5 +66,7 @@ interface RecruitmentService {
     ): Response<Boolean>
 
     @POST("reports")
-    suspend fun reportRecruitment(@Body reportRequestBody: ReportRequestBody): Response<ReportApiModel>
+    suspend fun reportRecruitment(
+        @Body recruitmentReportRequest: RecruitmentReportRequest,
+    ): Response<ReportApiModel>
 }

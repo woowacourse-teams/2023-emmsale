@@ -1,9 +1,9 @@
 package com.emmsale.data.service
 
-import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequestBody
-import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequestBody
-import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequestBody
-import com.emmsale.data.apiModel.request.MemberUpdateRequestBody
+import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
+import com.emmsale.data.apiModel.request.MemberCreateRequest
+import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
+import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
 import com.emmsale.data.apiModel.response.BlockRequestBody
 import com.emmsale.data.apiModel.response.MemberActivitiesApiModel
 import com.emmsale.data.apiModel.response.MemberApiModel
@@ -22,18 +22,18 @@ interface MemberService {
     suspend fun getMember(@Path("memberId") memberId: Long): Response<MemberApiModel>
 
     @POST("/members")
-    suspend fun updateMember(@Body member: MemberUpdateRequestBody): Response<Unit>
+    suspend fun updateMember(@Body member: MemberCreateRequest): Response<Unit>
 
     @PUT("/members/description")
-    suspend fun updateMemberDescription(@Body memberDescriptionUpdateRequestBody: MemberDescriptionUpdateRequestBody): Response<Unit>
+    suspend fun updateMemberDescription(@Body memberDescriptionUpdateRequest: MemberDescriptionUpdateRequest): Response<Unit>
 
     @PUT("/members/open-profile-url")
     suspend fun updateMemberOpenProfileUrl(
-        @Body memberOpenProfileUrlUpdateRequestBody: MemberOpenProfileUrlUpdateRequestBody,
+        @Body memberOpenProfileUrlUpdateRequest: MemberOpenProfileUrlUpdateRequest,
     ): Response<Unit>
 
     @POST("/members/activities")
-    suspend fun addMemberActivities(@Body memberActivitiesUpdateRequestBody: MemberActivitiesUpdateRequestBody): Response<Unit>
+    suspend fun addMemberActivities(@Body memberActivitiesUpdateRequest: MemberActivitiesUpdateRequest): Response<Unit>
 
     @DELETE("/members/activities")
     suspend fun deleteMemberActivities(@Query("activity-ids") ids: List<Long>): Response<List<MemberActivitiesApiModel>>

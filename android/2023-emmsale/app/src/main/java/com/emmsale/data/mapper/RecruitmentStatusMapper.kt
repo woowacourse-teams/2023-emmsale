@@ -1,6 +1,6 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.request.RecruitmentStatusUpdateRequestModel
+import com.emmsale.data.apiModel.request.RecruitmentNotificationStatusUpdateRequest
 import com.emmsale.data.model.RecruitmentStatus
 
 private const val IN_PROGRESS = "IN_PROGRESS"
@@ -16,9 +16,9 @@ fun String.toRecruitmentStatus(): RecruitmentStatus =
         else -> throw IllegalArgumentException(INVALID_STATUS_ERROR_MESSAGE)
     }
 
-fun RecruitmentStatus.toRequestModel(): RecruitmentStatusUpdateRequestModel =
+fun RecruitmentStatus.toRequestModel(): RecruitmentNotificationStatusUpdateRequest =
     when (this) {
-        RecruitmentStatus.PENDING -> RecruitmentStatusUpdateRequestModel(IN_PROGRESS)
-        RecruitmentStatus.ACCEPTED -> RecruitmentStatusUpdateRequestModel(ACCEPT)
-        RecruitmentStatus.REJECTED -> RecruitmentStatusUpdateRequestModel(REJECT)
+        RecruitmentStatus.PENDING -> RecruitmentNotificationStatusUpdateRequest(IN_PROGRESS)
+        RecruitmentStatus.ACCEPTED -> RecruitmentNotificationStatusUpdateRequest(ACCEPT)
+        RecruitmentStatus.REJECTED -> RecruitmentNotificationStatusUpdateRequest(REJECT)
     }

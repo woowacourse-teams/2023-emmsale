@@ -1,9 +1,9 @@
 package com.emmsale.data.repository
 
-import com.emmsale.data.apiModel.request.CompanionRequestBody
-import com.emmsale.data.apiModel.request.RecruitmentDeletionRequestBody
-import com.emmsale.data.apiModel.request.RecruitmentPostingRequestBody
-import com.emmsale.data.apiModel.request.ReportRequestBody
+import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
+import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
+import com.emmsale.data.apiModel.request.RecruitmentReportRequest
+import com.emmsale.data.apiModel.request.RecruitmentRequestCreateRequest
 import com.emmsale.data.apiModel.response.RecruitmentApiModel
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
@@ -39,7 +39,7 @@ class DefaultRecruitmentRepository(
     }
 
     override suspend fun postRecruitment(eventId: Long, content: String): ApiResult<Long> {
-        val requestBody = RecruitmentPostingRequestBody(memberId = myUid, content = content)
+        val requestBody = RecruitmentCreateRequest(memberId = myUid, content = content)
         val response = handleApi(
             execute = { recruitmentService.postRecruitment(eventId, requestBody) },
             mapToDomain = { },
@@ -84,7 +84,7 @@ class DefaultRecruitmentRepository(
                 recruitmentService.editRecruitment(
                     eventId = eventId,
                     recruitmentId = recruitmentId,
-                    recruitmentDeletionRequestBody = RecruitmentDeletionRequestBody(content),
+                    recruitmentDeleteRequest = RecruitmentDeleteRequest(content),
                 )
             },
             mapToDomain = {},
@@ -96,7 +96,7 @@ class DefaultRecruitmentRepository(
         memberId: Long,
         message: String,
     ): ApiResult<Unit> {
-        val requestBody = CompanionRequestBody(
+        val requestBody = RecruitmentRequestCreateRequest(
             senderId = myUid,
             receiverId = memberId,
             eventId = eventId,
@@ -140,7 +140,7 @@ class DefaultRecruitmentRepository(
         return handleApi(
             execute = {
                 recruitmentService.reportRecruitment(
-                    ReportRequestBody.createRecruitmentReport(
+                    RecruitmentReportRequest.create(
                         recruitmentId = recruitmentId,
                         authorId = authorId,
                         reporterId = reporterId,

@@ -1,9 +1,9 @@
 package com.emmsale.data.repository
 
-import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequestBody
-import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequestBody
-import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequestBody
-import com.emmsale.data.apiModel.request.MemberUpdateRequestBody
+import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
+import com.emmsale.data.apiModel.request.MemberCreateRequest
+import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
+import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
 import com.emmsale.data.apiModel.response.BlockRequestBody
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
@@ -33,7 +33,7 @@ class DefaultMemberRepository(
         handleApi(
             execute = {
                 memberService.updateMember(
-                    MemberUpdateRequestBody(
+                    MemberCreateRequest(
                         name = name,
                         activityIds = activityIds,
                     ),
@@ -48,7 +48,7 @@ class DefaultMemberRepository(
             handleApi(
                 execute = {
                     memberService.updateMemberDescription(
-                        MemberDescriptionUpdateRequestBody(description),
+                        MemberDescriptionUpdateRequest(description),
                     )
                 },
                 mapToDomain = {},
@@ -60,7 +60,7 @@ class DefaultMemberRepository(
             handleApi(
                 execute = {
                     memberService.updateMemberOpenProfileUrl(
-                        MemberOpenProfileUrlUpdateRequestBody(openProfileUrl),
+                        MemberOpenProfileUrlUpdateRequest(openProfileUrl),
                     )
                 },
                 mapToDomain = {},
@@ -71,7 +71,7 @@ class DefaultMemberRepository(
         withContext(dispatcher) {
             handleApi(
                 execute = {
-                    memberService.addMemberActivities(MemberActivitiesUpdateRequestBody(activityIds))
+                    memberService.addMemberActivities(MemberActivitiesUpdateRequest(activityIds))
                 },
                 mapToDomain = {},
             )

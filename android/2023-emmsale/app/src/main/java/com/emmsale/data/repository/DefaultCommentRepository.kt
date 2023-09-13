@@ -1,8 +1,8 @@
 package com.emmsale.data.repository
 
-import com.emmsale.data.apiModel.request.ReportRequestBody
-import com.emmsale.data.apiModel.request.SaveCommentRequestBody
-import com.emmsale.data.apiModel.request.UpdateCommentRequestBody
+import com.emmsale.data.apiModel.request.ChildCommentCreateRequest
+import com.emmsale.data.apiModel.request.CommentReportRequest
+import com.emmsale.data.apiModel.request.CommentUpdateRequest
 import com.emmsale.data.apiModel.response.CommentFamilyApiModel
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
@@ -60,7 +60,7 @@ class DefaultCommentRepository(
         content: String,
         eventId: Long,
         parentId: Long?,
-    ) = SaveCommentRequestBody(
+    ) = ChildCommentCreateRequest(
         content = content,
         eventId = eventId,
         parentId = parentId,
@@ -72,7 +72,7 @@ class DefaultCommentRepository(
                 execute = {
                     commentService.updateComment(
                         commentId,
-                        UpdateCommentRequestBody(content),
+                        CommentUpdateRequest(content),
                     )
                 },
                 mapToDomain = {},
@@ -94,7 +94,7 @@ class DefaultCommentRepository(
         handleApi(
             execute = {
                 commentService.reportComment(
-                    ReportRequestBody.createCommentReport(
+                    CommentReportRequest.createCommentReport(
                         commentId = commentId,
                         authorId = authorId,
                         reporterId = reporterId,

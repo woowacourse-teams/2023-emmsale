@@ -1,8 +1,8 @@
 package com.emmsale.data.service
 
-import com.emmsale.data.apiModel.request.RecruitmentStatusUpdateRequestModel
-import com.emmsale.data.apiModel.request.ReportRequestBody
-import com.emmsale.data.apiModel.request.UpdatedNotificationDeleteRequestModel
+import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
+import com.emmsale.data.apiModel.request.RecruitmentNotificationReportRequest
+import com.emmsale.data.apiModel.request.RecruitmentNotificationStatusUpdateRequest
 import com.emmsale.data.apiModel.response.RecruitmentNotificationApiModel
 import com.emmsale.data.apiModel.response.ReportApiModel
 import com.emmsale.data.apiModel.response.UpdatedNotificationApiModel
@@ -25,7 +25,7 @@ interface NotificationService {
     @PATCH("/request-notifications/{request-notification-id}/status")
     suspend fun updateRecruitmentStatus(
         @Path("request-notification-id") notificationId: Long,
-        @Body newStatus: RecruitmentStatusUpdateRequestModel,
+        @Body newStatus: RecruitmentNotificationStatusUpdateRequest,
     ): Response<Unit>
 
     @PATCH("/request-notifications/{request-notification-id}/read")
@@ -45,9 +45,11 @@ interface NotificationService {
 
     @HTTP(method = "DELETE", path = "/update-notifications", hasBody = true)
     suspend fun deleteNotification(
-        @Body notificationIds: UpdatedNotificationDeleteRequestModel,
+        @Body notificationIds: NotificationListDeleteRequest,
     ): Response<Unit>
 
     @POST("/reports")
-    suspend fun reportRecruitmentNotification(@Body reportRequestBody: ReportRequestBody): Response<ReportApiModel>
+    suspend fun reportRecruitmentNotification(
+        @Body recruitmentNotificationReportRequest: RecruitmentNotificationReportRequest,
+    ): Response<ReportApiModel>
 }

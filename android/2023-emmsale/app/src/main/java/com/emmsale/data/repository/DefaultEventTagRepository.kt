@@ -1,6 +1,6 @@
 package com.emmsale.data.repository
 
-import com.emmsale.data.apiModel.request.InterestEventTagUpdateRequestApiModel
+import com.emmsale.data.apiModel.request.InterestEventTagUpdateRequest
 import com.emmsale.data.apiModel.response.EventTagApiModel
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
@@ -60,7 +60,7 @@ class DefaultEventTagRepository(
             handleApi(
                 execute = {
                     eventTagRemoteDataSource.updateInterestEventTags(
-                        InterestEventTagUpdateRequestApiModel(interestEventTags.map { it.id }),
+                        InterestEventTagUpdateRequest(interestEventTags.map { it.id }),
                     )
                 },
                 mapToDomain = { },

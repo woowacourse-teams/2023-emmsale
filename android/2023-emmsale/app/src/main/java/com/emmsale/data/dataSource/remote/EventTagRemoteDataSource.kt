@@ -1,6 +1,6 @@
 package com.emmsale.data.dataSource.remote
 
-import com.emmsale.data.apiModel.request.InterestEventTagUpdateRequestApiModel
+import com.emmsale.data.apiModel.request.InterestEventTagUpdateRequest
 import com.emmsale.data.apiModel.response.EventTagApiModel
 import com.emmsale.data.apiModel.response.InterestEventTagUpdateResponseApiModel
 import com.emmsale.data.common.callAdapter.ApiResponse
@@ -17,7 +17,7 @@ class EventTagRemoteDataSource(
     ): Response<List<EventTagApiModel>> = eventTagService.getInterestEventTags(memberId)
 
     suspend fun updateInterestEventTags(
-        requestModel: InterestEventTagUpdateRequestApiModel,
+        requestModel: InterestEventTagUpdateRequest,
     ): Response<List<InterestEventTagUpdateResponseApiModel>> =
         eventTagService.updateInterestEventTags(requestModel)
 }

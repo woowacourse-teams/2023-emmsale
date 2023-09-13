@@ -1,6 +1,6 @@
 package com.emmsale.data.service
 
-import com.emmsale.data.apiModel.request.InterestEventTagUpdateRequestApiModel
+import com.emmsale.data.apiModel.request.InterestEventTagUpdateRequest
 import com.emmsale.data.apiModel.response.EventTagApiModel
 import com.emmsale.data.apiModel.response.InterestEventTagUpdateResponseApiModel
 import com.emmsale.data.common.callAdapter.ApiResponse
@@ -21,6 +21,6 @@ interface EventTagService {
 
     @PUT("/interest-tags")
     suspend fun updateInterestEventTags(
-        @Body requestModel: InterestEventTagUpdateRequestApiModel,
+        @Body requestModel: InterestEventTagUpdateRequest,
     ): Response<List<InterestEventTagUpdateResponseApiModel>>
 }

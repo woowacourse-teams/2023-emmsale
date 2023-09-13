@@ -1,6 +1,6 @@
 package com.emmsale.data.service
 
-import com.emmsale.data.apiModel.request.ScrappedEventRequestBody
+import com.emmsale.data.apiModel.request.ScrappedEventCreateRequest
 import com.emmsale.data.apiModel.response.ScrappedEventApiModel
 import retrofit2.Response
 import retrofit2.http.Body
@@ -15,7 +15,7 @@ interface ScrappedEventService {
 
     @POST("scraps")
     suspend fun scrapEvent(
-        @Body scrappedEventRequestBody: ScrappedEventRequestBody,
+        @Body scrappedEventCreateRequest: ScrappedEventCreateRequest,
     ): Response<Unit>
 
     @DELETE("scraps")

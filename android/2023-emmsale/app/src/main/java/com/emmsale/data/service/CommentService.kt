@@ -1,8 +1,8 @@
 package com.emmsale.data.service
 
-import com.emmsale.data.apiModel.request.ReportRequestBody
-import com.emmsale.data.apiModel.request.SaveCommentRequestBody
-import com.emmsale.data.apiModel.request.UpdateCommentRequestBody
+import com.emmsale.data.apiModel.request.ChildCommentCreateRequest
+import com.emmsale.data.apiModel.request.CommentReportRequest
+import com.emmsale.data.apiModel.request.CommentUpdateRequest
 import com.emmsale.data.apiModel.response.CommentApiModel
 import com.emmsale.data.apiModel.response.CommentFamilyApiModel
 import com.emmsale.data.apiModel.response.ReportApiModel
@@ -30,17 +30,17 @@ interface CommentService {
     suspend fun getChildComments(@Path("commentId") commentId: Long): Response<List<CommentApiModel>>
 
     @POST("comments")
-    suspend fun saveComment(@Body saveCommentRequestBody: SaveCommentRequestBody): Response<CommentApiModel>
+    suspend fun saveComment(@Body childCommentCreateRequest: ChildCommentCreateRequest): Response<CommentApiModel>
 
     @PATCH("comments/{commentId}")
     suspend fun updateComment(
         @Path("commentId") commentId: Long,
-        @Body updateCommentRequestBody: UpdateCommentRequestBody,
+        @Body commentUpdateRequest: CommentUpdateRequest,
     ): Response<CommentApiModel>
 
     @DELETE("comments/{commentId}")
     suspend fun deleteComment(@Path("commentId") commentId: Long): Response<Unit>
 
     @POST("/reports")
-    suspend fun reportComment(@Body reportRequestBody: ReportRequestBody): Response<ReportApiModel>
+    suspend fun reportComment(@Body commentReportRequest: CommentReportRequest): Response<ReportApiModel>
 }

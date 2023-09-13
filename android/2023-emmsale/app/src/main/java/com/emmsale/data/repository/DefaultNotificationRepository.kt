@@ -1,7 +1,7 @@
 package com.emmsale.data.repository
 
-import com.emmsale.data.apiModel.request.ReportRequestBody
-import com.emmsale.data.apiModel.request.UpdatedNotificationDeleteRequestModel
+import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
+import com.emmsale.data.apiModel.request.RecruitmentNotificationReportRequest
 import com.emmsale.data.apiModel.response.RecruitmentNotificationApiModel
 import com.emmsale.data.apiModel.response.UpdatedNotificationApiModel
 import com.emmsale.data.common.ApiResult
@@ -75,7 +75,7 @@ class DefaultNotificationRepository(
             handleApi(
                 execute = {
                     notificationService.deleteNotification(
-                        UpdatedNotificationDeleteRequestModel(notificationIds),
+                        NotificationListDeleteRequest(notificationIds),
                     )
                 },
                 mapToDomain = { },
@@ -91,7 +91,7 @@ class DefaultNotificationRepository(
         handleApi(
             execute = {
                 notificationService.reportRecruitmentNotification(
-                    ReportRequestBody.createRecruitmentNotificationReport(
+                    RecruitmentNotificationReportRequest.create(
                         recruitmentNotificationId = recruitmentNotificationId,
                         senderId = senderId,
                         reporterId = reporterId,

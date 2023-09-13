@@ -1,6 +1,6 @@
 package com.emmsale.data.repository
 
-import com.emmsale.data.apiModel.request.ScrappedEventRequestBody
+import com.emmsale.data.apiModel.request.ScrappedEventCreateRequest
 import com.emmsale.data.apiModel.response.ScrappedEventApiModel
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
@@ -24,9 +24,9 @@ class DefaultScrappedEventRepository(
     }
 
     override suspend fun scrapEvent(eventId: Long): ApiResult<Unit> {
-        val scrappedEventRequestBody = ScrappedEventRequestBody(eventId)
+        val scrappedEventCreateRequest = ScrappedEventCreateRequest(eventId)
         return handleApi(
-            execute = { scrappedEventService.scrapEvent(scrappedEventRequestBody) },
+            execute = { scrappedEventService.scrapEvent(scrappedEventCreateRequest) },
             mapToDomain = {},
         )
     }
