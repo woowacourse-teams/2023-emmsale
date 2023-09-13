@@ -1,6 +1,7 @@
 package com.emmsale.feed.application.dto;
 
 import com.emmsale.feed.domain.Feed;
+import com.emmsale.member.domain.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -24,5 +25,22 @@ public class FeedDetailResponse {
         feed.getTitle(),
         feed.getContent()
     );
+  }
+
+  @Getter
+  @RequiredArgsConstructor
+  public static class WriterProfileResponse {
+
+    private final Long memberId;
+    private final String name;
+    private final String imageUrl;
+
+    public static WriterProfileResponse from(final Member writer) {
+      return new WriterProfileResponse(
+          writer.getId(),
+          writer.getName(),
+          writer.getImageUrl()
+      );
+    }
   }
 }

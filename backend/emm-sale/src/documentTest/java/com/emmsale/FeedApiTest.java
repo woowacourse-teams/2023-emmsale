@@ -15,13 +15,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.feed.application.dto.FeedDetailResponse;
+import com.emmsale.feed.application.dto.FeedDetailResponse.WriterProfileResponse;
 import com.emmsale.feed.application.dto.FeedListResponse;
 import com.emmsale.feed.application.dto.FeedPostRequest;
 import com.emmsale.feed.application.dto.FeedPostResponse;
 import com.emmsale.feed.application.dto.FeedSimpleResponse;
 import com.emmsale.feed.application.dto.FeedUpdateRequest;
 import com.emmsale.feed.application.dto.FeedUpdateResponse;
-import com.emmsale.feed.application.dto.WriterProfileResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
