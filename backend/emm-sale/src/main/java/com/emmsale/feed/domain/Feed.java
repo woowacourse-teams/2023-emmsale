@@ -5,6 +5,7 @@ import com.emmsale.comment.domain.Comment;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.Member;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -60,5 +61,22 @@ public class Feed extends BaseEntity {
 
   public void delete() {
     this.isDeleted = true;
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final Feed feed = (Feed) o;
+    return Objects.equals(id, feed.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
