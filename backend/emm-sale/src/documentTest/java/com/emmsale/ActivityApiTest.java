@@ -1,16 +1,29 @@
 package com.emmsale;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.emmsale.activity.api.ActivityApi;
+import com.emmsale.activity.application.dto.ActivityAddRequest;
 import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.application.dto.ActivityResponses;
+import com.emmsale.activity.domain.ActivityType;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -52,12 +65,39 @@ class ActivityApiTest extends MockMvcTestHelper {
             ))
     );
 
-    Mockito.when(activityService.findAll()).thenReturn(activityResponses);
+    Mockito.when(activityQueryService.findAll()).thenReturn(activityResponses);
 
     // when & then
 
     mockMvc.perform(MockMvcRequestBuilders.get("/activities"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(MockMvcRestDocumentation.document("find-all-activities", responseFields));
+  }
+
+  @Test
+  @DisplayName("새로운 활동을 생성할 수 있다.")
+  void addTag() throws Exception {
+    //given
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("activityType").type(JsonFieldType.STRING).description("활동 유형"),
+        fieldWithPath("name").type(JsonFieldType.STRING).description("활동 이름")
+    );
+
+    final ActivityAddRequest request = new ActivityAddRequest(ActivityType.CLUB, "DND");
+    final ActivityResponse response = new ActivityResponse(3L, "DND");
+
+    when(activityCommandService.addActivity(any(ActivityAddRequest.class))).thenReturn(response);
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("id").type(JsonFieldType.NUMBER).description("활동 식별자"),
+        fieldWithPath("name").type(JsonFieldType.STRING).description("활동 이름")
+    );
+
+    //when & then
+    mockMvc.perform(post("/activities")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isCreated())
+        .andDo(document("add-activity", requestFields, responseFields));
   }
 }

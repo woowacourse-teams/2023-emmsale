@@ -19,6 +19,20 @@ include::{snippets}/find-all-activities/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-all-activities/response-fields.adoc[]
 
+=== `POST`: 새로운 Activity 추가
+
+.HTTP request
+include::{snippets}/add-activity/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/add-activity/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/add-activity/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-activity/response-fields.adoc[]
+
 == Member
 
 === `POST`: 초기 사용자 등록
@@ -287,7 +301,7 @@ include::{snippets}/update-event/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/update-event/response-fields.adoc[]
 
-=== `PUT` : 행사 삭제
+=== `DELETE` : 행사 삭제
 
 .HTTP request
 include::{snippets}/delete-event/http-request.adoc[]
@@ -551,6 +565,20 @@ include::{snippets}/find-tags/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/find-tags/response-fields.adoc[]
 
+=== `POST` : 새로운 태그 추가
+
+.HTTP request
+include::{snippets}/add-tag/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/add-tag/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/add-tag/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/add-tag/response-fields.adoc[]
+
 == Report
 
 === `POST` : 특정 사용자의 게시물 신고
@@ -622,3 +650,17 @@ include::{snippets}/send-message/http-request.adoc[]
 
 .HTTP response
 include::{snippets}/send-message/http-response.adoc[]
+
+=== `GET` : 쪽지함 목록 조회
+
+.HTTP request
+include::{snippets}/get-rooms/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/get-rooms/request-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/get-rooms/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/get-rooms/response-fields.adoc[]
