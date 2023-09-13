@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EventPublisher {
 
-
   private final ApplicationEventPublisher applicationEventPublisher;
   private final InterestTagRepository interestTagRepository;
   private final MemberRepository memberRepository;
