@@ -24,6 +24,8 @@ import com.emmsale.data.login.LoginRepository
 import com.emmsale.data.login.LoginRepositoryImpl
 import com.emmsale.data.member.MemberRepository
 import com.emmsale.data.member.MemberRepositoryImpl
+import com.emmsale.data.messageRoom.MessageRoomRepository
+import com.emmsale.data.messageRoom.MessageRoomRepositoryImpl
 import com.emmsale.data.myPost.MyPostRepository
 import com.emmsale.data.myPost.MyPostRepositoryImpl
 import com.emmsale.data.notification.NotificationRepository
@@ -97,6 +99,11 @@ class RepositoryContainer(
         MyPostRepositoryImpl(
             myPostService = serviceContainer.myPostService,
             tokenRepository = tokenRepository,
+        )
+    }
+    val messageRoomRepository: MessageRoomRepository by lazy {
+        MessageRoomRepositoryImpl(
+            messageRoomService = serviceContainer.messageRoomService,
         )
     }
 }
