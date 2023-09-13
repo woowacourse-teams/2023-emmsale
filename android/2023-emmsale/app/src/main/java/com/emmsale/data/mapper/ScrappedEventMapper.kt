@@ -1,10 +1,10 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.ScrappedEventApiModel
+import com.emmsale.data.apiModel.response.ScrappedEventResponse
 import com.emmsale.data.model.ConferenceStatus
 import com.emmsale.data.model.ScrappedEvent
 
-fun ScrappedEventApiModel.toData(): ScrappedEvent {
+fun ScrappedEventResponse.toData(): ScrappedEvent {
     return ScrappedEvent(
         scrapId = scrapId,
         eventId = eventId,
@@ -15,7 +15,7 @@ fun ScrappedEventApiModel.toData(): ScrappedEvent {
     )
 }
 
-fun List<ScrappedEventApiModel>.toData(): List<ScrappedEvent> = map {
+fun List<ScrappedEventResponse>.toData(): List<ScrappedEvent> = map {
     it.toData()
 }
 

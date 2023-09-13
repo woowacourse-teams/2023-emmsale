@@ -3,9 +3,9 @@ package com.emmsale.data.service
 import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentNotificationReportCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentNotificationStatusUpdateRequest
-import com.emmsale.data.apiModel.response.RecruitmentNotificationApiModel
-import com.emmsale.data.apiModel.response.ReportApiModel
-import com.emmsale.data.apiModel.response.UpdatedNotificationApiModel
+import com.emmsale.data.apiModel.response.NotificationReportResponse
+import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
+import com.emmsale.data.apiModel.response.UpdatedNotificationResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -20,7 +20,7 @@ interface NotificationService {
     @GET("/request-notifications")
     suspend fun getRecruitmentNotifications(
         @Query("member-id") memberId: Long,
-    ): Response<List<RecruitmentNotificationApiModel>>
+    ): Response<List<RecruitmentNotificationResponse>>
 
     @PATCH("/request-notifications/{request-notification-id}/status")
     suspend fun updateRecruitmentStatus(
@@ -36,7 +36,7 @@ interface NotificationService {
     @GET("/update-notifications")
     suspend fun getUpdatedNotifications(
         @Query("member-id") memberId: Long,
-    ): Response<List<UpdatedNotificationApiModel>>
+    ): Response<List<UpdatedNotificationResponse>>
 
     @PUT("/update-notifications/{update-notification-id}/read")
     suspend fun updateUpdatedNotificationReadStatus(
@@ -51,5 +51,5 @@ interface NotificationService {
     @POST("/reports")
     suspend fun reportRecruitmentNotification(
         @Body recruitmentNotificationReportCreateRequest: RecruitmentNotificationReportCreateRequest,
-    ): Response<ReportApiModel>
+    ): Response<NotificationReportResponse>
 }

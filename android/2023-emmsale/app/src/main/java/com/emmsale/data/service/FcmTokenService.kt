@@ -1,6 +1,6 @@
 package com.emmsale.data.service
 
-import com.emmsale.data.apiModel.response.FcmTokenApiModel
+import com.emmsale.data.apiModel.response.FcmTokenResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -8,6 +8,6 @@ import retrofit2.http.POST
 interface FcmTokenService {
     @POST("/notifications/token")
     suspend fun saveFcmToken(
-        @Body fcmToken: FcmTokenApiModel,
+        @Body fcmToken: FcmTokenResponse,
     ): Response<Unit>
 }

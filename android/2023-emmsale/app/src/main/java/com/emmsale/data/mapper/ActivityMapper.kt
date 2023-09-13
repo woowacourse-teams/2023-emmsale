@@ -1,22 +1,22 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.ActivitiesApiModel
-import com.emmsale.data.apiModel.response.ActivityApiModel
-import com.emmsale.data.apiModel.response.MemberActivitiesApiModel
+import com.emmsale.data.apiModel.response.ActivitiesResponse
+import com.emmsale.data.apiModel.response.ActivityResponse
+import com.emmsale.data.apiModel.response.MemberActivitiesResponse
 import com.emmsale.data.model.Activity
 import com.emmsale.data.model.ActivityType
 
-fun List<ActivitiesApiModel>.toData(): List<Activity> = flatMap { it.toData() }
+fun List<ActivitiesResponse>.toData(): List<Activity> = flatMap { it.toData() }
 
-fun ActivitiesApiModel.toData(): List<Activity> = activities.map { it.toData(category) }
+fun ActivitiesResponse.toData(): List<Activity> = activities.map { it.toData(category) }
 
 @JvmName("mapMemberActivitiesApiModelToData")
-fun List<MemberActivitiesApiModel>.toData(): List<Activity> = flatMap { it.toData() }
+fun List<MemberActivitiesResponse>.toData(): List<Activity> = flatMap { it.toData() }
 
-fun MemberActivitiesApiModel.toData(): List<Activity> =
+fun MemberActivitiesResponse.toData(): List<Activity> =
     memberActivityResponses.map { it.toData(activityType) }
 
-fun ActivityApiModel.toData(category: String): Activity = Activity(
+fun ActivityResponse.toData(category: String): Activity = Activity(
     id = id,
     activityType = category.toData(),
     name = name,

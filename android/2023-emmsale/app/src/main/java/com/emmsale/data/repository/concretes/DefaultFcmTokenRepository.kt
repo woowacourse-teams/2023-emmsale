@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.FcmTokenApiModel
+import com.emmsale.data.apiModel.response.FcmTokenResponse
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.repository.interfaces.FcmTokenRepository
@@ -16,7 +16,7 @@ class DefaultFcmTokenRepository(
     override suspend fun saveFcmToken(uid: Long, fcmToken: String): ApiResult<Unit> =
         withContext(dispatcher) {
             handleApi(
-                execute = { fcmTokenService.saveFcmToken(FcmTokenApiModel(uid, fcmToken)) },
+                execute = { fcmTokenService.saveFcmToken(FcmTokenResponse(uid, fcmToken)) },
                 mapToDomain = { },
             )
         }

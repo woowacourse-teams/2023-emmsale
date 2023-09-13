@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginApiModel(
+data class LoginResponse(
     @SerialName("memberId")
     val uid: Long,
     @SerialName("accessToken")

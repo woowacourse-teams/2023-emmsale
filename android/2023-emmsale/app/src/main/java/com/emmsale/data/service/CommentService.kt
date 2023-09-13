@@ -3,9 +3,9 @@ package com.emmsale.data.service
 import com.emmsale.data.apiModel.request.ChildCommentCreateRequest
 import com.emmsale.data.apiModel.request.CommentReportCreateRequest
 import com.emmsale.data.apiModel.request.CommentUpdateRequest
-import com.emmsale.data.apiModel.response.CommentApiModel
 import com.emmsale.data.apiModel.response.CommentFamilyApiModel
-import com.emmsale.data.apiModel.response.ReportApiModel
+import com.emmsale.data.apiModel.response.CommentReportResponse
+import com.emmsale.data.apiModel.response.CommentResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -35,13 +35,13 @@ interface CommentService {
     @POST("/comments")
     suspend fun saveComment(
         @Body childCommentCreateRequest: ChildCommentCreateRequest,
-    ): Response<CommentApiModel>
+    ): Response<CommentResponse>
 
     @PATCH("/comments/{commentId}")
     suspend fun updateComment(
         @Path("commentId") commentId: Long,
         @Body commentUpdateRequest: CommentUpdateRequest,
-    ): Response<CommentApiModel>
+    ): Response<CommentResponse>
 
     @DELETE("/comments/{commentId}")
     suspend fun deleteComment(
@@ -51,5 +51,5 @@ interface CommentService {
     @POST("/reports")
     suspend fun reportComment(
         @Body commentReportCreateRequest: CommentReportCreateRequest,
-    ): Response<ReportApiModel>
+    ): Response<CommentReportResponse>
 }

@@ -4,7 +4,7 @@ import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentRequestCreateRequest
-import com.emmsale.data.apiModel.response.RecruitmentApiModel
+import com.emmsale.data.apiModel.response.RecruitmentResponse
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
@@ -26,7 +26,7 @@ class DefaultRecruitmentRepository(
     override suspend fun getEventRecruitments(eventId: Long): ApiResult<List<Recruitment>> {
         return handleApi(
             execute = { recruitmentService.getRecruitments(eventId) },
-            mapToDomain = List<RecruitmentApiModel>::toData,
+            mapToDomain = List<RecruitmentResponse>::toData,
         )
     }
 
@@ -36,7 +36,7 @@ class DefaultRecruitmentRepository(
     ): ApiResult<Recruitment> {
         return handleApi(
             execute = { recruitmentService.getRecruitment(eventId, recruitmentId) },
-            mapToDomain = RecruitmentApiModel::toData,
+            mapToDomain = RecruitmentResponse::toData,
         )
     }
 

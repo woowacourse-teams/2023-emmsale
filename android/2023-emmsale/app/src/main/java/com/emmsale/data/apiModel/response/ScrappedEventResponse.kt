@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ScrappedEventApiModel(
+data class ScrappedEventResponse(
     @SerialName("scrapId")
     val scrapId: Long,
     @SerialName("eventId")

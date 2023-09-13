@@ -1,9 +1,9 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.MemberApiModel
+import com.emmsale.data.apiModel.response.MemberResponse
 import com.emmsale.data.model.Member
 
-fun MemberApiModel.toData() = Member(
+fun MemberResponse.toData() = Member(
     id = id,
     githubUrl = githubUrl,
     name = name,

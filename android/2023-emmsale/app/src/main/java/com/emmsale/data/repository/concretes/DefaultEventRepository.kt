@@ -1,7 +1,7 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.CompetitionApiModel
-import com.emmsale.data.apiModel.response.ConferenceApiModel
+import com.emmsale.data.apiModel.response.CompetitionResponse
+import com.emmsale.data.apiModel.response.ConferenceResponse
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.mapper.toApiModel
@@ -40,7 +40,7 @@ class DefaultEventRepository(
                     endDate = endDate?.toRequestFormat(),
                 )
             },
-            mapToDomain = List<ConferenceApiModel>::toData,
+            mapToDomain = List<ConferenceResponse>::toData,
         )
     }
 
@@ -60,7 +60,7 @@ class DefaultEventRepository(
                     endDate = endDate?.toRequestFormat(),
                 )
             },
-            mapToDomain = List<CompetitionApiModel>::toData,
+            mapToDomain = List<CompetitionResponse>::toData,
         )
     }
 

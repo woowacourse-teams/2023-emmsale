@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class EventTagApiModel(
-    @SerialName("id")
-    val id: Long,
-    @SerialName("name")
-    val name: String,
+data class FcmTokenResponse(
+    @SerialName("memberId")
+    val uid: Long,
+    @SerialName("token")
+    val token: String,
 )

@@ -1,7 +1,7 @@
 package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.request.ScrappedEventCreateRequest
-import com.emmsale.data.apiModel.response.ScrappedEventApiModel
+import com.emmsale.data.apiModel.response.ScrappedEventResponse
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiResult
@@ -20,7 +20,7 @@ class DefaultScrappedEventRepository(
     override suspend fun getScrappedEvents(): ApiResult<List<ScrappedEvent>> {
         return handleApi(
             execute = { scrappedEventService.getScrappedEvents() },
-            mapToDomain = List<ScrappedEventApiModel>::toData,
+            mapToDomain = List<ScrappedEventResponse>::toData,
         )
     }
 

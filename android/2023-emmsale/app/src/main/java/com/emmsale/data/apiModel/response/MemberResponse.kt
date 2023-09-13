@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MemberApiModel(
+data class MemberResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("githubUrl")

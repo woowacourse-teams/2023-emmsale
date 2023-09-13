@@ -1,12 +1,12 @@
 package com.emmsale.data.service
 
 import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
+import com.emmsale.data.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
 import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
-import com.emmsale.data.apiModel.response.BlockRequestBody
-import com.emmsale.data.apiModel.response.MemberActivitiesApiModel
-import com.emmsale.data.apiModel.response.MemberApiModel
+import com.emmsale.data.apiModel.response.MemberActivitiesResponse
+import com.emmsale.data.apiModel.response.MemberResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -21,7 +21,7 @@ interface MemberService {
     @GET("/members/{memberId}")
     suspend fun getMember(
         @Path("memberId") memberId: Long,
-    ): Response<MemberApiModel>
+    ): Response<MemberResponse>
 
     @POST("/members")
     suspend fun updateMember(
@@ -46,7 +46,7 @@ interface MemberService {
     @DELETE("/members/activities")
     suspend fun deleteMemberActivities(
         @Query("activity-ids") ids: List<Long>,
-    ): Response<List<MemberActivitiesApiModel>>
+    ): Response<List<MemberActivitiesResponse>>
 
     @DELETE("/members/{memberId}")
     suspend fun deleteMember(
@@ -55,6 +55,6 @@ interface MemberService {
 
     @POST("/blocks")
     suspend fun blockMember(
-        @Body blockRequestBody: BlockRequestBody,
+        @Body memberBlockCreateRequest: MemberBlockCreateRequest,
     ): Response<Unit>
 }

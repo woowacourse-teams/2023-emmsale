@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.ActivitiesApiModel
+import com.emmsale.data.apiModel.response.ActivitiesResponse
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.mapper.toData
@@ -19,7 +19,7 @@ class DefaultActivityRepository(
     override suspend fun getActivities(): ApiResult<List<Activity>> = withContext(dispatcher) {
         handleApi(
             execute = { activityService.getActivities() },
-            mapToDomain = List<ActivitiesApiModel>::toData,
+            mapToDomain = List<ActivitiesResponse>::toData,
         )
     }
 

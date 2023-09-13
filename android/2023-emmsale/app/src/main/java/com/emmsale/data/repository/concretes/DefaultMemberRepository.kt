@@ -1,10 +1,10 @@
 package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
+import com.emmsale.data.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
 import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
-import com.emmsale.data.apiModel.response.BlockRequestBody
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.mapper.toData
@@ -95,7 +95,7 @@ class DefaultMemberRepository(
 
     override suspend fun blockMember(memberId: Long): ApiResult<Unit> = withContext(dispatcher) {
         handleApi(
-            execute = { memberService.blockMember(BlockRequestBody(memberId)) },
+            execute = { memberService.blockMember(MemberBlockCreateRequest(memberId)) },
             mapToDomain = {},
         )
     }

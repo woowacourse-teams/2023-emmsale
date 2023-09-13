@@ -1,15 +1,15 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.RecruitmentApiModel
+import com.emmsale.data.apiModel.response.RecruitmentResponse
 import com.emmsale.data.model.Recruitment
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-fun List<RecruitmentApiModel>.toData(): List<Recruitment> = map {
+fun List<RecruitmentResponse>.toData(): List<Recruitment> = map {
     it.toData()
 }
 
-fun RecruitmentApiModel.toData(): Recruitment = Recruitment(
+fun RecruitmentResponse.toData(): Recruitment = Recruitment(
     id = id,
     memberId = memberId,
     name = name,

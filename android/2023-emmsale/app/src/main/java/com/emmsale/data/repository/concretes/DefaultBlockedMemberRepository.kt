@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.BlockedMemberApiModel
+import com.emmsale.data.apiModel.response.BlockedMemberResponse
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.mapper.toData
@@ -20,7 +20,7 @@ class DefaultBlockedMemberRepository(
         withContext(dispatcher) {
             handleApi(
                 execute = { blockedMemberService.getBlockedMembers() },
-                mapToDomain = { blockedMembers -> blockedMembers.map(BlockedMemberApiModel::toData) },
+                mapToDomain = { blockedMembers -> blockedMembers.map(BlockedMemberResponse::toData) },
             )
         }
 

@@ -28,3 +28,9 @@ data class MemberDescriptionUpdateRequest(
     @SerialName("description")
     val description: String,
 )
+
+@Serializable
+data class MemberBlockCreateRequest(
+    @SerialName("blockMemberId")
+    val blockMemberId: Long,
+)

@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.LoginApiModel
+import com.emmsale.data.apiModel.response.LoginResponse
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.mapper.toData
@@ -18,7 +18,7 @@ class DefaultLoginRepository(
     override suspend fun saveGithubCode(code: String): ApiResult<Login> = withContext(dispatcher) {
         handleApi(
             execute = { loginService.saveGithubCode(code) },
-            mapToDomain = LoginApiModel::toData,
+            mapToDomain = LoginResponse::toData,
         )
     }
 }

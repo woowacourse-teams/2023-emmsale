@@ -1,6 +1,6 @@
 package com.emmsale.data.member
 
-import com.emmsale.data.apiModel.response.MemberApiModel
+import com.emmsale.data.apiModel.response.MemberResponse
 import com.emmsale.data.service.MemberService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.test.runTest
@@ -65,7 +65,7 @@ internal class MemberServiceTest {
         val response = sut.getMember(4L)
 
         assertThat(response.body()).isEqualTo(
-            MemberApiModel(
+            MemberResponse(
                 id = 4L,
                 name = "THOMAS",
                 description = "",

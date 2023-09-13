@@ -1,11 +1,11 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.EventDetailApiModel
+import com.emmsale.data.apiModel.response.EventDetailResponse
 import com.emmsale.data.model.EventDetail
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun EventDetailApiModel.toData(): EventDetail = EventDetail(
+fun EventDetailResponse.toData(): EventDetail = EventDetail(
     id = id,
     name = name,
     informationUrl = informationUrl,

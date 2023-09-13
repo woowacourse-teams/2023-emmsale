@@ -1,6 +1,6 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.UpdatedNotificationApiModel
+import com.emmsale.data.apiModel.response.UpdatedNotificationResponse
 import com.emmsale.data.model.updatedNotification.ChildCommentNotification
 import com.emmsale.data.model.updatedNotification.InterestEventNotification
 import com.emmsale.data.model.updatedNotification.UpdatedNotification
@@ -10,9 +10,9 @@ import java.time.format.DateTimeFormatter
 private const val EVENT_TYPE = "EVENT"
 private const val COMMENT_TYPE = "COMMENT"
 
-fun List<UpdatedNotificationApiModel>.toData(): List<UpdatedNotification> = map { it.toData() }
+fun List<UpdatedNotificationResponse>.toData(): List<UpdatedNotification> = map { it.toData() }
 
-fun UpdatedNotificationApiModel.toData(): UpdatedNotification = when (type) {
+fun UpdatedNotificationResponse.toData(): UpdatedNotification = when (type) {
     EVENT_TYPE -> InterestEventNotification(
         id = id,
         receiverId = receiverId,

@@ -1,11 +1,11 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.RecruitmentNotificationApiModel
+import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
 import com.emmsale.data.model.RecruitmentNotification
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun RecruitmentNotificationApiModel.toData(): RecruitmentNotification = RecruitmentNotification(
+fun RecruitmentNotificationResponse.toData(): RecruitmentNotification = RecruitmentNotification(
     id = id,
     senderUid = senderUid,
     receiverUid = receiverUid,
@@ -21,5 +21,5 @@ private fun String.toLocalDateTime(): LocalDateTime {
     return LocalDateTime.parse(this, formatter)
 }
 
-fun List<RecruitmentNotificationApiModel>.toData(): List<RecruitmentNotification> =
+fun List<RecruitmentNotificationResponse>.toData(): List<RecruitmentNotification> =
     map { it.toData() }

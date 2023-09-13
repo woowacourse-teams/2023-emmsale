@@ -2,8 +2,8 @@ package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentNotificationReportCreateRequest
-import com.emmsale.data.apiModel.response.RecruitmentNotificationApiModel
-import com.emmsale.data.apiModel.response.UpdatedNotificationApiModel
+import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
+import com.emmsale.data.apiModel.response.UpdatedNotificationResponse
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.mapper.toData
@@ -25,7 +25,7 @@ class DefaultNotificationRepository(
         withContext(dispatcher) {
             handleApi(
                 execute = { notificationService.getRecruitmentNotifications(memberId) },
-                mapToDomain = List<RecruitmentNotificationApiModel>::toData,
+                mapToDomain = List<RecruitmentNotificationResponse>::toData,
             )
         }
 
@@ -57,7 +57,7 @@ class DefaultNotificationRepository(
         return withContext(dispatcher) {
             handleApi(
                 execute = { notificationService.getUpdatedNotifications(memberId) },
-                mapToDomain = List<UpdatedNotificationApiModel>::toData,
+                mapToDomain = List<UpdatedNotificationResponse>::toData,
             )
         }
     }

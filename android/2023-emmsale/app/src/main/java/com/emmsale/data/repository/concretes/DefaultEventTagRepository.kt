@@ -1,7 +1,7 @@
 package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.request.InterestEventTagUpdateRequest
-import com.emmsale.data.apiModel.response.EventTagApiModel
+import com.emmsale.data.apiModel.response.EventTagResponse
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.callAdapter.ApiResponse
@@ -28,7 +28,7 @@ class DefaultEventTagRepository(
 
         eventTagRemoteDataSource
             .getEventTags()
-            .map(List<EventTagApiModel>::toData)
+            .map(List<EventTagResponse>::toData)
             .apply { if (this is Success) cacheEventTags(data) }
     }
 
@@ -39,7 +39,7 @@ class DefaultEventTagRepository(
                 .map { eventTags ->
                     eventTags.filter { eventTag -> ids.contains(eventTag.id) }
                 }
-                .map(List<EventTagApiModel>::toData)
+                .map(List<EventTagResponse>::toData)
         }
 
     override suspend fun getInterestEventTags(memberId: Long): ApiResult<List<EventTag>> {
@@ -48,7 +48,7 @@ class DefaultEventTagRepository(
         val result = withContext(dispatcher) {
             handleApi(
                 execute = { eventTagRemoteDataSource.getInterestEventTags(memberId) },
-                mapToDomain = List<EventTagApiModel>::toData,
+                mapToDomain = List<EventTagResponse>::toData,
             )
         }
         if (result is ApiSuccess) cacheEventTags(result.data)

@@ -4,8 +4,8 @@ import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentRequestCreateRequest
-import com.emmsale.data.apiModel.response.RecruitmentApiModel
-import com.emmsale.data.apiModel.response.ReportApiModel
+import com.emmsale.data.apiModel.response.RecruitmentReportResponse
+import com.emmsale.data.apiModel.response.RecruitmentResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -20,13 +20,13 @@ interface RecruitmentService {
     @GET("/events/{eventId}/recruitment-posts")
     suspend fun getRecruitments(
         @Path("eventId") eventId: Long,
-    ): Response<List<RecruitmentApiModel>>
+    ): Response<List<RecruitmentResponse>>
 
     @GET("/events/{eventId}/recruitment-posts/{recruitment-post-id}")
     suspend fun getRecruitment(
         @Path("eventId") eventId: Long,
         @Path("recruitment-post-id") recruitmentId: Long,
-    ): Response<RecruitmentApiModel>
+    ): Response<RecruitmentResponse>
 
     @POST("/events/{eventId}/recruitment-posts")
     suspend fun postRecruitment(
@@ -68,5 +68,5 @@ interface RecruitmentService {
     @POST("/reports")
     suspend fun reportRecruitment(
         @Body recruitmentReportCreateRequest: RecruitmentReportCreateRequest,
-    ): Response<ReportApiModel>
+    ): Response<RecruitmentReportResponse>
 }

@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CommentApiModel(
+data class CommentResponse(
     @SerialName("content")
     val content: String,
     @SerialName("commentId")
@@ -27,4 +27,28 @@ data class CommentApiModel(
     val memberName: String,
     @SerialName("deleted")
     val deleted: Boolean,
+)
+
+@Serializable
+data class CommentFamilyApiModel(
+    @SerialName("parentComment")
+    val parentComment: CommentResponse,
+    @SerialName("childComments")
+    val childComments: List<CommentResponse>,
+)
+
+@Serializable
+data class CommentReportResponse(
+    @SerialName("id")
+    val id: Long,
+    @SerialName("reporterId")
+    val reporterId: Long,
+    @SerialName("reportedId")
+    val reportedId: Long,
+    @SerialName("type")
+    val type: String,
+    @SerialName("contentId")
+    val contentId: Long,
+    @SerialName("createdAt")
+    val createdAt: String,
 )

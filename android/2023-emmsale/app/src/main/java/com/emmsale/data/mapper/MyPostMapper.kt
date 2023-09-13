@@ -1,12 +1,12 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.MyPostApiModel
+import com.emmsale.data.apiModel.response.MyPostResponse
 import com.emmsale.data.model.MyPost
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-fun List<MyPostApiModel>.toData(): List<MyPost> = map { it.toData() }
-fun MyPostApiModel.toData(): MyPost {
+fun List<MyPostResponse>.toData(): List<MyPost> = map { it.toData() }
+fun MyPostResponse.toData(): MyPost {
     return MyPost(
         postId = postId,
         eventId = eventId,

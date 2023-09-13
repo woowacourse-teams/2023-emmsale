@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.MyPostApiModel
+import com.emmsale.data.apiModel.response.MyPostResponse
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.handleApi
 import com.emmsale.data.mapper.toData
@@ -17,7 +17,7 @@ class DefaultMyPostRepository(
     override suspend fun getMyPosts(): ApiResult<List<MyPost>> {
         return handleApi(
             execute = { myPostService.getMyPosts(myUid) },
-            mapToDomain = List<MyPostApiModel>::toData,
+            mapToDomain = List<MyPostResponse>::toData,
         )
     }
 }

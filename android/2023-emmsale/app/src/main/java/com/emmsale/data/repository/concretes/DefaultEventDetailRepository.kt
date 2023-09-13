@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.EventDetailApiModel
+import com.emmsale.data.apiModel.response.EventDetailResponse
 import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.EventDetail
@@ -13,6 +13,6 @@ class DefaultEventDetailRepository(
     override suspend fun getEventDetail(eventId: Long): ApiResponse<EventDetail> {
         return eventDetailService
             .getEventDetail(eventId)
-            .map(EventDetailApiModel::toData)
+            .map(EventDetailResponse::toData)
     }
 }

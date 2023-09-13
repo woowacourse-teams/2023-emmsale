@@ -1,7 +1,7 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.CommentApiModel
 import com.emmsale.data.apiModel.response.CommentFamilyApiModel
+import com.emmsale.data.apiModel.response.CommentResponse
 import com.emmsale.data.model.Comment
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -25,9 +25,9 @@ fun CommentFamilyApiModel.toData() = Comment(
 )
 
 @JvmName("mapCommentApiModelToData")
-fun List<CommentApiModel>.toData(): List<Comment> = map(CommentApiModel::toData)
+fun List<CommentResponse>.toData(): List<Comment> = map(CommentResponse::toData)
 
-fun CommentApiModel.toData() = Comment(
+fun CommentResponse.toData() = Comment(
     id = commentId,
     eventId = 1L,
     eventName = eventName,

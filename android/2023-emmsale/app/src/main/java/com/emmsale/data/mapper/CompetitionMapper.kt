@@ -1,6 +1,6 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.CompetitionApiModel
+import com.emmsale.data.apiModel.response.CompetitionResponse
 import com.emmsale.data.model.Competition
 import com.emmsale.data.model.CompetitionStatus
 import com.emmsale.data.model.EventApplyStatus
@@ -9,9 +9,9 @@ import java.time.format.DateTimeFormatter
 
 private const val DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss"
 
-fun List<CompetitionApiModel>.toData(): List<Competition> = map { it.toData() }
+fun List<CompetitionResponse>.toData(): List<Competition> = map { it.toData() }
 
-fun CompetitionApiModel.toData(): Competition = Competition(
+fun CompetitionResponse.toData(): Competition = Competition(
     id = id,
     name = name,
     startDate = parseDate(startDate),
