@@ -654,13 +654,47 @@ include::{snippets}/send-message/http-response.adoc[]
 === `GET` : 쪽지함 목록 조회
 
 .HTTP request
-include::{snippets}/get-rooms/http-request.adoc[]
+include::{snippets}/get-rooms-overview/http-request.adoc[]
 
 .HTTP request 설명
-include::{snippets}/get-rooms/request-parameters.adoc[]
+include::{snippets}/get-rooms-overview/request-parameters.adoc[]
 
 .HTTP response
-include::{snippets}/get-rooms/http-response.adoc[]
+include::{snippets}/get-rooms-overview/http-response.adoc[]
 
 .HTTP response 설명
-include::{snippets}/get-rooms/response-fields.adoc[]
+include::{snippets}/get-rooms-overview/response-fields.adoc[]
+
+=== `GET` : Room UUID로 쪽지방 조회
+
+/rooms/{room-id}?member-id=1
+
+.HTTP request
+include::{snippets}/get-rooms-roomId/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/get-rooms-roomId/request-parameters.adoc[]
+
+.path parameter 설명
+include::{snippets}/get-rooms-roomId/path-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/get-rooms-roomId/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/get-rooms-roomId/response-fields.adoc[]
+
+=== `GET` : 쪽지방 참여자 ID들로 쪽지방 조회
+
+.HTTP request
+include::{snippets}/get-rooms-interlocutorId/http-request.adoc[]
+
+.HTTP request 설명
+senderId와 receiverId는 의미 없어서 참여자 ID들을 변수명에 상관없이 보내주시면 됩니다.
+include::{snippets}/get-rooms-interlocutorId/request-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/get-rooms-interlocutorId/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/get-rooms-interlocutorId/response-fields.adoc[]
