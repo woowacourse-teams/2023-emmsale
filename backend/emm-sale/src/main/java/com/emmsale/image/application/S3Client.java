@@ -23,6 +23,7 @@ public class S3Client {
   
   private static final String EXTENSION_DELIMITER = ".";
   private static final List<String> ALLOWED_FILE_EXTENSIONS = List.of(".jpg", ".png", ".jpeg");
+  public static final int MIN_EXTENSION_SEPARATOR_INDEX = 0;
   
   @Value("${cloud.aws.s3.bucket}")
   private String bucket;
@@ -55,8 +56,8 @@ public class S3Client {
     return originalFileName.substring(extensionIndex);
   }
   
-  private static void validateExtension(int extensionIndex, String originalFileName) {
-    if (extensionIndex >= 0 && ALLOWED_FILE_EXTENSIONS.contains(
+  private void validateExtension(int extensionIndex, String originalFileName) {
+    if (extensionIndex >= MIN_EXTENSION_SEPARATOR_INDEX && ALLOWED_FILE_EXTENSIONS.contains(
         originalFileName.substring(extensionIndex))) {
       return;
     }
