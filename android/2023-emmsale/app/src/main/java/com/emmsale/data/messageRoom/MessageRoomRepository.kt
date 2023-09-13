@@ -17,4 +17,10 @@ interface MessageRoomRepository {
         myUid: Long,
         otherUid: Long,
     ): ApiResponse<List<Message>>
+
+    suspend fun sendMessage(
+        senderId: Long,
+        receiverId: Long,
+        message: String,
+    ): ApiResponse<Unit>
 }

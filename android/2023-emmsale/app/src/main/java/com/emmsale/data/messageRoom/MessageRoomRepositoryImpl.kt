@@ -3,6 +3,7 @@ package com.emmsale.data.messageRoom
 import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.message.Message
 import com.emmsale.data.message.mapper.toData
+import com.emmsale.data.messageRoom.dto.MessageRequest
 import com.emmsale.data.messageRoom.dto.MessageResponse
 import com.emmsale.data.messageRoom.dto.MessageRoomResponse
 import com.emmsale.data.messageRoom.mapper.toData
@@ -38,5 +39,14 @@ class MessageRoomRepositoryImpl(
         messageRoomService
             .getMessagesByMemberIds(myUid, otherUid)
             .map(List<MessageResponse>::toData)
+    }
+
+    override suspend fun sendMessage(
+        senderId: Long,
+        receiverId: Long,
+        message: String,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        messageRoomService
+            .sendMessage(MessageRequest(senderId, receiverId, message))
     }
 }

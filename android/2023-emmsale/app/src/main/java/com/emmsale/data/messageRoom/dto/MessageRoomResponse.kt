@@ -26,3 +26,13 @@ data class MessageResponse(
     @SerialName("createdAt")
     val createdAt: String,
 )
+
+@Serializable
+data class MessageRequest(
+    @SerialName("senderId")
+    val senderId: Long,
+    @SerialName("receiverId")
+    val receiverId: Long,
+    @SerialName("content")
+    val message: String,
+)
