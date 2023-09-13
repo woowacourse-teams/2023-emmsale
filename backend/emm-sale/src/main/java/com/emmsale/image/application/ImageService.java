@@ -8,10 +8,10 @@ import com.emmsale.image.exception.ImageException;
 import com.emmsale.image.exception.ImageExceptionType;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,8 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class ImageService {
   
-  public static final String EXTENSION_DELIMITER = ".";
-  private static List<String> ALLOWED_FILE_EXTENSIONS = List.of(".jpg", ".png", ".jpeg");
+  private static final String EXTENSION_DELIMITER = ".";
+  private static final List<String> ALLOWED_FILE_EXTENSIONS = List.of(".jpg", ".png", ".jpeg");
   
   @Value("${cloud.aws.s3.bucket}")
   private String bucket;
@@ -30,28 +30,24 @@ public class ImageService {
   private final AmazonS3 amazonS3;
   
   public List<String> uploadImages(final List<MultipartFile> multipartFiles) {
-    List<String> fileNameList = new ArrayList<>();
-    
-    multipartFiles.forEach(file -> {
-      final String fileExtension = extractFileExtension(file);
-      
-      String newFileName = UUID.randomUUID().toString().concat(fileExtension);
-      ObjectMetadata objectMetadata = new ObjectMetadata();
-      objectMetadata.setContentLength(file.getSize());
-      objectMetadata.setContentType(file.getContentType());
-      
-      try (InputStream inputStream = file.getInputStream()) {
-        amazonS3.putObject(new PutObjectRequest(bucket, newFileName, inputStream, objectMetadata));
-      } catch (IOException e) {
-        throw new ImageException(ImageExceptionType.FAIL_UPLOAD_IMAGE);
-      }
-      fileNameList.add(newFileName);
-    });
-    
-    return fileNameList;
+    return multipartFiles.stream().map(this::uploadImage)
+        .collect(Collectors.toList());
   }
   
-  private String extractFileExtension(MultipartFile file) {
+  private String uploadImage(final MultipartFile file) {
+    final String fileExtension = extractFileExtension(file);
+    final String newFileName = UUID.randomUUID().toString().concat(fileExtension);
+    final ObjectMetadata objectMetadata = configureObjectMetadata(file);
+    
+    try (InputStream inputStream = file.getInputStream()) {
+      amazonS3.putObject(new PutObjectRequest(bucket, newFileName, inputStream, objectMetadata));
+    } catch (IOException e) {
+      throw new ImageException(ImageExceptionType.FAIL_UPLOAD_IMAGE);
+    }
+    return newFileName;
+  }
+  
+  private String extractFileExtension(final MultipartFile file) {
     final String originalFileName = file.getOriginalFilename();
     final int extensionIndex = Objects.requireNonNull(originalFileName)
         .lastIndexOf(EXTENSION_DELIMITER);
@@ -60,6 +56,13 @@ public class ImageService {
       throw new ImageException(ImageExceptionType.INVALID_FILE_FORMAT);
     }
     return originalFileName.substring(extensionIndex);
+  }
+  
+  private ObjectMetadata configureObjectMetadata(MultipartFile file) {
+    ObjectMetadata objectMetadata = new ObjectMetadata();
+    objectMetadata.setContentLength(file.getSize());
+    objectMetadata.setContentType(file.getContentType());
+    return objectMetadata;
   }
   
   public void deleteImages(final List<String> fileNames) {
