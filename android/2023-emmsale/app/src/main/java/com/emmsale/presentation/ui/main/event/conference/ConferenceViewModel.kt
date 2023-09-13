@@ -13,9 +13,9 @@ import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.Conference
 import com.emmsale.data.model.ConferenceStatus
 import com.emmsale.data.model.EventTag
-import com.emmsale.data.repository.ConferenceStatusRepository
-import com.emmsale.data.repository.EventRepository
-import com.emmsale.data.repository.EventTagRepository
+import com.emmsale.data.repository.interfaces.ConferenceStatusRepository
+import com.emmsale.data.repository.interfaces.EventRepository
+import com.emmsale.data.repository.interfaces.EventTagRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

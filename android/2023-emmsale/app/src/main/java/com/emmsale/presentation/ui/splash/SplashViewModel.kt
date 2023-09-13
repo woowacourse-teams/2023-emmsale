@@ -2,7 +2,7 @@ package com.emmsale.presentation.ui.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.repository.ConfigRepository
+import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

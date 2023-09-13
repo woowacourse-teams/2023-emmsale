@@ -3,7 +3,7 @@ package com.emmsale.data.member
 import com.emmsale.data.apiModel.response.MemberApiModel
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.repository.DefaultMemberRepository
+import com.emmsale.data.repository.concretes.DefaultMemberRepository
 import com.emmsale.data.service.MemberService
 import io.mockk.coEvery
 import io.mockk.mockk

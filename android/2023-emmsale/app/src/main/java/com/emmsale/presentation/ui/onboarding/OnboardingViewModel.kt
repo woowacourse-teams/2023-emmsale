@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.repository.ActivityRepository
-import com.emmsale.data.repository.ConfigRepository
-import com.emmsale.data.repository.MemberRepository
+import com.emmsale.data.repository.interfaces.ActivityRepository
+import com.emmsale.data.repository.interfaces.ConfigRepository
+import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

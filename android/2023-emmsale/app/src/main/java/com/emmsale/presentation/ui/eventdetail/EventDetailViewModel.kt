@@ -7,7 +7,7 @@ import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.EventDetail
-import com.emmsale.data.repository.EventDetailRepository
+import com.emmsale.data.repository.interfaces.EventDetailRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logEventClick
 import com.emmsale.presentation.common.livedata.NotNullLiveData

@@ -12,8 +12,8 @@ import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.EventTag
-import com.emmsale.data.repository.EventTagRepository
-import com.emmsale.data.repository.TokenRepository
+import com.emmsale.data.repository.interfaces.EventTagRepository
+import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logInterestTags
 import com.emmsale.presentation.common.livedata.NotNullLiveData

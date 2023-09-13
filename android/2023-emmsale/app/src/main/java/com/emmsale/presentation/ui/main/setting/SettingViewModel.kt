@@ -6,8 +6,8 @@ import com.emmsale.BuildConfig
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.repository.MemberRepository
-import com.emmsale.data.repository.TokenRepository
+import com.emmsale.data.repository.interfaces.MemberRepository
+import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

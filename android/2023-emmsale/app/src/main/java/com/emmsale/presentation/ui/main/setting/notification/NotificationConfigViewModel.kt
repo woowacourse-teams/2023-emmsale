@@ -6,9 +6,9 @@ import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.model.Config
-import com.emmsale.data.repository.ConfigRepository
-import com.emmsale.data.repository.EventTagRepository
-import com.emmsale.data.repository.TokenRepository
+import com.emmsale.data.repository.interfaces.ConfigRepository
+import com.emmsale.data.repository.interfaces.EventTagRepository
+import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.firebase.analytics.logChangeConfig

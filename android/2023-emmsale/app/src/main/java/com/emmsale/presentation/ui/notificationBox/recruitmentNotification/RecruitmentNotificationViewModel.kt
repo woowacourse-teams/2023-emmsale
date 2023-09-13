@@ -13,10 +13,10 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.RecruitmentNotification
 import com.emmsale.data.model.RecruitmentStatus
-import com.emmsale.data.repository.EventDetailRepository
-import com.emmsale.data.repository.MemberRepository
-import com.emmsale.data.repository.NotificationRepository
-import com.emmsale.data.repository.TokenRepository
+import com.emmsale.data.repository.interfaces.EventDetailRepository
+import com.emmsale.data.repository.interfaces.MemberRepository
+import com.emmsale.data.repository.interfaces.NotificationRepository
+import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
