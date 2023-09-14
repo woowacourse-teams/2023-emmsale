@@ -3,10 +3,12 @@ package com.emmsale.notification.application;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.event_publisher.UpdateNotificationEvent;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.notification.domain.UpdateNotification;
@@ -54,5 +56,25 @@ class NotificationEventListenerTest extends ServiceIntegrationTestHelper {
         () -> verify(mockingFirebaseCloudMessageClient, times(1))
             .sendMessageTo((UpdateNotification) any())
     );
+  }
+
+  @Test
+  @DisplayName("createMessageNotification() : MessageNotificationEvent 이벤트가 발생했을 때 해당 메서드가 호출된다.")
+  void test_createMessageNotification() throws Exception {
+    //given
+    final MessageNotificationEvent event = new MessageNotificationEvent(
+        "rooId",
+        "content",
+        3L,
+        4L,
+        LocalDateTime.now()
+    );
+
+    //when
+    notificationEventListener.createMessageNotification(event);
+
+    //then
+    verify(mockingFirebaseCloudMessageClient, times(1))
+        .sendMessageTo(eq(event));
   }
 }

@@ -1,5 +1,6 @@
 package com.emmsale.notification.application;
 
+import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.event_publisher.UpdateNotificationEvent;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
@@ -19,7 +20,6 @@ public class NotificationEventListener {
   private final UpdateNotificationRepository updateNotificationRepository;
   private final FirebaseCloudMessageClient firebaseCloudMessageClient;
 
-
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   @TransactionalEventListener
   public void createUpdateNotification(final UpdateNotificationEvent updateNotificationEvent) {
@@ -35,6 +35,16 @@ public class NotificationEventListener {
 
     try {
       firebaseCloudMessageClient.sendMessageTo(savedNotification);
+    } catch (Exception e) {
+      log.error("파이어베이스 관련 에러, 알림 재요청 필요, {}", e.getMessage(), e);
+    }
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  @TransactionalEventListener
+  public void createMessageNotification(final MessageNotificationEvent messageNotificationEvent) {
+    try {
+      firebaseCloudMessageClient.sendMessageTo(messageNotificationEvent);
     } catch (Exception e) {
       log.error("파이어베이스 관련 에러, 알림 재요청 필요, {}", e.getMessage(), e);
     }

@@ -6,6 +6,7 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.message_room.domain.Message;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class EventPublisher {
-
 
   private final ApplicationEventPublisher applicationEventPublisher;
   private final InterestTagRepository interestTagRepository;
@@ -74,5 +74,10 @@ public class EventPublisher {
             UpdateNotificationEvent.of(event, it.getId())
         )
     );
+  }
+
+  public void publish(final Message message, final Long receiverId) {
+    final MessageNotificationEvent event = MessageNotificationEvent.of(message, receiverId);
+    applicationEventPublisher.publishEvent(event);
   }
 }

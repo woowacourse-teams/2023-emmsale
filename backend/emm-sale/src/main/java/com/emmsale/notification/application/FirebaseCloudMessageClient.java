@@ -4,7 +4,9 @@ import static com.emmsale.notification.exception.NotificationExceptionType.FIREB
 import static com.emmsale.notification.exception.NotificationExceptionType.GOOGLE_REQUEST_TOKEN_ERROR;
 import static com.emmsale.notification.exception.NotificationExceptionType.NOT_FOUND_FCM_TOKEN;
 
+import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.notification.application.generator.MessageNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.NotificationMessageGenerator;
 import com.emmsale.notification.application.generator.RequestNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.UpdateNotificationMessageGenerator;
@@ -59,6 +61,13 @@ public class FirebaseCloudMessageClient {
     sendMessageTo(
         updateNotification.getReceiverId(),
         new UpdateNotificationMessageGenerator(updateNotification)
+    );
+  }
+
+  public void sendMessageTo(final MessageNotificationEvent messageNotificationEvent) {
+    sendMessageTo(
+        messageNotificationEvent.getReceiverId(),
+        new MessageNotificationMessageGenerator(messageNotificationEvent)
     );
   }
 

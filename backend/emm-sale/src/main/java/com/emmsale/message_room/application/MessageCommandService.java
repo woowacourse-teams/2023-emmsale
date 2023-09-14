@@ -1,7 +1,8 @@
 package com.emmsale.message_room.application;
 
-import static com.emmsale.message_room.exception.MessageExceptionType.SENDER_IS_NOT_EQUAL_REQUEST_MEMBER;
+import static com.emmsale.message_room.exception.MessageRoomExceptionType.SENDER_IS_NOT_EQUAL_REQUEST_MEMBER;
 
+import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
@@ -12,7 +13,7 @@ import com.emmsale.message_room.domain.MessageRepository;
 import com.emmsale.message_room.domain.Room;
 import com.emmsale.message_room.domain.RoomId;
 import com.emmsale.message_room.domain.RoomRepository;
-import com.emmsale.message_room.exception.MessageException;
+import com.emmsale.message_room.exception.MessageRoomException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class MessageCommandService {
 
   private final MessageRepository messageRepository;
   private final RoomRepository roomRepository;
+  private final EventPublisher eventPublisher;
   private final MemberRepository memberRepository;
 
   public void sendMessage(final MessageSendRequest request, final Member member) {
@@ -38,11 +40,12 @@ public class MessageCommandService {
     final Message message = new Message(request.getContent(), request.getSenderId(),
         roomId, LocalDateTime.now());
     messageRepository.save(message);
+    eventPublisher.publish(message, request.getReceiverId());
   }
 
   private void validateMembers(final MessageSendRequest request, final Member member) {
     if (member.isNotMe(request.getSenderId())) {
-      throw new MessageException(SENDER_IS_NOT_EQUAL_REQUEST_MEMBER);
+      throw new MessageRoomException(SENDER_IS_NOT_EQUAL_REQUEST_MEMBER);
     }
     if (!memberRepository.existsById(request.getReceiverId())) {
       throw new MemberException(MemberExceptionType.NOT_FOUND_MEMBER);
