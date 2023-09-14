@@ -1,10 +1,8 @@
 package com.emmsale.feed.domain;
 
 import com.emmsale.base.BaseEntity;
-import com.emmsale.comment.domain.Comment;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.Member;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,8 +34,6 @@ public class Feed extends BaseEntity {
   private String title;
   @Column(nullable = false, length = 1000)
   private String content;
-  @OneToMany(mappedBy = "feed")
-  private List<Comment> comments;
   private boolean isDeleted = false;
   // TODO: 2023/08/31 이미지 추가
 
