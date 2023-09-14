@@ -1,50 +1,10 @@
 package com.emmsale.presentation.ui.eventDetail.uiState
 
 import com.emmsale.data.model.EventDetail
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.common.FetchResultUiState
 
 data class EventDetailUiState(
-    val id: Long = DEFAULT_ID,
-    val name: String = "",
-    val status: String = "",
-    val location: String = "",
-    val startDate: String = "",
-    val endDate: String = "",
-    val applyStartDate: String = "",
-    val applyEndDate: String = "",
-    val informationUrl: String = "",
-    val tags: List<String> = listOf(),
-    val imageUrl: String = "",
-    val isError: Boolean = false,
-    val isLoading: Boolean = false,
-) {
-
-    companion object {
-        private const val DEFAULT_ID = -1L
-        fun from(eventDetail: EventDetail): EventDetailUiState {
-            return with(eventDetail) {
-                EventDetailUiState(
-                    id = id,
-                    name = name,
-                    status = status,
-                    location = location,
-                    startDate = getGeneralDateFormat(startDate),
-                    endDate = getGeneralDateFormat(endDate),
-                    applyStartDate = getGeneralDateFormat(applyStartDate),
-                    applyEndDate = getGeneralDateFormat(applyEndDate),
-                    informationUrl = informationUrl,
-                    tags = tags,
-                    imageUrl = posterImageUrl ?: "",
-                    isError = false,
-                    isLoading = false,
-                )
-            }
-        }
-
-        private fun getGeneralDateFormat(dateTime: LocalDateTime): String {
-            val resultFormatter = DateTimeFormatter.ofPattern("yyyy.M.d HH:mm")
-            return dateTime.format(resultFormatter)
-        }
-    }
-}
+    override val fetchResult: FetchResult = FetchResult.SUCCESS,
+    val eventDetail: EventDetail? = null,
+) : FetchResultUiState()
