@@ -2,7 +2,7 @@ package com.emmsale.message_room.application;
 
 import static com.emmsale.member.MemberFixture.memberFixture;
 import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
-import static com.emmsale.message_room.exception.MessageExceptionType.SENDER_IS_NOT_EQUAL_REQUEST_MEMBER;
+import static com.emmsale.message_room.exception.MessageRoomExceptionType.SENDER_IS_NOT_EQUAL_REQUEST_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -18,7 +18,7 @@ import com.emmsale.member.exception.MemberException;
 import com.emmsale.message_room.application.dto.MessageSendRequest;
 import com.emmsale.message_room.domain.Message;
 import com.emmsale.message_room.domain.MessageRepository;
-import com.emmsale.message_room.exception.MessageException;
+import com.emmsale.message_room.exception.MessageRoomException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -103,7 +103,7 @@ class MessageCommandServiceTest extends ServiceIntegrationTestHelper {
 
       //when && then
       assertThatThrownBy(() -> messageCommandService.sendMessage(request, member))
-          .isInstanceOf(MessageException.class)
+          .isInstanceOf(MessageRoomException.class)
           .hasMessage(SENDER_IS_NOT_EQUAL_REQUEST_MEMBER.errorMessage());
     }
 
