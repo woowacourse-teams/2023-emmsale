@@ -10,14 +10,14 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.main.event.competition.CompetitionViewModel" />
+            type="com.emmsale.presentation.ui.competitionList.CompetitionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.main.event.competitionFilter.CompetitionFilterActivity">
+        tools:context=".presentation.ui.competitionFilter.CompetitionFilterActivity">
 
         <TextView
             android:id="@+id/tv_events_prefix"

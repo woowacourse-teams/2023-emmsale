@@ -14,7 +14,7 @@ import com.emmsale.data.repository.interfaces.LoginRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
-import com.emmsale.presentation.ui.login.uistate.LoginUiState
+import com.emmsale.presentation.ui.login.uiState.LoginUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch

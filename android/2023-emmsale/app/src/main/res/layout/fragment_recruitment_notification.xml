@@ -10,14 +10,14 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.notificationBox.recruitmentNotification.RecruitmentNotificationViewModel" />
+            type="com.emmsale.presentation.ui.recruitmentNotificationList.RecruitmentNotificationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.notificationBox.recruitmentNotification.RecruitmentNotificationFragment">
+        tools:context=".presentation.ui.recruitmentNotificationList.RecruitmentNotificationFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_recruitment_notification"

@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.main.setting.notificationTagConfig.NotificationTagConfigViewModel" />
+            type="com.emmsale.presentation.ui.notificationTagConfig.NotificationTagConfigViewModel" />
     </data>
 
     <ScrollView
@@ -23,7 +23,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".presentation.ui.main.setting.notificationTagConfig.NotificationTagConfigActivity">
+            tools:context=".presentation.ui.notificationTagConfig.NotificationTagConfigActivity">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/tb_notification_tag_config"

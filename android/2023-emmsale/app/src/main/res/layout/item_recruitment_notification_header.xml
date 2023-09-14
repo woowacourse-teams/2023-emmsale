@@ -11,11 +11,11 @@
 
         <variable
             name="notificationHeaderClickListener"
-            type="com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.header.RecruitmentNotificationHeaderClickListener" />
+            type="com.emmsale.presentation.ui.recruitmentNotificationList.recyclerView.header.RecruitmentNotificationHeaderClickListener" />
 
         <variable
             name="header"
-            type="com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationHeaderUiState" />
+            type="com.emmsale.presentation.ui.recruitmentNotificationList.uiState.RecruitmentNotificationHeaderUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

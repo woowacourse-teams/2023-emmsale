@@ -14,7 +14,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.eventdetail.information.EventInfoViewModel" />
+            type="com.emmsale.presentation.ui.eventDetailInfo.EventInfoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -10,7 +10,7 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.main.setting.myPost.MyPostViewModel" />
+            type="com.emmsale.presentation.ui.myPostList.MyPostViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

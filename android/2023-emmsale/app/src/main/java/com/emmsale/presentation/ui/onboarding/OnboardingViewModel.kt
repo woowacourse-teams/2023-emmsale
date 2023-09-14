@@ -13,8 +13,8 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
-import com.emmsale.presentation.ui.onboarding.uistate.MemberSavingUiState
-import com.emmsale.presentation.ui.onboarding.uistate.OnboardingUiState
+import com.emmsale.presentation.ui.onboarding.uiState.MemberSavingUiState
+import com.emmsale.presentation.ui.onboarding.uiState.OnboardingUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 

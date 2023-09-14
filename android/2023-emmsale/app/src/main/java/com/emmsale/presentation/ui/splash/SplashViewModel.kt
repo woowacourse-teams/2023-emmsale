@@ -7,7 +7,7 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
-import com.emmsale.presentation.ui.splash.uistate.SplashUiState
+import com.emmsale.presentation.ui.splash.uiState.SplashUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

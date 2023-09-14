@@ -21,7 +21,7 @@ import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.main.MainActivity
-import com.emmsale.presentation.ui.splash.uistate.SplashUiState
+import com.emmsale.presentation.ui.splash.uiState.SplashUiState
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 

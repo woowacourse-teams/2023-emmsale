@@ -11,7 +11,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityOnboardingBinding
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.main.MainActivity
-import com.emmsale.presentation.ui.onboarding.uistate.MemberSavingUiState
+import com.emmsale.presentation.ui.onboarding.uiState.MemberSavingUiState
 
 class OnboardingActivity : AppCompatActivity() {
     private val binding: ActivityOnboardingBinding by lazy {

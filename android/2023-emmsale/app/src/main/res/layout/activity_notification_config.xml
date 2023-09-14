@@ -8,11 +8,11 @@
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.ui.main.setting.notification.uistate.NotificationTagsUiState" />
+        <import type="com.emmsale.presentation.ui.notificationConfig.uiState.NotificationTagsUiState" />
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.main.setting.notification.NotificationConfigViewModel" />
+            type="com.emmsale.presentation.ui.notificationConfig.NotificationConfigViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

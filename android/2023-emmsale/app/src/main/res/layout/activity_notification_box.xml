@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.notificationBox.NotificationBoxActivity">
+        tools:context=".presentation.ui.notificationPageList.NotificationBoxActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_noti_box"

@@ -5,13 +5,13 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.ui.main.event.scrap.uistate.ScrappedEventUiState" />
+        <import type="com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState" />
 
         <import type="kotlin.Unit" />
 
         <variable
             name="event"
-            type="com.emmsale.presentation.ui.main.event.scrap.uistate.ScrappedEventUiState" />
+            type="com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState" />
 
         <variable
             name="onClickEvent"

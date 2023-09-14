@@ -7,7 +7,7 @@
 
         <variable
             name="recruitment"
-            type="com.emmsale.presentation.ui.eventdetail.recruitment.uistate.RecruitmentPostUiState" />
+            type="com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

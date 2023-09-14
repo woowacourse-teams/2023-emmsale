@@ -4,7 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.emmsale.data.common.ApiError
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
-import com.emmsale.presentation.ui.eventdetail.information.uiState.EventInfoUiEvent
+import com.emmsale.presentation.ui.eventDetailInfo.EventInfoViewModel
+import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
