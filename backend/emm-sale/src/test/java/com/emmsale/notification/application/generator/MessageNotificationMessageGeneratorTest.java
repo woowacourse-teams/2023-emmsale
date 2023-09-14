@@ -64,6 +64,7 @@ class MessageNotificationMessageGeneratorTest extends ServiceIntegrationTestHelp
       final LocalDateTime messageTime, final String content) {
 
     final Data Data = new Data(
+        "MESSAGE",
         roomId,
         sender.getId().toString(),
         sender.getName(),
