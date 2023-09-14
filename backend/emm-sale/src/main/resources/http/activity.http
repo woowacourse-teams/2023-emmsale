@@ -1,0 +1,13 @@
+### 활동 전체 조회
+
+GET http://localhost:8080/activities
+
+### 활동 추가
+
+POST http://localhost:8080/activities
+Content-Type: application/json
+
+{
+  "activityType": "CLUB",
+  "name": "테스트"
+}

@@ -1,6 +1,7 @@
 package com.emmsale.message_room.application;
 
 import static com.emmsale.member.MemberFixture.memberFixture;
+import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 import static com.emmsale.message_room.exception.MessageExceptionType.SENDER_IS_NOT_EQUAL_REQUEST_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -13,6 +14,7 @@ import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.member.exception.MemberException;
 import com.emmsale.message_room.application.dto.MessageSendRequest;
 import com.emmsale.message_room.domain.Message;
 import com.emmsale.message_room.domain.MessageRepository;
@@ -103,6 +105,22 @@ class MessageCommandServiceTest extends ServiceIntegrationTestHelper {
       assertThatThrownBy(() -> messageCommandService.sendMessage(request, member))
           .isInstanceOf(MessageException.class)
           .hasMessage(SENDER_IS_NOT_EQUAL_REQUEST_MEMBER.errorMessage());
+    }
+
+    @Test
+    @DisplayName("receiverId에 해당하는 멤버가 존재하지 않을 때 Exception 발생")
+    void senderNotFound() {
+      final Member member = memberRepository.save(memberFixture());
+      final Long requesterId = member.getId();
+      final Long receiverId = -1L;
+      final String content = "메시지 내용";
+      final MessageSendRequest request
+          = new MessageSendRequest(requesterId, receiverId, content);
+
+      //when && then
+      assertThatThrownBy(() -> messageCommandService.sendMessage(request, member))
+          .isInstanceOf(MemberException.class)
+          .hasMessage(NOT_FOUND_MEMBER.errorMessage());
     }
   }
 }

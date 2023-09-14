@@ -4,6 +4,9 @@ import static com.emmsale.message_room.exception.MessageExceptionType.SENDER_IS_
 
 import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.member.domain.Member;
+import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.member.exception.MemberException;
+import com.emmsale.member.exception.MemberExceptionType;
 import com.emmsale.message_room.application.dto.MessageSendRequest;
 import com.emmsale.message_room.domain.Message;
 import com.emmsale.message_room.domain.MessageRepository;
@@ -25,12 +28,11 @@ public class MessageCommandService {
   private final MessageRepository messageRepository;
   private final RoomRepository roomRepository;
   private final EventPublisher eventPublisher;
+  private final MemberRepository memberRepository;
 
   public void sendMessage(final MessageSendRequest request, final Member member) {
     //TODO: Room을 조회하는 기능 완성 후, 이미 있는 Room 조회해서 메시지보내는 기능 추가
-    if (member.isNotMe(request.getSenderId())) {
-      throw new MessageException(SENDER_IS_NOT_EQUAL_REQUEST_MEMBER);
-    }
+    validateMembers(request, member);
 
     final String roomId = UUID.randomUUID().toString();
     saveRooms(request, roomId);
@@ -39,6 +41,15 @@ public class MessageCommandService {
         roomId, LocalDateTime.now());
     messageRepository.save(message);
     eventPublisher.publish(message, request.getReceiverId());
+  }
+
+  private void validateMembers(final MessageSendRequest request, final Member member) {
+    if (member.isNotMe(request.getSenderId())) {
+      throw new MessageException(SENDER_IS_NOT_EQUAL_REQUEST_MEMBER);
+    }
+    if (!memberRepository.existsById(request.getReceiverId())) {
+      throw new MemberException(MemberExceptionType.NOT_FOUND_MEMBER);
+    }
   }
 
   private void saveRooms(final MessageSendRequest request, final String roomId) {

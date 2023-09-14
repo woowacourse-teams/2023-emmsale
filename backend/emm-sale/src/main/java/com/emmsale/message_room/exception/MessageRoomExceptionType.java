@@ -1,23 +1,21 @@
-package com.emmsale.tag.exception;
+package com.emmsale.message_room.exception;
 
 import com.emmsale.base.BaseExceptionType;
 import org.springframework.http.HttpStatus;
 
-public enum TagExceptionType implements BaseExceptionType {
+public enum MessageRoomExceptionType implements BaseExceptionType {
 
-  NOT_FOUND_TAG(
+  NOT_FOUND_MESSAGE_ROOM(
       HttpStatus.NOT_FOUND,
-      "해당 태그가 존재하지 않습니다."
+      "해당 쪽지방은 존재하지 않습니다."
   ),
-  ALEADY_EXIST_TAG(
-      HttpStatus.BAD_REQUEST,
-      "이미 존재하는 태그입니다."
-  );
+
+  ;
 
   private final HttpStatus httpStatus;
   private final String errorMessage;
 
-  TagExceptionType(final HttpStatus httpStatus, final String errorMessage) {
+  MessageRoomExceptionType(final HttpStatus httpStatus, final String errorMessage) {
     this.httpStatus = httpStatus;
     this.errorMessage = errorMessage;
   }
