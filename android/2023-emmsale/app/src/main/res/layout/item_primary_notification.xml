@@ -11,15 +11,15 @@
 
         <import type="com.emmsale.presentation.common.extension.LocalDateTimeExt" />
 
-        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationUiState" />
+        <import type="com.emmsale.presentation.ui.primaryNotificationList.uiState.PrimaryNotificationUiState" />
 
-        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.InterestEventNotificationUiState" />
+        <import type="com.emmsale.presentation.ui.primaryNotificationList.uiState.InterestEventNotificationUiState" />
 
         <import type="kotlin.jvm.functions.Function1" />
 
         <variable
             name="interestEventNotification"
-            type="InterestEventNotificationUiState" />
+            type="com.emmsale.presentation.ui.primaryNotificationList.uiState.InterestEventNotificationUiState" />
 
         <variable
             name="onDeleteClick"

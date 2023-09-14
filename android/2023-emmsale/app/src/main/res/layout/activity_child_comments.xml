@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.eventdetail.comment.childComment.ChildCommentViewModel" />
+            type="com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel" />
 
         <variable
             name="cancelUpdateComment"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.eventdetail.comment.childComment.ChildCommentActivity">
+        tools:context=".presentation.ui.childCommentList.ChildCommentActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_childcomments_toolbar"

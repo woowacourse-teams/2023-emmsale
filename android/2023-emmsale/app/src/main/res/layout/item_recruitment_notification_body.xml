@@ -9,15 +9,15 @@
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationStatusUiState" />
+        <import type="com.emmsale.presentation.ui.recruitmentNotificationList.uiState.RecruitmentNotificationStatusUiState" />
 
         <variable
             name="notificationBodyClickListener"
-            type="com.emmsale.presentation.ui.notificationBox.recruitmentNotification.recyclerview.body.RecruitmentNotificationBodyClickListener" />
+            type="com.emmsale.presentation.ui.recruitmentNotificationList.recyclerView.body.RecruitmentNotificationBodyClickListener" />
 
         <variable
             name="notification"
-            type="com.emmsale.presentation.ui.notificationBox.recruitmentNotification.uistate.RecruitmentNotificationBodyUiState" />
+            type="com.emmsale.presentation.ui.recruitmentNotificationList.uiState.RecruitmentNotificationBodyUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

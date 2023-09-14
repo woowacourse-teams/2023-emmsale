@@ -10,14 +10,14 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.main.event.conference.ConferenceViewModel" />
+            type="com.emmsale.presentation.ui.conferenceList.ConferenceViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.main.event.conference.ConferenceFragment">
+        tools:context=".presentation.ui.conferenceList.ConferenceFragment">
 
         <TextView
             android:id="@+id/tv_events_prefix"

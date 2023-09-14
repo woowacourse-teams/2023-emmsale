@@ -7,7 +7,7 @@
 
         <variable
             name="myPost"
-            type="com.emmsale.presentation.ui.main.setting.myPost.uiState.MyPostUiState" />
+            type="com.emmsale.presentation.ui.myPostList.uiState.MyPostUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -9,14 +9,14 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.eventdetail.EventDetailViewModel" />
+            type="com.emmsale.presentation.ui.eventDetail.EventDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.eventdetail.EventDetailActivity">
+        tools:context=".presentation.ui.eventDetail.EventDetailActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarlayout_eventdetail"
