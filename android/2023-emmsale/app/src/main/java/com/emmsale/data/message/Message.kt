@@ -9,13 +9,12 @@ data class Message(
     val createdAt: LocalDateTime,
 ) {
     companion object {
+        private const val MESSAGE_DATE_FORMAT = "yyyy:MM:dd:HH:mm:ss"
+
         fun create(senderId: Long, message: String, createdAt: String): Message = Message(
             senderId,
             message,
-            LocalDateTime.parse(
-                createdAt,
-                DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss"),
-            ),
+            LocalDateTime.parse(createdAt, DateTimeFormatter.ofPattern(MESSAGE_DATE_FORMAT)),
         )
     }
 }
