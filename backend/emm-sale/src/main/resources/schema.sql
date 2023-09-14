@@ -15,6 +15,7 @@ drop table if exists kerdy.report;
 drop table if exists kerdy.scrap;
 drop table if exists kerdy.message;
 drop table if exists kerdy.room;
+drop table if exists kerdy.image;
 
 create table activity
 (
@@ -207,4 +208,16 @@ create table message
     sender_id  bigint       not null,
     room_id    varchar(40)  not null,
     primary key (id)
+);
+
+-- 2023-09-14 13:39
+
+create table image
+(
+    id           bigint auto_increment primary key,
+    name         varchar(50) not null,
+    type         varchar(20) not null,
+    content_id   bigint      not null,
+    order_number bigint      not null,
+    created_at   datetime(6)
 );
