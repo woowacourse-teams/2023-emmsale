@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.emmsale.comment.application.dto.FeedCommentCount;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -114,73 +112,5 @@ class CommentRepositoryTest extends JpaRepositorySliceTestHelper {
         .usingRecursiveComparison()
         .ignoringFields("createdAt")
         .isEqualTo(expected);
-  }
-
-  @Nested
-  @DisplayName("countByFeedIn() 테스트")
-  class CountByFeedTest {
-
-    @Test
-    @DisplayName("countByFeedIn() : 피드들에 달린 댓글 수를 조회한다.")
-    void test_countByFeedIn() {
-      //given
-      final List<Feed> feeds = List.of(feed1, feed2);
-      final Comment parent = commentRepository.save(Comment.createRoot(feed1, member1, "부모댓글1"));
-      commentRepository.save(Comment.createChild(feed1, parent, member2, "자식댓글1"));
-      commentRepository.save(Comment.createRoot(feed2, member1, "부모댓글1"));
-
-      final List<FeedCommentCount> expect = List.of(new FeedCommentCount(feed1, 2L),
-          new FeedCommentCount(feed2, 1L));
-
-      //when
-      final List<FeedCommentCount> actual = commentRepository.countByFeedIn(feeds);
-
-      //then
-      assertThat(actual)
-          .usingRecursiveComparison()
-          .isEqualTo(expect);
-    }
-
-    @Test
-    @DisplayName("countByFeedIn() : 삭제된 댓글은 개수에 포함되지 않는다.")
-    void test_countByFeedInWithDeletedComment() {
-      //given
-      final List<Feed> feeds = List.of(feed1, feed2);
-      final Comment parent = commentRepository.save(Comment.createRoot(feed1, member1, "부모댓글1"));
-      final Comment deletedComment = commentRepository.save(
-          Comment.createChild(feed1, parent, member2, "자식댓글1"));
-      deletedComment.delete();
-      commentRepository.save(Comment.createRoot(feed2, member1, "부모댓글1"));
-
-      final List<FeedCommentCount> expect = List.of(new FeedCommentCount(feed1, 1L),
-          new FeedCommentCount(feed2, 1L));
-
-      //when
-      final List<FeedCommentCount> actual = commentRepository.countByFeedIn(feeds);
-
-      //then
-      assertThat(actual)
-          .usingRecursiveComparison()
-          .isEqualTo(expect);
-    }
-
-    @Test
-    @DisplayName("countByFeedIn() : 댓글이 없는 피드는 집계되지 않는다.")
-    void test_countByFeedInWithZeroCommentFeed() {
-      //given
-      final List<Feed> feeds = List.of(feed1, feed2);
-      final Comment parent = commentRepository.save(Comment.createRoot(feed1, member1, "부모댓글1"));
-      commentRepository.save(Comment.createChild(feed1, parent, member2, "자식댓글1"));
-
-      final List<FeedCommentCount> expect = List.of(new FeedCommentCount(feed1, 2L));
-
-      //when
-      final List<FeedCommentCount> actual = commentRepository.countByFeedIn(feeds);
-
-      //then
-      assertThat(actual)
-          .usingRecursiveComparison()
-          .isEqualTo(expect);
-    }
   }
 }

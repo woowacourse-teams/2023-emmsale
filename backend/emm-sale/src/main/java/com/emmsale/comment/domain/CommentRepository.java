@@ -1,7 +1,5 @@
 package com.emmsale.comment.domain;
 
-import com.emmsale.comment.application.dto.FeedCommentCount;
-import com.emmsale.feed.domain.Feed;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,11 +18,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
   @Query("select c From Comment c join fetch c.member m where m.id = :memberId")
   List<Comment> findByMemberId(@Param("memberId") final Long memberId);
-
-  @Query("select new com.emmsale.comment.application.dto.FeedCommentCount(c.feed, count(c))"
-      + " from Comment c"
-      + " where c.feed in :feeds"
-      + " and c.isDeleted = false"
-      + " group by c.feed")
-  List<FeedCommentCount> countByFeedIn(List<Feed> feeds);
 }
