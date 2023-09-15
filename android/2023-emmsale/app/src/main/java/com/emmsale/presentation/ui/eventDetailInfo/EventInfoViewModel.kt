@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
@@ -36,24 +34,6 @@ class EventInfoViewModel(
             when (val response = scrappedEventRepository.isScraped(eventId)) {
                 is ApiSuccess -> _isScraped.value = response.data
                 else -> _isError.value = true
-            }
-        }
-    }
-
-    fun scrapEvent() {
-        viewModelScope.launch {
-            when (scrappedEventRepository.scrapEvent(eventId = eventId)) {
-                is ApiSuccess -> _isScraped.value = true
-                is ApiError, is ApiException -> _event.value = EventInfoUiEvent.SCRAP_ERROR
-            }
-        }
-    }
-
-    fun deleteScrap() {
-        viewModelScope.launch {
-            when (scrappedEventRepository.deleteScrap(eventId = eventId)) {
-                is ApiSuccess -> _isScraped.value = false
-                is ApiError, is ApiException -> _event.value = EventInfoUiEvent.SCRAP_DELETE_ERROR
             }
         }
     }

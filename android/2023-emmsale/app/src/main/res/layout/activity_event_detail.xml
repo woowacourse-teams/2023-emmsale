@@ -19,7 +19,11 @@
 
         <variable
             name="navigateToUrl"
-            type="Function1&lt;Integer, Unit>" />
+            type="Function1&lt;String, Unit>" />
+
+        <!--        <variable-->
+        <!--            name="scrapEvent"-->
+        <!--            type="Function1&lt;Long, Unit>" />-->
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -116,6 +120,7 @@
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipgroup_evendetail_tags"
+                app:eventChips="@{vm.eventDetail.eventDetail.tags}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="17dp"
@@ -159,6 +164,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:onClick="@{_ -> navigateToUrl.invoke(vm.eventDetail.eventDetail.informationUrl)}"
                 android:id="@+id/button_eventinformation_navigatewebsite"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
@@ -166,7 +172,7 @@
                 android:layout_marginEnd="17dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
-                android:background="@drawable/bg_eventinformation_urlbutton"
+                android:background="@drawable/bg_all_two_state_button"
                 android:fontFamily="@font/nanum_square_bold"
                 android:stateListAnimator="@null"
                 android:text="@string/eventinformation_navigate_website"
@@ -178,6 +184,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:clickable="true"
+                android:onClick="@{()->vm.handleEventScrap()}"
                 android:id="@+id/iv_event_information_scrap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -185,7 +193,7 @@
                 android:padding="6dp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_event_information_scrap"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/ic_all_scrap_unchecked" />
+                android:src="@{vm.isScraped ? @drawable/ic_all_scrap_checked : @drawable/ic_all_scrap_unchecked}" />
 
             <TextView
                 android:id="@+id/tv_event_information_scrap"

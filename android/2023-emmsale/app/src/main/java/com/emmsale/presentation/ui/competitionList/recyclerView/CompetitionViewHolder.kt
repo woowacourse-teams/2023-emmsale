@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
 import com.emmsale.databinding.ItemCompetitionBinding
-import com.emmsale.presentation.common.views.EventTag
+import com.emmsale.presentation.common.views.EventTagChip
 import com.emmsale.presentation.common.views.eventChipOf
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionUiState
 
@@ -32,7 +32,7 @@ class CompetitionViewHolder(
         binding.cgEventTags.addView(createEventChip(itemView.context, tagName))
     }
 
-    private fun createEventChip(context: Context, tagName: String): EventTag = context.eventChipOf {
+    private fun createEventChip(context: Context, tagName: String): EventTagChip = context.eventChipOf {
         text = tagName
     }
 }

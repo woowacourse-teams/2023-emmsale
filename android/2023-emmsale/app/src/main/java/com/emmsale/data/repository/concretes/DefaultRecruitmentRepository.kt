@@ -5,6 +5,8 @@ import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentRequestCreateRequest
 import com.emmsale.data.apiModel.response.RecruitmentResponse
+import com.emmsale.data.common.ApiError
+import com.emmsale.data.common.ApiException
 import com.emmsale.data.common.ApiResult
 import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.handleApi
@@ -52,7 +54,8 @@ class DefaultRecruitmentRepository(
                 ApiSuccess(recruitmentId, Headers.headersOf())
             }
 
-            else -> response as ApiResult<Long>
+            is ApiError -> ApiError(response.code, response.message)
+            is ApiException -> ApiException(response.e)
         }
     }
 

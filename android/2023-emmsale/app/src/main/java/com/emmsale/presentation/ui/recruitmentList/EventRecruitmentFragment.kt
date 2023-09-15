@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventRecruitmentBinding
 import com.emmsale.presentation.base.BaseFragment
@@ -58,33 +57,7 @@ class EventRecruitmentFragment :
         initRecyclerView()
         setUpRecruitments()
         initWritingButtonClickListener()
-        initRecyclerViewListener()
     }
-
-    override fun onResume() {
-        super.onResume()
-        eventDetailActivity.showEventInformation()
-    }
-
-    private fun initRecyclerViewListener() {
-        binding.rvRecruitment.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                handleEventInformationVisibility(newState)
-            }
-        })
-    }
-
-    private fun handleEventInformationVisibility(newState: Int) {
-        if (newState == RecyclerView.SCROLL_STATE_IDLE && isScrollTop()) {
-            eventDetailActivity.showEventInformation()
-        } else if (!isScrollTop()) {
-            eventDetailActivity.hideEventInformation()
-        }
-    }
-
-    private fun isScrollTop(): Boolean =
-        !binding.rvRecruitment.canScrollVertically(TOP_CONDITION)
 
     private fun navigateToRecruitmentDetail(recruitmentPostUiState: RecruitmentPostUiState) {
         val intent = RecruitmentPostDetailActivity.getIntent(
@@ -122,7 +95,6 @@ class EventRecruitmentFragment :
     companion object {
         private const val EVENT_ID_KEY = "EVENT_ID_KEY"
         private const val EVENT_ID_NULL_ERROR = "행사 아이디를 가져오지 못했어요"
-        private const val TOP_CONDITION = -1
 
         fun create(eventId: Long): EventRecruitmentFragment {
             val fragment = EventRecruitmentFragment()
