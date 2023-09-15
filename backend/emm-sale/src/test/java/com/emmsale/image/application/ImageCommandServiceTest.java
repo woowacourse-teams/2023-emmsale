@@ -186,5 +186,4 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
       );
     }
   }
-  
 }
