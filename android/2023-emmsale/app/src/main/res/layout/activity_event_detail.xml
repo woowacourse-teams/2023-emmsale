@@ -64,7 +64,7 @@
                     android:layout_width="match_parent"
                     app:layout_collapseMode="pin"
                     app:navigationIcon="@drawable/ic_all_arrowback"
-                    android:layout_height="?attr/actionBarSize" />
+                    android:layout_height="56dp" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
