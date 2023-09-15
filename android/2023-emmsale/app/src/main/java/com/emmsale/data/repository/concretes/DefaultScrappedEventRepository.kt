@@ -2,11 +2,11 @@ package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.request.ScrappedEventCreateRequest
 import com.emmsale.data.apiModel.response.ScrappedEventResponse
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.common.handleApi
+import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.ScrappedEvent
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
@@ -17,33 +17,27 @@ class DefaultScrappedEventRepository(
     private val scrappedEventService: ScrappedEventService,
 ) : ScrappedEventRepository {
 
-    override suspend fun getScrappedEvents(): ApiResult<List<ScrappedEvent>> {
-        return handleApi(
-            execute = { scrappedEventService.getScrappedEvents() },
-            mapToDomain = List<ScrappedEventResponse>::toData,
-        )
+    override suspend fun getScrappedEvents(): ApiResponse<List<ScrappedEvent>> {
+        return scrappedEventService
+            .getScrappedEvents()
+            .map(List<ScrappedEventResponse>::toData)
     }
 
-    override suspend fun scrapEvent(eventId: Long): ApiResult<Unit> {
+    override suspend fun scrapEvent(eventId: Long): ApiResponse<Unit> {
         val scrappedEventCreateRequest = ScrappedEventCreateRequest(eventId)
-        return handleApi(
-            execute = { scrappedEventService.scrapEvent(scrappedEventCreateRequest) },
-            mapToDomain = {},
-        )
+        return scrappedEventService.scrapEvent(scrappedEventCreateRequest)
     }
 
-    override suspend fun deleteScrap(eventId: Long): ApiResult<Unit> {
-        return handleApi(
-            execute = { scrappedEventService.deleteScrap(eventId) },
-            mapToDomain = {},
-        )
+    override suspend fun deleteScrap(eventId: Long): ApiResponse<Unit> {
+        return scrappedEventService.deleteScrap(eventId)
     }
 
-    override suspend fun isScraped(eventId: Long): ApiResult<Boolean> {
+    override suspend fun isScraped(eventId: Long): ApiResponse<Boolean> {
         return when (val response = getScrappedEvents()) {
-            is ApiError -> ApiError(response.code, response.message)
-            is ApiException -> ApiException(response.e)
-            is ApiSuccess -> ApiSuccess(
+            is Failure -> response
+            is NetworkError -> response
+            is Unexpected -> response
+            is Success -> Success(
                 response.data.any { it.eventId == eventId },
                 DEFAULT_HEADER,
             )

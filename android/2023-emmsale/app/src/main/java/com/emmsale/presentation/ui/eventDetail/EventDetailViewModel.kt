@@ -4,9 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
@@ -50,8 +47,13 @@ class EventDetailViewModel(
     override fun refresh() {
         changeToLoadingState()
         viewModelScope.launch {
-            when (val result = eventRepository.getEventDetail(eventId)) {
-                is Success -> fetchSuccessEventDetail(result.data)
+            when (val eventFetchResult = eventRepository.getEventDetail(eventId)) {
+                is Success -> fetchSuccessEventDetail(eventFetchResult.data)
+                is Failure, NetworkError, is Unexpected -> changeToErrorState()
+            }
+
+            when (val isScrappedFetchResult = scrappedEventRepository.isScraped(eventId)) {
+                is Success -> _isScraped.value = isScrappedFetchResult.data
                 is Failure, NetworkError, is Unexpected -> changeToErrorState()
             }
         }
@@ -67,8 +69,8 @@ class EventDetailViewModel(
     private fun scrapEvent() {
         viewModelScope.launch {
             when (scrappedEventRepository.scrapEvent(eventId = eventId)) {
-                is ApiSuccess -> _isScraped.value = true
-                is ApiError, is ApiException -> _scrapUiEvent.value = EventInfoUiEvent.SCRAP_ERROR
+                is Success -> _isScraped.value = true
+                else -> _scrapUiEvent.value = EventInfoUiEvent.SCRAP_ERROR
             }
         }
     }
@@ -76,10 +78,8 @@ class EventDetailViewModel(
     private fun deleteScrap() {
         viewModelScope.launch {
             when (scrappedEventRepository.deleteScrap(eventId = eventId)) {
-                is ApiSuccess -> _isScraped.value = false
-                is ApiError, is ApiException ->
-                    _scrapUiEvent.value =
-                        EventInfoUiEvent.SCRAP_DELETE_ERROR
+                is Success -> _isScraped.value = false
+                else -> _scrapUiEvent.value = EventInfoUiEvent.SCRAP_DELETE_ERROR
             }
         }
     }

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.viewModel.Refreshable
@@ -32,7 +32,7 @@ class EventInfoViewModel(
     override fun refresh() {
         viewModelScope.launch {
             when (val response = scrappedEventRepository.isScraped(eventId)) {
-                is ApiSuccess -> _isScraped.value = response.data
+                is Success -> _isScraped.value = response.data
                 else -> _isError.value = true
             }
         }

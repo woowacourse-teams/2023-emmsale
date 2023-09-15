@@ -85,9 +85,7 @@ class EventDetailActivity :
     }
 
     private fun initBackPressButtonClickListener() {
-        binding.ivEventdetailBackpress.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+        binding.tbEventdetail.setNavigationOnClickListener { finish() }
     }
 
     companion object {
