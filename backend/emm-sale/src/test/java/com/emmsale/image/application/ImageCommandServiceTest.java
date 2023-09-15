@@ -58,7 +58,7 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
     @Test
     @DisplayName("S3와 DB에 Image를 성공적으로 업로드할 수 있다.")
     void saveImages_success() {
-      //givend
+      //given
       final Event event = eventRepository.save(인프콘_2023());
       final List<Image> expected = List.of(
           new Image("테스트테스트.png", ImageType.EVENT, event.getId(), 0L, null),
