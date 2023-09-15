@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MessageNotificationMessageGenerator implements NotificationMessageGenerator {
 
+  private static final String MESSAGE_NOTIFICATION_MESSAGE_TYPE = "MESSAGE";
+
   private final MessageNotificationEvent event;
 
   @Override
@@ -29,6 +31,7 @@ public class MessageNotificationMessageGenerator implements NotificationMessageG
         .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
 
     final Data data = new Data(
+        MESSAGE_NOTIFICATION_MESSAGE_TYPE,
         event.getRoomId(),
         sender.getId().toString(),
         sender.getName(),

@@ -31,14 +31,16 @@ public class MessageCommandService {
   private final MemberRepository memberRepository;
 
   public void sendMessage(final MessageSendRequest request, final Member member) {
-    //TODO: Room을 조회하는 기능 완성 후, 이미 있는 Room 조회해서 메시지보내는 기능 추가
     validateMembers(request, member);
 
-    final String roomId = UUID.randomUUID().toString();
-    saveRooms(request, roomId);
+    final String roomId = roomRepository.findByInterlocutorIds(request.getReceiverId(),
+            request.getSenderId())
+        .map(room -> room.getRoomId().getUuid())
+        .orElseGet(() -> saveRooms(request));
 
     final Message message = new Message(request.getContent(), request.getSenderId(),
         roomId, LocalDateTime.now());
+
     messageRepository.save(message);
     eventPublisher.publish(message, request.getReceiverId());
   }
@@ -52,7 +54,9 @@ public class MessageCommandService {
     }
   }
 
-  private void saveRooms(final MessageSendRequest request, final String roomId) {
+  private String saveRooms(final MessageSendRequest request) {
+    final String roomId = UUID.randomUUID().toString();
+
     final RoomId senderRoomId = new RoomId(roomId, request.getSenderId());
     final RoomId receiverRoomId = new RoomId(roomId, request.getReceiverId());
 
@@ -61,5 +65,7 @@ public class MessageCommandService {
 
     roomRepository.save(senderRoom);
     roomRepository.save(receiverRoom);
+
+    return roomId;
   }
 }
