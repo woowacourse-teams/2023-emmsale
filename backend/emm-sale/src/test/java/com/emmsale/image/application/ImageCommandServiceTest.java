@@ -61,12 +61,12 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
       //givend
       final Event event = eventRepository.save(인프콘_2023());
       final List<Image> expected = List.of(
-          new Image("테스트테스트", ImageType.EVENT, event.getId(), 0L, null),
-          new Image("테스트테스트2", ImageType.EVENT, event.getId(), 1L, null));
-      final List<String> imageNames = List.of("테스트테스트", "테스트테스트2");
+          new Image("테스트테스트.png", ImageType.EVENT, event.getId(), 0L, null),
+          new Image("테스트테스트2.png", ImageType.EVENT, event.getId(), 1L, null));
+      final List<String> imageNames = List.of("테스트테스트.png", "테스트테스트2.png");
       final List<MultipartFile> files = List.of(
           new MockMultipartFile("test", "test.png", "", new byte[]{}),
-          new MockMultipartFile("test", "test.jpg", "", new byte[]{}));
+          new MockMultipartFile("test", "test.png", "", new byte[]{}));
       
       BDDMockito.given(s3Client.uploadImages(any()))
           .willReturn(imageNames);
@@ -93,7 +93,7 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
       final Long noExistEventId = 999L;
       final List<MultipartFile> files = List.of(
           new MockMultipartFile("test", "test.png", "", new byte[]{}),
-          new MockMultipartFile("test", "test.jpg", "", new byte[]{}));
+          new MockMultipartFile("test", "test.png", "", new byte[]{}));
       
       //when
       final ThrowingCallable actual = () -> imageCommandService.saveImages(ImageType.EVENT,
@@ -112,9 +112,9 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
       final Event event = eventRepository.save(인프콘_2023());
       final List<MultipartFile> files = List.of(
           new MockMultipartFile("test", "test1.png", "", new byte[]{}),
-          new MockMultipartFile("test", "test2.jpg", "", new byte[]{}),
-          new MockMultipartFile("test", "test3.jpg", "", new byte[]{}),
-          new MockMultipartFile("test", "test4.jpg", "", new byte[]{}));
+          new MockMultipartFile("test", "test2.png", "", new byte[]{}),
+          new MockMultipartFile("test", "test3.png", "", new byte[]{}),
+          new MockMultipartFile("test", "test4.png", "", new byte[]{}));
       
       //when
       final ThrowingCallable actual = () -> imageCommandService.saveImages(ImageType.EVENT,
@@ -130,10 +130,10 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
     void saveImages_fail_and_rollback() {
       //givend
       final Event event = eventRepository.save(인프콘_2023());
-      final List<String> imageNames = List.of("테스트테스트", "테스트테스트2");
+      final List<String> imageNames = List.of("테스트테스트.png", "테스트테스트2.png");
       final List<MultipartFile> files = List.of(
           new MockMultipartFile("test", "test.png", "", new byte[]{}),
-          new MockMultipartFile("test", "test.jpg", "", new byte[]{}));
+          new MockMultipartFile("test", "test.png", "", new byte[]{}));
       
       BDDMockito.given(s3Client.uploadImages(any()))
           .willReturn(imageNames);
@@ -157,4 +157,34 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
       );
     }
   }
+  
+  @Nested
+  @DisplayName("deleteImages() 메서드를 호출하면 특정 컨텐츠의 이미지들을 S3와 DB에서 삭제한다.")
+  class DeleteImages {
+    
+    @Test
+    @DisplayName("S3와 DB에서 Image를 성공적으로 삭제할 수 있다.")
+    void deleteImages_success() {
+      //givend
+      final Event event = eventRepository.save(인프콘_2023());
+      final List<Image> expected = List.of(
+          new Image("테스트테스트.png", ImageType.EVENT, event.getId(), 0L, null),
+          new Image("테스트테스트2.png", ImageType.EVENT, event.getId(), 1L, null));
+      imageRepository.saveAll(expected);
+      
+      BDDMockito.willDoNothing().given(s3Client).deleteImages(any());
+      
+      //when
+      imageCommandService.deleteImages(ImageType.EVENT, event.getId());
+      final List<Image> actual = imageRepository.findAll();
+      
+      //then
+      assertAll(
+          () -> assertThat(actual).isEmpty(),
+          () -> verify(s3Client, times(1))
+              .deleteImages(any())
+      );
+    }
+  }
+  
 }
