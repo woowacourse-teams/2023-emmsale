@@ -1,5 +1,6 @@
 package com.emmsale.image.application;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -42,8 +43,8 @@ public class S3Client {
     
     try (InputStream inputStream = file.getInputStream()) {
       amazonS3.putObject(new PutObjectRequest(bucket, newFileName, inputStream, objectMetadata));
-    } catch (IOException e) {
-      throw new ImageException(ImageExceptionType.FAIL_UPLOAD_IMAGE);
+    } catch (IOException | SdkClientException exception) {
+      throw new ImageException(ImageExceptionType.FAIL_S3_UPLOAD_IMAGE);
     }
     return newFileName;
   }
@@ -72,7 +73,11 @@ public class S3Client {
   }
   
   public void deleteImages(final List<String> fileNames) {
-    fileNames.forEach(fileName ->
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName)));
+    try {
+      fileNames.forEach(fileName ->
+          amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName)));
+    } catch (SdkClientException exception) {
+      throw new ImageException(ImageExceptionType.FAIL_S3_DELETE_IMAGE);
+    }
   }
 }
