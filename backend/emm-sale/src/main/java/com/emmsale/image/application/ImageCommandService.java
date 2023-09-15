@@ -11,6 +11,7 @@ import com.emmsale.image.exception.ImageExceptionType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Transactional
 public class ImageCommandService {
-  // TODO: 2023/09/14 put, delete 메서드 구현
+  // TODO: 2023/09/14 put 메서드 구현
   
   private final S3Client s3Client;
   private final ImageRepository imageRepository;
@@ -71,5 +72,18 @@ public class ImageCommandService {
       images.add(imageRepository.save(image));
     }
     return images;
+  }
+  
+  public void deleteImages(final ImageType imageType, final Long contentId) {
+    final List<Image> images = imageRepository.findAllByTypeAndContentId(imageType, contentId);
+    final List<Long> imageIds = images.stream()
+        .map(Image::getId)
+        .collect(Collectors.toList());
+    final List<String> imageNames = images.stream()
+        .map(Image::getName)
+        .collect(Collectors.toList());
+    imageRepository.deleteAllByIdInBatch(imageIds);
+    s3Client.deleteImages(imageNames);
+    // TODO: 2023/09/15 S3의 이미지가 '일부만' 삭제되는 경우에 대한 처리(추후 고도화)
   }
 }
