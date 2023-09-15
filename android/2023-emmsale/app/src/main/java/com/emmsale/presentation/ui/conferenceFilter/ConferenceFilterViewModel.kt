@@ -59,13 +59,15 @@ class ConferenceFilterViewModel(
 
     private suspend fun fetchConferenceTags(): List<ConferenceFilteringOptionUiState> =
         withContext(Dispatchers.IO) {
-            when (val conferenceTag = eventTagRepository.getEventTags()) {
-                is Success -> conferenceTag.data.map(ConferenceFilteringOptionUiState::from)
-                is Unexpected, is Failure, NetworkError -> {
+            when (val result = eventTagRepository.getEventTags()) {
+                is Success -> result.data.map(ConferenceFilteringOptionUiState::from)
+                is Failure, NetworkError -> {
                     _conferenceFilter.value =
                         _conferenceFilter.value.copy(isLoadingConferenceFilterFailed = true)
                     emptyList()
                 }
+
+                is Unexpected -> throw Throwable(result.error)
             }
         }
 

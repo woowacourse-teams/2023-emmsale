@@ -2,9 +2,10 @@ package com.emmsale.presentation.ui.myCommentList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
@@ -37,12 +38,13 @@ class MyCommentsViewModel(
                 _isLogin.value = false
                 return@launch
             }
-            when (val result = commentRepository.getCommentsByMemberId(token.uid)) {
-                is ApiError, is ApiException ->
-                    _comments.value = _comments.value.changeToErrorState()
 
-                is ApiSuccess ->
+            when (val result = commentRepository.getCommentsByMemberId(token.uid)) {
+                is Failure, NetworkError -> _comments.value = _comments.value.changeToErrorState()
+                is Success ->
                     _comments.value = _comments.value.setCommentsState(result.data, token.uid)
+
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

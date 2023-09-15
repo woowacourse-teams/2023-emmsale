@@ -2,9 +2,10 @@ package com.emmsale.presentation.ui.scrappedEventList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -23,9 +24,10 @@ class ScrappedEventViewModel(
     override fun refresh() {
         changeToLoadingState()
         viewModelScope.launch {
-            when (val response = scrappedEventRepository.getScrappedEvents()) {
-                is ApiSuccess -> _scrappedEvents.value = ScrappedEventsUiState.from(response.data)
-                is ApiError, is ApiException -> changeToErrorState()
+            when (val result = scrappedEventRepository.getScrappedEvents()) {
+                is Failure, NetworkError -> changeToErrorState()
+                is Success -> _scrappedEvents.value = ScrappedEventsUiState.from(result.data)
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

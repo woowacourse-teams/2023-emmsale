@@ -12,6 +12,8 @@ import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.profile.ProfileActivity
+import com.emmsale.presentation.ui.recruitmentNotificationList.dialog.RecruitmentAcceptedDialog
+import com.emmsale.presentation.ui.recruitmentNotificationList.dialog.RecruitmentRejectConfirmDialog
 import com.emmsale.presentation.ui.recruitmentNotificationList.recyclerView.body.RecruitmentNotificationBodyClickListener
 import com.emmsale.presentation.ui.recruitmentNotificationList.recyclerView.header.RecruitmentNotificationHeaderAdapter
 import com.emmsale.presentation.ui.recruitmentNotificationList.recyclerView.header.RecruitmentNotificationHeaderClickListener

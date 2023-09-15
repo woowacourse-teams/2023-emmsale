@@ -3,9 +3,10 @@ package com.emmsale.presentation.ui.onboarding
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
@@ -37,10 +38,12 @@ class OnboardingViewModel(
     }
 
     private fun fetchActivities(): Job = viewModelScope.launch {
-        when (val activitiesResult = activityRepository.getActivities()) {
-            is ApiSuccess -> _activities.postValue(OnboardingUiState.from(activitiesResult.data))
-            is ApiError, is ApiException ->
+        when (val result = activityRepository.getActivities()) {
+            is Failure, NetworkError ->
                 _activities.postValue(activities.value.copy(isLoadingActivitiesFailed = true))
+
+            is Success -> _activities.postValue(OnboardingUiState.from(result.data))
+            is Unexpected -> throw Throwable(result.error)
         }
     }
 
@@ -62,17 +65,19 @@ class OnboardingViewModel(
     fun updateMember() {
         viewModelScope.launch {
             _activities.value = _activities.value.copy(isLoading = true)
-
             when (
-                memberRepository.updateMember(name.value!!, _activities.value.selectedActivityIds)
+                val result = memberRepository.updateMember(
+                    name.value!!,
+                    _activities.value.selectedActivityIds,
+                )
             ) {
-                is ApiSuccess -> {
+                is Failure, NetworkError -> updateMemberSavingUiState(MemberSavingUiState.Failed)
+                is Success -> {
                     updateMemberSavingUiState(MemberSavingUiState.Success)
                     configRepository.saveAutoLoginConfig(true)
                 }
 
-                is ApiError -> updateMemberSavingUiState(MemberSavingUiState.Failed)
-                is ApiException -> updateMemberSavingUiState(MemberSavingUiState.Failed)
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

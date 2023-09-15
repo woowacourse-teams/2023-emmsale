@@ -2,10 +2,7 @@ package com.emmsale.presentation.ui.conferenceList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
@@ -57,18 +54,19 @@ class ConferenceViewModel(
     ) {
         viewModelScope.launch {
             _conferences.value = _conferences.value.copy(isLoading = true)
-            when (val eventsResult = getConferences(statuses, tags, startDate, endDate)) {
-                is ApiSuccess ->
-                    _conferences.value = _conferences.value.copy(
-                        conferences = eventsResult.data.map(ConferenceUiState::from),
-                        isLoading = false,
-                        isError = false,
-                    )
-
-                is ApiError, is ApiException -> _conferences.value = _conferences.value.copy(
+            when (val result = getConferences(statuses, tags, startDate, endDate)) {
+                is Failure, NetworkError -> _conferences.value = _conferences.value.copy(
                     isError = true,
                     isLoading = false,
                 )
+
+                is Success -> _conferences.value = _conferences.value.copy(
+                    conferences = result.data.map(ConferenceUiState::from),
+                    isLoading = false,
+                    isError = false,
+                )
+
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -78,7 +76,7 @@ class ConferenceViewModel(
         tags: List<EventTag>,
         startDate: LocalDate?,
         endDate: LocalDate?,
-    ): ApiResult<List<Conference>> = eventRepository.getConferences(
+    ): ApiResponse<List<Conference>> = eventRepository.getConferences(
         statuses = statuses,
         tags = tags,
         startDate = startDate,
@@ -133,7 +131,15 @@ class ConferenceViewModel(
     private suspend fun getEventTagByIds(statusFilterIds: Array<Long>): List<EventTag> =
         when (val result = eventTagRepository.getEventTagByIds(statusFilterIds)) {
             is Success -> result.data
-            is Unexpected, is Failure, NetworkError -> emptyList()
+            is Failure, NetworkError -> {
+                _conferences.value = _conferences.value.copy(
+                    isError = true,
+                    isLoading = false,
+                )
+                emptyList()
+            }
+
+            is Unexpected -> throw Throwable(result.error)
         }
 
     fun removeFilteringOptionBy(filterOptionId: Long) {

@@ -4,9 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
@@ -68,15 +65,17 @@ class NotificationTagConfigViewModel(
     private suspend fun getEventTagsAsync(): Deferred<List<EventTag>?> = viewModelScope.async {
         when (val result = eventTagRepository.getEventTags()) {
             is Success -> result.data
-            is Unexpected, is Failure, NetworkError -> null
+            is Failure, NetworkError -> null
+            is Unexpected -> throw Throwable(result.error)
         }
     }
 
     private suspend fun getInterestEventTagsAsync(memberId: Long): Deferred<List<EventTag>?> =
         viewModelScope.async {
             when (val result = eventTagRepository.getInterestEventTags(memberId)) {
-                is ApiSuccess -> result.data
-                is ApiError, is ApiException -> null
+                is Failure, NetworkError -> null
+                is Success -> result.data
+                is Unexpected -> throw Throwable(result.error)
             }
         }
 
@@ -86,14 +85,14 @@ class NotificationTagConfigViewModel(
                 .filter(NotificationTagConfigUiState::isChecked)
                 .map { EventTag(id = it.id, name = it.tagName) }
 
-            when (eventTagRepository.updateInterestEventTags(interestEventTags)) {
-                is ApiSuccess -> {
+            when (val result = eventTagRepository.updateInterestEventTags(interestEventTags)) {
+                is Failure, NetworkError -> _event.value = NotificationTagConfigUiEvent.UPDATE_FAIL
+                is Success -> {
                     _event.value = NotificationTagConfigUiEvent.UPDATE_SUCCESS
                     logInterestTags(interestEventTags.map(EventTag::name))
                 }
 
-                is ApiError, is ApiException ->
-                    _event.value = NotificationTagConfigUiEvent.UPDATE_FAIL
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

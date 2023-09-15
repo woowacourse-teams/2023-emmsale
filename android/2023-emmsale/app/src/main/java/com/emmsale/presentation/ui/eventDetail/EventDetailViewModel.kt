@@ -35,7 +35,8 @@ class EventDetailViewModel(
         viewModelScope.launch {
             when (val result = eventRepository.getEventDetail(eventId)) {
                 is Success -> fetchSuccessEventDetail(result.data)
-                is Failure, NetworkError, is Unexpected -> changeToErrorState()
+                is Failure, NetworkError -> changeToErrorState()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

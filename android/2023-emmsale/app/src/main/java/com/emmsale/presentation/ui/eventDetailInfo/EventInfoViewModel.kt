@@ -4,9 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.viewModel.Refreshable
@@ -33,27 +34,30 @@ class EventInfoViewModel(
 
     override fun refresh() {
         viewModelScope.launch {
-            when (val response = scrappedEventRepository.isScraped(eventId)) {
-                is ApiSuccess -> _isScraped.value = response.data
-                else -> _isError.value = true
+            when (val result = scrappedEventRepository.isScraped(eventId)) {
+                is Failure, NetworkError -> _isError.value = true
+                is Success -> _isScraped.value = result.data
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun scrapEvent() {
         viewModelScope.launch {
-            when (scrappedEventRepository.scrapEvent(eventId = eventId)) {
-                is ApiSuccess -> _isScraped.value = true
-                is ApiError, is ApiException -> _event.value = EventInfoUiEvent.SCRAP_ERROR
+            when (val result = scrappedEventRepository.scrapEvent(eventId = eventId)) {
+                is Failure, NetworkError -> _event.value = EventInfoUiEvent.SCRAP_ERROR
+                is Success -> _isScraped.value = true
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun deleteScrap() {
         viewModelScope.launch {
-            when (scrappedEventRepository.deleteScrap(eventId = eventId)) {
-                is ApiSuccess -> _isScraped.value = false
-                is ApiError, is ApiException -> _event.value = EventInfoUiEvent.SCRAP_DELETE_ERROR
+            when (val result = scrappedEventRepository.deleteScrap(eventId = eventId)) {
+                is Failure, NetworkError -> _event.value = EventInfoUiEvent.SCRAP_DELETE_ERROR
+                is Success -> _isScraped.value = false
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
