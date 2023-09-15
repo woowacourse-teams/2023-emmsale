@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Transactional
 public class ImageCommandService {
-  // TODO: 2023/09/14 create, put, delete 메서드 구현
+  // TODO: 2023/09/14 put, delete 메서드 구현
   
   private final S3Client s3Client;
   private final ImageRepository imageRepository;
@@ -36,7 +36,8 @@ public class ImageCommandService {
     try {
       return saveImagesToDb(imageType, contentId, imageNames);
     } catch (Exception exception) {
-      s3Client.deleteImages(imageNames); // TODO: 2023/09/15 이 동작이 실패했을 경우에 대한 처리
+      s3Client.deleteImages(imageNames);
+      // TODO: 2023/09/15 이 동작이 실패했을 경우에 대한 처리(추후 고도화)
       throw new ImageException(ImageExceptionType.FAIL_DB_UPLOAD_IMAGE);
     }
   }
@@ -48,9 +49,10 @@ public class ImageCommandService {
   }
   
   private void validateEventExist(final Long contentId) {
-    if (!eventRepository.existsById(contentId)) { // TODO: 2023/09/15 테스트 작성
+    if (!eventRepository.existsById(contentId)) {
       throw new EventException(EventExceptionType.NOT_FOUND_EVENT);
     }
+    // TODO: 2023/09/15 Feed 도메인 추가 후 유효성 검사 추가 예정
   }
   
   private void validateImageCount(final ImageType imageType,
