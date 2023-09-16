@@ -9,11 +9,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEventDetailBinding
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
 import com.emmsale.presentation.ui.main.MainActivity
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class EventDetailActivity :
@@ -33,8 +35,9 @@ class EventDetailActivity :
         initFragmentStateAdapter()
         initBackPressedDispatcher()
         setUpBinding()
-        setUpEventUiEvent()
+        setUpScrapUiEvent()
         initBackPressButtonClickListener()
+        onTabSelectedListener()
     }
 
     private fun initBackPressedDispatcher() {
@@ -48,15 +51,15 @@ class EventDetailActivity :
         binding.navigateToUrl = ::navigateToUrl
     }
 
-    private fun setUpEventUiEvent() {
+    private fun setUpScrapUiEvent() {
         viewModel.scrapUiEvent.observe(this) { event ->
             handleEvent(event)
         }
     }
 
-    private fun handleEvent(event: EventInfoUiEvent?) {
-        if (event == null) return
-        when (event) {
+    private fun handleEvent(event: Event<EventInfoUiEvent>) {
+        val content = event.getContentIfNotHandled() ?: return
+        when (content) {
             EventInfoUiEvent.SCRAP_ERROR -> binding.root.showSnackBar("스크랩 불가")
             EventInfoUiEvent.SCRAP_DELETE_ERROR -> binding.root.showSnackBar("스크랩 삭제 불가")
         }
@@ -82,6 +85,19 @@ class EventDetailActivity :
             tab.text = tabNames[position]
         }.attach()
         binding.vpEventdetail.isUserInputEnabled = false
+    }
+
+    private fun onTabSelectedListener() {
+        binding.tablayoutEventdetail.addOnTabSelectedListener(
+            object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    viewModel.fetchCurrentScreen(tab?.position ?: 0)
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+                override fun onTabReselected(tab: TabLayout.Tab?) = Unit
+            },
+        )
     }
 
     private fun initBackPressButtonClickListener() {
