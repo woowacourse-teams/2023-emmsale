@@ -19,4 +19,5 @@
     <color name="ripple_color">#0D000000</color>
     <color name="github_login_color">#404040</color>
     <color name="dialog_window_background_color">#4D000000</color>
+    <color name="post_like_color">#FF6060</color>
 </resources>

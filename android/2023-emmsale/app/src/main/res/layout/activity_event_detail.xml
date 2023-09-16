@@ -73,7 +73,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="20dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layout_anchor="@id/appbarlayout_eventdetail"
                 app:layout_anchorGravity="bottom">
 
