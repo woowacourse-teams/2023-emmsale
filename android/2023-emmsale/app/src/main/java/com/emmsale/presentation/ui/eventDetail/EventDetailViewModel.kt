@@ -12,6 +12,7 @@ import com.emmsale.data.model.EventDetail
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult.ERROR
 import com.emmsale.presentation.common.FetchResult.LOADING
 import com.emmsale.presentation.common.FetchResult.SUCCESS
@@ -34,8 +35,8 @@ class EventDetailViewModel(
         NotNullMutableLiveData(EventDetailUiState())
     val eventDetail: NotNullLiveData<EventDetailUiState> = _eventDetail
 
-    private val _scrapUiEvent: MutableLiveData<EventInfoUiEvent?> = MutableLiveData(null)
-    val scrapUiEvent: LiveData<EventInfoUiEvent?> = _scrapUiEvent
+    private val _scrapUiEvent = MutableLiveData<Event<EventInfoUiEvent>>()
+    val scrapUiEvent: LiveData<Event<EventInfoUiEvent>> = _scrapUiEvent
 
     private val _isScraped: MutableLiveData<Boolean> = MutableLiveData(false)
     val isScraped: LiveData<Boolean> = _isScraped
@@ -46,12 +47,21 @@ class EventDetailViewModel(
 
     override fun refresh() {
         changeToLoadingState()
+        fetchEventDetail()
+        fetchIsScrapped()
+    }
+
+    private fun fetchEventDetail() {
         viewModelScope.launch {
             when (val eventFetchResult = eventRepository.getEventDetail(eventId)) {
-                is Success -> fetchSuccessEventDetail(eventFetchResult.data)
+                is Success -> changeToSuccessState(eventFetchResult.data)
                 is Failure, NetworkError, is Unexpected -> changeToErrorState()
             }
+        }
+    }
 
+    private fun fetchIsScrapped() {
+        viewModelScope.launch {
             when (val isScrappedFetchResult = scrappedEventRepository.isScraped(eventId)) {
                 is Success -> _isScraped.value = isScrappedFetchResult.data
                 is Failure, NetworkError, is Unexpected -> changeToErrorState()
@@ -70,7 +80,7 @@ class EventDetailViewModel(
         viewModelScope.launch {
             when (scrappedEventRepository.scrapEvent(eventId = eventId)) {
                 is Success -> _isScraped.value = true
-                else -> _scrapUiEvent.value = EventInfoUiEvent.SCRAP_ERROR
+                else -> _scrapUiEvent.value = Event(EventInfoUiEvent.SCRAP_ERROR)
             }
         }
     }
@@ -79,12 +89,12 @@ class EventDetailViewModel(
         viewModelScope.launch {
             when (scrappedEventRepository.deleteScrap(eventId = eventId)) {
                 is Success -> _isScraped.value = false
-                else -> _scrapUiEvent.value = EventInfoUiEvent.SCRAP_DELETE_ERROR
+                else -> _scrapUiEvent.value = Event(EventInfoUiEvent.SCRAP_DELETE_ERROR)
             }
         }
     }
 
-    private fun fetchSuccessEventDetail(eventDetail: EventDetail) {
+    private fun changeToSuccessState(eventDetail: EventDetail) {
         _eventDetail.value = EventDetailUiState(SUCCESS, eventDetail)
         logEventClick(eventDetail.name, eventDetail.id)
     }

@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEventDetailBinding
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
@@ -54,9 +55,9 @@ class EventDetailActivity :
         }
     }
 
-    private fun handleEvent(event: EventInfoUiEvent?) {
-        if (event == null) return
-        when (event) {
+    private fun handleEvent(event: Event<EventInfoUiEvent>) {
+        val content = event.getContentIfNotHandled() ?: return
+        when (content) {
             EventInfoUiEvent.SCRAP_ERROR -> binding.root.showSnackBar("스크랩 불가")
             EventInfoUiEvent.SCRAP_DELETE_ERROR -> binding.root.showSnackBar("스크랩 삭제 불가")
         }

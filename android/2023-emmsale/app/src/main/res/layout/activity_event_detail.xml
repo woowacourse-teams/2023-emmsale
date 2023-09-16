@@ -45,6 +45,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_eventdetail_poster"
+                        app:imageUrl="@{vm.eventDetail.eventDetail.posterImageUrl}"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         app:layout_constraintDimensionRatio="326:180"
@@ -55,7 +56,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:roundedImageRadius="@{15}"
                         app:layout_collapseMode="none"
-                        app:imageUrl="@{vm.eventDetail.eventDetail.posterImageUrl}"
                         tools:src="@drawable/img_all_loading" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -73,18 +73,17 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="20dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layout_anchor="@id/appbarlayout_eventdetail"
                 app:layout_anchorGravity="bottom">
 
                 <TextView
                     android:id="@+id/tv_eventdetail_eventstatus"
+                    android:text="@{vm.eventDetail.eventDetail.status}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="17dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/nanum_square_bold"
-                    android:text="@{vm.eventDetail.eventDetail.status}"
                     android:textColor="@color/primary_color"
                     android:textSize="13sp"
                     app:layout_constraintTop_toTopOf="parent"
@@ -93,10 +92,10 @@
 
                 <TextView
                     android:id="@+id/tv_eventdetail_eventname"
+                    android:text="@{vm.eventDetail.eventDetail.name}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nanum_square_bold"
-                    android:text="@{vm.eventDetail.eventDetail.name}"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -108,12 +107,12 @@
 
                 <TextView
                     android:id="@+id/tv_eventdetail_organization"
+                    android:text="@{vm.eventDetail.eventDetail.organization}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
                     android:layout_marginTop="6dp"
                     android:textSize="12sp"
-                    android:text="@{vm.eventDetail.eventDetail.organization}"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textColor="@color/dark_gray"
                     app:layout_constraintStart_toStartOf="parent"
@@ -156,7 +155,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/qwe"
+            android:id="@+id/cl_eventdetail_bottom_contatiner"
             android:background="@drawable/bg_shadow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -164,7 +163,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:onClick="@{_ -> navigateToUrl.invoke(vm.eventDetail.eventDetail.informationUrl)}"
-                android:id="@+id/button_eventinformation_navigatewebsite"
+                android:id="@+id/button_eventdetail_navigatewebsite"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="17dp"
@@ -178,32 +177,32 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iv_event_information_scrap"
+                app:layout_constraintEnd_toStartOf="@+id/iv_eventdetail_scrap"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:clickable="true"
-                android:onClick="@{()->vm.handleEventScrap()}"
-                android:id="@+id/iv_event_information_scrap"
+                android:id="@+id/iv_eventdetail_scrap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="@{()->vm.handleEventScrap()}"
                 android:layout_marginEnd="20dp"
                 android:padding="6dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_event_information_scrap"
+                app:layout_constraintBottom_toTopOf="@+id/tv_eventdetail_scrap"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:src="@{vm.isScraped ? @drawable/ic_all_scrap_checked : @drawable/ic_all_scrap_unchecked}" />
 
             <TextView
-                android:id="@+id/tv_event_information_scrap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="22dp"
-                android:layout_marginBottom="15dp"
+                android:id="@+id/tv_eventdetail_scrap"
                 android:fontFamily="@font/nanum_square_regular"
                 android:text="@string/eventinfromation_scrap"
                 android:textColor="@color/gray"
                 android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
