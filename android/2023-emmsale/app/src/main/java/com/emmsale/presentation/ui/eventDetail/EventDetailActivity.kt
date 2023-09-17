@@ -78,7 +78,7 @@ class EventDetailActivity :
             EventDetailFragmentStateAdapter(this, eventId)
         val tabNames = listOf(
             getString(R.string.eventdetail_tab_infromation),
-            getString(R.string.eventdetail_tab_comment),
+            getString(R.string.eventdetail_tab_post),
             getString(R.string.eventdetail_tab_recruitment),
         )
         TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->

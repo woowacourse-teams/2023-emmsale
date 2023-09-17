@@ -6,5 +6,5 @@ import com.emmsale.presentation.common.FetchResultUiState
 
 data class PostsUiState(
     override val fetchResult: FetchResult = FetchResult.LOADING,
-    val post: Post? = null,
+    val post: List<Post> = emptyList(),
 ) : FetchResultUiState()

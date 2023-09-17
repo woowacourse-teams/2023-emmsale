@@ -368,4 +368,5 @@
     <string name="openprofileurlconfig_register_success">성공적으로 등록하였습니다</string>
     <string name="openprofileurlconfig_register_fail">등록에 실패하였습니다</string>
     <string name="eventInfo_cost">비용</string>
+    <string name="eventdetail_tab_post">게시판</string>
 </resources>
