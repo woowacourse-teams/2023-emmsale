@@ -6,8 +6,9 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPostListBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.ui.postList.recyclerView.PostListAdapter
 
-class PostListFragment() : BaseFragment<FragmentPostListBinding>() {
+class PostListFragment : BaseFragment<FragmentPostListBinding>() {
 
     override val layoutResId: Int = R.layout.fragment_post_list
 
@@ -17,6 +18,10 @@ class PostListFragment() : BaseFragment<FragmentPostListBinding>() {
         )
     }
 
+    private val postListAdapter: PostListAdapter by lazy {
+        PostListAdapter(navigateToPostDetail = ::navigateToPostDetail)
+    }
+
     private val viewModel: PostListViewModel by viewModels {
         PostListViewModel.factory(eventId = eventId)
     }
@@ -24,6 +29,17 @@ class PostListFragment() : BaseFragment<FragmentPostListBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
+        binding.rvPostlist.adapter = postListAdapter
+        setUpPosts()
+    }
+
+    private fun setUpPosts() {
+        viewModel.posts.observe(viewLifecycleOwner) {
+            postListAdapter.submitList(it.posts)
+        }
+    }
+
+    private fun navigateToPostDetail(eventId: Long) {
     }
 
     companion object {

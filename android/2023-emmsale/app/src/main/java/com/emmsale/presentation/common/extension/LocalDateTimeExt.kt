@@ -7,7 +7,7 @@ import com.emmsale.R
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun LocalDateTime.compareToString(context: Context): String {
+fun LocalDateTime.toRelativeTimeText(context: Context): String {
     val currentDateTime = LocalDateTime.now()
 
     if (year < currentDateTime.year) {
@@ -28,7 +28,7 @@ fun LocalDateTime.compareToString(context: Context): String {
     ) {
         val dateFormatter = DateTimeFormatter.ofPattern(
             context.getString(
-                R.string.primarynotification_before_hour_format,
+                R.string.before_hour_format,
                 currentDateTime.hour.minus(hour),
             ),
         )
@@ -42,7 +42,7 @@ fun LocalDateTime.compareToString(context: Context): String {
     ) {
         val dateFormatter = DateTimeFormatter.ofPattern(
             context.getString(
-                R.string.primarynotification_before_minute_format,
+                R.string.before_minute_format,
                 currentDateTime.minute.minus(minute),
             ),
         )

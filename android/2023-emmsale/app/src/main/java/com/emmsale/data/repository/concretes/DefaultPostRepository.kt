@@ -14,6 +14,7 @@ class DefaultPostRepository(
         return Success(
             List(15) {
                 Post(
+                    id = 1,
                     eventId = 4629,
                     title = "타임라인이 어떻게 되나요?",
                     content = "행사 시간 공유 좀 해주실 분 부탁드려요요요ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ",

@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.emmsale.R
+import com.emmsale.presentation.common.extension.toRelativeTimeText
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -44,6 +45,15 @@ fun TextView.setDateRange(
         dateTimeFormatter.format(startDateTime),
         dateTimeFormatter.format(endDateTime),
     )
+}
+
+@BindingAdapter(
+    "app:relativeDate",
+)
+fun TextView.setRelativeTime(
+    time: LocalDateTime? = null,
+) {
+    text = time?.toRelativeTimeText(context)
 }
 
 enum class DateTimePattern {

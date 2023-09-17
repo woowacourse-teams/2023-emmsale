@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="post"
+            type="com.emmsale.data.model.Post" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,6 +16,7 @@
 
         <TextView
             android:id="@+id/tv_post_title"
+            android:text="@{post.title}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="13sp"
@@ -25,6 +29,7 @@
 
         <TextView
             android:id="@+id/tv_post_content"
+            android:text="@{post.content}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxLines="2"
@@ -53,6 +58,7 @@
 
         <TextView
             android:id="@+id/tv_post_comment_count"
+            android:text="@{String.valueOf(post.commentCount)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="3"
@@ -78,6 +84,7 @@
 
         <TextView
             android:id="@+id/tv_post_like_count"
+            android:text="@{String.valueOf(post.likeCount)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="11sp"
@@ -103,6 +110,7 @@
 
         <TextView
             android:id="@+id/tv_post_created_at"
+            app:relativeDate="@{post.createdAt}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nanum_square_regular"
@@ -116,6 +124,7 @@
 
         <ImageView
             android:id="@+id/iv_post_title_image"
+            app:imageUrl="@{post.titleImageUrl}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="1:1"
