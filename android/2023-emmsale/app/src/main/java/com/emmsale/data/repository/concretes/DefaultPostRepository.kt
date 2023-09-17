@@ -20,7 +20,7 @@ class DefaultPostRepository(
                     content = "행사 시간 공유 좀 해주실 분 부탁드려요요요ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ",
                     titleImageUrl = "https://www.google.com/#q=aptent",
                     likeCount = 5,
-                    createdAt = LocalDateTime.now(),
+                    createdAt = LocalDateTime.of(2023, 5, 8, 23, 23),
                     commentCount = 10,
                 )
             },

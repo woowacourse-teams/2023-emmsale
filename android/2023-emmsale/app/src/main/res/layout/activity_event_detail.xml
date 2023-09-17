@@ -155,7 +155,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:layout_marginBottom="93dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

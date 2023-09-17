@@ -18,18 +18,25 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.postList.PostListFragment">
+        tools:context=".presentation.ui.postList.PostListFragment"
+        android:layout_marginBottom="93dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_postlist"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:listitem="@layout/item_post" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_postlist"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:listitem="@layout/item_post" />
+
+        </androidx.core.widget.NestedScrollView>
 
         <ProgressBar
             android:id="@+id/pb_eventDetailParticipant_loadingbar"
