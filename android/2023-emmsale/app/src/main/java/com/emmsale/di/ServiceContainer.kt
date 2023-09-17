@@ -11,6 +11,7 @@ import com.emmsale.data.service.LoginService
 import com.emmsale.data.service.MemberService
 import com.emmsale.data.service.MyPostService
 import com.emmsale.data.service.NotificationService
+import com.emmsale.data.service.PostService
 import com.emmsale.data.service.RecruitmentService
 import com.emmsale.data.service.ScrappedEventService
 
@@ -34,5 +35,8 @@ class ServiceContainer(serviceFactory: ServiceFactory) {
     }
     val myPostService: MyPostService by lazy {
         serviceFactory.create(MyPostService::class.java)
+    }
+    val postService: PostService by lazy {
+        serviceFactory.create(PostService::class.java)
     }
 }
