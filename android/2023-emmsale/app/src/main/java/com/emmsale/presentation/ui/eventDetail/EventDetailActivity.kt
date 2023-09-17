@@ -50,16 +50,14 @@ class EventDetailActivity :
     }
 
     private fun setUpEventUiEvent() {
-        viewModel.scrapUiEvent.observe(this) { event ->
-            handleEvent(event)
-        }
+        viewModel.scrapUiEvent.observe(this, ::handleEvent)
     }
 
     private fun handleEvent(event: Event<EventInfoUiEvent>) {
         val content = event.getContentIfNotHandled() ?: return
         when (content) {
-            EventInfoUiEvent.SCRAP_ERROR -> binding.root.showSnackBar("스크랩 불가")
-            EventInfoUiEvent.SCRAP_DELETE_ERROR -> binding.root.showSnackBar("스크랩 삭제 불가")
+            EventInfoUiEvent.SCRAP_ERROR -> binding.root.showSnackBar(getString(R.string.eventdetail_scrap_error))
+            EventInfoUiEvent.SCRAP_DELETE_ERROR -> binding.root.showSnackBar(getString(R.string.eventdetail_scrap_delete_error))
         }
     }
 
