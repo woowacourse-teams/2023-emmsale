@@ -61,8 +61,8 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
       //given
       final Event event = eventRepository.save(인프콘_2023());
       final List<Image> expected = List.of(
-          new Image("테스트테스트.png", ImageType.EVENT, event.getId(), 0L, null),
-          new Image("테스트테스트2.png", ImageType.EVENT, event.getId(), 1L, null));
+          new Image("테스트테스트.png", ImageType.EVENT, event.getId(), 0, null),
+          new Image("테스트테스트2.png", ImageType.EVENT, event.getId(), 1, null));
       final List<String> imageNames = List.of("테스트테스트.png", "테스트테스트2.png");
       final List<MultipartFile> files = List.of(
           new MockMultipartFile("test", "test.png", "", new byte[]{}),
@@ -168,8 +168,8 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
       //givend
       final Event event = eventRepository.save(인프콘_2023());
       final List<Image> expected = List.of(
-          new Image("테스트테스트.png", ImageType.EVENT, event.getId(), 0L, null),
-          new Image("테스트테스트2.png", ImageType.EVENT, event.getId(), 1L, null));
+          new Image("테스트테스트.png", ImageType.EVENT, event.getId(), 0, null),
+          new Image("테스트테스트2.png", ImageType.EVENT, event.getId(), 1, null));
       imageRepository.saveAll(expected);
       
       BDDMockito.willDoNothing().given(s3Client).deleteImages(any());

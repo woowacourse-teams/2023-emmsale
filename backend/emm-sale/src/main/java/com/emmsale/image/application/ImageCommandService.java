@@ -66,8 +66,8 @@ public class ImageCommandService {
   private List<Image> saveImagesToDb(final ImageType imageType, final Long contentId,
       final List<String> imageNames) {
     final List<Image> images = new ArrayList<>();
-    for (long i = 0L; i < imageNames.size(); i++) {
-      final Image image = new Image(imageNames.get((int) i), imageType, contentId, i,
+    for (int i = 0; i < imageNames.size(); i++) {
+      final Image image = new Image(imageNames.get(i), imageType, contentId, i,
           LocalDateTime.now());
       images.add(imageRepository.save(image));
     }

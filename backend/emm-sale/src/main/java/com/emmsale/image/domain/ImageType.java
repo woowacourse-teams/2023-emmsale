@@ -4,7 +4,7 @@ public enum ImageType {
   FEED(5),
   EVENT(2);
   
-  final private int maxImageCount;
+  private final int maxImageCount;
   
   ImageType(final int maxImageCount) {
     this.maxImageCount = maxImageCount;

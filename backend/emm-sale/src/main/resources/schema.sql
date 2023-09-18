@@ -218,6 +218,6 @@ create table image
     name         varchar(50) not null,
     type         varchar(20) not null,
     content_id   bigint      not null,
-    order_number bigint      not null,
+    order_number int         not null,
     created_at   datetime(6)
 );

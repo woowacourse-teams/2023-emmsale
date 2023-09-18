@@ -32,11 +32,11 @@ public class Image {
   private Long contentId;
   
   @Column(name = "order_number", nullable = false)
-  private Long order;
+  private int order;
   
   private LocalDateTime createdAt;
   
-  public Image(final String name, final ImageType type, final Long contentId, final Long order,
+  public Image(final String name, final ImageType type, final Long contentId, final int order,
       final LocalDateTime createdAt) {
     this.name = name;
     this.type = type;
