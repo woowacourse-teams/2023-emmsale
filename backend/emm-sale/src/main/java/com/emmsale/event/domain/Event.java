@@ -5,7 +5,6 @@ import static lombok.AccessLevel.PROTECTED;
 import com.emmsale.base.BaseEntity;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
-import com.emmsale.feed.domain.Feed;
 import com.emmsale.member.domain.Member;
 import com.emmsale.tag.domain.Tag;
 import java.time.LocalDateTime;
@@ -48,8 +47,6 @@ public class Event extends BaseEntity {
   private String imageUrl;
   @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
-  @OneToMany(mappedBy = "event")
-  private List<Feed> feeds;
   @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
   private List<RecruitmentPost> recruitmentPosts = new ArrayList<>();
 
