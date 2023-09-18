@@ -24,6 +24,7 @@ public class MessageNotificationMessage {
   @Getter
   public static class Data {
 
+    private final String notificationType;
     private final String roomId;
     private final String senderId;
     private final String senderName;

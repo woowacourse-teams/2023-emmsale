@@ -13,6 +13,8 @@ import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
+import com.emmsale.feed.domain.Feed;
+import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -31,29 +33,33 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
   @Autowired
   private EventRepository eventRepository;
   @Autowired
+  private FeedRepository feedRepository;
+  @Autowired
   private MemberRepository memberRepository;
   @Autowired
   private CommentRepository commentRepository;
   @Autowired
   private BlockRepository blockRepository;
-  private Event event;
+
+  private Feed feed;
   private Member member;
   private Comment 부모_댓글1;
   private Comment 부모_댓글2;
 
   @BeforeEach
   void init() {
-    event = eventRepository.save(
+    final Event event = eventRepository.save(
         EventFixture.모바일_컨퍼런스()
     );
     member = memberRepository.findById(1L).get();
+    feed = feedRepository.save(new Feed(event, member, "피드 제목", "피드 내용"));
 
     부모_댓글2 = commentRepository.save(
-        Comment.createRoot(event, member, "부모댓글2")
+        Comment.createRoot(feed, member, "부모댓글2")
     );
 
     부모_댓글1 = commentRepository.save(
-        Comment.createRoot(event, member, "부모댓글1")
+        Comment.createRoot(feed, member, "부모댓글1")
     );
   }
 
@@ -61,8 +67,8 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("findAllComments() : 주어진 memberId가 null이고, eventId가 주어지면 행사에 존재하는 댓글들을 모두 조회할 수 있다.")
   void test_findAllComments_eventId() throws Exception {
     //given
-    final Comment comment1 = Comment.createChild(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글1");
-    final Comment comment2 = Comment.createChild(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글2");
+    final Comment comment1 = Comment.createChild(feed, 부모_댓글1, member, "부모댓글1에 대한 자식댓글1");
+    final Comment comment2 = Comment.createChild(feed, 부모_댓글1, member, "부모댓글1에 대한 자식댓글2");
     commentRepository.save(comment2);
     commentRepository.save(comment1);
 
@@ -80,7 +86,7 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
         )
     );
 
-    final CommentFindRequest request = new CommentFindRequest(event.getId(), null);
+    final CommentFindRequest request = new CommentFindRequest(feed.getId(), null);
 
     //when
     final List<CommentHierarchyResponse> actual =
@@ -96,8 +102,8 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("findAllComments() : 주어진 eventId가 null이고, memberId가 주어지면 사용자가 작성한 댓글들을 모두 조회할 수 있다.")
   void test_findAllComments_memberId() throws Exception {
     //given
-    final Comment comment1 = Comment.createChild(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글1");
-    final Comment comment2 = Comment.createChild(event, 부모_댓글1, member, "부모댓글1에 대한 자식댓글2");
+    final Comment comment1 = Comment.createChild(feed, 부모_댓글1, member, "부모댓글1에 대한 자식댓글1");
+    final Comment comment2 = Comment.createChild(feed, 부모_댓글1, member, "부모댓글1에 대한 자식댓글2");
     commentRepository.save(comment2);
     commentRepository.save(comment1);
 
@@ -132,9 +138,9 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
   void test_findChildrenComments_parentId() throws Exception {
     //given
     final Comment 자식댓글2 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글1, member, "자식댓글2"));
+        Comment.createChild(feed, 부모_댓글1, member, "자식댓글2"));
     final Comment 자식댓글1 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글1, member, "자식댓글1"));
+        Comment.createChild(feed, 부모_댓글1, member, "자식댓글1"));
 
     final CommentHierarchyResponse expected =
         new CommentHierarchyResponse(
@@ -160,9 +166,9 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
   void test_findChildrenComments_childId() throws Exception {
     //given
     final Comment 자식댓글2 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글1, member, "자식댓글2"));
+        Comment.createChild(feed, 부모_댓글1, member, "자식댓글2"));
     final Comment 자식댓글1 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글1, member, "자식댓글1"));
+        Comment.createChild(feed, 부모_댓글1, member, "자식댓글1"));
 
     final CommentHierarchyResponse expected =
         new CommentHierarchyResponse(
@@ -196,12 +202,12 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
       final long blockedMemberId = 2L;
       final Member blockedMember = memberRepository.findById(blockedMemberId).get();
 
-      commentRepository.save(Comment.createRoot(event, blockedMember, "차단한 사용자의 루트 댓글"));
+      commentRepository.save(Comment.createRoot(feed, blockedMember, "차단한 사용자의 루트 댓글"));
 
       final Block block = new Block(member.getId(), blockedMemberId);
       blockRepository.save(block);
 
-      final CommentFindRequest request = new CommentFindRequest(event.getId(), null);
+      final CommentFindRequest request = new CommentFindRequest(feed.getId(), null);
 
       //when
       final List<CommentHierarchyResponse> result = commentQueryService.findAllComments
@@ -221,12 +227,12 @@ class CommentQueryServiceTest extends ServiceIntegrationTestHelper {
       final long blockedMemberId = 2L;
       final Member blockedMember = memberRepository.findById(blockedMemberId).get();
 
-      commentRepository.save(Comment.createChild(event, 부모_댓글1, blockedMember, "차단한 사용자의 대댓글"));
+      commentRepository.save(Comment.createChild(feed, 부모_댓글1, blockedMember, "차단한 사용자의 대댓글"));
 
       final Block block = new Block(member.getId(), blockedMemberId);
       blockRepository.save(block);
 
-      final CommentFindRequest request = new CommentFindRequest(event.getId(), null);
+      final CommentFindRequest request = new CommentFindRequest(feed.getId(), null);
 
       //when
       final List<CommentHierarchyResponse> result =

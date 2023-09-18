@@ -698,3 +698,63 @@ include::{snippets}/get-rooms-interlocutorId/http-response.adoc[]
 
 .HTTP response 설명
 include::{snippets}/get-rooms-interlocutorId/response-fields.adoc[]
+
+== 피드
+
+=== `GET`: 피드 목록 조회
+
+.HTTP request
+include::{snippets}/find-all-feed/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-all-feed/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-all-feed/response-fields.adoc[]
+
+=== `GET`: 피드 상세 조회
+
+.HTTP request
+include::{snippets}/find-detail-feed/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/find-detail-feed/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/find-detail-feed/response-fields.adoc[]
+
+=== `POST`: 피드 등록
+
+.HTTP request
+include::{snippets}/post-feed/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/post-feed/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/post-feed/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/post-feed/response-fields.adoc[]
+
+=== `PUT`: 피드 업데이트
+
+.HTTP request
+include::{snippets}/update-feed/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/update-feed/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/update-feed/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/update-feed/response-fields.adoc[]
+
+=== `DELETE`: 피드 삭제
+
+.HTTP request
+include::{snippets}/delete-feed/http-request.adoc[]
+
+.HTTP response
+include::{snippets}/delete-feed/http-response.adoc[]

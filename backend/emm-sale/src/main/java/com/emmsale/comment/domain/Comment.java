@@ -4,7 +4,7 @@ import static com.emmsale.comment.exception.CommentExceptionType.NOT_CREATE_CHIL
 
 import com.emmsale.base.BaseEntity;
 import com.emmsale.comment.exception.CommentException;
-import com.emmsale.event.domain.Event;
+import com.emmsale.feed.domain.Feed;
 import com.emmsale.member.domain.Member;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +34,7 @@ public class Comment extends BaseEntity {
   private Long id;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
-  private Event event;
+  private Feed feed;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn
   private Comment parent;
@@ -46,12 +46,12 @@ public class Comment extends BaseEntity {
   private boolean isDeleted;
 
   private Comment(
-      final Event event,
+      final Feed feed,
       final Comment parent,
       final Member member,
       final String content
   ) {
-    this.event = event;
+    this.feed = feed;
     this.parent = parent;
     this.member = member;
     this.content = content;
@@ -59,15 +59,15 @@ public class Comment extends BaseEntity {
   }
 
   public static Comment createRoot(
-      final Event event,
+      final Feed feed,
       final Member member,
       final String content
   ) {
-    return new Comment(event, null, member, content);
+    return new Comment(feed, null, member, content);
   }
 
   public static Comment createChild(
-      final Event event,
+      final Feed feed,
       final Comment parent,
       final Member member,
       final String content
@@ -76,7 +76,7 @@ public class Comment extends BaseEntity {
       throw new CommentException(NOT_CREATE_CHILD_CHILD_COMMENT);
     }
 
-    return new Comment(event, parent, member, content);
+    return new Comment(feed, parent, member, content);
   }
 
   private static boolean isGrandChildComment(final Comment parent) {

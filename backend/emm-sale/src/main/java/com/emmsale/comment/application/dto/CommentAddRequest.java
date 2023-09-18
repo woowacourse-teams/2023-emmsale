@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public class CommentAddRequest {
 
   private final String content;
-  private final Long eventId;
+  private final Long feedId;
   private final Long parentId;
 
   public Optional<Long> optionalParentId() {

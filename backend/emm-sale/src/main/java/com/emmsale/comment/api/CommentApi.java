@@ -29,7 +29,7 @@ public class CommentApi {
 
   @PostMapping("/comments")
   public CommentResponse create(
-      @RequestBody final CommentAddRequest commentAddRequest,
+      final CommentAddRequest commentAddRequest,
       final Member member
   ) {
     return commentCommandService.create(commentAddRequest, member);
@@ -37,7 +37,7 @@ public class CommentApi {
 
   @GetMapping("/comments")
   public List<CommentHierarchyResponse> findAll(
-      final CommentFindRequest commentFindRequest,
+      @RequestBody final CommentFindRequest commentFindRequest,
       final Member member
   ) {
     return commentQueryService.findAllComments(commentFindRequest, member);

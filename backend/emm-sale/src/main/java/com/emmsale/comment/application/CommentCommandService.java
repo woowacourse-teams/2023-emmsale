@@ -12,11 +12,11 @@ import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.comment.exception.CommentException;
 import com.emmsale.comment.exception.CommentExceptionType;
-import com.emmsale.event.domain.Event;
-import com.emmsale.event.domain.repository.EventRepository;
-import com.emmsale.event.exception.EventException;
-import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.event_publisher.EventPublisher;
+import com.emmsale.feed.domain.Feed;
+import com.emmsale.feed.domain.repository.FeedRepository;
+import com.emmsale.feed.exception.FeedException;
+import com.emmsale.feed.exception.FeedExceptionType;
 import com.emmsale.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,25 +28,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentCommandService {
 
   private final CommentRepository commentRepository;
-  private final EventRepository eventRepository;
+  private final FeedRepository feedRepository;
   private final EventPublisher eventPublisher;
 
   public CommentResponse create(
       final CommentAddRequest commentAddRequest,
       final Member member
   ) {
-    final Event savedEvent = eventRepository.findById(commentAddRequest.getEventId())
-        .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_EVENT));
+    final Feed feed = feedRepository.findById(commentAddRequest.getFeedId())
+        .orElseThrow(() -> new FeedException(FeedExceptionType.NOT_FOUND_FEED));
     final String content = commentAddRequest.getContent();
 
     final Comment comment = commentAddRequest.optionalParentId()
         .map(commentId -> Comment.createChild(
-            savedEvent,
+            feed,
             findSavedComment(commentId),
             member,
             content)
         )
-        .orElseGet(() -> Comment.createRoot(savedEvent, member, content));
+        .orElseGet(() -> Comment.createRoot(feed, member, content));
 
     final Comment savedComment = commentRepository.save(comment);
 
