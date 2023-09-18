@@ -3,6 +3,9 @@ package com.emmsale.image.application;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
+import com.emmsale.feed.domain.repository.FeedRepository;
+import com.emmsale.feed.exception.FeedException;
+import com.emmsale.feed.exception.FeedExceptionType;
 import com.emmsale.image.domain.Image;
 import com.emmsale.image.domain.ImageType;
 import com.emmsale.image.domain.repository.ImageRepository;
@@ -26,6 +29,7 @@ public class ImageCommandService {
   private final S3Client s3Client;
   private final ImageRepository imageRepository;
   private final EventRepository eventRepository;
+  private final FeedRepository feedRepository;
   
   public List<Image> saveImages(final ImageType imageType, final Long contentId,
       final List<MultipartFile> multipartFiles) {
@@ -47,13 +51,21 @@ public class ImageCommandService {
     if (imageType == ImageType.EVENT) {
       validateEventExist(contentId);
     }
+    if (imageType == ImageType.FEED) {
+      validateFeedExist(contentId);
+    }
   }
   
   private void validateEventExist(final Long contentId) {
     if (!eventRepository.existsById(contentId)) {
       throw new EventException(EventExceptionType.NOT_FOUND_EVENT);
     }
-    // TODO: 2023/09/15 Feed 도메인 추가 후 유효성 검사 추가 예정
+  }
+  
+  private void validateFeedExist(final Long contentId) {
+    if (!feedRepository.existsById(contentId)) {
+      throw new FeedException(FeedExceptionType.NOT_FOUND_FEED);
+    }
   }
   
   private void validateImageCount(final ImageType imageType,

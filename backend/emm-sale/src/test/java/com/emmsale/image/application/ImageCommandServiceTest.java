@@ -13,6 +13,9 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
+import com.emmsale.feed.domain.repository.FeedRepository;
+import com.emmsale.feed.exception.FeedException;
+import com.emmsale.feed.exception.FeedExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.image.domain.Image;
 import com.emmsale.image.domain.ImageType;
@@ -39,16 +42,26 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
   private ImageRepository mockImageRepository;
   @Autowired
   private EventRepository eventRepository;
+  @Autowired
+  private FeedRepository feedRepository;
   private S3Client s3Client;
   
   @BeforeEach
   void setUp() {
     s3Client = mock(S3Client.class);
     mockImageRepository = mock(ImageRepository.class);
-    imageCommandService = new ImageCommandService(s3Client, imageRepository, eventRepository);
-    imageCommandServiceWithMockImageRepository = new ImageCommandService(s3Client,
+    imageCommandService = new ImageCommandService(
+        s3Client,
+        imageRepository,
+        eventRepository,
+        feedRepository
+    );
+    imageCommandServiceWithMockImageRepository = new ImageCommandService(
+        s3Client,
         mockImageRepository,
-        eventRepository);
+        eventRepository,
+        feedRepository
+    );
   }
   
   @Nested
@@ -104,6 +117,23 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
           .hasMessage(EventExceptionType.NOT_FOUND_EVENT.errorMessage());
     }
     
+    @Test
+    @DisplayName("이미지를 추가하려는 행사가 존재하지 않는 피드인 경우 예외를 던진다.")
+    void saveImages_fail_not_found_feed() {
+      //given
+      final Long noExistFeedId = 999L;
+      final List<MultipartFile> files = List.of(
+          new MockMultipartFile("test", "test.png", "", new byte[]{}),
+          new MockMultipartFile("test", "test.png", "", new byte[]{}));
+      
+      //when
+      final ThrowingCallable actual = () -> imageCommandService.saveImages(ImageType.FEED,
+          noExistFeedId, files);
+      
+      //then
+      assertThatThrownBy(actual).isInstanceOf(FeedException.class)
+          .hasMessage(FeedExceptionType.NOT_FOUND_FEED.errorMessage());
+    }
     
     @Test
     @DisplayName("추가하려는 이미지의 개수가 컨텐츠의 최대 이미지 개수보다 크면 예외를 던진다.")
