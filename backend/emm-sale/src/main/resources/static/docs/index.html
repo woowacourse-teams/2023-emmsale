@@ -2172,6 +2172,7 @@
         <ul class="sectlevel2">
           <li><a href="#_get_사용자의_관심_태그_조회"><code>GET</code> : 사용자의 관심 태그 조회</a></li>
           <li><a href="#_post_사용자의_관심_태그_추가"><code>POST</code> : 사용자의 관심 태그 추가</a></li>
+          <li><a href="#_put_사용자의_관심_태그_업데이트"><code>PUT</code> : 사용자의 관심 태그 업데이트</a></li>
           <li><a href="#_delete_사용자의_관심_태그_삭제"><code>DELETE</code> : 사용자의 관심 태그 삭제</a></li>
         </ul>
       </li>
@@ -2184,6 +2185,8 @@
           <li><a href="#_delete_행사의_함께_해요_게시글_삭제"><code>DELETE</code> : 행사의 함께 해요 게시글 삭제</a></li>
           <li><a href="#_get_사용자가_해당_행사에_이미_함께_해요_게시글을_작성했는지_확인"><code>GET</code>: 사용자가 해당 행사에 이미 함께
             해요 게시글을 작성했는지 확인</a></li>
+          <li><a href="#_get_사용자의_id를_기반으로_사용자가_작성한_모든_함께해요_요청_조회"><code>GET</code>: 사용자의 id를 기반으로
+            사용자가 작성한 모든 함께해요 요청 조회</a></li>
           <li><a href="#_get_행사_목록_조회"><code>GET</code>: 행사 목록 조회</a></li>
           <li><a href="#_get_함께_해요_게시글_목록_조회"><code>GET</code> : 함께 해요 게시글 목록 조회</a></li>
           <li><a href="#_get_함께_해요_게시글_단건_조회"><code>GET</code> : 함께 해요 게시글 단건 조회</a></li>
@@ -2237,6 +2240,7 @@
       <li><a href="#_block">Block</a>
         <ul class="sectlevel2">
           <li><a href="#_post_사용자_차단_등록"><code>POST</code> : 사용자 차단 등록</a></li>
+          <li><a href="#_delete_사용자_차단_해제"><code>DELETE</code> : 사용자 차단 해제</a></li>
           <li><a href="#_get_차단한_사용자_목록_조회"><code>GET</code> : 차단한 사용자 목록 조회</a></li>
         </ul>
       </li>
@@ -2256,6 +2260,12 @@
           <li><a href="#_get_전체_스크랩_조회"><code>GET</code> : 전체 스크랩 조회</a></li>
           <li><a href="#_post_스크랩_추가"><code>POST</code> : 스크랩 추가</a></li>
           <li><a href="#_delete_스크랩_삭제"><code>DELETE</code> : 스크랩 삭제</a></li>
+        </ul>
+      </li>
+      <li><a href="#_message_쪽지">Message (쪽지)</a>
+        <ul class="sectlevel2">
+          <li><a href="#_get_쪽지함_목록_조회"><code>GET</code> : 쪽지함 목록 조회</a></li>
+          <li><a href="#_get_room_id로_쪽지방_조회"><code>GET</code> : Room ID로 쪽지방 조회</a></li>
         </ul>
       </li>
     </ul>
@@ -2542,42 +2552,12 @@ Content-Length: 552
         <h3 id="_delete_사용자의_activity_삭제_api"><a class="link"
                                                  href="#_delete_사용자의_activity_삭제_api"><code>DELETE</code>:
           사용자의 Activity 삭제 API</a></h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 5. HTTP request 설명</caption>
-          <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">Path</th>
-            <th class="tableblock halign-left valign-top">Type</th>
-            <th class="tableblock halign-left valign-top">Description</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>activityIds</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">활동 id들</p></td>
-          </tr>
-          </tbody>
-        </table>
         <div class="listingblock">
           <div class="title">HTTP request</div>
           <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /members/activities HTTP/1.1
-Content-Type: application/json
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /members/activities?activity-ids=1,2 HTTP/1.1
 Authorization: Bearer AccessToken
-Content-Length: 30
-Host: localhost:8080
-
-{
-  "activityIds" : [ 1, 2 ]
-}</code></pre>
+Host: localhost:8080</code></pre>
           </div>
         </div>
         <div class="listingblock">
@@ -2597,7 +2577,7 @@ Content-Length: 116
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 6. HTTP response 설명</caption>
+          <caption class="title">Table 5. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -2688,7 +2668,7 @@ Content-Length: 552
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 7. HTTP response 설명</caption>
+          <caption class="title">Table 6. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -2731,7 +2711,7 @@ Content-Length: 552
                                                     href="#_put_사용자의_open_profile_url_업데이트"><code>PUT</code>:
           사용자의 Open Profile URL 업데이트</a></h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 8. HTTP request 설명</caption>
+          <caption class="title">Table 7. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -2781,7 +2761,7 @@ Host: localhost:8080
                                            href="#_put_사용자의_한줄_자기소개_업데이트"><code>PUT</code>: 사용자의 한줄
           자기소개 업데이트</a></h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 9. HTTP request 설명</caption>
+          <caption class="title">Table 8. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -2844,7 +2824,7 @@ Host: localhost:8080</code></pre>
           <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 199
+Content-Length: 225
 
 {
   "id" : 1,
@@ -2852,12 +2832,12 @@ Content-Length: 199
   "description" : "안녕하세요, 김길동입니다.",
   "imageUrl" : "https://image",
   "openProfileUrl" : "https://open.profile.url",
-  "githubId" : 12451
+  "githubUrl" : "https://github.com/amaran-th"
 }</code></pre>
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 10. HTTP response 설명</caption>
+          <caption class="title">Table 9. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -2910,10 +2890,10 @@ Content-Length: 199
           </tr>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>githubId</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+              <code>githubUrl</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
             </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">깃허브 ID</p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">깃허브 URL</p></td>
           </tr>
           </tbody>
         </table>
@@ -2970,7 +2950,7 @@ Content-Length: 88
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 11. HTTP response 설명</caption>
+          <caption class="title">Table 10. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -3019,7 +2999,7 @@ Host: localhost:8080
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 12. HTTP request 설명</caption>
+          <caption class="title">Table 11. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -3065,7 +3045,96 @@ Content-Length: 155
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 13. HTTP response 설명</caption>
+          <caption class="title">Table 12. HTTP response 설명</caption>
+          <colgroup>
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Path</th>
+            <th class="tableblock halign-left valign-top">Type</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">태그 ID</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">태그명</p></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sect2">
+        <h3 id="_put_사용자의_관심_태그_업데이트"><a class="link" href="#_put_사용자의_관심_태그_업데이트"><code>PUT</code>
+          : 사용자의 관심 태그 업데이트</a></h3>
+        <div class="listingblock">
+          <div class="title">HTTP request</div>
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /interest-tags HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken
+Content-Length: 25
+Host: localhost:8080
+
+{
+  "tagIds" : [ 1, 2 ]
+}</code></pre>
+          </div>
+        </div>
+        <table class="tableblock frame-all grid-all stretch">
+          <caption class="title">Table 13. HTTP request 설명</caption>
+          <colgroup>
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Path</th>
+            <th class="tableblock halign-left valign-top">Type</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tagIds</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">태그 id들</p></td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="listingblock">
+          <div class="title">HTTP response</div>
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Content-Type: application/json
+Content-Length: 88
+
+[ {
+  "id" : 1,
+  "name" : "백엔드"
+}, {
+  "id" : 2,
+  "name" : "프론트엔드"
+} ]</code></pre>
+          </div>
+        </div>
+        <table class="tableblock frame-all grid-all stretch">
+          <caption class="title">Table 14. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -3115,7 +3184,7 @@ Host: localhost:8080
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 14. HTTP request 설명</caption>
+          <caption class="title">Table 15. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -3158,7 +3227,7 @@ Content-Length: 115
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 15. HTTP response 설명</caption>
+          <caption class="title">Table 16. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -3231,7 +3300,7 @@ Content-Length: 506
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 16. HTTP response 설명</caption>
+          <caption class="title">Table 17. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -3364,7 +3433,7 @@ Content-Length: 506
                                                href="#_post_행사의_함께_해요_목록에_게시글_추가"><code>POST</code>
           : 행사의 함께 해요 목록에 게시글 추가</a></h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 17. HTTP request 설명</caption>
+          <caption class="title">Table 18. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -3485,6 +3554,104 @@ true</code></pre>
         </div>
       </div>
       <div class="sect2">
+        <h3 id="_get_사용자의_id를_기반으로_사용자가_작성한_모든_함께해요_요청_조회"><a class="link"
+                                                              href="#_get_사용자의_id를_기반으로_사용자가_작성한_모든_함께해요_요청_조회"><code>GET</code>:
+          사용자의 id를 기반으로 사용자가 작성한 모든 함께해요 요청 조회</a></h3>
+        <div class="listingblock">
+          <div class="title">HTTP request</div>
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /events/recruitment-posts?member-id=1 HTTP/1.1
+Authorization: Bearer AccessToken
+Host: localhost:8080</code></pre>
+          </div>
+        </div>
+        <div class="listingblock">
+          <div class="title">HTTP response</div>
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 300
+
+[ {
+  "postId" : 1,
+  "memberId" : 1,
+  "eventId" : 21,
+  "eventName" : "인프콘 2023",
+  "content" : "함께해요~",
+  "updatedAt" : "2023-07-15"
+}, {
+  "postId" : 2,
+  "memberId" : 1,
+  "eventId" : 43,
+  "eventName" : "구름톤",
+  "content" : "같이 가요~",
+  "updatedAt" : "2023-07-15"
+} ]</code></pre>
+          </div>
+        </div>
+        <table class="tableblock frame-all grid-all stretch">
+          <caption class="title">Table 19. HTTP response 설명</caption>
+          <colgroup>
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Path</th>
+            <th class="tableblock halign-left valign-top">Type</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>[].postId</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">함께해요 게시글 식별자</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>[].memberId</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">member의 식별자</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>[].eventId</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사의 식별자</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>[].eventName</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 제목</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>[].content</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">함께해요 게시글 내용</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>[].updatedAt</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">함께해요 게시글 수정 날짜</p>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sect2">
         <h3 id="_get_행사_목록_조회"><a class="link" href="#_get_행사_목록_조회"><code>GET</code>: 행사 목록 조회</a>
         </h3>
         <div class="listingblock">
@@ -3495,7 +3662,7 @@ Host: localhost:8080</code></pre>
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 18. HTTP request 설명</caption>
+          <caption class="title">Table 20. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 50%;">
             <col style="width: 50%;">
@@ -3583,7 +3750,7 @@ Content-Length: 1131
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 19. HTTP response 설명</caption>
+          <caption class="title">Table 21. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -3711,7 +3878,7 @@ Content-Length: 330
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 20. HTTP response 설명</caption>
+          <caption class="title">Table 22. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -3800,7 +3967,7 @@ Content-Length: 165
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 21. HTTP response 설명</caption>
+          <caption class="title">Table 23. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -3890,7 +4057,7 @@ Host: localhost:8080
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 22. HTTP request 설명</caption>
+          <caption class="title">Table 24. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -4011,7 +4178,7 @@ Content-Length: 485
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 23. HTTP response 설명</caption>
+          <caption class="title">Table 25. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -4169,7 +4336,7 @@ Host: localhost:8080
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 24. HTTP request 설명</caption>
+          <caption class="title">Table 26. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -4291,7 +4458,7 @@ Content-Length: 485
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 25. HTTP response 설명</caption>
+          <caption class="title">Table 27. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -4445,7 +4612,7 @@ Host: localhost:8080</code></pre>
         <h3 id="_get_댓글_모두_조회"><a class="link" href="#_get_댓글_모두_조회"><code>GET</code> : 댓글 모두 조회</a>
         </h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 26. HTTP request 설명</caption>
+          <caption class="title">Table 28. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 50%;">
             <col style="width: 50%;">
@@ -4460,7 +4627,14 @@ Host: localhost:8080</code></pre>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>eventId</code>
             </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">댓글을 볼 행사 id</p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">댓글을 볼 행사 id(빈 값
+              가능)</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>memberId</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">조회할 댓글을 작성한 사용자 ID(빈
+              값 가능) [둘 다 빈 값 X]</p></td>
           </tr>
           </tbody>
         </table>
@@ -4477,7 +4651,7 @@ Host: localhost:8080</code></pre>
           <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 1313
+Content-Length: 1437
 
 [ {
   "parentComment" : {
@@ -4485,8 +4659,9 @@ Content-Length: 1313
     "commentId" : 4,
     "parentId" : null,
     "eventId" : 1,
-    "createdAt" : "2023:08:16:14:34:32",
-    "updatedAt" : "2023:08:16:14:34:32",
+    "eventName" : "eventName",
+    "createdAt" : "2023:09:11:17:35:37",
+    "updatedAt" : "2023:09:11:17:35:37",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -4499,8 +4674,9 @@ Content-Length: 1313
     "commentId" : 5,
     "parentId" : null,
     "eventId" : 1,
-    "createdAt" : "2023:08:16:14:34:32",
-    "updatedAt" : "2023:08:16:14:34:32",
+    "eventName" : "eventName",
+    "createdAt" : "2023:09:11:17:35:37",
+    "updatedAt" : "2023:09:11:17:35:37",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -4511,8 +4687,9 @@ Content-Length: 1313
     "commentId" : 2,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:08:16:14:34:32",
-    "updatedAt" : "2023:08:16:14:34:32",
+    "eventName" : "eventName",
+    "createdAt" : "2023:09:11:17:35:37",
+    "updatedAt" : "2023:09:11:17:35:37",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -4522,8 +4699,9 @@ Content-Length: 1313
     "commentId" : 3,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:08:16:14:34:32",
-    "updatedAt" : "2023:08:16:14:34:32",
+    "eventName" : "eventName",
+    "createdAt" : "2023:09:11:17:35:37",
+    "updatedAt" : "2023:09:11:17:35:37",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -4533,7 +4711,7 @@ Content-Length: 1313
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 27. HTTP response 설명</caption>
+          <caption class="title">Table 29. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -4573,7 +4751,14 @@ Content-Length: 1313
             </p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
             </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">이벤트 ID</p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 ID</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].parentComment.eventName</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 이름</p></td>
           </tr>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].parentComment.deleted</code>
@@ -4651,7 +4836,14 @@ Content-Length: 1313
             </p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
             </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">이벤트 ID</p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 ID</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].childComments[].eventName</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 이름</p></td>
           </tr>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].childComments[].deleted</code>
@@ -4704,7 +4896,7 @@ Content-Length: 1313
                                                  href="#_get_특정_댓글_조회대댓글_있을_경우_같이_조회"><code>GET</code>
           : 특정 댓글 조회(대댓글 있을 경우 같이 조회)</a></h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 28. /comments/{comment-id}</caption>
+          <caption class="title">Table 30. /comments/{comment-id}</caption>
           <colgroup>
             <col style="width: 50%;">
             <col style="width: 50%;">
@@ -4719,7 +4911,7 @@ Content-Length: 1313
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock">
               <code>comment-id</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">부모 ID</p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 ID</p></td>
           </tr>
           </tbody>
         </table>
@@ -4736,7 +4928,7 @@ Host: localhost:8080</code></pre>
           <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 967
+Content-Length: 1060
 
 {
   "parentComment" : {
@@ -4744,8 +4936,9 @@ Content-Length: 967
     "commentId" : 5,
     "parentId" : null,
     "eventId" : 1,
-    "createdAt" : "2023:08:16:14:34:33",
-    "updatedAt" : "2023:08:16:14:34:33",
+    "eventName" : "eventName",
+    "createdAt" : "2023:09:11:17:35:37",
+    "updatedAt" : "2023:09:11:17:35:37",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -4756,8 +4949,9 @@ Content-Length: 967
     "commentId" : 2,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:08:16:14:34:33",
-    "updatedAt" : "2023:08:16:14:34:33",
+    "eventName" : "eventName",
+    "createdAt" : "2023:09:11:17:35:37",
+    "updatedAt" : "2023:09:11:17:35:37",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -4767,8 +4961,9 @@ Content-Length: 967
     "commentId" : 3,
     "parentId" : 1,
     "eventId" : 1,
-    "createdAt" : "2023:08:16:14:34:33",
-    "updatedAt" : "2023:08:16:14:34:33",
+    "eventName" : "eventName",
+    "createdAt" : "2023:09:11:17:35:37",
+    "updatedAt" : "2023:09:11:17:35:37",
     "memberId" : 1,
     "memberImageUrl" : "이미지",
     "memberName" : "이름1",
@@ -4778,7 +4973,7 @@ Content-Length: 967
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 29. HTTP response 설명</caption>
+          <caption class="title">Table 31. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -4818,7 +5013,14 @@ Content-Length: 967
             </p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
             </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">이벤트 ID</p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 ID</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>parentComment.eventName</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 제목</p></td>
           </tr>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>parentComment.deleted</code>
@@ -4896,7 +5098,14 @@ Content-Length: 967
             </p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
             </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">이벤트 ID</p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 ID</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>childComments[].eventName</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 이름</p></td>
           </tr>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>childComments[].deleted</code>
@@ -4967,15 +5176,16 @@ Host: localhost:8080
           <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 259
+Content-Length: 288
 
 {
   "content" : "내용",
   "commentId" : 2,
   "parentId" : 1,
   "eventId" : 1,
-  "createdAt" : "2023:08:16:14:34:32",
-  "updatedAt" : "2023:08:16:14:34:32",
+  "eventName" : "eventName",
+  "createdAt" : "2023:09:11:17:35:37",
+  "updatedAt" : "2023:09:11:17:35:37",
   "memberId" : 1,
   "memberImageUrl" : "이미지",
   "memberName" : "이름1",
@@ -4984,7 +5194,7 @@ Content-Length: 259
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 30. HTTP response 설명</caption>
+          <caption class="title">Table 32. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -5026,6 +5236,13 @@ Content-Length: 259
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
             </p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">행사 id</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>eventName</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 이름</p></td>
           </tr>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock">
@@ -5084,7 +5301,7 @@ Host: localhost:8080</code></pre>
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 31. /comments/{comment-id}</caption>
+          <caption class="title">Table 33. /comments/{comment-id}</caption>
           <colgroup>
             <col style="width: 50%;">
             <col style="width: 50%;">
@@ -5128,7 +5345,7 @@ Host: localhost:8080
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 32. HTTP request 설명</caption>
+          <caption class="title">Table 34. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -5152,7 +5369,7 @@ Host: localhost:8080
           </tbody>
         </table>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 33. /comments/{comment-id}</caption>
+          <caption class="title">Table 35. /comments/{comment-id}</caption>
           <colgroup>
             <col style="width: 50%;">
             <col style="width: 50%;">
@@ -5176,15 +5393,16 @@ Host: localhost:8080
           <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 259
+Content-Length: 288
 
 {
   "content" : "댓",
   "commentId" : 5,
   "parentId" : null,
   "eventId" : 1,
-  "createdAt" : "2023:08:16:14:34:32",
-  "updatedAt" : "2023:08:16:14:34:32",
+  "eventName" : "eventName",
+  "createdAt" : "2023:09:11:17:35:37",
+  "updatedAt" : "2023:09:11:17:35:37",
   "memberId" : 1,
   "memberImageUrl" : "이미지",
   "memberName" : "이름1",
@@ -5193,7 +5411,7 @@ Content-Length: 259
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 34. HTTP response 설명</caption>
+          <caption class="title">Table 36. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -5235,6 +5453,13 @@ Content-Length: 259
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
             </p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">행사 id</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>eventName</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">행사 이름</p></td>
           </tr>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock">
@@ -5315,7 +5540,7 @@ Content-Length: 77
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 35. HTTP response</caption>
+          <caption class="title">Table 37. HTTP response</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -5363,7 +5588,7 @@ Content-Length: 77
         <h3 id="_post_fcmtoken_생성"><a class="link" href="#_post_fcmtoken_생성"><code>POST</code> :
           FcmToken 생성</a></h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 36. HTTP request 설명</caption>
+          <caption class="title">Table 38. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -5420,7 +5645,7 @@ Host: localhost:8080
         <h3 id="_post_함께_가기_알림_저장"><a class="link" href="#_post_함께_가기_알림_저장"><code>POST</code> : 함께
           가기 알림 저장</a></h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 37. HTTP request 설명</caption>
+          <caption class="title">Table 39. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -5481,7 +5706,7 @@ Host: localhost:8080
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 38. HTTP response 설명</caption>
+          <caption class="title">Table 40. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -5568,7 +5793,7 @@ Content-Length: 205
   "message" : "알림 메시지야",
   "eventId" : 3,
   "status" : "IN_PROGRESS",
-  "createdAt" : "2023:08:16:14:35:33",
+  "createdAt" : "2023:09:11:17:35:48",
   "isRead" : false
 }</code></pre>
           </div>
@@ -5578,7 +5803,7 @@ Content-Length: 205
                                             href="#_post_차단된_사용자에게_알림_전송"><code>POST</code> : 차단된
             사용자에게 알림 전송</a></h4>
           <table class="tableblock frame-all grid-all stretch">
-            <caption class="title">Table 39. HTTP request 설명</caption>
+            <caption class="title">Table 41. HTTP request 설명</caption>
             <colgroup>
               <col style="width: 33.3333%;">
               <col style="width: 33.3333%;">
@@ -5658,7 +5883,7 @@ Content-Length: 88
                                           href="#_patch_함께_가기_알림_상태_변경"><code>PATCH</code> : 함께 가기
           알림 상태 변경</a></h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 40. HTTP request 설명</caption>
+          <caption class="title">Table 42. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -5696,7 +5921,7 @@ Host: localhost:8080
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 41. /request-notifications/{request-notification-id}/status
+          <caption class="title">Table 43. /request-notifications/{request-notification-id}/status
           </caption>
           <colgroup>
             <col style="width: 50%;">
@@ -5730,7 +5955,7 @@ Host: localhost:8080</code></pre>
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 42. /request-notifications/{request-notification-id}/read
+          <caption class="title">Table 44. /request-notifications/{request-notification-id}/read
           </caption>
           <colgroup>
             <col style="width: 50%;">
@@ -5764,7 +5989,7 @@ Host: localhost:8080</code></pre>
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 43. /request-notifications/{request-notification-id}
+          <caption class="title">Table 45. /request-notifications/{request-notification-id}
           </caption>
           <colgroup>
             <col style="width: 50%;">
@@ -5797,7 +6022,7 @@ Host: localhost:8080</code></pre>
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 44. /request-notifications/{request-notification-id}
+          <caption class="title">Table 46. /request-notifications/{request-notification-id}
           </caption>
           <colgroup>
             <col style="width: 50%;">
@@ -5819,7 +6044,7 @@ Host: localhost:8080</code></pre>
           </tbody>
         </table>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 45. HTTP response 설명</caption>
+          <caption class="title">Table 47. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -5906,7 +6131,7 @@ Content-Length: 204
   "message" : "알림 메시지야",
   "eventId" : 3,
   "status" : "IN_PROGRESS",
-  "createdAt" : "2023:08:16:14:35:33",
+  "createdAt" : "2023:09:11:17:35:48",
   "isRead" : true
 }</code></pre>
           </div>
@@ -5925,7 +6150,7 @@ Host: localhost:8080</code></pre>
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 46. HTTP response 설명</caption>
+          <caption class="title">Table 48. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -6012,7 +6237,7 @@ Content-Length: 412
   "message" : "같이 가요~",
   "eventId" : 312,
   "status" : "REJECTED",
-  "createdAt" : "2023:08:16:14:35:33",
+  "createdAt" : "2023:09:11:17:35:48",
   "isRead" : false
 }, {
   "notificationId" : 932,
@@ -6021,7 +6246,7 @@ Content-Length: 412
   "message" : "소통해요~",
   "eventId" : 123,
   "status" : "ACCEPTED",
-  "createdAt" : "2023:08:16:14:35:33",
+  "createdAt" : "2023:09:11:17:35:48",
   "isRead" : true
 } ]</code></pre>
           </div>
@@ -6089,7 +6314,7 @@ true</code></pre>
         <h3 id="_get_댓글_행사_알림들_조회"><a class="link" href="#_get_댓글_행사_알림들_조회"><code>GET</code> : 댓글
           &amp; 행사 알림들 조회</a></h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 47. HTTP request 설명</caption>
+          <caption class="title">Table 49. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 50%;">
             <col style="width: 50%;">
@@ -6121,13 +6346,13 @@ Host: localhost:8080</code></pre>
           <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 525
+Content-Length: 564
 
 [ {
   "updateNotificationId" : 1,
   "receiverId" : 2,
   "redirectId" : 3,
-  "createdAt" : "2023:08:16:14:35:34",
+  "createdAt" : "2023:09:11:17:35:53",
   "type" : "EVENT",
   "commentTypeNotification" : null,
   "isRead" : true
@@ -6135,12 +6360,14 @@ Content-Length: 525
   "updateNotificationId" : 1,
   "receiverId" : 2,
   "redirectId" : 3,
-  "createdAt" : "2023:08:16:14:35:34",
+  "createdAt" : "2023:09:11:17:35:53",
   "type" : "COMMENT",
   "commentTypeNotification" : {
     "content" : "대댓글 내용",
     "eventName" : "이벤트 이름",
-    "commenterImageUrl" : "대댓글 단 사용자의 이미지 URL"
+    "commenterImageUrl" : "대댓글 단 사용자의 이미지 URL",
+    "parentId" : 3,
+    "eventId" : 5
   },
   "isRead" : false
 } ]</code></pre>
@@ -6152,7 +6379,7 @@ Content-Length: 525
                                            href="#_put_댓글_행사_알림_읽음_상태_변경"><code>PUT</code> : 댓글
           &amp; 행사 알림 읽음 상태 변경</a></h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 48. /update-notifications/{update-notifications-id}/read
+          <caption class="title">Table 50. /update-notifications/{update-notifications-id}/read
           </caption>
           <colgroup>
             <col style="width: 50%;">
@@ -6230,7 +6457,7 @@ Host: localhost:8080
         <h3 id="_post_사용자_차단_등록"><a class="link" href="#_post_사용자_차단_등록"><code>POST</code> : 사용자 차단
           등록</a></h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 49. HTTP request 설명</caption>
+          <caption class="title">Table 51. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -6276,6 +6503,45 @@ Host: localhost:8080
         </div>
       </div>
       <div class="sect2">
+        <h3 id="_delete_사용자_차단_해제"><a class="link" href="#_delete_사용자_차단_해제"><code>DELETE</code> :
+          사용자 차단 해제</a></h3>
+        <table class="tableblock frame-all grid-all stretch">
+          <caption class="title">Table 52. /blocks/{block-id}</caption>
+          <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Parameter</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>block-id</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">차단 ID</p></td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="listingblock">
+          <div class="title">HTTP request</div>
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /blocks/2 HTTP/1.1
+Authorization: Bearer accessToken
+Host: localhost:8080</code></pre>
+          </div>
+        </div>
+        <div class="listingblock">
+          <div class="title">HTTP response</div>
+          <div class="content">
+            <pre class="highlightjs highlight nowrap"><code class="language-http hljs"
+                                                            data-lang="http">HTTP/1.1 204 No Content</code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="sect2">
         <h3 id="_get_차단한_사용자_목록_조회"><a class="link" href="#_get_차단한_사용자_목록_조회"><code>GET</code> :
           차단한 사용자 목록 조회</a></h3>
         <div class="listingblock">
@@ -6308,7 +6574,7 @@ Content-Length: 230
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 50. HTTP response 설명</caption>
+          <caption class="title">Table 53. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -6389,7 +6655,7 @@ Content-Length: 128
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 51. HTTP response 설명</caption>
+          <caption class="title">Table 54. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -6446,7 +6712,7 @@ Host: localhost:8080
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 52. HTTP request 설명</caption>
+          <caption class="title">Table 55. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -6510,7 +6776,7 @@ Content-Length: 134
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 53. HTTP response 설명</caption>
+          <caption class="title">Table 56. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -6620,7 +6886,7 @@ Content-Length: 568
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 54. HTTP response 설명</caption>
+          <caption class="title">Table 57. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -6698,7 +6964,7 @@ Host: localhost:8080</code></pre>
           </div>
         </div>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 55. HTTP response 설명</caption>
+          <caption class="title">Table 58. HTTP response 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -6785,7 +7051,7 @@ Content-Length: 407
         <h3 id="_post_스크랩_추가"><a class="link" href="#_post_스크랩_추가"><code>POST</code> : 스크랩 추가</a>
         </h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 56. HTTP request 설명</caption>
+          <caption class="title">Table 59. HTTP request 설명</caption>
           <colgroup>
             <col style="width: 33.3333%;">
             <col style="width: 33.3333%;">
@@ -6836,7 +7102,7 @@ Host: localhost:8080
         <div class="listingblock">
           <div class="title">HTTP request</div>
           <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /scraps/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /scraps?event-id=1 HTTP/1.1
 Authorization: Bearer AccessToken
 Host: localhost:8080</code></pre>
           </div>
@@ -6851,11 +7117,248 @@ Host: localhost:8080</code></pre>
       </div>
     </div>
   </div>
+  <div class="sect1">
+    <h2 id="_message_쪽지"><a class="link" href="#_message_쪽지">Message (쪽지)</a></h2>
+    <div class="sectionbody">
+      <div class="sect2">
+        <h3 id="_get_쪽지함_목록_조회"><a class="link" href="#_get_쪽지함_목록_조회"><code>GET</code> : 쪽지함 목록 조회</a>
+        </h3>
+        <div class="listingblock">
+          <div class="title">HTTP request</div>
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /rooms?member-id=1 HTTP/1.1
+Authorization: Bearer AccessToken
+Host: localhost:8080</code></pre>
+          </div>
+        </div>
+        <table class="tableblock frame-all grid-all stretch">
+          <caption class="title">Table 60. HTTP request 설명</caption>
+          <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Parameter</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>member-id</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">조회할 사용자의 ID</p></td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="listingblock">
+          <div class="title">HTTP response</div>
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 629
+
+[ {
+  "roomId" : "0eafcb7e-8669-49c4-a4c9-9857297c5783",
+  "interlocutorId" : 1,
+  "interlocutorName" : "receiver1",
+  "recentlyMessage" : "최근 메시지1",
+  "recentlyMessageTime" : "2023:09:11:17:35:49"
+}, {
+  "roomId" : "3f91913e-d950-405e-b227-5e7fe91c2fa6",
+  "interlocutorId" : 1,
+  "interlocutorName" : "receiver2",
+  "recentlyMessage" : "최근 메시지2",
+  "recentlyMessageTime" : "2023:09:09:17:35:49"
+}, {
+  "roomId" : "341c5c47-ac8d-45f5-afc9-ddcadd75e556",
+  "interlocutorId" : 1,
+  "interlocutorName" : "receiver3",
+  "recentlyMessage" : "최근 메시지3",
+  "recentlyMessageTime" : "2023:09:08:17:35:49"
+} ]</code></pre>
+          </div>
+        </div>
+        <table class="tableblock frame-all grid-all stretch">
+          <caption class="title">Table 61. HTTP response 설명</caption>
+          <colgroup>
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Path</th>
+            <th class="tableblock halign-left valign-top">Type</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>[].roomId</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">Room Id(String 타입의
+              UUID입니다)</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].interlocutorId</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">쪽지를 주고받는 상대방 ID</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].interlocutorName</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">쪽지를 주고받는 상대방의 이름</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].recentlyMessage</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">최근 메시지 내용</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].recentlyMessageTime</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">최근 메시지 시간</p></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sect2">
+        <h3 id="_get_room_id로_쪽지방_조회"><a class="link" href="#_get_room_id로_쪽지방_조회"><code>GET</code>
+          : Room ID로 쪽지방 조회</a></h3>
+        <div class="paragraph">
+          <p>/rooms/{room-id}?member-id=1</p>
+        </div>
+        <div class="listingblock">
+          <div class="title">HTTP request</div>
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /rooms/1?member-id=1 HTTP/1.1
+Authorization: Bearer AccessToken
+Host: localhost:8080</code></pre>
+          </div>
+        </div>
+        <table class="tableblock frame-all grid-all stretch">
+          <caption class="title">Table 62. HTTP request 설명</caption>
+          <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Parameter</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>member-id</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">조회할 사용자의 ID</p></td>
+          </tr>
+          </tbody>
+        </table>
+        <table class="tableblock frame-all grid-all stretch">
+          <caption class="title">Table 63. /rooms/{room-id}</caption>
+          <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Parameter</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>room-id</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">조회할 Room UUID</p>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="listingblock">
+          <div class="title">HTTP response</div>
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 260
+
+[ {
+  "senderId" : 1,
+  "content" : "내용1",
+  "createdAt" : "2023:09:11:17:35:49"
+}, {
+  "senderId" : 2,
+  "content" : "내용2",
+  "createdAt" : "2023:09:11:17:35:49"
+}, {
+  "senderId" : 1,
+  "content" : "내용3",
+  "createdAt" : "2023:09:11:17:35:49"
+} ]</code></pre>
+          </div>
+        </div>
+        <table class="tableblock frame-all grid-all stretch">
+          <caption class="title">Table 64. HTTP response 설명</caption>
+          <colgroup>
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Path</th>
+            <th class="tableblock halign-left valign-top">Type</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>[].senderId</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메시지를 보낸 사람 ID</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>[].content</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메시지 내용</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>[].createdAt</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메시지 보낸 시간</p></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-08-16 14:26:13 +0900
+    Last updated 2023-09-11 17:24:03 +0900
   </div>
 </div>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css"

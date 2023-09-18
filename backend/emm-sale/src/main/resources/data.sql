@@ -13,6 +13,8 @@ truncate table update_notification;
 truncate table block;
 truncate table report;
 truncate table scrap;
+truncate table message;
+truncate table room;
 truncate table feed;
 
 insert into activity(id, type, name)

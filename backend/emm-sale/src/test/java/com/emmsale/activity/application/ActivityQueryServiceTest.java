@@ -13,10 +13,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class ActivityServiceTest extends ServiceIntegrationTestHelper {
+class ActivityQueryServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
-  private ActivityService activityService;
+  private ActivityQueryService activityQueryService;
+
 
   @Test
   @DisplayName("존재하고 있는 Activity를 전체 조회할 수 있다.")
@@ -36,7 +37,7 @@ class ActivityServiceTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    List<ActivityResponses> activityResponses = activityService.findAll();
+    List<ActivityResponses> activityResponses = activityQueryService.findAll();
 
     //then
     final List<String> actualActivityNames = activityResponses.stream()

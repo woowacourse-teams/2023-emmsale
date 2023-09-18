@@ -3,7 +3,8 @@ package com.emmsale;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
-import com.emmsale.activity.application.ActivityService;
+import com.emmsale.activity.application.ActivityCommandService;
+import com.emmsale.activity.application.ActivityQueryService;
 import com.emmsale.block.application.BlockCommandService;
 import com.emmsale.block.application.BlockQueryService;
 import com.emmsale.comment.application.CommentCommandService;
@@ -18,6 +19,8 @@ import com.emmsale.member.application.InterestTagService;
 import com.emmsale.member.application.MemberActivityService;
 import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.MemberUpdateService;
+import com.emmsale.message_room.application.MessageCommandService;
+import com.emmsale.message_room.application.RoomQueryService;
 import com.emmsale.notification.application.FcmTokenRegisterService;
 import com.emmsale.notification.application.RequestNotificationCommandService;
 import com.emmsale.notification.application.RequestNotificationQueryService;
@@ -28,6 +31,7 @@ import com.emmsale.report.application.ReportQueryService;
 import com.emmsale.resolver.MemberArgumentResolver;
 import com.emmsale.scrap.application.ScrapCommandService;
 import com.emmsale.scrap.application.ScrapQueryService;
+import com.emmsale.tag.application.TagCommandService;
 import com.emmsale.tag.application.TagQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,6 +56,8 @@ abstract class MockMvcTestHelper {
   protected ObjectMapper objectMapper;
   @MockBean
   protected TagQueryService tagQueryService;
+  @MockBean
+  protected TagCommandService tagCommandService;
   @MockBean
   protected ScrapQueryService scrapQueryService;
   @MockBean
@@ -91,11 +97,17 @@ abstract class MockMvcTestHelper {
   @MockBean
   protected BlockQueryService blockQueryService;
   @MockBean
-  protected ActivityService activityService;
+  protected ActivityQueryService activityQueryService;
+  @MockBean
+  protected ActivityCommandService activityCommandService;
   @MockBean
   protected RecruitmentPostQueryService postQueryService;
   @MockBean
   protected RecruitmentPostCommandService postCommandService;
+  @MockBean
+  protected MessageCommandService messageCommandService;
+  @MockBean
+  protected RoomQueryService roomQueryService;
   @MockBean
   protected FeedCommandService feedCommandService;
   @MockBean

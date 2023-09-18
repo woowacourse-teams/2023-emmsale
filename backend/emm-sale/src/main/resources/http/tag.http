@@ -1,3 +1,12 @@
 ### 태그 전체 조회
 
 GET http://localhost:8080/tags
+
+### 태그 추가
+
+POST http://localhost:8080/tags
+Content-Type: application/json
+
+{
+  "name": "테스트"
+}

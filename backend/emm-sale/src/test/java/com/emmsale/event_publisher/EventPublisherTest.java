@@ -4,6 +4,7 @@ import static com.emmsale.tag.TagFixture.IOS;
 import static com.emmsale.tag.TagFixture.백엔드;
 import static com.emmsale.tag.TagFixture.안드로이드;
 import static com.emmsale.tag.TagFixture.프론트엔드;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -14,7 +15,7 @@ import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
-import com.emmsale.event_publisher.EventPublisherTest.TestConfig;
+import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.member.MemberFixture;
@@ -22,37 +23,21 @@ import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.message_room.domain.Message;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
-/**
- * Spring Event 를 따로 테스트하기 위해 helper 클래스를 상속하지 않음 EventPublisher 에서 Event 를 발생시켜도 Listener 가 동작하지
- * 않음
- */
-@Import(TestConfig.class)
-@SpringBootTest
-@Sql(value = "/data-test.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
-class EventPublisherTest {
+class EventPublisherTest extends ServiceIntegrationTestHelper {
 
-  @Autowired
-  private EventPublisher eventPublisher;
   @Autowired
   private InterestTagRepository interestTagRepository;
   @Autowired
@@ -65,8 +50,9 @@ class EventPublisherTest {
   private FeedRepository feedRepository;
   @Autowired
   private CommentRepository commentRepository;
-  @MockBean
+
   private ApplicationEventPublisher applicationEventPublisher;
+  private EventPublisher eventPublisher;
 
   private Event event;
   private Feed feed;
@@ -77,6 +63,10 @@ class EventPublisherTest {
     event = EventFixture.인프콘_2023();
     member = memberRepository.save(MemberFixture.memberFixture());
     feed = new Feed(event, member, "피드 제목", "피드 내용");
+
+    applicationEventPublisher = mock(ApplicationEventPublisher.class);
+    eventPublisher = new EventPublisher(applicationEventPublisher, interestTagRepository,
+        memberRepository, commentRepository);
   }
 
   @Test
@@ -118,7 +108,7 @@ class EventPublisherTest {
         .map(UpdateNotificationEvent::getReceiverId)
         .collect(Collectors.toList());
 
-    Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
+    assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
   }
 
   @Test
@@ -318,14 +308,33 @@ class EventPublisherTest {
         .publishEvent(any(UpdateNotificationEvent.class));
   }
 
+  @Test
+  @DisplayName("publish() : message를 받아서, Event로 변환 후 publish한다.")
+  void publishMessageEvent() {
+    //given
+    final Message message = new Message("content", 1L, "roomId", LocalDateTime.now());
+    final Long receiverId = 2L;
 
-  @TestConfiguration
-  static class TestConfig {
+    //when
+    eventPublisher.publish(message, receiverId);
 
-    @Bean
-    @Primary
-    public ApplicationEventPublisher publisher() {
-      return mock(ApplicationEventPublisher.class);
-    }
+    //then
+    final ArgumentCaptor<MessageNotificationEvent> argumentCaptor
+        = ArgumentCaptor.forClass(MessageNotificationEvent.class);
+    verify(applicationEventPublisher, times(1))
+        .publishEvent(argumentCaptor.capture());
+
+    final MessageNotificationEvent actualEvent = argumentCaptor.getValue();
+    final MessageNotificationEvent expectedEvent = new MessageNotificationEvent(
+        message.getRoomId(),
+        message.getContent(),
+        message.getSenderId(),
+        receiverId,
+        message.getCreatedAt()
+    );
+
+    assertThat(actualEvent)
+        .usingRecursiveComparison()
+        .isEqualTo(expectedEvent);
   }
 }
