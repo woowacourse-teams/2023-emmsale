@@ -7,6 +7,8 @@ import com.emmsale.comment.domain.Comment;
 import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
+import com.emmsale.feed.domain.Feed;
+import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -34,6 +36,8 @@ class ReportQueryServiceTest extends ServiceIntegrationTestHelper {
   @Autowired
   private EventRepository eventRepository;
   @Autowired
+  private FeedRepository feedRepository;
+  @Autowired
   private CommentRepository commentRepository;
 
   @BeforeEach
@@ -41,10 +45,12 @@ class ReportQueryServiceTest extends ServiceIntegrationTestHelper {
     final Event event = eventRepository.save(eventFixture());
     final Member 신고자 = memberRepository.findById(1L).get();
     final Member 신고_대상자 = memberRepository.findById(2L).get();
+    final Member feedWriter = memberRepository.save(new Member(111L, "img-url", "uname"));
+    final Feed feed = feedRepository.save(new Feed(event, feedWriter, "피드 제목", "피드 내용"));
     신고자_ID = 신고자.getId();
     신고_대상자_ID = 신고_대상자.getId();
-    commentRepository.save(Comment.createRoot(event, 신고_대상자, "상대방에게 불쾌감을 줄 수 있는 내용"));
-    commentRepository.save(Comment.createRoot(event, 신고자, "그냥 댓글"));
+    commentRepository.save(Comment.createRoot(feed, 신고_대상자, "상대방에게 불쾌감을 줄 수 있는 내용"));
+    commentRepository.save(Comment.createRoot(feed, 신고자, "그냥 댓글"));
   }
 
   @Test
@@ -62,7 +68,7 @@ class ReportQueryServiceTest extends ServiceIntegrationTestHelper {
             report.getType(), report.getContentId(), report.getCreatedAt()));
 
     // when
-    List<ReportFindResponse> actual = reportQueryService.findReports();
+    final List<ReportFindResponse> actual = reportQueryService.findReports();
 
     // then
     Assertions.assertThat(actual)

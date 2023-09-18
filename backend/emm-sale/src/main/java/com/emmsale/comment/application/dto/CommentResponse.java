@@ -1,7 +1,7 @@
 package com.emmsale.comment.application.dto;
 
 import com.emmsale.comment.domain.Comment;
-import com.emmsale.event.domain.Event;
+import com.emmsale.feed.domain.Feed;
 import com.emmsale.member.domain.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
@@ -21,8 +21,8 @@ public class CommentResponse {
   private String content;
   private Long commentId;
   private Long parentId;
-  private Long eventId;
-  private String eventName;
+  private Long feedId;
+  private String feedTitle;
   private boolean isDeleted;
   @JsonFormat(pattern = DATE_TIME_FORMAT)
   private LocalDateTime createdAt;
@@ -34,12 +34,12 @@ public class CommentResponse {
 
   public static CommentResponse from(final Comment comment) {
     final Member member = comment.getMember();
-    final Event event = comment.getEvent();
+    final Feed feed = comment.getFeed();
 
     return new CommentResponse(
         comment.getContent(), comment.getId(),
-        getParentId(comment), event.getId(),
-        event.getName(), comment.isDeleted(),
+        getParentId(comment), feed.getId(),
+        feed.getTitle(), comment.isDeleted(),
         comment.getCreatedAt(), comment.getUpdatedAt(),
         member.getId(), member.getImageUrl(),
         member.getName()
@@ -48,12 +48,12 @@ public class CommentResponse {
 
   public static CommentResponse from(final Comment comment, final List<Long> blockedMemberIds) {
     final Member member = comment.getMember();
-    final Event event = comment.getEvent();
+    final Feed feed = comment.getFeed();
 
     return new CommentResponse(
         comment.getContentOrHideIfBlockedMember(blockedMemberIds), comment.getId(),
-        getParentId(comment), event.getId(),
-        event.getName(), comment.isDeleted(),
+        getParentId(comment), feed.getId(),
+        feed.getTitle(), comment.isDeleted(),
         comment.getCreatedAt(), comment.getUpdatedAt(),
         member.getId(), member.getImageUrl(),
         member.getName()

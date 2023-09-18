@@ -11,7 +11,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class CommentFindRequest {
 
-  private final Long eventId;
+  private final Long feedId;
   @Getter(AccessLevel.PRIVATE)
   private final Long memberId;
 
