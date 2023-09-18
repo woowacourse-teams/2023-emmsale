@@ -1,5 +1,7 @@
 package com.emmsale.feed.application;
 
+import com.emmsale.block.domain.Block;
+import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.comment.infrastructure.persistence.CommentDao;
 import com.emmsale.comment.infrastructure.persistence.dto.FeedCommentCount;
 import com.emmsale.event.domain.repository.EventRepository;
@@ -12,6 +14,7 @@ import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
 import com.emmsale.feed.exception.FeedExceptionType;
+import com.emmsale.member.domain.Member;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +33,14 @@ public class FeedQueryService {
 
   private final FeedRepository feedRepository;
   private final EventRepository eventRepository;
+  private final BlockRepository blockRepository;
   private final CommentDao commentDao;
 
-  public FeedListResponse findAllFeeds(final Long eventId) {
+  public FeedListResponse findAllFeeds(final Member member, final Long eventId) {
     validateEvent(eventId);
 
-    final List<Feed> feeds = feedRepository.findAllByEventIdAndNotDeleted(eventId);
+    final List<Feed> feeds = excludeBlockedMembersFeed(member,
+        feedRepository.findAllByEventIdAndNotDeleted(eventId));
     final List<Long> feedIds = feeds.stream()
         .map(Feed::getId)
         .collect(Collectors.toList());
@@ -59,13 +64,39 @@ public class FeedQueryService {
     return new FeedListResponse(eventId, feedSimpleResponses);
   }
 
-  public FeedDetailResponse findFeed(final Long id) {
+  private List<Feed> excludeBlockedMembersFeed(final Member member, final List<Feed> feeds) {
+    final List<Long> blockedMemberIds = getBlockedMemberIds(member);
+    return feeds.stream()
+        .filter(feed -> isNotBlockedMember(blockedMemberIds, feed))
+        .collect(Collectors.toList());
+  }
+
+  private boolean isNotBlockedMember(final List<Long> blockedMemberIds, final Feed feed) {
+    return !blockedMemberIds.contains(feed.getWriter().getId());
+  }
+
+  private List<Long> getBlockedMemberIds(final Member member) {
+    return blockRepository.findAllByRequestMemberId(member.getId())
+        .stream()
+        .map(Block::getBlockMemberId)
+        .collect(Collectors.toList());
+  }
+
+  public FeedDetailResponse findFeed(final Member member, final Long id) {
     final Feed feed = feedRepository.findById(id)
         .orElseThrow(() -> new FeedException(FeedExceptionType.NOT_FOUND_FEED));
+    validateBlockedMemberFeed(member, feed);
 
     validateDeletedFeed(feed);
 
     return FeedDetailResponse.from(feed);
+  }
+
+  private void validateBlockedMemberFeed(final Member member, final Feed feed) {
+    if (blockRepository.existsByRequestMemberIdAndBlockMemberId(member.getId(),
+        feed.getWriter().getId())) {
+      throw new FeedException(FeedExceptionType.CAN_NOT_ACCESS_BLOCKED_MEMBER_FEED);
+    }
   }
 
   private void validateEvent(final Long eventId) {

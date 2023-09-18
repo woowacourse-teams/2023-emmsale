@@ -58,7 +58,7 @@ class FeedApiTest extends MockMvcTestHelper {
     );
     final FeedListResponse response = new FeedListResponse(eventId, feeds);
 
-    when(feedQueryService.findAllFeeds(any())).thenReturn(response);
+    when(feedQueryService.findAllFeeds(any(), any())).thenReturn(response);
 
     //when & then
     mockMvc.perform(get("/feeds")
@@ -91,7 +91,7 @@ class FeedApiTest extends MockMvcTestHelper {
     final FeedDetailResponse response = new FeedDetailResponse(feedId, eventId, writer, "피드 제목",
         "피드 상세 내용", LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)));
 
-    when(feedQueryService.findFeed(any())).thenReturn(response);
+    when(feedQueryService.findFeed(any(), any())).thenReturn(response);
 
     //when & then
     mockMvc.perform(get("/feeds/{feedId}", feedId))
