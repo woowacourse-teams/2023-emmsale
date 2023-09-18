@@ -1,5 +1,6 @@
 package com.emmsale.image.application;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -24,10 +25,12 @@ public class S3Client {
   private static final String EXTENSION_DELIMITER = ".";
   private static final List<String> ALLOWED_FILE_EXTENSIONS = List.of(".jpg", ".png", ".jpeg");
   private static final int MIN_EXTENSION_SEPARATOR_INDEX = 0;
-  private final AmazonS3 amazonS3;
+  
   @Value("${cloud.aws.s3.bucket}")
   private String bucket;
-
+  
+  private final AmazonS3 amazonS3;
+  
   public List<String> uploadImages(final List<MultipartFile> multipartFiles) {
     return multipartFiles.stream().map(this::uploadImage)
         .collect(Collectors.toList());
@@ -40,8 +43,8 @@ public class S3Client {
 
     try (final InputStream inputStream = file.getInputStream()) {
       amazonS3.putObject(new PutObjectRequest(bucket, newFileName, inputStream, objectMetadata));
-    } catch (final IOException e) {
-      throw new ImageException(ImageExceptionType.FAIL_UPLOAD_IMAGE);
+    } catch (final IOException | SdkClientException exception) {
+      throw new ImageException(ImageExceptionType.FAIL_S3_UPLOAD_IMAGE);
     }
     return newFileName;
   }
@@ -70,7 +73,11 @@ public class S3Client {
   }
 
   public void deleteImages(final List<String> fileNames) {
-    fileNames.forEach(fileName ->
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName)));
+    try {
+      fileNames.forEach(fileName ->
+          amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName)));
+    } catch (SdkClientException exception) {
+      throw new ImageException(ImageExceptionType.FAIL_S3_DELETE_IMAGE);
+    }
   }
 }

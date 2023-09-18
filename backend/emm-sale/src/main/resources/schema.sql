@@ -16,6 +16,7 @@ drop table if exists kerdy.scrap;
 drop table if exists kerdy.message;
 drop table if exists kerdy.room;
 drop table if exists kerdy.feed;
+drop table if exists kerdy.image;
 
 create table activity
 (
@@ -223,3 +224,15 @@ create table feed
 );
 
 alter table comment rename column event_id to feed_id;
+
+-- 2023-09-14 13:39
+
+create table image
+(
+    id           bigint auto_increment primary key,
+    name         varchar(50) not null,
+    type         varchar(20) not null,
+    content_id   bigint      not null,
+    order_number int         not null,
+    created_at   datetime(6)
+);
