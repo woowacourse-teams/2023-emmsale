@@ -63,11 +63,11 @@ public class Feed extends BaseEntity {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!(o instanceof Feed)) {
       return false;
     }
     final Feed feed = (Feed) o;
-    return Objects.equals(id, feed.id);
+    return Objects.equals(id, feed.getId());
   }
 
   @Override
