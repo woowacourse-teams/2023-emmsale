@@ -82,6 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginStart="42dp"
+                        android:layout_marginEnd="17dp"
                         android:fontFamily="@font/nanum_square_regular"
                         android:textColor="@color/black"
                         android:textSize="12sp"
@@ -106,16 +107,18 @@
                     <TextView
                         android:id="@+id/tv_eventInfo_place"
                         android:text="@{vm.eventDetail.eventDetail.location}"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="42dp"
+                        android:layout_marginEnd="17dp"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/nanum_square_regular"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_place_title"
                         app:layout_constraintTop_toBottomOf="@id/tv_eventInfo_date"
-                        tools:text="삼성동 코엑스 몰 2층 101" />
+                        tools:text="삼성동 코엑스 몰 2층 101"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_eventInfo_cost_title"
