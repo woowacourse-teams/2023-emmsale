@@ -15,6 +15,8 @@ truncate table report;
 truncate table scrap;
 truncate table message;
 truncate table room;
+truncate table feed;
+truncate table image;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');

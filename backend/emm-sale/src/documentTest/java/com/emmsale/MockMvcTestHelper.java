@@ -12,6 +12,8 @@ import com.emmsale.comment.application.CommentQueryService;
 import com.emmsale.event.application.EventService;
 import com.emmsale.event.application.RecruitmentPostCommandService;
 import com.emmsale.event.application.RecruitmentPostQueryService;
+import com.emmsale.feed.application.FeedCommandService;
+import com.emmsale.feed.application.FeedQueryService;
 import com.emmsale.login.application.LoginService;
 import com.emmsale.member.application.InterestTagService;
 import com.emmsale.member.application.MemberActivityService;
@@ -52,8 +54,6 @@ abstract class MockMvcTestHelper {
   protected MockMvc mockMvc;
   @Autowired
   protected ObjectMapper objectMapper;
-  @MockBean
-  private MemberArgumentResolver memberArgumentResolver;
   @MockBean
   protected TagQueryService tagQueryService;
   @MockBean
@@ -108,6 +108,12 @@ abstract class MockMvcTestHelper {
   protected MessageCommandService messageCommandService;
   @MockBean
   protected RoomQueryService roomQueryService;
+  @MockBean
+  protected FeedCommandService feedCommandService;
+  @MockBean
+  protected FeedQueryService feedQueryService;
+  @MockBean
+  private MemberArgumentResolver memberArgumentResolver;
 
   @BeforeEach
   void setUp(final WebApplicationContext applicationContext,

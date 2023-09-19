@@ -24,6 +24,29 @@ class MessageNotificationMessageGeneratorTest extends ServiceIntegrationTestHelp
   @Autowired
   private ObjectMapper objectMapper;
 
+  private static MessageNotificationMessage generateExpectedValue(final Member sender,
+      final String roomId, final String token,
+      final LocalDateTime messageTime, final String content) {
+
+    final Data Data = new Data(
+        "MESSAGE",
+        roomId,
+        sender.getId().toString(),
+        sender.getName(),
+        sender.getImageUrl(),
+        content,
+        messageTime.format(DATE_TIME_FORMATTER)
+    );
+
+    return new MessageNotificationMessage(
+        DEFAULT_VALIDATE_ONLY,
+        new MessageNotificationMessage.Message(
+            Data,
+            token
+        )
+    );
+  }
+
   @Test
   @DisplayName("makeMessage(): fcm에 보낼 메시지를 만드는 기능 테스트 ")
   void makeMessage() throws JsonProcessingException {
@@ -57,29 +80,6 @@ class MessageNotificationMessageGeneratorTest extends ServiceIntegrationTestHelp
     assertThat(actual)
         .usingRecursiveComparison()
         .isEqualTo(expected);
-  }
-
-  private static MessageNotificationMessage generateExpectedValue(final Member sender,
-      final String roomId, final String token,
-      final LocalDateTime messageTime, final String content) {
-
-    final Data Data = new Data(
-        "MESSAGE",
-        roomId,
-        sender.getId().toString(),
-        sender.getName(),
-        sender.getImageUrl(),
-        content,
-        messageTime.format(DATE_TIME_FORMATTER)
-    );
-
-    return new MessageNotificationMessage(
-        DEFAULT_VALIDATE_ONLY,
-        new MessageNotificationMessage.Message(
-            Data,
-            token
-        )
-    );
   }
 
 }

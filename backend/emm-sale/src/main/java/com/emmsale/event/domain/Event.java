@@ -3,7 +3,6 @@ package com.emmsale.event.domain;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.emmsale.base.BaseEntity;
-import com.emmsale.comment.domain.Comment;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
@@ -63,10 +62,7 @@ public class Event extends BaseEntity {
 
   @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
-
-  @OneToMany(mappedBy = "event")
-  private List<Comment> comments;
-
+  
   @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
   private List<RecruitmentPost> recruitmentPosts = new ArrayList<>();
 

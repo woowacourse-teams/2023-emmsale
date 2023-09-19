@@ -1,0 +1,39 @@
+### 이벤트의 피드 목록 조회
+
+GET http://localhost:8080/feeds?event-id=1
+Content-Type: application/json
+
+### 피드 상세 조회
+
+GET http://localhost:8080/feeds/1
+Content-Type: application/json
+
+### 피드 작성
+
+POST http://localhost:8080/feeds
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
+
+{
+  "eventId": 1,
+  "title": "피드 제목",
+  "content": "피드 내용"
+}
+
+### 피드 업데이트
+
+PUT http://localhost:8080/feeds/1
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0
+
+{
+  "eventId": 1,
+  "title": "피드 제목",
+  "content": "피드 내용"
+}
+
+### 피드 삭제
+
+DELETE http://localhost:8080/feeds/1
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkwMTk2OTY5LCJleHAiOjE2OTM3OTY5Njl9.yahaEBvKBA7xelNuykx8TROhemnzJAsu1Sv5rrSfCM0

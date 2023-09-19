@@ -15,6 +15,8 @@ drop table if exists kerdy.report;
 drop table if exists kerdy.scrap;
 drop table if exists kerdy.message;
 drop table if exists kerdy.room;
+drop table if exists kerdy.feed;
+drop table if exists kerdy.image;
 
 create table activity
 (
@@ -126,8 +128,7 @@ alter table event_member
     add column updated_at datetime(6);
 
 -- 2023.08.08 17:04
-rename
-    table notification TO request_notification;
+rename table notification TO request_notification;
 
 create table update_notification
 (
@@ -207,6 +208,33 @@ create table message
     sender_id  bigint       not null,
     room_id    varchar(40)  not null,
     primary key (id)
+);
+
+-- 2023-09-01 23:06
+create table feed
+(
+    id         bigint auto_increment primary key,
+    writer_id  bigint        not null,
+    title      varchar(50)   not null,
+    content    varchar(1000) not null,
+    event_id   bigint        not null,
+    is_deleted bit           not null,
+    created_at datetime(6)   null,
+    updated_at datetime(6)   null
+);
+
+alter table comment rename column event_id to feed_id;
+
+-- 2023-09-14 13:39
+
+create table image
+(
+    id           bigint auto_increment primary key,
+    name         varchar(50) not null,
+    type         varchar(20) not null,
+    content_id   bigint      not null,
+    order_number int         not null,
+    created_at   datetime(6)
 );
 
 -- 2023-09-14 16:43

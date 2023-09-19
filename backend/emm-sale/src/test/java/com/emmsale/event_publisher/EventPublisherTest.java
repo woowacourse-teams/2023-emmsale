@@ -16,6 +16,9 @@ import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.feed.domain.Feed;
+import com.emmsale.feed.domain.repository.FeedRepository;
+import com.emmsale.member.MemberFixture;
 import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
@@ -44,15 +47,23 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
   @Autowired
   private EventRepository eventRepository;
   @Autowired
+  private FeedRepository feedRepository;
+  @Autowired
   private CommentRepository commentRepository;
 
   private ApplicationEventPublisher applicationEventPublisher;
   private EventPublisher eventPublisher;
 
-  private Event event = EventFixture.인프콘_2023();
+  private Event event;
+  private Feed feed;
+  private Member member;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
+    event = EventFixture.인프콘_2023();
+    member = memberRepository.save(MemberFixture.memberFixture());
+    feed = new Feed(event, member, "피드 제목", "피드 내용");
+
     applicationEventPublisher = mock(ApplicationEventPublisher.class);
     eventPublisher = new EventPublisher(applicationEventPublisher, interestTagRepository,
         memberRepository, commentRepository);
@@ -87,7 +98,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     eventPublisher.publish(savedEvent);
 
     //then
-    ArgumentCaptor<UpdateNotificationEvent> captor = ArgumentCaptor.forClass(
+    final ArgumentCaptor<UpdateNotificationEvent> captor = ArgumentCaptor.forClass(
         UpdateNotificationEvent.class);
 
     verify(applicationEventPublisher, times(2)).publishEvent(captor.capture());
@@ -166,13 +177,14 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     final Member 로그인_사용자 = memberRepository.save(new Member(13445L, "image", "username1"));
     final Member 댓글_작성자2 = memberRepository.save(new Member(13444L, "image", "username"));
     eventRepository.save(event);
-    final Comment 부모_댓글 = commentRepository.save(Comment.createRoot(event, 댓글_작성자1, "내용1"));
+    feedRepository.save(feed);
+    final Comment 부모_댓글 = commentRepository.save(Comment.createRoot(feed, 댓글_작성자1, "내용1"));
     final Comment 자식_댓글1 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 로그인_사용자, "내용2"));
+        Comment.createChild(feed, 부모_댓글, 로그인_사용자, "내용2"));
     final Comment 자식_댓글2 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 댓글_작성자2, "내용3"));
+        Comment.createChild(feed, 부모_댓글, 댓글_작성자2, "내용3"));
     final Comment 알림_트리거_댓글 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 로그인_사용자, "내용4"));
+        Comment.createChild(feed, 부모_댓글, 로그인_사용자, "내용4"));
 
     //when
     eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
@@ -188,14 +200,15 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     //given
     final Member 댓글_작성자1 = memberRepository.findById(1L).get();
     eventRepository.save(event);
+    feedRepository.save(feed);
     final Comment 부모_댓글 = commentRepository.save(
-        Comment.createRoot(event, 댓글_작성자1, "내용1")
+        Comment.createRoot(feed, 댓글_작성자1, "내용1")
     );
     final Comment 자식_댓글1 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 댓글_작성자1, "내용2")
+        Comment.createChild(feed, 부모_댓글, 댓글_작성자1, "내용2")
     );
     final Comment 알림_트리거_댓글 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 댓글_작성자1, "내용4")
+        Comment.createChild(feed, 부모_댓글, 댓글_작성자1, "내용4")
     );
 
     //when
@@ -212,8 +225,9 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     //given
     final Member 댓글_작성자1 = memberRepository.findById(1L).get();
     eventRepository.save(event);
+    feedRepository.save(feed);
     final Comment 알림_트리거_댓글 = commentRepository.save(
-        Comment.createRoot(event, 댓글_작성자1, "내용1")
+        Comment.createRoot(feed, 댓글_작성자1, "내용1")
     );
 
     //when
@@ -229,25 +243,26 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
   void test_publish_comment_not_notification_deletedComment() throws Exception {
     //given
     eventRepository.save(event);
+    feedRepository.save(feed);
     final Member 로그인_사용자 = memberRepository.findById(1L).get();
     final Member 댓글_작성자1 = memberRepository.findById(2L).get();
     final Member savedMember = memberRepository.save(new Member(200L, "imageUrl", "아마란스"));
     final Member 댓글_작성자2 = memberRepository.findById(savedMember.getId()).get();
 
     final Comment 부모_댓글 = commentRepository.save(
-        Comment.createRoot(event, 로그인_사용자, "내용1")
+        Comment.createRoot(feed, 로그인_사용자, "내용1")
     );
     final Comment 자식_댓글1 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 댓글_작성자1, "내용2")
+        Comment.createChild(feed, 부모_댓글, 댓글_작성자1, "내용2")
     );
     final Comment 자식_댓글2 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 댓글_작성자2, "내용3")
+        Comment.createChild(feed, 부모_댓글, 댓글_작성자2, "내용3")
     );
     자식_댓글2.delete();
     commentRepository.save(자식_댓글2);
 
     final Comment 알림_트리거_댓글 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 로그인_사용자, "내용3")
+        Comment.createChild(feed, 부모_댓글, 로그인_사용자, "내용3")
     );
 
     //when
@@ -263,25 +278,26 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
   void test_publish_comment_not_notification_deletedComment2() throws Exception {
     //given
     eventRepository.save(event);
+    feedRepository.save(feed);
     final Member 로그인_사용자 = memberRepository.findById(1L).get();
     final Member 댓글_작성자1 = memberRepository.findById(2L).get();
     final Member savedMember = memberRepository.save(new Member(200L, "imageUrl", "아마란스"));
     final Member 댓글_작성자2 = memberRepository.findById(savedMember.getId()).get();
 
     final Comment 부모_댓글 = commentRepository.save(
-        Comment.createRoot(event, 로그인_사용자, "내용1")
+        Comment.createRoot(feed, 로그인_사용자, "내용1")
     );
     final Comment 자식_댓글1 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 댓글_작성자1, "내용2")
+        Comment.createChild(feed, 부모_댓글, 댓글_작성자1, "내용2")
     );
     final Comment 자식_댓글2 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 댓글_작성자2, "내용3")
+        Comment.createChild(feed, 부모_댓글, 댓글_작성자2, "내용3")
     );
     부모_댓글.delete();
     commentRepository.save(부모_댓글);
 
     final Comment 알림_트리거_댓글 = commentRepository.save(
-        Comment.createChild(event, 부모_댓글, 로그인_사용자, "내용3")
+        Comment.createChild(feed, 부모_댓글, 로그인_사용자, "내용3")
     );
 
     //when
