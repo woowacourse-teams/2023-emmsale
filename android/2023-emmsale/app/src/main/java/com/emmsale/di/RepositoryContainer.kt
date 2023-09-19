@@ -9,6 +9,7 @@ import com.emmsale.data.repository.concretes.DefaultConfigRepository
 import com.emmsale.data.repository.concretes.DefaultEventRepository
 import com.emmsale.data.repository.concretes.DefaultEventTagRepository
 import com.emmsale.data.repository.concretes.DefaultFcmTokenRepository
+import com.emmsale.data.repository.concretes.DefaultFeedRepository
 import com.emmsale.data.repository.concretes.DefaultLoginRepository
 import com.emmsale.data.repository.concretes.DefaultMemberRepository
 import com.emmsale.data.repository.concretes.DefaultMyPostRepository
@@ -25,6 +26,7 @@ import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
 import com.emmsale.data.repository.interfaces.FcmTokenRepository
+import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.data.repository.interfaces.LoginRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MyPostRepository
@@ -57,6 +59,9 @@ class RepositoryContainer(
     }
     val fcmTokenRepository: FcmTokenRepository by lazy {
         DefaultFcmTokenRepository(fcmTokenService = serviceContainer.fcmTokenService)
+    }
+    val feedRepository: FeedRepository by lazy {
+        DefaultFeedRepository(feedService = serviceContainer.feedService)
     }
     val commentRepository: CommentRepository by lazy {
         DefaultCommentRepository(

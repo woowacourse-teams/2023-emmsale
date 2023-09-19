@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text="@string/comments_is_updated"
+            android:text="@string/all_is_updated"
             android:textColor="@color/gray"
             android:textSize="11sp"
             android:visibility="@{(comment.isUpdated &amp;&amp; !comment.isDeleted)? View.VISIBLE : View.GONE}"

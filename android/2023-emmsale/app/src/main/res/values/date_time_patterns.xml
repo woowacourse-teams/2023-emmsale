@@ -2,4 +2,6 @@
 <resources>
     <string name="month_day_weekday">M월 d일(E)</string>
     <string name="date_range" translatable="false">%s ~ %s</string>
+    <string name="month_dot_day">MM.dd</string>
+    <string name="year_dot_month_dot_day">yyyy.MM.dd</string>
 </resources>

@@ -21,7 +21,7 @@ class ChildCommentViewHolder(
     private val bottomMenuDialog = BottomMenuDialog(binding.root.context)
 
     init {
-        binding.ivChildcommentsChildCommentAuthorImage.setOnClickListener {
+        binding.ivChildcommentAuthorImage.setOnClickListener {
             if (binding.comment?.isDeleted == true) return@setOnClickListener
             showProfile(binding.comment?.authorId ?: return@setOnClickListener)
         }

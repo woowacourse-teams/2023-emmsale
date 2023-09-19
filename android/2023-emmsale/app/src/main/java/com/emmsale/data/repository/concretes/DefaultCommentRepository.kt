@@ -1,6 +1,7 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.request.ChildCommentCreateRequest
+import com.emmsale.data.apiModel.request.CommentCreateRequest
+import com.emmsale.data.apiModel.request.CommentQueryRequest
 import com.emmsale.data.apiModel.request.CommentReportCreateRequest
 import com.emmsale.data.apiModel.request.CommentUpdateRequest
 import com.emmsale.data.apiModel.response.CommentFamilyApiModel
@@ -19,10 +20,10 @@ class DefaultCommentRepository(
 ) : CommentRepository {
 
     override suspend fun getComments(
-        eventId: Long,
+        feedId: Long,
     ): ApiResponse<List<Comment>> = withContext(dispatcher) {
         commentService
-            .getComments(eventId)
+            .getComments(CommentQueryRequest(feedId = feedId))
             .map(List<CommentFamilyApiModel>::toData)
     }
 
@@ -30,7 +31,7 @@ class DefaultCommentRepository(
         memberId: Long,
     ): ApiResponse<List<Comment>> = withContext(dispatcher) {
         commentService
-            .getCommentsByMemberId(memberId)
+            .getComments(CommentQueryRequest(memberId = memberId))
             .map(List<CommentFamilyApiModel>::toData)
     }
 
@@ -44,23 +45,19 @@ class DefaultCommentRepository(
 
     override suspend fun saveComment(
         content: String,
-        eventId: Long,
+        feedId: Long,
         parentId: Long?,
     ): ApiResponse<Unit> = withContext(dispatcher) {
+        val commentCreateRequest = CommentCreateRequest(
+            content = content,
+            feedId = feedId,
+            parentId = parentId,
+        )
+
         commentService
-            .saveComment(getSaveCommentRequestBody(content, eventId, parentId))
+            .saveComment(commentCreateRequest)
             .map { }
     }
-
-    private fun getSaveCommentRequestBody(
-        content: String,
-        eventId: Long,
-        parentId: Long?,
-    ) = ChildCommentCreateRequest(
-        content = content,
-        eventId = eventId,
-        parentId = parentId,
-    )
 
     override suspend fun updateComment(
         commentId: Long,

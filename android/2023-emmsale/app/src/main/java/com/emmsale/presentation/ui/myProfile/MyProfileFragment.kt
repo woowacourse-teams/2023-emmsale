@@ -9,6 +9,7 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.views.CategoryTagChip
 import com.emmsale.presentation.ui.editMyProfile.EditMyProfileActivity
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.myProfile.uiState.MyProfileUiState
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
 

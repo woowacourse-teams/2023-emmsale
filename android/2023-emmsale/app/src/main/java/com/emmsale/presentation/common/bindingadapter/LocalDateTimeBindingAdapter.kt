@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.emmsale.R
+import com.emmsale.presentation.common.extension.compareToString
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -15,9 +16,7 @@ fun TextView.setDate(
 ) {
     if (localDateTime == null) return
 
-    val dateTimePattern = DateTimePattern.getPattern(context, dateTimePattern)
-    val dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern, Locale.getDefault())
-    text = dateTimeFormatter.format(localDateTime)
+    text = dateTimePattern.format(context, localDateTime)
 }
 
 @BindingAdapter(
@@ -37,25 +36,41 @@ fun TextView.setDateRange(
     }
     if (startDateTime == null) return
 
-    val pattern = DateTimePattern.getPattern(context, dateTimePattern)
-    val dateTimeFormatter = DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
     text = context.getString(
         R.string.date_range,
-        dateTimeFormatter.format(startDateTime),
-        dateTimeFormatter.format(endDateTime),
+        dateTimePattern.format(context, startDateTime),
+        dateTimePattern.format(context, endDateTime),
     )
 }
 
 enum class DateTimePattern {
-    MONTH_DAY_WEEKDAY,
+    MONTH_DAY_WEEKDAY {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            val pattern = context.getString(R.string.month_day_weekday)
+            val formatter = DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
+            return formatter.format(localDateTime)
+        }
+    },
+    MONTH_DOT_DAY {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            val pattern = context.getString(R.string.month_dot_day)
+            val formatter = DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
+            return formatter.format(localDateTime)
+        }
+    },
+    YEAR_DOT_MONTH_DOT_DAY {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            val pattern = context.getString(R.string.year_dot_month_dot_day)
+            val formatter = DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
+            return formatter.format(localDateTime)
+        }
+    },
+    RELATED_TIME {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            return localDateTime.compareToString(context)
+        }
+    },
     ;
 
-    companion object {
-        fun getPattern(
-            context: Context,
-            dateTimePattern: DateTimePattern,
-        ): String = when (dateTimePattern) {
-            MONTH_DAY_WEEKDAY -> context.getString(R.string.month_day_weekday)
-        }
-    }
+    abstract fun format(context: Context, localDateTime: LocalDateTime): String
 }
