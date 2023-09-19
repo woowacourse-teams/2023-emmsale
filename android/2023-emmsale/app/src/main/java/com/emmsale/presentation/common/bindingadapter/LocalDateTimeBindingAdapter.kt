@@ -4,9 +4,10 @@ import android.content.Context
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.emmsale.R
+import com.emmsale.presentation.common.extension.format
+import com.emmsale.presentation.common.extension.toMessageRelativeTime
+import com.emmsale.presentation.common.extension.toRelativeTime
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 @BindingAdapter("app:dateText", "app:dateTimeFormatter", requireAll = false)
 fun TextView.setDate(
@@ -15,9 +16,7 @@ fun TextView.setDate(
 ) {
     if (localDateTime == null) return
 
-    val dateTimePattern = DateTimePattern.getPattern(context, dateTimePattern)
-    val dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern, Locale.getDefault())
-    text = dateTimeFormatter.format(localDateTime)
+    text = dateTimePattern.format(context, localDateTime)
 }
 
 @BindingAdapter(
@@ -37,25 +36,35 @@ fun TextView.setDateRange(
     }
     if (startDateTime == null) return
 
-    val pattern = DateTimePattern.getPattern(context, dateTimePattern)
-    val dateTimeFormatter = DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
     text = context.getString(
         R.string.date_range,
-        dateTimeFormatter.format(startDateTime),
-        dateTimeFormatter.format(endDateTime),
+        dateTimePattern.format(context, startDateTime),
+        dateTimePattern.format(context, endDateTime),
     )
 }
 
 enum class DateTimePattern {
-    MONTH_DAY_WEEKDAY,
+    MONTH_DAY_WEEKDAY {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            return localDateTime.format(context, R.string.month_day_weekday)
+        }
+    },
+    MONTH_DOT_DAY {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            return localDateTime.format(context, R.string.month_day_weekday)
+        }
+    },
+    RELATE_TIME {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            return localDateTime.toRelativeTime(context)
+        }
+    },
+    AM_PM_HOUR_MINUTE {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            return localDateTime.toMessageRelativeTime(context)
+        }
+    },
     ;
 
-    companion object {
-        fun getPattern(
-            context: Context,
-            dateTimePattern: DateTimePattern,
-        ): String = when (dateTimePattern) {
-            MONTH_DAY_WEEKDAY -> context.getString(R.string.month_day_weekday)
-        }
-    }
+    abstract fun format(context: Context, localDateTime: LocalDateTime): String
 }

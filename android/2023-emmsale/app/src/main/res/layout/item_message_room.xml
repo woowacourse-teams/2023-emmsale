@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
+
         <variable
             name="messageRoom"
             type="com.emmsale.data.messageRoom.MessageRoom" />
@@ -68,6 +70,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/gray"
             android:textSize="11sp"
+            app:dateText="@{messageRoom.recentMessage.createdAt}"
+            app:dateTimeFormatter="@{DateTimePattern.AM_PM_HOUR_MINUTE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_message_room_title"
             tools:text="오후 12:03" />

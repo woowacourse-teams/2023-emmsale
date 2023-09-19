@@ -29,6 +29,7 @@
     <string name="all_network_error_message">인터넷 연결이 불안정하여\n데이터를 불러올 수 없습니다.</string>
     <string name="all_retry">재시도</string>
     <string name="all_finish_confirm_message">한 번 더 누르면 종료됩니다.</string>
+    <string name="all_just_before">방금 전</string>
 
     <string name="splash_app_update_title">업데이트</string>
     <string name="splash_app_update_message">새로운 버전이 출시되었어요!\n지금 바로 커디 스토어로 이동하시겠어요?</string>
@@ -376,5 +377,4 @@
     <string name="messageroomlist_message_room_options_title">더보기</string>
 
     <string name="messageroom_room_image_desc">쪽지방 이미지</string>
-
 </resources>
