@@ -14,11 +14,13 @@ import com.emmsale.data.model.Member
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.messageList.uistate.MessageDateUiState
+import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
 import com.emmsale.presentation.ui.messageList.uistate.MessageUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
 import kotlinx.coroutines.Deferred
@@ -36,6 +38,9 @@ class MessageListViewModel(
 
     private val _messages = NotNullMutableLiveData(MessagesUiState())
     val messages: NotNullLiveData<MessagesUiState> = _messages
+
+    private val _event = MutableLiveData<Event<MessageListUiEvent>>()
+    val uiEvent: LiveData<Event<MessageListUiEvent>> = _event
 
     private val _otherMember = MutableLiveData<Member>()
     val otherMember: LiveData<Member> = _otherMember
@@ -121,6 +126,22 @@ class MessageListViewModel(
         when (val otherMember = memberRepository.getMember(otherUid)) {
             is Success -> otherMember.data
             else -> null
+        }
+    }
+
+    fun sendMessage(message: String) {
+        if (message.isBlank()) return
+
+        _messages.value = messages.value.toLoading()
+        viewModelScope.launch {
+            when (messageRoomRepository.sendMessage(myUid, otherUid, message)) {
+                is Success -> {
+                    _event.value = Event(MessageListUiEvent.MESSAGE_SENT)
+                    fetchMessages()
+                }
+
+                else -> _messages.value = messages.value.toError()
+            }
         }
     }
 

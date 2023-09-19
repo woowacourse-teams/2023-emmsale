@@ -6,8 +6,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityMessageListBinding
+import com.emmsale.presentation.common.EventObserver
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.ui.messageList.recyclerview.MessageListAdapter
+import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
 
 class MessageListActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
@@ -26,6 +28,7 @@ class MessageListActivity : AppCompatActivity() {
         setupToolbar()
         setupMessageRecyclerView()
         setupMessages()
+        setUpEventUiEvent()
     }
 
     private fun setupBinding() {
@@ -48,7 +51,19 @@ class MessageListActivity : AppCompatActivity() {
     private fun setupMessages() {
         viewModel.messages.observe(this) { uiState ->
             if (uiState.fetchResult != FetchResult.SUCCESS) return@observe
-            messageListAdapter.submitList(uiState.messages)
+            messageListAdapter.submitList(uiState.messages) {
+                binding.rvMessageList.scrollToPosition(messageListAdapter.itemCount - 1)
+            }
+        }
+    }
+
+    private fun setUpEventUiEvent() {
+        viewModel.uiEvent.observe(this, EventObserver(::handleEvent))
+    }
+
+    private fun handleEvent(event: MessageListUiEvent) {
+        when (event) {
+            MessageListUiEvent.MESSAGE_SENT -> binding.etMessageInput.text.clear()
         }
     }
 
