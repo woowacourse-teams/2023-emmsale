@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
 
         <variable
             name="message"
@@ -10,7 +14,49 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:visibility="@{message.message.isEmpty() ? View.GONE : View.VISIBLE}">
+
+        <ImageView
+            android:id="@+id/iv_member_profile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:importantForAccessibility="no"
+            android:visibility="@{message.shownProfile ? View.VISIBLE : View.INVISIBLE}"
+            app:imageUrl="@{message.profileImageUrl}"
+            app:isCircle="@{true}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_member_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@{message.memberName}"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:visibility="@{message.shownProfile ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintStart_toEndOf="@id/iv_member_profile"
+            app:layout_constraintTop_toTopOf="@id/iv_member_profile"
+            tools:text="김커디" />
+
+        <com.emmsale.presentation.common.views.WrapWidthTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_othermessage_message"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp"
+            android:text="@{message.message}"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_member_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_member_name"
+            tools:text="안녕안녕안녕안녕안안녕안녕안녕" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

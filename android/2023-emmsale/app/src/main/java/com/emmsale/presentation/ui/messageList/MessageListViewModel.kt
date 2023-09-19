@@ -52,11 +52,10 @@ class MessageListViewModel(
         viewModelScope.launch {
             _messages.value = messages.value.toLoading()
             _otherMember.value = getOtherMember().await()
-            val otherMemberProfileUrl = otherMember.value?.profileImageUrl
 
             when (val result = messageRoomRepository.getMessagesByRoomId(roomId, myUid)) {
                 is Success -> _messages.value = messages.value.toSuccess(
-                    messages = result.data.toUiState(otherMemberProfileUrl),
+                    messages = result.data.toUiState(),
                 )
 
                 is Failure, NetworkError, is Unexpected -> {
@@ -66,7 +65,7 @@ class MessageListViewModel(
         }
     }
 
-    private fun List<Message>.toUiState(otherMemberProfileUrl: String?): List<MessageUiState> {
+    private fun List<Message>.toUiState(): List<MessageUiState> {
         val myMessages = mutableListOf<MessageUiState>()
 
         forEachIndexed { index, message ->
@@ -78,14 +77,12 @@ class MessageListViewModel(
                     ),
                 )
                 myMessages.add(
-                    message.mapToMessageUiState(
-                        myUid,
-                        otherMemberProfileUrl,
-                    ),
+                    message.mapToMessageUiState(myUid),
                 ) // 메시지 데이터 추가
             } else {
                 val prevMessage = myMessages[index - 1]
 
+                var showProfile = message.createdAt == prevMessage.createdAt
                 if (prevMessage.createdAt.dayOfYear != message.createdAt.dayOfYear) {
                     myMessages.add(
                         MessageDateUiState(
@@ -93,22 +90,32 @@ class MessageListViewModel(
                             createdAt = message.createdAt,
                         ),
                     )
+                    showProfile = true
                 }
-                myMessages.add(MessageUiState.from(myUid, message, null))
+                myMessages.add(
+                    MessageUiState.from(
+                        myUid,
+                        message,
+                        otherMember.value!!.profileImageUrl,
+                        otherMember.value!!.name,
+                        showProfile,
+                    ),
+                )
             }
         }
 
         return myMessages
     }
 
-    private fun Message.mapToMessageUiState(
-        myUid: Long,
-        otherMemberProfileUrl: String?,
-    ): MessageUiState = MessageUiState.from(
-        myUid,
-        this,
-        otherMemberProfileUrl,
-    )
+    private fun Message.mapToMessageUiState(myUid: Long): MessageUiState {
+        val otherMember = otherMember.value!!
+        return MessageUiState.from(
+            myUid,
+            this,
+            otherMember.profileImageUrl,
+            otherMember.name,
+        )
+    }
 
     private fun getOtherMember(): Deferred<Member?> = viewModelScope.async {
         when (val otherMember = memberRepository.getMember(otherUid)) {
