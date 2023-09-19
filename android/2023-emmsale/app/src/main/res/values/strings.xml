@@ -22,8 +22,6 @@
     <string name="all_report_fail_message">신고하는 데 실패했어요 😢</string>
     <string name="all_report_duplicate_message">이미 신고 하셨습니다.</string>
     <string name="all_block">차단</string>
-    <string name="all_report_duplicate_dialog_title">중복 신고</string>
-    <string name="all_report_duplicate_dialog_message">이미 신고하셨습니다.</string>
     <string name="all_network_error_icon_description">네트워크 에러 아이콘</string>
     <string name="all_network_error_title">인터넷 연결이 불안정합니다.</string>
     <string name="all_network_error_message">인터넷 연결이 불안정하여\n데이터를 불러올 수 없습니다.</string>
