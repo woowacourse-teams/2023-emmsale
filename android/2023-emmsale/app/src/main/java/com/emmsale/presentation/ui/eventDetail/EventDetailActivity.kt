@@ -2,15 +2,18 @@ package com.emmsale.presentation.ui.eventDetail
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEventDetailBinding
+import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
+import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
 import com.emmsale.presentation.ui.main.MainActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -28,18 +31,11 @@ class EventDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerScreen(this)
+        initFragmentStateAdapter()
         initBackPressedDispatcher()
         setUpBinding()
-        setUpEventDetail()
+        setUpEventUiEvent()
         initBackPressButtonClickListener()
-    }
-
-    fun hideEventInformation() {
-        binding.clEventDetailEventContainer.visibility = View.GONE
-    }
-
-    fun showEventInformation() {
-        binding.clEventDetailEventContainer.visibility = View.VISIBLE
     }
 
     private fun initBackPressedDispatcher() {
@@ -50,21 +46,32 @@ class EventDetailActivity :
         setContentView(binding.root)
         binding.lifecycleOwner = this
         binding.vm = viewModel
+        binding.navigateToUrl = ::navigateToUrl
     }
 
-    private fun setUpEventDetail() {
-        viewModel.eventDetail.observe(this) { eventDetailUiState ->
-            addEventTag(eventDetailUiState.tags)
-            initFragmentStateAdapter(
-                eventDetailUiState.informationUrl,
-                eventDetailUiState.imageUrl,
-            )
+    private fun setUpEventUiEvent() {
+        viewModel.scrapUiEvent.observe(this, ::handleEvent)
+    }
+
+    private fun handleEvent(event: Event<EventInfoUiEvent>) {
+        val content = event.getContentIfNotHandled() ?: return
+        when (content) {
+            EventInfoUiEvent.SCRAP_ERROR -> binding.root.showSnackBar(getString(R.string.eventdetail_scrap_error))
+            EventInfoUiEvent.SCRAP_DELETE_ERROR -> binding.root.showSnackBar(getString(R.string.eventdetail_scrap_delete_error))
         }
     }
 
-    private fun initFragmentStateAdapter(informationUrl: String, imageUrl: String?) {
+    private fun navigateToUrl(url: String) {
+        val browserIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(url),
+        )
+        startActivity(browserIntent)
+    }
+
+    private fun initFragmentStateAdapter() {
         binding.vpEventdetail.adapter =
-            EventDetailFragmentStateAdapter(this, eventId, informationUrl, imageUrl)
+            EventDetailFragmentStateAdapter(this, eventId)
         val tabNames = listOf(
             getString(R.string.eventdetail_tab_infromation),
             getString(R.string.eventdetail_tab_comment),
@@ -76,18 +83,8 @@ class EventDetailActivity :
         binding.vpEventdetail.isUserInputEnabled = false
     }
 
-    private fun addEventTag(tags: List<String>) {
-        tags.forEach { binding.chipgroupEvendetailTags.addView(createEventTag(it)) }
-    }
-
-    private fun createEventTag(tag: String) = EventTag(this).apply {
-        text = tag
-    }
-
     private fun initBackPressButtonClickListener() {
-        binding.ivEventdetailBackpress.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+        binding.tbEventdetail.setNavigationOnClickListener { finish() }
     }
 
     companion object {

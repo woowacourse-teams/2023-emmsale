@@ -2,9 +2,7 @@ package com.emmsale.presentation.ui.scrappedEventList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -24,8 +22,8 @@ class ScrappedEventViewModel(
         changeToLoadingState()
         viewModelScope.launch {
             when (val response = scrappedEventRepository.getScrappedEvents()) {
-                is ApiSuccess -> _scrappedEvents.value = ScrappedEventsUiState.from(response.data)
-                is ApiError, is ApiException -> changeToErrorState()
+                is Success -> _scrappedEvents.value = ScrappedEventsUiState.from(response.data)
+                else -> changeToErrorState()
             }
         }
     }

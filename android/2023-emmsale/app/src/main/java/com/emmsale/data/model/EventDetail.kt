@@ -6,6 +6,7 @@ data class EventDetail(
     val id: Long,
     val name: String,
     val informationUrl: String,
+    val organization: String? = null,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
     val applyStartDate: LocalDateTime,

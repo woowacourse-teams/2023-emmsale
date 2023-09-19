@@ -220,9 +220,13 @@
     <string name="eventdetail_tab_comment">댓글</string>
     <string name="eventdetail_tab_recruitment">같이가요</string>
     <string name="eventdetail_tablayout_content_description">상세정보 보기 탭</string>
-    <string name="eventdetail_place">장소</string>
-    <string name="eventdetail_date">일시</string>
+    <string name="eventdetail_scrap_error">스크랩 불가</string>
+    <string name="eventdetail_scrap_delete_error">스크랩 삭제 불가</string>
     <string name="eventdetail_apply_date">접수 기간</string>
+
+    <string name="eventInfo_cost">비용</string>
+    <string name="eventInfo_place">장소</string>
+    <string name="eventInfo_date">일시</string>
 
     <string name="eventrecruitment_fetch_recruitments_error_message">글을 불러올 수 없습니다. 관리자에게 문의하세요.</string>
     <string name="eventrecruitment_has_not_permission_writing">모집글은 한 번만 작성이 가능합니다!!</string>
@@ -367,4 +371,5 @@
     <string name="openprofileurlconfig_complete">완료</string>
     <string name="openprofileurlconfig_register_success">성공적으로 등록하였습니다</string>
     <string name="openprofileurlconfig_register_fail">등록에 실패하였습니다</string>
+
 </resources>
