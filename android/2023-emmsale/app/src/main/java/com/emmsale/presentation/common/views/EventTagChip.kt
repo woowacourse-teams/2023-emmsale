@@ -8,7 +8,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.emmsale.R
 
-class EventTag : AppCompatTextView {
+class EventTagChip : AppCompatTextView {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -26,5 +26,5 @@ class EventTag : AppCompatTextView {
 }
 
 fun Context.eventChipOf(
-    block: EventTag.() -> Unit,
-): EventTag = EventTag(this).apply(block)
+    block: EventTagChip.() -> Unit,
+): EventTagChip = EventTagChip(this).apply(block)

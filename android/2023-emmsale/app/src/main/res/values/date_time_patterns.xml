@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="month_day_weekday">M월 d일(E)</string>
+    <string name="date_range" translatable="false">%s ~ %s</string>
+</resources>

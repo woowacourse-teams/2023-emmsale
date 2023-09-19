@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.views.CategoryTag
+import com.emmsale.presentation.common.views.CategoryTagChip
 import com.emmsale.presentation.ui.editMyProfile.EditMyProfileActivity
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
@@ -64,7 +64,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         binding.cgMyprofileFields.removeAllViews()
 
         myProfile.fields.forEach {
-            val tagView = CategoryTag(requireContext()).apply { text = it.name }
+            val tagView = CategoryTagChip(requireContext()).apply { text = it.name }
             binding.cgMyprofileFields.addView(tagView)
         }
     }

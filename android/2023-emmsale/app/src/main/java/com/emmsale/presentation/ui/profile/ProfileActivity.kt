@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityProfileBinding
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.views.CategoryTag
+import com.emmsale.presentation.common.views.CategoryTagChip
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
@@ -147,7 +147,7 @@ class ProfileActivity : AppCompatActivity() {
         binding.cgProfileFields.removeAllViews()
 
         profile.fields.forEach {
-            val tagView = CategoryTag(this).apply { text = it.name }
+            val tagView = CategoryTagChip(this).apply { text = it.name }
             binding.cgProfileFields.addView(tagView)
         }
     }

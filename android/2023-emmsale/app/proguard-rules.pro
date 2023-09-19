@@ -21,6 +21,6 @@
 # is used.
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
-# Keep the InterestEventTagUpdateResponseApiModel class itself and its fields from obfuscation
--keep class com.emmsale.data.apiModel.response.InterestEventTagUpdateResponseApiModel { *; }
+# Keep the classes of Kerdy class itself and its fields from obfuscation
+-keep class com.emmsale.data.apiModel.response.UpdatedMemberInterestEventTagResponse { *; }
 -keep class com.emmsale.data.common.callAdapter.* { *; }

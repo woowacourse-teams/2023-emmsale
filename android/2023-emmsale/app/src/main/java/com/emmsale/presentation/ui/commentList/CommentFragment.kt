@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.FragmentCommentsBinding
 import com.emmsale.presentation.base.BaseFragment
@@ -58,39 +57,12 @@ class CommentFragment :
         initDataBinding()
         initCommentsRecyclerView()
         setupUiLogic()
-        initRecyclerViewListener()
     }
 
     override fun onStart() {
         super.onStart()
-
         viewModel.refresh()
     }
-
-    override fun onResume() {
-        super.onResume()
-        eventDetailActivity.showEventInformation()
-    }
-
-    private fun initRecyclerViewListener() {
-        binding.rvCommentsComments.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                handleEventInformationVisibility(newState)
-            }
-        })
-    }
-
-    private fun handleEventInformationVisibility(newState: Int) {
-        if (newState == RecyclerView.SCROLL_STATE_IDLE && isScrollTop()) {
-            eventDetailActivity.showEventInformation()
-        } else if (!isScrollTop()) {
-            eventDetailActivity.hideEventInformation()
-        }
-    }
-
-    private fun isScrollTop(): Boolean =
-        !binding.rvCommentsComments.canScrollVertically(TOP_CONDITION)
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
@@ -251,7 +223,6 @@ class CommentFragment :
 
     companion object {
         private const val KEY_EVENT_ID = "KEY_EVENT_ID"
-        private const val TOP_CONDITION = -1
         fun create(eventId: Long): CommentFragment {
             val fragment = CommentFragment()
             fragment.arguments = Bundle().apply {

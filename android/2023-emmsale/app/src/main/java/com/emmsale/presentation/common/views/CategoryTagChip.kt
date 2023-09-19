@@ -7,7 +7,7 @@ import androidx.annotation.Dimension
 import androidx.core.content.ContextCompat
 import com.emmsale.R
 
-class CategoryTag(
+class CategoryTagChip(
     context: Context,
     attrs: AttributeSet? = null,
 ) : androidx.appcompat.widget.AppCompatTextView(context, attrs) {
