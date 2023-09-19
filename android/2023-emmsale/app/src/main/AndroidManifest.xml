@@ -98,7 +98,7 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".presentation.ui.eventDetail.EventDetailActivity"
+            android:name=".presentation.ui.eventdetail.EventDetailActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
@@ -119,6 +119,9 @@
                     android:scheme="kerdy" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.ui.messageRoomList.MessageRoomListActivity"
+            android:exported="true" />
 
         <service
             android:name=".presentation.service.KerdyFirebaseMessagingService"
