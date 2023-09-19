@@ -20,7 +20,9 @@
         <activity
             android:name=".presentation.ui.messageList.MessageListActivity"
             android:exported="true" />
-        <activity android:name=".presentation.ui.messageRoomList.MessageRoomListActivity" />
+        <activity
+            android:name=".presentation.ui.messageRoomList.MessageRoomListActivity"
+            android:exported="true" />
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true"

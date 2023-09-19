@@ -9,7 +9,7 @@ class MessageListActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
     private val viewModel: MessageListViewModel by viewModels {
         MessageListViewModel.factory(
-            roomId = intent.getLongExtra(KEY_ROOM_ID, DEFAULT_ROOM_ID),
+            roomId = intent.getStringExtra(KEY_ROOM_ID) ?: DEFAULT_ROOM_ID,
             otherUid = intent.getLongExtra(KEY_OTHER_UID, DEFAULT_OTHER_ID),
         )
     }
@@ -27,7 +27,7 @@ class MessageListActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY_ROOM_ID = "roomId"
-        private const val DEFAULT_ROOM_ID = -1L
+        private const val DEFAULT_ROOM_ID = ""
 
         private const val KEY_OTHER_UID = "otherUid"
         private const val DEFAULT_OTHER_ID = -1L
