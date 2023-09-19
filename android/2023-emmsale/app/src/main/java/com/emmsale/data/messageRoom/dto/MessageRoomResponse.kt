@@ -6,16 +6,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MessageRoomResponse(
     @SerialName("roomId")
-    val roomId: Long,
+    val roomId: String,
     @SerialName("interlocutorId")
     val senderId: Long,
-    @SerialName("interlocutorProfile")
-    val senderProfileImageUrl: String,
     @SerialName("interlocutorName")
     val senderName: String,
-    @SerialName("interlocutorAvatar")
-    val recentMessage: String,
+    @SerialName("interlocutorProfile")
+    val senderProfileImageUrl: String,
     @SerialName("recentlyMessage")
+    val recentMessage: String,
+    @SerialName("recentlyMessageTime")
     val recentMessageTime: String,
 )
 

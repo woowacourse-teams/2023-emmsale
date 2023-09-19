@@ -24,7 +24,7 @@ class MessageRoomRepositoryImpl(
     }
 
     override suspend fun getMessagesByRoomId(
-        roomId: Long,
+        roomId: String,
         memberId: Long,
     ): ApiResponse<List<Message>> = withContext(dispatcher) {
         messageRoomService

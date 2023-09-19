@@ -9,7 +9,7 @@ interface MessageRoomRepository {
     ): ApiResponse<List<MessageRoom>>
 
     suspend fun getMessagesByRoomId(
-        roomId: Long,
+        roomId: String,
         memberId: Long,
     ): ApiResponse<List<Message>>
 
