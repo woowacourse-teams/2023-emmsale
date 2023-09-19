@@ -1,6 +1,5 @@
 package com.emmsale.presentation.ui.messageList
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -57,25 +56,20 @@ class MessageListViewModel(
 
             when (val result = messageRoomRepository.getMessagesByRoomId(roomId, myUid)) {
                 is Success -> _messages.value = messages.value.toSuccess(
-                    messages = aaa(result.data, otherMemberProfileUrl),
+                    messages = result.data.toUiState(otherMemberProfileUrl),
                 )
 
                 is Failure, NetworkError, is Unexpected -> {
                     _messages.value = messages.value.toError()
                 }
             }
-
-            Log.d("buna", "데이터 목록")
-            messages.value.messages.forEach {
-                Log.d("buna", it.message)
-            }
         }
     }
 
-    private fun aaa(messages: List<Message>, otherMemberProfileUrl: String?): List<MessageUiState> {
+    private fun List<Message>.toUiState(otherMemberProfileUrl: String?): List<MessageUiState> {
         val myMessages = mutableListOf<MessageUiState>()
 
-        messages.forEachIndexed { index, message ->
+        forEachIndexed { index, message ->
             if (index == 0) { // 첫 번째인 경우
                 myMessages.add(
                     MessageDateUiState(

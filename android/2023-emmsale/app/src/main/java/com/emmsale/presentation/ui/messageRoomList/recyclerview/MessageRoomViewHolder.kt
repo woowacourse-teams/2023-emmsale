@@ -9,10 +9,15 @@ import com.emmsale.databinding.ItemMessageRoomBinding
 
 class MessageRoomViewHolder(
     parent: ViewGroup,
+    onMessageRoomClick: (roomId: String, otherUid: Long) -> Unit,
 ) : ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_message_room, parent, false),
 ) {
     private val binding = ItemMessageRoomBinding.bind(itemView)
+
+    init {
+        binding.onMessageRoomClick = onMessageRoomClick
+    }
 
     fun bind(messageRoom: MessageRoom) {
         binding.messageRoom = messageRoom

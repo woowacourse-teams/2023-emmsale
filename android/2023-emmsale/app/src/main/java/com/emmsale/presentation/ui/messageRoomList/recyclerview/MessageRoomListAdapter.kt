@@ -4,10 +4,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.emmsale.data.messageRoom.MessageRoom
 
-class MessageRoomListAdapter :
-    ListAdapter<MessageRoom, MessageRoomViewHolder>(MessageRoomDiffUtil) {
+class MessageRoomListAdapter(
+    private val onMessageRoomClick: (roomId: String, otherUid: Long) -> Unit,
+) : ListAdapter<MessageRoom, MessageRoomViewHolder>(MessageRoomDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageRoomViewHolder {
-        return MessageRoomViewHolder(parent)
+        return MessageRoomViewHolder(parent, onMessageRoomClick)
     }
 
     override fun onBindViewHolder(holder: MessageRoomViewHolder, position: Int) {

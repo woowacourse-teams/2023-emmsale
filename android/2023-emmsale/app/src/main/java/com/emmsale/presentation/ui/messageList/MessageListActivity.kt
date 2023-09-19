@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.messageList
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -31,5 +33,16 @@ class MessageListActivity : AppCompatActivity() {
 
         private const val KEY_OTHER_UID = "otherUid"
         private const val DEFAULT_OTHER_ID = -1L
+
+        fun startActivity(
+            context: Context,
+            roomId: String,
+            otherUid: Long,
+        ) {
+            val intent = Intent(context, MessageListActivity::class.java)
+                .putExtra(KEY_ROOM_ID, roomId)
+                .putExtra(KEY_OTHER_UID, otherUid)
+            context.startActivity(intent)
+        }
     }
 }

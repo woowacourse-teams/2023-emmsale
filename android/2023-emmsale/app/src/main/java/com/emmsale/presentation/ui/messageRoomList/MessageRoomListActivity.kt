@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityMessageRoomListBinding
 import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.messageRoomList.recyclerview.MessageRoomListAdapter
 
 class MessageRoomListActivity : AppCompatActivity() {
@@ -27,7 +28,7 @@ class MessageRoomListActivity : AppCompatActivity() {
     }
 
     private fun setupMessageRoomRecyclerView() {
-        messageRoomListAdapter = MessageRoomListAdapter()
+        messageRoomListAdapter = MessageRoomListAdapter(::navigateToMessageList)
         binding.rvMessageRoomList.adapter = messageRoomListAdapter
     }
 
@@ -36,5 +37,9 @@ class MessageRoomListActivity : AppCompatActivity() {
             if (uiState.fetchResult != FetchResult.SUCCESS) return@observe
             messageRoomListAdapter.submitList(uiState.messageRooms)
         }
+    }
+
+    private fun navigateToMessageList(roomId: String, otherUid: Long) {
+        MessageListActivity.startActivity(this, roomId, otherUid)
     }
 }
