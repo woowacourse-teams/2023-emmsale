@@ -6,8 +6,10 @@ import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
+import com.emmsale.event.domain.PaymentType;
 import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.application.dto.TagRequest;
 import java.time.LocalDate;
@@ -178,7 +180,7 @@ class EventApiTest extends MockMvcTestHelper {
         event.getInformationUrl(), event.getEventPeriod().getStartDate(),
         event.getEventPeriod().getEndDate(),
         event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(), tags,
-        event.getImageUrl(), event.getType());
+        event.getImageUrl(), event.getType(), EventMode.OFFLINE, PaymentType.PAID);
 
     final EventDetailResponse response = new EventDetailResponse(eventId, request.getName(),
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
@@ -210,7 +212,11 @@ class EventApiTest extends MockMvcTestHelper {
         PayloadDocumentation.fieldWithPath("imageUrl").type(JsonFieldType.STRING)
             .description("행사(Event) 이미지url"),
         PayloadDocumentation.fieldWithPath("type").type(JsonFieldType.STRING)
-            .description("행사(Event) 타입")
+            .description("행사(Event) 타입"),
+        PayloadDocumentation.fieldWithPath("eventMode").type(JsonFieldType.STRING)
+            .description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)"),
+        PayloadDocumentation.fieldWithPath("paymentType").type(JsonFieldType.STRING)
+            .description("행사 유료 여부(PAID, FREE, FREE_PAID)")
     );
 
     //when
@@ -258,7 +264,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getLocation(), event.getInformationUrl(), event.getEventPeriod().getStartDate(),
           event.getEventPeriod().getEndDate(),
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
-          tags, event.getImageUrl(), event.getType());
+          tags, event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE);
 
       final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
@@ -290,7 +296,12 @@ class EventApiTest extends MockMvcTestHelper {
           PayloadDocumentation.fieldWithPath("imageUrl").type(JsonFieldType.STRING)
               .description("행사(Event) imageUrl"),
           PayloadDocumentation.fieldWithPath("type").type(JsonFieldType.STRING)
-              .description("Event 타입"));
+              .description("Event 타입"),
+          PayloadDocumentation.fieldWithPath("eventMode").type(JsonFieldType.STRING)
+              .description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)"),
+          PayloadDocumentation.fieldWithPath("paymentType").type(JsonFieldType.STRING)
+              .description("행사 유료 여부(PAID, FREE, FREE_PAID)")
+      );
 
       //when
       final ResultActions result = mockMvc.perform(
@@ -320,7 +331,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getEventPeriod().getEndDate(),
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
           tags, null,
-          EventType.COMPETITION);
+          EventType.COMPETITION, EventMode.ON_OFFLINE, PaymentType.FREE);
 
       //when
       final ResultActions result = mockMvc.perform(
@@ -347,7 +358,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getEventPeriod().getEndDate(),
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
           tags,
-          event.getImageUrl(), event.getType());
+          event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE);
 
       //when
       final ResultActions result = mockMvc.perform(
@@ -375,7 +386,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getEventPeriod().getEndDate(),
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
           tags,
-          event.getImageUrl(), event.getType());
+          event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE);
 
       //when
       final ResultActions result = mockMvc.perform(

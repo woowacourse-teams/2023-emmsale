@@ -33,9 +33,11 @@ import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.event.domain.EventType;
+import com.emmsale.event.domain.PaymentType;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
@@ -480,6 +482,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     private final String eventLocation = "새로운 장소";
     private final String eventInformationUrl = "https://새로운-상세-URL.com";
     private final String imageUrl = "https://image.com";
+    private final PaymentType paymentType = PaymentType.FREE_PAID;
+    private final EventMode eventMode = EventMode.ON_OFFLINE;
     private final EventType type = EventType.CONFERENCE;
     private final LocalDate now = LocalDate.now();
 
@@ -497,7 +501,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           tagRequests,
           imageUrl,
-          type
+          type,
+          eventMode,
+          paymentType
       );
 
       doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
@@ -539,7 +545,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           tagRequests,
           imageUrl,
-          type
+          type,
+          eventMode,
+          paymentType
       );
 
       doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
@@ -571,7 +579,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           tagRequests,
           imageUrl,
-          type
+          type,
+          eventMode,
+          paymentType
       );
 
       doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
@@ -598,6 +608,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     private final String newInformationUrl = "https://새로운-상세-URL.com";
     private final String imageUrl = "https://image.com";
     private final LocalDate now = LocalDate.now();
+    private final PaymentType paymentType = PaymentType.FREE_PAID;
+    private final EventMode eventMode = EventMode.ON_OFFLINE;
 
     @Test
     @DisplayName("이벤트를 성공적으로 업데이트한다.")
@@ -616,7 +628,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           newTagRequests,
           imageUrl,
-          EventType.CONFERENCE
+          EventType.CONFERENCE,
+          eventMode,
+          paymentType
       );
 
       final Event event = eventRepository.save(인프콘_2023());
@@ -658,7 +672,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           newTagRequests,
           imageUrl,
-          EventType.CONFERENCE
+          EventType.CONFERENCE,
+          eventMode,
+          paymentType
       );
 
       //when & then
@@ -685,7 +701,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           newTagRequests,
           imageUrl,
-          EventType.CONFERENCE
+          EventType.CONFERENCE,
+          eventMode,
+          paymentType
       );
 
       final Event event = eventRepository.save(인프콘_2023());
@@ -716,7 +734,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           newTagRequests,
           imageUrl,
-          EventType.CONFERENCE
+          EventType.CONFERENCE,
+          eventMode,
+          paymentType
       );
 
       final Event event = eventRepository.save(인프콘_2023());

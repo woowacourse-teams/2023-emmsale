@@ -20,6 +20,7 @@ import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.event_publisher.EventPublisher;
+import com.emmsale.scrap.domain.ScrapRepository;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
@@ -47,11 +48,13 @@ public class EventService {
   private final EventTagRepository eventTagRepository;
   private final TagRepository tagRepository;
   private final EventPublisher eventPublisher;
+  private final ScrapRepository scrapRepository;
 
   @Transactional(readOnly = true)
   public EventDetailResponse findEvent(final Long id, final LocalDate today) {
     final Event event = eventRepository.findById(id)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
+//    scrapRepository.existsByMemberIdAndEventId()
     return EventDetailResponse.from(event, today);
   }
 
