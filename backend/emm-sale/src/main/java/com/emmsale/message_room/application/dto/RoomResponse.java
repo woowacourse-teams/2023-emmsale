@@ -14,6 +14,7 @@ public class RoomResponse {
   private final String roomId;
   private final Long interlocutorId;
   private final String interlocutorName;
+  private final String interlocutorProfile;
   private final String recentlyMessage;
   @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
   private final LocalDateTime recentlyMessageTime;
@@ -26,6 +27,7 @@ public class RoomResponse {
         messageOverview.getRoomUUID(),
         interlocutor.getId(),
         interlocutor.getName(),
+        interlocutor.getImageUrl(),
         messageOverview.getContent(),
         messageOverview.getCreatedAt()
     );
