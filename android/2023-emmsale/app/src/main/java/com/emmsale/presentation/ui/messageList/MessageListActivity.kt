@@ -19,12 +19,19 @@ class MessageListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupBinding()
+        setupToolbar()
     }
 
     private fun setupBinding() {
         setContentView(binding.root)
         binding.vm = viewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun setupToolbar() {
+        binding.tbMessageList.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     companion object {

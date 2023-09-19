@@ -43,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@id/tb_message_room_list" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/srl_profile_profilescreen"
+            android:id="@+id/srl_message_room_list"
             onRefresh="@{() -> vm.refresh()}"
             android:layout_width="0dp"
             android:layout_height="0dp"
