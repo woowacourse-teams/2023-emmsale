@@ -20,8 +20,8 @@ class MessageRoomListViewModel(
     private val memberRepository: TokenRepository,
     private val messageRoomRepository: MessageRoomRepository,
 ) : ViewModel(), Refreshable {
-    private val _memberRooms = MutableLiveData(MemberRoomListUiState())
-    val memberRooms: LiveData<MemberRoomListUiState> = _memberRooms
+    private val _messageRooms = MutableLiveData(MemberRoomListUiState())
+    val messageRooms: LiveData<MemberRoomListUiState> = _messageRooms
 
     init {
         refresh()
@@ -33,16 +33,16 @@ class MessageRoomListViewModel(
 
     private fun fetchMessageRooms() {
         val uid = memberRepository.getMyUid() ?: return
-        _memberRooms.value = memberRooms.value?.toLoading()
+        _messageRooms.value = messageRooms.value?.toLoading()
 
         viewModelScope.launch {
             when (val result = messageRoomRepository.getMessageRooms(uid)) {
                 is Success -> {
-                    _memberRooms.value = memberRooms.value?.toSuccess(result.data)
+                    _messageRooms.value = messageRooms.value?.toSuccess(result.data)
                 }
 
                 is Failure, NetworkError, is Unexpected -> {
-                    _memberRooms.value = memberRooms.value?.toError()
+                    _messageRooms.value = messageRooms.value?.toError()
                 }
             }
         }
