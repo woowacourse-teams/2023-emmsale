@@ -16,7 +16,7 @@ import com.emmsale.presentation.ui.childCommentList.recyclerView.ChildCommentAda
 import com.emmsale.presentation.ui.childCommentList.recyclerView.ChildCommentRecyclerViewDivider
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 

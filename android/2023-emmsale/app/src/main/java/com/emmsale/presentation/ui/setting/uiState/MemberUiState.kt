@@ -31,7 +31,7 @@ data class MemberUiState(
         isLoading = false,
         isError = false,
         id = member.id,
-        imageUrl = member.imageUrl,
+        imageUrl = member.profileImageUrl,
         name = member.name,
         githubId = member.githubUrl,
     )

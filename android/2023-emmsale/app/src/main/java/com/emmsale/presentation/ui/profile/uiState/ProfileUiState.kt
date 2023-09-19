@@ -34,7 +34,7 @@ data class ProfileUiState(
         memberId = member.id,
         memberName = member.name,
         description = member.description,
-        memberImageUrl = member.imageUrl,
+        memberImageUrl = member.profileImageUrl,
     )
 
     fun changeActivityState(activities: List<Activity>): ProfileUiState = copy(

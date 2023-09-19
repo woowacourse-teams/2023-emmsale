@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.eventDetail
+package com.emmsale.presentation.ui.eventdetail
 
 import android.content.Context
 import android.content.Intent
@@ -13,6 +13,8 @@ import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
+import com.emmsale.presentation.ui.eventDetail.EventDetailFragmentStateAdapter
+import com.emmsale.presentation.ui.eventDetail.EventDetailViewModel
 import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
 import com.emmsale.presentation.ui.main.MainActivity
 import com.google.android.material.tabs.TabLayoutMediator

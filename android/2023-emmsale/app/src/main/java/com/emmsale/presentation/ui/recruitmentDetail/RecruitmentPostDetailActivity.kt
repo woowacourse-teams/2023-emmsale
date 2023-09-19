@@ -15,7 +15,7 @@ import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.openProfileUrlConfig.OpenProfileUrlConfigActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.HasOpenUrlUiState
