@@ -6,7 +6,7 @@ import com.emmsale.data.apiModel.request.RecruitmentNotificationStatusUpdateRequ
 import com.emmsale.data.apiModel.response.NotificationReportResponse
 import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
 import com.emmsale.data.apiModel.response.UpdatedNotificationResponse
-import retrofit2.Response
+import com.emmsale.data.common.callAdapter.ApiResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
@@ -20,36 +20,36 @@ interface NotificationService {
     @GET("/request-notifications")
     suspend fun getRecruitmentNotifications(
         @Query("member-id") memberId: Long,
-    ): Response<List<RecruitmentNotificationResponse>>
+    ): ApiResponse<List<RecruitmentNotificationResponse>>
 
     @PATCH("/request-notifications/{request-notification-id}/status")
     suspend fun updateRecruitmentStatus(
         @Path("request-notification-id") notificationId: Long,
         @Body newStatus: RecruitmentNotificationStatusUpdateRequest,
-    ): Response<Unit>
+    ): ApiResponse<Unit>
 
     @PATCH("/request-notifications/{request-notification-id}/read")
     suspend fun updateNotificationReadStatus(
         @Path("request-notification-id") notificationId: Long,
-    ): Response<Unit>
+    ): ApiResponse<Unit>
 
     @GET("/update-notifications")
     suspend fun getUpdatedNotifications(
         @Query("member-id") memberId: Long,
-    ): Response<List<UpdatedNotificationResponse>>
+    ): ApiResponse<List<UpdatedNotificationResponse>>
 
     @PUT("/update-notifications/{update-notification-id}/read")
     suspend fun updateUpdatedNotificationReadStatus(
         @Path("update-notification-id") notificationId: Long,
-    ): Response<Unit>
+    ): ApiResponse<Unit>
 
     @HTTP(method = "DELETE", path = "/update-notifications", hasBody = true)
     suspend fun deleteNotification(
         @Body notificationIds: NotificationListDeleteRequest,
-    ): Response<Unit>
+    ): ApiResponse<Unit>
 
     @POST("/reports")
     suspend fun reportRecruitmentNotification(
         @Body recruitmentNotificationReportCreateRequest: RecruitmentNotificationReportCreateRequest,
-    ): Response<NotificationReportResponse>
+    ): ApiResponse<NotificationReportResponse>
 }

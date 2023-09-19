@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
@@ -36,22 +37,24 @@ class OpenProfileUrlConfigViewModel(
 
     private fun fetchOpenProfileUrl() {
         viewModelScope.launch {
-            when (val response = memberRepository.getMember(myUid)) {
-                is ApiSuccess -> {
+            when (val result = memberRepository.getMember(myUid)) {
+                is Failure, NetworkError -> _isUrlFetchError.value = true
+                is Success -> {
                     _isUrlFetchError.value = false
-                    url.value = response.data.openProfileUrl
+                    url.value = result.data.openProfileUrl
                 }
 
-                is ApiError, is ApiException -> _isUrlFetchError.value = true
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun updateOpenProfileUrl(url: String) {
         viewModelScope.launch {
-            when (memberRepository.updateMemberOpenProfileUrl(url)) {
-                is ApiSuccess -> _isUpdateUrlSuccess.value = true
-                is ApiError, is ApiException -> _isUpdateUrlSuccess.value = false
+            when (val result = memberRepository.updateMemberOpenProfileUrl(url)) {
+                is Failure, NetworkError -> _isUpdateUrlSuccess.value = false
+                is Success -> _isUpdateUrlSuccess.value = true
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

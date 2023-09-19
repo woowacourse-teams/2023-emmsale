@@ -5,8 +5,8 @@ import com.emmsale.data.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
 import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
-import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.handleApi
+import com.emmsale.data.apiModel.response.MemberResponse
+import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Member
 import com.emmsale.data.repository.interfaces.MemberRepository
@@ -20,83 +20,69 @@ class DefaultMemberRepository(
     private val memberService: MemberService,
 ) : MemberRepository {
 
-    override suspend fun getMember(memberId: Long): ApiResult<Member> = withContext(dispatcher) {
-        handleApi(
-            execute = { memberService.getMember(memberId) },
-            mapToDomain = { it.toData() },
-        )
+    override suspend fun getMember(
+        memberId: Long,
+    ): ApiResponse<Member> = withContext(dispatcher) {
+        memberService
+            .getMember(memberId)
+            .map(MemberResponse::toData)
     }
 
     override suspend fun updateMember(
         name: String,
         activityIds: List<Long>,
-    ): ApiResult<Unit> = withContext(dispatcher) {
-        handleApi(
-            execute = {
-                memberService.updateMember(
-                    MemberCreateRequest(
-                        name = name,
-                        activityIds = activityIds,
-                    ),
-                )
-            },
-            mapToDomain = { },
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        memberService.updateMember(
+            MemberCreateRequest(
+                name = name,
+                activityIds = activityIds,
+            ),
         )
     }
 
-    override suspend fun updateMemberDescription(description: String): ApiResult<Unit> =
-        withContext(dispatcher) {
-            handleApi(
-                execute = {
-                    memberService.updateMemberDescription(
-                        MemberDescriptionUpdateRequest(description),
-                    )
-                },
-                mapToDomain = {},
-            )
-        }
-
-    override suspend fun updateMemberOpenProfileUrl(openProfileUrl: String): ApiResult<Unit> =
-        withContext(dispatcher) {
-            handleApi(
-                execute = {
-                    memberService.updateMemberOpenProfileUrl(
-                        MemberOpenProfileUrlUpdateRequest(openProfileUrl),
-                    )
-                },
-                mapToDomain = {},
-            )
-        }
-
-    override suspend fun addMemberActivities(activityIds: List<Long>): ApiResult<Unit> =
-        withContext(dispatcher) {
-            handleApi(
-                execute = {
-                    memberService.addMemberActivities(MemberActivitiesUpdateRequest(activityIds))
-                },
-                mapToDomain = {},
-            )
-        }
-
-    override suspend fun deleteMemberActivities(activityIds: List<Long>): ApiResult<Unit> =
-        withContext(dispatcher) {
-            handleApi(
-                execute = { memberService.deleteMemberActivities(activityIds) },
-                mapToDomain = { },
-            )
-        }
-
-    override suspend fun deleteMember(memberId: Long): ApiResult<Unit> = withContext(dispatcher) {
-        handleApi(
-            execute = { memberService.deleteMember(memberId) },
-            mapToDomain = {},
+    override suspend fun updateMemberDescription(
+        description: String,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        memberService.updateMemberDescription(
+            MemberDescriptionUpdateRequest(description),
         )
     }
 
-    override suspend fun blockMember(memberId: Long): ApiResult<Unit> = withContext(dispatcher) {
-        handleApi(
-            execute = { memberService.blockMember(MemberBlockCreateRequest(memberId)) },
-            mapToDomain = {},
+    override suspend fun updateMemberOpenProfileUrl(
+        openProfileUrl: String,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        memberService.updateMemberOpenProfileUrl(
+            MemberOpenProfileUrlUpdateRequest(openProfileUrl),
+        )
+    }
+
+    override suspend fun addMemberActivities(
+        activityIds: List<Long>,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        memberService.addMemberActivities(
+            MemberActivitiesUpdateRequest(activityIds),
+        )
+    }
+
+    override suspend fun deleteMemberActivities(
+        activityIds: List<Long>,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        memberService
+            .deleteMemberActivities(activityIds)
+            .map { }
+    }
+
+    override suspend fun deleteMember(
+        memberId: Long,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        memberService.deleteMember(memberId)
+    }
+
+    override suspend fun blockMember(
+        memberId: Long,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        memberService.blockMember(
+            MemberBlockCreateRequest(memberId),
         )
     }
 }

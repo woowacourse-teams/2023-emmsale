@@ -4,8 +4,7 @@ import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentNotificationReportCreateRequest
 import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
 import com.emmsale.data.apiModel.response.UpdatedNotificationResponse
-import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.handleApi
+import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.mapper.toRequestModel
 import com.emmsale.data.model.RecruitmentNotification
@@ -21,85 +20,63 @@ class DefaultNotificationRepository(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val notificationService: NotificationService,
 ) : NotificationRepository {
-    override suspend fun getRecruitmentNotifications(memberId: Long): ApiResult<List<RecruitmentNotification>> =
-        withContext(dispatcher) {
-            handleApi(
-                execute = { notificationService.getRecruitmentNotifications(memberId) },
-                mapToDomain = List<RecruitmentNotificationResponse>::toData,
-            )
-        }
+    override suspend fun getRecruitmentNotifications(
+        memberId: Long,
+    ): ApiResponse<List<RecruitmentNotification>> = withContext(dispatcher) {
+        notificationService
+            .getRecruitmentNotifications(memberId)
+            .map(List<RecruitmentNotificationResponse>::toData)
+    }
 
     override suspend fun updateRecruitmentStatus(
         notificationId: Long,
         recruitmentStatus: RecruitmentStatus,
-    ): ApiResult<Unit> = withContext(dispatcher) {
-        handleApi(
-            execute = {
-                notificationService.updateRecruitmentStatus(
-                    notificationId = notificationId,
-                    newStatus = recruitmentStatus.toRequestModel(),
-                )
-            },
-            mapToDomain = { },
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        notificationService.updateRecruitmentStatus(
+            notificationId = notificationId,
+            newStatus = recruitmentStatus.toRequestModel(),
         )
     }
 
     override suspend fun updateNotificationReadStatus(
         notificationId: Long,
-    ): ApiResult<Unit> = withContext(dispatcher) {
-        handleApi(
-            execute = { notificationService.updateNotificationReadStatus(notificationId) },
-            mapToDomain = { },
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        notificationService.updateNotificationReadStatus(notificationId)
+    }
+
+    override suspend fun getUpdatedNotifications(
+        memberId: Long,
+    ): ApiResponse<List<UpdatedNotification>> = withContext(dispatcher) {
+        notificationService
+            .getUpdatedNotifications(memberId)
+            .map(List<UpdatedNotificationResponse>::toData)
+    }
+
+    override suspend fun updateUpdatedNotificationReadStatus(
+        notificationId: Long,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        notificationService.updateUpdatedNotificationReadStatus(notificationId)
+    }
+
+    override suspend fun deleteUpdatedNotifications(
+        notificationIds: List<Long>,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        notificationService.deleteNotification(
+            NotificationListDeleteRequest(notificationIds),
         )
-    }
-
-    override suspend fun getUpdatedNotifications(memberId: Long): ApiResult<List<UpdatedNotification>> {
-        return withContext(dispatcher) {
-            handleApi(
-                execute = { notificationService.getUpdatedNotifications(memberId) },
-                mapToDomain = List<UpdatedNotificationResponse>::toData,
-            )
-        }
-    }
-
-    override suspend fun updateUpdatedNotificationReadStatus(notificationId: Long): ApiResult<Unit> {
-        return withContext(dispatcher) {
-            handleApi(
-                execute = { notificationService.updateUpdatedNotificationReadStatus(notificationId) },
-                mapToDomain = { },
-            )
-        }
-    }
-
-    override suspend fun deleteUpdatedNotifications(notificationIds: List<Long>): ApiResult<Unit> {
-        return withContext(dispatcher) {
-            handleApi(
-                execute = {
-                    notificationService.deleteNotification(
-                        NotificationListDeleteRequest(notificationIds),
-                    )
-                },
-                mapToDomain = { },
-            )
-        }
     }
 
     override suspend fun reportRecruitmentNotification(
         recruitmentNotificationId: Long,
         senderId: Long,
         reporterId: Long,
-    ): ApiResult<Unit> = withContext(dispatcher) {
-        handleApi(
-            execute = {
-                notificationService.reportRecruitmentNotification(
-                    RecruitmentNotificationReportCreateRequest.create(
-                        recruitmentNotificationId = recruitmentNotificationId,
-                        senderId = senderId,
-                        reporterId = reporterId,
-                    ),
-                )
-            },
-            mapToDomain = {},
-        )
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        notificationService.reportRecruitmentNotification(
+            RecruitmentNotificationReportCreateRequest.create(
+                recruitmentNotificationId = recruitmentNotificationId,
+                senderId = senderId,
+                reporterId = reporterId,
+            ),
+        ).map { }
     }
 }

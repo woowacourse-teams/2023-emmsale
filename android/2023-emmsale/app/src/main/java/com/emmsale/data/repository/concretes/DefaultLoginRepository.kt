@@ -1,8 +1,7 @@
 package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.response.LoginResponse
-import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.handleApi
+import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Login
 import com.emmsale.data.repository.interfaces.LoginRepository
@@ -15,10 +14,11 @@ class DefaultLoginRepository(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val loginService: LoginService,
 ) : LoginRepository {
-    override suspend fun saveGithubCode(code: String): ApiResult<Login> = withContext(dispatcher) {
-        handleApi(
-            execute = { loginService.saveGithubCode(code) },
-            mapToDomain = LoginResponse::toData,
-        )
+    override suspend fun saveGithubCode(
+        code: String,
+    ): ApiResponse<Login> = withContext(dispatcher) {
+        loginService
+            .saveGithubCode(code)
+            .map(LoginResponse::toData)
     }
 }

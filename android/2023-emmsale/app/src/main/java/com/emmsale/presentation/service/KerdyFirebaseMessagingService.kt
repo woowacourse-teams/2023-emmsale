@@ -1,12 +1,10 @@
 package com.emmsale.presentation.service
 
 import com.emmsale.R
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.common.ServiceFactory
-import com.emmsale.data.common.handleApi
-import com.emmsale.data.service.CommentService
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
@@ -63,14 +61,15 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     private fun showChildCommentNotification(message: RemoteMessage) {
         fun getEventIdAndParentCommentId(commentId: Long): Pair<Long, Long> {
             return runBlocking {
-                val eventIdResult = handleApi(
-                    execute = { commentService.getComment(commentId) },
-                    mapToDomain = { it.parentComment.eventId to it.parentComment.commentId },
-                )
-                when (eventIdResult) {
-                    is ApiError -> ERROR_EVENT_ID to ERROR_EVENT_ID
-                    is ApiException -> ERROR_EVENT_ID to ERROR_EVENT_ID
-                    is ApiSuccess -> eventIdResult.data
+                val commentRepository = KerdyApplication.repositoryContainer.commentRepository
+                when (val result = commentRepository.getComment(commentId)) {
+                    is Failure, NetworkError -> ERROR_EVENT_ID to ERROR_EVENT_ID
+                    is Success -> result.data.eventId to (
+                        result.data.parentId
+                            ?: throw IllegalArgumentException("대댓글만 알림을 받을 수 있습니다. 알림 메세지를 보내는 로직을 다시 확인해주세요.")
+                        )
+
+                    is Unexpected -> throw Throwable(result.error)
                 }
             }
         }
@@ -116,8 +115,5 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         private const val FOLLOW_NOTIFICATION_TYPE = "REQUEST"
         private const val CHILD_COMMENT_NOTIFICATION_TYPE = "COMMENT"
         private const val EVENT_NOTIFICATION_TYPE = "EVENT"
-
-        private val commentService: CommentService =
-            ServiceFactory().create(CommentService::class.java)
     }
 }

@@ -4,8 +4,7 @@ import com.emmsale.data.apiModel.request.ChildCommentCreateRequest
 import com.emmsale.data.apiModel.request.CommentReportCreateRequest
 import com.emmsale.data.apiModel.request.CommentUpdateRequest
 import com.emmsale.data.apiModel.response.CommentFamilyApiModel
-import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.handleApi
+import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Comment
 import com.emmsale.data.repository.interfaces.CommentRepository
@@ -19,42 +18,38 @@ class DefaultCommentRepository(
     private val commentService: CommentService,
 ) : CommentRepository {
 
-    override suspend fun getComments(eventId: Long): ApiResult<List<Comment>> =
-        withContext(dispatcher) {
-            handleApi(
-                execute = { commentService.getComments(eventId) },
-                mapToDomain = List<CommentFamilyApiModel>::toData,
-            )
-        }
+    override suspend fun getComments(
+        eventId: Long,
+    ): ApiResponse<List<Comment>> = withContext(dispatcher) {
+        commentService
+            .getComments(eventId)
+            .map(List<CommentFamilyApiModel>::toData)
+    }
 
-    override suspend fun getCommentsByMemberId(memberId: Long): ApiResult<List<Comment>> =
-        withContext(dispatcher) {
-            handleApi(
-                execute = { commentService.getCommentsByMemberId(memberId) },
-                mapToDomain = List<CommentFamilyApiModel>::toData,
-            )
-        }
+    override suspend fun getCommentsByMemberId(
+        memberId: Long,
+    ): ApiResponse<List<Comment>> = withContext(dispatcher) {
+        commentService
+            .getCommentsByMemberId(memberId)
+            .map(List<CommentFamilyApiModel>::toData)
+    }
 
-    override suspend fun getComment(commentId: Long): ApiResult<Comment> = withContext(dispatcher) {
-        handleApi(
-            execute = { commentService.getComment(commentId) },
-            mapToDomain = CommentFamilyApiModel::toData,
-        )
+    override suspend fun getComment(
+        commentId: Long,
+    ): ApiResponse<Comment> = withContext(dispatcher) {
+        commentService
+            .getComment(commentId)
+            .map(CommentFamilyApiModel::toData)
     }
 
     override suspend fun saveComment(
         content: String,
         eventId: Long,
         parentId: Long?,
-    ): ApiResult<Unit> = withContext(dispatcher) {
-        handleApi(
-            execute = {
-                commentService.saveComment(
-                    getSaveCommentRequestBody(content, eventId, parentId),
-                )
-            },
-            mapToDomain = {},
-        )
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        commentService
+            .saveComment(getSaveCommentRequestBody(content, eventId, parentId))
+            .map { }
     }
 
     private fun getSaveCommentRequestBody(
@@ -67,42 +62,32 @@ class DefaultCommentRepository(
         parentId = parentId,
     )
 
-    override suspend fun updateComment(commentId: Long, content: String): ApiResult<Unit> =
-        withContext(dispatcher) {
-            handleApi(
-                execute = {
-                    commentService.updateComment(
-                        commentId,
-                        CommentUpdateRequest(content),
-                    )
-                },
-                mapToDomain = {},
-            )
-        }
+    override suspend fun updateComment(
+        commentId: Long,
+        content: String,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        commentService
+            .updateComment(commentId, CommentUpdateRequest(content))
+            .map { }
+    }
 
-    override suspend fun deleteComment(commentId: Long): ApiResult<Unit> = withContext(dispatcher) {
-        handleApi(
-            execute = { commentService.deleteComment(commentId) },
-            mapToDomain = {},
-        )
+    override suspend fun deleteComment(
+        commentId: Long,
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        commentService.deleteComment(commentId)
     }
 
     override suspend fun reportComment(
         commentId: Long,
         authorId: Long,
         reporterId: Long,
-    ): ApiResult<Unit> = withContext(dispatcher) {
-        handleApi(
-            execute = {
-                commentService.reportComment(
-                    CommentReportCreateRequest.createCommentReport(
-                        commentId = commentId,
-                        authorId = authorId,
-                        reporterId = reporterId,
-                    ),
-                )
-            },
-            mapToDomain = {},
-        )
+    ): ApiResponse<Unit> = withContext(dispatcher) {
+        commentService.reportComment(
+            CommentReportCreateRequest.createCommentReport(
+                commentId = commentId,
+                authorId = authorId,
+                reporterId = reporterId,
+            ),
+        ).map { }
     }
 }

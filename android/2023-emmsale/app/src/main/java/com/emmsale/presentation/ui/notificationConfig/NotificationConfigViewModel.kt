@@ -1,10 +1,12 @@
 package com.emmsale.presentation.ui.notificationConfig
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.Config
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
@@ -59,11 +61,9 @@ class NotificationConfigViewModel(
             val memberId = tokenRepository.getToken()?.uid ?: return@launch
 
             when (val result = eventTagRepository.getInterestEventTags(memberId)) {
-                is ApiSuccess ->
-                    _notificationTags.value = NotificationTagsUiState.Success(result.data)
-
-                is ApiError, is ApiException ->
-                    _notificationTags.value = NotificationTagsUiState.Error
+                is Failure, NetworkError -> _notificationTags.value = NotificationTagsUiState.Error
+                is Success -> _notificationTags.value = NotificationTagsUiState.Success(result.data)
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -71,6 +71,7 @@ class NotificationConfigViewModel(
     private fun fetchNotificationConfig() {
         viewModelScope.launch {
             _notificationConfig.value = configRepository.getConfig()
+            Log.d("buna", "${_notificationConfig.value.isAutoLogin}")
         }
     }
 
@@ -110,10 +111,15 @@ class NotificationConfigViewModel(
             val removedInterestEventTag =
                 notificationTags.tags.filter { tag -> tag.id != eventTagId }
 
-            when (eventTagRepository.updateInterestEventTags(removedInterestEventTag)) {
-                is ApiSuccess -> fetchNotificationTags()
-                is ApiError, is ApiException ->
+            when (
+                val result =
+                    eventTagRepository.updateInterestEventTags(removedInterestEventTag)
+            ) {
+                is Failure, NetworkError ->
                     _uiEvent.value = Event(NotificationConfigUiEvent.INTEREST_TAG_REMOVE_ERROR)
+
+                is Success -> fetchNotificationTags()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

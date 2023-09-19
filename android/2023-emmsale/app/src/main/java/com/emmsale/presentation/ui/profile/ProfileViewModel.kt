@@ -4,9 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.BlockedMemberRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
@@ -54,29 +55,35 @@ class ProfileViewModel(
             }
             launch {
                 when (val result = memberRepository.getMember(memberId)) {
-                    is ApiError, is ApiException ->
+                    is Failure, NetworkError ->
                         _profile.value = _profile.value.changeToFetchingErrorState()
 
-                    is ApiSuccess ->
+                    is Success ->
                         _profile.value = _profile.value.changeMemberState(result.data, token.uid)
+
+                    is Unexpected -> throw Throwable(result.error)
                 }
             }
             launch {
                 when (val result = activityRepository.getActivities(memberId)) {
-                    is ApiError, is ApiException ->
+                    is Failure, NetworkError ->
                         _profile.value = _profile.value.changeToFetchingErrorState()
 
-                    is ApiSuccess ->
+                    is Success ->
                         _profile.value = _profile.value.changeActivityState(result.data)
+
+                    is Unexpected -> throw Throwable(result.error)
                 }
             }
             launch {
                 when (val result = blockedMemberRepository.getBlockedMembers()) {
-                    is ApiError, is ApiException ->
+                    is Failure, NetworkError ->
                         _profile.value = _profile.value.changeToFetchingErrorState()
 
-                    is ApiSuccess ->
+                    is Success ->
                         _blockedMembers.value = result.data.map { BlockedMemberUiState.from(it) }
+
+                    is Unexpected -> throw Throwable(result.error)
                 }
             }
         }
@@ -88,12 +95,14 @@ class ProfileViewModel(
 
     fun blockMember() {
         viewModelScope.launch {
-            when (memberRepository.blockMember(memberId)) {
-                is ApiError, is ApiException -> _event.value = ProfileEvent.BLOCK_FAIL
-                is ApiSuccess -> {
+            when (val result = memberRepository.blockMember(memberId)) {
+                is Failure, NetworkError -> _event.value = ProfileEvent.BLOCK_FAIL
+                is Success -> {
                     _event.value = ProfileEvent.BLOCK_COMPLETE
                     refresh()
                 }
+
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -102,12 +111,14 @@ class ProfileViewModel(
         viewModelScope.launch {
             val blockId = _blockedMembers.value.find { it.blockedMemberId == memberId }?.blockId
                 ?: return@launch
-            when (blockedMemberRepository.deleteBlockedMember(blockId)) {
-                is ApiError, is ApiException -> _event.value = ProfileEvent.UNBLOCK_FAIL
-                is ApiSuccess -> {
+            when (val result = blockedMemberRepository.deleteBlockedMember(blockId)) {
+                is Failure, NetworkError -> _event.value = ProfileEvent.UNBLOCK_FAIL
+                is Success -> {
                     _event.value = ProfileEvent.UNBLOCK_SUCCESS
                     refresh()
                 }
+
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

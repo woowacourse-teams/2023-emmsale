@@ -2,10 +2,7 @@ package com.emmsale.presentation.ui.competitionList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
@@ -57,17 +54,19 @@ class CompetitionViewModel(
     ) {
         viewModelScope.launch {
             _competitions.value = _competitions.value.copy(isLoading = true)
-            when (val eventsResult = getCompetitions(statuses, tags, startDate, endDate)) {
-                is ApiSuccess -> _competitions.value = _competitions.value.copy(
-                    competitions = eventsResult.data.map(CompetitionUiState::from),
+            when (val result = getCompetitions(statuses, tags, startDate, endDate)) {
+                is Failure, NetworkError -> _competitions.value = _competitions.value.copy(
+                    isError = true,
+                    isLoading = false,
+                )
+
+                is Success -> _competitions.value = _competitions.value.copy(
+                    competitions = result.data.map(CompetitionUiState::from),
                     isLoading = false,
                     isError = false,
                 )
 
-                is ApiError, is ApiException -> _competitions.value = _competitions.value.copy(
-                    isError = true,
-                    isLoading = false,
-                )
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -77,7 +76,7 @@ class CompetitionViewModel(
         tags: List<EventTag>,
         startDate: LocalDate?,
         endDate: LocalDate?,
-    ): ApiResult<List<Competition>> = eventRepository.getCompetitions(
+    ): ApiResponse<List<Competition>> = eventRepository.getCompetitions(
         statuses = statuses,
         tags = tags,
         startDate = startDate,
@@ -141,7 +140,15 @@ class CompetitionViewModel(
     private suspend fun getEventTagByIds(statusFilterIds: Array<Long>): List<EventTag> =
         when (val result = eventTagRepository.getEventTagByIds(statusFilterIds)) {
             is Success -> result.data
-            is Unexpected, is Failure, NetworkError -> emptyList()
+            is Failure, NetworkError -> {
+                _competitions.value = _competitions.value.copy(
+                    isError = true,
+                    isLoading = false,
+                )
+                emptyList()
+            }
+
+            is Unexpected -> throw Throwable(result.error)
         }
 
     fun removeFilteringOptionBy(filterOptionId: Long) {

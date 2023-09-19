@@ -2,9 +2,10 @@ package com.emmsale.presentation.ui.recruitmentWriting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logWriting
@@ -53,14 +54,15 @@ class RecruitmentPostWritingViewModel(
     fun postRecruitment(content: String) {
         changeToLoadingState()
         viewModelScope.launch {
-            when (val response = recruitmentRepository.postRecruitment(eventId, content)) {
-                is ApiSuccess -> {
-                    _postedRecruitmentId.postValue(response.data)
+            when (val result = recruitmentRepository.postRecruitment(eventId, content)) {
+                is Failure, NetworkError -> changeToErrorState()
+                is Success -> {
+                    _postedRecruitmentId.postValue(result.data)
                     changeToPostSuccessState()
                     logWriting("recruitment", content, eventId)
                 }
 
-                is ApiError, is ApiException -> changeToErrorState()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -72,9 +74,13 @@ class RecruitmentPostWritingViewModel(
             return
         }
         viewModelScope.launch {
-            when (recruitmentRepository.editRecruitment(eventId, recruitmentIdToEdit, content)) {
-                is ApiSuccess -> changeToEditSuccessState()
-                is ApiError, is ApiException -> changeToErrorState()
+            when (
+                val result =
+                    recruitmentRepository.editRecruitment(eventId, recruitmentIdToEdit, content)
+            ) {
+                is Failure, NetworkError -> changeToErrorState()
+                is Success -> changeToEditSuccessState()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
