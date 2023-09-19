@@ -32,7 +32,7 @@
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="ㄴㄴㄴ안녕ㄴㄴㄴ안녕ㄴㄴㄴ안녕ㄴㄴㄴ안녕ㄴㄴㄴ안녕ㄴㄴㄴ안녕ㄴㄴㄴ안녕" />
+            tools:text="행사 같이 가시는거 어떠세요?" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityMessageListBinding
+import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.ui.messageList.recyclerview.MessageListAdapter
 
 class MessageListActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
@@ -16,10 +18,14 @@ class MessageListActivity : AppCompatActivity() {
         )
     }
 
+    private lateinit var messageListAdapter: MessageListAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupBinding()
         setupToolbar()
+        setupMessageRecyclerView()
+        setupMessages()
     }
 
     private fun setupBinding() {
@@ -31,6 +37,18 @@ class MessageListActivity : AppCompatActivity() {
     private fun setupToolbar() {
         binding.tbMessageList.setNavigationOnClickListener {
             finish()
+        }
+    }
+
+    private fun setupMessageRecyclerView() {
+        messageListAdapter = MessageListAdapter()
+        binding.rvMessageList.adapter = messageListAdapter
+    }
+
+    private fun setupMessages() {
+        viewModel.messages.observe(this) { uiState ->
+            if (uiState.fetchResult != FetchResult.SUCCESS) return@observe
+            messageListAdapter.submitList(uiState.messages)
         }
     }
 

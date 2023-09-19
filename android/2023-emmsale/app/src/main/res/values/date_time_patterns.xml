@@ -4,5 +4,7 @@
     <string name="am_pm_hour_minute">a HH시 mm분</string>
     <string name="year_month_day">yyyy.MM.dd</string>
     <string name="month_day">MM.dd</string>
+    <string name="year_month_day_weekday">yyyy년 MM월 dd일 E요일</string>
+
     <string name="date_range" translatable="false">%s ~ %s</string>
 </resources>

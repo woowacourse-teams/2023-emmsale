@@ -22,7 +22,9 @@ class MessageListAdapter : ListAdapter<MessageUiState, MessageViewHolder>(Messag
         holder.bind(getItem(position))
     }
 
-    override fun getItemViewType(position: Int): Int = getItem(position).messageType.ordinal
+    override fun getItemViewType(position: Int): Int {
+        return getItem(position).messageType.ordinal
+    }
 
     companion object {
         private const val INVALID_VIEW_TYPE_ERROR = "[ERROR] 올바르지 않은 ViewType 입니다."

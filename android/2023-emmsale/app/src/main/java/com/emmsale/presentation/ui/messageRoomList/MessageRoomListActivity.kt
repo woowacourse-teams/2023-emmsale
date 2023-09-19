@@ -18,7 +18,7 @@ class MessageRoomListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setupBinding()
         setupMessageRoomRecyclerView()
-        setupMessageRoom()
+        setupMessageRooms()
     }
 
     private fun setupBinding() {
@@ -32,7 +32,7 @@ class MessageRoomListActivity : AppCompatActivity() {
         binding.rvMessageRoomList.adapter = messageRoomListAdapter
     }
 
-    private fun setupMessageRoom() {
+    private fun setupMessageRooms() {
         viewModel.messageRooms.observe(this) { uiState ->
             if (uiState.fetchResult != FetchResult.SUCCESS) return@observe
             messageRoomListAdapter.submitList(uiState.messageRooms)

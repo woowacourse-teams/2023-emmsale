@@ -1,16 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="message"
             type="com.emmsale.presentation.ui.messageList.uistate.MessageDateUiState" />
+
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:textColor="@color/gray"
+            android:textSize="10sp"
+            app:dateText="@{message.createdAt}"
+            app:dateTimeFormatter="@{DateTimePattern.YEAR_MONTH_DAY_WEEKDAY}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2023년 09월 17일 일요일" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
