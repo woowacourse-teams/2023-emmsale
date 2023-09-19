@@ -1,32 +1,19 @@
 package com.emmsale.presentation.ui.conferenceList.uiState
 
 import com.emmsale.data.model.Conference
-import com.emmsale.data.model.ConferenceStatus
 
 data class ConferenceUiState(
-    val id: Long,
-    val name: String,
-    val tags: List<String>,
-    val status: String,
-    val posterUrl: String?,
-    val isFree: Boolean,
-    val isOnline: Boolean,
+    val conference: Conference,
 ) {
+    fun getStatusString(): String = when (conference.status) {
+        Conference.Status.IN_PROGRESS -> "진행중"
+        Conference.Status.UPCOMING -> "D-${conference.dDay}"
+        Conference.Status.ENDED -> "마감"
+    }
+
     companion object {
         fun from(conference: Conference): ConferenceUiState = ConferenceUiState(
-            id = conference.id,
-            name = conference.name,
-            tags = conference.tags,
-            status = getStatus(conference),
-            posterUrl = conference.posterUrl,
-            isFree = conference.isFree,
-            isOnline = conference.isOnline,
+            conference,
         )
-
-        private fun getStatus(conference: Conference): String = when (conference.status) {
-            ConferenceStatus.IN_PROGRESS -> "진행중"
-            ConferenceStatus.SCHEDULED -> "D-${conference.dDay}"
-            ConferenceStatus.ENDED -> "마감"
-        }
     }
 }

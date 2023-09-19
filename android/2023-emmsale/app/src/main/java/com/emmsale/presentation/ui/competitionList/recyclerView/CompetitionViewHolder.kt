@@ -25,7 +25,7 @@ class CompetitionViewHolder(
     fun bind(event: CompetitionUiState) {
         binding.event = event
         binding.cgEventTags.removeAllViews()
-        event.tags.forEach(::addEventChip)
+        event.competition.tags.forEach(::addEventChip)
     }
 
     private fun addEventChip(tagName: String) {

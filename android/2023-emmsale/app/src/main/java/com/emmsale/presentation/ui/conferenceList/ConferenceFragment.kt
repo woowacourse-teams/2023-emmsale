@@ -130,7 +130,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     }
 
     private fun navigateToEventDetail(event: ConferenceUiState) {
-        EventDetailActivity.startActivity(requireContext(), event.id)
+        EventDetailActivity.startActivity(requireContext(), event.conference.id)
     }
 
     private fun navigateToEventFilter() {

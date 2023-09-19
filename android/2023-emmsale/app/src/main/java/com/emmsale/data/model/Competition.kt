@@ -7,12 +7,24 @@ data class Competition(
     val name: String,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
-    val status: CompetitionStatus,
+    val status: Status,
     val tags: List<String>,
     val posterUrl: String?,
     val dDay: Int,
-    val eventApplyStatus: EventApplyStatus,
+    val eventStatus: Status,
     val applyRemainingDays: Int,
-    val isOnline: Boolean,
-    val isFree: Boolean,
-)
+    val eventMode: EventMode,
+    val paymentType: PaymentType,
+) {
+    enum class Status {
+        IN_PROGRESS, UPCOMING, ENDED,
+    }
+
+    enum class EventMode {
+        ONLINE, OFFLINE, ON_OFFLINE,
+    }
+
+    enum class PaymentType {
+        PAID, FREE, PAID_OR_FREE,
+    }
+}

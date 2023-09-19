@@ -8,7 +8,7 @@ object ConferenceDiffUtil : DiffUtil.ItemCallback<ConferenceUiState>() {
         oldItem: ConferenceUiState,
         newItem: ConferenceUiState,
     ): Boolean =
-        oldItem.id == newItem.id
+        oldItem.conference.id == newItem.conference.id
 
     override fun areContentsTheSame(
         oldItem: ConferenceUiState,

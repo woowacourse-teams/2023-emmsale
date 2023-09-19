@@ -7,7 +7,7 @@ object CompetitionDiffUtil : DiffUtil.ItemCallback<CompetitionUiState>() {
     override fun areItemsTheSame(
         oldItem: CompetitionUiState,
         newItem: CompetitionUiState,
-    ): Boolean = oldItem.id == newItem.id
+    ): Boolean = oldItem.competition.id == newItem.competition.id
 
     override fun areContentsTheSame(
         oldItem: CompetitionUiState,

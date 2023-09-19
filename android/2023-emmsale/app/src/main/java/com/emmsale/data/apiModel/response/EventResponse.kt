@@ -16,20 +16,53 @@ data class ConferenceResponse(
     @SerialName("tags")
     val tags: List<String>,
     @SerialName("status")
-    val status: String,
+    val status: Status,
     @SerialName("applyStatus")
-    val applyStatus: String,
+    val applyStatus: Status,
     @SerialName("imageUrl")
     val posterUrl: String? = null,
     @SerialName("remainingDays")
     val dDay: Int,
     @SerialName("applyRemainingDays")
     val applyRemainingDays: Int,
-    @SerialName("isOnline")
-    val isOnline: Boolean = false,
-    @SerialName("isFree")
-    val isFree: Boolean = false,
-)
+    @SerialName("eventMode")
+    val eventMode: EventMode,
+    @SerialName("paymentType")
+    val paymentType: PaymentType,
+) {
+    enum class Status {
+        @SerialName("IN_PROGRESS")
+        IN_PROGRESS,
+
+        @SerialName("UPCOMING")
+        UPCOMING,
+
+        @SerialName("ENDED")
+        ENDED,
+    }
+
+    enum class EventMode {
+        @SerialName("온라인")
+        ONLINE,
+
+        @SerialName("오프라인")
+        OFFLINE,
+
+        @SerialName("온오프라인")
+        ON_OFFLINE,
+    }
+
+    enum class PaymentType {
+        @SerialName("유료")
+        PAID,
+
+        @SerialName("무료")
+        FREE,
+
+        @SerialName("유무료")
+        PAID_OR_FREE,
+    }
+}
 
 @Serializable
 data class CompetitionResponse(
@@ -44,20 +77,53 @@ data class CompetitionResponse(
     @SerialName("tags")
     val tags: List<String>,
     @SerialName("status")
-    val status: String,
+    val status: Status,
     @SerialName("applyStatus")
-    val applyStatus: String,
+    val applyStatus: Status,
     @SerialName("imageUrl")
     val posterUrl: String? = null,
     @SerialName("remainingDays")
     val dDay: Int,
     @SerialName("applyRemainingDays")
     val applyRemainingDays: Int,
-    @SerialName("isFree")
-    val isFree: Boolean = false,
-    @SerialName("isOnline")
-    val isOnline: Boolean = false,
-)
+    @SerialName("eventMode")
+    val eventMode: EventMode,
+    @SerialName("paymentType")
+    val paymentType: PaymentType,
+) {
+    enum class Status {
+        @SerialName("IN_PROGRESS")
+        IN_PROGRESS,
+
+        @SerialName("UPCOMING")
+        UPCOMING,
+
+        @SerialName("ENDED")
+        ENDED,
+    }
+
+    enum class EventMode {
+        @SerialName("온라인")
+        ONLINE,
+
+        @SerialName("오프라인")
+        OFFLINE,
+
+        @SerialName("온오프라인")
+        ON_OFFLINE,
+    }
+
+    enum class PaymentType {
+        @SerialName("유료")
+        PAID,
+
+        @SerialName("무료")
+        FREE,
+
+        @SerialName("유무료")
+        PAID_OR_FREE,
+    }
+}
 
 @Serializable
 data class EventDetailResponse(

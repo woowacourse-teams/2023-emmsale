@@ -12,7 +12,7 @@ class DefaultConferenceStatusRepository(
     override suspend fun getConferenceStatuses(): List<ConferenceStatus> = withContext(dispatcher) {
         listOf(
             ConferenceStatus.IN_PROGRESS,
-            ConferenceStatus.SCHEDULED,
+            ConferenceStatus.UPCOMING,
             ConferenceStatus.ENDED,
         )
     }

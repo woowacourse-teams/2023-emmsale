@@ -130,7 +130,7 @@ class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
     }
 
     private fun navigateToEventDetail(event: CompetitionUiState) {
-        EventDetailActivity.startActivity(requireContext(), event.id)
+        EventDetailActivity.startActivity(requireContext(), event.competition.id)
     }
 
     private fun navigateToEventFilter() {

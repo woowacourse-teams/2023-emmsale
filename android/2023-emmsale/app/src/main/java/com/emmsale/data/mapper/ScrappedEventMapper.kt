@@ -21,7 +21,7 @@ fun List<ScrappedEventResponse>.toData(): List<ScrappedEvent> = map {
 
 private fun String.toConferenceStatusData(): ConferenceStatus = when (this) {
     "IN_PROGRESS" -> ConferenceStatus.IN_PROGRESS
-    "UPCOMING" -> ConferenceStatus.SCHEDULED
+    "UPCOMING" -> ConferenceStatus.UPCOMING
     "ENDED" -> ConferenceStatus.ENDED
     else -> throw IllegalArgumentException("Unknown conference status: $this")
 }
