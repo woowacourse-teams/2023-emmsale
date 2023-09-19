@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.main.myProfile.MyProfileViewModel" />
+            type="com.emmsale.presentation.ui.myProfile.MyProfileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

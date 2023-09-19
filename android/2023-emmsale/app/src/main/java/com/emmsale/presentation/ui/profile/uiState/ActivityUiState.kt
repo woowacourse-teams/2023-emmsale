@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.profile.uiState
 
-import com.emmsale.data.activity.Activity
+import com.emmsale.data.model.Activity
 
 data class ActivityUiState(
     val id: Long,

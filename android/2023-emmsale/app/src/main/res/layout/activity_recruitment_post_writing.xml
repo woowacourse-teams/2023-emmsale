@@ -9,14 +9,14 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingViewModel" />
+            type="com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.eventdetail.recruitment.writing.RecruitmentPostWritingActivity">
+        tools:context=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarlayout_recruitmentwriting"

@@ -10,7 +10,7 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.main.event.scrap.ScrappedEventViewModel" />
+            type="com.emmsale.presentation.ui.scrappedEventList.ScrappedEventViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

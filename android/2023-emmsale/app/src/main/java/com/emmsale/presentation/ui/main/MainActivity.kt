@@ -10,9 +10,9 @@ import androidx.fragment.app.commitNow
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.main.event.EventFragment
-import com.emmsale.presentation.ui.main.myProfile.MyProfileFragment
-import com.emmsale.presentation.ui.main.setting.SettingFragment
+import com.emmsale.presentation.ui.eventPageList.EventFragment
+import com.emmsale.presentation.ui.myProfile.MyProfileFragment
+import com.emmsale.presentation.ui.setting.SettingFragment
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }

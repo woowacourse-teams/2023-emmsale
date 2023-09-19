@@ -7,242 +7,221 @@
 
         <import type="android.view.View" />
 
+        <import type="kotlin.jvm.functions.Function1" />
+
+        <import type="kotlin.Unit" />
+
+        <import type="com.emmsale.presentation.common.FetchResult" />
+
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.eventdetail.EventDetailViewModel" />
+            type="com.emmsale.presentation.ui.eventDetail.EventDetailViewModel" />
+
+        <variable
+            name="navigateToUrl"
+            type="Function1&lt;String, Unit>" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        tools:context=".presentation.ui.eventdetail.EventDetailActivity">
+        android:background="@color/white">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarlayout_eventdetail"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/white"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_eventdetail_backpress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:padding="21dp"
-                android:src="@drawable/ic_all_arrowback" />
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_event_detail_event_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingBottom="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appbarlayout_eventdetail">
-
-            <TextView
-                android:id="@+id/tv_eventdetail_eventname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="11dp"
-                android:ems="12"
-                android:fontFamily="@font/nanum_square_bold"
-                android:lineHeight="20dp"
-                android:text="@{vm.eventDetail.name}"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventstatus"
-                tools:text="제 4회 대학생 나눔봉사 해커톤 프로그램" />
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipgroup_evendetail_tags"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="33dp"
-                android:layout_marginEnd="17dp"
-                app:layout_constraintEnd_toStartOf="@id/iv_eventdetail_poster"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_eventname" />
-
-            <View
-                android:id="@+id/line_eventdetail_top"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/light_gray"
-                app:layout_constraintTop_toBottomOf="@id/chipgroup_evendetail_tags" />
-
-            <TextView
-                android:id="@+id/tv_eventdetail_eventstatus"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="11dp"
-                android:fontFamily="@font/nanum_square_bold"
-                android:text="@{vm.eventDetail.status}"
-                android:textColor="@color/primary_color"
-                android:textSize="13sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="진행중" />
+                app:contentScrim="@color/white"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/iv_eventdetail_poster"
-                android:layout_width="100dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="17dp"
-                app:layout_constraintBottom_toBottomOf="@+id/chipgroup_evendetail_tags"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    app:imageUrl="@{vm.eventDetail.imageUrl}"
-                    tools:srcCompat="@tools:sample/avatars" />
-            </com.google.android.material.card.MaterialCardView>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="?attr/actionBarSize">
 
-            <TextView
-                android:id="@+id/tv_eventdetail_eventplace"
-                android:layout_width="wrap_content"
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_eventdetail_poster"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginHorizontal="17dp"
+                        app:imageUrl="@{vm.eventDetail.eventDetail.posterImageUrl}"
+                        app:layout_collapseMode="none"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="326:180"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:roundedImageRadius="@{15}"
+                        tools:src="@drawable/img_all_loading" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/tb_eventdetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/ic_all_arrowback" />
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_event_detail_event_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="45dp"
-                android:layout_marginTop="17dp"
-                android:drawablePadding="12dp"
-                android:fontFamily="@font/nanum_square_regular"
-                android:text="@{vm.eventDetail.location}"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_event_detail_place_title"
-                app:layout_constraintTop_toBottomOf="@+id/line_eventdetail_top"
-                tools:text="삼성동 코엑스 몰 2층 101" />
+                android:background="@color/white"
+                android:paddingBottom="20dp"
+                app:layout_anchor="@id/appbarlayout_eventdetail"
+                app:layout_anchorGravity="bottom">
 
-            <TextView
-                android:id="@+id/tv_event_detail_place_title"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/tv_eventdetail_eventstatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="11dp"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:text="@{vm.eventDetail.eventDetail.status}"
+                    android:textColor="@color/primary_color"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="D-Day" />
+
+                <TextView
+                    android:id="@+id/tv_eventdetail_eventname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="9dp"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:text="@{vm.eventDetail.eventDetail.name}"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventstatus"
+                    tools:text="AWS 부산 클라우드데이 2023 AWS" />
+
+                <TextView
+                    android:id="@+id/tv_eventdetail_organization"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="17dp"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:text="@{vm.eventDetail.eventDetail.organization}"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_eventname"
+                    tools:text="부산정보산업진흥원" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipgroup_evendetail_tags"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="17dp"
+                    android:layout_marginTop="23dp"
+                    app:eventChips="@{vm.eventDetail.eventDetail.tags}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_organization" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tablayout_eventdetail"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="17dp"
-                android:fontFamily="@font/nanum_square_bold"
-                android:text="@string/eventdetail_place"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/line_eventdetail_top" />
-
-            <TextView
-                android:id="@+id/tv_eventdetail_eventdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
-                android:drawablePadding="12dp"
-                android:fontFamily="@font/nanum_square_regular"
-                android:text="@{@string/eventdetail_date_format(vm.eventDetail.startDate,vm.eventDetail.endDate)}"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@+id/tv_eventdetail_eventplace"
-                app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventplace"
-                tools:text="2023.8.15 12:00 " />
-
-            <TextView
-                android:id="@+id/tv_event_detail_date_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="13dp"
-                android:fontFamily="@font/nanum_square_bold"
-                android:text="@string/eventdetail_date"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_event_detail_place_title" />
-
-            <TextView
-                android:id="@+id/tv_eventdetail_apply_date_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="13dp"
-                android:fontFamily="@font/nanum_square_bold"
-                android:text="@string/eventdetail_apply_date"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_event_detail_date_title" />
-
-            <TextView
-                android:id="@+id/tv_event_detail_apply_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
-                android:fontFamily="@font/nanum_square_regular"
-                android:text="@{@string/eventdetail_date_format(vm.eventDetail.applyStartDate,vm.eventDetail.applyEndDate)}"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@+id/tv_eventdetail_eventdate"
-                app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventdate"
-                tools:text="2023.08.15 12:00 ~ 2023.08.17 17:00" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tablayout_eventdetail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_event_detail_event_container"
-            app:tabBackground="@drawable/bg_tablayout_indicator"
-            app:tabIndicatorColor="@color/primary_color"
-            app:tabIndicatorFullWidth="true"
-            app:tabIndicatorHeight="2dp"
-            app:tabSelectedTextAppearance="@style/EventDetail_SelectedTabStyle"
-            app:tabSelectedTextColor="@color/primary_color"
-            app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle"
-            app:tabTextColor="@color/black" />
+                app:tabBackground="@drawable/bg_tablayout_indicator"
+                app:tabIndicatorColor="@color/primary_color"
+                app:tabIndicatorFullWidth="true"
+                app:tabIndicatorHeight="2dp"
+                app:tabSelectedTextAppearance="@style/EventDetail_SelectedTabStyle"
+                app:tabSelectedTextColor="@color/primary_color"
+                app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle"
+                app:tabTextColor="@color/black" />
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_eventdetail"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="93dp"
             android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tablayout_eventdetail" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_eventdetail_bottom_contatiner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bg_shadow">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_eventdetail_navigatewebsite"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="17dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_all_two_state_button"
+                android:fontFamily="@font/nanum_square_bold"
+                android:onClick="@{_ -> navigateToUrl.invoke(vm.eventDetail.eventDetail.informationUrl)}"
+                android:stateListAnimator="@null"
+                android:text="@string/eventinformation_navigate_website"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_eventdetail_scrap"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_eventdetail_scrap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:clickable="true"
+                android:onClick="@{()->vm.handleEventScrap()}"
+                android:padding="6dp"
+                android:src="@{vm.isScraped ? @drawable/ic_all_scrap_checked : @drawable/ic_all_scrap_unchecked}"
+                app:layout_constraintBottom_toTopOf="@+id/tv_eventdetail_scrap"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_eventdetail_scrap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/nanum_square_regular"
+                android:text="@string/eventinfromation_scrap"
+                android:textColor="@color/gray"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{vm.eventDetail.isLoading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/appbarlayout_eventdetail"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"
+            android:visibility="@{vm.eventDetail.fetchResult == FetchResult.LOADING ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone" />
 
         <include
             layout="@layout/layout_all_error_screen"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@color/white"
             android:clickable="true"
-            android:visibility="@{vm.eventDetail.isError ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appbarlayout_eventdetail"
+            android:visibility="@{vm.eventDetail.fetchResult == FetchResult.ERROR ? View.VISIBLE : View.GONE}"
             bind:viewModel="@{vm}"
             tools:visibility="gone" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.main.setting.openProfileUrl.OpenProfileUrlConfigViewModel" />
+            type="com.emmsale.presentation.ui.openProfileUrlConfig.OpenProfileUrlConfigViewModel" />
 
     </data>
 
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.main.setting.openProfileUrl.OpenProfileUrlConfigActivity">
+        tools:context=".presentation.ui.openProfileUrlConfig.OpenProfileUrlConfigActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_open_profile_url_config"

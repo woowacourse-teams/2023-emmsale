@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.eventdetail.comment.CommentViewModel" />
+            type="com.emmsale.presentation.ui.commentList.CommentViewModel" />
 
         <variable
             name="cancelUpdateComment"

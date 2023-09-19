@@ -5,13 +5,13 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionUiState" />
+        <import type="com.emmsale.presentation.ui.competitionList.uiState.CompetitionUiState" />
 
         <import type="kotlin.Unit" />
 
         <variable
             name="event"
-            type="com.emmsale.presentation.ui.main.event.competition.uistate.CompetitionUiState" />
+            type="com.emmsale.presentation.ui.competitionList.uiState.CompetitionUiState" />
 
         <variable
             name="onClickCompetition"

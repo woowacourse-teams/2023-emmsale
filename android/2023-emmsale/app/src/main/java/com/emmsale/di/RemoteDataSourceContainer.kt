@@ -1,6 +1,6 @@
 package com.emmsale.di
 
-import com.emmsale.data.eventTag.remote.EventTagRemoteDataSource
+import com.emmsale.data.dataSource.remote.EventTagRemoteDataSource
 
 class RemoteDataSourceContainer(
     serviceContainer: ServiceContainer,

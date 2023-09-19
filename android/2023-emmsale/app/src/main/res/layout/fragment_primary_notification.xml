@@ -8,18 +8,18 @@
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.ui.notificationBox.primaryNotification.uistate.PrimaryNotificationScreenUiState" />
+        <import type="com.emmsale.presentation.ui.primaryNotificationList.uiState.PrimaryNotificationScreenUiState" />
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.notificationBox.primaryNotification.PrimaryNotificationViewModel" />
+            type="com.emmsale.presentation.ui.primaryNotificationList.PrimaryNotificationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.notificationBox.primaryNotification.PrimaryNotificationFragment">
+        tools:context=".presentation.ui.primaryNotificationList.PrimaryNotificationFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_primarynotification_notifications"

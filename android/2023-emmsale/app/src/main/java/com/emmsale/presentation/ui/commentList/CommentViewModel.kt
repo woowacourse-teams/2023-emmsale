@@ -1,0 +1,152 @@
+package com.emmsale.presentation.ui.commentList
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
+import com.emmsale.data.repository.interfaces.CommentRepository
+import com.emmsale.data.repository.interfaces.TokenRepository
+import com.emmsale.presentation.KerdyApplication
+import com.emmsale.presentation.common.firebase.analytics.logComment
+import com.emmsale.presentation.common.livedata.NotNullLiveData
+import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.Refreshable
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
+import com.emmsale.presentation.ui.commentList.uiState.CommentsUiEvent
+import com.emmsale.presentation.ui.commentList.uiState.CommentsUiState
+import kotlinx.coroutines.launch
+
+class CommentViewModel(
+    private val eventId: Long,
+    private val tokenRepository: TokenRepository,
+    private val commentRepository: CommentRepository,
+) : ViewModel(), Refreshable {
+
+    private val _isLogin = NotNullMutableLiveData(true)
+    val isLogin: NotNullLiveData<Boolean> = _isLogin
+
+    private val _comments = NotNullMutableLiveData(CommentsUiState.Loading)
+    val comments: NotNullLiveData<CommentsUiState> = _comments
+
+    private val _editingCommentId = MutableLiveData<Long?>()
+    val editingCommentId: LiveData<Long?> = _editingCommentId
+    val editingCommentContent =
+        _editingCommentId.map { _comments.value.comments.find { comment -> comment.id == it }?.content }
+
+    private val _event = MutableLiveData<CommentsUiEvent?>(null)
+    val event: LiveData<CommentsUiEvent?> = _event
+
+    override fun refresh() {
+        _comments.value = _comments.value.changeToLoadingState()
+        viewModelScope.launch {
+            val token = tokenRepository.getToken()
+            if (token == null) {
+                _isLogin.value = false
+                return@launch
+            }
+
+            when (val result = commentRepository.getComments(eventId)) {
+                is Failure, NetworkError ->
+                    _comments.value = _comments.value.changeToFetchingErrorState()
+
+                is Success ->
+                    _comments.value =
+                        _comments.value.changeCommentsState(result.data, token.uid)
+
+                is Unexpected -> throw Throwable(result.error)
+            }
+        }
+    }
+
+    fun saveComment(content: String, eventId: Long) {
+        viewModelScope.launch {
+            when (val result = commentRepository.saveComment(content, eventId)) {
+                is Failure, NetworkError -> {
+                    _event.value = CommentsUiEvent.POST_ERROR
+                    logComment(content, eventId)
+                }
+
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
+            }
+        }
+    }
+
+    fun updateComment(commentId: Long, content: String) {
+        viewModelScope.launch {
+            when (val result = commentRepository.updateComment(commentId, content)) {
+                is Failure, NetworkError -> _event.value = CommentsUiEvent.UPDATE_ERROR
+                is Success -> {
+                    _editingCommentId.value = null
+                    refresh()
+                }
+
+                is Unexpected -> throw Throwable(result.error)
+            }
+        }
+    }
+
+    fun deleteComment(commentId: Long) {
+        viewModelScope.launch {
+            when (val result = commentRepository.deleteComment(commentId)) {
+                is Failure, NetworkError -> _event.value = CommentsUiEvent.DELETE_ERROR
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
+            }
+        }
+    }
+
+    fun setEditMode(isEditMode: Boolean, commentId: Long = -1) {
+        if (!isEditMode) {
+            _editingCommentId.value = null
+            return
+        }
+        _editingCommentId.value = commentId
+    }
+
+    fun reportComment(commentId: Long) {
+        viewModelScope.launch {
+            val token = tokenRepository.getToken()
+            if (token == null) {
+                _isLogin.value = false
+                return@launch
+            }
+            val authorId =
+                _comments.value.comments.find { it.id == commentId }?.authorId ?: return@launch
+            when (val result = commentRepository.reportComment(commentId, authorId, token.uid)) {
+                is Failure -> {
+                    if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
+                        _event.value = CommentsUiEvent.REPORT_DUPLICATE
+                    } else {
+                        _event.value = CommentsUiEvent.REPORT_ERROR
+                    }
+                }
+
+                NetworkError -> _event.value = CommentsUiEvent.REPORT_ERROR
+                is Success -> _event.value = CommentsUiEvent.REPORT_COMPLETE
+                is Unexpected -> throw Throwable(result.error)
+            }
+        }
+    }
+
+    fun removeEvent() {
+        _event.value = null
+    }
+
+    companion object {
+        private const val REPORT_DUPLICATE_ERROR_CODE = 400
+
+        fun factory(eventId: Long) = ViewModelFactory {
+            CommentViewModel(
+                eventId = eventId,
+                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
+                commentRepository = KerdyApplication.repositoryContainer.commentRepository,
+            )
+        }
+    }
+}

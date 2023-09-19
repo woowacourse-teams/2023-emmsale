@@ -4,17 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
-import com.emmsale.data.config.ConfigRepository
-import com.emmsale.data.fcmToken.FcmTokenRepository
-import com.emmsale.data.login.Login
-import com.emmsale.data.login.LoginRepository
-import com.emmsale.data.token.TokenRepository
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
+import com.emmsale.data.model.Login
+import com.emmsale.data.repository.interfaces.ConfigRepository
+import com.emmsale.data.repository.interfaces.FcmTokenRepository
+import com.emmsale.data.repository.interfaces.LoginRepository
+import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
-import com.emmsale.presentation.ui.login.uistate.LoginUiState
+import com.emmsale.presentation.ui.login.uiState.LoginUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -32,10 +33,10 @@ class LoginViewModel(
         changeLoginState(LoginUiState.Loading)
 
         viewModelScope.launch {
-            when (val loginResult = loginRepository.saveGithubCode(code)) {
-                is ApiSuccess -> saveTokens(loginResult.data, fcmToken)
-                is ApiError -> changeLoginState(LoginUiState.Error)
-                is ApiException -> changeLoginState(LoginUiState.Error)
+            when (val result = loginRepository.saveGithubCode(code)) {
+                is Failure, NetworkError -> changeLoginState(LoginUiState.Error)
+                is Success -> saveTokens(result.data, fcmToken)
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

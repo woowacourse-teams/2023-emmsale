@@ -5,13 +5,13 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState" />
+        <import type="com.emmsale.presentation.ui.conferenceList.uiState.ConferenceUiState" />
 
         <import type="kotlin.Unit" />
 
         <variable
             name="event"
-            type="com.emmsale.presentation.ui.main.event.conference.uistate.ConferenceUiState" />
+            type="com.emmsale.presentation.ui.conferenceList.uiState.ConferenceUiState" />
 
         <variable
             name="onClickConference"
@@ -109,6 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="10dp"
+            app:eventChips="@{event.tags}"
             app:layout_constraintEnd_toEndOf="@+id/iv_event_poster"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/tv_is_free" />
