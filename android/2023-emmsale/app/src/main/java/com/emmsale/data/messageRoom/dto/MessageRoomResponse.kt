@@ -9,6 +9,8 @@ data class MessageRoomResponse(
     val roomId: Long,
     @SerialName("interlocutorId")
     val senderId: Long,
+    @SerialName("interlocutorProfile")
+    val senderProfileImageUrl: String,
     @SerialName("interlocutorName")
     val senderName: String,
     @SerialName("interlocutorAvatar")
