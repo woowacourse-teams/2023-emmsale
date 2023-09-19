@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.emmsale.presentation.ui.messageList.MessageListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.messageList.MessageListActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_event_filter"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            android:keepScreenOn="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@{vm.otherMember.name}"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle"
+            tools:title="김커디" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

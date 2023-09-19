@@ -18,6 +18,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".presentation.ui.messageList.MessageListActivity"
+            android:exported="true" />
+        <activity android:name=".presentation.ui.messageRoomList.MessageRoomListActivity" />
+        <activity
             android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -25,6 +29,7 @@
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -119,9 +124,6 @@
                     android:scheme="kerdy" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".presentation.ui.messageRoomList.MessageRoomListActivity"
-            android:exported="true" />
 
         <service
             android:name=".presentation.service.KerdyFirebaseMessagingService"
@@ -131,4 +133,5 @@
             </intent-filter>
         </service>
     </application>
+
 </manifest>
