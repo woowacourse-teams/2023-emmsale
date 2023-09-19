@@ -58,7 +58,8 @@
                 android:paddingBottom="12dp"
                 android:scrollbars="none"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="12" />
+                tools:itemCount="12"
+                tools:listitem="@layout/item_other_message" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

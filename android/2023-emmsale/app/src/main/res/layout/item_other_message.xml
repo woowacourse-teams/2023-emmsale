@@ -51,6 +51,8 @@
             android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
             android:text="@{message.message}"
+            android:textColor="@color/black"
+            android:textSize="12sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_member_name"

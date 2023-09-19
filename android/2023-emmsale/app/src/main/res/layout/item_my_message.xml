@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
 
         <variable
             name="message"
@@ -10,8 +14,26 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="@{message.message.isEmpty() ? View.GONE : View.VISIBLE}">
 
+        <com.emmsale.presentation.common.views.WrapWidthTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="17dp"
+            android:background="@drawable/bg_mymessage_message"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp"
+            android:text="@{message.message}"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ㄴㄴㄴ안녕ㄴㄴㄴ안녕ㄴㄴㄴ안녕ㄴㄴㄴ안녕ㄴㄴㄴ안녕ㄴㄴㄴ안녕ㄴㄴㄴ안녕" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
