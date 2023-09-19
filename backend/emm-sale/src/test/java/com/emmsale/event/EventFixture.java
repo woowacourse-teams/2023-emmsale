@@ -22,8 +22,8 @@ public class EventFixture {
         "http://infcon.com",
         EventType.CONFERENCE,
         "https://image.url",
-        PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE
+        PaymentType.PAID,
+        EventMode.OFFLINE
     );
   }
 

@@ -33,17 +33,23 @@ public class EventResponse {
   private final String imageUrl;
   private final int remainingDays;
   private final int applyRemainingDays;
+  private final String eventMode;
+  private final String paymentType;
 
-  public static List<EventResponse> makeEventResponsesByStatus(final LocalDate today,
+  public static List<EventResponse> makeEventResponsesByStatus(
+      final LocalDate today,
       final EventStatus status,
-      final List<Event> events) {
+      final List<Event> events
+  ) {
     return events.stream()
         .map(event -> EventResponse.from(today, status, event))
         .collect(toList());
   }
 
-  public static List<EventResponse> mergeEventResponses(final LocalDate today,
-      final Map<EventStatus, List<Event>> groupByEventStatus) {
+  public static List<EventResponse> mergeEventResponses(
+      final LocalDate today,
+      final Map<EventStatus, List<Event>> groupByEventStatus
+  ) {
     return groupByEventStatus.entrySet().stream()
         .map(entry -> makeEventResponsesByStatus(today, entry.getKey(), entry.getValue()))
         .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
@@ -52,21 +58,24 @@ public class EventResponse {
         });
   }
 
-  private static EventResponse from(final LocalDate today, final EventStatus status,
-      final Event event) {
-    return
-        new EventResponse(
-            event.getId(),
-            event.getName(),
-            event.getEventPeriod().getStartDate(),
-            event.getEventPeriod().getEndDate(),
-            event.extractTags(),
-            status.name(),
-            event.getEventPeriod().calculateEventApplyStatus(today).name(),
-            event.getImageUrl(),
-            event.getEventPeriod().calculateRemainingDays(today),
-            event.getEventPeriod().calculateApplyRemainingDays(today)
-        );
+  private static EventResponse from(
+      final LocalDate today,
+      final EventStatus status,
+      final Event event
+  ) {
+    return new EventResponse(
+        event.getId(),
+        event.getName(),
+        event.getEventPeriod().getStartDate(),
+        event.getEventPeriod().getEndDate(),
+        event.extractTags(),
+        status.name(),
+        event.getEventPeriod().calculateEventApplyStatus(today).name(),
+        event.getImageUrl(),
+        event.getEventPeriod().calculateRemainingDays(today),
+        event.getEventPeriod().calculateApplyRemainingDays(today),
+        event.getEventMode().getValue(),
+        event.getPaymentType().getValue()
+    );
   }
-
 }

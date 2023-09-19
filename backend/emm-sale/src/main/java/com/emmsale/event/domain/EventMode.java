@@ -1,5 +1,8 @@
 package com.emmsale.event.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum EventMode {
 
   ONLINE("온라인"),
