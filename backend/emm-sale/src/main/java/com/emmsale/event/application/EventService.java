@@ -133,9 +133,11 @@ public class EventService {
         );
   }
 
-  private List<EventResponse> filterByStatuses(final LocalDate today,
+  private List<EventResponse> filterByStatuses(
+      final LocalDate today,
       final List<EventStatus> statuses,
-      final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus
+  ) {
     if (isExistStatusName(statuses)) {
       return filterEventResponseByStatuses(today, statuses, eventsForEventStatus);
     }
@@ -146,9 +148,11 @@ public class EventService {
     return statuses != null;
   }
 
-  private List<EventResponse> filterEventResponseByStatuses(final LocalDate today,
+  private List<EventResponse> filterEventResponseByStatuses(
+      final LocalDate today,
       final List<EventStatus> statuses,
-      final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus
+  ) {
     return eventsForEventStatus.entrySet()
         .stream()
         .filter(entry -> statuses.contains(entry.getKey()))

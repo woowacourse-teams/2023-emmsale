@@ -236,3 +236,9 @@ create table image
     order_number int         not null,
     created_at   datetime(6)
 );
+
+-- 2023-09-14 16:43
+alter table event
+    add column payment_type varchar(50) not null;
+alter table event
+    add column event_mode varchar(50) not null;
