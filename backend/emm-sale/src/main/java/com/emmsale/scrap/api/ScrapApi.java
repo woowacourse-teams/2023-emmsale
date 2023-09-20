@@ -1,10 +1,10 @@
 package com.emmsale.scrap.api;
 
+import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.scrap.application.ScrapCommandService;
 import com.emmsale.scrap.application.ScrapQueryService;
 import com.emmsale.scrap.application.dto.ScrapRequest;
-import com.emmsale.scrap.application.dto.ScrapResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class ScrapApi {
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public List<ScrapResponse> findAllScraps(final Member member) {
+  public List<EventResponse> findAllScraps(final Member member) {
     return scrapQueryService.findAllScraps(member);
   }
 
