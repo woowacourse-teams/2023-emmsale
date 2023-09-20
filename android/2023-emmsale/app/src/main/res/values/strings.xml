@@ -382,5 +382,6 @@
     <string name="messagelist_message_send_hint">메세지를 입력하세요.</string>
     <string name="messagelist_send_message">입력</string>
     <string name="messagelist_refresh_desc">새로고침</string>
+    <string name="messagelist_not_found_other_member">대화 상대를 찾을 수 없어요 😥</string>
 
 </resources>

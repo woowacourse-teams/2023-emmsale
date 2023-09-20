@@ -9,6 +9,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityMessageListBinding
 import com.emmsale.presentation.common.EventObserver
 import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.messageList.recyclerview.MessageListAdapter
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
 import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
@@ -74,6 +75,7 @@ class MessageListActivity : AppCompatActivity() {
     private fun handleEvent(event: MessageListUiEvent) {
         when (event) {
             MessageListUiEvent.MESSAGE_SENT -> binding.etMessageInput.text.clear()
+            MessageListUiEvent.NOT_FOUND_OTHER_MEMBER -> binding.root.showSnackBar(R.string.messagelist_not_found_other_member)
         }
     }
 
