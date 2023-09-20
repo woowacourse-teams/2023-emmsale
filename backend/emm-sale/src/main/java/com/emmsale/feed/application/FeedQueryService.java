@@ -53,7 +53,7 @@ public class FeedQueryService {
 
     final List<FeedSimpleResponse> feedSimpleResponses = commentCountByFeed.entrySet().stream()
         .map(FeedSimpleResponse::from)
-        .sorted(Comparator.comparing(FeedSimpleResponse::getCreatedAt).reversed())
+        .sorted(Comparator.comparing(FeedSimpleResponse::getUpdatedAt).reversed())
         .collect(Collectors.toList());
 
     return new FeedListResponse(eventId, feedSimpleResponses);

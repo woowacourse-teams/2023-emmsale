@@ -11,14 +11,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FeedSimpleResponse {
 
-  public static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
+  private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
 
   private final Long id;
   private final String title;
+  private final String content;
   private final Long writerId;
-  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final Long commentsCount;
-  private final LocalDateTime createdAt;
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime updatedAt;
 
   public static FeedSimpleResponse from(final Entry<Feed, Long> entry) {
     final Feed feed = entry.getKey();
@@ -27,9 +28,10 @@ public class FeedSimpleResponse {
     return new FeedSimpleResponse(
         feed.getId(),
         feed.getTitle(),
+        feed.getContent(),
         feed.getWriter().getId(),
         commentCount,
-        feed.getCreatedAt()
+        feed.getUpdatedAt()
     );
   }
 }
