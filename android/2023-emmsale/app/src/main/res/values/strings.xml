@@ -370,4 +370,5 @@
     <string name="post_writing_title_hint">글 제목</string>
     <string name="post_writing_content_hint">내용을 입력하세요.</string>
     <string name="post_writing_upload_error">업로드에 실패하였습니다</string>
+    <string name="post_writing_empty_title_content_message">제목 또는 내용을 채워주세요!!</string>
 </resources>

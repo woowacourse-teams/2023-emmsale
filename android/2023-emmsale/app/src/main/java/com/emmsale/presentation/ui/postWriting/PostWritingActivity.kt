@@ -2,7 +2,10 @@ package com.emmsale.presentation.ui.postWriting
 
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,7 +40,17 @@ class PostWritingActivity : AppCompatActivity() {
     private val photoPicker = registerForActivityResult(
         ActivityResultContracts.PickMultipleVisualMedia(MAX_IMAGE_COUNT),
     ) { uris ->
-        viewModel.fetchImageUrls(uris.map { it.toString() })
+        viewModel.fetchImageUrls(uris.map { getAbsolutePathFromUri(it) ?: "" })
+    }
+
+    private fun getAbsolutePathFromUri(uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = contentResolver.query(uri, projection, null, null, null)
+        return cursor?.use {
+            val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            it.moveToFirst()
+            it.getString(columnIndex)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +102,13 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     private fun uploadPost() {
+        // 임시로 일단 Activitiy
+        val title = binding.etPostWritingTitle.text.toString()
+        val content = binding.etPostWritingContent.text.toString()
+        if (title.isBlank() || content.isBlank()) {
+            showToast(getString(R.string.post_writing_empty_title_content_message))
+            return
+        }
         viewModel.uploadPost(
             title = binding.etPostWritingTitle.text.toString(),
             content = binding.etPostWritingContent.text.toString(),
