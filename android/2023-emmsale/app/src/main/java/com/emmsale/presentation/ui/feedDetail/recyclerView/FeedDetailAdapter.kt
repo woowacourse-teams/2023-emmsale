@@ -3,6 +3,7 @@ package com.emmsale.presentation.ui.feedDetail.recyclerView
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder.FeedDetailViewHolder
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
 
 class FeedDetailAdapter(

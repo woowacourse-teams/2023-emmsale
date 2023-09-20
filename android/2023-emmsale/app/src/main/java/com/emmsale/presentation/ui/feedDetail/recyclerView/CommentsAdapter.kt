@@ -3,6 +3,10 @@ package com.emmsale.presentation.ui.feedDetail.recyclerView
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder.ChildCommentViewHolder
+import com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder.CommentViewHolder
+import com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder.DeletedChildCommentViewHolder
+import com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder.DeletedCommentViewHolder
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
 class CommentsAdapter(

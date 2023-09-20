@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.feedDetail.recyclerView
+package com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
