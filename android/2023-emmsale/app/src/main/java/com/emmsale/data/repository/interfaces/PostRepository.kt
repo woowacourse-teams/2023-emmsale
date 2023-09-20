@@ -4,7 +4,8 @@ import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.model.Post
 
 interface PostRepository {
-    suspend fun getPosts(): ApiResponse<List<Post>>
+    suspend fun getPosts(eventId: Long): ApiResponse<List<Post>>
+
     suspend fun uploadPost(
         eventId: Long,
         title: String,
