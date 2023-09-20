@@ -23,16 +23,12 @@ public class ScrapQueryService {
   private final ScrapRepository scrapRepository;
 
   public List<EventResponse> findAllScraps(final Member member) {
-    //Scrap에서 event 사용해서 N+1 발생
+    //TODO : Scrap에서 event 사용해서 N+1 발생
     final Map<EventStatus, List<Event>> eventGroupByStatus
         = scrapRepository.findAllByMemberId(member.getId())
         .stream()
         .map(Scrap::getEvent)
         .collect(groupingBy(event -> event.getEventPeriod().calculateEventStatus(LocalDate.now())));
     return EventResponse.mergeEventResponses(LocalDate.now(), eventGroupByStatus);
-//    return scraps.stream()
-//        .map(ScrapResponse::from)
-//        .collect(Collectors.toList());
-//    return null;
   }
 }
