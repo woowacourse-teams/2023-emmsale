@@ -10,6 +10,7 @@ import com.emmsale.presentation.common.EventObserver
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.ui.messageList.recyclerview.MessageListAdapter
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
+import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
 
 class MessageListActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
@@ -52,9 +53,13 @@ class MessageListActivity : AppCompatActivity() {
         viewModel.messages.observe(this) { uiState ->
             if (uiState.fetchResult != FetchResult.SUCCESS) return@observe
             messageListAdapter.submitList(uiState.messages) {
-                binding.rvMessageList.scrollToPosition(messageListAdapter.itemCount - 1)
+                scrollToEnd(uiState)
             }
         }
+    }
+
+    private fun scrollToEnd(uiState: MessagesUiState) {
+        binding.rvMessageList.scrollToPosition(uiState.messages.size - 1)
     }
 
     private fun setUpEventUiEvent() {

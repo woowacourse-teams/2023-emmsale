@@ -1,6 +1,8 @@
 package com.emmsale.presentation.common.bindingadapter
 
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -37,8 +39,19 @@ fun ImageView.setRoundedImageUrl(
         .into(this)
 }
 
-@BindingAdapter("app:imageUrl", "app:isCircle")
-fun ImageView.setCircleImage(imageUrl: String?, isCircle: Boolean) {
+@BindingAdapter(
+    "app:imageUrl",
+    "app:isCircle",
+    "app:loadingImage",
+    "app:defaultImage",
+    requireAll = false,
+)
+fun ImageView.setCircleImage(
+    imageUrl: String?,
+    isCircle: Boolean,
+    loadingImageRes: Drawable? = ContextCompat.getDrawable(context, R.drawable.img_all_loading),
+    defaultImageRes: Drawable? = ContextCompat.getDrawable(context, R.mipmap.ic_launcher),
+) {
     if (!isCircle) {
         setImage(imageUrl)
         return
@@ -46,9 +59,9 @@ fun ImageView.setCircleImage(imageUrl: String?, isCircle: Boolean) {
 
     Glide.with(this)
         .load(imageUrl)
-        .placeholder(R.drawable.img_all_loading)
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
+        .placeholder(loadingImageRes)
+        .error(defaultImageRes)
+        .fallback(defaultImageRes)
         .transform(CenterCrop(), CircleCrop())
         .into(this)
 }

@@ -6,4 +6,5 @@ class MyMessageUiState(
     override val messageType: MessageType = MessageType.MY,
     message: String,
     createdAt: LocalDateTime,
+    val isFirst: Boolean = true,
 ) : MessageUiState(message, createdAt)

@@ -83,9 +83,9 @@ class MessageListViewModel(
                 )
                 myMessages.add(
                     message.mapToMessageUiState(myUid),
-                ) // 메시지 데이터 추가
+                )
             } else {
-                val prevMessage = myMessages[index - 1]
+                val prevMessage = this[index - 1]
 
                 var showProfile = message.createdAt == prevMessage.createdAt
                 if (prevMessage.createdAt.dayOfYear != message.createdAt.dayOfYear) {

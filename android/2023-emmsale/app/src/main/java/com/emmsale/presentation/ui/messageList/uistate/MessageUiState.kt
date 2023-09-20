@@ -33,11 +33,12 @@ abstract class MessageUiState(
             message: Message,
             profileImageUrl: String?,
             senderName: String,
-            isShownProfile: Boolean = true,
+            isFirstMessage: Boolean = true,
         ): MessageUiState = when (message.toMessageType(myUid)) {
             MessageType.MY -> MyMessageUiState(
                 message = message.message,
                 createdAt = message.createdAt,
+                isFirst = isFirstMessage,
             )
 
             MessageType.OTHER -> OtherMessageUiState(
@@ -45,7 +46,7 @@ abstract class MessageUiState(
                 createdAt = message.createdAt,
                 profileImageUrl = profileImageUrl ?: "",
                 memberName = senderName,
-                isShownProfile = isShownProfile,
+                isShownProfile = isFirstMessage,
             )
 
             else -> throw IllegalArgumentException("임시 에러")

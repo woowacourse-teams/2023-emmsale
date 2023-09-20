@@ -14,15 +14,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/message_date_top_margin">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:gravity="center"
             android:textColor="@color/gray"
-            android:textSize="10sp"
+            android:textSize="11sp"
             app:dateText="@{message.createdAt}"
             app:dateTimeFormatter="@{DateTimePattern.YEAR_MONTH_DAY_WEEKDAY}"
             app:layout_constraintEnd_toEndOf="parent"

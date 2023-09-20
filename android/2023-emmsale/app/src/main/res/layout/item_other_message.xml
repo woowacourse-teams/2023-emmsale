@@ -15,7 +15,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="@{message.message.isEmpty() ? View.GONE : View.VISIBLE}">
+        android:layout_marginStart="17dp"
+        android:visibility="@{message.message.isEmpty() ? View.GONE : View.VISIBLE}"
+        app:layoutMarginTop="@{message.shownProfile ? @dimen/other_message_with_profile_layout_top_margin : @dimen/other_message_without_profile_layout_top_margin}">
 
         <ImageView
             android:id="@+id/iv_member_profile"
@@ -23,6 +25,7 @@
             android:layout_height="30dp"
             android:importantForAccessibility="no"
             android:visibility="@{message.shownProfile ? View.VISIBLE : View.INVISIBLE}"
+            app:defaultImage="@{@drawable/ic_anonymous_profile}"
             app:imageUrl="@{message.profileImageUrl}"
             app:isCircle="@{true}"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,15 +40,16 @@
             android:text="@{message.memberName}"
             android:textSize="11sp"
             android:textStyle="bold"
-            android:visibility="@{message.shownProfile ? View.VISIBLE : View.INVISIBLE}"
+            android:visibility="@{message.shownProfile ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toEndOf="@id/iv_member_profile"
             app:layout_constraintTop_toTopOf="@id/iv_member_profile"
             tools:text="김커디" />
 
+
         <com.emmsale.presentation.common.views.WrapWidthTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginStart="7dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_othermessage_message"
             android:paddingHorizontal="10dp"
@@ -53,9 +57,9 @@
             android:text="@{message.message}"
             android:textColor="@color/black"
             android:textSize="12sp"
-            app:layout_constrainedWidth="true"
+            app:layoutMarginTop="@{message.shownProfile ? @dimen/other_message_with_profile_top_margin : @dimen/other_message_without_profile_top_margin}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_member_name"
+            app:layout_constraintStart_toEndOf="@id/iv_member_profile"
             app:layout_constraintTop_toBottomOf="@id/tv_member_name"
             tools:text="안녕안녕안녕안녕안안녕안녕안녕" />
 

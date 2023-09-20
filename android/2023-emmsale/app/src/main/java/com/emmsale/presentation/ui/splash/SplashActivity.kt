@@ -41,7 +41,7 @@ class SplashActivity : AppCompatActivity() {
         viewModel.splash.observe(this) { splashState ->
             when (splashState) {
                 is SplashUiState.Loading -> initSplashAnimation(splashState.splashTimeMs)
-                is SplashUiState.Done -> checkAppUpdate(splashState.isAutoLogin)
+                is SplashUiState.Done -> navigateToLoginScreen() // checkAppUpdate(splashState.isAutoLogin)
             }
         }
     }
