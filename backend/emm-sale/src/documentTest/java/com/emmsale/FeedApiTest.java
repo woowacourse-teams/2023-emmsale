@@ -45,7 +45,7 @@ class FeedApiTest extends MockMvcTestHelper {
         fieldWithPath("feeds[].title").type(JsonFieldType.STRING).description("피드 제목"),
         fieldWithPath("feeds[].writerId").type(JsonFieldType.NUMBER).description("피드 작성자 id"),
         fieldWithPath("feeds[].commentsCount").type(JsonFieldType.NUMBER).description("피드의 댓글 개수"),
-        fieldWithPath("feeds[].createdAt").type(JsonFieldType.STRING).description("피드 작성 일시")
+        fieldWithPath("feeds[].updatedAt").type(JsonFieldType.STRING).description("피드 업데이트 일시")
     );
 
     final long eventId = 11L;
@@ -79,7 +79,8 @@ class FeedApiTest extends MockMvcTestHelper {
         fieldWithPath("writer.name").type(JsonFieldType.STRING).description("작성자명"),
         fieldWithPath("writer.imageUrl").type(JsonFieldType.STRING).description("작성자 이미지 url"),
         fieldWithPath("title").type(JsonFieldType.STRING).description("피드 제목"),
-        fieldWithPath("content").type(JsonFieldType.STRING).description("피드 내용")
+        fieldWithPath("content").type(JsonFieldType.STRING).description("피드 내용"),
+        fieldWithPath("updatedAt").type(JsonFieldType.STRING).description("피드 업데이트 일시")
     );
 
     final long eventId = 11L;
@@ -87,7 +88,7 @@ class FeedApiTest extends MockMvcTestHelper {
     final WriterProfileResponse writer = new WriterProfileResponse(8L, "작성자명",
         "https://member-image.com");
     final FeedDetailResponse response = new FeedDetailResponse(feedId, eventId, writer, "피드 제목",
-        "피드 상세 내용");
+        "피드 상세 내용", LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)));
 
     when(feedQueryService.findFeed(any())).thenReturn(response);
 
