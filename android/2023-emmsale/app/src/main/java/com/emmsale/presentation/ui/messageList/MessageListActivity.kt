@@ -80,10 +80,10 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KEY_ROOM_ID = "roomId"
+        private const val KEY_ROOM_ID = "KEY_ROOM_ID"
         private const val DEFAULT_ROOM_ID = ""
 
-        private const val KEY_OTHER_UID = "otherUid"
+        private const val KEY_OTHER_UID = "KEY_OTHER_UID"
         private const val DEFAULT_OTHER_ID = -1L
 
         fun startActivity(
