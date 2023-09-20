@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.emmsale.R
 import com.emmsale.databinding.ActivityMessageListBinding
 import com.emmsale.presentation.common.EventObserver
 import com.emmsale.presentation.common.FetchResult
@@ -41,6 +42,10 @@ class MessageListActivity : AppCompatActivity() {
     private fun setupToolbar() {
         binding.tbMessageList.setNavigationOnClickListener {
             finish()
+        }
+        binding.tbMessageList.setOnMenuItemClickListener { menuItem ->
+            if (menuItem.itemId == R.id.refresh) viewModel.refresh()
+            true
         }
     }
 

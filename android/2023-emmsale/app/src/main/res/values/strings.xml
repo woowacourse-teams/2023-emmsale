@@ -375,8 +375,11 @@
 
     <string name="messageroomlist_toolbar_title">메시지</string>
     <string name="messageroomlist_message_room_options_title">더보기</string>
-    <string name="messagelist_message_send_hint">메세지를 입력하세요.</string>
-    <string name="messagelist_send_message">입력</string>
 
     <string name="messageroom_room_image_desc">쪽지방 이미지</string>
+
+    <string name="messagelist_message_send_hint">메세지를 입력하세요.</string>
+    <string name="messagelist_send_message">입력</string>
+    <string name="messagelist_refresh_desc">새로고침</string>
+
 </resources>
