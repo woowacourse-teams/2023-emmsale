@@ -18,8 +18,12 @@ import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.messageList.uistate.MessageDateUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
+import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENT
+import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.NOT_FOUND_OTHER_MEMBER
 import com.emmsale.presentation.ui.messageList.uistate.MessageUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
+import com.emmsale.presentation.ui.messageList.uistate.MyMessageUiState
+import com.emmsale.presentation.ui.messageList.uistate.OtherMessageUiState
 import kotlinx.coroutines.launch
 
 class MessageListViewModel(
@@ -53,90 +57,8 @@ class MessageListViewModel(
             loading()
             fetchOtherMember()
 
-            when (val result = messageRoomRepository.getMessagesByRoomId(roomId, myUid)) {
-                is Success -> updateMessages(result.data)
-                else -> _messages.value = messages.value.toError()
-            }
-        }
-    }
-
-    private suspend fun fetchOtherMember() {
-        when (val otherMemberResult = memberRepository.getMember(otherUid)) {
-            is Success -> _otherMember.value = otherMemberResult.data
-            else -> _uiEvent.value = Event(MessageListUiEvent.NOT_FOUND_OTHER_MEMBER)
-        }
-    }
-
-    private fun updateMessages(result: List<Message>) {
-        _messages.value = messages.value.toSuccess(
-            messages = result.toUiState(),
-        )
-    }
-
-    private fun List<Message>.toUiState(): List<MessageUiState> {
-        val myMessages = mutableListOf<MessageUiState>()
-
-        forEachIndexed { index, message ->
-            if (index == 0) { // 첫 번째인 경우
-                myMessages.add(
-                    MessageDateUiState(
-                        date = message.createdAt.toString(),
-                        createdAt = message.createdAt,
-                    ),
-                )
-                myMessages.add(
-                    message.mapToMessageUiState(myUid),
-                )
-            } else {
-                val prevMessage = this[index - 1]
-
-                var showProfile =
-                    message.createdAt == prevMessage.createdAt || prevMessage.senderId != message.senderId
-                if (prevMessage.createdAt.dayOfYear != message.createdAt.dayOfYear) {
-                    myMessages.add(
-                        MessageDateUiState(
-                            date = message.createdAt.toString(),
-                            createdAt = message.createdAt,
-                        ),
-                    )
-                    showProfile = true
-                }
-                myMessages.add(
-                    MessageUiState.from(
-                        myUid,
-                        message,
-                        otherMember.value!!.profileImageUrl,
-                        otherMember.value!!.name,
-                        showProfile,
-                    ),
-                )
-            }
-        }
-
-        return myMessages
-    }
-
-    private fun Message.mapToMessageUiState(myUid: Long): MessageUiState {
-        val otherMember = otherMember.value!!
-        return MessageUiState.from(
-            myUid,
-            this,
-            otherMember.profileImageUrl,
-            otherMember.name,
-        )
-    }
-
-    fun sendMessage(message: String) {
-        if (message.isBlank()) return
-        loading()
-
-        viewModelScope.launch {
-            when (messageRoomRepository.sendMessage(myUid, otherUid, message)) {
-                is Success -> {
-                    _uiEvent.value = Event(MessageListUiEvent.MESSAGE_SENT)
-                    fetchMessages()
-                }
-
+            when (val messagesResult = messageRoomRepository.getMessagesByRoomId(roomId, myUid)) {
+                is Success -> updateMessages(messagesResult.data)
                 else -> _messages.value = messages.value.toError()
             }
         }
@@ -144,6 +66,70 @@ class MessageListViewModel(
 
     private fun loading() {
         _messages.value = messages.value.toLoading()
+    }
+
+    private suspend fun fetchOtherMember() {
+        when (val otherMemberResult = memberRepository.getMember(otherUid)) {
+            is Success -> _otherMember.value = otherMemberResult.data
+            else -> _uiEvent.value = Event(NOT_FOUND_OTHER_MEMBER)
+        }
+    }
+
+    private fun updateMessages(newMessages: List<Message>) {
+        _messages.value = messages.value.toSuccess(newMessages.toUiState())
+    }
+
+    private fun List<Message>.toUiState(): List<MessageUiState> {
+        val newMessages = mutableListOf<MessageUiState>()
+
+        forEachIndexed { index, message ->
+            when {
+                index == 0 -> {
+                    newMessages += message.createMessageDateUiState()
+                    newMessages += message.createChatMessageUiState()
+                }
+
+                message.isDifferentDate(this[index - 1]) -> {
+                    newMessages += message.createMessageDateUiState()
+                }
+            }
+
+            val shouldShowProfile = message.shouldShowMemberProfile(this[index - 1])
+            newMessages += message.createChatMessageUiState(shouldShowProfile)
+        }
+
+        return newMessages
+    }
+
+    private fun Message.shouldShowMemberProfile(prevMessage: Message): Boolean {
+        return isSameDateTime(prevMessage) ||
+            isDifferentSender(prevMessage) ||
+            isDifferentDate(prevMessage)
+    }
+
+    private fun Message.createMessageDateUiState(): MessageDateUiState = MessageDateUiState(
+        date = createdAt.toString(),
+    )
+
+    private fun Message.createChatMessageUiState(
+        shouldShowProfile: Boolean = true,
+    ): MessageUiState = when (senderId) {
+        myUid -> MyMessageUiState.create(this, shouldShowProfile)
+        else -> OtherMessageUiState.create(this, otherMember.value!!, shouldShowProfile)
+    }
+
+    fun sendMessage(message: String) {
+        if (message.isBlank()) return
+
+        _uiEvent.value = Event(MESSAGE_SENT)
+        loading()
+
+        viewModelScope.launch {
+            when (messageRoomRepository.sendMessage(myUid, otherUid, message)) {
+                is Success -> fetchMessages()
+                else -> _messages.value = messages.value.toError()
+            }
+        }
     }
 
     companion object {

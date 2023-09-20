@@ -1,5 +1,6 @@
 package com.emmsale.presentation.ui.messageList.uistate
 
+import com.emmsale.data.message.Message
 import java.time.LocalDateTime
 
 class MyMessageUiState(
@@ -7,4 +8,16 @@ class MyMessageUiState(
     message: String,
     createdAt: LocalDateTime,
     val isFirst: Boolean = true,
-) : MessageUiState(message, createdAt)
+) : MessageUiState(message, createdAt) {
+
+    companion object {
+        fun create(
+            message: Message,
+            isFirst: Boolean = true,
+        ): MyMessageUiState = MyMessageUiState(
+            message = message.message,
+            createdAt = message.createdAt,
+            isFirst = isFirst,
+        )
+    }
+}

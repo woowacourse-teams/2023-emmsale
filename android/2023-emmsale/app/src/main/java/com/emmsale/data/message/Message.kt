@@ -8,6 +8,18 @@ data class Message(
     val message: String,
     val createdAt: LocalDateTime,
 ) {
+    fun isSameDateTime(other: Message): Boolean {
+        return createdAt == other.createdAt
+    }
+
+    fun isDifferentSender(other: Message): Boolean {
+        return senderId != other.senderId
+    }
+
+    fun isDifferentDate(other: Message): Boolean {
+        return createdAt.dayOfYear != other.createdAt.dayOfYear
+    }
+
     companion object {
         private const val MESSAGE_DATE_FORMAT = "yyyy:MM:dd:HH:mm:ss"
 
