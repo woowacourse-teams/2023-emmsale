@@ -26,4 +26,13 @@ class DefaultPostRepository(
             },
         )
     }
+
+    override suspend fun uploadPost(
+        eventId: Long,
+        title: String,
+        content: String,
+        imageUrls: List<String>,
+    ): ApiResponse<Long> {
+        return Success(1L)
+    }
 }

@@ -15,6 +15,7 @@ import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDeleg
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
 import com.emmsale.presentation.ui.main.MainActivity
+import com.emmsale.presentation.ui.postWriting.PostWritingActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -49,6 +50,7 @@ class EventDetailActivity :
         binding.lifecycleOwner = this
         binding.vm = viewModel
         binding.navigateToUrl = ::navigateToUrl
+        binding.navigateToWritingPost = ::navigateToWritingPost
     }
 
     private fun setUpScrapUiEvent() {
@@ -63,6 +65,10 @@ class EventDetailActivity :
             EventInfoUiEvent.SCRAP_ERROR -> binding.root.showSnackBar("스크랩 불가")
             EventInfoUiEvent.SCRAP_DELETE_ERROR -> binding.root.showSnackBar("스크랩 삭제 불가")
         }
+    }
+
+    private fun navigateToWritingPost() {
+        PostWritingActivity.startActivity(this, eventId)
     }
 
     private fun navigateToUrl(url: String) {

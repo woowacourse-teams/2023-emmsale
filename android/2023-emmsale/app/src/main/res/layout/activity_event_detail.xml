@@ -9,6 +9,8 @@
 
         <import type="kotlin.jvm.functions.Function1" />
 
+        <import type="kotlin.jvm.functions.Function0" />
+
         <import type="kotlin.Unit" />
 
         <import type="com.emmsale.presentation.common.FetchResult" />
@@ -24,6 +26,10 @@
         <variable
             name="navigateToUrl"
             type="Function1&lt;String, Unit>" />
+
+        <variable
+            name="navigateToWritingPost"
+            type="Function0" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -213,6 +219,7 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btn_eventdetail_writing"
+            android:onClick="@{()->navigateToWritingPost.invoke()}"
             android:visibility="@{vm.currentScreen == Screen.INFORMATION ? View.GONE : View.VISIBLE  }"
             android:layout_width="60dp"
             android:layout_height="60dp"

@@ -7,4 +7,7 @@ import retrofit2.http.GET
 interface PostService {
     @GET
     suspend fun getPosts(): ApiResponse<List<Post>>
+
+    @GET
+    suspend fun uploadPost(): ApiResponse<Long>
 }

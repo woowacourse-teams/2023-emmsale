@@ -367,4 +367,7 @@
     <string name="openprofileurlconfig_register_fail">등록에 실패하였습니다</string>
     <string name="eventInfo_cost">비용</string>
     <string name="eventdetail_tab_post">게시판</string>
+    <string name="post_writing_title_hint">글 제목</string>
+    <string name="post_writing_content_hint">내용을 입력하세요.</string>
+    <string name="post_writing_upload_error">업로드에 실패하였습니다</string>
 </resources>
