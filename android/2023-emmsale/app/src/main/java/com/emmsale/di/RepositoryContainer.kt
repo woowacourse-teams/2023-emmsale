@@ -1,5 +1,7 @@
 package com.emmsale.di
 
+import com.emmsale.data.messageRoom.MessageRoomRepository
+import com.emmsale.data.messageRoom.MessageRoomRepositoryImpl
 import com.emmsale.data.repository.concretes.DefaultActivityRepository
 import com.emmsale.data.repository.concretes.DefaultBlockedMemberRepository
 import com.emmsale.data.repository.concretes.DefaultCommentRepository
@@ -90,6 +92,11 @@ class RepositoryContainer(
         DefaultMyPostRepository(
             myPostService = serviceContainer.myPostService,
             tokenRepository = tokenRepository,
+        )
+    }
+    val messageRoomRepository: MessageRoomRepository by lazy {
+        MessageRoomRepositoryImpl(
+            messageRoomService = serviceContainer.messageRoomService,
         )
     }
 }

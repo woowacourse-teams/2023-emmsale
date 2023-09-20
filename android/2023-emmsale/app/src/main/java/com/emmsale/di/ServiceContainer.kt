@@ -1,6 +1,7 @@
 package com.emmsale.di
 
 import com.emmsale.data.common.ServiceFactory
+import com.emmsale.data.messageRoom.MessageRoomService
 import com.emmsale.data.service.ActivityService
 import com.emmsale.data.service.BlockedMemberService
 import com.emmsale.data.service.CommentService
@@ -35,4 +36,5 @@ class ServiceContainer(serviceFactory: ServiceFactory) {
     val myPostService: MyPostService by lazy {
         serviceFactory.create(MyPostService::class.java)
     }
+    val messageRoomService: MessageRoomService by lazy { serviceFactory.create(MessageRoomService::class.java) }
 }

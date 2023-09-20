@@ -1,6 +1,5 @@
 package com.emmsale.presentation.ui.notificationConfig
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Failure
@@ -71,7 +70,6 @@ class NotificationConfigViewModel(
     private fun fetchNotificationConfig() {
         viewModelScope.launch {
             _notificationConfig.value = configRepository.getConfig()
-            Log.d("buna", "${_notificationConfig.value.isAutoLogin}")
         }
     }
 

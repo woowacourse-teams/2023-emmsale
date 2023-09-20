@@ -11,6 +11,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityMainBinding
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventPageList.EventFragment
+import com.emmsale.presentation.ui.messageRoomList.MessageRoomFragment
 import com.emmsale.presentation.ui.myProfile.MyProfileFragment
 import com.emmsale.presentation.ui.setting.SettingFragment
 
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
                 R.id.mi_main_event -> showFragment(EventFragment.TAG)
+                R.id.mi_main_message -> showFragment(MessageRoomFragment.TAG)
                 R.id.mi_main_setting -> showFragment(SettingFragment.TAG)
             }
             return@setOnItemSelectedListener true
@@ -60,14 +62,16 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.commitNow {
             add(R.id.fcv_main, MyProfileFragment(), MyProfileFragment.TAG)
             add(R.id.fcv_main, EventFragment(), EventFragment.TAG)
+            add(R.id.fcv_main, MessageRoomFragment(), MessageRoomFragment.TAG)
             add(R.id.fcv_main, SettingFragment(), SettingFragment.TAG)
         }
     }
 
     private fun showFragment(tag: String) {
         supportFragmentManager.commit {
-            val fragment = supportFragmentManager.findFragmentByTag(tag)
-                ?: throw IllegalStateException("태그 ${tag}로 프래그먼트를 찾을 수 없습니다. 프래그먼트 초기화 로직을 다시 살펴보세요.")
+            val fragment = requireNotNull(supportFragmentManager.findFragmentByTag(tag)) {
+                "[ERROR] 태그 ${tag}로 프래그먼트를 찾을 수 없습니다. 프래그먼트 초기화 로직을 다시 살펴보세요."
+            }
             supportFragmentManager.fragments.forEach { hide(it) }
             show(fragment)
         }

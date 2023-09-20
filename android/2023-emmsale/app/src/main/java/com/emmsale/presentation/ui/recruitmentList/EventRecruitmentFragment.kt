@@ -13,7 +13,7 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
 import com.emmsale.presentation.ui.recruitmentList.recyclerView.EventRecruitmentAdapter
 import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostUiState

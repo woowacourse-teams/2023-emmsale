@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/mi_main_profile"
         android:icon="@drawable/ic_main_menuitemprofile"
@@ -8,6 +9,11 @@
         android:id="@+id/mi_main_event"
         android:icon="@drawable/ic_main_menuitemhome"
         android:title="@string/main_menu_item_name_of_home" />
+    <item
+        android:id="@+id/mi_main_message"
+        android:icon="@drawable/ic_main_menuitemmessage"
+        android:title="@string/main_menu_item_name_of_message"
+        app:tint="@color/primary_color" />
     <item
         android:id="@+id/mi_main_setting"
         android:icon="@drawable/ic_main_menuitemsetting"

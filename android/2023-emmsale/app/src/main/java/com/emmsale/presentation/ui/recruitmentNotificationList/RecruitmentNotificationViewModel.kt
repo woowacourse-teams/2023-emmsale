@@ -102,7 +102,7 @@ class RecruitmentNotificationViewModel(
                 is Failure, NetworkError -> null
                 is Success -> RecruitmentNotificationMemberUiState(
                     name = result.data.name,
-                    profileImageUrl = result.data.imageUrl,
+                    profileImageUrl = result.data.profileImageUrl,
                     openChatUrl = result.data.openProfileUrl,
                 )
 
