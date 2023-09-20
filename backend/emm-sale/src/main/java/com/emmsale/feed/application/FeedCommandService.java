@@ -5,7 +5,6 @@ import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.feed.application.dto.FeedPostRequest;
-import com.emmsale.feed.application.dto.FeedPostResponse;
 import com.emmsale.feed.application.dto.FeedUpdateRequest;
 import com.emmsale.feed.application.dto.FeedUpdateResponse;
 import com.emmsale.feed.domain.Feed;
@@ -30,7 +29,7 @@ public class FeedCommandService {
   private final EventRepository eventRepository;
   private final ImageCommandService imageCommandService;
 
-  public FeedPostResponse postFeed(
+  public Long postFeed(
       final Member member,
       final FeedPostRequest feedPostRequest,
       final List<MultipartFile> images
@@ -40,11 +39,11 @@ public class FeedCommandService {
 
     final Feed feed = new Feed(event, member, feedPostRequest.getTitle(),
         feedPostRequest.getContent());
-    final Feed savedFeed = feedRepository.save(feed);
+    feedRepository.save(feed);
 
     saveImages(images, feed);
 
-    return FeedPostResponse.from(savedFeed);
+    return feed.getId();
   }
 
   private void saveImages(final List<MultipartFile> images, final Feed feed) {

@@ -16,8 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.emmsale.feed.application.dto.FeedDetailResponse;
 import com.emmsale.feed.application.dto.FeedDetailResponse.WriterProfileResponse;
 import com.emmsale.feed.application.dto.FeedListResponse;
-import com.emmsale.feed.application.dto.FeedPostRequest;
-import com.emmsale.feed.application.dto.FeedPostResponse;
 import com.emmsale.feed.application.dto.FeedSimpleResponse;
 import com.emmsale.feed.application.dto.FeedUpdateRequest;
 import com.emmsale.feed.application.dto.FeedUpdateResponse;
@@ -109,21 +107,13 @@ class FeedApiTest extends MockMvcTestHelper {
         fieldWithPath("content").type(JsonFieldType.STRING).description("피드 내용"),
         fieldWithPath("parentComment.parentId").description("부모 댓글 ID").optional()
     );
-    final ResponseFieldsSnippet responseFields = responseFields(
-        fieldWithPath("id").type(JsonFieldType.NUMBER).description("피드 id"),
-        fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("이벤트 id"),
-        fieldWithPath("writerId").type(JsonFieldType.NUMBER).description("작성자 id"),
-        fieldWithPath("title").type(JsonFieldType.STRING).description("피드 제목"),
-        fieldWithPath("content").type(JsonFieldType.STRING).description("피드 내용")
-    );
 
     final long eventId = 1L;
+    final long feedId = 3L;
     final String 피드_제목 = "피드 제목";
     final String 피드_내용 = "피드 내용";
-    final FeedPostRequest feedPostRequest = new FeedPostRequest(eventId, 피드_제목, 피드_내용);
-    final FeedPostResponse response = new FeedPostResponse(134L, eventId, 41L, 피드_제목, 피드_내용);
 
-    when(feedCommandService.postFeed(any(), any(), any())).thenReturn(response);
+    when(feedCommandService.postFeed(any(), any(), any())).thenReturn(feedId);
 
     //when & then
     final MockMultipartFile eventid = new MockMultipartFile("eventId", "",

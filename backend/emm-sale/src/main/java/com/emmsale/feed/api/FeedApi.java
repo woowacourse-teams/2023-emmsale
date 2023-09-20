@@ -5,7 +5,6 @@ import com.emmsale.feed.application.FeedQueryService;
 import com.emmsale.feed.application.dto.FeedDetailResponse;
 import com.emmsale.feed.application.dto.FeedListResponse;
 import com.emmsale.feed.application.dto.FeedPostRequest;
-import com.emmsale.feed.application.dto.FeedPostResponse;
 import com.emmsale.feed.application.dto.FeedUpdateRequest;
 import com.emmsale.feed.application.dto.FeedUpdateResponse;
 import com.emmsale.member.domain.Member;
@@ -45,14 +44,15 @@ public class FeedApi {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public FeedPostResponse postFeed(
+  public Long postFeed(
       final Member member,
-      @RequestPart final Long eventId,
+      @RequestPart final String eventId,
       @RequestPart final String title,
       @RequestPart final String content,
       @RequestPart(required = false) final List<MultipartFile> images
   ) {
-    final FeedPostRequest feedPostRequest = new FeedPostRequest(eventId, title, content);
+    final FeedPostRequest feedPostRequest = new FeedPostRequest(Long.parseLong(eventId), title,
+        content);
     return feedCommandService.postFeed(member, feedPostRequest, images);
   }
 

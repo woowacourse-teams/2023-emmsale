@@ -1,6 +1,7 @@
 package com.emmsale.feed.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,7 +15,6 @@ import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.feed.application.dto.FeedPostRequest;
-import com.emmsale.feed.application.dto.FeedPostResponse;
 import com.emmsale.feed.application.dto.FeedUpdateRequest;
 import com.emmsale.feed.application.dto.FeedUpdateResponse;
 import com.emmsale.feed.domain.Feed;
@@ -70,15 +70,16 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
     final FeedPostRequest request = new FeedPostRequest(이벤트1.getId(), feedTitle, feedContent);
 
     //when
-    final FeedPostResponse expectResponse = feedCommandService.postFeed(작성자, request,
-        Collections.emptyList());
-    final Feed actual = feedRepository.findById(expectResponse.getId()).get();
-    final FeedPostResponse actualResponse = FeedPostResponse.from(actual);
+    final Long feedId = feedCommandService.postFeed(작성자, request, Collections.emptyList());
+    final Feed actual = feedRepository.findById(feedId).get();
 
     //then
-    assertThat(expectResponse)
-        .usingRecursiveComparison()
-        .isEqualTo(actualResponse);
+    assertAll(
+        () -> assertThat(actual.getEvent().getId()).isEqualTo(이벤트1.getId()),
+        () -> assertThat(actual.getWriter().getId()).isEqualTo(작성자.getId()),
+        () -> assertThat(actual.getTitle()).isEqualTo(feedTitle),
+        () -> assertThat(actual.getContent()).isEqualTo(feedContent)
+    );
   }
 
   @Test
