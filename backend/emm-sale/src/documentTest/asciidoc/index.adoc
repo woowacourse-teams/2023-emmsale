@@ -275,11 +275,16 @@ include::{snippets}/find-recruitment-post/response-fields.adoc[]
 
 === `POST` : 행사 생성
 
-.HTTP request
-include::{snippets}/add-event/http-request.adoc[]
+POST
+
+[source]
+----
+/events?name=인프콘 2023&location=코엑스&informationUrl=https://~~~&startDateTime=2023:06:01:12:00:00&endDateTime=2023:09:01:12:00:00&applyStartDateTime=2023:05:01:12:00:00&applyEndDateTime=2023:06:01:12:00:00&tags=백엔드,안드로이드&imageUrl=https://image.url&type=CONFERENCE&eventMode=ON_OFFLINE&paymentType=FREE
+----
 
 .HTTP request 설명
-include::{snippets}/add-event/request-fields.adoc[]
+include::{snippets}/add-event/request-parameters.adoc[]
+include::{snippets}/add-event/request-parts.adoc[]
 
 .HTTP response
 include::{snippets}/add-event/http-response.adoc[]

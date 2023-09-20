@@ -8,6 +8,8 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -54,6 +56,13 @@ public class GlobalControllerAdvice {
   @ExceptionHandler(MissingServletRequestParameterException.class)
   public ResponseEntity<ExceptionResponse> handleMissingServletRequestParameterException(
       final MissingServletRequestParameterException e) {
+    final String message = "요청 파라미터가 올바르지 않습니다.";
+    log.warn("[WARN] MESSAGE: " + message);
+    return new ResponseEntity<>(new ExceptionResponse(message), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(BindException.class)
+  public ResponseEntity<ExceptionResponse> handleBindExceptionHandler(final BindException e) {
     final String message = "요청 파라미터가 올바르지 않습니다.";
     log.warn("[WARN] MESSAGE: " + message);
     return new ResponseEntity<>(new ExceptionResponse(message), HttpStatus.BAD_REQUEST);

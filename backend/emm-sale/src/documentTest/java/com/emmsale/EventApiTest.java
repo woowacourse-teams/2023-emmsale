@@ -1,5 +1,19 @@
 package com.emmsale;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.api.EventApi;
 import com.emmsale.event.application.dto.EventDetailRequest;
@@ -14,6 +28,7 @@ import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.application.dto.TagRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,6 +43,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
@@ -35,10 +51,11 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.request.RequestParametersSnippet;
+import org.springframework.restdocs.request.RequestPartsSnippet;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.multipart.MultipartFile;
 
 @WebMvcTest(EventApi.class)
 class EventApiTest extends MockMvcTestHelper {
@@ -83,12 +100,12 @@ class EventApiTest extends MockMvcTestHelper {
         "ENDED", List.of("코틀린", "백엔드", "안드로이드"),
         "https://www.image.com", 2, -12, EventType.COMPETITION.toString());
 
-    Mockito.when(eventService.findEvent(ArgumentMatchers.anyLong(), ArgumentMatchers.any()))
+    Mockito.when(eventService.findEvent(ArgumentMatchers.anyLong(), any()))
         .thenReturn(eventDetailResponse);
 
     //when
-    mockMvc.perform(MockMvcRequestBuilders.get("/events/" + eventId)).andExpect(
-            MockMvcResultMatchers.status().isOk())
+    mockMvc.perform(get("/events/" + eventId)).andExpect(
+            status().isOk())
         .andDo(MockMvcRestDocumentation.document("find-event", EVENT_DETAIL_RESPONSE_FILED));
   }
 
@@ -96,7 +113,7 @@ class EventApiTest extends MockMvcTestHelper {
   @DisplayName("특정 카테고리의 행사 목록을 조회할 수 있으면 200 OK를 반환한다.")
   void findEvents() throws Exception {
     // given
-    final RequestParametersSnippet requestParameters = RequestDocumentation.requestParameters(
+    final RequestParametersSnippet requestParameters = requestParameters(
         RequestDocumentation.parameterWithName("category")
             .description("행사 카테고리(CONFERENCE, COMPETITION)"),
         RequestDocumentation.parameterWithName("start_date")
@@ -153,19 +170,19 @@ class EventApiTest extends MockMvcTestHelper {
             3, -18, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue())
     );
 
-    Mockito.when(eventService.findEvents(ArgumentMatchers.any(EventType.class),
-        ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.eq("2023-07-01"),
+    Mockito.when(eventService.findEvents(any(EventType.class),
+        any(LocalDate.class), ArgumentMatchers.eq("2023-07-01"),
         ArgumentMatchers.eq("2023-07-31"),
-        ArgumentMatchers.eq(null), ArgumentMatchers.any())).thenReturn(eventResponses);
+        ArgumentMatchers.eq(null), any())).thenReturn(eventResponses);
 
     // when & then
-    mockMvc.perform(MockMvcRequestBuilders.get("/events")
+    mockMvc.perform(get("/events")
             .param("category", "CONFERENCE")
             .param("start_date", "2023-07-01")
             .param("end_date", "2023-07-31")
             .param("statuses", "UPCOMING,IN_PROGRESS")
         )
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(MockMvcRestDocumentation.document("find-events", requestParameters, responseFields));
   }
 
@@ -183,7 +200,7 @@ class EventApiTest extends MockMvcTestHelper {
         event.getInformationUrl(), event.getEventPeriod().getStartDate(),
         event.getEventPeriod().getEndDate(),
         event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(), tags,
-        event.getImageUrl(), event.getType(), EventMode.OFFLINE, PaymentType.PAID);
+        event.getImageUrl(), event.getType(), EventMode.OFFLINE, PaymentType.PAID, null);
 
     final EventDetailResponse response = new EventDetailResponse(eventId, request.getName(),
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
@@ -192,45 +209,32 @@ class EventApiTest extends MockMvcTestHelper {
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()), request.getImageUrl(),
         10, 10, request.getType().toString());
 
-    Mockito.when(eventService.updateEvent(ArgumentMatchers.any(), ArgumentMatchers.any(),
-        ArgumentMatchers.any())).thenReturn(response);
+    Mockito.when(eventService.updateEvent(any(), any(),
+        any())).thenReturn(response);
 
-    final RequestFieldsSnippet requestFields = PayloadDocumentation.requestFields(
-        PayloadDocumentation.fieldWithPath("name").type(JsonFieldType.STRING)
-            .description("행사(Event) 이름"),
-        PayloadDocumentation.fieldWithPath("location").type(JsonFieldType.STRING)
-            .description("행사(Event) 장소"),
-        PayloadDocumentation.fieldWithPath("startDateTime").type(JsonFieldType.STRING)
-            .description("행사(Event) 시작일시"),
-        PayloadDocumentation.fieldWithPath("endDateTime").type(JsonFieldType.STRING)
-            .description("행사(Event) 종료일시"),
-        PayloadDocumentation.fieldWithPath("applyStartDateTime").type(JsonFieldType.STRING)
-            .description("행사(Event) 신청시작일시"),
-        PayloadDocumentation.fieldWithPath("applyEndDateTime").type(JsonFieldType.STRING)
-            .description("행사(Event) 신청종료일시"),
-        PayloadDocumentation.fieldWithPath("informationUrl").type(JsonFieldType.STRING)
-            .description("행사(Event) 상세 정보 URL"),
-        PayloadDocumentation.fieldWithPath("tags[].name").type(JsonFieldType.STRING)
-            .description("연관 태그명"),
-        PayloadDocumentation.fieldWithPath("imageUrl").type(JsonFieldType.STRING)
-            .description("행사(Event) 이미지url"),
-        PayloadDocumentation.fieldWithPath("type").type(JsonFieldType.STRING)
-            .description("행사(Event) 타입"),
-        PayloadDocumentation.fieldWithPath("eventMode").type(JsonFieldType.STRING)
-            .description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)"),
-        PayloadDocumentation.fieldWithPath("paymentType").type(JsonFieldType.STRING)
-            .description("행사 유료 여부(PAID, FREE, FREE_PAID)")
+    final RequestFieldsSnippet requestFieldsSnippet = requestFields(
+        fieldWithPath("name").description("행사(Event) 이름"),
+        fieldWithPath("location").description("행사(Event) 장소"),
+        fieldWithPath("startDateTime").description("행사(Event) 시작일시"),
+        fieldWithPath("endDateTime").description("행사(Event) 종료일시"),
+        fieldWithPath("applyStartDateTime").description("행사(Event) 신청시작일시"),
+        fieldWithPath("applyEndDateTime").description("행사(Event) 신청종료일시"),
+        fieldWithPath("informationUrl").description("행사(Event) 상세 정보 URL"),
+        fieldWithPath("tags[].name").description("연관 태그명"),
+        fieldWithPath("imageUrl").description("행사(Event) 이미지url"),
+        fieldWithPath("type").description("행사(Event) 타입"),
+        fieldWithPath("eventMode").description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)"),
+        fieldWithPath("paymentType").description("행사 유료 여부(PAID, FREE, FREE_PAID)"),
+        fieldWithPath("images").description("이미지들").optional()
     );
 
-    //when
-    final ResultActions result = mockMvc.perform(
-        MockMvcRequestBuilders.put("/events/" + eventId)
+    //when & then
+    mockMvc.perform(put("/events/" + eventId)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .content(objectMapper.writeValueAsString(request)));
-
-    //then
-    result.andExpect(MockMvcResultMatchers.status().isOk()).andDo(MockMvcResultHandlers.print())
-        .andDo(MockMvcRestDocumentation.document("update-event", requestFields,
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isOk())
+        .andDo(MockMvcResultHandlers.print())
+        .andDo(MockMvcRestDocumentation.document("update-event", requestFieldsSnippet,
             EVENT_DETAIL_RESPONSE_FILED));
   }
 
@@ -243,10 +247,10 @@ class EventApiTest extends MockMvcTestHelper {
     Mockito.doNothing().when(eventService).deleteEvent(eventId);
     //when
     final ResultActions result = mockMvc.perform(
-        MockMvcRequestBuilders.delete("/events/" + eventId));
+        delete("/events/" + eventId));
 
     //then
-    result.andExpect(MockMvcResultMatchers.status().isNoContent())
+    result.andExpect(status().isNoContent())
         .andDo(MockMvcResultHandlers.print()).andDo(
             MockMvcRestDocumentation.document("delete-event"));
   }
@@ -258,6 +262,20 @@ class EventApiTest extends MockMvcTestHelper {
     @DisplayName("이벤트를 성공적으로 추가하면 201, CREATED 를 반환한다.")
     void addEventTest() throws Exception {
       //given
+      final MockMultipartFile image1 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
+      final MockMultipartFile image2 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
       final Event event = EventFixture.인프콘_2023();
 
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
@@ -267,7 +285,8 @@ class EventApiTest extends MockMvcTestHelper {
           event.getLocation(), event.getInformationUrl(), event.getEventPeriod().getStartDate(),
           event.getEventPeriod().getEndDate(),
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
-          tags, event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE);
+          tags, event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE,
+          List.of(image1, image2));
 
       final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
@@ -276,46 +295,58 @@ class EventApiTest extends MockMvcTestHelper {
           tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
           request.getImageUrl(), 10, 10, request.getType().toString());
 
-      Mockito.when(eventService.addEvent(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      Mockito.when(eventService.addEvent(any(), any()))
           .thenReturn(response);
 
-      final RequestFieldsSnippet requestFields = PayloadDocumentation.requestFields(
-          PayloadDocumentation.fieldWithPath("name").type(JsonFieldType.STRING)
-              .description("행사(Event) 이름"),
-          PayloadDocumentation.fieldWithPath("location").type(JsonFieldType.STRING)
-              .description("행사(Event) 장소"),
-          PayloadDocumentation.fieldWithPath("startDateTime").type(JsonFieldType.STRING)
-              .description("행사(Event) 시작일시"),
-          PayloadDocumentation.fieldWithPath("endDateTime").type(JsonFieldType.STRING)
-              .description("행사(Event) 종료일시"),
-          PayloadDocumentation.fieldWithPath("applyStartDateTime").type(JsonFieldType.STRING)
-              .description("행사(Event) 신청시작일시"),
-          PayloadDocumentation.fieldWithPath("applyEndDateTime").type(JsonFieldType.STRING)
-              .description("행사(Event) 신청종료일시"),
-          PayloadDocumentation.fieldWithPath("informationUrl").type(JsonFieldType.STRING)
-              .description("행사(Event) 상세 정보 URL"),
-          PayloadDocumentation.fieldWithPath("tags[].name").type(JsonFieldType.STRING)
-              .description("연관 태그명"),
-          PayloadDocumentation.fieldWithPath("imageUrl").type(JsonFieldType.STRING)
-              .description("행사(Event) imageUrl"),
-          PayloadDocumentation.fieldWithPath("type").type(JsonFieldType.STRING)
-              .description("Event 타입"),
-          PayloadDocumentation.fieldWithPath("eventMode").type(JsonFieldType.STRING)
-              .description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)"),
-          PayloadDocumentation.fieldWithPath("paymentType").type(JsonFieldType.STRING)
-              .description("행사 유료 여부(PAID, FREE, FREE_PAID)")
+      final RequestParametersSnippet requestParam = requestParameters(
+          parameterWithName("name").description("행사(Event) 이름"),
+          parameterWithName("location").description("행사(Event) 장소"),
+          parameterWithName("startDateTime").description("행사(Event) 시작일시"),
+          parameterWithName("endDateTime").description("행사(Event) 종료일시"),
+          parameterWithName("applyStartDateTime").description("행사(Event) 신청시작일시"),
+          parameterWithName("applyEndDateTime").description("행사(Event) 신청종료일시"),
+          parameterWithName("informationUrl").description("행사(Event) 상세 정보 URL"),
+          parameterWithName("tags").description("연관 태그명"),
+          parameterWithName("imageUrl").description("행사(Event) imageUrl"),
+          parameterWithName("type").description("Event 타입"),
+          parameterWithName("eventMode").description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)"),
+          parameterWithName("paymentType").description("행사 유료 여부(PAID, FREE, FREE_PAID)")
+      );
+
+      final RequestPartsSnippet requestPartsSnippet = requestParts(
+          partWithName("images").description("이미지들").optional()
       );
 
       //when
-      final ResultActions result = mockMvc.perform(
-          MockMvcRequestBuilders.post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
-              .content(objectMapper.writeValueAsString(request)));
+      MockMultipartHttpServletRequestBuilder builder = multipart("/events")
+          .file("images", image1.getBytes())
+          .file("images", image2.getBytes());
+
+      builder.param("name", request.getName())
+          .param("location", request.getLocation())
+          .param("informationUrl", request.getInformationUrl())
+          .param("startDateTime",
+              request.getStartDateTime().format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+          .param("endDateTime",
+              request.getEndDateTime().format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+          .param("applyStartDateTime", request.getApplyStartDateTime()
+              .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+          .param("applyEndDateTime", request.getApplyEndDateTime()
+              .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+          .param("tags", request.getTags().stream().map(TagRequest::getName)
+              .collect(Collectors.joining(",")))
+          .param("imageUrl", request.getImageUrl())
+          .param("type", request.getType().toString())
+          .param("eventMode", request.getEventMode().toString())
+          .param("paymentType", request.getPaymentType().toString());
+
+      final ResultActions result = mockMvc.perform(builder);
 
       //then
-      result.andExpect(MockMvcResultMatchers.status().isCreated())
+      result.andExpect(status().isCreated())
           .andDo(MockMvcResultHandlers.print())
-          .andDo(MockMvcRestDocumentation.document("add-event", requestFields,
-              EVENT_DETAIL_RESPONSE_FILED));
+          .andDo(MockMvcRestDocumentation.document("add-event", requestParam,
+              EVENT_DETAIL_RESPONSE_FILED, requestPartsSnippet));
     }
 
     @ParameterizedTest
@@ -329,20 +360,26 @@ class EventApiTest extends MockMvcTestHelper {
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
-      final EventDetailRequest request = new EventDetailRequest(eventName, event.getLocation(),
-          event.getInformationUrl(), event.getEventPeriod().getStartDate(),
-          event.getEventPeriod().getEndDate(),
-          event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
-          tags, null,
-          EventType.COMPETITION, EventMode.ON_OFFLINE, PaymentType.FREE);
-
-      //when
-      final ResultActions result = mockMvc.perform(
-          MockMvcRequestBuilders.post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
-              .content(objectMapper.writeValueAsString(request)));
-
-      //then
-      result.andExpect(MockMvcResultMatchers.status().isBadRequest());
+      //when & then
+      mockMvc.perform(post("/events")
+              .param("name", eventName)
+              .param("location", event.getLocation())
+              .param("informationUrl", event.getInformationUrl())
+              .param("startDateTime", event.getEventPeriod().getStartDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("endDateTime", event.getEventPeriod().getEndDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("applyStartDateTime", event.getEventPeriod().getApplyStartDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("applyEndDateTime", event.getEventPeriod().getApplyEndDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("imageUrl", event.getImageUrl())
+              .param("type", event.getType().toString())
+              .param("eventMode", EventMode.ON_OFFLINE.toString())
+              .param("paymentType", PaymentType.FREE.toString())
+              .param("tags", tags.stream().map(TagRequest::getName)
+                  .collect(Collectors.joining(","))))
+          .andExpect(status().isBadRequest());
     }
 
     @ParameterizedTest
@@ -356,20 +393,26 @@ class EventApiTest extends MockMvcTestHelper {
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
-      final EventDetailRequest request = new EventDetailRequest(event.getName(), eventLocation,
-          event.getInformationUrl(), event.getEventPeriod().getStartDate(),
-          event.getEventPeriod().getEndDate(),
-          event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
-          tags,
-          event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE);
-
-      //when
-      final ResultActions result = mockMvc.perform(
-          MockMvcRequestBuilders.post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
-              .content(objectMapper.writeValueAsString(request)));
-
-      //then
-      result.andExpect(MockMvcResultMatchers.status().isBadRequest());
+      //when & then
+      mockMvc.perform(post("/events")
+              .param("name", event.getName())
+              .param("location", eventLocation)
+              .param("informationUrl", eventLocation)
+              .param("startDateTime", event.getEventPeriod().getStartDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("endDateTime", event.getEventPeriod().getEndDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("applyStartDateTime", event.getEventPeriod().getApplyStartDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("applyEndDateTime", event.getEventPeriod().getApplyEndDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("imageUrl", event.getImageUrl())
+              .param("type", event.getType().toString())
+              .param("eventMode", EventMode.ON_OFFLINE.toString())
+              .param("paymentType", PaymentType.FREE.toString())
+              .param("tags", tags.stream().map(TagRequest::getName)
+                  .collect(Collectors.joining(","))))
+          .andExpect(status().isBadRequest());
     }
 
     @ParameterizedTest
@@ -384,20 +427,27 @@ class EventApiTest extends MockMvcTestHelper {
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
-      final EventDetailRequest request = new EventDetailRequest(event.getName(),
-          event.getLocation(), informationUrl, event.getEventPeriod().getStartDate(),
-          event.getEventPeriod().getEndDate(),
-          event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
-          tags,
-          event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE);
-
       //when
-      final ResultActions result = mockMvc.perform(
-          MockMvcRequestBuilders.post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
-              .content(objectMapper.writeValueAsString(request)));
+      mockMvc.perform(post("/events")
+              .param("name", event.getName())
+              .param("location", event.getLocation())
+              .param("informationUrl", informationUrl)
+              .param("startDateTime", event.getEventPeriod().getStartDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("endDateTime", event.getEventPeriod().getEndDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("applyStartDateTime", event.getEventPeriod().getApplyStartDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("applyEndDateTime", event.getEventPeriod().getApplyEndDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
+              .param("imageUrl", event.getImageUrl())
+              .param("type", event.getType().toString())
+              .param("eventMode", EventMode.ON_OFFLINE.toString())
+              .param("paymentType", PaymentType.FREE.toString())
+              .param("tags", tags.stream().map(TagRequest::getName)
+                  .collect(Collectors.joining(","))))
+          .andExpect(status().isBadRequest());
 
-      //then
-      result.andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @ParameterizedTest
@@ -406,24 +456,16 @@ class EventApiTest extends MockMvcTestHelper {
     @NullSource
     @DisplayName("시작 일시에 null 혹은 다른 형식의 일시 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
     void addEventWithUnformattedStartDateTimeTest(final String startDateTime) throws Exception {
-      //given
-      final Event event = EventFixture.인프콘_2023();
-
-      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
-          .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
-
-      final String request = "{" + "\"name\":\"인프콘 2023\"," + "\"location\":\"코엑스\","
-          + "\"informationUrl\":\"https://~~~\"," + "\"startDateTime\":" + startDateTime + ","
-          + "\"endDateTime\":\"2023-01-02T12:00:00\","
-          + ",\"tags\":[{\"name\":\"백엔드\"},{\"name\":\"안드로이드\"}]" + "}";
-
-      //when
-      final ResultActions result = mockMvc.perform(
-          MockMvcRequestBuilders.post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
-              .content(request));
-
-      //then
-      result.andExpect(MockMvcResultMatchers.status().isBadRequest());
+      //when & then
+      mockMvc.perform(post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
+              .param("name", "인프콘 2023")
+              .param("location", "코엑스")
+              .param("informationUrl", "https://~~~")
+              .param("startDateTime", startDateTime) // 이 변수의 값을 확인하고 올바른 값을 설정하세요.
+              .param("endDateTime", "2023-01-02T12:00:00")
+              .param("tags[0].name", "백엔드")
+              .param("tags[1].name", "안드로이드"))
+          .andExpect(status().isBadRequest());
     }
 
     @ParameterizedTest
@@ -432,26 +474,16 @@ class EventApiTest extends MockMvcTestHelper {
     @NullSource
     @DisplayName("종료 일시에 null 혹은 다른 형식의 일시 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
     void addEventWithUnformattedEndDateTimeTest(final String endDateTime) throws Exception {
-      //given
-      final Event event = EventFixture.인프콘_2023();
-
-      final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
-          .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
-
-      final String request = "{" + "\"name\":\"인프콘 2023\"," + "\"location\":\"코엑스\","
-          + "\"informationUrl\":\"https://~~~\"," + "\"startDateTime\":\"2023-01-01T12:00:00\","
-          + "\"endDateTime\":" + endDateTime + ","
-          + ",\"tags\":[{\"name\":\"백엔드\"},{\"name\":\"안드로이드\"}]" + "}";
-
-      //when
-      final ResultActions result = mockMvc.perform(
-          MockMvcRequestBuilders.post("/events")
-              .contentType(MediaType.APPLICATION_JSON_VALUE)
-              .content(request)
-      );
-
-      //then
-      result.andExpect(MockMvcResultMatchers.status().isBadRequest());
+      //when & then
+      mockMvc.perform(post("/events")
+              .param("name", "인프콘 2023")
+              .param("location", "코엑스")
+              .param("informationUrl", "https://~~~")
+              .param("startDateTime", "2023-01-01T12:00:00")
+              .param("endDateTime", endDateTime) // 이 변수의 값을 확인하고 올바른 값을 설정하세요.
+              .param("tags[0].name", "백엔드")
+              .param("tags[1].name", "안드로이드"))
+          .andExpect(status().isBadRequest());
     }
   }
 
