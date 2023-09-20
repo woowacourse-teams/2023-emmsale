@@ -55,7 +55,6 @@ import org.springframework.restdocs.request.RequestPartsSnippet;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.web.multipart.MultipartFile;
 
 @WebMvcTest(EventApi.class)
 class EventApiTest extends MockMvcTestHelper {
@@ -85,7 +84,8 @@ class EventApiTest extends MockMvcTestHelper {
       PayloadDocumentation.fieldWithPath("applyRemainingDays").type(JsonFieldType.NUMBER)
           .description("행사 신청 시작일까지 남은 일 수"),
       PayloadDocumentation.fieldWithPath("type").type(JsonFieldType.STRING)
-          .description("event의 타입"));
+          .description("event의 타입"),
+      PayloadDocumentation.fieldWithPath("imageUrls[]").description("이미지 URL들"));
 
   @Test
   @DisplayName("컨퍼런스의 상세정보를 조회할 수 있다.")
@@ -98,7 +98,8 @@ class EventApiTest extends MockMvcTestHelper {
         LocalDateTime.of(2023, 8, 15, 12, 0), "코엑스",
         "UPCOMING",
         "ENDED", List.of("코틀린", "백엔드", "안드로이드"),
-        "https://www.image.com", 2, -12, EventType.COMPETITION.toString());
+        "https://www.image.com", 2, -12, EventType.COMPETITION.toString(),
+        List.of("imageUrl1", "imageUrl2"));
 
     Mockito.when(eventService.findEvent(ArgumentMatchers.anyLong(), any()))
         .thenReturn(eventDetailResponse);
@@ -207,7 +208,8 @@ class EventApiTest extends MockMvcTestHelper {
         request.getApplyStartDateTime(), request.getApplyEndDateTime(),
         request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()), request.getImageUrl(),
-        10, 10, request.getType().toString());
+        10, 10, request.getType().toString(),
+        List.of("imageUrl1", "imageUrl2"));
 
     Mockito.when(eventService.updateEvent(any(), any(),
         any())).thenReturn(response);
@@ -293,7 +295,8 @@ class EventApiTest extends MockMvcTestHelper {
           request.getApplyStartDateTime(), request.getApplyEndDateTime(),
           request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
           tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
-          request.getImageUrl(), 10, 10, request.getType().toString());
+          request.getImageUrl(), 10, 10, request.getType().toString(),
+          List.of("imageUrl1", "imageUrl2"));
 
       Mockito.when(eventService.addEvent(any(), any()))
           .thenReturn(response);

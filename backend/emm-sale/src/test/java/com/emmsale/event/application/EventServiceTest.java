@@ -42,6 +42,9 @@ import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.image.domain.Image;
+import com.emmsale.image.domain.ImageType;
+import com.emmsale.image.domain.repository.ImageRepository;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
@@ -61,6 +64,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
@@ -97,6 +103,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private EventTagRepository eventTagRepository;
   @Autowired
   private TagRepository tagRepository;
+  @Autowired
+  private ImageRepository imageRepository;
+
+  private List<MultipartFile> mockMultipartFiles;
 
   @BeforeEach
   void init() {
@@ -120,6 +130,15 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
         new EventTag(모바일_컨퍼런스, 안드로이드), new EventTag(모바일_컨퍼런스, IOS), new EventTag(안드로이드_컨퍼런스, 안드로이드),
         new EventTag(웹_컨퍼런스, 백엔드), new EventTag(웹_컨퍼런스, 프론트엔드))
     );
+
+    mockMultipartFiles = List.of(
+        new MockMultipartFile(
+            "picture",
+            "picture.jpg",
+            MediaType.TEXT_PLAIN_VALUE,
+            "test data".getBytes()
+        )
+    );
   }
 
   @Nested
@@ -131,7 +150,16 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     void success() {
       //given
       final Event event = eventRepository.save(eventFixture());
-      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일());
+      imageRepository.save(
+          new Image("imageUrl1", ImageType.EVENT, event.getId(), 1, LocalDateTime.now())
+      );
+      imageRepository.save(
+          new Image("imageUrl2", ImageType.EVENT, event.getId(), 0, LocalDateTime.now())
+      );
+
+      final List<String> imageUrls = List.of("imageUrl2", "imageUrl1");
+
+      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일(), imageUrls);
 
       //when
       final EventDetailResponse actual = eventService.findEvent(event.getId(), 날짜_8월_10일());
@@ -498,6 +526,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("이벤트를 성공적으로 저장한다.")
     void addEventTest() {
       //given
+      final Image image1 = new Image("image", ImageType.EVENT, 1L, 0, LocalDateTime.now());
+      final Image image2 = new Image("image", ImageType.EVENT, 1L, 0, LocalDateTime.now());
+
       final EventDetailRequest request = new EventDetailRequest(
           eventName,
           eventLocation,
@@ -510,7 +541,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           imageUrl,
           type,
           eventMode,
-          paymentType
+          paymentType,
+          mockMultipartFiles
       );
 
       doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
@@ -554,7 +586,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           imageUrl,
           type,
           eventMode,
-          paymentType
+          paymentType,
+          mockMultipartFiles
       );
 
       doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
@@ -588,7 +621,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           imageUrl,
           type,
           eventMode,
-          paymentType
+          paymentType,
+          mockMultipartFiles
       );
 
       doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
@@ -637,7 +671,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           imageUrl,
           EventType.CONFERENCE,
           eventMode,
-          paymentType
+          paymentType,
+          mockMultipartFiles
       );
 
       final Event event = eventRepository.save(인프콘_2023());
@@ -681,7 +716,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           imageUrl,
           EventType.CONFERENCE,
           eventMode,
-          paymentType
+          paymentType,
+          mockMultipartFiles
       );
 
       //when & then
@@ -710,7 +746,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           imageUrl,
           EventType.CONFERENCE,
           eventMode,
-          paymentType
+          paymentType,
+          mockMultipartFiles
       );
 
       final Event event = eventRepository.save(인프콘_2023());
@@ -743,7 +780,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           imageUrl,
           EventType.CONFERENCE,
           eventMode,
-          paymentType
+          paymentType,
+          mockMultipartFiles
       );
 
       final Event event = eventRepository.save(인프콘_2023());
