@@ -24,8 +24,8 @@ class DefaultCommentRepository(
     private val comments: List<Comment> = listOf(
         Comment(
             id = 1,
-            eventId = 1,
-            eventName = "인프콘 2023",
+            feedId = 1,
+            feedTitle = "인프콘 2023",
             authorId = 34,
             authorName = "토마스",
             authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -37,8 +37,8 @@ class DefaultCommentRepository(
             childComments = listOf(
                 Comment(
                     id = 2,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 25,
                     authorName = "Buna",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -51,8 +51,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 3,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 34,
                     authorName = "토마스",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -65,8 +65,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 4,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 25,
                     authorName = "Buna",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -79,8 +79,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 5,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 34,
                     authorName = "토마스",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -93,8 +93,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 6,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 25,
                     authorName = "Buna",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -109,8 +109,8 @@ class DefaultCommentRepository(
         ),
         Comment(
             id = 1,
-            eventId = 1,
-            eventName = "인프콘 2023",
+            feedId = 1,
+            feedTitle = "인프콘 2023",
             authorId = 34,
             authorName = "토마스",
             authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -122,8 +122,8 @@ class DefaultCommentRepository(
             childComments = listOf(
                 Comment(
                     id = 2,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 25,
                     authorName = "Buna",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -136,8 +136,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 3,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 34,
                     authorName = "토마스",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -150,8 +150,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 4,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 25,
                     authorName = "Buna",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -164,8 +164,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 5,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 34,
                     authorName = "토마스",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -178,8 +178,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 6,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 25,
                     authorName = "Buna",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -194,8 +194,8 @@ class DefaultCommentRepository(
         ),
         Comment(
             id = 1,
-            eventId = 1,
-            eventName = "인프콘 2023",
+            feedId = 1,
+            feedTitle = "인프콘 2023",
             authorId = 34,
             authorName = "토마스",
             authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -207,8 +207,8 @@ class DefaultCommentRepository(
             childComments = listOf(
                 Comment(
                     id = 2,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 25,
                     authorName = "Buna",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -221,8 +221,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 3,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 34,
                     authorName = "토마스",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -235,8 +235,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 4,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 25,
                     authorName = "Buna",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -249,8 +249,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 5,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 34,
                     authorName = "토마스",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
@@ -263,8 +263,8 @@ class DefaultCommentRepository(
                 ),
                 Comment(
                     id = 6,
-                    eventId = 1,
-                    eventName = "인프콘 2023",
+                    feedId = 1,
+                    feedTitle = "인프콘 2023",
                     authorId = 25,
                     authorName = "Buna",
                     authorImageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",

@@ -64,7 +64,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
                 val commentRepository = KerdyApplication.repositoryContainer.commentRepository
                 when (val result = commentRepository.getComment(commentId)) {
                     is Failure, NetworkError -> ERROR_EVENT_ID to ERROR_EVENT_ID
-                    is Success -> result.data.eventId to (
+                    is Success -> result.data.feedId to (
                         result.data.parentId
                             ?: throw IllegalArgumentException("대댓글만 알림을 받을 수 있습니다. 알림 메세지를 보내는 로직을 다시 확인해주세요.")
                         )

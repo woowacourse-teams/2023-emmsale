@@ -11,10 +11,10 @@ data class CommentResponse(
     val commentId: Long,
     @SerialName("parentId")
     val parentId: Long?,
-    @SerialName("eventId")
-    val eventId: Long,
-    @SerialName("eventName")
-    val eventName: String,
+    @SerialName("feedId")
+    val feedId: Long,
+    @SerialName("feedTitle")
+    val feedTitle: String,
     @SerialName("createdAt")
     val createdAt: String,
     @SerialName("updatedAt")
