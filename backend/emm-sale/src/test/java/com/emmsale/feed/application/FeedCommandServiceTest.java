@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
@@ -19,14 +22,20 @@ import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
 import com.emmsale.feed.exception.FeedExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.image.application.ImageCommandService;
+import com.emmsale.image.domain.ImageType;
 import com.emmsale.member.MemberFixture;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 
 class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
 
@@ -38,6 +47,8 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
   private MemberRepository memberRepository;
   @Autowired
   private EventRepository eventRepository;
+  @MockBean
+  private ImageCommandService imageCommandService;
 
   private Member 작성자;
   private Event 이벤트1;
@@ -59,7 +70,8 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
     final FeedPostRequest request = new FeedPostRequest(이벤트1.getId(), feedTitle, feedContent);
 
     //when
-    final FeedPostResponse expectResponse = feedCommandService.postFeed(작성자, request);
+    final FeedPostResponse expectResponse = feedCommandService.postFeed(작성자, request,
+        Collections.emptyList());
     final Feed actual = feedRepository.findById(expectResponse.getId()).get();
     final FeedPostResponse actualResponse = FeedPostResponse.from(actual);
 
@@ -82,7 +94,7 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
 
     //when
     final EventException actualException = assertThrowsExactly(EventException.class,
-        () -> feedCommandService.postFeed(작성자, request));
+        () -> feedCommandService.postFeed(작성자, request, Collections.emptyList()));
 
     //then
     assertEquals(expectExceptionType, actualException.exceptionType());
@@ -261,6 +273,44 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
 
       //then
       assertEquals(expect, actualException.exceptionType());
+    }
+  }
+
+  @Nested
+  @DisplayName("피드 이미지 업로드 테스트")
+  class PostFeedWithImage {
+
+    @Test
+    @DisplayName("피드에 이미지를 함께 업로드하면 imageCommandService가 호출된다.")
+    void postFeedWithImages() {
+      //given
+      final String feedTitle = "피드 제목";
+      final String feedContent = "피드 내용";
+      final FeedPostRequest request = new FeedPostRequest(이벤트1.getId(), feedTitle, feedContent);
+
+      //when
+      feedCommandService.postFeed(작성자, request,
+          List.of(new MockMultipartFile("image", "image".getBytes())));
+
+      //then
+      verify(imageCommandService, times(1))
+          .saveImages(any(ImageType.class), any(Long.class), any(List.class));
+    }
+
+    @Test
+    @DisplayName("피드에 이미지가 비어있으면 imageCommandService가 호출되지 않는다.")
+    void postFeedWithoutImages() {
+      //given
+      final String feedTitle = "피드 제목";
+      final String feedContent = "피드 내용";
+      final FeedPostRequest request = new FeedPostRequest(이벤트1.getId(), feedTitle, feedContent);
+
+      //when
+      feedCommandService.postFeed(작성자, request, Collections.emptyList());
+
+      //then
+      verify(imageCommandService, times(0))
+          .saveImages(any(ImageType.class), any(Long.class), any(List.class));
     }
   }
 }
