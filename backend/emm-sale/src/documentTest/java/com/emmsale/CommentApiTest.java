@@ -146,8 +146,8 @@ class CommentApiTest extends MockMvcTestHelper {
     //when & then
     mockMvc.perform(get("/comments")
             .header("Authorization", accessToken)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .content(objectMapper.writeValueAsString(request)))
+            .queryParam("feedId", "123")
+            .queryParam("memberId", "456"))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("get-comments", requestParam, responseFieldsSnippet));

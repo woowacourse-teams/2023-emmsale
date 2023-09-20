@@ -16,7 +16,9 @@ import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.comment.exception.CommentException;
 import com.emmsale.comment.exception.CommentExceptionType;
 import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventType;
+import com.emmsale.event.domain.PaymentType;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
@@ -61,7 +63,9 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
             afterDateTime,
             "url",
             EventType.CONFERENCE,
-            "https://image.com"
+            "https://image.com",
+            PaymentType.FREE_PAID,
+            EventMode.ON_OFFLINE
         )
     );
     댓글_작성자 = memberRepository.findById(1L).get();

@@ -44,16 +44,17 @@ class RoomApiTest extends MockMvcTestHelper {
         fieldWithPath("[].roomId").description("Room Id(String 타입의 UUID입니다)"),
         fieldWithPath("[].interlocutorId").description("쪽지를 주고받는 상대방 ID"),
         fieldWithPath("[].interlocutorName").description("쪽지를 주고받는 상대방의 이름"),
+        fieldWithPath("[].interlocutorProfile").description("쪽지를 주고받는 상대방 이미지 URL"),
         fieldWithPath("[].recentlyMessage").description("최근 메시지 내용"),
         fieldWithPath("[].recentlyMessageTime").description("최근 메시지 시간")
     );
 
     final List<RoomResponse> roomResponses = List.of(
-        new RoomResponse(UUID.randomUUID().toString(), 1L, "receiver1", "최근 메시지1",
+        new RoomResponse(UUID.randomUUID().toString(), 1L, "receiver1", "imageUrl1", "최근 메시지1",
             LocalDateTime.now()),
-        new RoomResponse(UUID.randomUUID().toString(), 2L, "receiver2", "최근 메시지2",
+        new RoomResponse(UUID.randomUUID().toString(), 2L, "receiver2", "imageUrl2", "최근 메시지2",
             LocalDateTime.now().minusDays(2)),
-        new RoomResponse(UUID.randomUUID().toString(), 1L, "receiver3", "최근 메시지3",
+        new RoomResponse(UUID.randomUUID().toString(), 1L, "receiver3", "imageUrl3", "최근 메시지3",
             LocalDateTime.now().minusDays(3))
     );
 

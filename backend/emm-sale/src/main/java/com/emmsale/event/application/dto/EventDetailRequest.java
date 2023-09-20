@@ -1,7 +1,9 @@
 package com.emmsale.event.application.dto;
 
 import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventType;
+import com.emmsale.event.domain.PaymentType;
 import com.emmsale.tag.application.dto.TagRequest;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,6 +45,9 @@ public class EventDetailRequest {
   private final String imageUrl;
   private final EventType type;
 
+  private final EventMode eventMode;
+  private final PaymentType paymentType;
+
   public Event toEvent() {
     return new Event(
         name,
@@ -53,7 +58,9 @@ public class EventDetailRequest {
         applyEndDateTime,
         informationUrl,
         type,
-        imageUrl
+        imageUrl,
+        paymentType,
+        eventMode
     );
   }
 }

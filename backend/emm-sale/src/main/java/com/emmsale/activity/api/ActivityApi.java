@@ -35,4 +35,3 @@ public class ActivityApi {
         .body(activityCommandService.addActivity(request));
   }
 }
-
