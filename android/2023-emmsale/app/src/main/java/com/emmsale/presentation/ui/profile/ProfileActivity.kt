@@ -56,7 +56,7 @@ class ProfileActivity : AppCompatActivity() {
         binding.tbProfileToolbar.setNavigationOnClickListener { finish() }
         binding.tbProfileToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.profile_more -> showMoreMenu()
+                R.id.more -> showMoreMenu()
             }
             true
         }

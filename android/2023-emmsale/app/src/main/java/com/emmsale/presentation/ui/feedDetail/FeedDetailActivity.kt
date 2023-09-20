@@ -54,6 +54,7 @@ class FeedDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setUpDataBinding()
+        setUpToolbar()
         setUpRecyclerView()
         setUpUiEvent()
         setUpCommentEditing()
@@ -98,6 +99,48 @@ class FeedDetailActivity : AppCompatActivity() {
         hideKeyboard()
     }
 
+    private fun setUpToolbar() {
+        binding.tbFeeddetailToolbar.setNavigationOnClickListener { finish() }
+        binding.tbFeeddetailToolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.more -> showFeedDetailMenuDialog()
+            }
+            true
+        }
+    }
+
+    private fun showFeedDetailMenuDialog() {
+        bottomMenuDialog.resetMenu()
+        if (viewModel.isFeedDetailWrittenByLoginUser) {
+            bottomMenuDialog.addFeedUpdateButton()
+            bottomMenuDialog.addFeedDeleteButton()
+        } else {
+            bottomMenuDialog.addFeedReportButton()
+        }
+        bottomMenuDialog.show()
+    }
+
+    private fun BottomMenuDialog.addFeedUpdateButton() {
+        addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
+            binding.root.showSnackBar("아직 피드 수정 기능이 준비되지 않았습니다.")
+        }
+    }
+
+    private fun BottomMenuDialog.addFeedDeleteButton() {
+        addMenuItemBelow(context.getString(R.string.all_delete_button_label)) {
+            viewModel.deleteFeed()
+        }
+    }
+
+    private fun BottomMenuDialog.addFeedReportButton() {
+        addMenuItemBelow(
+            context.getString(R.string.all_report_button_label),
+            MenuItemType.IMPORTANT,
+        ) {
+            binding.root.showSnackBar("아직 피드 신고 기능이 준비되지 않았습니다.")
+        }
+    }
+
     private fun setUpRecyclerView() {
         val concatAdapterConfig = ConcatAdapter.Config.Builder().build()
 
@@ -123,27 +166,27 @@ class FeedDetailActivity : AppCompatActivity() {
     private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, commentId: Long) {
         bottomMenuDialog.resetMenu()
         if (isWrittenByLoginUser) {
-            bottomMenuDialog.addUpdateButton(commentId)
-            bottomMenuDialog.addDeleteButton(commentId)
+            bottomMenuDialog.addCommentUpdateButton(commentId)
+            bottomMenuDialog.addCommentDeleteButton(commentId)
         } else {
-            bottomMenuDialog.addReportButton(commentId)
+            bottomMenuDialog.addCommentReportButton(commentId)
         }
         bottomMenuDialog.show()
     }
 
-    private fun BottomMenuDialog.addUpdateButton(commentId: Long) {
+    private fun BottomMenuDialog.addCommentUpdateButton(commentId: Long) {
         addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
             editComment(commentId)
         }
     }
 
-    private fun BottomMenuDialog.addDeleteButton(commentId: Long) {
+    private fun BottomMenuDialog.addCommentDeleteButton(commentId: Long) {
         addMenuItemBelow(context.getString(R.string.all_delete_button_label)) {
-            onDeleteButtonClick(commentId)
+            onCommentDeleteButtonClick(commentId)
         }
     }
 
-    private fun onDeleteButtonClick(commentId: Long) {
+    private fun onCommentDeleteButtonClick(commentId: Long) {
         val context = binding.root.context
         WarningDialog(
             context = context,
@@ -155,7 +198,7 @@ class FeedDetailActivity : AppCompatActivity() {
         ).show()
     }
 
-    private fun BottomMenuDialog.addReportButton(commentId: Long) {
+    private fun BottomMenuDialog.addCommentReportButton(commentId: Long) {
         addMenuItemBelow(
             context.getString(R.string.all_report_button_label),
             MenuItemType.IMPORTANT,
@@ -220,6 +263,17 @@ class FeedDetailActivity : AppCompatActivity() {
 
             FeedDetailUiEvent.CommentReportFail -> binding.root.showSnackBar(R.string.all_report_fail_message)
             FeedDetailUiEvent.CommentUpdateFail -> binding.root.showSnackBar(getString(R.string.comments_comments_update_error_message))
+            FeedDetailUiEvent.FeedDeleteComplete -> {
+                InfoDialog(
+                    context = this,
+                    title = getString(R.string.feeddetail_feed_delete_complete_title),
+                    message = getString(R.string.feeddetail_feed_delete_complete_message),
+                    buttonLabel = getString(R.string.all_okay),
+                ).show()
+                finish()
+            }
+
+            FeedDetailUiEvent.FeedDeleteFail -> binding.root.showSnackBar(getString(R.string.feeddetail_feed_delete_fail_message))
         }
     }
 

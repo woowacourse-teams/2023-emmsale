@@ -32,9 +32,14 @@ class FeedDetailViewModel(
     private val tokenRepository: TokenRepository,
 ) : ViewModel(), Refreshable {
 
+    private val uid: Long by lazy { tokenRepository.getMyUid() ?: -1 }
+
     private val _feedDetail: NotNullMutableLiveData<FeedDetailUiState> =
         NotNullMutableLiveData(FeedDetailUiState.Loading)
     val feedDetail: NotNullLiveData<FeedDetailUiState> = _feedDetail
+
+    val isFeedDetailWrittenByLoginUser: Boolean
+        get() = _feedDetail.value.feedDetail.writer.id == uid
 
     private val _editingCommentId = MutableLiveData<Long?>()
     val editingCommentId: LiveData<Long?> = _editingCommentId
@@ -74,7 +79,6 @@ class FeedDetailViewModel(
 
     private fun fetchComments() {
         viewModelScope.launch {
-            val uid = tokenRepository.getMyUid() ?: return@launch
             when (val result = commentRepository.getComments(feedId)) {
                 is Failure -> {}
                 NetworkError ->
@@ -86,6 +90,28 @@ class FeedDetailViewModel(
                             parentComment.childComments.map { CommentUiState.create(uid, it) }
                     },
                 )
+
+                is Unexpected ->
+                    _uiEvent.value =
+                        Event(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
+            }
+        }
+    }
+
+    fun deleteFeed() {
+        viewModelScope.launch {
+            _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
+            when (val result = feedRepository.deleteFeed(feedId)) {
+                is Failure -> {
+                    _uiEvent.value = Event(FeedDetailUiEvent.FeedDeleteFail)
+                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
+                }
+
+                NetworkError ->
+                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
+
+                is Success ->
+                    _uiEvent.value = Event(FeedDetailUiEvent.FeedDeleteComplete)
 
                 is Unexpected ->
                     _uiEvent.value =
@@ -170,7 +196,6 @@ class FeedDetailViewModel(
     fun reportComment(commentId: Long) {
         viewModelScope.launch {
             _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
-            val uid = tokenRepository.getMyUid() ?: return@launch
             val authorId =
                 _feedDetail.value.comments.find { it.comment.id == commentId }?.comment?.authorId
                     ?: return@launch
