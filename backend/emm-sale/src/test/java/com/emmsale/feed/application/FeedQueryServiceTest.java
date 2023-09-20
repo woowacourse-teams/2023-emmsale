@@ -67,7 +67,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
           .map(FeedSimpleResponse::from)
           .collect(Collectors.toList());
       final FeedListResponse expect = new FeedListResponse(eventId, feedSimpleResponses);
-      expect.getFeeds().sort(Comparator.comparing(FeedSimpleResponse::getCreatedAt).reversed());
+      expect.getFeeds().sort(Comparator.comparing(FeedSimpleResponse::getUpdatedAt).reversed());
 
       //when
       final FeedListResponse actual = feedQueryService.findAllFeeds(eventId);
