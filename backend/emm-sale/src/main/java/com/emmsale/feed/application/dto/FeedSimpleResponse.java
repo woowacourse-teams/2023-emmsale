@@ -15,6 +15,7 @@ public class FeedSimpleResponse {
 
   private final Long id;
   private final String title;
+  private final String content;
   private final Long writerId;
   private final Long commentsCount;
   @JsonFormat(pattern = DATE_TIME_FORMAT)
@@ -27,6 +28,7 @@ public class FeedSimpleResponse {
     return new FeedSimpleResponse(
         feed.getId(),
         feed.getTitle(),
+        feed.getContent(),
         feed.getWriter().getId(),
         commentCount,
         feed.getUpdatedAt()
