@@ -15,6 +15,7 @@ import com.emmsale.presentation.ui.postList.uiState.PostsUiState
 import kotlinx.coroutines.launch
 
 class PostListViewModel(
+    private val eventId: Long,
     private val postRepository: PostRepository,
 ) : ViewModel(), Refreshable {
     private val _posts = NotNullMutableLiveData(PostsUiState())
@@ -31,7 +32,7 @@ class PostListViewModel(
     private fun fetchPosts() {
         _posts.toLoadingState()
         viewModelScope.launch {
-            when (val postsFetchResult = postRepository.getPosts()) {
+            when (val postsFetchResult = postRepository.getPosts(eventId)) {
                 is Success -> _posts.toSuccessState(postsFetchResult.data)
                 else -> _posts.toErrorState()
             }
@@ -52,7 +53,10 @@ class PostListViewModel(
 
     companion object {
         fun factory(eventId: Long) = ViewModelFactory {
-            PostListViewModel(KerdyApplication.repositoryContainer.postRepository)
+            PostListViewModel(
+                eventId,
+                KerdyApplication.repositoryContainer.postRepository,
+            )
         }
     }
 }

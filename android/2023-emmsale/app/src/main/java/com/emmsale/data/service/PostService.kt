@@ -1,10 +1,13 @@
 package com.emmsale.data.service
 
+import com.emmsale.data.apiModel.response.PostsResponse
 import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.model.Post
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface PostService {
-    @GET
-    suspend fun getPosts(): ApiResponse<List<Post>>
+    @GET("/feeds?")
+    suspend fun getPosts(
+        @Query("event-id") eventId: Long,
+    ): ApiResponse<PostsResponse>
 }
