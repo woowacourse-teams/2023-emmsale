@@ -47,10 +47,12 @@ public class FeedApi {
   @ResponseStatus(HttpStatus.CREATED)
   public FeedPostResponse postFeed(
       final Member member,
-      @RequestPart final FeedPostRequest feedPostRequest,
+      @RequestPart final Long eventId,
+      @RequestPart final String title,
+      @RequestPart final String content,
       @RequestPart(required = false) final List<MultipartFile> images
   ) {
-    System.out.println("d");
+    final FeedPostRequest feedPostRequest = new FeedPostRequest(eventId, title, content);
     return feedCommandService.postFeed(member, feedPostRequest, images);
   }
 

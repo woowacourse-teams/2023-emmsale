@@ -126,15 +126,20 @@ class FeedApiTest extends MockMvcTestHelper {
     when(feedCommandService.postFeed(any(), any(), any())).thenReturn(response);
 
     //when & then
-    final MockMultipartFile request = new MockMultipartFile("feedPostRequest", "",
-        "application/json",
-        objectMapper.writeValueAsString(feedPostRequest).getBytes());
+    final MockMultipartFile eventid = new MockMultipartFile("eventId", "",
+        "application/json", "1".getBytes());
+    final MockMultipartFile title = new MockMultipartFile("title", "",
+        "application/json", "title".getBytes());
+    final MockMultipartFile content = new MockMultipartFile("content", "",
+        "application/json", "content".getBytes());
 
     final MockMultipartFile images = new MockMultipartFile("images", "image.jpg",
         "multipart/form-data", "image".getBytes());
 
     mockMvc.perform(multipart("/feeds")
-            .file(request)
+            .file(eventid)
+            .file(title)
+            .file(content)
             .file(images))
         .andDo(print())
         .andExpect(status().isCreated());
