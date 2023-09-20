@@ -87,7 +87,8 @@ class MessageListViewModel(
             } else {
                 val prevMessage = this[index - 1]
 
-                var showProfile = message.createdAt == prevMessage.createdAt
+                var showProfile =
+                    message.createdAt == prevMessage.createdAt || prevMessage.senderId != message.senderId
                 if (prevMessage.createdAt.dayOfYear != message.createdAt.dayOfYear) {
                     myMessages.add(
                         MessageDateUiState(
