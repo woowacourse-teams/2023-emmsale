@@ -17,9 +17,7 @@
         android:theme="@style/Theme.Emmsale"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
-        <activity
-            android:name=".presentation.ui.messageList.MessageListActivity"
-            android:exported="true" />
+        <activity android:name=".presentation.ui.messageList.MessageListActivity" />
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true"
@@ -94,7 +92,6 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.main.MainActivity"
-            android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />

@@ -25,7 +25,7 @@
             android:layout_height="30dp"
             android:importantForAccessibility="no"
             android:visibility="@{message.shownProfile ? View.VISIBLE : View.INVISIBLE}"
-            app:defaultImage="@{@drawable/ic_anonymous_profile}"
+            app:defaultImage="@{@drawable/ic_message_default_profile}"
             app:imageUrl="@{message.profileImageUrl}"
             app:isCircle="@{true}"
             app:layout_constraintStart_toStartOf="parent"
