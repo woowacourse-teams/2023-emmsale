@@ -15,7 +15,7 @@ data class EventDetail(
     val status: String,
     val applyStatus: String,
     val tags: List<String>,
-    val posterImageUrl: String,
+    val posterImageUrl: String?,
     val remainingDays: Int,
     val applyRemainingDays: Int,
     val type: String,

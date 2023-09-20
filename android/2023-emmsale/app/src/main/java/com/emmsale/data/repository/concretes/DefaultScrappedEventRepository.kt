@@ -11,7 +11,6 @@ import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.ScrappedEvent
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.data.service.ScrappedEventService
-import okhttp3.Headers
 
 class DefaultScrappedEventRepository(
     private val scrappedEventService: ScrappedEventService,
@@ -24,8 +23,9 @@ class DefaultScrappedEventRepository(
     }
 
     override suspend fun scrapEvent(eventId: Long): ApiResponse<Unit> {
-        val scrappedEventCreateRequest = ScrappedEventCreateRequest(eventId)
-        return scrappedEventService.scrapEvent(scrappedEventCreateRequest)
+        return scrappedEventService.scrapEvent(
+            ScrappedEventCreateRequest(eventId),
+        )
     }
 
     override suspend fun deleteScrap(eventId: Long): ApiResponse<Unit> {
@@ -39,12 +39,7 @@ class DefaultScrappedEventRepository(
             is Unexpected -> response
             is Success -> Success(
                 response.data.any { it.eventId == eventId },
-                DEFAULT_HEADER,
             )
         }
-    }
-
-    companion object {
-        private val DEFAULT_HEADER = Headers.headersOf("Auth", "Auth")
     }
 }

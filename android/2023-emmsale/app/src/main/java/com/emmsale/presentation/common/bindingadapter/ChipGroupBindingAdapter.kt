@@ -5,7 +5,7 @@ import com.emmsale.presentation.common.views.EventTagChip
 import com.google.android.material.chip.ChipGroup
 
 @BindingAdapter("app:eventChips")
-fun ChipGroup.chips(tags: List<String>?) {
+fun ChipGroup.setEventChips(tags: List<String>?) {
     removeAllViews()
     addEventTags(tags ?: emptyList())
 }
