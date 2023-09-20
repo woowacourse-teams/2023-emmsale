@@ -62,7 +62,15 @@ class FeedDetailViewModel(
     private fun fetchFeedDetail() {
         viewModelScope.launch {
             when (val result = feedRepository.getFeed(feedId)) {
-                is Failure, NetworkError ->
+                is Failure -> {
+                    if (result.code == DELETED_FEED_FETCH_ERROR_CODE) {
+                        _uiEvent.value = Event(FeedDetailUiEvent.DeletedFeedFetch)
+                    } else {
+                        _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
+                    }
+                }
+
+                NetworkError ->
                     _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
 
                 is Success -> _feedDetail.value = _feedDetail.value.copy(
@@ -221,6 +229,7 @@ class FeedDetailViewModel(
     }
 
     companion object {
+        private const val DELETED_FEED_FETCH_ERROR_CODE = 403
         private const val REPORT_DUPLICATE_ERROR_CODE = 400
 
         fun factory(feedId: Long) = ViewModelFactory {

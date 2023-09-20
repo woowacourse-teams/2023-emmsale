@@ -376,5 +376,7 @@
     <string name="feeddetail_feed_delete_fail_message">피드를 삭제하는 데 실패했어요 😥</string>
     <string name="feeddetail_feed_delete_complete_title">피드 삭제 완료</string>
     <string name="feeddetail_feed_delete_complete_message">피드가 삭제되었습니다.</string>
+    <string name="feeddetail_deleted_feed_fetch_title">삭제된 피드 조회</string>
+    <string name="feeddetail_deleted_feed_fetch_message">피드가 삭제되었습니다.</string>
 
 </resources>

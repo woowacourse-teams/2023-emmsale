@@ -274,6 +274,15 @@ class FeedDetailActivity : AppCompatActivity() {
             }
 
             FeedDetailUiEvent.FeedDeleteFail -> binding.root.showSnackBar(getString(R.string.feeddetail_feed_delete_fail_message))
+            FeedDetailUiEvent.DeletedFeedFetch -> {
+                InfoDialog(
+                    context = this,
+                    title = getString(R.string.feeddetail_deleted_feed_fetch_title),
+                    message = getString(R.string.feeddetail_deleted_feed_fetch_message),
+                    buttonLabel = getString(R.string.all_okay),
+                ).show()
+                finish()
+            }
         }
     }
 
