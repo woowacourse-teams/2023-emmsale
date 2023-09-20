@@ -30,7 +30,7 @@ class ChildCommentActivity : AppCompatActivity() {
         ChildCommentViewModel.factory(parentCommentId)
     }
 
-    private val eventId: Long by lazy { intent.getLongExtra(KEY_EVENT_ID, -1) }
+    private val feedId: Long by lazy { intent.getLongExtra(KEY_FEED_ID, -1) }
 
     private val parentCommentId: Long by lazy { intent.getLongExtra(KEY_PARENT_COMMENT_ID, -1) }
 
@@ -199,7 +199,7 @@ class ChildCommentActivity : AppCompatActivity() {
         viewModel.saveChildComment(
             content = binding.etChildcommentsEditchildcommentcontent.text.toString(),
             parentCommentId = parentCommentId,
-            eventId = eventId,
+            feedId = feedId,
         )
         binding.etChildcommentsEditchildcommentcontent.apply {
             text.clear()
@@ -222,13 +222,13 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KEY_EVENT_ID = "KEY_EVENT_ID"
+        private const val KEY_FEED_ID = "KEY_FEED_ID"
         private const val KEY_PARENT_COMMENT_ID = "KEY_PARENT_COMMENT_ID"
         private const val KEY_FROM_NOTIFICATION = "KEY_FROM_NOTIFICATION"
 
-        fun startActivity(context: Context, eventId: Long, parentCommentId: Long) {
+        fun startActivity(context: Context, feedId: Long, parentCommentId: Long) {
             val intent = Intent(context, ChildCommentActivity::class.java).apply {
-                putExtra(KEY_EVENT_ID, eventId)
+                putExtra(KEY_FEED_ID, feedId)
                 putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
@@ -237,12 +237,12 @@ class ChildCommentActivity : AppCompatActivity() {
 
         fun getIntent(
             context: Context,
-            eventId: Long,
+            feedId: Long,
             parentCommentId: Long,
             fromNotification: Boolean = false,
         ): Intent =
             Intent(context, ChildCommentActivity::class.java).apply {
-                putExtra(KEY_EVENT_ID, eventId)
+                putExtra(KEY_FEED_ID, feedId)
                 putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 if (fromNotification) putExtra(KEY_FROM_NOTIFICATION, true)
@@ -252,7 +252,7 @@ class ChildCommentActivity : AppCompatActivity() {
     inner class ChildCommentOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (intent.getBooleanExtra(KEY_FROM_NOTIFICATION, false)) {
-                EventDetailActivity.startActivity(this@ChildCommentActivity, eventId)
+                EventDetailActivity.startActivity(this@ChildCommentActivity, feedId)
             }
             finish()
         }

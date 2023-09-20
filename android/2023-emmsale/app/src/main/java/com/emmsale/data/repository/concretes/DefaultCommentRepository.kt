@@ -299,9 +299,10 @@ class DefaultCommentRepository(
     override suspend fun getComment(
         commentId: Long,
     ): ApiResponse<Comment> = withContext(dispatcher) {
-        commentService
-            .getComment(commentId)
-            .map(CommentFamilyApiModel::toData)
+        // commentService
+        //     .getComment(commentId)
+        //     .map(CommentFamilyApiModel::toData)
+        Success(comments[0])
     }
 
     override suspend fun saveComment(

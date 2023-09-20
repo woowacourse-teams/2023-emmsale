@@ -63,9 +63,9 @@ class ChildCommentViewModel(
         }
     }
 
-    fun saveChildComment(content: String, parentCommentId: Long, eventId: Long) {
+    fun saveChildComment(content: String, parentCommentId: Long, feedId: Long) {
         viewModelScope.launch {
-            when (val result = commentRepository.saveComment(content, eventId, parentCommentId)) {
+            when (val result = commentRepository.saveComment(content, feedId, parentCommentId)) {
                 is Failure, NetworkError -> _event.value = ChildCommentsUiEvent.POST_ERROR
                 is Success -> refresh()
                 is Unexpected -> throw Throwable(result.error)

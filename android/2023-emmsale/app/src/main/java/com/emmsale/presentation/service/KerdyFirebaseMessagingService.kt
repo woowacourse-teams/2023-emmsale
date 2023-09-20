@@ -59,11 +59,11 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun showChildCommentNotification(message: RemoteMessage) {
-        fun getEventIdAndParentCommentId(commentId: Long): Pair<Long, Long> {
+        fun getFeedIdAndParentCommentId(commentId: Long): Pair<Long, Long> {
             return runBlocking {
                 val commentRepository = KerdyApplication.repositoryContainer.commentRepository
                 when (val result = commentRepository.getComment(commentId)) {
-                    is Failure, NetworkError -> ERROR_EVENT_ID to ERROR_EVENT_ID
+                    is Failure, NetworkError -> ERROR_FEED_ID to ERROR_FEED_ID
                     is Success -> result.data.feedId to (
                         result.data.parentId
                             ?: throw IllegalArgumentException("대댓글만 알림을 받을 수 있습니다. 알림 메세지를 보내는 로직을 다시 확인해주세요.")
@@ -79,14 +79,14 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationType = message.data["notificationType"] ?: return
         val createdAt = message.data["createdAt"] ?: return
 
-        val (eventId, parentCommentId) = getEventIdAndParentCommentId(childCommentId)
-        if (eventId == ERROR_EVENT_ID) return
+        val (feedId, parentCommentId) = getFeedIdAndParentCommentId(childCommentId)
+        if (feedId == ERROR_FEED_ID) return
 
         baseContext.showNotification(
             title = getString(R.string.kerdyfirebasemessaging_child_comment_notification_title_format),
             message = createdAt.toTimeMessage(),
             channelId = R.id.id_all_child_comment_notification_channel,
-            intent = ChildCommentActivity.getIntent(this, eventId, parentCommentId, true),
+            intent = ChildCommentActivity.getIntent(this, feedId, parentCommentId, true),
         )
     }
 
@@ -110,7 +110,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
-        private const val ERROR_EVENT_ID = -1L
+        private const val ERROR_FEED_ID = -1L
 
         private const val FOLLOW_NOTIFICATION_TYPE = "REQUEST"
         private const val CHILD_COMMENT_NOTIFICATION_TYPE = "COMMENT"
