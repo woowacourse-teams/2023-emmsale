@@ -16,7 +16,7 @@ import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.messageRoomList.uistate.MemberRoomListUiState
 import kotlinx.coroutines.launch
 
-class MessageRoomListViewModel(
+class MessageRoomViewModel(
     private val memberRepository: TokenRepository,
     private val messageRoomRepository: MessageRoomRepository,
 ) : ViewModel(), Refreshable {
@@ -50,7 +50,7 @@ class MessageRoomListViewModel(
 
     companion object {
         val factory = ViewModelFactory {
-            MessageRoomListViewModel(
+            MessageRoomViewModel(
                 memberRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 messageRoomRepository = KerdyApplication.repositoryContainer.messageRoomRepository,
             )

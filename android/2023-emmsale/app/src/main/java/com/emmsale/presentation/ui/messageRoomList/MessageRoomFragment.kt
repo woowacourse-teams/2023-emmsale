@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
-import com.emmsale.databinding.ActivityMessageRoomListBinding
+import com.emmsale.databinding.FragmentMessageRoomBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.messageRoomList.recyclerview.MessageRoomListAdapter
 
-class MessageRoomListFragment : BaseFragment<ActivityMessageRoomListBinding>() {
-    override val layoutResId: Int = R.layout.activity_message_room_list
-    private val viewModel: MessageRoomListViewModel by viewModels { MessageRoomListViewModel.factory }
+class MessageRoomFragment : BaseFragment<FragmentMessageRoomBinding>() {
+    override val layoutResId: Int = R.layout.fragment_message_room
+    private val viewModel: MessageRoomViewModel by viewModels { MessageRoomViewModel.factory }
 
     private lateinit var messageRoomListAdapter: MessageRoomListAdapter
 
@@ -42,5 +42,9 @@ class MessageRoomListFragment : BaseFragment<ActivityMessageRoomListBinding>() {
 
     private fun navigateToMessageList(roomId: String, otherUid: Long) {
         MessageListActivity.startActivity(requireContext(), roomId, otherUid)
+    }
+
+    companion object {
+        const val TAG: String = "TAG_MESSAGE_ROOM"
     }
 }

@@ -12,14 +12,14 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.messageRoomList.MessageRoomListViewModel" />
+            type="com.emmsale.presentation.ui.messageRoomList.MessageRoomViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.ui.messageRoomList.MessageRoomListFragment">
+        tools:context=".presentation.ui.messageRoomList.MessageRoomFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_message_room_list"

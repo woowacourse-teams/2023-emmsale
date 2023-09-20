@@ -81,6 +81,7 @@
 
     <string name="main_menu_item_name_of_profile">프로필</string>
     <string name="main_menu_item_name_of_home">홈</string>
+    <string name="main_menu_item_name_of_message">쪽지</string>
     <string name="main_menu_item_name_of_setting">설정</string>
 
     <string name="profile_memberimagedescription">회원의 사진</string>
