@@ -24,11 +24,15 @@ class DefaultConfigRepository(
         ),
         isInterestEventNotificationReceive = preference.getBoolean(
             KEY_INTEREST_EVENT_NOTIFICATION_RECEIVE,
-            DEFAULT_VALUE_INTEREST_EVENT_NOTIFIACTION_RECEIVE,
+            DEFAULT_VALUE_INTEREST_EVENT_NOTIFICATION_RECEIVE,
         ),
         isAutoLogin = preference.getBoolean(
             KEY_AUTO_LOGIN,
             DEFAULT_VALUE_AUTO_LOGIN,
+        ),
+        isMessageNotificationReceive = preference.getBoolean(
+            KEY_MESSAGE_NOTIFICATION_RECEIVE,
+            DEFAULT_VALUE_MESSAGE_NOTIFICATION_RECEIVE,
         ),
     )
 
@@ -46,6 +50,10 @@ class DefaultConfigRepository(
 
     override fun saveInterestEventNotificationReceiveConfig(isReceive: Boolean) {
         preferenceEditor.putBoolean(KEY_INTEREST_EVENT_NOTIFICATION_RECEIVE, isReceive).apply()
+    }
+
+    override fun saveMessageNotificationReceiveConfig(isReceive: Boolean) {
+        preferenceEditor.putBoolean(KEY_MESSAGE_NOTIFICATION_RECEIVE, isReceive).apply()
     }
 
     override fun saveAutoLoginConfig(isAutoLogin: Boolean) {
@@ -68,6 +76,10 @@ class DefaultConfigRepository(
 
         private const val KEY_INTEREST_EVENT_NOTIFICATION_RECEIVE =
             "interest_event_notification_receive_key"
-        private const val DEFAULT_VALUE_INTEREST_EVENT_NOTIFIACTION_RECEIVE = true
+        private const val DEFAULT_VALUE_INTEREST_EVENT_NOTIFICATION_RECEIVE = true
+
+        private const val KEY_MESSAGE_NOTIFICATION_RECEIVE =
+            "message_notification_receive_key"
+        private const val DEFAULT_VALUE_MESSAGE_NOTIFICATION_RECEIVE = true
     }
 }

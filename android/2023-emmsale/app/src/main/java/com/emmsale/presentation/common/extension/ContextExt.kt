@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.emmsale.R
 import com.emmsale.presentation.common.views.ConfirmDialog
 import java.time.LocalDate
@@ -75,13 +76,23 @@ fun Context.showNotification(
     message: String,
     notificationId: Int = System.currentTimeMillis().toInt(),
     channelId: Int,
-    intent: Intent? = null,
+    intent: Intent = Intent(),
+    largeIconUrl: String? = null,
+    groupKey: String? = null,
 ) {
     val notificationManager = NotificationManagerCompat.from(this)
 
     if (!checkPostNotificationPermission()) return
 
-    val notification = createNotification(channelId, title, message, notificationId, intent)
+    val notification = createNotification(
+        channelId = channelId,
+        title = title,
+        message = message,
+        notificationId = notificationId,
+        intent = intent,
+        largeIconUrl = largeIconUrl,
+        groupKey = groupKey,
+    )
     notificationManager.notify(notificationId, notification)
 }
 
@@ -91,13 +102,18 @@ private fun Context.createNotification(
     message: String,
     notificationId: Int,
     intent: Intent? = null,
+    largeIconUrl: String? = null,
+    groupKey: String? = null,
 ) = NotificationCompat.Builder(this, channelId.toString())
     .setSmallIcon(R.drawable.ic_all_notification)
+    .setColor(ContextCompat.getColor(this, R.color.notification_icon_background_color))
+    .setLargeIcon(largeIconUrl?.toBitmap(this))
     .setContentTitle(title)
+    .setGroupSummary(true)
+    .setGroup(groupKey)
     .setContentText(message)
     .setContentIntent(
         PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_MUTABLE),
     )
-    .setPriority(NotificationCompat.PRIORITY_HIGH)
     .setAutoCancel(true)
     .build()

@@ -182,7 +182,6 @@
                         android:text="@string/notificationconfig_notification_follow_title"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/switch_comment_notification_receive_config"
                         app:layout_constraintStart_toStartOf="@+id/tv_notification_tag_title"
                         app:layout_constraintTop_toBottomOf="@+id/tv_notification_child_comment_title" />
@@ -197,6 +196,31 @@
                         app:layout_constraintBottom_toBottomOf="@+id/tv_notification_follow_title"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/tv_notification_follow_title"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <TextView
+                        android:id="@+id/tv_notification_message_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="25dp"
+                        android:text="@string/notificationconfig_notification_message_title"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/switch_comment_notification_receive_config"
+                        app:layout_constraintStart_toStartOf="@+id/tv_notification_follow_title"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_notification_follow_title" />
+
+                    <Switch
+                        android:id="@+id/switch_message_notification_receive_config"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="17dp"
+                        android:thumb="@drawable/bg_notificationconfig_switch_thumb"
+                        android:track="@drawable/bg_notificationconfig_switch_track"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_notification_message_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tv_notification_message_title"
                         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
 
