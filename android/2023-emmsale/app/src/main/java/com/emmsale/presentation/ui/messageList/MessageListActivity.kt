@@ -81,6 +81,11 @@ class MessageListActivity : AppCompatActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        viewModel.refresh()
+    }
+
     companion object {
         private const val KEY_ROOM_ID = "KEY_ROOM_ID"
         private const val DEFAULT_ROOM_ID = ""
