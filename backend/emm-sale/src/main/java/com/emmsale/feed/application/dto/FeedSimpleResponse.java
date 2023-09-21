@@ -19,6 +19,8 @@ public class FeedSimpleResponse {
   private final Long writerId;
   private final Long commentsCount;
   @JsonFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime createdAt;
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime updatedAt;
 
   public static FeedSimpleResponse from(final Entry<Feed, Long> entry) {
@@ -31,6 +33,7 @@ public class FeedSimpleResponse {
         feed.getContent(),
         feed.getWriter().getId(),
         commentCount,
+        feed.getCreatedAt(),
         feed.getUpdatedAt()
     );
   }

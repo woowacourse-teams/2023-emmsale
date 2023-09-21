@@ -19,6 +19,8 @@ public class FeedDetailResponse {
   private final String title;
   private final String content;
   @JsonFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime createdAt;
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime updatedAt;
 
   public static FeedDetailResponse from(final Feed feed) {
@@ -30,6 +32,7 @@ public class FeedDetailResponse {
         writerResponse,
         feed.getTitle(),
         feed.getContent(),
+        feed.getCreatedAt(),
         feed.getUpdatedAt()
     );
   }
