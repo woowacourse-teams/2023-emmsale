@@ -24,6 +24,7 @@ import com.emmsale.feed.application.dto.FeedUpdateResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,18 +45,20 @@ class FeedApiTest extends MockMvcTestHelper {
         fieldWithPath("feeds[].id").type(JsonFieldType.NUMBER).description("피드 id"),
         fieldWithPath("feeds[].title").type(JsonFieldType.STRING).description("피드 제목"),
         fieldWithPath("feeds[].content").type(JsonFieldType.STRING).description("피드 내용"),
+        fieldWithPath("feeds[].images").type(JsonFieldType.ARRAY).description("피드 이미지 url 리스트"),
         fieldWithPath("feeds[].writerId").type(JsonFieldType.NUMBER).description("피드 작성자 id"),
-        fieldWithPath("feeds[].commentsCount").type(JsonFieldType.NUMBER).description("피드의 댓글 개수"),
+        fieldWithPath("feeds[].commentCount").type(JsonFieldType.NUMBER).description("피드의 댓글 개수"),
         fieldWithPath("feeds[].createdAt").type(JsonFieldType.STRING).description("피드 생성 일시"),
         fieldWithPath("feeds[].updatedAt").type(JsonFieldType.STRING).description("피드 업데이트 일시")
     );
 
     final long eventId = 11L;
     final List<FeedSimpleResponse> feeds = List.of(
-        new FeedSimpleResponse(34L, "피드1 제목", "피드 내용", 23L, 0L,
+        new FeedSimpleResponse(34L, "피드1 제목", "피드 내용", 23L,
+            List.of("https://image1.url", "https://image2.url"), 0L,
             LocalDateTime.of(LocalDate.of(2023, 7, 13), LocalTime.of(11, 43, 11)),
             LocalDateTime.of(LocalDate.of(2023, 7, 13), LocalTime.of(11, 43, 11))),
-        new FeedSimpleResponse(35L, "피드2 제목", "피드 내용", 43L, 3L,
+        new FeedSimpleResponse(35L, "피드2 제목", "피드 내용", 43L, Collections.emptyList(), 3L,
             LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)),
             LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)))
     );

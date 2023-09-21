@@ -14,8 +14,10 @@ import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
 import com.emmsale.feed.exception.FeedExceptionType;
+import com.emmsale.image.domain.Image;
+import com.emmsale.image.domain.repository.ImageRepository;
 import com.emmsale.member.domain.Member;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -34,6 +36,7 @@ public class FeedQueryService {
   private final FeedRepository feedRepository;
   private final EventRepository eventRepository;
   private final BlockRepository blockRepository;
+  private final ImageRepository imageRepository;
   private final CommentDao commentDao;
 
   public FeedListResponse findAllFeeds(final Member member, final Long eventId) {
@@ -44,24 +47,39 @@ public class FeedQueryService {
     final List<Long> feedIds = feeds.stream()
         .map(Feed::getId)
         .collect(Collectors.toList());
-    final Map<Long, Long> feedCommentCounts = commentDao.findCommentCountByFeedIds(feedIds).stream()
+
+    final Map<Long, Long> feedCommentCounts = getFeedidCommentCountMap(feedIds);
+    final Map<Long, List<Image>> feedImages = getFeedImagesMap(feedIds);
+
+    final List<FeedSimpleResponse> feedSimpleResponses = feeds.stream()
+        .map(feed -> {
+          final List<Image> images = feedImages.getOrDefault(feed.getId(), Collections.emptyList());
+          final Long commentCount = feedCommentCounts.getOrDefault(feed.getId(),
+              DEFAULT_COMMENT_COUNT);
+          return FeedSimpleResponse.from(feed, images, commentCount);
+        })
+        .collect(Collectors.toList());
+
+    return new FeedListResponse(eventId, feedSimpleResponses);
+  }
+
+  private Map<Long, List<Image>> getFeedImagesMap(final List<Long> feedIds) {
+    return imageRepository.findAllByFeedIdIn(feedIds).stream()
+        .collect(Collectors.groupingBy(
+            Image::getContentId,
+            Collectors.mapping(
+                Function.identity(),
+                Collectors.toList()
+            )
+        ));
+  }
+
+  private Map<Long, Long> getFeedidCommentCountMap(final List<Long> feedIds) {
+    return commentDao.findCommentCountByFeedIds(feedIds).stream()
         .collect(Collectors.toMap(
             FeedCommentCount::getFeedId,
             FeedCommentCount::getCount
         ));
-
-    final Map<Feed, Long> commentCountByFeed = feeds.stream()
-        .collect(Collectors.toMap(
-            Function.identity(),
-            feed -> feedCommentCounts.getOrDefault(feed.getId(), DEFAULT_COMMENT_COUNT)
-        ));
-
-    final List<FeedSimpleResponse> feedSimpleResponses = commentCountByFeed.entrySet().stream()
-        .map(FeedSimpleResponse::from)
-        .sorted(Comparator.comparing(FeedSimpleResponse::getUpdatedAt).reversed())
-        .collect(Collectors.toList());
-
-    return new FeedListResponse(eventId, feedSimpleResponses);
   }
 
   private List<Feed> excludeBlockedMembersFeed(final Member member, final List<Feed> feeds) {
