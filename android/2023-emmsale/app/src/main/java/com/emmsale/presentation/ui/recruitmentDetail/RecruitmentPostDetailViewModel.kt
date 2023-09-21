@@ -9,17 +9,18 @@ import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
-import com.emmsale.data.model.Recruitment
-import com.emmsale.data.repository.interfaces.MemberRepository
+import com.emmsale.data.messageRoom.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.common.firebase.analytics.logRecruitment
+import com.emmsale.presentation.KerdyApplication
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.HasOpenUrlUiState
+import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.RecruitmentPostDetailUiEvent
-import com.emmsale.presentation.ui.recruitmentList.uiState.CompanionRequestTaskUiState
 import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ import javax.inject.Inject
 class RecruitmentPostDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val recruitmentRepository: RecruitmentRepository,
-    private val memberRepository: MemberRepository,
+    private val messageRoomRepository: MessageRoomRepository,
     tokenRepository: TokenRepository,
 ) : ViewModel(), Refreshable {
     val eventId: Long = requireNotNull(savedStateHandle[EVENT_ID_KEY]) {
@@ -40,15 +41,8 @@ class RecruitmentPostDetailViewModel @Inject constructor(
     }
 
     private val _recruitmentPost: NotNullMutableLiveData<RecruitmentPostUiState> =
-        NotNullMutableLiveData(RecruitmentPostUiState())
+        NotNullMutableLiveData(RecruitmentPostUiState.Loading)
     val recruitmentPost: NotNullLiveData<RecruitmentPostUiState> = _recruitmentPost
-
-    private val _companionRequest: NotNullMutableLiveData<CompanionRequestTaskUiState> =
-        NotNullMutableLiveData(CompanionRequestTaskUiState())
-    val companionRequest: NotNullLiveData<CompanionRequestTaskUiState> = _companionRequest
-
-    private val _isDeletePostSuccess: MutableLiveData<Boolean> = MutableLiveData()
-    val isDeletePostSuccess: LiveData<Boolean> = _isDeletePostSuccess
 
     private val _isAlreadyRequest: MutableLiveData<Boolean> = MutableLiveData(false)
     val isAlreadyRequest: LiveData<Boolean> = _isAlreadyRequest
@@ -56,50 +50,28 @@ class RecruitmentPostDetailViewModel @Inject constructor(
     private val _event = MutableLiveData<RecruitmentPostDetailUiEvent?>(null)
     val event: LiveData<RecruitmentPostDetailUiEvent?> = _event
 
-    private val _hasOpenProfileUrl: MutableLiveData<HasOpenUrlUiState> = MutableLiveData()
-    val hasOpenProfileUrl: LiveData<HasOpenUrlUiState> = _hasOpenProfileUrl
+    private val _uiEvent: NotNullMutableLiveData<Event<RecruitmentPostDetailUiEvent>> =
+        NotNullMutableLiveData(Event(RecruitmentPostDetailUiEvent.None))
+    val uiEvent: NotNullLiveData<Event<RecruitmentPostDetailUiEvent>> = _uiEvent
 
-    private val myUid = requireNotNull(tokenRepository.getMyUid()) {
-        "[ERROR] 유저 아이디를 가져오지 못했어요."
-    }
+    private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
 
     init {
         refresh()
     }
 
     override fun refresh() {
-        changeRecruitmentPostToLoadingState()
         viewModelScope.launch {
             when (val result = recruitmentRepository.getEventRecruitment(eventId, recruitmentId)) {
-                is Failure, NetworkError -> changeRecruitmentPostToErrorState()
+                is Failure -> _uiEvent.value = Event(RecruitmentPostDetailUiEvent.PostFetchFail)
+                NetworkError -> _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
                 is Success -> {
-                    changeRecruitmentPostToSuccessState(result.data)
-                    updateRecruitmentPostIsMyPostState()
-                    checkIsAlreadyRequestCompanion()
+                    _recruitmentPost.value = RecruitmentPostUiState.create(result.data, myUid)
                 }
 
-                is Unexpected -> throw Throwable(result.error)
-            }
-        }
-    }
-
-    fun requestCompanion(message: String) {
-        changeRequestCompanionToLoadingState()
-        viewModelScope.launch {
-            val result = recruitmentRepository.requestCompanion(
-                eventId = eventId,
-                memberId = recruitmentPost.value.memberId,
-                message = message,
-            )
-            when (result) {
-                is Failure, NetworkError -> changeRequestCompanionToErrorState()
-                is Success -> {
-                    changeRequestCompanionToSuccessState()
-                    setRequestCompanionIsAlreadyState(true)
-                    logRecruitment(message, myUid)
-                }
-
-                is Unexpected -> throw Throwable(result.error)
+                is Unexpected ->
+                    _uiEvent.value =
+                        Event(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -107,9 +79,15 @@ class RecruitmentPostDetailViewModel @Inject constructor(
     fun deleteRecruitmentPost() {
         viewModelScope.launch {
             when (val result = recruitmentRepository.deleteRecruitment(eventId, recruitmentId)) {
-                is Failure, NetworkError -> _isDeletePostSuccess.postValue(false)
-                is Success -> _isDeletePostSuccess.postValue(true)
-                is Unexpected -> throw Throwable(result.error)
+                is Failure -> _uiEvent.value = Event(RecruitmentPostDetailUiEvent.PostDeleteFail)
+                NetworkError -> _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
+                is Success ->
+                    _uiEvent.value =
+                        Event(RecruitmentPostDetailUiEvent.PostDeleteComplete)
+
+                is Unexpected ->
+                    _uiEvent.value =
+                        Event(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -124,90 +102,50 @@ class RecruitmentPostDetailViewModel @Inject constructor(
             when (result) {
                 is Failure -> {
                     if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
-                        _event.value = RecruitmentPostDetailUiEvent.REPORT_DUPLICATE
+                        _uiEvent.value = Event(RecruitmentPostDetailUiEvent.ReportDuplicate)
                     } else {
-                        _event.value = RecruitmentPostDetailUiEvent.REPORT_ERROR
+                        _uiEvent.value = Event(RecruitmentPostDetailUiEvent.ReportFail)
                     }
                 }
 
                 NetworkError ->
-                    _event.value = RecruitmentPostDetailUiEvent.REPORT_ERROR
+                    _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
 
-                is Success -> _event.value = RecruitmentPostDetailUiEvent.REPORT_SUCCESS
-                is Unexpected -> throw Throwable(result.error)
+                is Success -> _uiEvent.value = Event(RecruitmentPostDetailUiEvent.ReportComplete)
+                is Unexpected ->
+                    _uiEvent.value =
+                        Event(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
 
-    fun fetchProfile() {
+    fun sendMessage(message: String) {
         viewModelScope.launch {
-            when (val result = memberRepository.getMember(myUid)) {
-                is Failure, NetworkError -> _hasOpenProfileUrl.value = HasOpenUrlUiState.ERROR
-                is Success -> {
-                    if (result.data.openProfileUrl != "") {
-                        _hasOpenProfileUrl.value =
-                            HasOpenUrlUiState.TRUE
-                    } else {
-                        _hasOpenProfileUrl.value =
-                            HasOpenUrlUiState.FALSE
-                    }
-                }
+            when (
+                val result =
+                    messageRoomRepository.sendMessage(
+                        myUid,
+                        _recruitmentPost.value.memberId,
+                        message,
+                    )
+            ) {
+                is Failure ->
+                    _uiEvent.value = Event(RecruitmentPostDetailUiEvent.MessageSendFail)
 
-                is Unexpected -> throw Throwable(result.error)
+                NetworkError -> _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
+                is Success ->
+                    _uiEvent.value = Event(
+                        RecruitmentPostDetailUiEvent.MessageSendComplete(
+                            result.data,
+                            _recruitmentPost.value.memberId,
+                        ),
+                    )
+
+                is Unexpected ->
+                    _uiEvent.value =
+                        Event(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
-    }
-
-    fun removeEvent() {
-        _event.value = null
-    }
-
-    private fun checkIsAlreadyRequestCompanion() {
-        viewModelScope.launch {
-            val result = recruitmentRepository.checkIsAlreadyRequestCompanion(
-                eventId = eventId,
-                senderId = myUid,
-                receiverId = recruitmentPost.value.memberId,
-            )
-            when (result) {
-                is Failure, NetworkError -> {}
-                is Success -> setRequestCompanionIsAlreadyState(result.data)
-                is Unexpected -> throw Throwable(result.error)
-            }
-        }
-    }
-
-    private fun updateRecruitmentPostIsMyPostState() {
-        val isMyPost = (recruitmentPost.value.memberId == myUid)
-        _recruitmentPost.value = (_recruitmentPost.value.copy(isMyPost = isMyPost))
-    }
-
-    private fun changeRecruitmentPostToLoadingState() {
-        _recruitmentPost.value = (_recruitmentPost.value.changeToLoadingState())
-    }
-
-    private fun changeRecruitmentPostToSuccessState(recruitment: Recruitment) {
-        _recruitmentPost.value = (RecruitmentPostUiState.from(recruitment))
-    }
-
-    private fun changeRecruitmentPostToErrorState() {
-        _recruitmentPost.value = _recruitmentPost.value.changeToErrorState()
-    }
-
-    private fun changeRequestCompanionToLoadingState() {
-        _companionRequest.value = _companionRequest.value.changeToLoadingState()
-    }
-
-    private fun changeRequestCompanionToSuccessState() {
-        _companionRequest.value = _companionRequest.value.changeToSuccessState()
-    }
-
-    private fun changeRequestCompanionToErrorState() {
-        _companionRequest.value = _companionRequest.value.changeToErrorState()
-    }
-
-    private fun setRequestCompanionIsAlreadyState(state: Boolean) {
-        _isAlreadyRequest.value = state
     }
 
     companion object {

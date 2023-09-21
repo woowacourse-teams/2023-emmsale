@@ -46,19 +46,19 @@ class NotificationTagConfigViewModel @Inject constructor(
         viewModelScope.launch {
             val memberId = tokenRepository.getToken()?.uid ?: return@launch
 
-            val (eventTags, interestEventTagIds) = awaitAll(
+            val (eventTags, interestEventTags) = awaitAll(
                 getEventTagsAsync(),
                 getInterestEventTagsAsync(memberId),
             )
 
-            if (eventTags == null || interestEventTagIds == null) {
+            if (eventTags == null || interestEventTags == null) {
                 _notificationTags.value =
                     _notificationTags.value.copy(isLoading = false, isError = true)
                 return@launch
             }
             _notificationTags.value = NotificationTagsConfigUiState.from(
                 eventTags = eventTags,
-                interestEventTags = interestEventTagIds,
+                interestEventTags = interestEventTags,
             )
         }
     }

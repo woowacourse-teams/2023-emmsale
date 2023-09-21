@@ -262,7 +262,7 @@
     <string name="recruitmentpostdetail_success_request_message">요청에 성공했어요</string>
     <string name="recruitmentpostdetail_fail_request_message">요청에 실패했어요</string>
     <string name="recruitmentpostdetail_deletion_success_message">글을 삭제했어요!</string>
-    <string name="recruitmentpostdetail_deletion_fail_message">삭제에 실패했어요. 네트워크 연결 확인 후 관리자에 문의해주세요</string>
+    <string name="recruitmentpostdetail_deletion_fail_message">함께해요 글을 삭제하는 데 실패했어요 😥</string>
     <string name="recruitmentpostdetail_dialog_editing_text">수정</string>
     <string name="recruitmentpostdetail_dialog_deletion_text">삭제</string>
     <string name="recruitmentpostdetail_dialog_report_text">신고하기</string>

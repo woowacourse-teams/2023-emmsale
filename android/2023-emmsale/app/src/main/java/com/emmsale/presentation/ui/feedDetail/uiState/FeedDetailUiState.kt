@@ -14,6 +14,8 @@ data class FeedDetailUiState(
 
     val isUpdated: Boolean = feedDetail.createdAt != feedDetail.updatedAt
 
+    val commentsCount: Int = comments.count { !it.comment.deleted }
+
     companion object {
         val Loading: FeedDetailUiState = FeedDetailUiState(
             fetchResult = FetchResult.LOADING,

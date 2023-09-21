@@ -8,6 +8,8 @@ data class CommentUiState(
 ) {
     val isUpdated: Boolean = comment.createdAt != comment.updatedAt
 
+    val childCommentsCount = comment.childComments.count { !it.deleted }
+
     companion object {
         fun create(uid: Long, comment: Comment): CommentUiState = CommentUiState(
             isWrittenByLoginUser = uid == comment.authorId,

@@ -25,6 +25,19 @@ data class RecruitmentPostUiState(
     companion object {
         private const val DEFAULT_RECRUITMENT_ID = -1L
         private const val DEFAULT_MEMBER_ID = -1L
+
+        val Loading: RecruitmentPostUiState = RecruitmentPostUiState(
+            id = DEFAULT_RECRUITMENT_ID,
+            memberId = DEFAULT_MEMBER_ID,
+            name = "",
+            profileImageUrl = "",
+            content = "",
+            updatedAt = "",
+            isMyPost = false,
+            isLoading = true,
+            isError = false,
+        )
+
         fun from(recruitment: Recruitment): RecruitmentPostUiState = RecruitmentPostUiState(
             id = recruitment.id,
             memberId = recruitment.memberId,
@@ -36,5 +49,18 @@ data class RecruitmentPostUiState(
             isLoading = false,
             isError = false,
         )
+
+        fun create(recruitment: Recruitment, myUid: Long): RecruitmentPostUiState =
+            RecruitmentPostUiState(
+                id = recruitment.id,
+                memberId = recruitment.memberId,
+                name = recruitment.name,
+                profileImageUrl = recruitment.imageUrl,
+                content = recruitment.content ?: "",
+                updatedAt = recruitment.updatedDate.toString(),
+                isMyPost = recruitment.memberId == myUid,
+                isLoading = false,
+                isError = false,
+            )
     }
 }
