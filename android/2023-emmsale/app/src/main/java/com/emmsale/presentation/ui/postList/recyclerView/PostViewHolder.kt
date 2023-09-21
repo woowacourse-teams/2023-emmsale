@@ -14,7 +14,7 @@ class PostViewHolder(
     init {
         itemView.setOnClickListener {
             navigateToPostDetail(
-                binding.post?.eventId ?: return@setOnClickListener,
+                binding.post?.id ?: return@setOnClickListener,
             )
         }
     }

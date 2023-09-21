@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPostListBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.postList.recyclerView.PostListAdapter
 
 class PostListFragment : BaseFragment<FragmentPostListBinding>() {
@@ -44,7 +45,8 @@ class PostListFragment : BaseFragment<FragmentPostListBinding>() {
         }
     }
 
-    private fun navigateToPostDetail(eventId: Long) {
+    private fun navigateToPostDetail(feedId: Long) {
+        FeedDetailActivity.startActivity(requireContext(), feedId)
     }
 
     companion object {
