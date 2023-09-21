@@ -208,8 +208,7 @@ class EventApiTest extends MockMvcTestHelper {
         request.getApplyStartDateTime(), request.getApplyEndDateTime(),
         request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()), request.getImageUrl(),
-        10, 10, request.getType().toString(),
-        List.of("imageUrl1", "imageUrl2"));
+        10, 10, request.getType().toString(), null);
 
     Mockito.when(eventService.updateEvent(any(), any(),
         any())).thenReturn(response);
