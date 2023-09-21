@@ -9,9 +9,11 @@ import com.emmsale.di.RepositoryContainer
 import com.emmsale.di.ServiceContainer
 import com.emmsale.di.SharedPreferenceContainer
 import com.google.firebase.analytics.FirebaseAnalytics
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
+@HiltAndroidApp
 class KerdyApplication : Application() {
 
     override fun onCreate() {
