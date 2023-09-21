@@ -36,7 +36,7 @@ class PostWritingViewModel(
         viewModelScope.launch {
             when (
                 val fetchResult =
-                postRepository.uploadPost(eventId, title, content, imageUrls.value)
+                    postRepository.uploadPost(eventId, title, content, imageUrls.value)
             ) {
                 is Success ->
                     _postUploadResult.value =
