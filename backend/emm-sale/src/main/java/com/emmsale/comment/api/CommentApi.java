@@ -29,7 +29,7 @@ public class CommentApi {
 
   @PostMapping("/comments")
   public CommentResponse create(
-      final CommentAddRequest commentAddRequest,
+      @RequestBody final CommentAddRequest commentAddRequest,
       final Member member
   ) {
     return commentCommandService.create(commentAddRequest, member);
