@@ -8,6 +8,7 @@ import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import com.emmsale.message_room.application.dto.MessageSendRequest;
+import com.emmsale.message_room.application.dto.MessageSendResponse;
 import com.emmsale.message_room.domain.Message;
 import com.emmsale.message_room.domain.MessageRepository;
 import com.emmsale.message_room.domain.Room;
@@ -30,7 +31,7 @@ public class MessageCommandService {
   private final EventPublisher eventPublisher;
   private final MemberRepository memberRepository;
 
-  public void sendMessage(final MessageSendRequest request, final Member member) {
+  public MessageSendResponse sendMessage(final MessageSendRequest request, final Member member) {
     validateMembers(request, member);
 
     final String roomId = roomRepository.findByInterlocutorIds(request.getReceiverId(),
@@ -43,6 +44,7 @@ public class MessageCommandService {
 
     messageRepository.save(message);
     eventPublisher.publish(message, request.getReceiverId());
+    return new MessageSendResponse(roomId);
   }
 
   private void validateMembers(final MessageSendRequest request, final Member member) {

@@ -48,8 +48,7 @@ public class EventApi {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public EventDetailResponse addEvent(
-      @RequestBody @Valid final EventDetailRequest request) {
+  public EventDetailResponse addEvent(@Valid final EventDetailRequest request) {
     return eventService.addEvent(request, LocalDate.now());
   }
 

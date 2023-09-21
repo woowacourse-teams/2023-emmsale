@@ -12,10 +12,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Getter
+@Setter
 public class EventDetailRequest {
 
   private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
@@ -47,6 +50,8 @@ public class EventDetailRequest {
 
   private final EventMode eventMode;
   private final PaymentType paymentType;
+
+  private final List<MultipartFile> images;
 
   public Event toEvent() {
     return new Event(

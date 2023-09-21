@@ -9,13 +9,14 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.domain.EventMode;
+import com.emmsale.event.domain.PaymentType;
 import com.emmsale.scrap.api.ScrapApi;
 import com.emmsale.scrap.application.dto.ScrapRequest;
-import com.emmsale.scrap.application.dto.ScrapResponse;
-import com.emmsale.tag.TagFixture;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
@@ -33,37 +35,51 @@ class ScrapApiTest extends MockMvcTestHelper {
   @DisplayName("스크랩 목록을 성공적으로 조회하면 200 OK를 반환한다.")
   void findAllScraps() throws Exception {
     //given
-    final List<ScrapResponse> responses = List.of(
-        new ScrapResponse(
-            1L,
-            593L,
-            "인프콘 2023",
-            "진행 예정",
-            "https://infcon-image.com",
-            List.of(TagFixture.백엔드().getName(), TagFixture.안드로이드().getName(),
-                TagFixture.프론트엔드().getName(), TagFixture.IOS().getName())
-        ),
-        new ScrapResponse(
-            2L,
-            842L,
-            "구름톤",
-            "종료된 행사",
-            "https://goormthon-image.com",
-            List.of(TagFixture.백엔드().getName(), TagFixture.프론트엔드().getName())
-        )
+    final List<EventResponse> expectedScrapResponse = List.of(
+        new EventResponse(1L, "인프콘 2023", LocalDateTime.parse("2023-06-03T12:00:00"),
+            LocalDateTime.parse("2023-09-03T12:00:00"),
+            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"), "IN_PROGRESS", "ENDED",
+            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
+            3, -30, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue()),
+        new EventResponse(5L, "웹 컨퍼런스", LocalDateTime.parse("2023-07-03T12:00:00"),
+            LocalDateTime.parse("2023-08-03T12:00:00"), List.of("백엔드", "프론트엔드"),
+            "IN_PROGRESS", "IN_PROGRESS",
+            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
+            3, 3, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue()),
+        new EventResponse(2L, "AI 컨퍼런스", LocalDateTime.parse("2023-07-22T12:00:00"),
+            LocalDateTime.parse("2023-07-30T12:00:00"), List.of("AI"), "UPCOMING",
+            "IN_PROGRESS",
+            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
+            3, -18, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue())
     );
 
-    final ResponseFieldsSnippet responseFields = responseFields(
-        fieldWithPath("[].scrapId").type(JsonFieldType.NUMBER).description("스크랩 id"),
-        fieldWithPath("[].eventId").type(JsonFieldType.NUMBER).description("행사 id"),
-        fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
-        fieldWithPath("[].status").type(JsonFieldType.STRING).description("행사 상태"),
-        fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("행사 이미지 url"),
-        fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY).description("행사 태그 목록")
+    final ResponseFieldsSnippet responseFields = PayloadDocumentation.responseFields(
+        PayloadDocumentation.fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
+        PayloadDocumentation.fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
+        PayloadDocumentation.fieldWithPath("[].startDate").type(JsonFieldType.STRING)
+            .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
+        PayloadDocumentation.fieldWithPath("[].endDate").type(JsonFieldType.STRING)
+            .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
+        PayloadDocumentation.fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
+            .description("행사 태그 목록"),
+        PayloadDocumentation.fieldWithPath("[].status").type(JsonFieldType.STRING)
+            .description("행사 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
+        PayloadDocumentation.fieldWithPath("[].applyStatus").type(JsonFieldType.STRING)
+            .description("행사 신청 기간의 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
+        PayloadDocumentation.fieldWithPath("[].remainingDays").type(JsonFieldType.NUMBER)
+            .description("행사 시작일까지 남은 일 수"),
+        PayloadDocumentation.fieldWithPath("[].applyRemainingDays").type(JsonFieldType.NUMBER)
+            .description("행사 신청 시작일까지 남은 일 수"),
+        PayloadDocumentation.fieldWithPath("[].imageUrl").type(JsonFieldType.STRING)
+            .description("행사 이미지 URL"),
+        PayloadDocumentation.fieldWithPath("[].eventMode").type(JsonFieldType.STRING)
+            .description("행사 온라인 여부(온라인, 오프라인, 온오프라인)"),
+        PayloadDocumentation.fieldWithPath("[].paymentType").type(JsonFieldType.STRING)
+            .description("행사 유료 여부(유료, 무료, 유무료)")
     );
 
     //when
-    when(scrapQueryService.findAllScraps(any())).thenReturn(responses);
+    when(scrapQueryService.findAllScraps(any())).thenReturn(expectedScrapResponse);
 
     //then
     mockMvc.perform(get("/scraps")

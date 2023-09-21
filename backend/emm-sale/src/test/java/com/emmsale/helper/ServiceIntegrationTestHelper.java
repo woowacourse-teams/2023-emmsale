@@ -1,5 +1,6 @@
 package com.emmsale.helper;
 
+import com.emmsale.image.application.ImageCommandService;
 import com.emmsale.login.utils.GithubClient;
 import com.emmsale.notification.application.FirebaseCloudMessageClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,4 +16,6 @@ public abstract class ServiceIntegrationTestHelper {
   protected GithubClient githubClient;
   @MockBean
   protected FirebaseCloudMessageClient firebaseCloudMessageClient;
+  @MockBean
+  protected ImageCommandService imageCommandService;
 }

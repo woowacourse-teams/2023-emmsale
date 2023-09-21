@@ -3,6 +3,7 @@ package com.emmsale.feed.domain;
 import com.emmsale.base.BaseEntity;
 import com.emmsale.event.domain.Event;
 import com.emmsale.member.domain.Member;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,6 +57,10 @@ public class Feed extends BaseEntity {
 
   public void delete() {
     this.isDeleted = true;
+  }
+
+  public boolean isNotBlockedMember(final List<Long> blockedMemberIds) {
+    return !blockedMemberIds.contains(writer.getId());
   }
 
   @Override

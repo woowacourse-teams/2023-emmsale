@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
+import com.emmsale.block.domain.Block;
+import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
@@ -39,16 +41,20 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
   private EventRepository eventRepository;
   @Autowired
   private MemberRepository memberRepository;
+  @Autowired
+  private BlockRepository blockRepository;
 
   private Feed feed1;
   private Event event;
   private Member writer;
+  private Member reader;
   private Feed feed2;
 
   @BeforeEach
   void setUp() {
     event = eventRepository.save(EventFixture.인프콘_2023());
     writer = memberRepository.findById(1L).get();
+    reader = memberRepository.findById(2L).get();
     feed1 = feedRepository.save(new Feed(event, writer, "피드1 제목", "피드1 내용"));
     feed2 = feedRepository.save(new Feed(event, writer, "피드2 제목", "피드2 내용"));
   }
@@ -70,7 +76,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       expect.getFeeds().sort(Comparator.comparing(FeedSimpleResponse::getUpdatedAt).reversed());
 
       //when
-      final FeedListResponse actual = feedQueryService.findAllFeeds(eventId);
+      final FeedListResponse actual = feedQueryService.findAllFeeds(writer, eventId);
 
       //then
       assertThat(actual)
@@ -93,7 +99,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       final FeedListResponse expect = new FeedListResponse(eventId, feedSimpleResponses);
 
       //when
-      final FeedListResponse actual = feedQueryService.findAllFeeds(eventId);
+      final FeedListResponse actual = feedQueryService.findAllFeeds(writer, eventId);
 
       //then
       assertThat(actual)
@@ -111,13 +117,34 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       //when
       final EventException actualException = assertThrowsExactly(
           EventException.class,
-          () -> feedQueryService.findAllFeeds(존재하지_않는_이벤트_id)
+          () -> feedQueryService.findAllFeeds(writer, 존재하지_않는_이벤트_id)
       );
 
       //then
       assertEquals(expect, actualException.exceptionType());
     }
 
+    @Test
+    @DisplayName("차단한 사용자의 피드는 조회되지 않는다.")
+    void findAllFeedsWithBlockedMember() {
+      //given
+      final Feed feed3 = feedRepository.save(new Feed(event, reader, "피드3 제목", "피드3 내용"));
+      blockRepository.save(new Block(reader.getId(), writer.getId()));
+
+      final Map<Feed, Long> feedCommentCountMap = Map.of(feed3, 0L);
+      final List<FeedSimpleResponse> feedSimpleResponses = feedCommentCountMap.entrySet().stream()
+          .map(FeedSimpleResponse::from)
+          .collect(Collectors.toList());
+      final FeedListResponse expect = new FeedListResponse(event.getId(), feedSimpleResponses);
+
+      //when
+      final FeedListResponse actual = feedQueryService.findAllFeeds(reader, event.getId());
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
   }
 
   @Nested
@@ -134,7 +161,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       final FeedDetailResponse expect = FeedDetailResponse.from(feed);
 
       //when
-      final FeedDetailResponse actual = feedQueryService.findFeed(feedId);
+      final FeedDetailResponse actual = feedQueryService.findFeed(writer, feedId);
 
       //then
       assertThat(actual)
@@ -153,7 +180,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       //when
       final FeedException actualException = assertThrowsExactly(
           FeedException.class,
-          () -> feedQueryService.findFeed(notExistsFeedId)
+          () -> feedQueryService.findFeed(writer, notExistsFeedId)
       );
 
       //then
@@ -174,7 +201,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       //when
       final FeedException actualException = assertThrowsExactly(
           FeedException.class,
-          () -> feedQueryService.findFeed(삭제된_피드_id)
+          () -> feedQueryService.findFeed(writer, 삭제된_피드_id)
       );
 
       //then
