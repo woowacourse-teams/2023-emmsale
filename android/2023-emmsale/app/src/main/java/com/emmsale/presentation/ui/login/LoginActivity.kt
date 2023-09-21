@@ -23,14 +23,14 @@ import com.emmsale.presentation.ui.login.uiState.LoginUiState
 import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity :
     AppCompatActivity(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("login") {
-    private val viewModel: LoginViewModel by viewModels { LoginViewModel.factory }
-    private val binding: ActivityLoginBinding by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        ActivityLoginBinding.inflate(layoutInflater)
-    }
+    private val viewModel: LoginViewModel by viewModels()
+    private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),

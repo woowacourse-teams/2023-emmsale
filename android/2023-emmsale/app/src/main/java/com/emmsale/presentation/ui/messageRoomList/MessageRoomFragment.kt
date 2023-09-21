@@ -9,10 +9,12 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.messageRoomList.recyclerview.MessageRoomListAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MessageRoomFragment : BaseFragment<FragmentMessageRoomBinding>() {
     override val layoutResId: Int = R.layout.fragment_message_room
-    private val viewModel: MessageRoomViewModel by viewModels { MessageRoomViewModel.factory }
+    private val viewModel: MessageRoomViewModel by viewModels()
 
     private lateinit var messageRoomListAdapter: MessageRoomListAdapter
 

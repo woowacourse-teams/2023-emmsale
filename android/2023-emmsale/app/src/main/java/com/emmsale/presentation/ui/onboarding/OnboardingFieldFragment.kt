@@ -9,12 +9,14 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.onboarding.uiState.ActivityUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingFieldFragment :
     BaseFragment<FragmentOnboardingFieldBinding>(),
     View.OnClickListener {
-    val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }
     override val layoutResId: Int = R.layout.fragment_onboarding_field
+    val viewModel: OnboardingViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

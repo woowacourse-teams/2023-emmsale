@@ -11,12 +11,12 @@ import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.ui.blockMemberList.recyclerView.BlockedMemberAdapter
 import com.emmsale.presentation.ui.blockMemberList.uiState.BlockedMembersUiEvent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MemberBlockActivity : AppCompatActivity() {
-    private val binding: ActivityMemberBlockBinding by lazy {
-        ActivityMemberBlockBinding.inflate(layoutInflater)
-    }
-    private val viewModel: MemberBlockViewModel by viewModels { MemberBlockViewModel.factory }
+    private val binding by lazy { ActivityMemberBlockBinding.inflate(layoutInflater) }
+    private val viewModel: MemberBlockViewModel by viewModels()
     private val blockedMemberAdapter: BlockedMemberAdapter by lazy { BlockedMemberAdapter(::showUnblockMemberDialog) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -24,10 +24,12 @@ import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.splash.uiState.SplashUiState
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
-    private val viewModel: SplashViewModel by viewModels { SplashViewModel.factory }
+    private val viewModel: SplashViewModel by viewModels()
     private val binding by lazy { ActivitySplashBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

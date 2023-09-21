@@ -16,12 +16,14 @@ import com.emmsale.presentation.ui.competitionList.recyclerView.CompetitionRecyc
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionUiState
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
+@AndroidEntryPoint
 class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
     override val layoutResId: Int = R.layout.fragment_competition
-    private val viewModel: CompetitionViewModel by viewModels { CompetitionViewModel.factory }
+    private val viewModel: CompetitionViewModel by viewModels()
     private val eventAdapter: CompetitionRecyclerViewAdapter by lazy {
         CompetitionRecyclerViewAdapter(::navigateToEventDetail)
     }

@@ -8,17 +8,15 @@ import androidx.fragment.app.activityViewModels
 import com.emmsale.databinding.FragmentEditmyprofileFieldsAddBottomDialogBinding
 import com.emmsale.presentation.common.views.activityChipOf
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
-
     private var _binding: FragmentEditmyprofileFieldsAddBottomDialogBinding? = null
     private val binding
-        get() =
-            _binding ?: throw IllegalStateException("관심 카테고리 추가 다이얼로그가 보이지 않을 때 바인딩 객체에 접근했습니다.")
+        get() = requireNotNull(_binding) { "[ERROR] 관심 카테고리 추가 다이얼로그가 보이지 않을 때 바인딩 객체에 접근했습니다." }
 
-    private val viewModel: EditMyProfileViewModel by activityViewModels {
-        EditMyProfileViewModel.factory
-    }
+    private val viewModel: EditMyProfileViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

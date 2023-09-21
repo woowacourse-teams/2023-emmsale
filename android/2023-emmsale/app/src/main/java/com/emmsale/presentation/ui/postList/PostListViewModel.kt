@@ -1,23 +1,27 @@
 package com.emmsale.presentation.ui.postList
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.model.Post
 import com.emmsale.data.repository.interfaces.PostRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.postList.uiState.PostsUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PostListViewModel(
-    private val eventId: Long,
+@HiltViewModel
+class PostListViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val postRepository: PostRepository,
 ) : ViewModel(), Refreshable {
+    val eventId: Long = savedStateHandle[EVENT_ID_KEY] ?: DEFAULT_EVENT_ID
+
     private val _posts = NotNullMutableLiveData(PostsUiState())
     val posts: NotNullLiveData<PostsUiState> = _posts
 
@@ -52,11 +56,7 @@ class PostListViewModel(
     }
 
     companion object {
-        fun factory(eventId: Long) = ViewModelFactory {
-            PostListViewModel(
-                eventId,
-                KerdyApplication.repositoryContainer.postRepository,
-            )
-        }
+        const val EVENT_ID_KEY = "EVENT_ID_KEY"
+        private const val DEFAULT_EVENT_ID = -1L
     }
 }

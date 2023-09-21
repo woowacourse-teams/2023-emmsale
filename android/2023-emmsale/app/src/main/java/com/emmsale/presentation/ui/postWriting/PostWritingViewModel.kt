@@ -2,23 +2,26 @@ package com.emmsale.presentation.ui.postWriting
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.repository.interfaces.PostRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.postWriting.uiState.PostUploadResultUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PostWritingViewModel(
-    private val eventId: Long,
+@HiltViewModel
+class PostWritingViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val postRepository: PostRepository,
 ) : ViewModel() {
+    private val eventId = savedStateHandle[EVENT_ID_KEY] ?: DEFAULT_ID
 
     private val _imageUrls: NotNullMutableLiveData<List<String>> =
         NotNullMutableLiveData(emptyList())
@@ -57,11 +60,7 @@ class PostWritingViewModel(
     }
 
     companion object {
-        fun viewModelFactory(eventId: Long) = ViewModelFactory {
-            PostWritingViewModel(
-                eventId,
-                KerdyApplication.repositoryContainer.postRepository,
-            )
-        }
+        const val EVENT_ID_KEY = "EVENT_ID_KEY"
+        private const val DEFAULT_ID = -1L
     }
 }

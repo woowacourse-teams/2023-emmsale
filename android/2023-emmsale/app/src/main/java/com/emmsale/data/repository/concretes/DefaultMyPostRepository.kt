@@ -7,8 +7,9 @@ import com.emmsale.data.model.MyPost
 import com.emmsale.data.repository.interfaces.MyPostRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.data.service.MyPostService
+import javax.inject.Inject
 
-class DefaultMyPostRepository(
+class DefaultMyPostRepository @Inject constructor(
     private val myPostService: MyPostService,
     tokenRepository: TokenRepository,
 ) : MyPostRepository {

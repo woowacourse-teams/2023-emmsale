@@ -19,8 +19,9 @@ import com.emmsale.data.service.RecruitmentService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DefaultRecruitmentRepository(
+class DefaultRecruitmentRepository @Inject constructor(
     private val recruitmentService: RecruitmentService,
     tokenRepository: TokenRepository,
 ) : RecruitmentRepository {

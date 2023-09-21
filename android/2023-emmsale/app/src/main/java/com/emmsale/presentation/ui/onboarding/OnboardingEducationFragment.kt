@@ -8,12 +8,14 @@ import com.emmsale.databinding.FragmentOnboardingEducationBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.onboarding.uiState.ActivityUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingEducationFragment :
     BaseFragment<FragmentOnboardingEducationBinding>(),
     View.OnClickListener {
-    val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }
     override val layoutResId: Int = R.layout.fragment_onboarding_education
+    val viewModel: OnboardingViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

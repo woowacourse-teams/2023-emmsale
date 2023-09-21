@@ -13,16 +13,13 @@ import com.emmsale.presentation.ui.commentList.recyclerView.CommentRecyclerViewD
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.myCommentList.recyclerView.MyCommentsAdapter
 import com.emmsale.presentation.ui.myCommentList.uiState.MyCommentsUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyCommentsActivity : AppCompatActivity() {
+    private val binding by lazy { ActivityMyCommentsBinding.inflate(layoutInflater) }
 
-    private val binding: ActivityMyCommentsBinding by lazy {
-        ActivityMyCommentsBinding.inflate(layoutInflater)
-    }
-
-    private val viewModel: MyCommentsViewModel by viewModels {
-        MyCommentsViewModel.factory
-    }
+    private val viewModel: MyCommentsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

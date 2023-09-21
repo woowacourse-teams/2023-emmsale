@@ -3,29 +3,26 @@ package com.emmsale.data.repository.concretes
 import android.content.SharedPreferences
 import com.emmsale.data.model.Token
 import com.emmsale.data.repository.interfaces.TokenRepository
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DefaultTokenRepository(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+class DefaultTokenRepository @Inject constructor(
     private val preference: SharedPreferences,
 ) : TokenRepository {
     private val preferenceEditor = preference.edit()
 
-    override suspend fun saveToken(token: Token) = withContext(dispatcher) {
+    override fun saveToken(token: Token) {
         preferenceEditor.putLong(UID_KEY, token.uid).apply()
         preferenceEditor.putString(ACCESS_TOKEN_KEY, token.accessToken).apply()
     }
 
-    override suspend fun getToken(): Token? = withContext(dispatcher) {
+    override fun getToken(): Token? {
         val uid = preference.getLong(UID_KEY, DEFAULT_UID_VALUE)
         val accessToken = preference.getString(ACCESS_TOKEN_KEY, DEFAULT_TOKEN_VALUE)
 
-        if (uid == DEFAULT_UID_VALUE) return@withContext null
-        if (accessToken == null || accessToken == DEFAULT_TOKEN_VALUE) return@withContext null
+        if (uid == DEFAULT_UID_VALUE) return null
+        if (accessToken == null || accessToken == DEFAULT_TOKEN_VALUE) return null
 
-        Token(uid, accessToken)
+        return Token(uid, accessToken)
     }
 
     override fun getMyUid(): Long? {
@@ -35,7 +32,7 @@ class DefaultTokenRepository(
         return uid
     }
 
-    override suspend fun deleteToken() = withContext(dispatcher) {
+    override fun deleteToken() {
         preference.edit().remove(UID_KEY).remove(ACCESS_TOKEN_KEY).apply()
     }
 

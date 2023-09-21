@@ -1,16 +1,13 @@
 package com.emmsale.presentation.ui.competitionFilter.uiState
 
-import android.os.Parcelable
 import com.emmsale.data.model.CompetitionStatus
 import com.emmsale.data.model.EventTag
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class CompetitionFilteringOptionUiState(
     val id: Long,
     val name: String,
     val isSelected: Boolean = false,
-) : Parcelable {
+) {
     fun toggleSelection(): CompetitionFilteringOptionUiState = copy(isSelected = !isSelected)
 
     companion object {

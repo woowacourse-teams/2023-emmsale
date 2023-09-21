@@ -22,13 +22,13 @@ import com.emmsale.presentation.ui.conferenceFilter.uiState.ConferenceFilterUiSt
 import com.emmsale.presentation.ui.conferenceFilter.uiState.ConferenceFilteringDateOptionUiState
 import com.emmsale.presentation.ui.conferenceFilter.uiState.ConferenceFilteringOptionUiState
 import com.google.android.material.chip.ChipGroup
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
+@AndroidEntryPoint
 class ConferenceFilterActivity : AppCompatActivity() {
-    private val viewModel: ConferenceFilterViewModel by viewModels { ConferenceFilterViewModel.factory }
-    private val binding: ActivityConferenceFilterBinding by lazy {
-        ActivityConferenceFilterBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityConferenceFilterBinding.inflate(layoutInflater) }
+    private val viewModel: ConferenceFilterViewModel by viewModels()
     private val statusFilterBinding: LayoutFilterConferenceStatusBinding by lazy { binding.layoutFilterStatus }
     private val tagFilterBinding: LayoutFilterConferenceTagBinding by lazy { binding.layoutFilterTag }
     private val durationFilterBinding: LayoutFilterConferenceDurationBinding by lazy { binding.layoutFilterDuration }

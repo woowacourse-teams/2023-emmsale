@@ -13,20 +13,21 @@ import com.emmsale.data.model.EventTag
 import com.emmsale.data.repository.interfaces.ConferenceStatusRepository
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferencesUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
-class ConferenceViewModel(
+@HiltViewModel
+class ConferenceViewModel @Inject constructor(
     private val eventRepository: EventRepository,
     private val conferenceStatusRepository: ConferenceStatusRepository,
     private val eventTagRepository: EventTagRepository,
@@ -159,16 +160,6 @@ class ConferenceViewModel(
                 selectedTagFilteringOptionIds,
                 startDateFilteringOption?.date,
                 endDateFilteringOption?.date,
-            )
-        }
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            ConferenceViewModel(
-                conferenceStatusRepository = KerdyApplication.repositoryContainer.conferenceStatusRepository,
-                eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository,
-                eventRepository = KerdyApplication.repositoryContainer.eventRepository,
             )
         }
     }

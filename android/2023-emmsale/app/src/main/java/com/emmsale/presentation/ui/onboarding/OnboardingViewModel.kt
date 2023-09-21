@@ -10,16 +10,17 @@ import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.onboarding.uiState.MemberSavingUiState
 import com.emmsale.presentation.ui.onboarding.uiState.OnboardingUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OnboardingViewModel(
+@HiltViewModel
+class OnboardingViewModel @Inject constructor(
     private val activityRepository: ActivityRepository,
     private val memberRepository: MemberRepository,
     private val configRepository: ConfigRepository,
@@ -88,13 +89,5 @@ class OnboardingViewModel(
 
     companion object {
         private const val MAXIMUM_FIELD_SELECTION = 4
-
-        val factory = ViewModelFactory {
-            OnboardingViewModel(
-                activityRepository = KerdyApplication.repositoryContainer.activityRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
-                configRepository = KerdyApplication.repositoryContainer.configRepository,
-            )
-        }
     }
 }

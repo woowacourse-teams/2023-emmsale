@@ -8,7 +8,9 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.ui.notificationPageList.NotificationBoxActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EventFragment : BaseFragment<FragmentEventBinding>() {
     override val layoutResId: Int = R.layout.fragment_event
 

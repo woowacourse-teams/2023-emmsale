@@ -1,5 +1,6 @@
 package com.emmsale.data.common
 
+import android.content.Context
 import com.emmsale.BuildConfig
 import com.emmsale.data.common.callAdapter.KerdyCallAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -10,7 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
-class ServiceFactory {
+class ServiceFactory(context: Context) {
     private val json = Json {
         coerceInputValues = true
         encodeDefaults = true
@@ -25,7 +26,7 @@ class ServiceFactory {
 
     private val okhttpClient = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)
-        .addInterceptor(AuthInterceptor())
+        .addInterceptor(AuthInterceptor(context))
         .connectTimeout(120, TimeUnit.SECONDS)
         .readTimeout(120, TimeUnit.SECONDS)
         .writeTimeout(120, TimeUnit.SECONDS)

@@ -9,12 +9,13 @@ import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Comment
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.service.CommentService
+import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DefaultCommentRepository(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+class DefaultCommentRepository @Inject constructor(
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val commentService: CommentService,
 ) : CommentRepository {
 

@@ -15,25 +15,24 @@ import com.emmsale.databinding.ActivityMessageListBinding
 import com.emmsale.presentation.common.EventObserver
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.extension.showSnackBar
+import com.emmsale.presentation.ui.messageList.MessageListViewModel.Companion.KEY_OTHER_UID
+import com.emmsale.presentation.ui.messageList.MessageListViewModel.Companion.KEY_ROOM_ID
 import com.emmsale.presentation.ui.messageList.recyclerview.MessageListAdapter
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
 import com.emmsale.presentation.ui.profile.ProfileActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MessageListActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
-    private val viewModel: MessageListViewModel by viewModels {
-        MessageListViewModel.factory(
-            roomId = intent.getStringExtra(KEY_ROOM_ID) ?: DEFAULT_ROOM_ID,
-            otherUid = intent.getLongExtra(KEY_OTHER_UID, DEFAULT_OTHER_ID),
-        )
-    }
-
-    private var job: Job? = null
+    private val viewModel: MessageListViewModel by viewModels()
 
     private lateinit var messageListAdapter: MessageListAdapter
+
+    private var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,12 +138,6 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KEY_ROOM_ID = "KEY_ROOM_ID"
-        private const val DEFAULT_ROOM_ID = ""
-
-        private const val KEY_OTHER_UID = "KEY_OTHER_UID"
-        private const val DEFAULT_OTHER_ID = -1L
-
         private const val KEY_PROFILE_URL = "KEY_PROFILE_URL"
         private const val KEY_OTHER_NAME = "KEY_OTHER_NAME"
         private const val KEY_MESSAGE_CONTENT = "KEY_MESSAGE_CONTENT"

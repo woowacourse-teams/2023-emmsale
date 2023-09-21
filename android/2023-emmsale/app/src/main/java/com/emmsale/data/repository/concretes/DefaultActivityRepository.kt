@@ -6,12 +6,13 @@ import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Activity
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.service.ActivityService
+import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DefaultActivityRepository(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+class DefaultActivityRepository @Inject constructor(
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val activityService: ActivityService,
 ) : ActivityRepository {
 
