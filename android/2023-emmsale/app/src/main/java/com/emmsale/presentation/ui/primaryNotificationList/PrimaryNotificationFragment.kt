@@ -91,7 +91,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         when (notification) {
             is InterestEventNotificationUiState -> navigateToEventScreen(notification.eventId)
             is ChildCommentNotificationUiState -> navigateToCommentScreen(
-                eventId = notification.eventId,
+                feedId = notification.feedId,
                 parentCommentId = notification.parentCommentId,
             )
         }
@@ -101,8 +101,8 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         EventDetailActivity.startActivity(requireContext(), eventId)
     }
 
-    private fun navigateToCommentScreen(eventId: Long, parentCommentId: Long) {
-        ChildCommentActivity.startActivity(requireContext(), eventId, parentCommentId)
+    private fun navigateToCommentScreen(feedId: Long, parentCommentId: Long) {
+        ChildCommentActivity.startActivity(requireContext(), feedId, parentCommentId)
     }
 
     private fun deleteNotification(notificationId: Long) {
