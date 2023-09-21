@@ -62,7 +62,7 @@ class LoginActivity :
     private fun setupLoginState() {
         viewModel.loginState.observe(this) { loginState ->
             when (loginState) {
-                is LoginUiState.Login -> FeedDetailActivity.startActivity(this, 1)
+                is LoginUiState.Login -> navigateToMain()
                 is LoginUiState.Onboarded -> navigateToOnboarding()
                 is LoginUiState.Loading -> changeLoadingVisibility(true)
                 is LoginUiState.Error -> showLoginFailedMessage()

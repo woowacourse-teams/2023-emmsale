@@ -1,7 +1,6 @@
 package com.emmsale.data.service
 
 import com.emmsale.data.apiModel.request.CommentCreateRequest
-import com.emmsale.data.apiModel.request.CommentQueryRequest
 import com.emmsale.data.apiModel.request.CommentReportCreateRequest
 import com.emmsale.data.apiModel.request.CommentUpdateRequest
 import com.emmsale.data.apiModel.response.CommentFamilyApiModel
@@ -14,12 +13,14 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface CommentService {
 
     @GET("/comments")
     suspend fun getComments(
-        @Body commentQueryRequest: CommentQueryRequest,
+        @Query("feedId") feedId: Long? = null,
+        @Query("memberId") memberId: Long? = null,
     ): ApiResponse<List<CommentFamilyApiModel>>
 
     @GET("/comments/{commentId}")
