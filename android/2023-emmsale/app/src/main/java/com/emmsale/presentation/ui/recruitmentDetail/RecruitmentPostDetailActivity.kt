@@ -72,7 +72,7 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
             title = getString(R.string.recruitmentpostdetail_delete_dialog_title),
             message = getString(R.string.recruitmentpostdetail_delete_dialog_message),
             positiveButtonLabel = getString(R.string.all_delete_button_label),
-            negativeButtonLabel = getString(R.string.all_delete_button_label),
+            negativeButtonLabel = getString(R.string.all_cancel),
             onPositiveButtonClick = { viewModel.deleteRecruitmentPost() },
         ).show()
     }

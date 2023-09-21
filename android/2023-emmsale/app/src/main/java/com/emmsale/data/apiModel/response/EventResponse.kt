@@ -129,6 +129,8 @@ data class CompetitionResponse(
 data class EventDetailResponse(
     @SerialName("id")
     val id: Long,
+    @SerialName("organization")
+    val organization: String,
     @SerialName("name")
     val name: String,
     @SerialName("informationUrl")

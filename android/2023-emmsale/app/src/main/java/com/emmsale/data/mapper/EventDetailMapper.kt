@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter
 fun EventDetailResponse.toData(): EventDetail = EventDetail(
     id = id,
     name = name,
+    organization = organization,
     informationUrl = informationUrl,
     startDate = startDate.toLocalDateTime(),
     endDate = endDate.toLocalDateTime(),
