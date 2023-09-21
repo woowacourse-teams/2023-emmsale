@@ -378,5 +378,6 @@
     <string name="feeddetail_feed_delete_complete_message">피드가 삭제되었습니다.</string>
     <string name="feeddetail_deleted_feed_fetch_title">삭제된 피드 조회</string>
     <string name="feeddetail_deleted_feed_fetch_message">피드가 삭제되었습니다.</string>
+    <string name="feeddetail_image_description">피드 상세 이미지</string>
 
 </resources>

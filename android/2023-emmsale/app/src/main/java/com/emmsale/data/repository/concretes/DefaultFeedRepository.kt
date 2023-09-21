@@ -23,6 +23,13 @@ class DefaultFeedRepository(private val feedService: FeedService) : FeedReposito
                 name = "Buna",
                 imageUrl = "https://avatars.githubusercontent.com/u/123928686?v=4",
             ),
+            imageUrls = listOf(
+                "https://avatars.githubusercontent.com/u/123928686?v=4",
+                "https://avatars.githubusercontent.com/u/123928686?v=4",
+                "https://avatars.githubusercontent.com/u/123928686?v=4",
+                "https://avatars.githubusercontent.com/u/123928686?v=4",
+                "https://avatars.githubusercontent.com/u/123928686?v=4",
+            ),
             createdAt = LocalDateTime.of(2023, 9, 20, 4, 1),
             updatedAt = LocalDateTime.of(2023, 9, 20, 4, 1),
         ),

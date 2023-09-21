@@ -114,6 +114,8 @@
             android:layout_marginBottom="14dp"
             android:text="@{uiState.comment.content}"
             android:textSize="13sp"
+            android:autoLink="web"
+            android:linksClickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/iv_childcomment_author_image"

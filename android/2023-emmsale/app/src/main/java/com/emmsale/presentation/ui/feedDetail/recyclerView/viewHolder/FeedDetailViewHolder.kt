@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.ItemFeeddetailFeedDetailBinding
+import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailImagesAdapter
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
 
 class FeedDetailViewHolder(
@@ -17,6 +18,10 @@ class FeedDetailViewHolder(
 
     fun bind(feedDetailUiState: FeedDetailUiState) {
         binding.uiState = feedDetailUiState
+        binding.rvFeeddetailFeedDetailImages.apply {
+            adapter = FeedDetailImagesAdapter(feedDetailUiState.feedDetail.imageUrls)
+            itemAnimator = null
+        }
     }
 
     companion object {

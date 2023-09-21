@@ -10,6 +10,7 @@ fun FeedDetailResponse.toData(): FeedDetail = FeedDetail(
     title = title,
     content = content,
     writer = writer.toData(),
+    imageUrls = imageUrls,
     createdAt = LocalDateTime.parse(createdAt),
     updatedAt = LocalDateTime.parse(updatedAt),
 )

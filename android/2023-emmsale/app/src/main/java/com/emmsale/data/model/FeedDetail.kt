@@ -8,6 +8,7 @@ data class FeedDetail(
     val title: String,
     val content: String,
     val writer: Writer,
+    val imageUrls: List<String>,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
 )

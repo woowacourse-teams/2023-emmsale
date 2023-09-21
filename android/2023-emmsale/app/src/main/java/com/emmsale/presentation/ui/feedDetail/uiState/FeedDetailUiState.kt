@@ -25,6 +25,7 @@ data class FeedDetailUiState(
                     name = "",
                     imageUrl = "",
                 ),
+                imageUrls = emptyList(),
                 createdAt = LocalDateTime.now(),
                 updatedAt = LocalDateTime.now(),
             ),
