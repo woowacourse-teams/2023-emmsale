@@ -17,6 +17,7 @@ import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.messageList.recyclerview.MessageListAdapter
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
 import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
+import com.emmsale.presentation.ui.profile.ProfileActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -56,10 +57,14 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun setupMessageRecyclerView() {
-        messageListAdapter = MessageListAdapter()
+        messageListAdapter = MessageListAdapter(::navigateToProfile)
         binding.rvMessageList.setHasFixedSize(true)
         binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
+    }
+
+    private fun navigateToProfile(uid: Long) {
+        ProfileActivity.startActivity(this, uid)
     }
 
     private fun setupMessages() {
@@ -82,7 +87,6 @@ class MessageListActivity : AppCompatActivity() {
             MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED -> scrollToEnd(viewModel.messages.value)
             MessageListUiEvent.MESSAGE_SENDING -> binding.etMessageInput.text.clear()
             MessageListUiEvent.MESSAGE_SENT_REFRESHED -> scrollToEnd(viewModel.messages.value)
-            MessageListUiEvent.MESSAGE_SENT_SUCCESS -> viewModel.refreshForScrollDown()
             MessageListUiEvent.MESSAGE_SENT_FAILED -> binding.root.showSnackBar(R.string.messagelist_message_sent_failed)
             MessageListUiEvent.NOT_FOUND_OTHER_MEMBER -> binding.root.showSnackBar(R.string.messagelist_not_found_other_member)
         }
@@ -90,7 +94,7 @@ class MessageListActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        viewModel.refreshForNotScrollDown()
+        viewModel.refresh()
 
         val profileUrl = intent?.getStringExtra(KEY_PROFILE_URL)
         val messageContent = intent?.getStringExtra(KEY_MESSAGE_CONTENT) ?: return

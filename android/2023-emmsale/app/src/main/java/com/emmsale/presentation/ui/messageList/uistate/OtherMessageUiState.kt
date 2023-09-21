@@ -8,6 +8,7 @@ class OtherMessageUiState(
     override val messageType: MessageType = MessageType.OTHER,
     message: String,
     createdAt: LocalDateTime,
+    val senderId: Long,
     val memberName: String,
     val profileImageUrl: String,
     val isShownProfile: Boolean = true,
@@ -21,6 +22,7 @@ class OtherMessageUiState(
         ): OtherMessageUiState = OtherMessageUiState(
             message = message.message,
             createdAt = message.createdAt,
+            senderId = message.senderId,
             memberName = member.name,
             profileImageUrl = member.profileImageUrl,
             isShownProfile = isShownProfile,

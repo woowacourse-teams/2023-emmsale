@@ -14,13 +14,14 @@ import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.messageList.uistate.MessageDateUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENDING
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENT_FAILED
-import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENT_SUCCESS
+import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENT_REFRESHED
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.NOT_FOUND_OTHER_MEMBER
 import com.emmsale.presentation.ui.messageList.uistate.MessageUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
@@ -34,7 +35,7 @@ class MessageListViewModel(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val messageRoomRepository: MessageRoomRepository,
-) : ViewModel() {
+) : ViewModel(), Refreshable {
     private val myUid: Long = tokenRepository.getMyUid() ?: -1
 
     private val _messages = NotNullMutableLiveData(MessagesUiState())
@@ -53,14 +54,7 @@ class MessageListViewModel(
         }
     }
 
-    fun refreshForScrollDown() {
-        viewModelScope.launch {
-            fetchMessages()
-            _uiEvent.value = Event(MESSAGE_LIST_FIRST_LOADED)
-        }
-    }
-
-    fun refreshForNotScrollDown() {
+    override fun refresh() {
         viewModelScope.launch { fetchMessages() }
     }
 
@@ -137,7 +131,11 @@ class MessageListViewModel(
 
         viewModelScope.launch {
             when (messageRoomRepository.sendMessage(myUid, otherUid, message)) {
-                is Success -> _uiEvent.value = Event(MESSAGE_SENT_SUCCESS)
+                is Success -> {
+                    fetchMessages()
+                    _uiEvent.value = Event(MESSAGE_SENT_REFRESHED)
+                }
+
                 else -> _uiEvent.value = Event(MESSAGE_SENT_FAILED)
             }
         }
