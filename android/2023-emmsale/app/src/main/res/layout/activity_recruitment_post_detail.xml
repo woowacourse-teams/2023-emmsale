@@ -185,7 +185,7 @@
             android:clickable="true"
             android:fontFamily="@font/nanum_square_bold"
             android:gravity="center"
-            android:text="@string/recruitmentpostdetail_navigate_to_event_detail_btn_text"
+            android:text="@string/recruitmentpostdetail_request_button_text"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="@{isNavigatedFromMyPost ? View.VISIBLE : View.GONE}"
@@ -198,16 +198,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="@{vm.recruitmentPost.loading? View.VISIBLE:View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ProgressBar
-            android:id="@+id/progressBar3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{vm.companionRequest.isLoading? View.VISIBLE:View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
