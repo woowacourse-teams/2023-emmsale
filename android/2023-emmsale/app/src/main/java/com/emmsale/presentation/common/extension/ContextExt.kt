@@ -76,12 +76,20 @@ fun Context.showNotification(
     notificationId: Int = System.currentTimeMillis().toInt(),
     channelId: Int,
     intent: Intent? = null,
+    largeIconUrl: String? = null,
 ) {
     val notificationManager = NotificationManagerCompat.from(this)
 
     if (!checkPostNotificationPermission()) return
 
-    val notification = createNotification(channelId, title, message, notificationId, intent)
+    val notification = createNotification(
+        channelId = channelId,
+        title = title,
+        message = message,
+        notificationId = notificationId,
+        intent = intent,
+        largeIconUrl = largeIconUrl,
+    )
     notificationManager.notify(notificationId, notification)
 }
 
@@ -91,8 +99,10 @@ private fun Context.createNotification(
     message: String,
     notificationId: Int,
     intent: Intent? = null,
+    largeIconUrl: String? = null,
 ) = NotificationCompat.Builder(this, channelId.toString())
     .setSmallIcon(R.drawable.ic_all_notification)
+    .setLargeIcon(largeIconUrl?.toBitmap(this))
     .setContentTitle(title)
     .setContentText(message)
     .setContentIntent(
