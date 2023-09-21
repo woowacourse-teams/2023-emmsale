@@ -53,10 +53,6 @@ class MessageListActivity : AppCompatActivity() {
         binding.tbMessageList.setNavigationOnClickListener {
             finish()
         }
-        binding.tbMessageList.setOnMenuItemClickListener { menuItem ->
-            if (menuItem.itemId == R.id.refresh) viewModel.refresh()
-            true
-        }
     }
 
     private fun setupMessageRecyclerView() {
@@ -85,11 +81,8 @@ class MessageListActivity : AppCompatActivity() {
         when (event) {
             MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED -> scrollToEnd(viewModel.messages.value)
             MessageListUiEvent.MESSAGE_SENDING -> binding.etMessageInput.text.clear()
-            MessageListUiEvent.MESSAGE_SENT_SUCCESS -> {
-                viewModel.refresh()
-                scrollToEnd(viewModel.messages.value)
-            }
-
+            MessageListUiEvent.MESSAGE_SENT_REFRESHED -> scrollToEnd(viewModel.messages.value)
+            MessageListUiEvent.MESSAGE_SENT_SUCCESS -> viewModel.refreshForScrollDown()
             MessageListUiEvent.MESSAGE_SENT_FAILED -> binding.root.showSnackBar(R.string.messagelist_message_sent_failed)
             MessageListUiEvent.NOT_FOUND_OTHER_MEMBER -> binding.root.showSnackBar(R.string.messagelist_not_found_other_member)
         }
@@ -97,7 +90,7 @@ class MessageListActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        viewModel.refresh()
+        viewModel.refreshForNotScrollDown()
 
         val profileUrl = intent?.getStringExtra(KEY_PROFILE_URL)
         val messageContent = intent?.getStringExtra(KEY_MESSAGE_CONTENT) ?: return
