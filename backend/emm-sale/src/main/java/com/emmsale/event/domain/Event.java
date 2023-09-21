@@ -60,9 +60,12 @@ public class Event extends BaseEntity {
 
   private String imageUrl;
 
+  @Column(nullable = false)
+  private String organization;
+
   @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
-  
+
   @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
   private List<RecruitmentPost> recruitmentPosts = new ArrayList<>();
 
@@ -77,7 +80,8 @@ public class Event extends BaseEntity {
       final EventType eventType,
       final String imageUrl,
       final PaymentType paymentType,
-      final EventMode eventMode
+      final EventMode eventMode,
+      final String organization
   ) {
     this.name = name;
     this.location = location;
@@ -87,6 +91,7 @@ public class Event extends BaseEntity {
     this.imageUrl = imageUrl;
     this.paymentType = paymentType;
     this.eventMode = eventMode;
+    this.organization = organization;
   }
 
   public RecruitmentPost createRecruitmentPost(final Member member, final String content) {
