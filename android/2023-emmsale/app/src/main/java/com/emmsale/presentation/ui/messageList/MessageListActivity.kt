@@ -16,7 +16,6 @@ import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.messageList.recyclerview.MessageListAdapter
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
-import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -74,8 +73,8 @@ class MessageListActivity : AppCompatActivity() {
         }
     }
 
-    private fun scrollToEnd(uiState: MessagesUiState) {
-        binding.rvMessageList.smoothScrollToPosition(uiState.messages.size)
+    private fun scrollToEnd() {
+        binding.rvMessageList.smoothScrollToPosition(viewModel.messages.value.messageSize)
     }
 
     private fun setUpEventUiEvent() {
@@ -84,9 +83,9 @@ class MessageListActivity : AppCompatActivity() {
 
     private fun handleEvent(event: MessageListUiEvent) {
         when (event) {
-            MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED -> scrollToEnd(viewModel.messages.value)
+            MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED -> scrollToEnd()
             MessageListUiEvent.MESSAGE_SENDING -> binding.etMessageInput.text.clear()
-            MessageListUiEvent.MESSAGE_SENT_REFRESHED -> scrollToEnd(viewModel.messages.value)
+            MessageListUiEvent.MESSAGE_SENT_REFRESHED -> scrollToEnd()
             MessageListUiEvent.MESSAGE_SENT_FAILED -> binding.root.showSnackBar(R.string.messagelist_message_sent_failed)
             MessageListUiEvent.NOT_FOUND_OTHER_MEMBER -> binding.root.showSnackBar(R.string.messagelist_not_found_other_member)
         }
@@ -116,6 +115,7 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun showBottomMessage(profileUrl: String?, messageContent: String) {
+        binding.clNewMessage.setOnClickListener { scrollToEnd() }
         binding.clNewMessage.visibility = View.VISIBLE
         Glide.with(this@MessageListActivity)
             .load(profileUrl)
