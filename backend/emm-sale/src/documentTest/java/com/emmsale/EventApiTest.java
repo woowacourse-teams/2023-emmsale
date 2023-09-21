@@ -29,6 +29,7 @@ import com.emmsale.tag.application.dto.TagRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -85,7 +86,7 @@ class EventApiTest extends MockMvcTestHelper {
           .description("행사 신청 시작일까지 남은 일 수"),
       PayloadDocumentation.fieldWithPath("type").type(JsonFieldType.STRING)
           .description("event의 타입"),
-      PayloadDocumentation.fieldWithPath("imageUrls[]").description("이미지 URL들"));
+      PayloadDocumentation.fieldWithPath("imageUrls[]").description("이미지 URL들").optional());
 
   @Test
   @DisplayName("컨퍼런스의 상세정보를 조회할 수 있다.")
@@ -208,7 +209,7 @@ class EventApiTest extends MockMvcTestHelper {
         request.getApplyStartDateTime(), request.getApplyEndDateTime(),
         request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()), request.getImageUrl(),
-        10, 10, request.getType().toString(), null);
+        10, 10, request.getType().toString(), Collections.emptyList());
 
     Mockito.when(eventService.updateEvent(any(), any(),
         any())).thenReturn(response);
