@@ -8,6 +8,8 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services")
     id("kotlin-parcelize")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -70,6 +72,7 @@ android {
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
+        unitTests.isIncludeAndroidResources = true
     }
 }
 
@@ -141,10 +144,18 @@ dependencies {
     // SplashScreen
     implementation("androidx.core:core-splashscreen:1.0.0-beta01")
 
-    // imageview
+    // ImageView
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.stfalcon:stfalcon-imageviewer:1.0.10")
 
     // Google Play In-App Update
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+}
+
+kapt {
+    correctErrorTypes = true
 }
