@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.distinctUntilChanged
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.Event
@@ -174,7 +175,7 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private fun setupCommentsUiLogic() {
-        viewModel.comments.observe(this) {
+        viewModel.comments.distinctUntilChanged().observe(this) {
             handleChildComments(it)
         }
     }
