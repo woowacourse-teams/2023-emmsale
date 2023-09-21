@@ -118,7 +118,14 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
 
         if (topActivityName == MessageListActivity::class.java.name) {
             val messageIntent = MessageListActivity
-                .getIntent(applicationContext, roomId, senderId, senderProfileUrl, content)
+                .getIntent(
+                    applicationContext,
+                    roomId,
+                    senderId,
+                    senderProfileUrl,
+                    senderName,
+                    content,
+                )
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(messageIntent)
             return

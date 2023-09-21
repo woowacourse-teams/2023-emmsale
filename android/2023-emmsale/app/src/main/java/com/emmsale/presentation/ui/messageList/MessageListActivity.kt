@@ -96,25 +96,26 @@ class MessageListActivity : AppCompatActivity() {
         viewModel.refresh()
 
         val profileUrl = intent?.getStringExtra(KEY_PROFILE_URL)
-        val messageContent = intent?.getStringExtra(KEY_MESSAGE_CONTENT) ?: return
-        showNewMessage(profileUrl, messageContent)
+        val otherName = intent?.getStringExtra(KEY_OTHER_NAME) ?: return
+        val messageContent = intent.getStringExtra(KEY_MESSAGE_CONTENT) ?: return
+        showNewMessage(profileUrl, otherName, messageContent)
     }
 
-    private fun showNewMessage(profileUrl: String?, messageContent: String) {
+    private fun showNewMessage(profileUrl: String?, otherName: String, messageContent: String) {
         val layoutManager = binding.rvMessageList.layoutManager as LinearLayoutManager
         val lastVisiblePos = layoutManager.findLastVisibleItemPosition()
         val itemCount = viewModel.messages.value.messages.size
         if (lastVisiblePos <= itemCount - 3) {
             job?.cancel()
             job = lifecycleScope.launch {
-                showBottomMessage(profileUrl, messageContent)
+                showBottomMessage(profileUrl, otherName, messageContent)
                 delay(4000)
                 hideBottomMessage()
             }
         }
     }
 
-    private fun showBottomMessage(profileUrl: String?, messageContent: String) {
+    private fun showBottomMessage(profileUrl: String?, otherName: String, messageContent: String) {
         binding.clNewMessage.setOnClickListener { scrollToEnd() }
         binding.clNewMessage.visibility = View.VISIBLE
         Glide.with(this@MessageListActivity)
@@ -122,6 +123,7 @@ class MessageListActivity : AppCompatActivity() {
             .fallback(R.drawable.ic_message_default_profile)
             .into(binding.ivMemberProfile)
         binding.tvNewMessage.text = messageContent
+        binding.tvSenderName.text = otherName
     }
 
     private fun hideBottomMessage() {
@@ -136,6 +138,7 @@ class MessageListActivity : AppCompatActivity() {
         private const val DEFAULT_OTHER_ID = -1L
 
         private const val KEY_PROFILE_URL = "KEY_PROFILE_URL"
+        private const val KEY_OTHER_NAME = "KEY_OTHER_NAME"
         private const val KEY_MESSAGE_CONTENT = "KEY_MESSAGE_CONTENT"
 
         fun getIntent(
@@ -151,9 +154,11 @@ class MessageListActivity : AppCompatActivity() {
             roomId: String,
             otherUid: Long,
             profileUrl: String?,
+            otherName: String,
             messageContent: String,
         ) = getIntent(context, roomId, otherUid)
             .putExtra(KEY_PROFILE_URL, profileUrl)
+            .putExtra(KEY_OTHER_NAME, otherName)
             .putExtra(KEY_MESSAGE_CONTENT, messageContent)
     }
 }
