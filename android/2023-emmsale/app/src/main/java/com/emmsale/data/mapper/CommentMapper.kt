@@ -11,8 +11,8 @@ fun List<CommentFamilyApiModel>.toData(): List<Comment> = map(CommentFamilyApiMo
 
 fun CommentFamilyApiModel.toData() = Comment(
     id = parentComment.commentId,
-    eventId = 1L,
-    eventName = parentComment.eventName,
+    feedId = parentComment.feedId,
+    feedTitle = parentComment.feedTitle,
     authorId = parentComment.memberId,
     authorName = parentComment.memberName,
     authorImageUrl = parentComment.memberImageUrl,
@@ -29,8 +29,8 @@ fun List<CommentResponse>.toData(): List<Comment> = map(CommentResponse::toData)
 
 fun CommentResponse.toData() = Comment(
     id = commentId,
-    eventId = 1L,
-    eventName = eventName,
+    feedId = feedId,
+    feedTitle = feedTitle,
     authorId = memberId,
     authorName = memberName,
     authorImageUrl = memberImageUrl,

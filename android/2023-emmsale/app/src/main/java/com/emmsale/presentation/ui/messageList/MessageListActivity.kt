@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -74,6 +75,10 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun scrollToEnd() {
+        binding.rvMessageList.scrollToPosition(viewModel.messages.value.messageSize - 1)
+    }
+
+    private fun smoothScrollToEnd() {
         binding.rvMessageList.smoothScrollToPosition(viewModel.messages.value.messageSize)
     }
 
@@ -85,7 +90,7 @@ class MessageListActivity : AppCompatActivity() {
         when (event) {
             MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED -> scrollToEnd()
             MessageListUiEvent.MESSAGE_SENDING -> binding.etMessageInput.text.clear()
-            MessageListUiEvent.MESSAGE_SENT_REFRESHED -> scrollToEnd()
+            MessageListUiEvent.MESSAGE_SENT_REFRESHED -> smoothScrollToEnd()
             MessageListUiEvent.MESSAGE_SENT_FAILED -> binding.root.showSnackBar(R.string.messagelist_message_sent_failed)
             MessageListUiEvent.NOT_FOUND_OTHER_MEMBER -> binding.root.showSnackBar(R.string.messagelist_not_found_other_member)
         }
@@ -116,7 +121,10 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun showBottomMessage(profileUrl: String?, otherName: String, messageContent: String) {
-        binding.clNewMessage.setOnClickListener { scrollToEnd() }
+        binding.clNewMessage.setOnClickListener {
+            it.isVisible = false
+            smoothScrollToEnd()
+        }
         binding.clNewMessage.visibility = View.VISIBLE
         Glide.with(this@MessageListActivity)
             .load(profileUrl)
@@ -140,6 +148,10 @@ class MessageListActivity : AppCompatActivity() {
         private const val KEY_PROFILE_URL = "KEY_PROFILE_URL"
         private const val KEY_OTHER_NAME = "KEY_OTHER_NAME"
         private const val KEY_MESSAGE_CONTENT = "KEY_MESSAGE_CONTENT"
+
+        fun startActivity(context: Context, roomId: String, otherUid: Long) {
+            context.startActivity(getIntent(context, roomId, otherUid))
+        }
 
         fun getIntent(
             context: Context,

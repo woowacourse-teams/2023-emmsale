@@ -25,7 +25,7 @@
             android:text="@{comment.isDeleted ? @string/comment_deleted_comment_author_name : comment.authorName}"
             android:textSize="12sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/iv_childcomments_child_comment_author_image"
+            app:layout_constraintStart_toEndOf="@+id/iv_childcomment_author_image"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="김커디" />
 
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text="@string/comments_is_updated"
+            android:text="@string/all_is_updated"
             android:textColor="@color/gray"
             android:textSize="11sp"
             android:visibility="@{(comment.isUpdated &amp;&amp; !comment.isDeleted)? View.VISIBLE : View.GONE}"
@@ -97,7 +97,7 @@
             app:srcCompat="@drawable/ic_childcomment_arrow" />
 
         <ImageView
-            android:id="@+id/iv_childcomments_child_comment_author_image"
+            android:id="@+id/iv_childcomment_author_image"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"

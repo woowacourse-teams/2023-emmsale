@@ -4,8 +4,8 @@ import java.time.LocalDateTime
 
 data class Comment(
     val id: Long,
-    val eventId: Long,
-    val eventName: String,
+    val feedId: Long,
+    val feedTitle: String,
     val authorId: Long,
     val authorName: String,
     val authorImageUrl: String,

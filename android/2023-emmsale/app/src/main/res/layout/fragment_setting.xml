@@ -97,26 +97,9 @@
             tools:text="git1234567@github.com" />
 
         <TextView
-            android:id="@+id/tv_setting_writings_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/bg_setting_button"
-            android:gravity="center"
-            android:onClick="@{() -> showWritings.invoke()}"
-            android:paddingVertical="12dp"
-            android:text="@string/setting_writings_button_label"
-            android:textSize="11sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_setting_written_comments_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image" />
-
-        <TextView
             android:id="@+id/tv_setting_written_comments_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
             android:layout_marginEnd="17dp"
             android:background="@drawable/bg_setting_button"
             android:gravity="center"
@@ -124,19 +107,19 @@
             android:paddingVertical="12dp"
             android:text="@string/setting_written_comments_button_label"
             android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_setting_writings_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_setting_writings_button"
-            app:layout_constraintTop_toTopOf="@+id/tv_setting_writings_button" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="@+id/iv_setting_member_image" />
 
         <com.emmsale.presentation.common.views.VerticalDivider
             android:id="@+id/verticaldivider_setting_vertical_divider"
             android:layout_width="0dp"
             android:layout_height="0.5dp"
-            android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_setting_writings_button" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_setting_written_comments_button"
+            android:layout_marginTop="12dp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_setting_notification_setting_button"
@@ -242,41 +225,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_setting_kakao_url_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginEnd="17dp"
-            android:onClick="@{() -> showOpenProfileUrlConfig.invoke()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_use_term_button">
-
-            <TextView
-                android:id="@+id/tv_setting_kakao_url_button_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/setting_kakao_url_label"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_setting_kako_url_button_decoration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_setting_button_decoration" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_setting_version_info_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -284,7 +232,7 @@
             android:layout_marginEnd="17dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_kakao_url_button">
+            app:layout_constraintTop_toBottomOf="@+id/cl_setting_use_term_button">
 
             <TextView
                 android:id="@+id/tv_setting_version_info_button_label"

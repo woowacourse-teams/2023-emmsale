@@ -1,24 +1,24 @@
 package com.emmsale.presentation.ui.profile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
+import com.emmsale.data.messageRoom.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.BlockedMemberRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.profile.uiState.BlockedMemberUiState
-import com.emmsale.presentation.ui.profile.uiState.ProfileEvent
+import com.emmsale.presentation.ui.profile.uiState.ProfileUiEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 import kotlinx.coroutines.launch
 
@@ -27,8 +27,11 @@ class ProfileViewModel(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val activityRepository: ActivityRepository,
+    private val messageRoomRepository: MessageRoomRepository,
     private val blockedMemberRepository: BlockedMemberRepository,
 ) : ViewModel(), Refreshable {
+
+    val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
@@ -38,8 +41,9 @@ class ProfileViewModel(
 
     private val _blockedMembers = NotNullMutableLiveData(listOf<BlockedMemberUiState>())
 
-    private val _event = MutableLiveData<ProfileEvent?>(null)
-    val event: LiveData<ProfileEvent?> = _event
+    private val _uiEvent: NotNullMutableLiveData<Event<ProfileUiEvent>> =
+        NotNullMutableLiveData(Event(ProfileUiEvent.None))
+    val uiEvent: NotNullLiveData<Event<ProfileUiEvent>> = _uiEvent
 
     init {
         refresh()
@@ -96,13 +100,16 @@ class ProfileViewModel(
     fun blockMember() {
         viewModelScope.launch {
             when (val result = memberRepository.blockMember(memberId)) {
-                is Failure, NetworkError -> _event.value = ProfileEvent.BLOCK_FAIL
+                is Failure -> _uiEvent.value = Event(ProfileUiEvent.BlockFail)
+
+                NetworkError -> _profile.value = _profile.value.copy(isError = true)
                 is Success -> {
-                    _event.value = ProfileEvent.BLOCK_COMPLETE
+                    _uiEvent.value = Event(ProfileUiEvent.BlockComplete)
                     refresh()
                 }
 
-                is Unexpected -> throw Throwable(result.error)
+                is Unexpected ->
+                    _uiEvent.value = Event(ProfileUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -112,19 +119,38 @@ class ProfileViewModel(
             val blockId = _blockedMembers.value.find { it.blockedMemberId == memberId }?.blockId
                 ?: return@launch
             when (val result = blockedMemberRepository.deleteBlockedMember(blockId)) {
-                is Failure, NetworkError -> _event.value = ProfileEvent.UNBLOCK_FAIL
+                is Failure -> _uiEvent.value = Event(ProfileUiEvent.UnblockFail)
+                NetworkError -> _profile.value = _profile.value.copy(isError = true)
                 is Success -> {
-                    _event.value = ProfileEvent.UNBLOCK_SUCCESS
+                    _uiEvent.value = Event(ProfileUiEvent.UnblockSuccess)
                     refresh()
                 }
 
-                is Unexpected -> throw Throwable(result.error)
+                is Unexpected ->
+                    _uiEvent.value = Event(ProfileUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
 
-    fun removeEvent() {
-        _event.value = null
+    fun sendMessage(message: String) {
+        viewModelScope.launch {
+            when (
+                val result =
+                    messageRoomRepository.sendMessage(uid, _profile.value.memberId, message)
+            ) {
+                is Failure ->
+                    _uiEvent.value = Event(ProfileUiEvent.MessageSendFail)
+
+                NetworkError -> _profile.value = _profile.value.copy(isError = true)
+                is Success ->
+                    _uiEvent.value = Event(
+                        ProfileUiEvent.MessageSendComplete(result.data, _profile.value.memberId),
+                    )
+
+                is Unexpected ->
+                    _uiEvent.value = Event(ProfileUiEvent.UnexpectedError(result.error.toString()))
+            }
+        }
     }
 
     companion object {
@@ -134,6 +160,7 @@ class ProfileViewModel(
                 tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
                 memberRepository = KerdyApplication.repositoryContainer.memberRepository,
                 activityRepository = KerdyApplication.repositoryContainer.activityRepository,
+                messageRoomRepository = KerdyApplication.repositoryContainer.messageRoomRepository,
                 blockedMemberRepository = KerdyApplication.repositoryContainer.blockedMemberRepository,
             )
         }

@@ -20,8 +20,8 @@ data class MyCommentUiState(
 
         fun from(comment: Comment) = MyCommentUiState(
             id = comment.id,
-            eventId = comment.eventId,
-            eventName = comment.eventName,
+            eventId = comment.feedId,
+            eventName = comment.feedTitle,
             authorId = comment.authorId,
             parentId = comment.parentId,
             content = comment.content,

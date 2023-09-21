@@ -22,5 +22,5 @@ interface MessageRoomRepository {
         senderId: Long,
         receiverId: Long,
         message: String,
-    ): ApiResponse<Unit>
+    ): ApiResponse<String>
 }

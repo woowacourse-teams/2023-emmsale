@@ -8,6 +8,7 @@ import com.emmsale.data.service.CommentService
 import com.emmsale.data.service.EventService
 import com.emmsale.data.service.EventTagService
 import com.emmsale.data.service.FcmTokenService
+import com.emmsale.data.service.FeedService
 import com.emmsale.data.service.LoginService
 import com.emmsale.data.service.MemberService
 import com.emmsale.data.service.MyPostService
@@ -22,6 +23,7 @@ class ServiceContainer(serviceFactory: ServiceFactory) {
     val memberService: MemberService by lazy { serviceFactory.create(MemberService::class.java) }
     val eventService: EventService by lazy { serviceFactory.create(EventService::class.java) }
     val fcmTokenService: FcmTokenService by lazy { serviceFactory.create(FcmTokenService::class.java) }
+    val feedService: FeedService by lazy { serviceFactory.create(FeedService::class.java) }
     val commentService: CommentService by lazy { serviceFactory.create(CommentService::class.java) }
     val eventTagService: EventTagService by lazy { serviceFactory.create(EventTagService::class.java) }
     val recruitmentService: RecruitmentService by lazy { serviceFactory.create(RecruitmentService::class.java) }

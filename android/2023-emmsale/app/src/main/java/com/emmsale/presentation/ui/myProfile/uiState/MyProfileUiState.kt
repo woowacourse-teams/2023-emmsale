@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.myProfile
+package com.emmsale.presentation.ui.myProfile.uiState
 
 import com.emmsale.data.model.Activity
 import com.emmsale.data.model.ActivityType

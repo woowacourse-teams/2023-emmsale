@@ -1,5 +1,13 @@
 package com.emmsale.presentation.ui.childCommentList.uiState
 
-enum class ChildCommentsUiEvent {
-    POST_ERROR, UPDATE_ERROR, DELETE_ERROR, REPORT_ERROR, REPORT_COMPLETE, REPORT_DUPLICATE,
+sealed interface ChildCommentsUiEvent {
+    object None : ChildCommentsUiEvent
+    data class UnexpectedError(val errorMessage: String) : ChildCommentsUiEvent
+    object CommentPostFail : ChildCommentsUiEvent
+    object CommentUpdateFail : ChildCommentsUiEvent
+    object CommentDeleteFail : ChildCommentsUiEvent
+    object CommentReportDuplicate : ChildCommentsUiEvent
+    object CommentReportFail : ChildCommentsUiEvent
+    object CommentReportComplete : ChildCommentsUiEvent
+    object CommentPostComplete : ChildCommentsUiEvent
 }

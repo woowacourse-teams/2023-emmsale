@@ -69,6 +69,11 @@ enum class DateTimePattern {
             return localDateTime.format(context, R.string.year_month_day_weekday)
         }
     },
+    YEAR_DOT_MONTH_DOT_DAY {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            return localDateTime.format(context, R.string.year_dot_month_dot_day)
+        }
+    },
     ;
 
     abstract fun format(context: Context, localDateTime: LocalDateTime): String
