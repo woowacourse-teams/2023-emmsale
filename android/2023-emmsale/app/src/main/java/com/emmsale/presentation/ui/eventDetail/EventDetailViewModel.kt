@@ -4,12 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emmsale.data.common.ApiError
+import com.emmsale.data.common.ApiException
+import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.EventDetail
 import com.emmsale.data.repository.interfaces.EventRepository
+import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
@@ -30,6 +34,7 @@ class EventDetailViewModel(
     private val eventId: Long,
     private val eventRepository: EventRepository,
     private val scrappedEventRepository: ScrappedEventRepository,
+    private val recruitmentRepository: RecruitmentRepository,
 ) : ViewModel(), Refreshable {
 
     private val _eventDetail: NotNullMutableLiveData<EventDetailUiState> =
@@ -44,6 +49,9 @@ class EventDetailViewModel(
 
     private val _currentScreen = NotNullMutableLiveData(EventDetailScreenUiState.INFORMATION)
     val currentScreen: NotNullLiveData<EventDetailScreenUiState> = _currentScreen
+
+    private val _hasWritingPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val hasWritingPermission: LiveData<Event<Boolean>> = _hasWritingPermission
 
     init {
         refresh()
@@ -115,12 +123,26 @@ class EventDetailViewModel(
         _eventDetail.value = eventDetail.value.copy(fetchResult = ERROR)
     }
 
+    fun fetchHasWritingPermission() {
+        viewModelScope.launch {
+            when (val response = recruitmentRepository.checkIsAlreadyPostRecruitment(eventId)) {
+                is ApiSuccess -> setHasPermissionWritingState(!response.data)
+                is ApiError, is ApiException -> setHasPermissionWritingState(false)
+            }
+        }
+    }
+
+    private fun setHasPermissionWritingState(state: Boolean) {
+        _hasWritingPermission.value = Event(state)
+    }
+
     companion object {
         fun factory(eventId: Long) = ViewModelFactory {
             EventDetailViewModel(
                 eventId,
                 eventRepository = KerdyApplication.repositoryContainer.eventRepository,
                 scrappedEventRepository = KerdyApplication.repositoryContainer.scrappedEventRepository,
+                recruitmentRepository = KerdyApplication.repositoryContainer.recruitmentRepository,
             )
         }
     }

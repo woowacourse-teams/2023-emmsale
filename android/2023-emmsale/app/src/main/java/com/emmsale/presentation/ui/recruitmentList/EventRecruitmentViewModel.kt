@@ -1,7 +1,5 @@
 package com.emmsale.presentation.ui.recruitmentList
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.ApiError
@@ -28,16 +26,8 @@ class EventRecruitmentViewModel(
         )
     val recruitments: NotNullLiveData<RecruitmentPostsUiState> = _recruitments
 
-    private val _hasWritingPermission: MutableLiveData<Boolean> = MutableLiveData()
-    val hasWritingPermission: LiveData<Boolean> = _hasWritingPermission
-
-    init {
-        refresh()
-    }
-
     override fun refresh() {
         fetchRecruitments()
-        fetchHasWritingPermission()
     }
 
     fun fetchRecruitments() {
@@ -51,28 +41,15 @@ class EventRecruitmentViewModel(
     }
 
     private fun changeRecruitmentsToLoadingState() {
-        _recruitments.postValue(_recruitments.value.changeToLoadingState())
+        _recruitments.value = _recruitments.value.changeToLoadingState()
     }
 
     private fun changeRecruitmentsToErrorState() {
-        _recruitments.postValue(_recruitments.value.changeToErrorState())
+        _recruitments.value = _recruitments.value.changeToErrorState()
     }
 
     private fun fetchSuccessRecruitments(recruitments: List<Recruitment>) {
-        _recruitments.postValue(RecruitmentPostsUiState.from(recruitments))
-    }
-
-    fun fetchHasWritingPermission() {
-        viewModelScope.launch {
-            when (val response = recruitmentRepository.checkIsAlreadyPostRecruitment(eventId)) {
-                is ApiSuccess -> setHasPermissionWritingState(!response.data)
-                is ApiError, is ApiException -> setHasPermissionWritingState(false)
-            }
-        }
-    }
-
-    private fun setHasPermissionWritingState(state: Boolean) {
-        _hasWritingPermission.postValue(state)
+        _recruitments.value = RecruitmentPostsUiState.from(recruitments)
     }
 
     companion object {

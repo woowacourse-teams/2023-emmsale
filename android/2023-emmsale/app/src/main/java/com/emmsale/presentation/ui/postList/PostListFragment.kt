@@ -33,6 +33,11 @@ class PostListFragment : BaseFragment<FragmentPostListBinding>() {
         setUpPosts()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
+    }
+
     private fun setUpPosts() {
         viewModel.posts.observe(viewLifecycleOwner) {
             postListAdapter.submitList(it.posts)

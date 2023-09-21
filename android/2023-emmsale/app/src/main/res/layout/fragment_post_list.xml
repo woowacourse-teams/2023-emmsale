@@ -34,8 +34,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:listitem="@layout/item_post" />
-
+                tools:listitem="@layout/item_post"
+                app:itemAnimator="@{null}" />
         </androidx.core.widget.NestedScrollView>
 
         <ProgressBar
