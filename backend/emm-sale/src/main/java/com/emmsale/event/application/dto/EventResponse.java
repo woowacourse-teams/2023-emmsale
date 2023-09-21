@@ -35,6 +35,7 @@ public class EventResponse {
   private final int applyRemainingDays;
   private final String eventMode;
   private final String paymentType;
+  private final String organization;
 
   public static List<EventResponse> makeEventResponsesByStatus(
       final LocalDate today,
@@ -75,7 +76,8 @@ public class EventResponse {
         event.getEventPeriod().calculateRemainingDays(today),
         event.getEventPeriod().calculateApplyRemainingDays(today),
         event.getEventMode().getValue(),
-        event.getPaymentType().getValue()
+        event.getPaymentType().getValue(),
+        event.getOrganization()
     );
   }
 }

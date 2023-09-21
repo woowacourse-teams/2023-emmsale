@@ -40,17 +40,17 @@ class ScrapApiTest extends MockMvcTestHelper {
             LocalDateTime.parse("2023-09-03T12:00:00"),
             List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"), "IN_PROGRESS", "ENDED",
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3, -30, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue()),
+            3, -30, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue(), "행사기관"),
         new EventResponse(5L, "웹 컨퍼런스", LocalDateTime.parse("2023-07-03T12:00:00"),
             LocalDateTime.parse("2023-08-03T12:00:00"), List.of("백엔드", "프론트엔드"),
             "IN_PROGRESS", "IN_PROGRESS",
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3, 3, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue()),
+            3, 3, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue(), "행사기관"),
         new EventResponse(2L, "AI 컨퍼런스", LocalDateTime.parse("2023-07-22T12:00:00"),
             LocalDateTime.parse("2023-07-30T12:00:00"), List.of("AI"), "UPCOMING",
             "IN_PROGRESS",
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3, -18, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue())
+            3, -18, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue(), "행사기관")
     );
 
     final ResponseFieldsSnippet responseFields = PayloadDocumentation.responseFields(
@@ -75,7 +75,9 @@ class ScrapApiTest extends MockMvcTestHelper {
         PayloadDocumentation.fieldWithPath("[].eventMode").type(JsonFieldType.STRING)
             .description("행사 온라인 여부(온라인, 오프라인, 온오프라인)"),
         PayloadDocumentation.fieldWithPath("[].paymentType").type(JsonFieldType.STRING)
-            .description("행사 유료 여부(유료, 무료, 유무료)")
+            .description("행사 유료 여부(유료, 무료, 유무료)"),
+        PayloadDocumentation.fieldWithPath("[].organization").type(JsonFieldType.STRING)
+            .description("행사 기관")
     );
 
     //when
