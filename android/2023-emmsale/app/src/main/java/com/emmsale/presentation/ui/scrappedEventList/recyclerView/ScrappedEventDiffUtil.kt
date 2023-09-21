@@ -8,7 +8,7 @@ object ScrappedEventDiffUtil : DiffUtil.ItemCallback<ScrappedEventUiState>() {
         oldItem: ScrappedEventUiState,
         newItem: ScrappedEventUiState,
     ): Boolean =
-        oldItem.scrapId == newItem.scrapId
+        oldItem.data.id == newItem.data.id
 
     override fun areContentsTheSame(
         oldItem: ScrappedEventUiState,

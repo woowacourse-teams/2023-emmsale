@@ -1,13 +1,10 @@
 package com.emmsale.presentation.ui.scrappedEventList.recyclerView
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
 import com.emmsale.databinding.ItemScrappedEventBinding
-import com.emmsale.presentation.common.views.EventTagChip
-import com.emmsale.presentation.common.views.eventChipOf
 import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState
 
 class ScrappedEventViewHolder(
@@ -19,20 +16,10 @@ class ScrappedEventViewHolder(
     private val binding = ItemScrappedEventBinding.bind(itemView)
 
     init {
-        binding.onClickEvent = onClickEvent
+        binding.onClickScrappedEvent = onClickEvent
     }
 
     fun bind(event: ScrappedEventUiState) {
         binding.event = event
-        binding.cgScrappedEventTags.removeAllViews()
-        event.tags.forEach(::addEventChip)
-    }
-
-    private fun addEventChip(tagName: String) {
-        binding.cgScrappedEventTags.addView(createEventChip(itemView.context, tagName))
-    }
-
-    private fun createEventChip(context: Context, tagName: String): EventTagChip = context.eventChipOf {
-        text = tagName
     }
 }
