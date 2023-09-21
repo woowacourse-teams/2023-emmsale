@@ -123,7 +123,7 @@ class FeedDetailActivity : AppCompatActivity() {
 
     private fun BottomMenuDialog.addFeedUpdateButton() {
         addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
-            binding.root.showSnackBar("아직 피드 수정 기능이 준비되지 않았습니다.")
+            binding.root.showSnackBar("아직 게시글 수정 기능이 준비되지 않았습니다.")
         }
     }
 
@@ -149,7 +149,7 @@ class FeedDetailActivity : AppCompatActivity() {
             context.getString(R.string.all_report_button_label),
             MenuItemType.IMPORTANT,
         ) {
-            binding.root.showSnackBar("아직 피드 신고 기능이 준비되지 않았습니다.")
+            binding.root.showSnackBar("아직 게시글 신고 기능이 준비되지 않았습니다.")
         }
     }
 
