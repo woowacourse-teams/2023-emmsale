@@ -1,18 +1,29 @@
 package com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.R
+import com.emmsale.databinding.ItemAllDeletedCommentBinding
+import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
-class DeletedCommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class DeletedCommentViewHolder(
+    private val binding: ItemAllDeletedCommentBinding,
+    onClick: (commentId: Long) -> Unit,
+) : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        binding.onClick = onClick
+    }
+
+    fun bind(commentUiState: CommentUiState) {
+        binding.uiState = commentUiState
+    }
 
     companion object {
-        fun from(parent: ViewGroup): DeletedCommentViewHolder {
-            val layoutInflater = LayoutInflater.from(parent.context)
-            val itemView = layoutInflater.inflate(R.layout.item_all_deleted_comment, parent, false)
-            return DeletedCommentViewHolder(itemView)
+        fun from(parent: ViewGroup, onClick: (commentId: Long) -> Unit): DeletedCommentViewHolder {
+            val binding = ItemAllDeletedCommentBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
+            return DeletedCommentViewHolder(binding, onClick)
         }
     }
 }

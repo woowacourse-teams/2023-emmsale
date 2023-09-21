@@ -29,13 +29,18 @@ class CommentsAdapter(
                 onCommentMenuClick = onCommentMenuClick,
             )
 
-            CommentsViewType.DELETED_COMMENT -> DeletedCommentViewHolder.from(parent)
+            CommentsViewType.DELETED_COMMENT -> DeletedCommentViewHolder.from(
+                parent = parent,
+                onClick = onParentCommentClick,
+            )
+
             CommentsViewType.DELETED_CHILD_COMMENT -> DeletedChildCommentViewHolder.from(parent)
         }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is CommentViewHolder) holder.bind(getItem(position))
         if (holder is ChildCommentViewHolder) holder.bind(getItem(position))
+        if (holder is DeletedCommentViewHolder) holder.bind(getItem(position))
     }
 
     override fun getItemViewType(position: Int): Int {
