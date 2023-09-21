@@ -7,7 +7,8 @@ data class Post(
     val eventId: Long,
     val title: String,
     val content: String,
-    val titleImageUrl: String,
+    val titleImageUrl: String?,
     val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
     val commentCount: Int,
 )

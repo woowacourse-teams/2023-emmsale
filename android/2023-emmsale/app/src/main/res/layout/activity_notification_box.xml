@@ -27,21 +27,6 @@
             app:titleCentered="true"
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tl_notification_box"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_noti_box"
-            app:tabBackground="@drawable/bg_tablayout_indicator"
-            app:tabIndicatorColor="@color/color_tab_indicator"
-            app:tabIndicatorFullWidth="true"
-            app:tabIndicatorHeight="@dimen/tab_indicator_height"
-            app:tabSelectedTextColor="@color/primary_color"
-            app:tabTextAppearance="@style/KerdyTextStyleBlackBold14" />
-
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_notification_box"
             android:layout_width="0dp"
@@ -49,7 +34,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tl_notification_box" />
+            app:layout_constraintTop_toBottomOf="@id/tb_noti_box" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

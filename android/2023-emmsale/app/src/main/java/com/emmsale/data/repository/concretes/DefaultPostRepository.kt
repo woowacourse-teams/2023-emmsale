@@ -1,7 +1,7 @@
 package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Post
 import com.emmsale.data.repository.interfaces.PostRepository
 import com.emmsale.data.service.PostService
@@ -11,29 +11,15 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import java.time.LocalDateTime
 
 class DefaultPostRepository(
     private val postService: PostService,
 ) : PostRepository {
 
     override suspend fun getPosts(eventId: Long): ApiResponse<List<Post>> {
-        // return postService
-        //     .getPosts(eventId)
-        //     .map { it.toData() }
-        return Success(
-            List(15) {
-                Post(
-                    id = 7649,
-                    eventId = 1,
-                    title = "mauris",
-                    content = "definitiones",
-                    titleImageUrl = "https://duckduckgo.com/?q=sanctus",
-                    createdAt = LocalDateTime.now(),
-                    commentCount = 1761,
-                )
-            },
-        )
+        return postService
+            .getPosts(eventId)
+            .map { it.toData() }
     }
 
     override suspend fun uploadPost(

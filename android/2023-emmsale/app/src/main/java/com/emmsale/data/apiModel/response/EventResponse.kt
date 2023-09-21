@@ -158,5 +158,5 @@ data class EventDetailResponse(
     @SerialName("type")
     val type: String,
     @SerialName("imageUrls")
-    val imageUrls: List<String>,
+    val imageUrls: List<String> = emptyList(),
 )
