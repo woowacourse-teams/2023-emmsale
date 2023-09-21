@@ -42,30 +42,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_message_list" />
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/srl_message_list"
-            onRefresh="@{() -> vm.refresh()}"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/cl_message_input"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            app:swipeRefreshColor="@{@color/primary_color}">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_message_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:clipToPadding="false"
-                android:paddingBottom="12dp"
-                android:scrollbars="none"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="12"
-                tools:listitem="@layout/item_other_message" />
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_message_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"
+            android:paddingBottom="12dp"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="12"
+            tools:listitem="@layout/item_other_message" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_message_input"
