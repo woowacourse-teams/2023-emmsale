@@ -17,7 +17,9 @@
         android:theme="@style/Theme.Emmsale"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
-        <activity android:name=".presentation.ui.messageList.MessageListActivity" />
+        <activity
+            android:name=".presentation.ui.messageList.MessageListActivity"
+            android:launchMode="singleTop" />
         <activity
             android:name=".presentation.ui.postWriting.PostWritingActivity"
             android:exported="false" />

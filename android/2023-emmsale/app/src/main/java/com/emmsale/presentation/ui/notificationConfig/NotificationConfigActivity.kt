@@ -92,6 +92,9 @@ class NotificationConfigActivity :
         binding.switchInterestTagNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setInterestEventNotificationReceiveConfig(isChecked)
         }
+        binding.switchMessageNotificationReceiveConfig.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setMessageNotificationReceiveConfig(isChecked)
+        }
     }
 
     private fun showPermissionRequestDialog() {
@@ -126,6 +129,9 @@ class NotificationConfigActivity :
 
             binding.switchInterestTagNotificationReceiveConfig.isChecked =
                 config.isInterestEventNotificationReceive
+
+            binding.switchMessageNotificationReceiveConfig.isChecked =
+                config.isMessageNotificationReceive
         }
     }
 

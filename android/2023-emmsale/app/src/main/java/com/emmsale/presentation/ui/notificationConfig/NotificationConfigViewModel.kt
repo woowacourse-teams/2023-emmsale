@@ -33,6 +33,7 @@ class NotificationConfigViewModel(
             isCommentNotificationReceive = false,
             isInterestEventNotificationReceive = false,
             isAutoLogin = false,
+            isMessageNotificationReceive = false,
         ),
     )
     val notificationConfig: NotNullLiveData<Config> = _notificationConfig
@@ -98,6 +99,13 @@ class NotificationConfigViewModel(
     fun setInterestEventNotificationReceiveConfig(isReceive: Boolean) {
         viewModelScope.launch {
             configRepository.saveInterestEventNotificationReceiveConfig(isReceive)
+            fetchNotificationConfig()
+        }
+    }
+
+    fun setMessageNotificationReceiveConfig(isReceive: Boolean) {
+        viewModelScope.launch {
+            configRepository.saveMessageNotificationReceiveConfig(isReceive)
             fetchNotificationConfig()
         }
     }

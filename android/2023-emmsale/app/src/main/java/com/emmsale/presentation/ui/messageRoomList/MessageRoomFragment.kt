@@ -41,7 +41,7 @@ class MessageRoomFragment : BaseFragment<FragmentMessageRoomBinding>() {
     }
 
     private fun navigateToMessageList(roomId: String, otherUid: Long) {
-        MessageListActivity.startActivity(requireContext(), roomId, otherUid)
+        startActivity(MessageListActivity.getIntent(requireContext(), roomId, otherUid))
     }
 
     companion object {
