@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 public class FeedDetailResponse {
 
   private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
-  private static final String IMAGE_URL_PREFIX = "https://d3ms3abrjbgefs.cloudfront.net/dev/";
 
   private final Long id;
   private final Long eventId;
@@ -31,7 +30,7 @@ public class FeedDetailResponse {
   public static FeedDetailResponse from(final Feed feed, final List<Image> images) {
     final WriterProfileResponse writerResponse = WriterProfileResponse.from(feed.getWriter());
     final List<String> imageUrls = images.stream()
-        .map(image -> IMAGE_URL_PREFIX + image.getName())
+        .map(Image::getName)
         .collect(Collectors.toList());
 
     return new FeedDetailResponse(
