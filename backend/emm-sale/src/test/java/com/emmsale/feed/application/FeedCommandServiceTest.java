@@ -22,7 +22,6 @@ import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
 import com.emmsale.feed.exception.FeedExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
-import com.emmsale.image.application.ImageCommandService;
 import com.emmsale.image.domain.ImageType;
 import com.emmsale.member.MemberFixture;
 import com.emmsale.member.domain.Member;
@@ -34,7 +33,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 
 class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
@@ -47,8 +45,6 @@ class FeedCommandServiceTest extends ServiceIntegrationTestHelper {
   private MemberRepository memberRepository;
   @Autowired
   private EventRepository eventRepository;
-  @MockBean
-  private ImageCommandService imageCommandService;
 
   private Member 작성자;
   private Event 이벤트1;
