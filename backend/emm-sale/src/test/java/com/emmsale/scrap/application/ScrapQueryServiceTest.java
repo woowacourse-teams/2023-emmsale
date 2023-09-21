@@ -50,7 +50,7 @@ class ScrapQueryServiceTest extends ServiceIntegrationTestHelper {
             Collections.emptyList(), "ENDED", "ENDED", event1.getImageUrl(), event1.getEventPeriod()
             .calculateRemainingDays(LocalDate.now()), event1.getEventPeriod()
             .calculateApplyRemainingDays(LocalDate.now()), event1
-            .getEventMode().getValue(), event1.getPaymentType().getValue(), "행사기관"),
+            .getEventMode().getValue(), event1.getPaymentType().getValue(), "인프런"),
 
         new EventResponse(event2.getId(), event2.getName(), event2.getEventPeriod().getStartDate(),
             event2.getEventPeriod().getEndDate(),
