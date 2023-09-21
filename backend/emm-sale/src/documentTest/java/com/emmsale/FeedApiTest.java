@@ -30,6 +30,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 
 class FeedApiTest extends MockMvcTestHelper {
 
@@ -103,11 +104,19 @@ class FeedApiTest extends MockMvcTestHelper {
   @DisplayName("이벤트의 피드를 성공적으로 저장하면 201 CREATED를 반환한다.")
   void postFeedTest() throws Exception {
     //given
-    final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("이벤트 id"),
-        fieldWithPath("title").type(JsonFieldType.STRING).description("피드 제목"),
-        fieldWithPath("content").type(JsonFieldType.STRING).description("피드 내용"),
-        fieldWithPath("parentComment.parentId").description("부모 댓글 ID").optional()
+    final List<MockMultipartFile> images = List.of(
+        new MockMultipartFile(
+            "picture",
+            "picture.jpg",
+            MediaType.TEXT_PLAIN_VALUE,
+            "test data".getBytes()
+        ),
+        new MockMultipartFile(
+            "picture",
+            "picture.jpg",
+            MediaType.TEXT_PLAIN_VALUE,
+            "test data".getBytes()
+        )
     );
 
     final long eventId = 1L;
@@ -115,27 +124,19 @@ class FeedApiTest extends MockMvcTestHelper {
     final String 피드_제목 = "피드 제목";
     final String 피드_내용 = "피드 내용";
 
+    final MockMultipartHttpServletRequestBuilder builder = multipart("/feeds")
+        .file("eventId", String.valueOf(eventId).getBytes())
+        .file("title", 피드_제목.getBytes())
+        .file("content", 피드_내용.getBytes())
+        .file("images", images.get(0).getBytes())
+        .file("images", images.get(1).getBytes());
+
     when(feedCommandService.postFeed(any(), any(), any())).thenReturn(feedId);
 
-    //when & then
-    final MockMultipartFile eventid = new MockMultipartFile("eventId", "",
-        "application/json", "1".getBytes());
-    final MockMultipartFile title = new MockMultipartFile("title", "",
-        "application/json", "title".getBytes());
-    final MockMultipartFile content = new MockMultipartFile("content", "",
-        "application/json", "content".getBytes());
-
-    final MockMultipartFile images = new MockMultipartFile("images", "image.jpg",
-        "multipart/form-data", "image".getBytes());
-
-    mockMvc.perform(multipart("/feeds")
-            .file(eventid)
-            .file(title)
-            .file(content)
-            .file(images))
+    mockMvc.perform(builder)
+        .andExpect(status().isCreated())
         .andDo(print())
-        .andExpect(status().isCreated());
-    //.andDo(document("post-feed", requestFields, responseFields));
+        .andDo(document("post-feed"));
   }
 
   @Test
