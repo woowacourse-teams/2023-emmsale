@@ -30,6 +30,8 @@ class ProfileViewModel(
     private val blockedMemberRepository: BlockedMemberRepository,
 ) : ViewModel(), Refreshable {
 
+    val uid: Long by lazy { tokenRepository.getMyUid()!! }
+
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
 
@@ -125,6 +127,9 @@ class ProfileViewModel(
 
     fun removeEvent() {
         _event.value = null
+    }
+
+    fun sendMessage(message: String) {
     }
 
     companion object {

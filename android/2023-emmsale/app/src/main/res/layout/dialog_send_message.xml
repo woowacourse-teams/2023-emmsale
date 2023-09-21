@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="vm"
+            type="com.emmsale.presentation.ui.profile.ProfileViewModel" />
+
+        <variable
+            name="onSendButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="280dp"
+                android:layout_height="324dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="15dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_sendmessagedialog_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="29dp"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:text="@string/sendmessagedialog_title"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_sendmessagedialog_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:text="@{@string/sendmessagedialog_message(vm.profile.memberName)}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_sendmessagedialog_title"
+                        tools:text="김커디님께 쪽지를 보내시겠습니까?" />
+
+                    <EditText
+                        android:id="@+id/et_sendmessagedialog_message"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_marginStart="17dp"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginEnd="17dp"
+                        android:autofillHints="username"
+                        android:background="@drawable/bg_requestcompanion_et"
+                        android:fontFamily="@font/nanum_square_regular"
+                        android:gravity="start"
+                        android:hint="@string/sendmessagedialog_hint"
+                        android:maxLength="255"
+                        android:inputType="textMultiLine"
+                        android:padding="12dp"
+                        android:textColorHint="@color/gray"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_sendmessagedialog_description"
+                        android:lineSpacingExtra="2dp" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/materialDivider_sendmessagedialog"
+                        android:layout_width="0dp"
+                        android:layout_height="0.5dp"
+                        android:layout_marginBottom="55dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/materialDivider_sendmessagedialog_vertical"
+                        android:layout_width="0.5dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/materialDivider_sendmessagedialog" />
+
+                    <Button
+                        android:id="@+id/btn_sendmessagedialog_positive"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="1dp"
+                        android:backgroundTint="@color/white"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:text="@string/sendmessagedialog_send_button_label"
+                        android:textColor="@color/primary_color"
+                        android:textSize="14sp"
+                        android:onClick="@{() -> onSendButtonClick.invoke(etSendmessagedialogMessage.text)}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/materialDivider_sendmessagedialog_vertical"
+                        app:layout_constraintTop_toTopOf="@+id/materialDivider_sendmessagedialog_vertical" />
+
+                    <Button
+                        android:id="@+id/btn_sendmessagedialog_negative"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="1dp"
+                        android:backgroundTint="@color/white"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:text="@string/requestcompanion_dialog_negative_button_text"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/materialDivider_sendmessagedialog_vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/materialDivider_sendmessagedialog_vertical" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

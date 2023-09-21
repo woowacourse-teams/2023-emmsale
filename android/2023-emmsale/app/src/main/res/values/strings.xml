@@ -103,6 +103,12 @@
     <string name="profilemenudialog_report_button_label">신고하기</string>
     <string name="profilemenudialog_unblock_button_label">차단 해제</string>
 
+    <string name="sendmessagedialog_title">쪽지 보내기</string>
+    <string name="sendmessagedialog_message">%s님께 쪽지를 보내시겠습니까?</string>
+    <string name="sendmessagedialog_hint">쪽지 메세지를 작성해주세요</string>
+    <string name="sendmessagedialog_send_button_label">보내기</string>
+    <string name="sendmessagedialog_message_send_fail_message">쪽지를 보내는 데 실패했어요 😥</string>
+
     <string name="event_poster_description">event poster</string>
     <string name="event_filter">필터 설정</string>
     <string name="event_count_format">%,d개</string>

@@ -37,6 +37,8 @@ class ProfileActivity : AppCompatActivity() {
 
     private val menuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
+    private val sendMessageDialog: SendMessageDialog by lazy { SendMessageDialog() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -65,12 +67,17 @@ class ProfileActivity : AppCompatActivity() {
     private fun showMoreMenu() {
         menuDialog.resetMenu()
         menuDialog.apply {
+            addMenuItemBelow("쪽지 보내기") { onSendMessageButtonClick() }
             if (viewModel.isBlocked()) {
                 addMenuItemBelow(getString(R.string.profilemenudialog_unblock_button_label)) { onUnblockButtonClick() }
             } else {
                 addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) { onBlockButtonClick() }
             }
         }.show()
+    }
+
+    private fun onSendMessageButtonClick() {
+        sendMessageDialog.show(supportFragmentManager, SendMessageDialog.TAG)
     }
 
     private fun onBlockButtonClick() {
@@ -126,6 +133,8 @@ class ProfileActivity : AppCompatActivity() {
 
             ProfileEvent.UNBLOCK_FAIL -> binding.root.showSnackBar(getString(R.string.profile_unblock_fail_message))
             ProfileEvent.UNBLOCK_SUCCESS -> binding.root.showSnackBar(getString(R.string.profile_unblock_complete_message))
+            ProfileEvent.MESSAGE_SEND_FAIL -> binding.root.showSnackBar(getString(R.string.sendmessagedialog_message_send_fail_message))
+            ProfileEvent.MESSAGE_SEND_COMPLETE -> {}
         }
         viewModel.removeEvent()
     }
