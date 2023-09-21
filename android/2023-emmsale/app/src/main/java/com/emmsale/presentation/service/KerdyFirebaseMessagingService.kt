@@ -8,6 +8,7 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.ConfigRepository
+import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.common.extension.topActivityName
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
@@ -26,6 +27,7 @@ import javax.inject.Inject
 class KerdyFirebaseMessagingService @Inject constructor(
     private val configRepository: ConfigRepository,
     private val commentRepository: CommentRepository,
+    private val tokenRepository: TokenRepository,
 ) : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -33,7 +35,7 @@ class KerdyFirebaseMessagingService @Inject constructor(
 
         val config = configRepository.getConfig()
         val isNotificationReceive = config.isNotificationReceive
-        if (!isNotificationReceive || token == null) return
+        if (!isNotificationReceive || tokenRepository.getToken() == null) return
 
         when (message.data["notificationType"]) {
             FOLLOW_NOTIFICATION_TYPE -> {

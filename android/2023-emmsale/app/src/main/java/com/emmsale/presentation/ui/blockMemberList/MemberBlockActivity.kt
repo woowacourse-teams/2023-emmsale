@@ -15,9 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MemberBlockActivity : AppCompatActivity() {
-    private val binding: ActivityMemberBlockBinding by lazy {
-        ActivityMemberBlockBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityMemberBlockBinding.inflate(layoutInflater) }
     private val viewModel: MemberBlockViewModel by viewModels()
     private val blockedMemberAdapter: BlockedMemberAdapter by lazy { BlockedMemberAdapter(::showUnblockMemberDialog) }
 

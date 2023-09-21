@@ -16,10 +16,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
-    private val binding: ActivityOnboardingBinding by lazy {
-        ActivityOnboardingBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityOnboardingBinding.inflate(layoutInflater) }
     private val viewModel: OnboardingViewModel by viewModels()
+
     private val fragmentStateAdapter: OnboardingFragmentStateAdapter by lazy {
         OnboardingFragmentStateAdapter(this)
     }

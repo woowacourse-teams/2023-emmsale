@@ -29,10 +29,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class NotificationConfigActivity :
     AppCompatActivity(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("notification_config") {
+    private val binding by lazy { ActivityNotificationConfigBinding.inflate(layoutInflater) }
     private val viewModel: NotificationConfigViewModel by viewModels()
-    private val binding: ActivityNotificationConfigBinding by lazy {
-        ActivityNotificationConfigBinding.inflate(layoutInflater)
-    }
+
     private val notiTagConfigLauncher = registerForActivityResult(StartActivityForResult()) {
         viewModel.fetchNotificationTags()
     }

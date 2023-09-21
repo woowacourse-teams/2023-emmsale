@@ -16,22 +16,17 @@ import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
-import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
-import com.emmsale.presentation.ui.openProfileUrlConfig.OpenProfileUrlConfigActivity
+import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailViewModel.Companion.RECRUITMENT_ID_KEY
-import com.emmsale.presentation.ui.recruitmentDetail.uiState.HasOpenUrlUiState
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.RecruitmentPostDetailUiEvent
 import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RecruitmentPostDetailActivity :
-    AppCompatActivity(),
-    RequestCompanionFragmentDialog.RequestCompanionDialogListener {
+class RecruitmentPostDetailActivity : AppCompatActivity() {
     private val binding by lazy { ActivityRecruitmentPostDetailBinding.inflate(layoutInflater) }
     private val viewModel: RecruitmentPostDetailViewModel by viewModels()
 

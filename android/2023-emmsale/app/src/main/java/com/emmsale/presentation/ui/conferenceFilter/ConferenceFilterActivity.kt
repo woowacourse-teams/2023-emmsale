@@ -27,10 +27,8 @@ import java.time.LocalDate
 
 @AndroidEntryPoint
 class ConferenceFilterActivity : AppCompatActivity() {
+    private val binding by lazy { ActivityConferenceFilterBinding.inflate(layoutInflater) }
     private val viewModel: ConferenceFilterViewModel by viewModels()
-    private val binding: ActivityConferenceFilterBinding by lazy {
-        ActivityConferenceFilterBinding.inflate(layoutInflater)
-    }
     private val statusFilterBinding: LayoutFilterConferenceStatusBinding by lazy { binding.layoutFilterStatus }
     private val tagFilterBinding: LayoutFilterConferenceTagBinding by lazy { binding.layoutFilterTag }
     private val durationFilterBinding: LayoutFilterConferenceDurationBinding by lazy { binding.layoutFilterDuration }

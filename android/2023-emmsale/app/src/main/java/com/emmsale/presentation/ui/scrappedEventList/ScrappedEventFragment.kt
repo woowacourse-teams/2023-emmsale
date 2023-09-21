@@ -14,7 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
     override val layoutResId: Int = R.layout.fragment_scrapped_event
-
     private val viewModel: ScrappedEventViewModel by viewModels()
 
     private val scrappedEventsAdapter: ScrappedEventAdapter by lazy {

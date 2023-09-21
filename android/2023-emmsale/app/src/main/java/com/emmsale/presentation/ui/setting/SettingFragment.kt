@@ -25,7 +25,6 @@ class SettingFragment :
     BaseFragment<FragmentSettingBinding>(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("setting") {
     override val layoutResId: Int = R.layout.fragment_setting
-
     private val viewModel: SettingViewModel by viewModels()
 
     override fun onAttach(context: Context) {

@@ -12,14 +12,10 @@ import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.messageRoom.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.firebase.analytics.logRecruitment
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.ui.recruitmentDetail.uiState.HasOpenUrlUiState
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.RecruitmentPostDetailUiEvent
 import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -54,7 +50,9 @@ class RecruitmentPostDetailViewModel @Inject constructor(
         NotNullMutableLiveData(Event(RecruitmentPostDetailUiEvent.None))
     val uiEvent: NotNullLiveData<Event<RecruitmentPostDetailUiEvent>> = _uiEvent
 
-    private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
+    private val myUid = requireNotNull(tokenRepository.getMyUid()) {
+        "[ERROR] 내 아이디를 가져오지 못했어요."
+    }
 
     init {
         refresh()

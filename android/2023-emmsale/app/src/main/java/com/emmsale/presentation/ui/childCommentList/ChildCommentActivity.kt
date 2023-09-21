@@ -29,7 +29,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChildCommentActivity : AppCompatActivity() {
-
     private val binding by lazy { ActivityChildCommentsBinding.inflate(layoutInflater) }
     private val viewModel: ChildCommentViewModel by viewModels()
 

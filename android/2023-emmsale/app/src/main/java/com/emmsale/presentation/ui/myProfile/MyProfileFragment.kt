@@ -17,7 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     override val layoutResId: Int = R.layout.fragment_my_profile
-
     private val viewModel: MyProfileViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

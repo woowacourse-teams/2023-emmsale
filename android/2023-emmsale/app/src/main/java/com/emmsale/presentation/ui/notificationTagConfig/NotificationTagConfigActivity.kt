@@ -22,9 +22,7 @@ class NotificationTagConfigActivity :
     AppCompatActivity(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("notification_tag_config") {
     private val viewModel: NotificationTagConfigViewModel by viewModels()
-    private val binding: ActivityNotificationTagConfigBinding by lazy {
-        ActivityNotificationTagConfigBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityNotificationTagConfigBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

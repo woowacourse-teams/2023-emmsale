@@ -28,9 +28,7 @@ import java.time.LocalDate
 @AndroidEntryPoint
 class CompetitionFilterActivity : AppCompatActivity() {
     private val viewModel: CompetitionFilterViewModel by viewModels()
-    private val binding: ActivityCompetitionFilterBinding by lazy {
-        ActivityCompetitionFilterBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityCompetitionFilterBinding.inflate(layoutInflater) }
     private val statusFilterBinding: LayoutFilterCompetitionStatusBinding by lazy { binding.layoutFilterStatus }
     private val tagFilterBinding: LayoutFilterCompetitionTagBinding by lazy { binding.layoutFilterTag }
     private val durationFilterBinding: LayoutFilterCompetitionDurationBinding by lazy { binding.layoutFilterDuration }

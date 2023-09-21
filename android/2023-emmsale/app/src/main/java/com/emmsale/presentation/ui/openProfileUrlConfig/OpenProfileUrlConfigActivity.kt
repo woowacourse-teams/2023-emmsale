@@ -12,10 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OpenProfileUrlConfigActivity : AppCompatActivity() {
-
-    private val binding: ActivityOpenProfileUrlConfigBinding by lazy {
-        ActivityOpenProfileUrlConfigBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityOpenProfileUrlConfigBinding.inflate(layoutInflater) }
     private val viewModel: OpenProfileUrlConfigViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

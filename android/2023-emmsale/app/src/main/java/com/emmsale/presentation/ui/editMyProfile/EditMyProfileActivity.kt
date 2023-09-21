@@ -24,11 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class EditMyProfileActivity : AppCompatActivity() {
-
-    private val binding: ActivityEditMyProfileBinding by lazy {
-        ActivityEditMyProfileBinding.inflate(layoutInflater)
-    }
-
+    private val binding by lazy { ActivityEditMyProfileBinding.inflate(layoutInflater) }
     private val viewModel: EditMyProfileViewModel by viewModels()
 
     private val fieldsDialog by lazy { FieldsAddBottomDialogFragment() }

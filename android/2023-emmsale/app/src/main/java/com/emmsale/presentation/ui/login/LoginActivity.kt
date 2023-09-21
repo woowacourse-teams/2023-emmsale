@@ -30,9 +30,7 @@ class LoginActivity :
     AppCompatActivity(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("login") {
     private val viewModel: LoginViewModel by viewModels()
-    private val binding: ActivityLoginBinding by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        ActivityLoginBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),

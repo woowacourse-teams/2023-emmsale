@@ -17,10 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyCommentsActivity : AppCompatActivity() {
-
-    private val binding: ActivityMyCommentsBinding by lazy {
-        ActivityMyCommentsBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityMyCommentsBinding.inflate(layoutInflater) }
 
     private val viewModel: MyCommentsViewModel by viewModels()
 

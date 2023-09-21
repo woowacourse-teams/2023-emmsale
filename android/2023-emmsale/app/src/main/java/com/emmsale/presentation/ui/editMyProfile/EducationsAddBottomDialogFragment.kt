@@ -12,10 +12,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
-
     private var _binding: FragmentEditmyprofileEducationsAddBottomDialogBinding? = null
     private val binding
-        get() = _binding ?: throw IllegalStateException("교육 활동 추가 다이얼로그가 보이지 않을 때 바인딩 객체에 접근했습니다.")
+        get() = requireNotNull(_binding) { "[ERROR] 교육 활동 추가 다이얼로그가 보이지 않을 때 바인딩 객체에 접근했습니다." }
 
     private val viewModel: EditMyProfileViewModel by activityViewModels()
 
