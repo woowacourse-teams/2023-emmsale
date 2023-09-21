@@ -24,11 +24,16 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class KerdyFirebaseMessagingService @Inject constructor(
-    private val configRepository: ConfigRepository,
-    private val commentRepository: CommentRepository,
-    private val tokenRepository: TokenRepository,
-) : FirebaseMessagingService() {
+class KerdyFirebaseMessagingService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var configRepository: ConfigRepository
+
+    @Inject
+    lateinit var commentRepository: CommentRepository
+
+    @Inject
+    lateinit var tokenRepository: TokenRepository
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
