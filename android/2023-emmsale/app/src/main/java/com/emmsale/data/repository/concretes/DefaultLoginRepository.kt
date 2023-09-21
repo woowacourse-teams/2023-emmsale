@@ -6,12 +6,13 @@ import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Login
 import com.emmsale.data.repository.interfaces.LoginRepository
 import com.emmsale.data.service.LoginService
+import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DefaultLoginRepository(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+class DefaultLoginRepository @Inject constructor(
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val loginService: LoginService,
 ) : LoginRepository {
     override suspend fun saveGithubCode(

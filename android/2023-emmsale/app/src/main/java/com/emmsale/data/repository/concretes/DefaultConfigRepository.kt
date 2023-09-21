@@ -3,8 +3,9 @@ package com.emmsale.data.repository.concretes
 import android.content.SharedPreferences
 import com.emmsale.data.model.Config
 import com.emmsale.data.repository.interfaces.ConfigRepository
+import javax.inject.Inject
 
-class DefaultConfigRepository(
+class DefaultConfigRepository @Inject constructor(
     private val preference: SharedPreferences,
 ) : ConfigRepository {
     private val preferenceEditor = preference.edit()

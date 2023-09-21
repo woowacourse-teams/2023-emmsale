@@ -16,12 +16,14 @@ import com.emmsale.presentation.ui.conferenceList.recyclerView.ConferenceRecycle
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceUiState
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
+@AndroidEntryPoint
 class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     override val layoutResId: Int = R.layout.fragment_conference
-    private val viewModel: ConferenceViewModel by viewModels { ConferenceViewModel.factory }
+    private val viewModel: ConferenceViewModel by viewModels()
     private val eventAdapter: ConferenceRecyclerViewAdapter by lazy {
         ConferenceRecyclerViewAdapter(::navigateToEventDetail)
     }

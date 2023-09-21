@@ -10,22 +10,20 @@ import com.emmsale.databinding.FragmentEventRecruitmentBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
+import com.emmsale.presentation.ui.recruitmentList.EventRecruitmentViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.recruitmentList.recyclerView.EventRecruitmentAdapter
 import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EventRecruitmentFragment :
     BaseFragment<FragmentEventRecruitmentBinding>(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("event_recruitment") {
     override val layoutResId: Int = R.layout.fragment_event_recruitment
+    private val viewModel: EventRecruitmentViewModel by viewModels()
 
-    private val viewModel: EventRecruitmentViewModel by viewModels {
-        EventRecruitmentViewModel.factory(eventId)
-    }
-    private val eventId: Long by lazy {
-        arguments?.getLong(EVENT_ID_KEY) ?: throw IllegalArgumentException(EVENT_ID_NULL_ERROR)
-    }
     private val recruitmentAdapter: EventRecruitmentAdapter by lazy {
         EventRecruitmentAdapter(::navigateToRecruitmentDetail)
     }
@@ -53,7 +51,7 @@ class EventRecruitmentFragment :
     private fun navigateToRecruitmentDetail(recruitmentPostUiState: RecruitmentPostUiState) {
         val intent = RecruitmentPostDetailActivity.getIntent(
             requireContext(),
-            eventId,
+            viewModel.eventId,
             recruitmentPostUiState.id,
         )
         startActivity(intent)
@@ -71,15 +69,10 @@ class EventRecruitmentFragment :
     }
 
     companion object {
-        private const val EVENT_ID_KEY = "EVENT_ID_KEY"
-        private const val EVENT_ID_NULL_ERROR = "행사 아이디를 가져오지 못했어요"
-
-        fun create(eventId: Long): EventRecruitmentFragment {
-            val fragment = EventRecruitmentFragment()
-            fragment.arguments = Bundle().apply {
+        fun create(eventId: Long): EventRecruitmentFragment = EventRecruitmentFragment().apply {
+            arguments = Bundle().apply {
                 putLong(EVENT_ID_KEY, eventId)
             }
-            return fragment
         }
     }
 }

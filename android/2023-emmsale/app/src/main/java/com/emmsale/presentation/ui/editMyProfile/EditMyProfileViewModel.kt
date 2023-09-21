@@ -14,17 +14,18 @@ import com.emmsale.data.model.ActivityType
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileErrorEvent
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileUiState
 import com.emmsale.presentation.ui.editMyProfile.uiState.SelectableActivityUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EditMyProfileViewModel(
+@HiltViewModel
+class EditMyProfileViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val activityRepository: ActivityRepository,
@@ -229,13 +230,5 @@ class EditMyProfileViewModel(
 
     companion object {
         private const val MAX_FIELDS_COUNT = 4
-
-        val factory = ViewModelFactory {
-            EditMyProfileViewModel(
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
-                activityRepository = KerdyApplication.repositoryContainer.activityRepository,
-            )
-        }
     }
 }

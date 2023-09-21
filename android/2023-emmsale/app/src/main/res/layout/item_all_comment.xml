@@ -37,14 +37,14 @@
             android:id="@+id/iv_comment_author_image"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="15dp"
             android:layout_marginStart="17dp"
+            android:layout_marginTop="15dp"
+            android:contentDescription="@string/comment_author_image"
             android:onClick="@{() -> onProfileImageClick.invoke(uiState.comment.authorId)}"
             app:imageUrl="@{uiState.comment.authorImageUrl}"
             app:isCircle="@{true}"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="@string/comment_author_image"
+            app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -68,8 +68,8 @@
             android:textSize="11sp"
             app:dateText="@{uiState.comment.updatedAt}"
             app:dateTimeFormatter="@{DateTimePattern.RELATIVE_TIME}"
-            app:layout_constraintStart_toStartOf="@+id/tv_comment_authorname"
             app:layout_constraintBottom_toBottomOf="@id/iv_comment_author_image"
+            app:layout_constraintStart_toStartOf="@+id/tv_comment_authorname"
             tools:text="2023.08.03" />
 
         <TextView
@@ -90,9 +90,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="13dp"
-            android:onClick="@{() -> onCommentMenuClick.invoke(uiState.isWrittenByLoginUser, uiState.comment.id)}"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/comment_menu_button"
+            android:onClick="@{() -> onCommentMenuClick.invoke(uiState.isWrittenByLoginUser, uiState.comment.id)}"
             android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_comment_author_image"
             app:layout_constraintEnd_toEndOf="parent"
@@ -105,11 +105,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="17dp"
+            android:autoLink="web"
+            android:lineSpacingExtra="2dp"
+            android:linksClickable="true"
             android:text="@{uiState.comment.content}"
             android:textSize="13sp"
-            android:autoLink="web"
-            android:linksClickable="true"
-            android:lineSpacingExtra="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/iv_comment_author_image"
             app:layout_constraintTop_toBottomOf="@+id/iv_comment_author_image"

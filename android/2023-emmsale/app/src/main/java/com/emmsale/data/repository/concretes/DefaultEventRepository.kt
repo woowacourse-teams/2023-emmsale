@@ -15,14 +15,15 @@ import com.emmsale.data.model.EventDetail
 import com.emmsale.data.model.EventTag
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.service.EventService
+import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class DefaultEventRepository(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+class DefaultEventRepository @Inject constructor(
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val eventService: EventService,
 ) : EventRepository {
     override suspend fun getConferences(

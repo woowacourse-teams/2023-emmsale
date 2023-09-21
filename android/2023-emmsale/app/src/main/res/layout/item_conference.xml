@@ -111,11 +111,11 @@
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cg_event_tags"
-            app:eventChips="@{event.conference.tags}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="10dp"
+            app:eventChips="@{event.conference.tags}"
             app:layout_constraintEnd_toEndOf="@+id/iv_event_poster"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/tv_is_free" />

@@ -15,13 +15,13 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/iv_feeddetailfeeddetailimage_image"
             android:layout_width="140dp"
             android:layout_height="140dp"
+            android:contentDescription="@string/feeddetail_image_description"
+            app:canZoomIn="@{true}"
             app:imageUrl="@{imageUrl}"
             app:roundedImageRadius="@{10}"
-            app:canZoomIn="@{true}"
-            tools:srcCompat="@tools:sample/avatars"
-            android:id="@+id/iv_feeddetailfeeddetailimage_image"
-            android:contentDescription="@string/feeddetail_image_description" />
+            tools:srcCompat="@tools:sample/avatars" />
     </LinearLayout>
 </layout>

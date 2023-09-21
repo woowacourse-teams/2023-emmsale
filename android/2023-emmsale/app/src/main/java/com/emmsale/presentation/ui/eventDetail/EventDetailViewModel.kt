@@ -1,7 +1,8 @@
-package com.emmsale.presentation.ui.eventDetail
+package com.emmsale.presentation.ui.eventdetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Failure
@@ -12,7 +13,6 @@ import com.emmsale.data.model.EventDetail
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult.ERROR
 import com.emmsale.presentation.common.FetchResult.LOADING
@@ -21,18 +21,21 @@ import com.emmsale.presentation.common.firebase.analytics.logEventClick
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailUiState
 import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EventDetailViewModel(
-    private val eventId: Long,
+@HiltViewModel
+class EventDetailViewModel @Inject constructor(
+    stateHandle: SavedStateHandle,
     private val eventRepository: EventRepository,
     private val scrappedEventRepository: ScrappedEventRepository,
     private val recruitmentRepository: RecruitmentRepository,
 ) : ViewModel(), Refreshable {
+    val eventId = stateHandle[EVENT_ID_KEY] ?: DEFAULT_EVENT_ID
 
     private val _eventDetail: NotNullMutableLiveData<EventDetailUiState> =
         NotNullMutableLiveData(EventDetailUiState())
@@ -135,13 +138,7 @@ class EventDetailViewModel(
     }
 
     companion object {
-        fun factory(eventId: Long) = ViewModelFactory {
-            EventDetailViewModel(
-                eventId,
-                eventRepository = KerdyApplication.repositoryContainer.eventRepository,
-                scrappedEventRepository = KerdyApplication.repositoryContainer.scrappedEventRepository,
-                recruitmentRepository = KerdyApplication.repositoryContainer.recruitmentRepository,
-            )
-        }
+        const val EVENT_ID_KEY = "EVENT_ID_KEY"
+        private const val DEFAULT_EVENT_ID = -1L
     }
 }

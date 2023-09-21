@@ -12,12 +12,13 @@ import com.emmsale.data.model.RecruitmentStatus
 import com.emmsale.data.model.updatedNotification.UpdatedNotification
 import com.emmsale.data.repository.interfaces.NotificationRepository
 import com.emmsale.data.service.NotificationService
+import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DefaultNotificationRepository(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+class DefaultNotificationRepository @Inject constructor(
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val notificationService: NotificationService,
 ) : NotificationRepository {
     override suspend fun getRecruitmentNotifications(

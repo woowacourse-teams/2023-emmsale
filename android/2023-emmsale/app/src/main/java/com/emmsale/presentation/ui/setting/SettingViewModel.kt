@@ -9,15 +9,16 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SettingViewModel(
+@HiltViewModel
+class SettingViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
 ) : ViewModel(), Refreshable {
@@ -55,15 +56,6 @@ class SettingViewModel(
         viewModelScope.launch {
             tokenRepository.deleteToken()
             _member.value = _member.value.changeToLogoutState()
-        }
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            SettingViewModel(
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
-            )
         }
     }
 }

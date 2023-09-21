@@ -8,15 +8,16 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.myCommentList.uiState.MyCommentsUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyCommentsViewModel(
+@HiltViewModel
+class MyCommentsViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
 ) : ViewModel(), Refreshable {
@@ -46,15 +47,6 @@ class MyCommentsViewModel(
 
                 is Unexpected -> throw Throwable(result.error)
             }
-        }
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            MyCommentsViewModel(
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                commentRepository = KerdyApplication.repositoryContainer.commentRepository,
-            )
         }
     }
 }

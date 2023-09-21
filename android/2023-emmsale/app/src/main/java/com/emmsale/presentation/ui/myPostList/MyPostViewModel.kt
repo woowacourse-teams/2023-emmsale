@@ -7,15 +7,16 @@ import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.MyPostRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.myPostList.uiState.MyPostsUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyPostViewModel(
+@HiltViewModel
+class MyPostViewModel @Inject constructor(
     private val myPostRepository: MyPostRepository,
 ) : ViewModel(), Refreshable {
     private val _myPosts: NotNullMutableLiveData<MyPostsUiState> =
@@ -37,12 +38,6 @@ class MyPostViewModel(
                 is Success -> _myPosts.value = MyPostsUiState.from(result.data)
                 is Unexpected -> throw Throwable(result.error)
             }
-        }
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            MyPostViewModel(KerdyApplication.repositoryContainer.myPostRepository)
         }
     }
 }

@@ -12,23 +12,15 @@ import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivi
 import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostWritingUiState
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.EDIT
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.POST
+import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingViewModel.Companion.EVENT_ID_KEY
+import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingViewModel.Companion.RECRUITMENT_CONTENT_KEY
+import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingViewModel.Companion.RECRUITMENT_ID_KEY
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecruitmentPostWritingActivity : AppCompatActivity() {
-    private val binding: ActivityRecruitmentPostWritingBinding by lazy {
-        ActivityRecruitmentPostWritingBinding.inflate(layoutInflater)
-    }
-    private val eventId: Long by lazy {
-        intent.getLongExtra(EVENT_ID_KEY, DEFAULT_ID)
-    }
-    private val recruitmentIdToEdit: Long? by lazy {
-        receiveRecruitmentId()
-    }
-    private val recruitmentContentToEdit: String by lazy {
-        intent.getStringExtra(RECRUITMENT_CONTENT_KEY) ?: DEFAULT_CONTENT
-    }
-    private val viewModel: RecruitmentPostWritingViewModel by viewModels {
-        RecruitmentPostWritingViewModel.factory(eventId, recruitmentIdToEdit)
-    }
+    private val binding by lazy { ActivityRecruitmentPostWritingBinding.inflate(layoutInflater) }
+    private val viewModel: RecruitmentPostWritingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +72,7 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
             EDIT -> {
                 binding.tvRecruitmentwritingComplete.text =
                     getString(R.string.recruitmentpostwriting_edit_button_text)
-                binding.etRecruitmentwriting.setText(recruitmentContentToEdit)
+                binding.etRecruitmentwriting.setText(viewModel.recruitmentContentToEdit)
             }
         }
     }
@@ -89,7 +81,7 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
         startActivity(
             RecruitmentPostDetailActivity.getIntent(
                 this,
-                eventId,
+                viewModel.eventId,
                 viewModel.postedRecruitmentId.value,
             ),
         )
@@ -124,19 +116,7 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
         }
     }
 
-    private fun receiveRecruitmentId(): Long? {
-        val recruitmentId = intent.getLongExtra(RECRUITMENT_ID_KEY, DEFAULT_ID)
-        if (recruitmentId == DEFAULT_ID) return null
-        return recruitmentId
-    }
-
     companion object {
-        private const val EVENT_ID_KEY = "EVENT_ID_KEY"
-        private const val RECRUITMENT_ID_KEY = "RECRUITMENT_ID_KEY"
-        private const val RECRUITMENT_CONTENT_KEY = "RECRUITMENT_CONTENT_KEY"
-        private const val DEFAULT_CONTENT = ""
-        private const val DEFAULT_ID = -1L
-
         fun getPostModeIntent(context: Context, eventId: Long): Intent {
             val intent = Intent(context, RecruitmentPostWritingActivity::class.java)
             intent.putExtra(EVENT_ID_KEY, eventId)

@@ -100,6 +100,7 @@
             android:id="@+id/tv_setting_written_comments_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="17dp"
             android:background="@drawable/bg_setting_button"
             android:gravity="center"
@@ -108,18 +109,17 @@
             android:text="@string/setting_written_comments_button_label"
             android:textSize="11sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="@+id/iv_setting_member_image" />
+            app:layout_constraintStart_toStartOf="@+id/iv_setting_member_image"
+            app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image" />
 
         <com.emmsale.presentation.common.views.VerticalDivider
             android:id="@+id/verticaldivider_setting_vertical_divider"
             android:layout_width="0dp"
             android:layout_height="0.5dp"
+            android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_setting_written_comments_button"
-            android:layout_marginTop="12dp" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_setting_written_comments_button" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_setting_notification_setting_button"

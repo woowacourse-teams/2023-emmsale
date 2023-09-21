@@ -2,12 +2,13 @@ package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.model.CompetitionStatus
 import com.emmsale.data.repository.interfaces.CompetitionStatusRepository
+import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DefaultCompetitionStatusRepository(
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+class DefaultCompetitionStatusRepository @Inject constructor(
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : CompetitionStatusRepository {
     override suspend fun getCompetitionStatuses(): List<CompetitionStatus> =
         withContext(dispatcher) {

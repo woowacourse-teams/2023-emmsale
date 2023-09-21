@@ -12,12 +12,14 @@ import com.emmsale.databinding.ActivityOnboardingBinding
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.onboarding.uiState.MemberSavingUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
     private val binding: ActivityOnboardingBinding by lazy {
         ActivityOnboardingBinding.inflate(layoutInflater)
     }
-    private val viewModel: OnboardingViewModel by viewModels { OnboardingViewModel.factory }
+    private val viewModel: OnboardingViewModel by viewModels()
     private val fragmentStateAdapter: OnboardingFragmentStateAdapter by lazy {
         OnboardingFragmentStateAdapter(this)
     }

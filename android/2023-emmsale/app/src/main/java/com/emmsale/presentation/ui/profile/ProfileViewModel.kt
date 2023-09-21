@@ -1,5 +1,6 @@
 package com.emmsale.presentation.ui.profile
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Failure
@@ -11,26 +12,29 @@ import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.BlockedMemberRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.profile.uiState.BlockedMemberUiState
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProfileViewModel(
-    private val memberId: Long,
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val activityRepository: ActivityRepository,
     private val messageRoomRepository: MessageRoomRepository,
     private val blockedMemberRepository: BlockedMemberRepository,
 ) : ViewModel(), Refreshable {
-
+    private val memberId: Long = requireNotNull(savedStateHandle[KEY_MEMBER_ID]) {
+        "[ERROR] 멤버 아이디를 가져오지 못했어요."
+    }
     val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
     private val _isLogin = NotNullMutableLiveData(true)
@@ -154,15 +158,6 @@ class ProfileViewModel(
     }
 
     companion object {
-        fun factory(memberId: Long) = ViewModelFactory {
-            ProfileViewModel(
-                memberId = memberId,
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
-                activityRepository = KerdyApplication.repositoryContainer.activityRepository,
-                messageRoomRepository = KerdyApplication.repositoryContainer.messageRoomRepository,
-                blockedMemberRepository = KerdyApplication.repositoryContainer.blockedMemberRepository,
-            )
-        }
+        const val KEY_MEMBER_ID = "KEY_MEMBER_ID"
     }
 }

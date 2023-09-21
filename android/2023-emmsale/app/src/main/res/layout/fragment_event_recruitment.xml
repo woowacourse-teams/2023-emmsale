@@ -16,8 +16,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_marginBottom="93dp">
+        android:layout_marginBottom="93dp"
+        android:background="@color/white">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -25,13 +25,13 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_recruitment"
-                app:itemAnimator="@{null}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:itemAnimator="@{null}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 tools:listitem="@layout/item_recruitment" />
 
         </androidx.core.widget.NestedScrollView>

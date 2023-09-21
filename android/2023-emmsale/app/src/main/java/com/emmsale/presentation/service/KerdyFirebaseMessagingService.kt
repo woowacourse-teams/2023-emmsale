@@ -6,25 +6,31 @@ import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
-import com.emmsale.presentation.KerdyApplication
+import com.emmsale.data.repository.interfaces.CommentRepository
+import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.common.extension.topActivityName
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.notificationPageList.NotificationBoxActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class KerdyFirebaseMessagingService : FirebaseMessagingService() {
+@AndroidEntryPoint
+class KerdyFirebaseMessagingService @Inject constructor(
+    private val configRepository: ConfigRepository,
+    private val commentRepository: CommentRepository,
+) : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        val configRepository = KerdyApplication.repositoryContainer.configRepository
         val config = configRepository.getConfig()
         val isNotificationReceive = config.isNotificationReceive
         if (!isNotificationReceive) return
@@ -64,7 +70,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     private fun showChildCommentNotification(message: RemoteMessage) {
         fun getFeedIdAndParentCommentId(commentId: Long): Pair<Long, Long> {
             return runBlocking {
-                val commentRepository = KerdyApplication.repositoryContainer.commentRepository
                 when (val result = commentRepository.getComment(commentId)) {
                     is Failure, NetworkError -> ERROR_FEED_ID to ERROR_FEED_ID
                     is Success -> result.data.feedId to (

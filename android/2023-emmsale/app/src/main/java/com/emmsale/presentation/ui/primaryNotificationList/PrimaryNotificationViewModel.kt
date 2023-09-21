@@ -8,17 +8,18 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.NotificationRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.primaryNotificationList.uiState.PrimaryNotificationScreenUiState
 import com.emmsale.presentation.ui.primaryNotificationList.uiState.PrimaryNotificationsUiEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PrimaryNotificationViewModel(
+@HiltViewModel
+class PrimaryNotificationViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val notificationRepository: NotificationRepository,
 ) : ViewModel(), Refreshable {
@@ -93,15 +94,6 @@ class PrimaryNotificationViewModel(
                 is Success -> refresh()
                 is Unexpected -> throw Throwable(result.error)
             }
-        }
-    }
-
-    companion object {
-        val factory: ViewModelFactory<PrimaryNotificationViewModel> = ViewModelFactory {
-            PrimaryNotificationViewModel(
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                notificationRepository = KerdyApplication.repositoryContainer.notificationRepository,
-            )
         }
     }
 }

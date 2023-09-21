@@ -19,36 +19,29 @@ import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
 import com.emmsale.presentation.ui.commentList.recyclerView.CommentRecyclerViewDivider
+import com.emmsale.presentation.ui.feedDetail.FeedDetailViewModel.Companion.KEY_FEED_ID
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailAdapter
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
 import com.emmsale.presentation.ui.profile.ProfileActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FeedDetailActivity : AppCompatActivity() {
-
-    private val feedId: Long by lazy {
-        intent.getLongExtra(KEY_FEED_ID, DEFAULT_FEED_ID)
-    }
-
-    private val binding: ActivityFeedDetailBinding by lazy {
-        ActivityFeedDetailBinding.inflate(layoutInflater)
-    }
-
-    private val viewModel: FeedDetailViewModel by viewModels { FeedDetailViewModel.factory(feedId) }
+    private val binding by lazy { ActivityFeedDetailBinding.inflate(layoutInflater) }
+    private val viewModel: FeedDetailViewModel by viewModels()
 
     private val inputMethodManager: InputMethodManager by lazy {
         getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
     }
+    private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
     private val feedDetailAdapter: FeedDetailAdapter = FeedDetailAdapter(::showProfile)
-
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
         onParentCommentClick = ::showChildComments,
         onProfileImageClick = ::showProfile,
         onCommentMenuClick = ::showCommentMenuDialog,
     )
-
-    private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -172,7 +165,7 @@ class FeedDetailActivity : AppCompatActivity() {
     }
 
     private fun showChildComments(commentId: Long) {
-        ChildCommentActivity.startActivity(this, feedId, commentId)
+        ChildCommentActivity.startActivity(this, viewModel.feedId, commentId)
     }
 
     private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, commentId: Long) {
@@ -311,12 +304,9 @@ class FeedDetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KEY_FEED_ID: String = "KEY_FEED_ID"
-        private const val DEFAULT_FEED_ID: Long = -1
-
         fun startActivity(context: Context, feedId: Long) {
             val intent = Intent(context, FeedDetailActivity::class.java)
-            intent.putExtra(KEY_FEED_ID, feedId)
+                .putExtra(KEY_FEED_ID, feedId)
             context.startActivity(intent)
         }
     }

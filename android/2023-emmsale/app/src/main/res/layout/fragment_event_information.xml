@@ -11,7 +11,7 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.eventDetail.EventDetailViewModel" />
+            type="com.emmsale.presentation.ui.eventdetail.EventDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,20 +46,20 @@
 
                     <TextView
                         android:id="@+id/tv_eventInfo_apply_date"
-                        app:startDateTime="@{vm.eventDetail.eventDetail.applyStartDate}"
-                        app:endDateTime="@{vm.eventDetail.eventDetail.applyEndDate}"
-                        app:dateTimeFormatter="@{DateTimePattern.MONTH_DAY_WEEKDAY}"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
                         android:layout_marginStart="42dp"
+                        android:layout_marginTop="24dp"
                         android:layout_marginEnd="17dp"
                         android:fontFamily="@font/nanum_square_regular"
                         android:textColor="@color/black"
                         android:textSize="12sp"
-                        app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_date_title"
+                        app:dateTimeFormatter="@{DateTimePattern.MONTH_DAY_WEEKDAY}"
+                        app:endDateTime="@{vm.eventDetail.eventDetail.applyEndDate}"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_date_title"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:startDateTime="@{vm.eventDetail.eventDetail.applyStartDate}"
                         tools:text="2023.08.15 12:00 ~ 2023.08.17 17:00" />
 
                     <TextView
@@ -77,20 +77,20 @@
 
                     <TextView
                         android:id="@+id/tv_eventInfo_date"
-                        app:startDateTime="@{vm.eventDetail.eventDetail.startDate}"
-                        app:endDateTime="@{vm.eventDetail.eventDetail.endDate}"
-                        app:dateTimeFormatter="@{DateTimePattern.MONTH_DAY_WEEKDAY}"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:layout_marginStart="42dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="17dp"
                         android:fontFamily="@font/nanum_square_regular"
                         android:textColor="@color/black"
                         android:textSize="12sp"
+                        app:dateTimeFormatter="@{DateTimePattern.MONTH_DAY_WEEKDAY}"
+                        app:endDateTime="@{vm.eventDetail.eventDetail.endDate}"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_date_title"
                         app:layout_constraintTop_toBottomOf="@+id/tv_eventInfo_apply_date"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:startDateTime="@{vm.eventDetail.eventDetail.startDate}"
                         tools:text="2023.8.15 12:00 " />
 
                     <TextView
@@ -108,19 +108,19 @@
 
                     <TextView
                         android:id="@+id/tv_eventInfo_place"
-                        android:text="@{vm.eventDetail.eventDetail.location}"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="42dp"
-                        android:layout_marginEnd="17dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="17dp"
                         android:fontFamily="@font/nanum_square_regular"
+                        android:text="@{vm.eventDetail.eventDetail.location}"
                         android:textColor="@color/black"
                         android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_place_title"
                         app:layout_constraintTop_toBottomOf="@id/tv_eventInfo_date"
-                        tools:text="삼성동 코엑스 몰 2층 101"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        tools:text="삼성동 코엑스 몰 2층 101" />
 
                     <TextView
                         android:id="@+id/tv_eventInfo_cost_title"
@@ -141,8 +141,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="42dp"
                         android:layout_marginTop="10dp"
-                        android:text="무료"
                         android:fontFamily="@font/nanum_square_regular"
+                        android:text="무료"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_place_title"
@@ -150,15 +150,15 @@
                         tools:text="무료" />
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        app:imageUrl="@{vm.eventDetail.eventDetail.posterImageUrl}"
                         android:id="@+id/eventInfo_poster"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:adjustViewBounds="true"
-                        app:layout_constraintTop_toBottomOf="@id/tv_eventInfo_cost"
+                        app:imageUrl="@{vm.eventDetail.eventDetail.posterImageUrl}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_eventInfo_cost"
                         tools:src="@drawable/img_all_loading" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>

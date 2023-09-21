@@ -8,9 +8,11 @@ import com.emmsale.databinding.FragmentOnboardingClubBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.onboarding.uiState.ActivityUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingClubFragment : BaseFragment<FragmentOnboardingClubBinding>(), View.OnClickListener {
-    val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }
+    val viewModel: OnboardingViewModel by activityViewModels()
     override val layoutResId: Int = R.layout.fragment_onboarding_club
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.commentList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
@@ -11,21 +12,25 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.commentList.uiState.CommentsUiEvent
 import com.emmsale.presentation.ui.commentList.uiState.CommentsUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CommentViewModel(
-    private val eventId: Long,
+@HiltViewModel
+class CommentViewModel @Inject constructor(
+    stateHandle: SavedStateHandle,
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
 ) : ViewModel(), Refreshable {
+    val eventId = requireNotNull(stateHandle.get<Long>(KEY_EVENT_ID)) {
+        "[ERROR] 컨퍼런스의 댓글 프래그먼트는 컨퍼런스 아이디를 알아야 합니다. 로직을 다시 확인해주세요"
+    }
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
@@ -63,7 +68,7 @@ class CommentViewModel(
         }
     }
 
-    fun saveComment(content: String, eventId: Long) {
+    fun saveComment(content: String) {
         viewModelScope.launch {
             when (val result = commentRepository.saveComment(content, eventId)) {
                 is Failure, NetworkError -> {
@@ -139,14 +144,8 @@ class CommentViewModel(
     }
 
     companion object {
-        private const val REPORT_DUPLICATE_ERROR_CODE = 400
+        const val KEY_EVENT_ID = "KEY_EVENT_ID"
 
-        fun factory(eventId: Long) = ViewModelFactory {
-            CommentViewModel(
-                eventId = eventId,
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                commentRepository = KerdyApplication.repositoryContainer.commentRepository,
-            )
-        }
+        private const val REPORT_DUPLICATE_ERROR_CODE = 400
     }
 }

@@ -8,15 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityOpenProfileUrlConfigBinding
 import com.emmsale.presentation.common.extension.showSnackBar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OpenProfileUrlConfigActivity : AppCompatActivity() {
 
     private val binding: ActivityOpenProfileUrlConfigBinding by lazy {
         ActivityOpenProfileUrlConfigBinding.inflate(layoutInflater)
     }
-    private val viewModel: OpenProfileUrlConfigViewModel by viewModels {
-        OpenProfileUrlConfigViewModel.factory
-    }
+    private val viewModel: OpenProfileUrlConfigViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

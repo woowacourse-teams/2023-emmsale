@@ -45,8 +45,8 @@
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:onClick="@{() -> onProfileImageClick.invoke(uiState.comment.authorId)}"
             android:contentDescription="@string/childcomments_child_comment_author_image_description"
+            android:onClick="@{() -> onProfileImageClick.invoke(uiState.comment.authorId)}"
             app:imageUrl="@{uiState.comment.authorImageUrl}"
             app:isCircle="@{true}"
             app:layout_constraintStart_toEndOf="@+id/iv_childcomment_arrowdecoration"
@@ -98,8 +98,8 @@
             android:layout_marginEnd="13dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/comment_menu_button"
-            android:padding="4dp"
             android:onClick="@{() -> onCommentMenuClick.invoke(uiState.isWrittenByLoginUser, uiState.comment.id)}"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_childcomment_author_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_childcomment_author_image"
@@ -112,16 +112,16 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="17dp"
             android:layout_marginBottom="14dp"
+            android:autoLink="web"
+            android:lineSpacingExtra="2dp"
+            android:linksClickable="true"
             android:text="@{uiState.comment.content}"
             android:textSize="13sp"
-            android:autoLink="web"
-            android:linksClickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/iv_childcomment_author_image"
             app:layout_constraintTop_toBottomOf="@+id/iv_childcomment_author_image"
-            tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하"
-            android:lineSpacingExtra="2dp" />
+            tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

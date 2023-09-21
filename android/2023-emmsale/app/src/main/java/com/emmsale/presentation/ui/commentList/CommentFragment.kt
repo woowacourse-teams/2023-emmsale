@@ -15,29 +15,22 @@ import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDeleg
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
+import com.emmsale.presentation.ui.commentList.CommentViewModel.Companion.KEY_EVENT_ID
 import com.emmsale.presentation.ui.commentList.recyclerView.CommentRecyclerViewDivider
 import com.emmsale.presentation.ui.commentList.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.commentList.uiState.CommentsUiEvent
 import com.emmsale.presentation.ui.commentList.uiState.CommentsUiState
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CommentFragment :
     BaseFragment<FragmentCommentsBinding>(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("comment") {
     override val layoutResId: Int = R.layout.fragment_comments
-
-    private val eventId: Long by lazy {
-        arguments?.getLong(KEY_EVENT_ID)?.run {
-            if (this < 1) throw IllegalStateException("컨퍼런스의 댓글 프래그먼트는 1 이상이어야 합니다. 로직을 다시 확인해주세요")
-            this
-        } ?: throw IllegalStateException("컨퍼런스의 댓글 프래그먼트는 컨퍼런스 아이디를 모르면 존재 의미가 없습니다. 로직을 다시 확인해주세요")
-    }
-
-    private val viewModel: CommentViewModel by viewModels {
-        CommentViewModel.factory(eventId)
-    }
+    private val viewModel: CommentViewModel by viewModels()
 
     private val inputMethodManager: InputMethodManager by lazy {
         requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -101,7 +94,7 @@ class CommentFragment :
     }
 
     private fun showChildComments(commentId: Long) {
-        ChildCommentActivity.startActivity(requireContext(), eventId, commentId)
+        ChildCommentActivity.startActivity(requireContext(), viewModel.eventId, commentId)
     }
 
     private fun editComment(commentId: Long) {
@@ -165,7 +158,7 @@ class CommentFragment :
 
     private fun onCommentSave() {
         isSaveButtonClick = true
-        viewModel.saveComment(binding.etCommentsPostComment.text.toString(), eventId)
+        viewModel.saveComment(binding.etCommentsPostComment.text.toString())
         binding.etCommentsPostComment.apply {
             text.clear()
         }
@@ -222,13 +215,10 @@ class CommentFragment :
     }
 
     companion object {
-        private const val KEY_EVENT_ID = "KEY_EVENT_ID"
-        fun create(eventId: Long): CommentFragment {
-            val fragment = CommentFragment()
-            fragment.arguments = Bundle().apply {
+        fun create(eventId: Long): CommentFragment = CommentFragment().apply {
+            arguments = Bundle().apply {
                 putLong(KEY_EVENT_ID, eventId)
             }
-            return fragment
         }
     }
 }

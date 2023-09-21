@@ -15,11 +15,13 @@ import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.notificationTagConfig.uiState.NotificationTagConfigUiEvent
 import com.emmsale.presentation.ui.notificationTagConfig.uiState.NotificationTagConfigUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NotificationTagConfigActivity :
     AppCompatActivity(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("notification_tag_config") {
-    private val viewModel: NotificationTagConfigViewModel by viewModels { NotificationTagConfigViewModel.factory }
+    private val viewModel: NotificationTagConfigViewModel by viewModels()
     private val binding: ActivityNotificationTagConfigBinding by lazy {
         ActivityNotificationTagConfigBinding.inflate(layoutInflater)
     }

@@ -22,10 +22,12 @@ import com.emmsale.presentation.ui.competitionFilter.uiState.CompetitionFilterUi
 import com.emmsale.presentation.ui.competitionFilter.uiState.CompetitionFilteringDateOptionUiState
 import com.emmsale.presentation.ui.competitionFilter.uiState.CompetitionFilteringOptionUiState
 import com.google.android.material.chip.ChipGroup
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
+@AndroidEntryPoint
 class CompetitionFilterActivity : AppCompatActivity() {
-    private val viewModel: CompetitionFilterViewModel by viewModels { CompetitionFilterViewModel.factory }
+    private val viewModel: CompetitionFilterViewModel by viewModels()
     private val binding: ActivityCompetitionFilterBinding by lazy {
         ActivityCompetitionFilterBinding.inflate(layoutInflater)
     }

@@ -4,10 +4,6 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import com.emmsale.R
-import com.emmsale.data.common.ServiceFactory
-import com.emmsale.di.RepositoryContainer
-import com.emmsale.di.ServiceContainer
-import com.emmsale.di.SharedPreferenceContainer
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -18,16 +14,8 @@ class KerdyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        initDiContainer()
         initFirebaseAnalytics()
         initNotificationChannels()
-    }
-
-    private fun initDiContainer() {
-        repositoryContainer = RepositoryContainer(
-            serviceContainer = ServiceContainer(ServiceFactory()),
-            preferenceContainer = SharedPreferenceContainer(this),
-        )
     }
 
     private fun initFirebaseAnalytics() {
@@ -107,8 +95,6 @@ class KerdyApplication : Application() {
     }
 
     companion object {
-        lateinit var repositoryContainer: RepositoryContainer
-            private set
         lateinit var firebaseAnalytics: FirebaseAnalytics
             private set
         val applicationScope: CoroutineScope = CoroutineScope(Dispatchers.IO)

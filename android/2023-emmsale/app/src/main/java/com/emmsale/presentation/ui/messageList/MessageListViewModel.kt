@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.messageList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Success
@@ -10,12 +11,10 @@ import com.emmsale.data.messageRoom.MessageRoomRepository
 import com.emmsale.data.model.Member
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.messageList.uistate.MessageDateUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED
@@ -27,15 +26,20 @@ import com.emmsale.presentation.ui.messageList.uistate.MessageUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
 import com.emmsale.presentation.ui.messageList.uistate.MyMessageUiState
 import com.emmsale.presentation.ui.messageList.uistate.OtherMessageUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MessageListViewModel(
-    private val roomId: String,
-    private val otherUid: Long,
-    private val tokenRepository: TokenRepository,
+@HiltViewModel
+class MessageListViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val messageRoomRepository: MessageRoomRepository,
 ) : ViewModel(), Refreshable {
+    private val roomId = savedStateHandle[KEY_ROOM_ID] ?: DEFAULT_ROOM_ID
+    private val otherUid = savedStateHandle[KEY_OTHER_UID] ?: DEFAULT_OTHER_ID
+
     private val myUid: Long = tokenRepository.getMyUid() ?: -1
 
     private val _messages = NotNullMutableLiveData(MessagesUiState())
@@ -142,14 +146,10 @@ class MessageListViewModel(
     }
 
     companion object {
-        fun factory(roomId: String, otherUid: Long) = ViewModelFactory {
-            MessageListViewModel(
-                roomId = roomId,
-                otherUid = otherUid,
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
-                messageRoomRepository = KerdyApplication.repositoryContainer.messageRoomRepository,
-            )
-        }
+        const val KEY_ROOM_ID = "KEY_ROOM_ID"
+        private const val DEFAULT_ROOM_ID = ""
+
+        const val KEY_OTHER_UID = "KEY_OTHER_UID"
+        private const val DEFAULT_OTHER_ID = -1L
     }
 }

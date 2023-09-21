@@ -11,21 +11,22 @@ import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.EventTag
 import com.emmsale.data.repository.interfaces.EventTagRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logInterestTags
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.notificationTagConfig.uiState.NotificationTagConfigUiEvent
 import com.emmsale.presentation.ui.notificationTagConfig.uiState.NotificationTagConfigUiState
 import com.emmsale.presentation.ui.notificationTagConfig.uiState.NotificationTagsConfigUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NotificationTagConfigViewModel(
+@HiltViewModel
+class NotificationTagConfigViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val eventTagRepository: EventTagRepository,
 ) : ViewModel(), Refreshable {
@@ -107,14 +108,5 @@ class NotificationTagConfigViewModel(
 
     fun resetEvent() {
         _event.value = null
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            NotificationTagConfigViewModel(
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository,
-            )
-        }
     }
 }

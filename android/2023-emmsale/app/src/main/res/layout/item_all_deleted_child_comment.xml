@@ -5,40 +5,40 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_childcomment_arrow"
-        android:id="@+id/imageView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="15dp"
         android:layout_marginStart="17dp"
-        android:importantForAccessibility="no" />
-
-    <TextView
-        android:text="@string/comment_deleted_comment_author_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feeddetaildeletedchildcomment_title"
+        android:layout_marginTop="15dp"
+        android:importantForAccessibility="no"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="18dp"
-        android:textStyle="bold"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="17dp"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        android:layout_marginStart="8dp" />
+        app:srcCompat="@drawable/ic_childcomment_arrow" />
 
     <TextView
-        android:text="@string/comment_deleted_comment_content"
+        android:id="@+id/tv_feeddetaildeletedchildcomment_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="17dp"
+        android:text="@string/comment_deleted_comment_author_name"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/tv_feeddetaildeletedchildcomment_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_feeddetaildeletedchildcomment_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_feeddetaildeletedchildcomment_title"
+        android:layout_marginBottom="14dp"
+        android:text="@string/comment_deleted_comment_content"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="14dp" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_feeddetaildeletedchildcomment_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_feeddetaildeletedchildcomment_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_feeddetaildeletedchildcomment_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>

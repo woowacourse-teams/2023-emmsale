@@ -14,7 +14,9 @@ import com.emmsale.presentation.ui.eventPageList.EventFragment
 import com.emmsale.presentation.ui.messageRoomList.MessageRoomFragment
 import com.emmsale.presentation.ui.myProfile.MyProfileFragment
 import com.emmsale.presentation.ui.setting.SettingFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 

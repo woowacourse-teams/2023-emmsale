@@ -15,31 +15,23 @@ import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.openProfileUrlConfig.OpenProfileUrlConfigActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
+import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailViewModel.Companion.EVENT_ID_KEY
+import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailViewModel.Companion.RECRUITMENT_ID_KEY
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.HasOpenUrlUiState
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.RecruitmentPostDetailUiEvent
 import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecruitmentPostDetailActivity :
     AppCompatActivity(),
     RequestCompanionFragmentDialog.RequestCompanionDialogListener {
-    private val binding: ActivityRecruitmentPostDetailBinding by lazy {
-        ActivityRecruitmentPostDetailBinding.inflate(layoutInflater)
-    }
-    private val viewModel: RecruitmentPostDetailViewModel by viewModels {
-        RecruitmentPostDetailViewModel.factory(
-            eventId,
-            recruitmentId,
-        )
-    }
-    private val eventId: Long by lazy {
-        intent.getLongExtra(EVENT_ID_KEY, -DEFAULT__ID)
-    }
-    private val recruitmentId: Long by lazy {
-        intent.getLongExtra(RECRUITMENT_ID_KEY, DEFAULT__ID)
-    }
+    private val binding by lazy { ActivityRecruitmentPostDetailBinding.inflate(layoutInflater) }
+    private val viewModel: RecruitmentPostDetailViewModel by viewModels()
+
     private val isNavigatedFromMyPost: Boolean by lazy {
         intent.getBooleanExtra(FROM_MY_POST_KEY, false)
     }
@@ -195,7 +187,7 @@ class RecruitmentPostDetailActivity :
 
     private fun initNavigateToEventDetailButtonClick() {
         binding.btnRecruitmentdetailNavigateToEventDetail.setOnClickListener {
-            EventDetailActivity.startActivity(this, eventId)
+            EventDetailActivity.startActivity(this, viewModel.eventId)
         }
     }
 
@@ -250,16 +242,14 @@ class RecruitmentPostDetailActivity :
     private fun navigateToEditPage() {
         val intent = RecruitmentPostWritingActivity.getEditModeIntent(
             this,
-            eventId,
-            recruitmentId,
+            viewModel.eventId,
+            viewModel.recruitmentId,
             viewModel.recruitmentPost.value.content,
         )
         fetchByResultActivityLauncher.launch(intent)
     }
 
     companion object {
-        private const val EVENT_ID_KEY = "EVENT_ID_KEY"
-        private const val RECRUITMENT_ID_KEY = "RECRUITMENT_ID_KEY"
         private const val FROM_MY_POST_KEY = "FROM_MY_POST_KEY"
         private const val DEFAULT__ID = -1L
 

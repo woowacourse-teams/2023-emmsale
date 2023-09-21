@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.databinding.ActivityNotificationBoxBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NotificationBoxActivity : AppCompatActivity() {
     private val binding by lazy { ActivityNotificationBoxBinding.inflate(layoutInflater) }
 

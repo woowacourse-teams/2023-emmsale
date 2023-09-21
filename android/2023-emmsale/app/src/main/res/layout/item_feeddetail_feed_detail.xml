@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -25,121 +25,121 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/iv_feeddetail_feed_author_image"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            tools:srcCompat="@tools:sample/avatars"
-            android:id="@+id/iv_feeddetail_feed_author_image"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="14dp"
+            android:contentDescription="@string/feeddetail_author_image_description"
+            android:onClick="@{() -> onProfileImageClick.invoke(uiState.feedDetail.writer.id)}"
             app:imageUrl="@{uiState.feedDetail.writer.imageUrl}"
             app:isCircle="@{true}"
-            android:onClick="@{() -> onProfileImageClick.invoke(uiState.feedDetail.writer.id)}"
-            android:layout_marginTop="14dp"
-            android:layout_marginStart="17dp"
-            android:contentDescription="@string/feeddetail_author_image_description" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/tv_feeddetail_feed_author_name"
-            app:layout_constraintStart_toEndOf="@+id/iv_feeddetail_feed_author_image"
-            android:textStyle="bold"
-            android:text="@{uiState.feedDetail.writer.name}"
-            tools:text="김커디"
-            android:textSize="13sp"
-            app:layout_constraintTop_toTopOf="@+id/iv_feeddetail_feed_author_image"
-            android:layout_marginTop="4dp"
-            android:layout_marginStart="9dp" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="4dp"
+            android:text="@{uiState.feedDetail.writer.name}"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/iv_feeddetail_feed_author_image"
+            app:layout_constraintTop_toTopOf="@+id/iv_feeddetail_feed_author_image"
+            tools:text="김커디" />
+
+        <TextView
             android:id="@+id/tv_feeddetail_last_modified_date"
-            app:layout_constraintStart_toStartOf="@+id/tv_feeddetail_feed_author_name"
-            android:textSize="11sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
             android:textColor="@color/gray"
+            android:textSize="11sp"
             app:dateText="@{uiState.feedDetail.updatedAt}"
             app:dateTimeFormatter="@{DateTimePattern.RELATIVE_TIME}"
-            tools:text="2023.08.23"
             app:layout_constraintBottom_toBottomOf="@+id/iv_feeddetail_feed_author_image"
-            android:layout_marginBottom="3dp" />
+            app:layout_constraintStart_toStartOf="@+id/tv_feeddetail_feed_author_name"
+            tools:text="2023.08.23" />
 
         <TextView
+            android:id="@+id/tv_feeddetail_is_updated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_feeddetail_is_updated"
-            app:layout_constraintStart_toEndOf="@+id/tv_feeddetail_last_modified_date"
-            app:layout_constraintTop_toTopOf="@+id/tv_feeddetail_last_modified_date"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_feeddetail_last_modified_date"
-            android:visibility="@{uiState.isUpdated ? View.VISIBLE : View.GONE}"
-            android:textSize="11sp"
-            android:textColor="@color/gray"
+            android:layout_marginStart="3dp"
             android:text="@string/all_is_updated"
-            android:layout_marginStart="3dp" />
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            android:visibility="@{uiState.isUpdated ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_feeddetail_last_modified_date"
+            app:layout_constraintStart_toEndOf="@+id/tv_feeddetail_last_modified_date"
+            app:layout_constraintTop_toTopOf="@+id/tv_feeddetail_last_modified_date" />
 
         <TextView
+            android:id="@+id/tv_feeddetail_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_feeddetail_title"
-            app:layout_constraintTop_toBottomOf="@+id/iv_feeddetail_feed_author_image"
-            app:layout_constraintStart_toStartOf="@+id/iv_feeddetail_feed_author_image"
             android:layout_marginTop="14dp"
+            android:layout_marginEnd="17dp"
             android:text="@{uiState.feedDetail.title}"
             android:textSize="15sp"
             android:textStyle="bold"
-            tools:text="타임라인 어떻게 되나요?"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="17dp" />
+            app:layout_constraintStart_toStartOf="@+id/iv_feeddetail_feed_author_image"
+            app:layout_constraintTop_toBottomOf="@+id/iv_feeddetail_feed_author_image"
+            tools:text="타임라인 어떻게 되나요?" />
 
         <TextView
+            android:id="@+id/tv_feeddetail_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_feeddetail_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_feeddetail_title"
-            app:layout_constraintStart_toStartOf="@+id/tv_feeddetail_title"
-            app:layout_constraintEnd_toEndOf="@+id/tv_feeddetail_title"
             android:layout_marginTop="10dp"
             android:autoLink="web"
+            android:lineSpacingExtra="2dp"
             android:linksClickable="true"
             android:text="@{uiState.feedDetail.content}"
-            tools:text="행사 시간 공유 좀 부탁드려요오오오오오오오오오오오오오오오오오오오오오오오오오오오오오오"
-            android:lineSpacingExtra="2dp" />
+            app:layout_constraintEnd_toEndOf="@+id/tv_feeddetail_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_feeddetail_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_feeddetail_title"
+            tools:text="행사 시간 공유 좀 부탁드려요오오오오오오오오오오오오오오오오오오오오오오오오오오오오오오" />
 
         <ImageView
+            android:id="@+id/iv_feeddetail_comment_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_feeddetail_comment_count"
-            android:id="@+id/iv_feeddetail_comment_icon"
-            app:layout_constraintStart_toStartOf="@+id/iv_feeddetail_feed_author_image"
+            android:layout_marginTop="35dp"
             android:layout_marginBottom="12dp"
             android:importantForAccessibility="no"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/iv_feeddetail_feed_author_image"
             app:layout_constraintTop_toBottomOf="@+id/rv_feeddetail_feed_detail_images"
-            android:layout_marginTop="35dp" />
+            app:srcCompat="@drawable/ic_feeddetail_comment_count" />
 
         <TextView
+            android:id="@+id/tv_feeddetail_comments_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_feeddetail_comments_count"
-            app:layout_constraintStart_toEndOf="@+id/iv_feeddetail_comment_icon"
             android:layout_marginStart="5dp"
-            app:layout_constraintTop_toTopOf="@+id/iv_feeddetail_comment_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_feeddetail_comment_icon"
-            android:textSize="12sp"
             android:text="@{uiState.comments.size()}"
             android:textColor="@color/primary_color"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_feeddetail_comment_icon"
+            app:layout_constraintStart_toEndOf="@+id/iv_feeddetail_comment_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_feeddetail_comment_icon"
             tools:text="8" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_feeddetail_feed_detail_images"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="horizontal"
-            android:id="@+id/rv_feeddetail_feed_detail_images"
-            app:layout_constraintTop_toBottomOf="@id/tv_feeddetail_content"
-            app:layout_constraintStart_toStartOf="@+id/tv_feeddetail_content"
-            app:layout_constraintEnd_toEndOf="@id/tv_feeddetail_content"
             android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="@id/tv_feeddetail_content"
+            app:layout_constraintStart_toStartOf="@+id/tv_feeddetail_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_feeddetail_content"
             tools:listitem="@layout/item_feeddetail_feed_detail_image" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

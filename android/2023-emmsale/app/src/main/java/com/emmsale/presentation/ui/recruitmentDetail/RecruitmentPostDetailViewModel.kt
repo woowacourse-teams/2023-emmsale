@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.recruitmentDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Failure
@@ -12,25 +13,31 @@ import com.emmsale.data.model.Recruitment
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logRecruitment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.HasOpenUrlUiState
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.RecruitmentPostDetailUiEvent
 import com.emmsale.presentation.ui.recruitmentList.uiState.CompanionRequestTaskUiState
 import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecruitmentPostDetailViewModel(
-    private val eventId: Long,
-    private val recruitmentId: Long,
+@HiltViewModel
+class RecruitmentPostDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val recruitmentRepository: RecruitmentRepository,
     private val memberRepository: MemberRepository,
     tokenRepository: TokenRepository,
 ) : ViewModel(), Refreshable {
+    val eventId: Long = requireNotNull(savedStateHandle[EVENT_ID_KEY]) {
+        "[ERROR] 행사 아이디를 가져오지 못했어요."
+    }
+    val recruitmentId: Long = requireNotNull(savedStateHandle[RECRUITMENT_ID_KEY]) {
+        "[ERROR] 모집글 아이디를 가져오지 못했어요."
+    }
 
     private val _recruitmentPost: NotNullMutableLiveData<RecruitmentPostUiState> =
         NotNullMutableLiveData(RecruitmentPostUiState())
@@ -52,7 +59,9 @@ class RecruitmentPostDetailViewModel(
     private val _hasOpenProfileUrl: MutableLiveData<HasOpenUrlUiState> = MutableLiveData()
     val hasOpenProfileUrl: LiveData<HasOpenUrlUiState> = _hasOpenProfileUrl
 
-    private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException(NOT_LOGIN_ERROR)
+    private val myUid = requireNotNull(tokenRepository.getMyUid()) {
+        "[ERROR] 유저 아이디를 가져오지 못했어요."
+    }
 
     init {
         refresh()
@@ -202,20 +211,9 @@ class RecruitmentPostDetailViewModel(
     }
 
     companion object {
-        private const val NOT_LOGIN_ERROR = "로그인되지 않은 사용자는 이용할 수 없어요!!"
-        private const val REPORT_DUPLICATE_ERROR_CODE = 400
+        const val EVENT_ID_KEY = "EVENT_ID_KEY"
+        const val RECRUITMENT_ID_KEY = "RECRUITMENT_ID_KEY"
 
-        fun factory(
-            eventId: Long,
-            recruitmentId: Long,
-        ) = ViewModelFactory {
-            RecruitmentPostDetailViewModel(
-                eventId = eventId,
-                recruitmentId = recruitmentId,
-                recruitmentRepository = KerdyApplication.repositoryContainer.recruitmentRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-            )
-        }
+        private const val REPORT_DUPLICATE_ERROR_CODE = 400
     }
 }

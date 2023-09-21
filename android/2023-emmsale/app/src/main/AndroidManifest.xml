@@ -108,7 +108,7 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".presentation.ui.eventDetail.EventDetailActivity"
+            android:name=".presentation.ui.eventdetail.EventDetailActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity

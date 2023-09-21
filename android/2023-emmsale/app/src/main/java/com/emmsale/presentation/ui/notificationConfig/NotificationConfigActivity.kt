@@ -23,11 +23,13 @@ import com.emmsale.presentation.common.views.cancelablePrimaryChipOf
 import com.emmsale.presentation.ui.notificationConfig.uiState.NotificationConfigUiEvent
 import com.emmsale.presentation.ui.notificationConfig.uiState.NotificationTagsUiState
 import com.emmsale.presentation.ui.notificationTagConfig.NotificationTagConfigActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NotificationConfigActivity :
     AppCompatActivity(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("notification_config") {
-    private val viewModel: NotificationConfigViewModel by viewModels { NotificationConfigViewModel.factory }
+    private val viewModel: NotificationConfigViewModel by viewModels()
     private val binding: ActivityNotificationConfigBinding by lazy {
         ActivityNotificationConfigBinding.inflate(layoutInflater)
     }

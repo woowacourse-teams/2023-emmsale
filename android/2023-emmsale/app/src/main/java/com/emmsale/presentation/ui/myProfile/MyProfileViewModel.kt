@@ -9,15 +9,16 @@ import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.myProfile.uiState.MyProfileUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyProfileViewModel(
+@HiltViewModel
+class MyProfileViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val activityRepository: ActivityRepository,
@@ -57,16 +58,6 @@ class MyProfileViewModel(
                     is Unexpected -> throw Throwable(result.error)
                 }
             }
-        }
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            MyProfileViewModel(
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
-                activityRepository = KerdyApplication.repositoryContainer.activityRepository,
-            )
         }
     }
 }

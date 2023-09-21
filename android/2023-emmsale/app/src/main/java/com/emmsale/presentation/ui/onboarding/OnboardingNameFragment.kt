@@ -6,9 +6,11 @@ import androidx.fragment.app.activityViewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentOnboardingNameBinding
 import com.emmsale.presentation.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingNameFragment : BaseFragment<FragmentOnboardingNameBinding>(), View.OnClickListener {
-    val viewModel: OnboardingViewModel by activityViewModels { OnboardingViewModel.factory }
+    val viewModel: OnboardingViewModel by activityViewModels()
     override val layoutResId: Int = R.layout.fragment_onboarding_name
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

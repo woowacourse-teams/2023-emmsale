@@ -7,13 +7,14 @@ import com.emmsale.data.message.mapper.toData
 import com.emmsale.data.messageRoom.dto.MessageResponse
 import com.emmsale.data.messageRoom.dto.MessageRoomResponse
 import com.emmsale.data.messageRoom.mapper.toData
+import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MessageRoomRepositoryImpl(
+class DefaultMessageRoomRepository @Inject constructor(
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val messageRoomService: MessageRoomService,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : MessageRoomRepository {
     override suspend fun getMessageRooms(
         memberId: Long,
