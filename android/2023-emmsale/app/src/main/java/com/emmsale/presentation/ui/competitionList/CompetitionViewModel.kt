@@ -13,20 +13,21 @@ import com.emmsale.data.model.EventTag
 import com.emmsale.data.repository.interfaces.CompetitionStatusRepository
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionsUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
-class CompetitionViewModel(
+@HiltViewModel
+class CompetitionViewModel @Inject constructor(
     private val eventRepository: EventRepository,
     private val competitionStatusRepository: CompetitionStatusRepository,
     private val eventTagRepository: EventTagRepository,
@@ -159,15 +160,5 @@ class CompetitionViewModel(
     fun removeDurationFilteringOption() {
         _selectedFilter.value = _selectedFilter.value.clearSelectedDate()
         fetchFilteredCompetitions()
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            CompetitionViewModel(
-                competitionStatusRepository = KerdyApplication.repositoryContainer.competitionStatusRepository,
-                eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository,
-                eventRepository = KerdyApplication.repositoryContainer.eventRepository,
-            )
-        }
     }
 }

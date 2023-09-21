@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.childCommentList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
@@ -11,24 +12,26 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.childCommentList.uiState.CommentsUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ChildCommentViewModel(
-    private val parentCommentId: Long,
+@HiltViewModel
+class ChildCommentViewModel @Inject constructor(
+    stateHandle: SavedStateHandle,
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
 ) : ViewModel(), Refreshable {
-
+    private val parentCommentId = stateHandle.get<Long>(KEY_PARENT_COMMENT_ID)!!
+    val feedId = stateHandle.get<Long>(KEY_FEED_ID)!!
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
     private val _comments = NotNullMutableLiveData(CommentsUiState.Loading)
@@ -66,7 +69,7 @@ class ChildCommentViewModel(
         }
     }
 
-    fun saveChildComment(content: String, parentCommentId: Long, feedId: Long) {
+    fun saveChildComment(content: String) {
         viewModelScope.launch {
             _comments.value = _comments.value.copy(fetchResult = FetchResult.LOADING)
             when (val result = commentRepository.saveComment(content, feedId, parentCommentId)) {
@@ -170,14 +173,9 @@ class ChildCommentViewModel(
     }
 
     companion object {
-        private const val REPORT_DUPLICATE_ERROR_CODE = 400
+        const val KEY_FEED_ID = "KEY_FEED_ID"
+        const val KEY_PARENT_COMMENT_ID = "KEY_PARENT_COMMENT_ID"
 
-        fun factory(parentCommentId: Long) = ViewModelFactory {
-            ChildCommentViewModel(
-                parentCommentId = parentCommentId,
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                commentRepository = KerdyApplication.repositoryContainer.commentRepository,
-            )
-        }
+        private const val REPORT_DUPLICATE_ERROR_CODE = 400
     }
 }

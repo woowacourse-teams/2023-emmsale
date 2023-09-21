@@ -17,26 +17,20 @@ import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
+import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_FEED_ID
+import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_PARENT_COMMENT_ID
 import com.emmsale.presentation.ui.childCommentList.recyclerView.ChildCommentRecyclerViewDivider
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.childCommentList.uiState.CommentsUiState
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.profile.ProfileActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChildCommentActivity : AppCompatActivity() {
-
-    private val binding by lazy {
-        ActivityChildCommentsBinding.inflate(layoutInflater)
-    }
-
-    private val viewModel: ChildCommentViewModel by viewModels {
-        ChildCommentViewModel.factory(parentCommentId)
-    }
-
-    private val feedId: Long by lazy { intent.getLongExtra(KEY_FEED_ID, -1) }
-
-    private val parentCommentId: Long by lazy { intent.getLongExtra(KEY_PARENT_COMMENT_ID, -1) }
+    private val binding by lazy { ActivityChildCommentsBinding.inflate(layoutInflater) }
+    private val viewModel: ChildCommentViewModel by viewModels()
 
     private val inputMethodManager: InputMethodManager by lazy {
         getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -231,14 +225,8 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private fun onChildCommentSave() {
-        viewModel.saveChildComment(
-            content = binding.etChildcommentsEditchildcommentcontent.text.toString(),
-            parentCommentId = parentCommentId,
-            feedId = feedId,
-        )
-        binding.etChildcommentsEditchildcommentcontent.apply {
-            text.clear()
-        }
+        viewModel.saveChildComment(binding.etChildcommentsEditchildcommentcontent.text.toString())
+        binding.etChildcommentsEditchildcommentcontent.text.clear()
         hideKeyboard()
     }
 
@@ -257,8 +245,6 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KEY_FEED_ID = "KEY_FEED_ID"
-        private const val KEY_PARENT_COMMENT_ID = "KEY_PARENT_COMMENT_ID"
         private const val KEY_FROM_NOTIFICATION = "KEY_FROM_NOTIFICATION"
 
         fun startActivity(context: Context, feedId: Long, parentCommentId: Long) {
@@ -287,7 +273,7 @@ class ChildCommentActivity : AppCompatActivity() {
     inner class ChildCommentOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (intent.getBooleanExtra(KEY_FROM_NOTIFICATION, false)) {
-                FeedDetailActivity.startActivity(this@ChildCommentActivity, feedId)
+                FeedDetailActivity.startActivity(this@ChildCommentActivity, viewModel.feedId)
             }
             finish()
         }

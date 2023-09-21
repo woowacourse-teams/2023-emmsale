@@ -12,12 +12,12 @@ import com.emmsale.databinding.ActivityMyPostBinding
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.myPostList.recyclerView.MyPostAdapter
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyPostActivity : AppCompatActivity() {
-    private val binding: ActivityMyPostBinding by lazy {
-        ActivityMyPostBinding.inflate(layoutInflater)
-    }
-    private val viewModel: MyPostViewModel by viewModels { MyPostViewModel.factory }
+    private val binding by lazy { ActivityMyPostBinding.inflate(layoutInflater) }
+    private val viewModel: MyPostViewModel by viewModels()
 
     private val myPostAdapter: MyPostAdapter by lazy {
         MyPostAdapter(navigateToDetail = ::navigateToDetail)

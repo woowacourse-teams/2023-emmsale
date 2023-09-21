@@ -10,6 +10,8 @@ plugins {
     kotlin("android") version kotlinVersion apply false
     kotlin("jvm") version kotlinVersion apply false
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0" apply false
+
+    id("com.google.dagger.hilt.android") version "2.44" apply false
 }
 
 allprojects {

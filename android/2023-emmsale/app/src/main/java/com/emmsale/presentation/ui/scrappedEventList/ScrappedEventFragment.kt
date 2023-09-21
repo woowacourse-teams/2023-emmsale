@@ -6,14 +6,15 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentScrappedEventBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.scrappedEventList.recyclerView.ScrappedEventAdapter
 import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
     override val layoutResId: Int = R.layout.fragment_scrapped_event
-
-    private val viewModel: ScrappedEventViewModel by viewModels { ScrappedEventViewModel.factory }
+    private val viewModel: ScrappedEventViewModel by viewModels()
 
     private val scrappedEventsAdapter: ScrappedEventAdapter by lazy {
         ScrappedEventAdapter(::showEventDetail)

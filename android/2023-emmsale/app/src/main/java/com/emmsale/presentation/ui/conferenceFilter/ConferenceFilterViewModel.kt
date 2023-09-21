@@ -10,24 +10,26 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.ConferenceStatusRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.conferenceFilter.uiState.ConferenceFilterUiState
 import com.emmsale.presentation.ui.conferenceFilter.uiState.ConferenceFilteringDateOptionUiState
 import com.emmsale.presentation.ui.conferenceFilter.uiState.ConferenceFilteringOptionUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
+import javax.inject.Inject
 
-class ConferenceFilterViewModel(
+@HiltViewModel
+class ConferenceFilterViewModel @Inject constructor(
     private val eventTagRepository: EventTagRepository,
     private val conferenceStatusRepository: ConferenceStatusRepository,
-    private val selectedStartDate: ConferenceFilteringDateOptionUiState? = null,
-    private val selectedEndDate: ConferenceFilteringDateOptionUiState? = null,
 ) : ViewModel() {
+    private val selectedStartDate: ConferenceFilteringDateOptionUiState? = null
+    private val selectedEndDate: ConferenceFilteringDateOptionUiState? = null
+
     private val _conferenceFilter = NotNullMutableLiveData(ConferenceFilterUiState())
     val conferenceFilter: NotNullLiveData<ConferenceFilterUiState> = _conferenceFilter
 
@@ -135,14 +137,5 @@ class ConferenceFilterViewModel(
 
     fun clearFilters() {
         _conferenceFilter.value = _conferenceFilter.value.resetSelection()
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            ConferenceFilterViewModel(
-                conferenceStatusRepository = KerdyApplication.repositoryContainer.conferenceStatusRepository,
-                eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository,
-            )
-        }
     }
 }

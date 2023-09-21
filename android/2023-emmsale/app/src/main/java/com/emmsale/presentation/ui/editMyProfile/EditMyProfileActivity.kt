@@ -20,14 +20,12 @@ import com.emmsale.presentation.ui.editMyProfile.recyclerView.FieldsAdapter
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileErrorEvent
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileUiState
 import com.emmsale.presentation.ui.login.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditMyProfileActivity : AppCompatActivity() {
-
-    private val binding: ActivityEditMyProfileBinding by lazy {
-        ActivityEditMyProfileBinding.inflate(layoutInflater)
-    }
-
-    private val viewModel: EditMyProfileViewModel by viewModels { EditMyProfileViewModel.factory }
+    private val binding by lazy { ActivityEditMyProfileBinding.inflate(layoutInflater) }
+    private val viewModel: EditMyProfileViewModel by viewModels()
 
     private val fieldsDialog by lazy { FieldsAddBottomDialogFragment() }
     private val educationsDialog by lazy { EducationsAddBottomDialogFragment() }

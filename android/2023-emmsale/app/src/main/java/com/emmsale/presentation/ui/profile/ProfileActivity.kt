@@ -16,27 +16,17 @@ import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
+import com.emmsale.presentation.ui.profile.ProfileViewModel.Companion.KEY_MEMBER_ID
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileActivity : AppCompatActivity() {
-
-    private val binding: ActivityProfileBinding by lazy {
-        ActivityProfileBinding.inflate(layoutInflater)
-    }
-
-    private val viewModel: ProfileViewModel by viewModels {
-        ProfileViewModel.factory(memberId)
-    }
-
-    private val memberId: Long by lazy {
-        intent.getLongExtra(KEY_MEMBER_ID, -1).run {
-            if (this == -1L) throw IllegalStateException("프로필을 조회할 회원의 아이디는 1 이상이어야 합니다. 로직을 다시 확인해주세요.")
-            this
-        }
-    }
+    private val binding by lazy { ActivityProfileBinding.inflate(layoutInflater) }
+    private val viewModel: ProfileViewModel by viewModels()
 
     private val menuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
@@ -195,13 +185,9 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KEY_MEMBER_ID = "KEY_MEMBER_ID"
-
         fun startActivity(context: Context, memberId: Long) {
-            val intent = Intent(context, ProfileActivity::class.java).apply {
-                putExtra(KEY_MEMBER_ID, memberId)
-            }
-
+            val intent = Intent(context, ProfileActivity::class.java)
+                .putExtra(KEY_MEMBER_ID, memberId)
             context.startActivity(intent)
         }
     }

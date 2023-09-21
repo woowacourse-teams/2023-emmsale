@@ -11,12 +11,13 @@ import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Member
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.service.MemberService
+import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DefaultMemberRepository(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+class DefaultMemberRepository @Inject constructor(
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val memberService: MemberService,
 ) : MemberRepository {
 

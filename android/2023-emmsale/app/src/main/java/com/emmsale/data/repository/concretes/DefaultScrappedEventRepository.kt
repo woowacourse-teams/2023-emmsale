@@ -11,8 +11,9 @@ import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.ScrappedEvent
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.data.service.ScrappedEventService
+import javax.inject.Inject
 
-class DefaultScrappedEventRepository(
+class DefaultScrappedEventRepository @Inject constructor(
     private val scrappedEventService: ScrappedEventService,
 ) : ScrappedEventRepository {
 

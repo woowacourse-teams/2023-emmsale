@@ -13,14 +13,15 @@ import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.FcmTokenRepository
 import com.emmsale.data.repository.interfaces.LoginRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.login.uiState.LoginUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
     private val tokenRepository: TokenRepository,
     private val fcmTokenRepository: FcmTokenRepository,
@@ -62,16 +63,5 @@ class LoginViewModel(
 
     private fun changeLoginState(loginState: LoginUiState) {
         _loginState.postValue(loginState)
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            LoginViewModel(
-                loginRepository = KerdyApplication.repositoryContainer.loginRepository,
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-                fcmTokenRepository = KerdyApplication.repositoryContainer.fcmTokenRepository,
-                configRepository = KerdyApplication.repositoryContainer.configRepository,
-            )
-        }
     }
 }

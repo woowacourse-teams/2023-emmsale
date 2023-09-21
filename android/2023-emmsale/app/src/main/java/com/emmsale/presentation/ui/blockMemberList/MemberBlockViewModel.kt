@@ -9,16 +9,17 @@ import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.BlockedMemberRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.blockMemberList.uiState.BlockedMembersUiEvent
 import com.emmsale.presentation.ui.blockMemberList.uiState.BlockedMembersUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MemberBlockViewModel(
+@HiltViewModel
+class MemberBlockViewModel @Inject constructor(
     private val blockedMemberRepository: BlockedMemberRepository,
 ) : ViewModel(), Refreshable {
     private val _blockedMembers = NotNullMutableLiveData(BlockedMembersUiState())
@@ -67,13 +68,5 @@ class MemberBlockViewModel(
 
     fun resetEvent() {
         _event.value = null
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            MemberBlockViewModel(
-                blockedMemberRepository = KerdyApplication.repositoryContainer.blockedMemberRepository,
-            )
-        }
     }
 }

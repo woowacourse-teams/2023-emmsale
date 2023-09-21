@@ -17,22 +17,15 @@ import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
+import com.emmsale.presentation.ui.postWriting.PostWritingViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.postWriting.recyclerView.PostWritingImageAdapter
 import com.emmsale.presentation.ui.postWriting.uiState.PostUploadResultUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PostWritingActivity : AppCompatActivity() {
-
-    private val binding: ActivityPostWritingBinding by lazy {
-        ActivityPostWritingBinding.inflate(layoutInflater)
-    }
-
-    private val eventId: Long by lazy {
-        intent.getLongExtra(EVENT_ID_KEY, DEFAULT_ID)
-    }
-
-    private val viewModel: PostWritingViewModel by viewModels {
-        PostWritingViewModel.viewModelFactory(eventId)
-    }
+    private val binding by lazy { ActivityPostWritingBinding.inflate(layoutInflater) }
+    private val viewModel: PostWritingViewModel by viewModels()
 
     private val adapter: PostWritingImageAdapter by lazy {
         PostWritingImageAdapter(deleteImage = viewModel::deleteImageUrl)
@@ -121,13 +114,11 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EVENT_ID_KEY = "EVENT_ID_KEY"
-        private const val DEFAULT_ID = -1L
         private const val MAX_IMAGE_COUNT = 5
 
         fun startActivity(context: Context, eventId: Long) {
             val intent = Intent(context, PostWritingActivity::class.java)
-            intent.putExtra(EVENT_ID_KEY, eventId)
+                .putExtra(EVENT_ID_KEY, eventId)
             context.startActivity(intent)
         }
     }

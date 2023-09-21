@@ -4,15 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventsUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ScrappedEventViewModel(
+@HiltViewModel
+class ScrappedEventViewModel @Inject constructor(
     private val scrappedEventRepository: ScrappedEventRepository,
 ) : ViewModel(), Refreshable {
     private val _scrappedEvents = NotNullMutableLiveData(ScrappedEventsUiState())
@@ -35,11 +36,5 @@ class ScrappedEventViewModel(
     private fun changeToErrorState() {
         _scrappedEvents.value =
             ScrappedEventsUiState(isLoading = false, isError = true)
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            ScrappedEventViewModel(scrappedEventRepository = KerdyApplication.repositoryContainer.scrappedEventRepository)
-        }
     }
 }

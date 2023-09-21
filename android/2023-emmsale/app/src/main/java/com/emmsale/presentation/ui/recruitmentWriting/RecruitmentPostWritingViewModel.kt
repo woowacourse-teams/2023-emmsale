@@ -1,5 +1,6 @@
 package com.emmsale.presentation.ui.recruitmentWriting
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Failure
@@ -7,21 +8,25 @@ import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.firebase.analytics.logWriting
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostWritingUiState
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.EDIT
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.POST
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecruitmentPostWritingViewModel(
-    private val eventId: Long,
-    private val recruitmentIdToEdit: Long?,
+@HiltViewModel
+class RecruitmentPostWritingViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val recruitmentRepository: RecruitmentRepository,
 ) : ViewModel() {
+    val eventId: Long = savedStateHandle[EVENT_ID_KEY] ?: DEFAULT_EVENT_ID
+    private val recruitmentIdToEdit: Long? = savedStateHandle[RECRUITMENT_ID_KEY]
+    val recruitmentContentToEdit = savedStateHandle[RECRUITMENT_CONTENT_KEY] ?: DEFAULT_CONTENT
+
     private val _recruitmentWriting: NotNullMutableLiveData<RecruitmentPostWritingUiState> =
         NotNullMutableLiveData(RecruitmentPostWritingUiState())
     val recruitmentWriting: NotNullLiveData<RecruitmentPostWritingUiState> =
@@ -102,13 +107,14 @@ class RecruitmentPostWritingViewModel(
     }
 
     companion object {
+        const val EVENT_ID_KEY = "EVENT_ID_KEY"
+        private const val DEFAULT_EVENT_ID = -1L
+
+        const val RECRUITMENT_ID_KEY = "RECRUITMENT_ID_KEY"
+
+        const val RECRUITMENT_CONTENT_KEY = "RECRUITMENT_CONTENT_KEY"
+        private const val DEFAULT_CONTENT = ""
+
         private const val DEFAULT_POSTED_RECRUITMENT_ID = -1L
-        fun factory(eventId: Long, recruitmentId: Long?) = ViewModelFactory {
-            RecruitmentPostWritingViewModel(
-                eventId,
-                recruitmentId,
-                KerdyApplication.repositoryContainer.recruitmentRepository,
-            )
-        }
     }
 }

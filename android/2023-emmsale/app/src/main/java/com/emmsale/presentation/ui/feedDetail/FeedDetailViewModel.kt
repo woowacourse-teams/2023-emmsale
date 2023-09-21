@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.feedDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
@@ -12,25 +13,27 @@ import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FeedDetailViewModel(
-    private val feedId: Long,
+@HiltViewModel
+class FeedDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val feedRepository: FeedRepository,
     private val commentRepository: CommentRepository,
     private val tokenRepository: TokenRepository,
 ) : ViewModel(), Refreshable {
+    val feedId = savedStateHandle[KEY_FEED_ID] ?: DEFAULT_FEED_ID
 
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
@@ -234,16 +237,10 @@ class FeedDetailViewModel(
     }
 
     companion object {
+        const val KEY_FEED_ID: String = "KEY_FEED_ID"
+        private const val DEFAULT_FEED_ID: Long = -1
+
         private const val DELETED_FEED_FETCH_ERROR_CODE = 403
         private const val REPORT_DUPLICATE_ERROR_CODE = 400
-
-        fun factory(feedId: Long) = ViewModelFactory {
-            FeedDetailViewModel(
-                feedId = feedId,
-                feedRepository = KerdyApplication.repositoryContainer.feedRepository,
-                commentRepository = KerdyApplication.repositoryContainer.commentRepository,
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-            )
-        }
     }
 }

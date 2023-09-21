@@ -11,7 +11,7 @@ import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.primaryNotificationList.recyclerView.adapter.PastNotificationHeaderAdapter
 import com.emmsale.presentation.ui.primaryNotificationList.recyclerView.adapter.PrimaryNotificationAdapter
 import com.emmsale.presentation.ui.primaryNotificationList.recyclerView.adapter.RecentNotificationHeaderAdapter
@@ -20,12 +20,12 @@ import com.emmsale.presentation.ui.primaryNotificationList.uiState.InterestEvent
 import com.emmsale.presentation.ui.primaryNotificationList.uiState.PrimaryNotificationScreenUiState
 import com.emmsale.presentation.ui.primaryNotificationList.uiState.PrimaryNotificationUiState
 import com.emmsale.presentation.ui.primaryNotificationList.uiState.PrimaryNotificationsUiEvent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBinding>() {
     override val layoutResId: Int = R.layout.fragment_primary_notification
-    private val viewModel: PrimaryNotificationViewModel by viewModels {
-        PrimaryNotificationViewModel.factory
-    }
+    private val viewModel: PrimaryNotificationViewModel by viewModels()
 
     private val recentNotificationHeaderAdapter = RecentNotificationHeaderAdapter()
     private val recentNotificationAdapter = PrimaryNotificationAdapter(

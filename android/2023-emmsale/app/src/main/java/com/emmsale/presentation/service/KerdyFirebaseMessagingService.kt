@@ -6,30 +6,41 @@ import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
-import com.emmsale.presentation.KerdyApplication
+import com.emmsale.data.repository.interfaces.CommentRepository
+import com.emmsale.data.repository.interfaces.ConfigRepository
+import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.common.extension.topActivityName
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.notificationPageList.NotificationBoxActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class KerdyFirebaseMessagingService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var configRepository: ConfigRepository
+
+    @Inject
+    lateinit var commentRepository: CommentRepository
+
+    @Inject
+    lateinit var tokenRepository: TokenRepository
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        val configRepository = KerdyApplication.repositoryContainer.configRepository
-        val tokenRepository = KerdyApplication.repositoryContainer.tokenRepository
-        val token = runBlocking { tokenRepository.getToken() }
         val config = configRepository.getConfig()
         val isNotificationReceive = config.isNotificationReceive
-        if (!isNotificationReceive || token == null) return
+        if (!isNotificationReceive || tokenRepository.getToken() == null) return
 
         when (message.data["notificationType"]) {
             FOLLOW_NOTIFICATION_TYPE -> {
@@ -66,7 +77,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     private fun showChildCommentNotification(message: RemoteMessage) {
         fun getFeedIdAndParentCommentId(commentId: Long): Pair<Long, Long> {
             return runBlocking {
-                val commentRepository = KerdyApplication.repositoryContainer.commentRepository
                 when (val result = commentRepository.getComment(commentId)) {
                     is Failure, NetworkError -> ERROR_FEED_ID to ERROR_FEED_ID
                     is Success -> result.data.feedId to (

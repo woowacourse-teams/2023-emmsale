@@ -11,8 +11,9 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import javax.inject.Inject
 
-class DefaultPostRepository(
+class DefaultPostRepository @Inject constructor(
     private val postService: PostService,
 ) : PostRepository {
 

@@ -11,11 +11,12 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.KerdyApplication
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OpenProfileUrlConfigViewModel(
+@HiltViewModel
+class OpenProfileUrlConfigViewModel @Inject constructor(
     private val memberRepository: MemberRepository,
     private val tokenRepository: TokenRepository,
 ) : ViewModel() {
@@ -62,12 +63,5 @@ class OpenProfileUrlConfigViewModel(
     companion object {
         private const val NOT_UID_ERROR = "카카오 URL 설정 페이지에서현재 UID 를 찾을 수 없어요"
         private const val URL_PREFIX = "https://open.kakao.com/"
-
-        val factory = ViewModelFactory {
-            OpenProfileUrlConfigViewModel(
-                memberRepository = KerdyApplication.repositoryContainer.memberRepository,
-                tokenRepository = KerdyApplication.repositoryContainer.tokenRepository,
-            )
-        }
     }
 }

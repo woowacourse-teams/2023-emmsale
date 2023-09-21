@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.eventDetail
+package com.emmsale.presentation.ui.eventdetail
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

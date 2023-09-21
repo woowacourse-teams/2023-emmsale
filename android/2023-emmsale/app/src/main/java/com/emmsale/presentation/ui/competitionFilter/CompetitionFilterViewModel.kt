@@ -10,24 +10,26 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CompetitionStatusRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.competitionFilter.uiState.CompetitionFilterUiState
 import com.emmsale.presentation.ui.competitionFilter.uiState.CompetitionFilteringDateOptionUiState
 import com.emmsale.presentation.ui.competitionFilter.uiState.CompetitionFilteringOptionUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
+import javax.inject.Inject
 
-class CompetitionFilterViewModel(
+@HiltViewModel
+class CompetitionFilterViewModel @Inject constructor(
     private val eventTagRepository: EventTagRepository,
     private val competitionStatusRepository: CompetitionStatusRepository,
-    private val selectedStartDate: CompetitionFilteringDateOptionUiState? = null,
-    private val selectedEndDate: CompetitionFilteringDateOptionUiState? = null,
 ) : ViewModel() {
+    private val selectedStartDate: CompetitionFilteringDateOptionUiState? = null
+    private val selectedEndDate: CompetitionFilteringDateOptionUiState? = null
+
     private val _competitionFilter = NotNullMutableLiveData(CompetitionFilterUiState())
     val competitionFilter: NotNullLiveData<CompetitionFilterUiState> = _competitionFilter
 
@@ -135,14 +137,5 @@ class CompetitionFilterViewModel(
 
     fun clearFilters() {
         _competitionFilter.value = _competitionFilter.value.resetSelection()
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            CompetitionFilterViewModel(
-                competitionStatusRepository = KerdyApplication.repositoryContainer.competitionStatusRepository,
-                eventTagRepository = KerdyApplication.repositoryContainer.eventTagRepository,
-            )
-        }
     }
 }

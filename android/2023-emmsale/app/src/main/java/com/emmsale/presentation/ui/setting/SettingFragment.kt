@@ -18,15 +18,14 @@ import com.emmsale.presentation.ui.notificationConfig.NotificationConfigActivity
 import com.emmsale.presentation.ui.openProfileUrlConfig.OpenProfileUrlConfigActivity
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
 import com.emmsale.presentation.ui.useTerm.UseTermWebViewActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingFragment :
     BaseFragment<FragmentSettingBinding>(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("setting") {
     override val layoutResId: Int = R.layout.fragment_setting
-
-    private val viewModel: SettingViewModel by viewModels {
-        SettingViewModel.factory
-    }
+    private val viewModel: SettingViewModel by viewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

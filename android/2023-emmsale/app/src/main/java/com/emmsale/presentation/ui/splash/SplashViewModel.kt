@@ -3,15 +3,16 @@ package com.emmsale.presentation.ui.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.repository.interfaces.ConfigRepository
-import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.splash.uiState.SplashUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SplashViewModel(
+@HiltViewModel
+class SplashViewModel @Inject constructor(
     private val configRepository: ConfigRepository,
 ) : ViewModel() {
     private val _splash = NotNullMutableLiveData<SplashUiState>(SplashUiState.Loading())
@@ -31,14 +32,6 @@ class SplashViewModel(
             }
 
             _splash.value = SplashUiState.Done(isAutoLogin = autoLogin)
-        }
-    }
-
-    companion object {
-        val factory = ViewModelFactory {
-            SplashViewModel(
-                configRepository = KerdyApplication.repositoryContainer.configRepository,
-            )
         }
     }
 }

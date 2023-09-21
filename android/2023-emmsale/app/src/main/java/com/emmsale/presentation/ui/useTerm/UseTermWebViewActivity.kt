@@ -9,10 +9,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityUseTermWebViewBinding
 
 class UseTermWebViewActivity : AppCompatActivity() {
-
-    private val binding: ActivityUseTermWebViewBinding by lazy {
-        ActivityUseTermWebViewBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityUseTermWebViewBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
