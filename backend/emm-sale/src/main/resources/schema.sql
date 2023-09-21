@@ -242,3 +242,7 @@ alter table event
     add column payment_type varchar(50) not null;
 alter table event
     add column event_mode varchar(50) not null;
+
+-- 2023-09-20 20:25
+alter table event
+    add column organization varchar(50) not null;

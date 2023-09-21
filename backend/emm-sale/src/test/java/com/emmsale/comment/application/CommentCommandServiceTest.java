@@ -65,7 +65,8 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
             EventType.CONFERENCE,
             "https://image.com",
             PaymentType.FREE_PAID,
-            EventMode.ON_OFFLINE
+            EventMode.ON_OFFLINE,
+            "행사기간"
         )
     );
     댓글_작성자 = memberRepository.findById(1L).get();

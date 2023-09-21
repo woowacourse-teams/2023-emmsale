@@ -521,6 +521,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     private final EventMode eventMode = EventMode.ON_OFFLINE;
     private final EventType type = EventType.CONFERENCE;
     private final LocalDate now = LocalDate.now();
+    private final String organization = "행사기관";
 
     @Test
     @DisplayName("이벤트를 성공적으로 저장한다.")
@@ -542,7 +543,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type,
           eventMode,
           paymentType,
-          mockMultipartFiles
+          mockMultipartFiles,
+          organization
       );
 
       doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
@@ -587,7 +589,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type,
           eventMode,
           paymentType,
-          mockMultipartFiles
+          mockMultipartFiles,
+          organization
       );
 
       doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
@@ -622,7 +625,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type,
           eventMode,
           paymentType,
-          mockMultipartFiles
+          mockMultipartFiles,
+          organization
       );
 
       doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
@@ -651,6 +655,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     private final LocalDate now = LocalDate.now();
     private final PaymentType paymentType = PaymentType.FREE_PAID;
     private final EventMode eventMode = EventMode.ON_OFFLINE;
+    private final String organization = "행사기관";
 
     @Test
     @DisplayName("이벤트를 성공적으로 업데이트한다.")
@@ -672,7 +677,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           EventType.CONFERENCE,
           eventMode,
           paymentType,
-          mockMultipartFiles
+          mockMultipartFiles,
+          organization
       );
 
       final Event event = eventRepository.save(인프콘_2023());
@@ -717,7 +723,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           EventType.CONFERENCE,
           eventMode,
           paymentType,
-          mockMultipartFiles
+          mockMultipartFiles,
+          organization
       );
 
       //when & then
@@ -747,7 +754,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           EventType.CONFERENCE,
           eventMode,
           paymentType,
-          mockMultipartFiles
+          mockMultipartFiles,
+          organization
       );
 
       final Event event = eventRepository.save(인프콘_2023());
@@ -781,7 +789,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           EventType.CONFERENCE,
           eventMode,
           paymentType,
-          mockMultipartFiles
+          mockMultipartFiles,
+          organization
       );
 
       final Event event = eventRepository.save(인프콘_2023());

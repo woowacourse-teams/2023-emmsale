@@ -19,12 +19,14 @@ import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
 import com.emmsale.feed.exception.FeedExceptionType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.image.domain.Image;
+import com.emmsale.image.domain.ImageType;
+import com.emmsale.image.domain.repository.ImageRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import java.util.Comparator;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -43,6 +45,8 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
   private MemberRepository memberRepository;
   @Autowired
   private BlockRepository blockRepository;
+  @Autowired
+  private ImageRepository imageRepository;
 
   private Feed feed1;
   private Event event;
@@ -68,12 +72,13 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
     void findAllFeedsTest() {
       //given
       final Long eventId = event.getId();
-      final Map<Feed, Long> feedCommentCountMap = Map.of(feed1, 0L, feed2, 0L);
-      final List<FeedSimpleResponse> feedSimpleResponses = feedCommentCountMap.entrySet().stream()
-          .map(FeedSimpleResponse::from)
-          .collect(Collectors.toList());
+
+      final List<FeedSimpleResponse> feedSimpleResponses = List.of(
+          FeedSimpleResponse.from(feed1, Collections.emptyList(), 0L),
+          FeedSimpleResponse.from(feed2, Collections.emptyList(), 0L)
+      );
+
       final FeedListResponse expect = new FeedListResponse(eventId, feedSimpleResponses);
-      expect.getFeeds().sort(Comparator.comparing(FeedSimpleResponse::getUpdatedAt).reversed());
 
       //when
       final FeedListResponse actual = feedQueryService.findAllFeeds(writer, eventId);
@@ -92,10 +97,9 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       feedRepository.save(feed1);
 
       final Long eventId = event.getId();
-      final Map<Feed, Long> feedCommentCountMap = Map.of(feed2, 0L);
-      final List<FeedSimpleResponse> feedSimpleResponses = feedCommentCountMap.entrySet().stream()
-          .map(FeedSimpleResponse::from)
-          .collect(Collectors.toList());
+      final List<FeedSimpleResponse> feedSimpleResponses = List.of(
+          FeedSimpleResponse.from(feed2, Collections.emptyList(), 0L)
+      );
       final FeedListResponse expect = new FeedListResponse(eventId, feedSimpleResponses);
 
       //when
@@ -131,14 +135,31 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       final Feed feed3 = feedRepository.save(new Feed(event, reader, "피드3 제목", "피드3 내용"));
       blockRepository.save(new Block(reader.getId(), writer.getId()));
 
-      final Map<Feed, Long> feedCommentCountMap = Map.of(feed3, 0L);
-      final List<FeedSimpleResponse> feedSimpleResponses = feedCommentCountMap.entrySet().stream()
-          .map(FeedSimpleResponse::from)
-          .collect(Collectors.toList());
+      final List<FeedSimpleResponse> feedSimpleResponses = List.of(
+          FeedSimpleResponse.from(feed3, Collections.emptyList(), 0L)
+      );
       final FeedListResponse expect = new FeedListResponse(event.getId(), feedSimpleResponses);
 
       //when
       final FeedListResponse actual = feedQueryService.findAllFeeds(reader, event.getId());
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
+
+    @Test
+    @DisplayName("피드가 존재하지 않는 이벤트의 피드 목록을 조회한다.")
+    void findAllFeedsWithNotExistFeed() {
+      //given
+      final Event noFeedEvent = eventRepository.save(EventFixture.구름톤());
+
+      final FeedListResponse expect = new FeedListResponse(noFeedEvent.getId(),
+          Collections.emptyList());
+
+      //when
+      final FeedListResponse actual = feedQueryService.findAllFeeds(writer, noFeedEvent.getId());
 
       //then
       assertThat(actual)
@@ -158,7 +179,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       final Feed feed = feed1;
       final Long feedId = feed.getId();
 
-      final FeedDetailResponse expect = FeedDetailResponse.from(feed);
+      final FeedDetailResponse expect = FeedDetailResponse.from(feed, Collections.emptyList());
 
       //when
       final FeedDetailResponse actual = feedQueryService.findFeed(writer, feedId);
@@ -190,7 +211,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
     @Test
     @DisplayName("삭제된 피드를 조회하면 FORBIDDEN_DELETED_FEED 타입의 FeedException이 발생한다.")
     void findFeedWithDeletedFeedIdTest() {
-      //given;
+      //given
       feed1.delete();
       feedRepository.save(feed1);
 
@@ -206,6 +227,59 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
 
       //then
       assertEquals(expect, actualException.exceptionType());
+    }
+  }
+
+  @Nested
+  @DisplayName("피드 이미지 조회 테스트")
+  class FeedQueryWithImage {
+
+    private List<Image> images;
+
+    @BeforeEach
+    void setUp() {
+      images = imageRepository.saveAll(List.of(
+              new Image("image-uuid", ImageType.FEED, feed1.getId(), 1, LocalDateTime.now()),
+              new Image("image-uuid", ImageType.FEED, feed1.getId(), 2, LocalDateTime.now())
+          )
+      );
+    }
+
+    @Test
+    @DisplayName("피드에 이미지가 있을 경우 피드 목록에서 이미지 리스트를 함께 반환한다.")
+    void findAllFeedsWithImages() {
+      //given
+      final Long eventId = event.getId();
+
+      final List<FeedSimpleResponse> feedSimpleResponses = List.of(
+          FeedSimpleResponse.from(feed1, images, 0L),
+          FeedSimpleResponse.from(feed2, Collections.emptyList(), 0L)
+      );
+
+      final FeedListResponse expect = new FeedListResponse(eventId, feedSimpleResponses);
+
+      //when
+      final FeedListResponse actual = feedQueryService.findAllFeeds(writer, eventId);
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
+
+    @Test
+    @DisplayName("피드에 이미지가 있을 경우 피드 목록에서 이미지 리스트를 함께 반환한다.")
+    void findDetailFeedWithImages() {
+      //given
+      final FeedDetailResponse expect = FeedDetailResponse.from(feed1, images);
+
+      //when
+      final FeedDetailResponse actual = feedQueryService.findFeed(writer, feed1.getId());
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
     }
   }
 }

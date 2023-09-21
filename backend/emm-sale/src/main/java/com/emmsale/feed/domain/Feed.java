@@ -36,7 +36,6 @@ public class Feed extends BaseEntity {
   @Column(nullable = false, length = 1000)
   private String content;
   private boolean isDeleted = false;
-  // TODO: 2023/08/31 이미지 추가
 
   public Feed(final Event event, final Member writer, final String title, final String content) {
     this.event = event;

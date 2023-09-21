@@ -53,6 +53,8 @@ public class EventDetailRequest {
 
   private final List<MultipartFile> images;
 
+  private final String organization;
+
   public Event toEvent() {
     return new Event(
         name,
@@ -65,7 +67,8 @@ public class EventDetailRequest {
         type,
         imageUrl,
         paymentType,
-        eventMode
+        eventMode,
+        organization
     );
   }
 }

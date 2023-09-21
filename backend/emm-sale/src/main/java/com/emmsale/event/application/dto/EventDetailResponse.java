@@ -38,6 +38,7 @@ public class EventDetailResponse {
   private final Integer applyRemainingDays;
   private final String type;
   private final List<String> imageUrls;
+  private final String organization;
 
   public static EventDetailResponse from(
       final Event event,
@@ -65,7 +66,8 @@ public class EventDetailResponse {
         event.getEventPeriod().calculateRemainingDays(today),
         event.getEventPeriod().calculateApplyRemainingDays(today),
         event.getType().toString(),
-        imageUrls
+        imageUrls,
+        event.getOrganization()
     );
   }
 }
