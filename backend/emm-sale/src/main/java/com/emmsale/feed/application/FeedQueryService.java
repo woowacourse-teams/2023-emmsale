@@ -48,7 +48,7 @@ public class FeedQueryService {
         .map(Feed::getId)
         .collect(Collectors.toList());
 
-    final Map<Long, Long> feedCommentCounts = getFeedidCommentCountMap(feedIds);
+    final Map<Long, Long> feedCommentCounts = getFeedIdCommentCountMap(feedIds);
     final Map<Long, List<Image>> feedImages = getFeedImagesMap(feedIds);
 
     final List<FeedSimpleResponse> feedSimpleResponses = feeds.stream()
@@ -74,7 +74,7 @@ public class FeedQueryService {
         ));
   }
 
-  private Map<Long, Long> getFeedidCommentCountMap(final List<Long> feedIds) {
+  private Map<Long, Long> getFeedIdCommentCountMap(final List<Long> feedIds) {
     return commentDao.findCommentCountByFeedIds(feedIds).stream()
         .collect(Collectors.toMap(
             FeedCommentCount::getFeedId,
