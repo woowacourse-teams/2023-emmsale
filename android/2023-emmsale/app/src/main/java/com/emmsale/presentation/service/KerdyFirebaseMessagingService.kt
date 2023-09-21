@@ -107,7 +107,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun showMessageNotification(message: RemoteMessage) {
-        val roomId: String = message.data["senderImageUrl"] ?: return
+        val roomId: String = message.data["roomId"] ?: return
         val senderId = message.data["senderId"]?.toLong() ?: return
 
         val senderProfileUrl = message.data["senderImageUrl"]
