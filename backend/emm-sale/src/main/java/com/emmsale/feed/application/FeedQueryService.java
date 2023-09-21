@@ -75,6 +75,10 @@ public class FeedQueryService {
   }
 
   private Map<Long, Long> getFeedIdCommentCountMap(final List<Long> feedIds) {
+    if (feedIds.isEmpty()) {
+      return Collections.emptyMap();
+    }
+
     return commentDao.findCommentCountByFeedIds(feedIds).stream()
         .collect(Collectors.toMap(
             FeedCommentCount::getFeedId,

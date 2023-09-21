@@ -148,6 +148,24 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
           .usingRecursiveComparison()
           .isEqualTo(expect);
     }
+
+    @Test
+    @DisplayName("피드가 존재하지 않는 이벤트의 피드 목록을 조회한다.")
+    void findAllFeedsWithNotExistFeed() {
+      //given
+      final Event noFeedEvent = eventRepository.save(EventFixture.구름톤());
+
+      final FeedListResponse expect = new FeedListResponse(noFeedEvent.getId(),
+          Collections.emptyList());
+
+      //when
+      final FeedListResponse actual = feedQueryService.findAllFeeds(writer, noFeedEvent.getId());
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
   }
 
   @Nested
@@ -252,7 +270,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
     @Test
     @DisplayName("피드에 이미지가 있을 경우 피드 목록에서 이미지 리스트를 함께 반환한다.")
     void findDetailFeedWithImages() {
-//given
+      //given
       final FeedDetailResponse expect = FeedDetailResponse.from(feed1, images);
 
       //when
