@@ -1,6 +1,5 @@
 package com.emmsale.data.repository.concretes
 
-import android.util.Log
 import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.model.Post
@@ -43,10 +42,9 @@ class DefaultPostRepository(
         content: String,
         imageUrls: List<String>,
     ): ApiResponse<Long> {
-        Log.d("wooseok", "$eventId $title $content ${imageUrls.size}")
         val imageFiles = imageUrls.map { imageUrl ->
             val file = File(imageUrl)
-            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+            val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(
                 IMAGES_KEY,
                 file.name,

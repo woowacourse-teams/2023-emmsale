@@ -69,6 +69,10 @@ class EventDetailViewModel(
         }
     }
 
+    fun fetchCurrentScreen(position: Int) {
+        _currentScreen.value = EventDetailScreenUiState.from(position)
+    }
+
     private fun fetchIsScrapped() {
         viewModelScope.launch {
             when (val isScrappedFetchResult = scrappedEventRepository.isScraped(eventId)) {
@@ -120,8 +124,8 @@ class EventDetailViewModel(
     fun fetchHasWritingPermission() {
         viewModelScope.launch {
             when (val response = recruitmentRepository.checkIsAlreadyPostRecruitment(eventId)) {
-                is ApiSuccess -> setHasPermissionWritingState(!response.data)
-                is ApiError, is ApiException -> setHasPermissionWritingState(false)
+                is Success -> setHasPermissionWritingState(!response.data)
+                else -> setHasPermissionWritingState(false)
             }
         }
     }

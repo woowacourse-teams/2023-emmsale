@@ -94,7 +94,8 @@ class MessageListViewModel(
                 }
             }
 
-            val shouldShowProfile = message.shouldShowMemberProfile(this[index - 1])
+            val previousMessage = getOrNull(index - 1) ?: return@forEachIndexed
+            val shouldShowProfile = message.shouldShowMemberProfile(previousMessage)
             newMessages += message.createChatMessageUiState(shouldShowProfile)
         }
 
