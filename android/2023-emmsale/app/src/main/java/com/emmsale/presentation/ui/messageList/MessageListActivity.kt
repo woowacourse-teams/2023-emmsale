@@ -52,6 +52,8 @@ class MessageListActivity : AppCompatActivity() {
 
     private fun setupMessageRecyclerView() {
         messageListAdapter = MessageListAdapter()
+        binding.rvMessageList.setHasFixedSize(true)
+        binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
     }
 
@@ -65,7 +67,7 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun scrollToEnd(uiState: MessagesUiState) {
-        binding.rvMessageList.scrollToPosition(uiState.messages.size - 1)
+        binding.rvMessageList.smoothScrollToPosition(uiState.messages.size)
     }
 
     private fun setUpEventUiEvent() {
