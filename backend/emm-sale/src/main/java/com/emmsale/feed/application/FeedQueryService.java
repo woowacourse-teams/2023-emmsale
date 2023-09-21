@@ -67,12 +67,8 @@ public class FeedQueryService {
   private List<Feed> excludeBlockedMembersFeed(final Member member, final List<Feed> feeds) {
     final List<Long> blockedMemberIds = getBlockedMemberIds(member);
     return feeds.stream()
-        .filter(feed -> isNotBlockedMember(blockedMemberIds, feed))
+        .filter(feed -> feed.isNotBlockedMember(blockedMemberIds))
         .collect(Collectors.toList());
-  }
-
-  private boolean isNotBlockedMember(final List<Long> blockedMemberIds, final Feed feed) {
-    return !blockedMemberIds.contains(feed.getWriter().getId());
   }
 
   private List<Long> getBlockedMemberIds(final Member member) {
