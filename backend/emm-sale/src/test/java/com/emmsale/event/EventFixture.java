@@ -23,7 +23,8 @@ public class EventFixture {
         EventType.CONFERENCE,
         "https://image.url",
         PaymentType.PAID,
-        EventMode.OFFLINE
+        EventMode.OFFLINE,
+        "인프런"
     );
   }
 
@@ -33,7 +34,8 @@ public class EventFixture {
         LocalDateTime.parse("2023-06-01T12:00:00"), "https://~~~", EventType.CONFERENCE,
         "https://image.url",
         PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE
+        EventMode.ON_OFFLINE,
+        "인프런"
     );
   }
 
@@ -43,7 +45,8 @@ public class EventFixture {
         LocalDateTime.parse("2023-07-22T12:00:00"), "https://~~~", EventType.CONFERENCE,
         "https://image.url",
         PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE
+        EventMode.ON_OFFLINE,
+        "행사기관"
     );
   }
 
@@ -53,7 +56,8 @@ public class EventFixture {
         LocalDateTime.parse("2023-08-02T12:00:00"), "https://~~~", EventType.CONFERENCE,
         "https://image.url",
         PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE
+        EventMode.ON_OFFLINE,
+        "행사기관"
     );
   }
 
@@ -63,7 +67,8 @@ public class EventFixture {
         LocalDateTime.parse("2023-06-20T12:00:00"), "https://~~~", EventType.CONFERENCE,
         "https://image.url",
         PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE
+        EventMode.ON_OFFLINE,
+        "행사기관"
     );
   }
 
@@ -73,7 +78,8 @@ public class EventFixture {
         LocalDateTime.parse("2023-08-03T12:00:00"), "https://~~~", EventType.CONFERENCE,
         "https://image.url",
         PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE
+        EventMode.ON_OFFLINE,
+        "행사기관"
     );
   }
 
@@ -84,7 +90,8 @@ public class EventFixture {
         EventType.COMPETITION,
         "https://image.url",
         PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE
+        EventMode.ON_OFFLINE,
+        "행사기관"
     );
   }
 
@@ -95,7 +102,8 @@ public class EventFixture {
         EventType.COMPETITION,
         "https://image.url",
         PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE
+        EventMode.ON_OFFLINE,
+        "행사기관"
     );
   }
 

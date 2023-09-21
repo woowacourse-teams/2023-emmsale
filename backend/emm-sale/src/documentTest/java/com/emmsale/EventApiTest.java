@@ -202,7 +202,7 @@ class EventApiTest extends MockMvcTestHelper {
         event.getInformationUrl(), event.getEventPeriod().getStartDate(),
         event.getEventPeriod().getEndDate(),
         event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(), tags,
-        event.getImageUrl(), event.getType(), EventMode.OFFLINE, PaymentType.PAID, null);
+        event.getImageUrl(), event.getType(), EventMode.OFFLINE, PaymentType.PAID, null, "행사기관");
 
     final EventDetailResponse response = new EventDetailResponse(eventId, request.getName(),
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
@@ -227,7 +227,8 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("type").description("행사(Event) 타입"),
         fieldWithPath("eventMode").description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)"),
         fieldWithPath("paymentType").description("행사 유료 여부(PAID, FREE, FREE_PAID)"),
-        fieldWithPath("images").description("이미지들").optional()
+        fieldWithPath("images").description("이미지들").optional(),
+        fieldWithPath("organization").description("행사 기관")
     );
 
     //when & then
@@ -288,7 +289,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getEventPeriod().getEndDate(),
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
           tags, event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE,
-          List.of(image1, image2));
+          List.of(image1, image2), "행사기관");
 
       final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
