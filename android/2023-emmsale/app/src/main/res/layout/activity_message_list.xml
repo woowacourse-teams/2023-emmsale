@@ -44,15 +44,59 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_message_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:clipToPadding="false"
             android:paddingBottom="12dp"
             android:scrollbars="none"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/cl_message_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
             tools:itemCount="12"
             tools:listitem="@layout/item_other_message" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_new_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#1FFFEB3B"
+            android:paddingVertical="12dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="30dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/cl_message_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_member_profile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:importantForAccessibility="no"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_new_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#191919"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_member_profile"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="새로운 메시지가 도착했어요!" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_message_input"
