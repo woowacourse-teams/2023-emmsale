@@ -26,7 +26,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/menu_message_toolbar"
             app:navigationIcon="@drawable/ic_back"
             app:title="@{vm.otherMember.name}"
             app:titleCentered="true"
@@ -42,30 +41,87 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_message_list" />
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/srl_message_list"
-            onRefresh="@{() -> vm.refresh()}"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_message_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingBottom="12dp"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/cl_message_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            tools:itemCount="12"
+            tools:listitem="@layout/item_other_message" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_new_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/bg_messagelist_new_message"
+            android:paddingVertical="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="20dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/cl_message_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            app:swipeRefreshColor="@{@color/primary_color}">
+            tools:visibility="visible">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_message_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:clipToPadding="false"
-                android:paddingBottom="12dp"
-                android:scrollbars="none"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="12"
-                tools:listitem="@layout/item_other_message" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_member_profile"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:importantForAccessibility="no"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <TextView
+                android:id="@+id/tv_sender_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#474747"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_member_profile"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="최우석" />
+
+            <TextView
+                android:id="@+id/tv_new_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#191919"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_scroll_down"
+                app:layout_constraintStart_toEndOf="@id/tv_sender_name"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="새로운 메시지가 도착했어요!" />
+
+            <ImageView
+                android:id="@+id/iv_scroll_down"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_toggle_down"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_member_profile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/iv_member_profile" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_message_input"
@@ -88,6 +144,7 @@
                 android:hint="@string/messagelist_message_send_hint"
                 android:importantForAutofill="no"
                 android:maxHeight="30dp"
+                android:maxLength="255"
                 android:maxLines="2"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"

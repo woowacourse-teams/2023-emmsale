@@ -22,7 +22,7 @@
             android:exported="false" />
         <activity
             android:name=".presentation.ui.messageList.MessageListActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".presentation.ui.postWriting.PostWritingActivity"
             android:exported="false" />
@@ -99,6 +99,7 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.main.MainActivity"
+            android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
