@@ -73,7 +73,7 @@
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:dateText="@{uiState.comment.updatedAt}"
-            app:dateTimeFormatter="@{DateTimePattern.MONTH_DOT_DAY}"
+            app:dateTimeFormatter="@{DateTimePattern.RELATIVE_TIME}"
             app:layout_constraintBottom_toBottomOf="@+id/iv_childcomment_author_image"
             app:layout_constraintStart_toStartOf="@+id/tv_childcomment_authorname"
             tools:text="2023.08.03" />

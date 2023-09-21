@@ -59,7 +59,7 @@
             android:textSize="11sp"
             android:textColor="@color/gray"
             app:dateText="@{uiState.feedDetail.updatedAt}"
-            app:dateTimeFormatter="@{DateTimePattern.YEAR_DOT_MONTH_DOT_DAY}"
+            app:dateTimeFormatter="@{DateTimePattern.RELATIVE_TIME}"
             tools:text="2023.08.23"
             app:layout_constraintBottom_toBottomOf="@+id/iv_feeddetail_feed_author_image"
             android:layout_marginBottom="3dp" />
@@ -71,7 +71,7 @@
             app:layout_constraintStart_toEndOf="@+id/tv_feeddetail_last_modified_date"
             app:layout_constraintTop_toTopOf="@+id/tv_feeddetail_last_modified_date"
             app:layout_constraintBottom_toBottomOf="@+id/tv_feeddetail_last_modified_date"
-            android:visibility="@{uiState.feedDetail.createdAt == uiState.feedDetail.updatedAt ? View.GONE : View.VISIBLE}"
+            android:visibility="@{uiState.isUpdated ? View.VISIBLE : View.GONE}"
             android:textSize="11sp"
             android:textColor="@color/gray"
             android:text="@string/all_is_updated"
