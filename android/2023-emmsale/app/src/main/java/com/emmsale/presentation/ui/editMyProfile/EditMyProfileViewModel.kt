@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.Activity
 import com.emmsale.data.model.ActivityType
 import com.emmsale.data.repository.interfaces.ActivityRepository
@@ -78,22 +79,26 @@ class EditMyProfileViewModel(
             }
             launch {
                 when (val result = memberRepository.getMember(token.uid)) {
-                    is ApiError, is ApiException -> _isError.value = true
-                    is ApiSuccess -> {
+                    is Failure, NetworkError -> _isError.value = true
+                    is Success -> {
                         _profile.value = _profile.value.changeMemberState(result.data)
                         _isLoading.value = false
                         _isError.value = false
                     }
+
+                    is Unexpected -> throw Throwable(result.error)
                 }
             }
             launch {
                 when (val result = activityRepository.getActivities(token.uid)) {
-                    is ApiError, is ApiException -> _isError.value = true
-                    is ApiSuccess -> {
+                    is Failure, NetworkError -> _isError.value = true
+                    is Success -> {
                         _profile.value = _profile.value.changeActivities(result.data)
                         _isLoading.value = false
                         _isError.value = false
                     }
+
+                    is Unexpected -> throw Throwable(result.error)
                 }
             }.join()
             fetchAllActivities()
@@ -103,14 +108,16 @@ class EditMyProfileViewModel(
     private fun fetchAllActivities() {
         viewModelScope.launch {
             when (val result = activityRepository.getActivities()) {
-                is ApiError, is ApiException -> _isError.value = true
-                is ApiSuccess -> {
+                is Failure, NetworkError -> _isError.value = true
+                is Success -> {
                     _selectableFields.value = result.data.toSelectableFields()
                     _selectableEducations.value = result.data.toSelectableEducations()
                     _selectableClubs.value = result.data.toSelectableClubs()
                     _isLoading.value = false
                     _isError.value = false
                 }
+
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -122,24 +129,26 @@ class EditMyProfileViewModel(
                 _isLogin.value = false
                 return@launch
             }
-            when (memberRepository.updateMemberDescription(description)) {
-                is ApiError, is ApiException ->
+            when (val result = memberRepository.updateMemberDescription(description)) {
+                is Failure, NetworkError ->
                     _errorEvents.value =
                         EditMyProfileErrorEvent.DESCRIPTION_UPDATE
 
-                is ApiSuccess -> _profile.value = _profile.value.changeDescription(description)
+                is Success -> _profile.value = _profile.value.changeDescription(description)
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun removeActivity(activityId: Long) {
         viewModelScope.launch {
-            when (memberRepository.deleteMemberActivities(listOf(activityId))) {
-                is ApiError, is ApiException ->
+            when (val result = memberRepository.deleteMemberActivities(listOf(activityId))) {
+                is Failure, NetworkError ->
                     _errorEvents.value =
                         EditMyProfileErrorEvent.ACTIVITY_REMOVE
 
-                is ApiSuccess -> refresh()
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -147,12 +156,13 @@ class EditMyProfileViewModel(
     fun addSelectedFields() {
         viewModelScope.launch {
             val selectedFieldIds = _selectableFields.value.filter { it.isSelected }.map { it.id }
-            when (memberRepository.addMemberActivities(selectedFieldIds)) {
-                is ApiError, is ApiException ->
+            when (val result = memberRepository.addMemberActivities(selectedFieldIds)) {
+                is Failure, NetworkError ->
                     _errorEvents.value =
                         EditMyProfileErrorEvent.ACTIVITIES_ADD
 
-                is ApiSuccess -> refresh()
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -161,12 +171,13 @@ class EditMyProfileViewModel(
         viewModelScope.launch {
             val selectedEducationIds =
                 _selectableEducations.value.filter { it.isSelected }.map { it.id }
-            when (memberRepository.addMemberActivities(selectedEducationIds)) {
-                is ApiError, is ApiException ->
+            when (val result = memberRepository.addMemberActivities(selectedEducationIds)) {
+                is Failure, NetworkError ->
                     _errorEvents.value =
                         EditMyProfileErrorEvent.ACTIVITIES_ADD
 
-                is ApiSuccess -> refresh()
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -174,12 +185,13 @@ class EditMyProfileViewModel(
     fun addSelectedClubs() {
         viewModelScope.launch {
             val selectedClubIds = _selectableClubs.value.filter { it.isSelected }.map { it.id }
-            when (memberRepository.addMemberActivities(selectedClubIds)) {
-                is ApiError, is ApiException ->
+            when (val result = memberRepository.addMemberActivities(selectedClubIds)) {
+                is Failure, NetworkError ->
                     _errorEvents.value =
                         EditMyProfileErrorEvent.ACTIVITIES_ADD
 
-                is ApiSuccess -> refresh()
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

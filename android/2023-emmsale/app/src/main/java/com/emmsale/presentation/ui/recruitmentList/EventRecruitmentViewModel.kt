@@ -2,9 +2,10 @@ package com.emmsale.presentation.ui.recruitmentList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.Recruitment
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.presentation.KerdyApplication
@@ -33,9 +34,10 @@ class EventRecruitmentViewModel(
     fun fetchRecruitments() {
         changeRecruitmentsToLoadingState()
         viewModelScope.launch {
-            when (val response = recruitmentRepository.getEventRecruitments(eventId)) {
-                is ApiSuccess -> fetchSuccessRecruitments(response.data)
-                is ApiError, is ApiException -> changeRecruitmentsToErrorState()
+            when (val result = recruitmentRepository.getEventRecruitments(eventId)) {
+                is Failure, NetworkError -> changeRecruitmentsToErrorState()
+                is Success -> fetchSuccessRecruitments(result.data)
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

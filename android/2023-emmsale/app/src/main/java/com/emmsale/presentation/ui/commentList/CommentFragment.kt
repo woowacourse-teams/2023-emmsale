@@ -19,7 +19,7 @@ import com.emmsale.presentation.ui.commentList.recyclerView.CommentRecyclerViewD
 import com.emmsale.presentation.ui.commentList.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.commentList.uiState.CommentsUiEvent
 import com.emmsale.presentation.ui.commentList.uiState.CommentsUiState
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 

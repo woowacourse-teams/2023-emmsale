@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
@@ -50,47 +51,52 @@ class CommentViewModel(
             }
 
             when (val result = commentRepository.getComments(eventId)) {
-                is ApiError, is ApiException ->
+                is Failure, NetworkError ->
                     _comments.value = _comments.value.changeToFetchingErrorState()
 
-                is ApiSuccess ->
-                    _comments.value = _comments.value.changeCommentsState(result.data, token.uid)
+                is Success ->
+                    _comments.value =
+                        _comments.value.changeCommentsState(result.data, token.uid)
+
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun saveComment(content: String, eventId: Long) {
         viewModelScope.launch {
-            when (commentRepository.saveComment(content, eventId)) {
-                is ApiError, is ApiException -> {
+            when (val result = commentRepository.saveComment(content, eventId)) {
+                is Failure, NetworkError -> {
                     _event.value = CommentsUiEvent.POST_ERROR
                     logComment(content, eventId)
                 }
 
-                is ApiSuccess -> refresh()
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun updateComment(commentId: Long, content: String) {
         viewModelScope.launch {
-            when (commentRepository.updateComment(commentId, content)) {
-                is ApiError, is ApiException -> _event.value = CommentsUiEvent.UPDATE_ERROR
-
-                is ApiSuccess -> {
+            when (val result = commentRepository.updateComment(commentId, content)) {
+                is Failure, NetworkError -> _event.value = CommentsUiEvent.UPDATE_ERROR
+                is Success -> {
                     _editingCommentId.value = null
                     refresh()
                 }
+
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun deleteComment(commentId: Long) {
         viewModelScope.launch {
-            when (commentRepository.deleteComment(commentId)) {
-                is ApiError, is ApiException -> _event.value = CommentsUiEvent.DELETE_ERROR
-
-                is ApiSuccess -> refresh()
+            when (val result = commentRepository.deleteComment(commentId)) {
+                is Failure, NetworkError -> _event.value = CommentsUiEvent.DELETE_ERROR
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -113,7 +119,7 @@ class CommentViewModel(
             val authorId =
                 _comments.value.comments.find { it.id == commentId }?.authorId ?: return@launch
             when (val result = commentRepository.reportComment(commentId, authorId, token.uid)) {
-                is ApiError -> {
+                is Failure -> {
                     if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
                         _event.value = CommentsUiEvent.REPORT_DUPLICATE
                     } else {
@@ -121,8 +127,9 @@ class CommentViewModel(
                     }
                 }
 
-                is ApiException -> _event.value = CommentsUiEvent.REPORT_ERROR
-                is ApiSuccess -> _event.value = CommentsUiEvent.REPORT_COMPLETE
+                NetworkError -> _event.value = CommentsUiEvent.REPORT_ERROR
+                is Success -> _event.value = CommentsUiEvent.REPORT_COMPLETE
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

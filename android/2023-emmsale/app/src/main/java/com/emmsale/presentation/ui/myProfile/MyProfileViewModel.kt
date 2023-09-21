@@ -2,9 +2,10 @@ package com.emmsale.presentation.ui.myProfile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
@@ -37,20 +38,22 @@ class MyProfileViewModel(
             }
             launch {
                 when (val result = memberRepository.getMember(token.uid)) {
-                    is ApiError, is ApiException ->
+                    is Failure, NetworkError ->
                         _myProfile.value = _myProfile.value.changeToErrorState()
 
-                    is ApiSuccess ->
-                        _myProfile.value = _myProfile.value.changeMemberState(result.data)
+                    is Success -> _myProfile.value = _myProfile.value.changeMemberState(result.data)
+                    is Unexpected -> throw Throwable(result.error)
                 }
             }
             launch {
                 when (val result = activityRepository.getActivities(token.uid)) {
-                    is ApiError, is ApiException ->
+                    is Failure, NetworkError ->
                         _myProfile.value = _myProfile.value.changeToErrorState()
 
-                    is ApiSuccess ->
+                    is Success ->
                         _myProfile.value = _myProfile.value.changeActivitiesState(result.data)
+
+                    is Unexpected -> throw Throwable(result.error)
                 }
             }
         }

@@ -8,6 +8,6 @@ fun MemberResponse.toData() = Member(
     githubUrl = githubUrl,
     name = name,
     description = description,
-    imageUrl = imageUrl,
+    profileImageUrl = imageUrl,
     openProfileUrl = openProfileUrl,
 )

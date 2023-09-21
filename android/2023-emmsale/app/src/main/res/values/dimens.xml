@@ -3,4 +3,13 @@
     <dimen name="tab_indicator_height">2dp</dimen>
 
     <dimen name="padding_bottommenudialog_menu_item_vertical">21dp</dimen>
+
+    <dimen name="message_date_top_margin">20dp</dimen>
+    <dimen name="other_message_with_profile_layout_top_margin">14dp</dimen>
+    <dimen name="other_message_without_profile_layout_top_margin">4dp</dimen>
+    <dimen name="other_message_with_profile_top_margin">4dp</dimen>
+    <dimen name="other_message_without_profile_top_margin">0dp</dimen>
+
+    <dimen name="my_first_message_top_margin">17dp</dimen>
+    <dimen name="my_not_fisrt_message_top_margin">4dp</dimen>
 </resources>

@@ -4,9 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.Recruitment
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
@@ -60,15 +61,15 @@ class RecruitmentPostDetailViewModel(
     override fun refresh() {
         changeRecruitmentPostToLoadingState()
         viewModelScope.launch {
-            val response = recruitmentRepository.getEventRecruitment(eventId, recruitmentId)
-            when (response) {
-                is ApiSuccess -> {
-                    changeRecruitmentPostToSuccessState(response.data)
+            when (val result = recruitmentRepository.getEventRecruitment(eventId, recruitmentId)) {
+                is Failure, NetworkError -> changeRecruitmentPostToErrorState()
+                is Success -> {
+                    changeRecruitmentPostToSuccessState(result.data)
                     updateRecruitmentPostIsMyPostState()
                     checkIsAlreadyRequestCompanion()
                 }
 
-                is ApiError, is ApiException -> changeRecruitmentPostToErrorState()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -76,28 +77,30 @@ class RecruitmentPostDetailViewModel(
     fun requestCompanion(message: String) {
         changeRequestCompanionToLoadingState()
         viewModelScope.launch {
-            val response = recruitmentRepository.requestCompanion(
+            val result = recruitmentRepository.requestCompanion(
                 eventId = eventId,
                 memberId = recruitmentPost.value.memberId,
                 message = message,
             )
-            when (response) {
-                is ApiSuccess -> {
+            when (result) {
+                is Failure, NetworkError -> changeRequestCompanionToErrorState()
+                is Success -> {
                     changeRequestCompanionToSuccessState()
                     setRequestCompanionIsAlreadyState(true)
                     logRecruitment(message, myUid)
                 }
 
-                is ApiError, is ApiException -> changeRequestCompanionToErrorState()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun deleteRecruitmentPost() {
         viewModelScope.launch {
-            when (recruitmentRepository.deleteRecruitment(eventId, recruitmentId)) {
-                is ApiSuccess -> _isDeletePostSuccess.postValue(true)
-                is ApiError, is ApiException -> _isDeletePostSuccess.postValue(false)
+            when (val result = recruitmentRepository.deleteRecruitment(eventId, recruitmentId)) {
+                is Failure, NetworkError -> _isDeletePostSuccess.postValue(false)
+                is Success -> _isDeletePostSuccess.postValue(true)
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -110,7 +113,7 @@ class RecruitmentPostDetailViewModel(
                 myUid,
             )
             when (result) {
-                is ApiError -> {
+                is Failure -> {
                     if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
                         _event.value = RecruitmentPostDetailUiEvent.REPORT_DUPLICATE
                     } else {
@@ -118,19 +121,21 @@ class RecruitmentPostDetailViewModel(
                     }
                 }
 
-                is ApiException ->
+                NetworkError ->
                     _event.value = RecruitmentPostDetailUiEvent.REPORT_ERROR
 
-                is ApiSuccess -> _event.value = RecruitmentPostDetailUiEvent.REPORT_SUCCESS
+                is Success -> _event.value = RecruitmentPostDetailUiEvent.REPORT_SUCCESS
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun fetchProfile() {
         viewModelScope.launch {
-            when (val response = memberRepository.getMember(myUid)) {
-                is ApiSuccess -> {
-                    if (response.data.openProfileUrl != "") {
+            when (val result = memberRepository.getMember(myUid)) {
+                is Failure, NetworkError -> _hasOpenProfileUrl.value = HasOpenUrlUiState.ERROR
+                is Success -> {
+                    if (result.data.openProfileUrl != "") {
                         _hasOpenProfileUrl.value =
                             HasOpenUrlUiState.TRUE
                     } else {
@@ -139,7 +144,7 @@ class RecruitmentPostDetailViewModel(
                     }
                 }
 
-                else -> _hasOpenProfileUrl.value = HasOpenUrlUiState.ERROR
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -150,14 +155,15 @@ class RecruitmentPostDetailViewModel(
 
     private fun checkIsAlreadyRequestCompanion() {
         viewModelScope.launch {
-            val response = recruitmentRepository.checkIsAlreadyRequestCompanion(
+            val result = recruitmentRepository.checkIsAlreadyRequestCompanion(
                 eventId = eventId,
                 senderId = myUid,
                 receiverId = recruitmentPost.value.memberId,
             )
-            when (response) {
-                is ApiSuccess -> setRequestCompanionIsAlreadyState(response.data)
-                is ApiError, is ApiException -> {}
+            when (result) {
+                is Failure, NetworkError -> {}
+                is Success -> setRequestCompanionIsAlreadyState(result.data)
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

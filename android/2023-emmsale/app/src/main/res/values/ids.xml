@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="id_all_follow_notification_channel" />
-    <item type="id" name="id_all_child_comment_notification_channel" />
-    <item type="id" name="id_all_interest_event_notification_channel" />
+    <item name="id_all_follow_notification_channel" type="id" />
+    <item name="id_all_child_comment_notification_channel" type="id" />
+    <item name="id_all_interest_event_notification_channel" type="id" />
 </resources>

@@ -9,6 +9,8 @@
 
         <import type="android.view.View" />
 
+        <import type="com.emmsale.presentation.common.extension.LocalDateTimeExt" />
+
         <import type="com.emmsale.presentation.ui.primaryNotificationList.uiState.PrimaryNotificationUiState" />
 
         <import type="com.emmsale.presentation.ui.primaryNotificationList.uiState.ChildCommentNotificationUiState" />
@@ -72,7 +74,7 @@
             android:id="@+id/tv_comment_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:relativeDate="@{commentNotification.createdAt}"
+            android:text="@{LocalDateTimeExt.toRelativeTime(commentNotification.createdAt, context)}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -93,5 +95,6 @@
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_comment" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

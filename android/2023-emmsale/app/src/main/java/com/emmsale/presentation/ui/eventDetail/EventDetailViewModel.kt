@@ -4,9 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
@@ -106,10 +103,6 @@ class EventDetailViewModel(
         }
     }
 
-    fun fetchCurrentScreen(position: Int) {
-        _currentScreen.value = EventDetailScreenUiState.from(position)
-    }
-
     private fun changeToSuccessState(eventDetail: EventDetail) {
         _eventDetail.value = EventDetailUiState(SUCCESS, eventDetail)
         logEventClick(eventDetail.name, eventDetail.id)
@@ -120,6 +113,7 @@ class EventDetailViewModel(
     }
 
     private fun changeToErrorState() {
+        _eventDetail.value = eventDetail.value.copy(fetchResult = ERROR)
         _eventDetail.value = eventDetail.value.copy(fetchResult = ERROR)
     }
 

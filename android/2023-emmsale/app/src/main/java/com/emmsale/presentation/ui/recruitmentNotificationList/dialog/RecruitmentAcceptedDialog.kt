@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.recruitmentNotificationList
+package com.emmsale.presentation.ui.recruitmentNotificationList.dialog
 
 import android.app.Dialog
 import android.content.Context

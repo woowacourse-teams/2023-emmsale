@@ -2,9 +2,10 @@ package com.emmsale.presentation.ui.primaryNotificationList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
+import com.emmsale.data.common.callAdapter.Failure
+import com.emmsale.data.common.callAdapter.NetworkError
+import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.NotificationRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
@@ -36,14 +37,15 @@ class PrimaryNotificationViewModel(
     override fun refresh() {
         viewModelScope.launch {
             val uid = tokenRepository.getToken()?.uid ?: return@launch
-            when (val result = notificationRepository.getUpdatedNotifications(uid)) {
-                is ApiError, is ApiException ->
-                    _uiState.value =
-                        PrimaryNotificationScreenUiState.Error
 
-                is ApiSuccess ->
-                    _uiState.value =
-                        PrimaryNotificationScreenUiState.Success.from(result.data)
+            when (val result = notificationRepository.getUpdatedNotifications(uid)) {
+                is Failure, NetworkError ->
+                    _uiState.value = PrimaryNotificationScreenUiState.Error
+
+                is Success ->
+                    _uiState.value = PrimaryNotificationScreenUiState.Success.from(result.data)
+
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -53,31 +55,43 @@ class PrimaryNotificationViewModel(
             val currentUiState = _uiState.value
             if (currentUiState !is PrimaryNotificationScreenUiState.Success) return@launch
             val pastNotificationIds = currentUiState.pastNotifications.map { it.notificationId }
-            when (notificationRepository.deleteUpdatedNotifications(pastNotificationIds)) {
-                is ApiSuccess -> refresh()
-                is ApiError, is ApiException ->
-                    _uiEvent.value =
-                        Event(PrimaryNotificationsUiEvent.DELETE_FAIL)
+            when (
+                val result =
+                    notificationRepository.deleteUpdatedNotifications(pastNotificationIds)
+            ) {
+                is Failure, NetworkError ->
+                    _uiEvent.value = Event(PrimaryNotificationsUiEvent.DELETE_FAIL)
+
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun readNotification(notificationId: Long) {
         viewModelScope.launch {
-            when (notificationRepository.updateUpdatedNotificationReadStatus(notificationId)) {
-                is ApiSuccess -> refresh()
-                is ApiError, is ApiException -> Unit
+            when (
+                val result =
+                    notificationRepository.updateUpdatedNotificationReadStatus(notificationId)
+            ) {
+                is Failure, NetworkError -> Unit
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun deleteNotification(notificationId: Long) {
         viewModelScope.launch {
-            when (notificationRepository.deleteUpdatedNotifications(listOf(notificationId))) {
-                is ApiSuccess -> refresh()
-                is ApiError, is ApiException ->
-                    _uiEvent.value =
-                        Event(PrimaryNotificationsUiEvent.DELETE_FAIL)
+            when (
+                val result =
+                    notificationRepository.deleteUpdatedNotifications(listOf(notificationId))
+            ) {
+                is Failure, NetworkError ->
+                    _uiEvent.value = Event(PrimaryNotificationsUiEvent.DELETE_FAIL)
+
+                is Success -> refresh()
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

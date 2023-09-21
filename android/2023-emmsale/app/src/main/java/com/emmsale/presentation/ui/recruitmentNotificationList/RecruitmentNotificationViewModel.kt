@@ -4,9 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.ApiError
-import com.emmsale.data.common.ApiException
-import com.emmsale.data.common.ApiSuccess
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
@@ -54,11 +51,13 @@ class RecruitmentNotificationViewModel(
             val uid = tokenRepository.getToken()?.uid ?: return@launch
 
             when (val result = notificationRepository.getRecruitmentNotifications(uid)) {
-                is ApiSuccess -> updateNotifications(result.data)
-                is ApiException, is ApiError -> _notifications.value = _notifications.value.copy(
+                is Failure, NetworkError -> _notifications.value = _notifications.value.copy(
                     isLoading = false,
                     isError = true,
                 )
+
+                is Success -> updateNotifications(result.data)
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -99,14 +98,15 @@ class RecruitmentNotificationViewModel(
 
     private suspend fun getNotificationMemberAsync(userId: Long): Deferred<RecruitmentNotificationMemberUiState?> =
         viewModelScope.async {
-            when (val member = memberRepository.getMember(userId)) {
-                is ApiSuccess -> RecruitmentNotificationMemberUiState(
-                    name = member.data.name,
-                    profileImageUrl = member.data.imageUrl,
-                    openChatUrl = member.data.openProfileUrl,
+            when (val result = memberRepository.getMember(userId)) {
+                is Failure, NetworkError -> null
+                is Success -> RecruitmentNotificationMemberUiState(
+                    name = result.data.name,
+                    profileImageUrl = result.data.profileImageUrl,
+                    openChatUrl = result.data.openProfileUrl,
                 )
 
-                is ApiException, is ApiError -> null
+                is Unexpected -> throw Throwable(result.error)
             }
         }
 
@@ -124,38 +124,40 @@ class RecruitmentNotificationViewModel(
 
     fun acceptRecruit(notificationId: Long) {
         viewModelScope.launch {
-            when (
-                notificationRepository.updateRecruitmentStatus(
-                    notificationId,
-                    RecruitmentStatus.ACCEPTED,
-                )
-            ) {
-                is ApiSuccess -> {
+            val result = notificationRepository.updateRecruitmentStatus(
+                notificationId,
+                RecruitmentStatus.ACCEPTED,
+            )
+            when (result) {
+                is Failure, NetworkError ->
+                    _event.value = RecruitmentNotificationUiEvent.ACCEPT_FAIL
+
+                is Success -> {
                     _event.value = RecruitmentNotificationUiEvent.ACCEPT_COMPLETE
                     _notifications.value = notifications.value.changeAcceptStateBy(notificationId)
                 }
 
-                is ApiException, is ApiError ->
-                    _event.value = RecruitmentNotificationUiEvent.ACCEPT_FAIL
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
 
     fun rejectRecruit(notificationId: Long) {
         viewModelScope.launch {
-            when (
-                notificationRepository.updateRecruitmentStatus(
-                    notificationId,
-                    RecruitmentStatus.REJECTED,
-                )
-            ) {
-                is ApiSuccess -> {
+            val result = notificationRepository.updateRecruitmentStatus(
+                notificationId,
+                RecruitmentStatus.REJECTED,
+            )
+            when (result) {
+                is Failure, NetworkError ->
+                    _event.value = RecruitmentNotificationUiEvent.REJECT_FAIL
+
+                is Success -> {
                     _event.value = RecruitmentNotificationUiEvent.REJECT_COMPLETE
                     _notifications.value = notifications.value.changeRejectStateBy(notificationId)
                 }
 
-                is ApiException, is ApiError ->
-                    _event.value = RecruitmentNotificationUiEvent.REJECT_FAIL
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
@@ -173,7 +175,7 @@ class RecruitmentNotificationViewModel(
                 reporterId = uid,
             )
             when (result) {
-                is ApiError -> {
+                is Failure -> {
                     if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
                         _event.value = RecruitmentNotificationUiEvent.REPORT_DUPLICATE
                     } else {
@@ -181,11 +183,11 @@ class RecruitmentNotificationViewModel(
                     }
                 }
 
-                is ApiException ->
-                    _event.value =
-                        RecruitmentNotificationUiEvent.REPORT_FAIL
+                NetworkError ->
+                    _event.value = RecruitmentNotificationUiEvent.REPORT_FAIL
 
-                is ApiSuccess -> _event.value = RecruitmentNotificationUiEvent.REPORT_SUCCESS
+                is Success -> _event.value = RecruitmentNotificationUiEvent.REPORT_SUCCESS
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }

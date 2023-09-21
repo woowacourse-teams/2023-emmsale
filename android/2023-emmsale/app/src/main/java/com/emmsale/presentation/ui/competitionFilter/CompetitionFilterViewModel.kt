@@ -61,11 +61,13 @@ class CompetitionFilterViewModel(
         withContext(Dispatchers.IO) {
             when (val result = eventTagRepository.getEventTags()) {
                 is Success -> result.data.map(CompetitionFilteringOptionUiState::from)
-                is Unexpected, is Failure, NetworkError -> {
+                is Failure, NetworkError -> {
                     _competitionFilter.value =
                         _competitionFilter.value.copy(isLoadingCompetitionFilterFailed = true)
                     emptyList()
                 }
+
+                is Unexpected -> throw Throwable(result.error)
             }
         }
 

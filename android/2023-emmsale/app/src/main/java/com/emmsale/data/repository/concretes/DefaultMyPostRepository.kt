@@ -1,8 +1,7 @@
 package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.response.MyPostResponse
-import com.emmsale.data.common.ApiResult
-import com.emmsale.data.common.handleApi
+import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.MyPost
 import com.emmsale.data.repository.interfaces.MyPostRepository
@@ -13,11 +12,13 @@ class DefaultMyPostRepository(
     private val myPostService: MyPostService,
     tokenRepository: TokenRepository,
 ) : MyPostRepository {
-    private val myUid = tokenRepository.getMyUid() ?: throw IllegalStateException("로그인 되지 않았어요!!!!")
-    override suspend fun getMyPosts(): ApiResult<List<MyPost>> {
-        return handleApi(
-            execute = { myPostService.getMyPosts(myUid) },
-            mapToDomain = List<MyPostResponse>::toData,
-        )
+    private val myUid = requireNotNull(tokenRepository.getMyUid()) {
+        "[ERROR] 로그인되지 않은 사용자입니다."
+    }
+
+    override suspend fun getMyPosts(): ApiResponse<List<MyPost>> {
+        return myPostService
+            .getMyPosts(myUid)
+            .map(List<MyPostResponse>::toData)
     }
 }
