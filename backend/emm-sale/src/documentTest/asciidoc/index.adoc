@@ -734,8 +734,11 @@ include::{snippets}/find-detail-feed/response-fields.adoc[]
 
 === `POST`: 피드 등록
 
-.HTTP request
-include::{snippets}/post-feed/http-request.adoc[]
+```http
+POST /feeds HTTP/1.1
+Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Host: localhost:8080
+```
 
 .HTTP request 설명
 include::{snippets}/post-feed/request-fields.adoc[]

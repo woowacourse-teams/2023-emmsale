@@ -8,7 +8,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -16,8 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.emmsale.feed.application.dto.FeedDetailResponse;
 import com.emmsale.feed.application.dto.FeedDetailResponse.WriterProfileResponse;
 import com.emmsale.feed.application.dto.FeedListResponse;
-import com.emmsale.feed.application.dto.FeedPostRequest;
-import com.emmsale.feed.application.dto.FeedPostResponse;
 import com.emmsale.feed.application.dto.FeedSimpleResponse;
 import com.emmsale.feed.application.dto.FeedUpdateRequest;
 import com.emmsale.feed.application.dto.FeedUpdateResponse;
@@ -29,9 +27,11 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 
 class FeedApiTest extends MockMvcTestHelper {
 
@@ -114,34 +114,39 @@ class FeedApiTest extends MockMvcTestHelper {
   @DisplayName("이벤트의 피드를 성공적으로 저장하면 201 CREATED를 반환한다.")
   void postFeedTest() throws Exception {
     //given
-    final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("이벤트 id"),
-        fieldWithPath("title").type(JsonFieldType.STRING).description("피드 제목"),
-        fieldWithPath("content").type(JsonFieldType.STRING).description("피드 내용")
-    );
-    final ResponseFieldsSnippet responseFields = responseFields(
-        fieldWithPath("id").type(JsonFieldType.NUMBER).description("피드 id"),
-        fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("이벤트 id"),
-        fieldWithPath("writerId").type(JsonFieldType.NUMBER).description("작성자 id"),
-        fieldWithPath("title").type(JsonFieldType.STRING).description("피드 제목"),
-        fieldWithPath("content").type(JsonFieldType.STRING).description("피드 내용")
+    final List<MockMultipartFile> images = List.of(
+        new MockMultipartFile(
+            "picture",
+            "picture.jpg",
+            MediaType.TEXT_PLAIN_VALUE,
+            "test data".getBytes()
+        ),
+        new MockMultipartFile(
+            "picture",
+            "picture.jpg",
+            MediaType.TEXT_PLAIN_VALUE,
+            "test data".getBytes()
+        )
     );
 
     final long eventId = 1L;
+    final long feedId = 3L;
     final String 피드_제목 = "피드 제목";
     final String 피드_내용 = "피드 내용";
-    final FeedPostRequest request = new FeedPostRequest(eventId, 피드_제목, 피드_내용);
-    final FeedPostResponse response = new FeedPostResponse(134L, eventId, 41L, 피드_제목, 피드_내용);
 
-    when(feedCommandService.postFeed(any(), any())).thenReturn(response);
+    final MockMultipartHttpServletRequestBuilder builder = multipart("/feeds")
+        .file("eventId", String.valueOf(eventId).getBytes())
+        .file("title", 피드_제목.getBytes())
+        .file("content", 피드_내용.getBytes())
+        .file("images", images.get(0).getBytes())
+        .file("images", images.get(1).getBytes());
 
-    //when & then
-    mockMvc.perform(post("/feeds")
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .content(objectMapper.writeValueAsString(request)))
+    when(feedCommandService.postFeed(any(), any(), any())).thenReturn(feedId);
+
+    mockMvc.perform(builder)
         .andExpect(status().isCreated())
         .andDo(print())
-        .andDo(document("post-feed", requestFields, responseFields));
+        .andDo(document("post-feed"));
   }
 
   @Test
