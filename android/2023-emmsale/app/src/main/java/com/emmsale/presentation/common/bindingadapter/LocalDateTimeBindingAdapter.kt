@@ -54,7 +54,7 @@ enum class DateTimePattern {
             return localDateTime.format(context, R.string.month_day_weekday)
         }
     },
-    RELATE_TIME {
+    RELATIVE_TIME {
         override fun format(context: Context, localDateTime: LocalDateTime): String {
             return localDateTime.toRelativeTime(context)
         }

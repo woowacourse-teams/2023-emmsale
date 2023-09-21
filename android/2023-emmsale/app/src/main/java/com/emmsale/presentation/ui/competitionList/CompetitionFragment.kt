@@ -16,7 +16,7 @@ import com.emmsale.presentation.ui.competitionList.recyclerView.CompetitionRecyc
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionUiState
-import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import java.time.LocalDate
 
 class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
@@ -130,7 +130,7 @@ class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
     }
 
     private fun navigateToEventDetail(event: CompetitionUiState) {
-        EventDetailActivity.startActivity(requireContext(), event.id)
+        EventDetailActivity.startActivity(requireContext(), event.competition.id)
     }
 
     private fun navigateToEventFilter() {

@@ -25,7 +25,7 @@ data class ScrappedEventUiState(
 
         private fun getStatus(scrappedEvent: ScrappedEvent): String = when (scrappedEvent.status) {
             ConferenceStatus.IN_PROGRESS -> "진행중"
-            ConferenceStatus.SCHEDULED -> "진행 예정"
+            ConferenceStatus.UPCOMING -> "진행 예정"
             ConferenceStatus.ENDED -> "마감"
         }
     }

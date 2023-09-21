@@ -16,16 +16,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:layout_marginBottom="93dp">
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_recruitment"
+            app:itemAnimator="@{null}"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:listitem="@layout/item_recruitment" />
 
         <ProgressBar
@@ -39,23 +42,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/btn_recruitment_writing"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginBottom="17dp"
-            android:background="@drawable/bg_recruitment_writing_button"
-            android:src="@drawable/ic_recruitment_pencil"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
         <include
             layout="@layout/layout_all_error_screen"
             android:background="@color/white"
             android:clickable="true"
             android:visibility="@{viewModel.recruitments.isError ? View.VISIBLE : View.GONE}"
-            bind:viewModel="@{viewModel}" />
+            bind:viewModel="@{viewModel}"
+            tools:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -9,9 +9,15 @@
 
         <import type="kotlin.jvm.functions.Function1" />
 
+        <import type="kotlin.jvm.functions.Function0" />
+
         <import type="kotlin.Unit" />
 
         <import type="com.emmsale.presentation.common.FetchResult" />
+
+        <import
+            type="com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState"
+            alias="Screen" />
 
         <variable
             name="vm"
@@ -20,6 +26,10 @@
         <variable
             name="navigateToUrl"
             type="Function1&lt;String, Unit>" />
+
+        <variable
+            name="navigateToWritingPost"
+            type="Function0" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -40,31 +50,31 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="?attr/actionBarSize">
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:layout_height="wrap_content">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_eventdetail_poster"
+                        app:imageUrl="@{vm.eventDetail.eventDetail.posterImageUrl}"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_marginHorizontal="17dp"
-                        app:imageUrl="@{vm.eventDetail.eventDetail.posterImageUrl}"
-                        app:layout_collapseMode="none"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="326:180"
+                        android:layout_marginHorizontal="17dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:roundedImageRadius="@{15}"
+                        app:layout_collapseMode="none"
                         tools:src="@drawable/img_all_loading" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/tb_eventdetail"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
                     app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/ic_all_arrowback" />
+                    app:navigationIcon="@drawable/ic_all_arrowback"
+                    android:layout_height="56dp" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -78,55 +88,55 @@
 
                 <TextView
                     android:id="@+id/tv_eventdetail_eventstatus"
+                    android:text="@{vm.eventDetail.eventDetail.status}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="17dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/nanum_square_bold"
-                    android:text="@{vm.eventDetail.eventDetail.status}"
                     android:textColor="@color/primary_color"
                     android:textSize="13sp"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     tools:text="D-Day" />
 
                 <TextView
                     android:id="@+id/tv_eventdetail_eventname"
+                    android:text="@{vm.eventDetail.eventDetail.name}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="17dp"
-                    android:layout_marginTop="9dp"
                     android:fontFamily="@font/nanum_square_bold"
-                    android:text="@{vm.eventDetail.eventDetail.name}"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginStart="17dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventstatus"
                     tools:text="AWS 부산 클라우드데이 2023 AWS" />
 
                 <TextView
                     android:id="@+id/tv_eventdetail_organization"
+                    android:text="@{vm.eventDetail.eventDetail.organization}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
                     android:layout_marginTop="6dp"
-                    android:fontFamily="@font/nanum_square_regular"
-                    android:text="@{vm.eventDetail.eventDetail.organization}"
-                    android:textColor="@color/dark_gray"
                     android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textColor="@color/dark_gray"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_eventname"
                     tools:text="부산정보산업진흥원" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chipgroup_evendetail_tags"
+                    app:eventChips="@{vm.eventDetail.eventDetail.tags}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
                     android:layout_marginTop="23dp"
-                    app:eventChips="@{vm.eventDetail.eventDetail.tags}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_eventdetail_organization" />
@@ -150,28 +160,28 @@
             android:id="@+id/vp_eventdetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="93dp"
             android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_eventdetail_bottom_contatiner"
+            android:visibility="@{vm.currentScreen == Screen.INFORMATION ? View.VISIBLE : View.GONE  }"
+            android:background="@drawable/bg_shadow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@drawable/bg_shadow">
+            android:layout_gravity="bottom">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:onClick="@{_ -> navigateToUrl.invoke(vm.eventDetail.eventDetail.informationUrl)}"
                 android:id="@+id/button_eventdetail_navigatewebsite"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="17dp"
-                android:layout_marginTop="12dp"
                 android:layout_marginEnd="17dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
                 android:background="@drawable/bg_all_two_state_button"
                 android:fontFamily="@font/nanum_square_bold"
-                android:onClick="@{_ -> navigateToUrl.invoke(vm.eventDetail.eventDetail.informationUrl)}"
                 android:stateListAnimator="@null"
                 android:text="@string/eventinformation_navigate_website"
                 android:textColor="@color/white"
@@ -185,27 +195,39 @@
                 android:id="@+id/iv_eventdetail_scrap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
                 android:clickable="true"
                 android:onClick="@{()->vm.handleEventScrap()}"
+                android:layout_marginEnd="20dp"
                 android:padding="6dp"
-                android:src="@{vm.isScraped ? @drawable/ic_all_scrap_checked : @drawable/ic_all_scrap_unchecked}"
                 app:layout_constraintBottom_toTopOf="@+id/tv_eventdetail_scrap"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@{vm.isScraped ? @drawable/ic_all_scrap_checked : @drawable/ic_all_scrap_unchecked}" />
 
             <TextView
                 android:id="@+id/tv_eventdetail_scrap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="22dp"
-                android:layout_marginBottom="15dp"
                 android:fontFamily="@font/nanum_square_regular"
                 android:text="@string/eventinfromation_scrap"
                 android:textColor="@color/gray"
                 android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btn_eventdetail_writing"
+            android:onClick="@{()->navigateToWritingPost.invoke()}"
+            android:visibility="@{vm.currentScreen == Screen.INFORMATION ? View.GONE : View.VISIBLE  }"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="17dp"
+            android:layout_marginBottom="17dp"
+            android:background="@drawable/bg_recruitment_writing_button"
+            android:src="@drawable/ic_recruitment_pencil" />
 
         <ProgressBar
             android:layout_width="wrap_content"
