@@ -126,7 +126,7 @@
             app:layout_constraintTop_toTopOf="@+id/iv_feeddetail_comment_icon"
             app:layout_constraintBottom_toBottomOf="@+id/iv_feeddetail_comment_icon"
             android:textSize="12sp"
-            android:text="@{uiState.comments.size()}"
+            android:text="@{uiState.commentsCount}"
             android:textColor="@color/primary_color"
             tools:text="8" />
 

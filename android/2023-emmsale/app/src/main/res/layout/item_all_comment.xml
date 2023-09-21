@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
-            android:text="@{@string/comments_child_comments_count_format(uiState.comment.childComments.size())}"
+            android:text="@{@string/comments_child_comments_count_format(uiState.childCommentsCount)}"
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="parent"
