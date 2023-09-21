@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 public enum FeedExceptionType implements BaseExceptionType {
   NOT_FOUND_FEED(HttpStatus.NOT_FOUND, "피드를 찾을 수 없습니다."),
   FORBIDDEN_NOT_OWNER(HttpStatus.FORBIDDEN, "피드의 소유자가 아닙니다."),
-  FORBIDDEN_DELETED_FEED(HttpStatus.FORBIDDEN, "삭제된 피드입니다.");
+  FORBIDDEN_DELETED_FEED(HttpStatus.FORBIDDEN, "삭제된 피드입니다."),
+  CAN_NOT_ACCESS_BLOCKED_MEMBER_FEED(HttpStatus.BAD_REQUEST, "차단한 사용자의 피드입니다.");
 
   private final HttpStatus httpStatus;
   private final String errorMessage;

@@ -31,13 +31,14 @@ public class FeedApi {
   private final FeedCommandService feedCommandService;
 
   @GetMapping
-  public FeedListResponse findAllFeeds(@RequestParam("event-id") final Long eventId) {
-    return feedQueryService.findAllFeeds(eventId);
+  public FeedListResponse findAllFeeds(final Member member,
+      @RequestParam("event-id") final Long eventId) {
+    return feedQueryService.findAllFeeds(member, eventId);
   }
 
   @GetMapping("/{id}")
-  public FeedDetailResponse findFeed(@PathVariable final Long id) {
-    return feedQueryService.findFeed(id);
+  public FeedDetailResponse findFeed(final Member member, @PathVariable final Long id) {
+    return feedQueryService.findFeed(member, id);
   }
 
   @PostMapping
