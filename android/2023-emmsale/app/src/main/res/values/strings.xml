@@ -71,6 +71,8 @@
     <string name="kerdyfirebasemessaging_interest_event_notification_title_format">관심 태그 행사가 업데이트 되었어요.</string>
     <string name="kerdyfirebasemessaging_interest_event_notification_channel_name">관심 태그 행사 알림 채널</string>
     <string name="kerdyfirebasemessaging_interest_event_notification_channel_description">관심 태그 행사 알림을 받기 위한 알림 채널입니다.</string>
+    <string name="kerdyfirebasemessaging_message_notification_channel_name">쪽지 알림 채널</string>
+    <string name="kerdyfirebasemessaging_message_notification_channel_description">쪽지 알림을 받기 위한 알림 채널입니다.</string>
 
     <string name="login_failed_message">로그인에 실패했어요 😥</string>
     <string name="login_logo">로그인 로고</string>

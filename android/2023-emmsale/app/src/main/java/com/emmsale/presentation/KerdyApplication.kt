@@ -39,6 +39,7 @@ class KerdyApplication : Application() {
             createFollowNotificationChannel(),
             createChildCommentNotificationChannel(),
             createInterestEventNotificationChannel(),
+            createMessageNotificationChannel(),
         )
         notificationManager.createNotificationChannels(notificationChannels)
     }
@@ -79,6 +80,21 @@ class KerdyApplication : Application() {
             getString(R.string.kerdyfirebasemessaging_interest_event_notification_channel_name)
         val channelDescription =
             getString(R.string.kerdyfirebasemessaging_follow_notification_channel_description)
+        return NotificationChannel(
+            channelId.toString(),
+            channelName,
+            NotificationManager.IMPORTANCE_HIGH,
+        ).apply {
+            description = channelDescription
+        }
+    }
+
+    private fun createMessageNotificationChannel(): NotificationChannel {
+        val channelId = R.id.id_all_message_notification_channel
+        val channelName =
+            getString(R.string.kerdyfirebasemessaging_message_notification_channel_name)
+        val channelDescription =
+            getString(R.string.kerdyfirebasemessaging_message_notification_channel_description)
         return NotificationChannel(
             channelId.toString(),
             channelName,

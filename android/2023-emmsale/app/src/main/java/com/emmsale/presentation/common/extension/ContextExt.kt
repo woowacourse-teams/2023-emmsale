@@ -75,7 +75,7 @@ fun Context.showNotification(
     message: String,
     notificationId: Int = System.currentTimeMillis().toInt(),
     channelId: Int,
-    intent: Intent? = null,
+    intent: Intent = Intent(),
     largeIconUrl: String? = null,
 ) {
     val notificationManager = NotificationManagerCompat.from(this)
