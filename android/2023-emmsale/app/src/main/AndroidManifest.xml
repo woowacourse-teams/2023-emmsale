@@ -19,13 +19,19 @@
         tools:targetApi="33">
         <activity
             android:name=".presentation.ui.feedDetail.FeedDetailActivity"
-            android:exported="false" />
+            android:screenOrientation="portrait"
+            android:exported="false"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.messageList.MessageListActivity"
-            android:launchMode="singleTask" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.postWriting.PostWritingActivity"
-            android:exported="false" />
+            android:screenOrientation="portrait"
+            android:exported="false"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true"
@@ -108,7 +114,7 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".presentation.ui.eventdetail.EventDetailActivity"
+            android:name=".presentation.ui.eventDetail.EventDetailActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity

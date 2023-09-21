@@ -29,8 +29,8 @@ fun UpdatedNotificationResponse.toData(): UpdatedNotification = when (type) {
         parentCommentId = commentTypeNotification?.parentId ?: 0,
         childCommentId = redirectId,
         childCommentContent = commentTypeNotification?.childCommentContent ?: "",
-        eventId = commentTypeNotification?.eventId ?: 0,
-        eventName = commentTypeNotification?.eventName ?: "",
+        feedId = commentTypeNotification?.feedId ?: 0,
+        feedTitle = commentTypeNotification?.feedTitle ?: "",
         commentProfileImageUrl = commentTypeNotification?.commentProfileImageUrl ?: "",
     )
 

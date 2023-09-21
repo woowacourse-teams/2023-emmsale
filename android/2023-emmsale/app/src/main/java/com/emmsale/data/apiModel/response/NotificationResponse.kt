@@ -25,14 +25,14 @@ data class UpdatedNotificationResponse(
 data class CommentTypeNotificationResponse(
     @SerialName("content")
     val childCommentContent: String,
-    @SerialName("eventName")
-    val eventName: String,
+    @SerialName("feedTitle")
+    val feedTitle: String,
     @SerialName("commenterImageUrl")
     val commentProfileImageUrl: String,
     @SerialName("parentId")
     val parentId: Long = -1L,
-    @SerialName("eventId")
-    val eventId: Long = -1L,
+    @SerialName("feedId")
+    val feedId: Long = -1L,
 )
 
 @Serializable

@@ -12,7 +12,7 @@ import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.common.extension.topActivityName
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
-import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.notificationPageList.NotificationBoxActivity
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -79,11 +79,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             return runBlocking {
                 when (val result = commentRepository.getComment(commentId)) {
                     is Failure, NetworkError -> ERROR_FEED_ID to ERROR_FEED_ID
-                    is Success -> result.data.feedId to (
-                        result.data.parentId
-                            ?: throw IllegalArgumentException("대댓글만 알림을 받을 수 있습니다. 알림 메세지를 보내는 로직을 다시 확인해주세요.")
-                        )
-
+                    is Success -> result.data.feedId to result.data.id
                     is Unexpected -> throw Throwable(result.error)
                 }
             }

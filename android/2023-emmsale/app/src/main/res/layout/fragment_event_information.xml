@@ -11,7 +11,7 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.eventdetail.EventDetailViewModel" />
+            type="com.emmsale.presentation.ui.eventDetail.EventDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

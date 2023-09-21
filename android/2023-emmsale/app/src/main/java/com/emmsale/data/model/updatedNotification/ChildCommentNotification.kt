@@ -10,8 +10,8 @@ class ChildCommentNotification(
     val parentCommentId: Long,
     val childCommentId: Long,
     val childCommentContent: String,
-    val eventId: Long,
-    val eventName: String,
+    val feedId: Long,
+    val feedTitle: String,
     val commentProfileImageUrl: String,
 ) : UpdatedNotification(
     id = id,
