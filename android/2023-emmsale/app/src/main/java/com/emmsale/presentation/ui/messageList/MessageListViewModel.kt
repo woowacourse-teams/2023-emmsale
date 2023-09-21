@@ -18,7 +18,10 @@ import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.messageList.uistate.MessageDateUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
-import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENT
+import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED
+import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENDING
+import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENT_FAILED
+import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENT_REFRESHED
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.NOT_FOUND_OTHER_MEMBER
 import com.emmsale.presentation.ui.messageList.uistate.MessageUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
@@ -45,22 +48,23 @@ class MessageListViewModel(
     val otherMember: LiveData<Member> = _otherMember
 
     init {
-        refresh()
+        viewModelScope.launch {
+            fetchMessages()
+            _uiEvent.value = Event(MESSAGE_LIST_FIRST_LOADED)
+        }
     }
 
     override fun refresh() {
-        fetchMessages()
+        viewModelScope.launch { fetchMessages() }
     }
 
-    private fun fetchMessages() {
-        viewModelScope.launch {
-            loading()
-            fetchOtherMember()
+    private suspend fun fetchMessages() {
+        loading()
+        fetchOtherMember()
 
-            when (val messagesResult = messageRoomRepository.getMessagesByRoomId(roomId, myUid)) {
-                is Success -> updateMessages(messagesResult.data)
-                else -> _messages.value = messages.value.toError()
-            }
+        when (val messagesResult = messageRoomRepository.getMessagesByRoomId(roomId, myUid)) {
+            is Success -> updateMessages(messagesResult.data)
+            else -> _messages.value = messages.value.toError()
         }
     }
 
@@ -122,13 +126,17 @@ class MessageListViewModel(
     fun sendMessage(message: String) {
         if (message.isBlank()) return
 
-        _uiEvent.value = Event(MESSAGE_SENT)
+        _uiEvent.value = Event(MESSAGE_SENDING)
         loading()
 
         viewModelScope.launch {
             when (messageRoomRepository.sendMessage(myUid, otherUid, message)) {
-                is Success -> fetchMessages()
-                else -> _messages.value = messages.value.toError()
+                is Success -> {
+                    fetchMessages()
+                    _uiEvent.value = Event(MESSAGE_SENT_REFRESHED)
+                }
+
+                else -> _uiEvent.value = Event(MESSAGE_SENT_FAILED)
             }
         }
     }

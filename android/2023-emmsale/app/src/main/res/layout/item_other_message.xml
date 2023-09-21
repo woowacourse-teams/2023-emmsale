@@ -7,9 +7,17 @@
 
         <import type="android.view.View" />
 
+        <import type="kotlin.Unit" />
+
+        <import type="kotlin.jvm.functions.Function1" />
+
         <variable
             name="message"
             type="com.emmsale.presentation.ui.messageList.uistate.OtherMessageUiState" />
+
+        <variable
+            name="onProfileClick"
+            type="Function1&lt;Long, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,6 +32,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:importantForAccessibility="no"
+            android:onClick="@{() -> onProfileClick.invoke(message.senderId)}"
             android:visibility="@{message.shownProfile ? View.VISIBLE : View.INVISIBLE}"
             app:defaultImage="@{@drawable/ic_message_default_profile}"
             app:imageUrl="@{message.profileImageUrl}"

@@ -8,6 +8,8 @@ data class MessagesUiState(
     val messages: List<MessageUiState> = emptyList(),
 ) : FetchResultUiState() {
 
+    val messageSize: Int = messages.size
+
     fun toSuccess(
         messages: List<MessageUiState>,
     ): MessagesUiState = MessagesUiState(

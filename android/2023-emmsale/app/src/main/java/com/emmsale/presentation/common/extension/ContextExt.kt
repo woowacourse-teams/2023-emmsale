@@ -1,6 +1,7 @@
 package com.emmsale.presentation.common.extension
 
 import android.Manifest
+import android.app.ActivityManager
 import android.app.DatePickerDialog
 import android.app.PendingIntent
 import android.content.Context
@@ -18,6 +19,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.emmsale.R
 import com.emmsale.presentation.common.views.ConfirmDialog
+import com.google.firebase.messaging.FirebaseMessagingService
 import java.time.LocalDate
 
 fun Context.showToast(text: String) {
@@ -117,3 +119,9 @@ private fun Context.createNotification(
     )
     .setAutoCancel(true)
     .build()
+
+val Context.topActivityName: String?
+    get() {
+        val manager = getSystemService(FirebaseMessagingService.ACTIVITY_SERVICE) as ActivityManager
+        return manager.appTasks[0].taskInfo.topActivity?.className
+    }

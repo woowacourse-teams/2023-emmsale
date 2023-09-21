@@ -7,13 +7,16 @@ import com.emmsale.presentation.ui.messageList.recyclerview.viewholder.MessageVi
 import com.emmsale.presentation.ui.messageList.recyclerview.viewholder.MyMessageViewHolder
 import com.emmsale.presentation.ui.messageList.recyclerview.viewholder.OtherMessageViewHolder
 import com.emmsale.presentation.ui.messageList.uistate.MessageUiState
+import com.emmsale.presentation.ui.messageList.uistate.MessageUiState.MessageType
 
-class MessageListAdapter : ListAdapter<MessageUiState, MessageViewHolder>(MessageDiffUtil) {
+class MessageListAdapter(
+    private val onProfileClick: (uid: Long) -> Unit,
+) : ListAdapter<MessageUiState, MessageViewHolder>(MessageDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return when (viewType) {
-            MessageUiState.MessageType.MY.ordinal -> MyMessageViewHolder(parent)
-            MessageUiState.MessageType.OTHER.ordinal -> OtherMessageViewHolder(parent)
-            MessageUiState.MessageType.DATE.ordinal -> MessageDateViewHolder(parent)
+            MessageType.MY.ordinal -> MyMessageViewHolder(parent)
+            MessageType.OTHER.ordinal -> OtherMessageViewHolder(parent, onProfileClick)
+            MessageType.DATE.ordinal -> MessageDateViewHolder(parent)
             else -> throw IllegalArgumentException(INVALID_VIEW_TYPE_ERROR)
         }
     }
