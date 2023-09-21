@@ -129,8 +129,19 @@ class FeedDetailActivity : AppCompatActivity() {
 
     private fun BottomMenuDialog.addFeedDeleteButton() {
         addMenuItemBelow(context.getString(R.string.all_delete_button_label)) {
-            viewModel.deleteFeed()
+            onFeedDeleteButtonClick()
         }
+    }
+
+    private fun onFeedDeleteButtonClick() {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.feeddetaildeletedialog_title),
+            message = getString(R.string.feeddetaildeletedialog_message),
+            positiveButtonLabel = getString(R.string.all_delete_button_label),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { viewModel.deleteFeed() },
+        ).show()
     }
 
     private fun BottomMenuDialog.addFeedReportButton() {
@@ -188,13 +199,12 @@ class FeedDetailActivity : AppCompatActivity() {
     }
 
     private fun onCommentDeleteButtonClick(commentId: Long) {
-        val context = binding.root.context
         WarningDialog(
-            context = context,
-            title = context.getString(R.string.commentdeletedialog_title),
-            message = context.getString(R.string.commentdeletedialog_message),
-            positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
-            negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
+            context = this,
+            title = getString(R.string.commentdeletedialog_title),
+            message = getString(R.string.commentdeletedialog_message),
+            positiveButtonLabel = getString(R.string.commentdeletedialog_positive_button_label),
+            negativeButtonLabel = getString(R.string.commentdeletedialog_negative_button_label),
             onPositiveButtonClick = { deleteComment(commentId) },
         ).show()
     }
