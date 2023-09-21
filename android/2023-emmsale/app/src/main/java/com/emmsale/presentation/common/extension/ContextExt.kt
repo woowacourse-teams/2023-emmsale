@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.emmsale.R
 import com.emmsale.presentation.common.views.ConfirmDialog
 import java.time.LocalDate
@@ -102,6 +103,7 @@ private fun Context.createNotification(
     largeIconUrl: String? = null,
 ) = NotificationCompat.Builder(this, channelId.toString())
     .setSmallIcon(R.drawable.ic_all_notification)
+    .setColor(ContextCompat.getColor(this, R.color.primary_color))
     .setLargeIcon(largeIconUrl?.toBitmap(this))
     .setContentTitle(title)
     .setContentText(message)
