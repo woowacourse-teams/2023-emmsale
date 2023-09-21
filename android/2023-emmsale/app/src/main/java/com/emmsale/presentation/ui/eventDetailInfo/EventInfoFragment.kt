@@ -9,7 +9,7 @@ import com.emmsale.databinding.FragmentEventInformationBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
-import com.emmsale.presentation.ui.eventdetail.EventDetailViewModel
+import com.emmsale.presentation.ui.eventDetail.EventDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

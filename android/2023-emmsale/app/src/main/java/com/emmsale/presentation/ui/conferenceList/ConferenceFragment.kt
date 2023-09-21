@@ -16,7 +16,7 @@ import com.emmsale.presentation.ui.conferenceList.recyclerView.ConferenceRecycle
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceUiState
-import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 

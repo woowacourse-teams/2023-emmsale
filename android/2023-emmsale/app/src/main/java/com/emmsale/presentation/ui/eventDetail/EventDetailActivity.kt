@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.eventdetail
+package com.emmsale.presentation.ui.eventDetail
 
 import android.content.Context
 import android.content.Intent
@@ -13,9 +13,9 @@ import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
+import com.emmsale.presentation.ui.eventDetail.EventDetailViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
-import com.emmsale.presentation.ui.eventdetail.EventDetailViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.postWriting.PostWritingActivity
 import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity
