@@ -75,6 +75,7 @@
                 android:hint="@string/messagelist_message_send_hint"
                 android:importantForAutofill="no"
                 android:maxHeight="30dp"
+                android:maxLength="255"
                 android:maxLines="2"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
