@@ -1,5 +1,6 @@
 package com.emmsale.presentation.service
 
+import android.content.Intent
 import com.emmsale.R
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
@@ -7,6 +8,7 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.extension.showNotification
+import com.emmsale.presentation.common.extension.topActivityName
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
 import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
@@ -113,6 +115,14 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val senderProfileUrl = message.data["senderImageUrl"]
         val senderName = message.data["senderName"] ?: return
         val content = message.data["content"] ?: return
+
+        if (topActivityName == MessageListActivity::class.java.name) {
+            val messageIntent = MessageListActivity
+                .getIntent(applicationContext, roomId, senderId)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(messageIntent)
+            return
+        }
 
         baseContext.showNotification(
             title = senderName,
