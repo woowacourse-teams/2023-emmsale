@@ -36,7 +36,8 @@ class EventDetailResponseTest {
         구름톤.getImageUrl(),
         2, 2,
         구름톤.getType().toString(),
-        imageUrls
+        imageUrls,
+        구름톤.getOrganization()
     );
 
     //when
