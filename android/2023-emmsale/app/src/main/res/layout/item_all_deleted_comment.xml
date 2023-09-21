@@ -18,8 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> onClick.invoke(uiState.comment.id)}"
-        android:foreground="?attr/selectableItemBackground">
+        android:onClick="@{() -> onClick.invoke(uiState.comment.id)}">
 
         <TextView
             android:text="@string/comment_deleted_comment_author_name"

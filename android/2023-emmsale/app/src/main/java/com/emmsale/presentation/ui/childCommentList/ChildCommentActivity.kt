@@ -9,15 +9,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
-import com.emmsale.presentation.ui.childCommentList.recyclerView.ChildCommentAdapter
+import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
+import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.recyclerView.ChildCommentRecyclerViewDivider
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
-import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
-import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.childCommentList.uiState.CommentsUiState
+import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
+import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.profile.ProfileActivity
 
 class ChildCommentActivity : AppCompatActivity() {
@@ -38,7 +41,13 @@ class ChildCommentActivity : AppCompatActivity() {
         getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
-    private var saveButtonCLick: Boolean = false
+    private val commentsAdapter: CommentsAdapter = CommentsAdapter(
+        onParentCommentClick = {},
+        onProfileImageClick = ::showProfile,
+        onCommentMenuClick = ::showCommentMenuDialog,
+    )
+
+    private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +56,80 @@ class ChildCommentActivity : AppCompatActivity() {
         initBackPressedDispatcher()
         initToolbar()
         initChildCommentsRecyclerView()
+        initEditComment()
         setupUiLogic()
     }
 
     override fun onStart() {
         super.onStart()
         viewModel.refresh()
+    }
+
+    private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, commentId: Long) {
+        bottomMenuDialog.resetMenu()
+        if (isWrittenByLoginUser) {
+            bottomMenuDialog.addCommentUpdateButton(commentId)
+            bottomMenuDialog.addCommentDeleteButton(commentId)
+        } else {
+            bottomMenuDialog.addCommentReportButton(commentId)
+        }
+        bottomMenuDialog.show()
+    }
+
+    private fun BottomMenuDialog.addCommentUpdateButton(commentId: Long) {
+        addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
+            editComment(commentId)
+        }
+    }
+
+    private fun BottomMenuDialog.addCommentDeleteButton(commentId: Long) {
+        addMenuItemBelow(context.getString(R.string.all_delete_button_label)) {
+            onCommentDeleteButtonClick(commentId)
+        }
+    }
+
+    private fun onCommentDeleteButtonClick(commentId: Long) {
+        val context = binding.root.context
+        WarningDialog(
+            context = context,
+            title = context.getString(R.string.commentdeletedialog_title),
+            message = context.getString(R.string.commentdeletedialog_message),
+            positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
+            negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
+            onPositiveButtonClick = { deleteComment(commentId) },
+        ).show()
+    }
+
+    private fun BottomMenuDialog.addCommentReportButton(commentId: Long) {
+        addMenuItemBelow(
+            context.getString(R.string.all_report_button_label),
+            MenuItemType.IMPORTANT,
+        ) { reportComment(commentId) }
+    }
+
+    private fun showProfile(authorId: Long) {
+        ProfileActivity.startActivity(this, authorId)
+    }
+
+    private fun editComment(commentId: Long) {
+        viewModel.setEditMode(true, commentId)
+        binding.etChildcommentsCommentUpdate.requestFocus()
+        showKeyboard()
+    }
+
+    private fun deleteComment(commentId: Long) {
+        viewModel.deleteComment(commentId)
+    }
+
+    private fun reportComment(commentId: Long) {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.all_report_dialog_title),
+            message = getString(R.string.comments_comment_report_dialog_message),
+            positiveButtonLabel = getString(R.string.all_report_dialog_positive_button_label),
+            negativeButtonLabel = getString(R.string.commentdeletedialog_negative_button_label),
+            onPositiveButtonClick = { viewModel.reportComment(commentId) },
+        ).show()
     }
 
     private fun initDataBinding() {
@@ -84,55 +161,21 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun initChildCommentsRecyclerView() {
         binding.rvChildcommentsChildcomments.apply {
-            adapter =
-                ChildCommentAdapter(::showProfile, ::editComment, ::deleteComment, ::reportComment)
+            adapter = commentsAdapter
             itemAnimator = null
             addItemDecoration(ChildCommentRecyclerViewDivider(this@ChildCommentActivity))
         }
     }
 
-    private fun showProfile(authorId: Long) {
-        ProfileActivity.startActivity(this, authorId)
-    }
-
-    private fun editComment(commentId: Long) {
-        viewModel.setEditMode(true, commentId)
-        binding.etChildcommentsCommentUpdate.requestFocus()
-        showKeyboard()
-    }
-
-    private fun deleteComment(commentId: Long) {
-        viewModel.deleteComment(commentId)
-    }
-
-    private fun reportComment(commentId: Long) {
-        WarningDialog(
-            context = this,
-            title = getString(R.string.all_report_dialog_title),
-            message = getString(R.string.comments_comment_report_dialog_message),
-            positiveButtonLabel = getString(R.string.all_report_dialog_positive_button_label),
-            negativeButtonLabel = getString(R.string.commentdeletedialog_negative_button_label),
-            onPositiveButtonClick = { viewModel.reportComment(commentId) },
-        ).show()
-    }
-
     private fun setupUiLogic() {
-        setupLoginUiLogic()
         setupCommentsUiLogic()
         setupEditingCommentUiLogic()
-        setupEventUiLogic()
-    }
-
-    private fun setupLoginUiLogic() {
-        viewModel.isLogin.observe(this) {
-            handleNotLogin(it)
-        }
+        setUpUiEvent()
     }
 
     private fun setupCommentsUiLogic() {
         viewModel.comments.observe(this) {
             handleChildComments(it)
-            handleEditComment()
         }
     }
 
@@ -143,59 +186,50 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleNotLogin(isLogin: Boolean) {
-        if (!isLogin) {
-            LoginActivity.startActivity(this)
-            finish()
-        }
+    private fun handleChildComments(comments: CommentsUiState) {
+        commentsAdapter.submitList(comments.comments)
     }
 
-    private fun handleChildComments(childComments: ChildCommentsUiState) {
-        (binding.rvChildcommentsChildcomments.adapter as ChildCommentAdapter).submitList(
-            listOf(childComments.parentComment) + childComments.childComments,
-        )
-        if (saveButtonCLick) scrollToLastPosition(childComments)
-    }
-
-    private fun handleEditComment() {
+    private fun initEditComment() {
         binding.tvChildcommentsPostchildcommentbutton.setOnClickListener {
             onChildCommentSave()
         }
     }
 
-    private fun setupEventUiLogic() {
-        viewModel.event.observe(this) {
-            handleEvent(it)
+    private fun setUpUiEvent() {
+        viewModel.uiEvent.observe(this) {
+            handleUiEvent(it)
         }
     }
 
-    private fun handleEvent(event: ChildCommentsUiEvent?) {
-        if (event == null) return
-        when (event) {
-            ChildCommentsUiEvent.REPORT_ERROR -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
-            ChildCommentsUiEvent.REPORT_COMPLETE -> InfoDialog(
+    private fun handleUiEvent(event: Event<ChildCommentsUiEvent>) {
+        val content = event.getContentIfNotHandled() ?: return
+        when (content) {
+            ChildCommentsUiEvent.CommentReportFail -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
+            ChildCommentsUiEvent.CommentReportComplete -> InfoDialog(
                 context = this,
                 title = getString(R.string.all_report_complete_dialog_title),
                 message = getString(R.string.all_report_complete_dialog_message),
                 buttonLabel = getString(R.string.all_okay),
             ).show()
 
-            ChildCommentsUiEvent.REPORT_DUPLICATE -> InfoDialog(
+            ChildCommentsUiEvent.CommentReportDuplicate -> InfoDialog(
                 context = this,
                 title = getString(R.string.all_report_duplicate_dialog_title),
                 message = getString(R.string.all_report_duplicate_message),
                 buttonLabel = getString(R.string.all_okay),
             ).show()
 
-            ChildCommentsUiEvent.POST_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_posting_error_message))
-            ChildCommentsUiEvent.UPDATE_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_update_error_message))
-            ChildCommentsUiEvent.DELETE_ERROR -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))
+            ChildCommentsUiEvent.CommentPostFail -> binding.root.showSnackBar(getString(R.string.comments_comments_posting_error_message))
+            ChildCommentsUiEvent.CommentUpdateFail -> binding.root.showSnackBar(getString(R.string.comments_comments_update_error_message))
+            ChildCommentsUiEvent.CommentDeleteFail -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))
+            ChildCommentsUiEvent.None -> {}
+            is ChildCommentsUiEvent.UnexpectedError -> showToast(content.errorMessage)
+            ChildCommentsUiEvent.CommentPostComplete -> scrollToLastPosition()
         }
-        viewModel.removeEvent()
     }
 
     private fun onChildCommentSave() {
-        saveButtonCLick = true
         viewModel.saveChildComment(
             content = binding.etChildcommentsEditchildcommentcontent.text.toString(),
             parentCommentId = parentCommentId,
@@ -207,8 +241,8 @@ class ChildCommentActivity : AppCompatActivity() {
         hideKeyboard()
     }
 
-    private fun scrollToLastPosition(childComments: ChildCommentsUiState) {
-        binding.rvChildcommentsChildcomments.smoothScrollToPosition(childComments.childComments.size + 1)
+    private fun scrollToLastPosition() {
+        binding.rvChildcommentsChildcomments.smoothScrollToPosition(viewModel.comments.value.comments.size)
     }
 
     private fun hideKeyboard() {
@@ -252,7 +286,7 @@ class ChildCommentActivity : AppCompatActivity() {
     inner class ChildCommentOnBackPressedCallback : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (intent.getBooleanExtra(KEY_FROM_NOTIFICATION, false)) {
-                EventDetailActivity.startActivity(this@ChildCommentActivity, feedId)
+                FeedDetailActivity.startActivity(this@ChildCommentActivity, feedId)
             }
             finish()
         }

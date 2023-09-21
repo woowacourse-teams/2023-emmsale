@@ -3,11 +3,11 @@ package com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.databinding.ItemFeeddetailCommentBinding
+import com.emmsale.databinding.ItemAllCommentBinding
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
 class CommentViewHolder(
-    private val binding: ItemFeeddetailCommentBinding,
+    private val binding: ItemAllCommentBinding,
     onClick: (commentId: Long) -> Unit,
     onProfileImageClick: (authorId: Long) -> Unit,
     onCommentMenuClick: (isWrittenByLoginUser: Boolean, commentId: Long) -> Unit,
@@ -30,7 +30,7 @@ class CommentViewHolder(
             onProfileImageClick: (authorId: Long) -> Unit,
             onCommentMenuClick: (isWrittenByLoginUser: Boolean, commentId: Long) -> Unit,
         ): CommentViewHolder {
-            val binding = ItemFeeddetailCommentBinding
+            val binding = ItemAllCommentBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
             return CommentViewHolder(binding, onClick, onProfileImageClick, onCommentMenuClick)
         }

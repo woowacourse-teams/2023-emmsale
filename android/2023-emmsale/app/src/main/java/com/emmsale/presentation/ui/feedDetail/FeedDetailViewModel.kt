@@ -32,7 +32,7 @@ class FeedDetailViewModel(
     private val tokenRepository: TokenRepository,
 ) : ViewModel(), Refreshable {
 
-    private val uid: Long by lazy { tokenRepository.getMyUid() ?: -1 }
+    private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
     private val _feedDetail: NotNullMutableLiveData<FeedDetailUiState> =
         NotNullMutableLiveData(FeedDetailUiState.Loading)
@@ -43,8 +43,9 @@ class FeedDetailViewModel(
 
     private val _editingCommentId = MutableLiveData<Long?>()
     val editingCommentId: LiveData<Long?> = _editingCommentId
-    val editingCommentContent =
-        _editingCommentId.map { _feedDetail.value.comments.find { commentUiState -> commentUiState.comment.id == it }?.comment?.content }
+    val editingCommentContent = _editingCommentId.map {
+        _feedDetail.value.comments.find { commentUiState -> commentUiState.comment.id == it }?.comment?.content
+    }
 
     private val _uiEvent: NotNullMutableLiveData<Event<FeedDetailUiEvent>> =
         NotNullMutableLiveData(Event(FeedDetailUiEvent.None))
@@ -141,7 +142,11 @@ class FeedDetailViewModel(
                 NetworkError ->
                     _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
 
-                is Success -> refresh()
+                is Success -> {
+                    refresh()
+                    _uiEvent.value = Event(FeedDetailUiEvent.CommentPostComplete)
+                }
+
                 is Unexpected ->
                     _uiEvent.value =
                         Event(FeedDetailUiEvent.UnexpectedError(result.error.toString()))

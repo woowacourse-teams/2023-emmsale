@@ -12,4 +12,5 @@ sealed interface FeedDetailUiEvent {
     object CommentReportDuplicate : FeedDetailUiEvent
     object CommentReportFail : FeedDetailUiEvent
     object CommentReportComplete : FeedDetailUiEvent
+    object CommentPostComplete : FeedDetailUiEvent
 }

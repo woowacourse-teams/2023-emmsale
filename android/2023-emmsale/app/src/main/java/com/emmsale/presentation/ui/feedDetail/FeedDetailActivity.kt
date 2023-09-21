@@ -283,7 +283,13 @@ class FeedDetailActivity : AppCompatActivity() {
                 ).show()
                 finish()
             }
+
+            FeedDetailUiEvent.CommentPostComplete -> scrollToLastPosition()
         }
+    }
+
+    private fun scrollToLastPosition() {
+        binding.rvFeeddetailFeedAndComments.smoothScrollToPosition(viewModel.feedDetail.value.comments.size + 1)
     }
 
     private fun setUpFeedDetail() {
