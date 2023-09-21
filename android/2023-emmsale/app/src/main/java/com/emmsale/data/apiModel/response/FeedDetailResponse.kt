@@ -15,7 +15,7 @@ data class FeedDetailResponse(
     val title: String,
     @SerialName("content")
     val content: String,
-    @SerialName("imageUrls")
+    @SerialName("images")
     val imageUrls: List<String>,
     @SerialName("createdAt")
     val createdAt: String,

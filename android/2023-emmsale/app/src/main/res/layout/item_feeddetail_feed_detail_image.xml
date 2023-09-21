@@ -19,6 +19,7 @@
             android:layout_height="140dp"
             app:imageUrl="@{imageUrl}"
             app:roundedImageRadius="@{10}"
+            app:canZoomIn="@{true}"
             tools:srcCompat="@tools:sample/avatars"
             android:id="@+id/iv_feeddetailfeeddetailimage_image"
             android:contentDescription="@string/feeddetail_image_description" />
