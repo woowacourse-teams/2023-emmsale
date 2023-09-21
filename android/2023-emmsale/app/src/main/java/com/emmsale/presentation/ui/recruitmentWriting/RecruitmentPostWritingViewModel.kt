@@ -57,7 +57,7 @@ class RecruitmentPostWritingViewModel(
             when (val result = recruitmentRepository.postRecruitment(eventId, content)) {
                 is Failure, NetworkError -> changeToErrorState()
                 is Success -> {
-                    _postedRecruitmentId.postValue(result.data)
+                    _postedRecruitmentId.value = result.data
                     changeToPostSuccessState()
                     logWriting("recruitment", content, eventId)
                 }
@@ -94,7 +94,7 @@ class RecruitmentPostWritingViewModel(
     }
 
     private fun changeToPostSuccessState() {
-        _recruitmentWriting.postValue(_recruitmentWriting.value.changeToPostSuccessState())
+        _recruitmentWriting.value = _recruitmentWriting.value.changeToPostSuccessState()
     }
 
     private fun changeToEditSuccessState() {

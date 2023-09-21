@@ -25,15 +25,14 @@ class CompetitionViewHolder(
     fun bind(event: CompetitionUiState) {
         binding.event = event
         binding.cgEventTags.removeAllViews()
-        event.tags.forEach(::addEventChip)
+        event.competition.tags.forEach(::addEventChip)
     }
 
     private fun addEventChip(tagName: String) {
         binding.cgEventTags.addView(createEventChip(itemView.context, tagName))
     }
 
-    private fun createEventChip(context: Context, tagName: String): EventTagChip =
-        context.eventChipOf {
-            text = tagName
-        }
+    private fun createEventChip(context: Context, tagName: String): EventTagChip = context.eventChipOf {
+        text = tagName
+    }
 }

@@ -117,7 +117,6 @@
                         android:text="@string/sendmessagedialog_send_button_label"
                         android:textColor="@color/primary_color"
                         android:textSize="14sp"
-                        android:onClick="@{() -> onSendButtonClick.invoke(etSendmessagedialogMessage.text)}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/materialDivider_sendmessagedialog_vertical"

@@ -10,6 +10,7 @@ import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.model.EventDetail
 import com.emmsale.data.repository.interfaces.EventRepository
+import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.presentation.KerdyApplication
 import com.emmsale.presentation.common.Event
@@ -21,6 +22,7 @@ import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
+import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailUiState
 import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
 import kotlinx.coroutines.launch
@@ -29,6 +31,7 @@ class EventDetailViewModel(
     private val eventId: Long,
     private val eventRepository: EventRepository,
     private val scrappedEventRepository: ScrappedEventRepository,
+    private val recruitmentRepository: RecruitmentRepository,
 ) : ViewModel(), Refreshable {
 
     private val _eventDetail: NotNullMutableLiveData<EventDetailUiState> =
@@ -40,6 +43,12 @@ class EventDetailViewModel(
 
     private val _isScraped: MutableLiveData<Boolean> = MutableLiveData(false)
     val isScraped: LiveData<Boolean> = _isScraped
+
+    private val _currentScreen = NotNullMutableLiveData(EventDetailScreenUiState.INFORMATION)
+    val currentScreen: NotNullLiveData<EventDetailScreenUiState> = _currentScreen
+
+    private val _hasWritingPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val hasWritingPermission: LiveData<Event<Boolean>> = _hasWritingPermission
 
     init {
         refresh()
@@ -60,11 +69,15 @@ class EventDetailViewModel(
         }
     }
 
+    fun fetchCurrentScreen(position: Int) {
+        _currentScreen.value = EventDetailScreenUiState.from(position)
+    }
+
     private fun fetchIsScrapped() {
         viewModelScope.launch {
             when (val isScrappedFetchResult = scrappedEventRepository.isScraped(eventId)) {
                 is Success -> _isScraped.value = isScrappedFetchResult.data
-                is Failure, NetworkError, is Unexpected -> changeToErrorState()
+                is Failure, NetworkError, is Unexpected -> {}
             }
         }
     }
@@ -95,16 +108,30 @@ class EventDetailViewModel(
     }
 
     private fun changeToSuccessState(eventDetail: EventDetail) {
-        _eventDetail.value = EventDetailUiState(SUCCESS, eventDetail)
+        _eventDetail.value =
+            _eventDetail.value.copy(fetchResult = SUCCESS, eventDetail = eventDetail)
         logEventClick(eventDetail.name, eventDetail.id)
     }
 
     private fun changeToLoadingState() {
-        _eventDetail.value = eventDetail.value.copy(fetchResult = LOADING)
+        _eventDetail.value = _eventDetail.value.copy(fetchResult = LOADING)
     }
 
     private fun changeToErrorState() {
-        _eventDetail.value = eventDetail.value.copy(fetchResult = ERROR)
+        _eventDetail.value = _eventDetail.value.copy(fetchResult = ERROR)
+    }
+
+    fun fetchHasWritingPermission() {
+        viewModelScope.launch {
+            when (val response = recruitmentRepository.checkIsAlreadyPostRecruitment(eventId)) {
+                is Success -> setHasPermissionWritingState(!response.data)
+                else -> setHasPermissionWritingState(false)
+            }
+        }
+    }
+
+    private fun setHasPermissionWritingState(state: Boolean) {
+        _hasWritingPermission.value = Event(state)
     }
 
     companion object {
@@ -113,6 +140,7 @@ class EventDetailViewModel(
                 eventId,
                 eventRepository = KerdyApplication.repositoryContainer.eventRepository,
                 scrappedEventRepository = KerdyApplication.repositoryContainer.scrappedEventRepository,
+                recruitmentRepository = KerdyApplication.repositoryContainer.recruitmentRepository,
             )
         }
     }

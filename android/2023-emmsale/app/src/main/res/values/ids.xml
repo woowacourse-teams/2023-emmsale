@@ -3,4 +3,5 @@
     <item name="id_all_follow_notification_channel" type="id" />
     <item name="id_all_child_comment_notification_channel" type="id" />
     <item name="id_all_interest_event_notification_channel" type="id" />
+    <item name="id_all_message_notification_channel" type="id" />
 </resources>

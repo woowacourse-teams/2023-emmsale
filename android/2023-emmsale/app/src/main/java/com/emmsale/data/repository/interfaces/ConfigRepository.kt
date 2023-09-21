@@ -15,4 +15,6 @@ interface ConfigRepository {
     fun saveCommentNotificationReceiveConfig(isReceive: Boolean)
 
     fun saveInterestEventNotificationReceiveConfig(isReceive: Boolean)
+
+    fun saveMessageNotificationReceiveConfig(isReceive: Boolean)
 }

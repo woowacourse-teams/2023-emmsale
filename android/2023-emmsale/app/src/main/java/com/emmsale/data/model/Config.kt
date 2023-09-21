@@ -5,5 +5,6 @@ data class Config(
     val isFollowNotificationReceive: Boolean,
     val isCommentNotificationReceive: Boolean,
     val isInterestEventNotificationReceive: Boolean,
+    val isMessageNotificationReceive: Boolean,
     val isAutoLogin: Boolean,
 )

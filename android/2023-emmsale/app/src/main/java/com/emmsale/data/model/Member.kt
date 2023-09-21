@@ -5,6 +5,6 @@ data class Member(
     val githubUrl: String,
     val name: String,
     val description: String,
-    val imageUrl: String,
+    val profileImageUrl: String,
     val openProfileUrl: String,
 )

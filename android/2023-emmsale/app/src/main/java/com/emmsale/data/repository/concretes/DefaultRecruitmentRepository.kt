@@ -1,5 +1,6 @@
 package com.emmsale.data.repository.concretes
 
+import android.util.Log
 import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
@@ -15,6 +16,9 @@ import com.emmsale.data.model.Recruitment
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.data.service.RecruitmentService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 
 class DefaultRecruitmentRepository(
     private val recruitmentService: RecruitmentService,
@@ -39,14 +43,20 @@ class DefaultRecruitmentRepository(
     override suspend fun postRecruitment(
         eventId: Long,
         content: String,
-    ): ApiResponse<Long> {
-        val response = recruitmentService.postRecruitment(
-            eventId,
-            RecruitmentCreateRequest(memberId = myUid, content = content),
-        )
+    ): ApiResponse<Long> = withContext(Dispatchers.IO) {
+        val deferredResponse = async {
+            recruitmentService.postRecruitment(
+                eventId,
+                RecruitmentCreateRequest(memberId = myUid, content = content),
+            )
+        }
 
-        return when (response) {
-            is Success -> Success(getRecruitmentIdFromResponse(response))
+        when (val response = deferredResponse.await()) {
+            is Success -> {
+                val recruitmentId = getRecruitmentIdFromResponse(response)
+                Success((recruitmentId))
+            }
+
             is Failure -> Failure(response.code, response.message)
             is NetworkError -> NetworkError
             is Unexpected -> Unexpected(response.error)
@@ -54,6 +64,7 @@ class DefaultRecruitmentRepository(
     }
 
     private fun getRecruitmentIdFromResponse(result: Success<Unit>): Long {
+        Log.d("wooseok", result.toString())
         val locationHeader = result.headers[HEADER_LOCATION] as CharSequence
         val regex = "/(\\d+)$".toRegex()
         val matchResult = regex.find(locationHeader)

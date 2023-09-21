@@ -1,5 +1,7 @@
 package com.emmsale.di
 
+import com.emmsale.data.messageRoom.MessageRoomRepository
+import com.emmsale.data.messageRoom.MessageRoomRepositoryImpl
 import com.emmsale.data.repository.concretes.DefaultActivityRepository
 import com.emmsale.data.repository.concretes.DefaultBlockedMemberRepository
 import com.emmsale.data.repository.concretes.DefaultCommentRepository
@@ -14,6 +16,7 @@ import com.emmsale.data.repository.concretes.DefaultLoginRepository
 import com.emmsale.data.repository.concretes.DefaultMemberRepository
 import com.emmsale.data.repository.concretes.DefaultMyPostRepository
 import com.emmsale.data.repository.concretes.DefaultNotificationRepository
+import com.emmsale.data.repository.concretes.DefaultPostRepository
 import com.emmsale.data.repository.concretes.DefaultRecruitmentRepository
 import com.emmsale.data.repository.concretes.DefaultScrappedEventRepository
 import com.emmsale.data.repository.concretes.DefaultTokenRepository
@@ -31,6 +34,7 @@ import com.emmsale.data.repository.interfaces.LoginRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MyPostRepository
 import com.emmsale.data.repository.interfaces.NotificationRepository
+import com.emmsale.data.repository.interfaces.PostRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
@@ -95,6 +99,14 @@ class RepositoryContainer(
         DefaultMyPostRepository(
             myPostService = serviceContainer.myPostService,
             tokenRepository = tokenRepository,
+        )
+    }
+    val postRepository: PostRepository by lazy {
+        DefaultPostRepository(serviceContainer.postService)
+    }
+    val messageRoomRepository: MessageRoomRepository by lazy {
+        MessageRoomRepositoryImpl(
+            messageRoomService = serviceContainer.messageRoomService,
         )
     }
 }

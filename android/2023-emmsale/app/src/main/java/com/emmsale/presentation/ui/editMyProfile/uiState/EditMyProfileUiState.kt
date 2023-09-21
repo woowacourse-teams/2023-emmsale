@@ -16,7 +16,7 @@ data class EditMyProfileUiState(
     fun changeMemberState(member: Member): EditMyProfileUiState = copy(
         id = member.id,
         name = member.name,
-        imageUrl = member.imageUrl,
+        imageUrl = member.profileImageUrl,
         description = member.description,
     )
 

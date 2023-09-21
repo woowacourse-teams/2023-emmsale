@@ -16,7 +16,7 @@ data class ConferenceSelectedFilteringOptionUiState(
 
         private fun ConferenceStatus.toText(): String = when (this) {
             ConferenceStatus.IN_PROGRESS -> "진행 중"
-            ConferenceStatus.SCHEDULED -> "진행 예정"
+            ConferenceStatus.UPCOMING -> "진행 예정"
             ConferenceStatus.ENDED -> "마감"
         }
 

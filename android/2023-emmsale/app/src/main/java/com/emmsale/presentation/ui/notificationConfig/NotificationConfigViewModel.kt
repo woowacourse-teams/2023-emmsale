@@ -1,6 +1,5 @@
 package com.emmsale.presentation.ui.notificationConfig
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Failure
@@ -34,6 +33,7 @@ class NotificationConfigViewModel(
             isCommentNotificationReceive = false,
             isInterestEventNotificationReceive = false,
             isAutoLogin = false,
+            isMessageNotificationReceive = false,
         ),
     )
     val notificationConfig: NotNullLiveData<Config> = _notificationConfig
@@ -71,7 +71,6 @@ class NotificationConfigViewModel(
     private fun fetchNotificationConfig() {
         viewModelScope.launch {
             _notificationConfig.value = configRepository.getConfig()
-            Log.d("buna", "${_notificationConfig.value.isAutoLogin}")
         }
     }
 
@@ -100,6 +99,13 @@ class NotificationConfigViewModel(
     fun setInterestEventNotificationReceiveConfig(isReceive: Boolean) {
         viewModelScope.launch {
             configRepository.saveInterestEventNotificationReceiveConfig(isReceive)
+            fetchNotificationConfig()
+        }
+    }
+
+    fun setMessageNotificationReceiveConfig(isReceive: Boolean) {
+        viewModelScope.launch {
+            configRepository.saveMessageNotificationReceiveConfig(isReceive)
             fetchNotificationConfig()
         }
     }

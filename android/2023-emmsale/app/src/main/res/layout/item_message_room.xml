@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
+
+        <import type="kotlin.jvm.functions.Function2" />
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="messageRoom"
+            type="com.emmsale.data.messageRoom.MessageRoom" />
+
+        <variable
+            name="onMessageRoomClick"
+            type="Function2&lt;String, Long, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:onClick="@{() -> onMessageRoomClick.invoke(messageRoom.roomId, messageRoom.recentMessage.senderId)}"
+        android:paddingHorizontal="17dp"
+        android:paddingVertical="11dp">
+
+        <ImageView
+            android:id="@+id/iv_message_room_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/messageroom_room_image_desc"
+            app:imageUrl="@{messageRoom.messageRoomImageUrl}"
+            app:isCircle="@{true}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_message_room_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{messageRoom.senderName}"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_recent_message"
+            app:layout_constraintEnd_toStartOf="@+id/tv_last_chat_time"
+            app:layout_constraintStart_toEndOf="@id/iv_message_room_image"
+            app:layout_constraintTop_toTopOf="@id/iv_message_room_image"
+            tools:text="김커디" />
+
+        <TextView
+            android:id="@+id/tv_recent_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{messageRoom.recentMessage.message}"
+            android:textColor="@color/dark_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_message_room_image"
+            app:layout_constraintEnd_toStartOf="@+id/tv_last_chat_time"
+            app:layout_constraintStart_toStartOf="@+id/tv_message_room_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_message_room_title"
+            tools:text="안녕하세요, 같이 가고싶습니다" />
+
+        <TextView
+            android:id="@+id/tv_last_chat_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            app:dateText="@{messageRoom.recentMessage.createdAt}"
+            app:dateTimeFormatter="@{DateTimePattern.AM_PM_HOUR_MINUTE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_message_room_title"
+            tools:text="오후 12:03" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

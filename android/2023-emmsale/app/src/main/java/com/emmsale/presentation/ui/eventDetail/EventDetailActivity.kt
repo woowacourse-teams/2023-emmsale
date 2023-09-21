@@ -13,8 +13,12 @@ import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
+import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
 import com.emmsale.presentation.ui.main.MainActivity
+import com.emmsale.presentation.ui.postWriting.PostWritingActivity
+import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class EventDetailActivity :
@@ -34,8 +38,10 @@ class EventDetailActivity :
         initFragmentStateAdapter()
         initBackPressedDispatcher()
         setUpBinding()
-        setUpEventUiEvent()
+        setUpScrapUiEvent()
+        setUpRecruitmentWritingPermission()
         initBackPressButtonClickListener()
+        onTabSelectedListener()
     }
 
     private fun initBackPressedDispatcher() {
@@ -47,17 +53,44 @@ class EventDetailActivity :
         binding.lifecycleOwner = this
         binding.vm = viewModel
         binding.navigateToUrl = ::navigateToUrl
+        binding.navigateToWritingPost = ::navigateToWriting
     }
 
-    private fun setUpEventUiEvent() {
-        viewModel.scrapUiEvent.observe(this, ::handleEvent)
+    private fun setUpScrapUiEvent() {
+        viewModel.scrapUiEvent.observe(this) { event ->
+            handleEvent(event)
+        }
     }
 
     private fun handleEvent(event: Event<EventInfoUiEvent>) {
         val content = event.getContentIfNotHandled() ?: return
         when (content) {
-            EventInfoUiEvent.SCRAP_ERROR -> binding.root.showSnackBar(getString(R.string.eventdetail_scrap_error))
-            EventInfoUiEvent.SCRAP_DELETE_ERROR -> binding.root.showSnackBar(getString(R.string.eventdetail_scrap_delete_error))
+            EventInfoUiEvent.SCRAP_ERROR -> binding.root.showSnackBar("스크랩 불가")
+            EventInfoUiEvent.SCRAP_DELETE_ERROR -> binding.root.showSnackBar("스크랩 삭제 불가")
+        }
+    }
+
+    private fun setUpRecruitmentWritingPermission() {
+        viewModel.hasWritingPermission.observe(this) {
+            val hasPermission = it.getContentIfNotHandled() ?: return@observe
+            if (hasPermission) {
+                navigateToRecruitmentWriting()
+            } else {
+                binding.root.showSnackBar(getString(R.string.eventrecruitment_has_not_permission_writing))
+            }
+        }
+    }
+
+    private fun navigateToRecruitmentWriting() {
+        val intent = RecruitmentPostWritingActivity.getPostModeIntent(this, eventId)
+        startActivity(intent)
+    }
+
+    private fun navigateToWriting() {
+        when (viewModel.currentScreen.value) {
+            EventDetailScreenUiState.INFORMATION -> {}
+            EventDetailScreenUiState.RECRUITMENT -> viewModel.fetchHasWritingPermission()
+            EventDetailScreenUiState.POST -> PostWritingActivity.startActivity(this, eventId)
         }
     }
 
@@ -74,13 +107,26 @@ class EventDetailActivity :
             EventDetailFragmentStateAdapter(this, eventId)
         val tabNames = listOf(
             getString(R.string.eventdetail_tab_infromation),
-            getString(R.string.eventdetail_tab_comment),
+            getString(R.string.eventdetail_tab_post),
             getString(R.string.eventdetail_tab_recruitment),
         )
         TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
             tab.text = tabNames[position]
         }.attach()
         binding.vpEventdetail.isUserInputEnabled = false
+    }
+
+    private fun onTabSelectedListener() {
+        binding.tablayoutEventdetail.addOnTabSelectedListener(
+            object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    viewModel.fetchCurrentScreen(tab?.position ?: 0)
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+                override fun onTabReselected(tab: TabLayout.Tab?) = Unit
+            },
+        )
     }
 
     private fun initBackPressButtonClickListener() {

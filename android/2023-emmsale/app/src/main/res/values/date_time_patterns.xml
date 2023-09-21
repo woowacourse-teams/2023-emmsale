@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="month_day_weekday">M월 d일(E)</string>
+    <string name="am_pm_hour_minute">a hh시 mm분</string>
+    <string name="year_month_day">yyyy.MM.dd</string>
+    <string name="month_day">MM.dd</string>
+    <string name="year_month_day_weekday">yyyy년 MM월 dd일 E요일</string>
+
     <string name="date_range" translatable="false">%s ~ %s</string>
     <string name="month_dot_day">MM.dd</string>
     <string name="year_dot_month_dot_day">yyyy.MM.dd</string>
+    <string name="before_minute_format">%d분 전</string>
+    <string name="before_hour_format">%d시간 전</string>
 </resources>
