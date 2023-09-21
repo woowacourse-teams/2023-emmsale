@@ -25,9 +25,11 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         val configRepository = KerdyApplication.repositoryContainer.configRepository
+        val tokenRepository = KerdyApplication.repositoryContainer.tokenRepository
+        val token = runBlocking { tokenRepository.getToken() }
         val config = configRepository.getConfig()
         val isNotificationReceive = config.isNotificationReceive
-        if (!isNotificationReceive) return
+        if (!isNotificationReceive || token == null) return
 
         when (message.data["notificationType"]) {
             FOLLOW_NOTIFICATION_TYPE -> {
