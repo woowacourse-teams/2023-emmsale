@@ -106,7 +106,7 @@ private fun Context.createNotification(
     groupKey: String? = null,
 ) = NotificationCompat.Builder(this, channelId.toString())
     .setSmallIcon(R.drawable.ic_all_notification)
-    .setColor(ContextCompat.getColor(this, R.color.primary_color))
+    .setColor(ContextCompat.getColor(this, R.color.notification_icon_background_color))
     .setLargeIcon(largeIconUrl?.toBitmap(this))
     .setContentTitle(title)
     .setGroupSummary(true)
@@ -115,6 +115,5 @@ private fun Context.createNotification(
     .setContentIntent(
         PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_MUTABLE),
     )
-    .setPriority(NotificationCompat.PRIORITY_HIGH)
     .setAutoCancel(true)
     .build()
