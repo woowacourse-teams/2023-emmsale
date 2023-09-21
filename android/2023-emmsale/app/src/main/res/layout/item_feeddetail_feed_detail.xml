@@ -140,6 +140,6 @@
             app:layout_constraintStart_toStartOf="@+id/tv_feeddetail_content"
             app:layout_constraintEnd_toEndOf="@id/tv_feeddetail_content"
             android:layout_marginTop="30dp"
-            tools:listitem="@layout/item_feeddetail_feed_detail_image"/>
+            tools:listitem="@layout/item_feeddetail_feed_detail_image" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

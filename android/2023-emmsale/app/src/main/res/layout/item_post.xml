@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern"/>
+
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
 
         <import type="android.view.View" />
+
         <variable
             name="post"
             type="com.emmsale.data.model.Post" />
