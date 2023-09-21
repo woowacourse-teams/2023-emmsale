@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.profile
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +24,7 @@ class SendMessageDialog : DialogFragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = DialogSendMessageBinding.inflate(inflater, container, false)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
@@ -35,10 +38,15 @@ class SendMessageDialog : DialogFragment() {
     private fun initDataBinding() {
         binding.vm = viewModel
         binding.onSendButtonClick = ::onSendButtonClick
+        binding.onCancelButtonClick = ::onCancelButtonClick
     }
 
     private fun onSendButtonClick(message: String) {
         viewModel.sendMessage(message)
+    }
+
+    private fun onCancelButtonClick() {
+        dismiss()
     }
 
     override fun onDestroyView() {

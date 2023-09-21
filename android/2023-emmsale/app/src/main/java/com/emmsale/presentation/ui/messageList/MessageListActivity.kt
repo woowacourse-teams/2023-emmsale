@@ -93,6 +93,10 @@ class MessageListActivity : AppCompatActivity() {
         private const val KEY_OTHER_UID = "KEY_OTHER_UID"
         private const val DEFAULT_OTHER_ID = -1L
 
+        fun startActivity(context: Context, roomId: String, otherUid: Long) {
+            context.startActivity(getIntent(context, roomId, otherUid))
+        }
+
         fun getIntent(
             context: Context,
             roomId: String,
