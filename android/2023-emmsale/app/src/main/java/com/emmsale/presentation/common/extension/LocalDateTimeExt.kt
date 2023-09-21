@@ -30,7 +30,7 @@ fun LocalDateTime.toRelativeTime(context: Context): String {
     ) {
         val dateFormatter = DateTimeFormatter.ofPattern(
             context.getString(
-                R.string.primarynotification_before_hour_format,
+                R.string.before_hour_format,
                 currentDateTime.hour.minus(hour),
             ),
         )
@@ -44,7 +44,7 @@ fun LocalDateTime.toRelativeTime(context: Context): String {
     ) {
         val dateFormatter = DateTimeFormatter.ofPattern(
             context.getString(
-                R.string.primarynotification_before_minute_format,
+                R.string.before_minute_format,
                 currentDateTime.minute.minus(minute),
             ),
         )

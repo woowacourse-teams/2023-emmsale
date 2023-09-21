@@ -2,8 +2,6 @@ package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.CompetitionResponse
 import com.emmsale.data.model.Competition
-import com.emmsale.data.model.CompetitionStatus
-import com.emmsale.data.model.EventApplyStatus
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -16,31 +14,33 @@ fun CompetitionResponse.toData(): Competition = Competition(
     name = name,
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
-    status = status.toData(),
+    status = when (status) {
+        CompetitionResponse.Status.ENDED -> Competition.Status.ENDED
+        CompetitionResponse.Status.UPCOMING -> Competition.Status.UPCOMING
+        CompetitionResponse.Status.IN_PROGRESS -> Competition.Status.IN_PROGRESS
+    },
     tags = tags,
     posterUrl = posterUrl,
     dDay = dDay,
-    eventApplyStatus = applyStatus.mapToApplyStatus(),
+    eventStatus = when (applyStatus) {
+        CompetitionResponse.Status.ENDED -> Competition.Status.ENDED
+        CompetitionResponse.Status.UPCOMING -> Competition.Status.UPCOMING
+        CompetitionResponse.Status.IN_PROGRESS -> Competition.Status.IN_PROGRESS
+    },
     applyRemainingDays = applyRemainingDays,
-    isOnline = isOnline,
-    isFree = isFree,
+    eventMode = when (eventMode) {
+        CompetitionResponse.EventMode.ONLINE -> Competition.EventMode.ONLINE
+        CompetitionResponse.EventMode.OFFLINE -> Competition.EventMode.OFFLINE
+        CompetitionResponse.EventMode.ON_OFFLINE -> Competition.EventMode.ON_OFFLINE
+    },
+    paymentType = when (paymentType) {
+        CompetitionResponse.PaymentType.FREE -> Competition.PaymentType.FREE
+        CompetitionResponse.PaymentType.PAID -> Competition.PaymentType.PAID
+        CompetitionResponse.PaymentType.PAID_OR_FREE -> Competition.PaymentType.PAID_OR_FREE
+    },
 )
 
 private fun parseDate(date: String): LocalDateTime {
     val dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)
     return LocalDateTime.parse(date, dateTimeFormatter)
-}
-
-private fun String.toData(): CompetitionStatus = when (this) {
-    "IN_PROGRESS" -> CompetitionStatus.IN_PROGRESS
-    "UPCOMING" -> CompetitionStatus.SCHEDULED
-    "ENDED" -> CompetitionStatus.ENDED
-    else -> throw IllegalArgumentException("Unknown conference status: $this")
-}
-
-private fun String.mapToApplyStatus(): EventApplyStatus = when (this) {
-    "IN_PROGRESS" -> EventApplyStatus.IN_PROGRESS
-    "UPCOMING" -> EventApplyStatus.UPCOMING
-    "ENDED" -> EventApplyStatus.ENDED
-    else -> throw IllegalArgumentException("알 수 없는 신청 상태입니다. api 스펙을 다시 확인해주세요.")
 }

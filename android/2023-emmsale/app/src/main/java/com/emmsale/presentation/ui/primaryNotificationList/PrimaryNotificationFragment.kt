@@ -11,7 +11,7 @@ import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
-import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.primaryNotificationList.recyclerView.adapter.PastNotificationHeaderAdapter
 import com.emmsale.presentation.ui.primaryNotificationList.recyclerView.adapter.PrimaryNotificationAdapter
 import com.emmsale.presentation.ui.primaryNotificationList.recyclerView.adapter.RecentNotificationHeaderAdapter

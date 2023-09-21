@@ -19,9 +19,9 @@ class KerdyCall<T : Any>(
             override fun onResponse(call: Call<T>, result: Response<T>) {
                 val apiResult = when {
                     !result.isSuccessful -> Failure(result.code(), result.errorBody()?.string())
-                    responseType == Unit::class.java -> Success(Unit as T)
+                    responseType == Unit::class.java -> Success(Unit as T, result.headers())
                     result.body() == null -> Unexpected(IllegalStateException(NOT_EXIST_BODY))
-                    else -> Success(result.body()!!)
+                    else -> Success(result.body()!!, result.headers())
                 }
                 callback.onResponse(this@KerdyCall, Response.success(apiResult))
             }

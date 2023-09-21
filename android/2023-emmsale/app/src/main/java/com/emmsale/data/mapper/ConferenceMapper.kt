@@ -2,8 +2,6 @@ package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.ConferenceResponse
 import com.emmsale.data.model.Conference
-import com.emmsale.data.model.ConferenceStatus
-import com.emmsale.data.model.EventApplyStatus
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -16,31 +14,33 @@ fun ConferenceResponse.toData(): Conference = Conference(
     name = name,
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
-    status = status.toData(),
+    status = when (status) {
+        ConferenceResponse.Status.ENDED -> Conference.Status.ENDED
+        ConferenceResponse.Status.UPCOMING -> Conference.Status.UPCOMING
+        ConferenceResponse.Status.IN_PROGRESS -> Conference.Status.IN_PROGRESS
+    },
     tags = tags,
     posterUrl = posterUrl,
     dDay = dDay,
-    eventApplyStatus = applyStatus.mapToApplyStatus(),
+    eventStatus = when (applyStatus) {
+        ConferenceResponse.Status.ENDED -> Conference.Status.ENDED
+        ConferenceResponse.Status.UPCOMING -> Conference.Status.UPCOMING
+        ConferenceResponse.Status.IN_PROGRESS -> Conference.Status.IN_PROGRESS
+    },
     applyRemainingDays = applyRemainingDays,
-    isOnline = isOnline,
-    isFree = isFree,
+    eventMode = when (eventMode) {
+        ConferenceResponse.EventMode.ONLINE -> Conference.EventMode.ONLINE
+        ConferenceResponse.EventMode.OFFLINE -> Conference.EventMode.OFFLINE
+        ConferenceResponse.EventMode.ON_OFFLINE -> Conference.EventMode.ON_OFFLINE
+    },
+    paymentType = when (paymentType) {
+        ConferenceResponse.PaymentType.FREE -> Conference.PaymentType.FREE
+        ConferenceResponse.PaymentType.PAID -> Conference.PaymentType.PAID
+        ConferenceResponse.PaymentType.PAID_OR_FREE -> Conference.PaymentType.PAID_OR_FREE
+    },
 )
 
 private fun parseDate(date: String): LocalDateTime {
     val dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)
     return LocalDateTime.parse(date, dateTimeFormatter)
-}
-
-private fun String.mapToApplyStatus(): EventApplyStatus = when (this) {
-    "IN_PROGRESS" -> EventApplyStatus.IN_PROGRESS
-    "UPCOMING" -> EventApplyStatus.UPCOMING
-    "ENDED" -> EventApplyStatus.ENDED
-    else -> throw IllegalArgumentException("알 수 없는 신청 상태입니다. api 스펙을 다시 확인해주세요.")
-}
-
-private fun String.toData(): ConferenceStatus = when (this) {
-    "IN_PROGRESS" -> ConferenceStatus.IN_PROGRESS
-    "UPCOMING" -> ConferenceStatus.SCHEDULED
-    "ENDED" -> ConferenceStatus.ENDED
-    else -> throw IllegalArgumentException("Unknown conference status: $this")
 }

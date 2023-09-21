@@ -7,4 +7,6 @@
     <string name="year_month_day_weekday">yyyy년 MM월 dd일 E요일</string>
 
     <string name="date_range" translatable="false">%s ~ %s</string>
+    <string name="before_minute_format">%d분 전</string>
+    <string name="before_hour_format">%d시간 전</string>
 </resources>

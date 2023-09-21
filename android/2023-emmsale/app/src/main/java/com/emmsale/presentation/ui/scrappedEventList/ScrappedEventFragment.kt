@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentScrappedEventBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.ui.eventdetail.EventDetailActivity
+import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.scrappedEventList.recyclerView.ScrappedEventAdapter
 import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState
 
@@ -42,6 +42,6 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
     }
 
     private fun showEventDetail(scrappedEventUiState: ScrappedEventUiState) {
-        EventDetailActivity.startActivity(requireContext(), scrappedEventUiState.eventId)
+        EventDetailActivity.startActivity(requireContext(), scrappedEventUiState.data.id)
     }
 }

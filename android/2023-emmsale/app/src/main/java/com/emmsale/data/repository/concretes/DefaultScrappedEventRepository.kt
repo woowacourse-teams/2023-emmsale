@@ -38,7 +38,7 @@ class DefaultScrappedEventRepository(
             is NetworkError -> response
             is Unexpected -> response
             is Success -> Success(
-                response.data.any { it.eventId == eventId },
+                response.data.any { it.id == eventId },
             )
         }
     }
