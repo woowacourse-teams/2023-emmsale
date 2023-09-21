@@ -9,22 +9,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.views.ConfirmDialog
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
-import com.emmsale.presentation.ui.openProfileUrlConfig.OpenProfileUrlConfigActivity
+import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
-import com.emmsale.presentation.ui.recruitmentDetail.uiState.HasOpenUrlUiState
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.RecruitmentPostDetailUiEvent
 import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity
 
-class RecruitmentPostDetailActivity :
-    AppCompatActivity(),
-    RequestCompanionFragmentDialog.RequestCompanionDialogListener {
+class RecruitmentPostDetailActivity : AppCompatActivity() {
     private val binding: ActivityRecruitmentPostDetailBinding by lazy {
         ActivityRecruitmentPostDetailBinding.inflate(layoutInflater)
     }
@@ -58,6 +56,8 @@ class RecruitmentPostDetailActivity :
         }
     }
 
+    private val sendMessageDialog: SendMessageDialog by lazy { SendMessageDialog() }
+
     private val fetchByResultActivityLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
@@ -72,7 +72,7 @@ class RecruitmentPostDetailActivity :
             title = getString(R.string.recruitmentpostdetail_delete_dialog_title),
             message = getString(R.string.recruitmentpostdetail_delete_dialog_message),
             positiveButtonLabel = getString(R.string.all_delete_button_label),
-            negativeButtonLabel = getString(R.string.all_delete_button_label),
+            negativeButtonLabel = getString(R.string.all_cancel),
             onPositiveButtonClick = { viewModel.deleteRecruitmentPost() },
         ).show()
     }
@@ -87,18 +87,6 @@ class RecruitmentPostDetailActivity :
         }
     }
 
-    private fun showNavigateToUrlConfigConfirmDialog() {
-        ConfirmDialog(
-            context = this,
-            title = getString(R.string.recruitmentpostdetail_dialog_open_profile_title),
-            message = getString(R.string.recruitmentpostdetail_dialog_open_profile_message),
-            positiveButtonLabel = getString(R.string.recruitmentpostdetail_dialog_open_profile_positive_label),
-            negativeButtonLabel = getString(R.string.recruitmentpostdetail_dialog_open_profile_negative_label),
-            onPositiveButtonClick = { OpenProfileUrlConfigActivity.startActivity(this) },
-            onNegativeButtonClick = {},
-        ).show()
-    }
-
     private fun showReportDialog() {
         WarningDialog(
             context = this,
@@ -110,19 +98,11 @@ class RecruitmentPostDetailActivity :
         ).show()
     }
 
-    override fun getReceiverName(): String = viewModel.recruitmentPost.value.name
-
-    override fun onPositiveButtonClick(content: String): Unit =
-        viewModel.requestCompanion(message = content)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
         initClickListener()
-        setUpCompanionRequest()
-        setUpIsPostDeleteSuccess()
         setupEventUiLogic()
-        setUpHasOpenProfileUrl()
     }
 
     private fun initBinding() {
@@ -141,45 +121,15 @@ class RecruitmentPostDetailActivity :
         initNavigateToEventDetailButtonClick()
     }
 
-    private fun setUpCompanionRequest() {
-        viewModel.companionRequest.observe(this) { companionRequest ->
-            when {
-                companionRequest.isSuccess -> binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_success_request_message))
-                companionRequest.isError -> binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_fail_request_message))
-            }
-        }
-    }
-
-    private fun setUpIsPostDeleteSuccess() {
-        viewModel.isDeletePostSuccess.observe(this) { isPostDeleteSuccess ->
-            if (isPostDeleteSuccess) {
-                binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_deletion_success_message))
-                onBackPressedDispatcher.onBackPressed()
-            } else {
-                binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_deletion_fail_message))
-            }
-        }
-    }
-
-    private fun setUpHasOpenProfileUrl() {
-        viewModel.hasOpenProfileUrl.observe(this) { state ->
-            when (state) {
-                HasOpenUrlUiState.TRUE -> showRequestCompanionDialog()
-                HasOpenUrlUiState.FALSE -> showNavigateToUrlConfigConfirmDialog()
-                HasOpenUrlUiState.ERROR -> binding.root.showSnackBar(getString(R.string.all_data_loading_failed_message))
-            }
-        }
-    }
-
     private fun setupEventUiLogic() {
-        viewModel.event.observe(this) {
-            handleEvent(it)
+        viewModel.uiEvent.observe(this) {
+            handleUiEvent(it)
         }
     }
 
     private fun initRequestCompanionButtonClick() {
         binding.btnRecruitmentdetailRequestCompanion.setOnClickListener {
-            viewModel.fetchProfile()
+            sendMessageDialog.show(supportFragmentManager, SendMessageDialog.TAG)
         }
     }
 
@@ -217,34 +167,49 @@ class RecruitmentPostDetailActivity :
         }
     }
 
-    private fun handleEvent(event: RecruitmentPostDetailUiEvent?) {
-        if (event == null) return
-        when (event) {
-            RecruitmentPostDetailUiEvent.REPORT_ERROR -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
-            RecruitmentPostDetailUiEvent.REPORT_SUCCESS -> InfoDialog(
+    private fun handleUiEvent(event: Event<RecruitmentPostDetailUiEvent>) {
+        val content = event.getContentIfNotHandled() ?: return
+        when (content) {
+            is RecruitmentPostDetailUiEvent.MessageSendComplete -> {
+                MessageListActivity.startActivity(
+                    this,
+                    content.roomId,
+                    content.otherId,
+                )
+                sendMessageDialog.dismiss()
+            }
+
+            RecruitmentPostDetailUiEvent.MessageSendFail -> binding.root.showSnackBar(R.string.sendmessagedialog_message_send_fail_message)
+            RecruitmentPostDetailUiEvent.None -> {}
+            RecruitmentPostDetailUiEvent.PostDeleteComplete -> {
+                binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_deletion_success_message))
+                onBackPressedDispatcher.onBackPressed()
+            }
+
+            RecruitmentPostDetailUiEvent.PostDeleteFail -> binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_deletion_fail_message))
+            RecruitmentPostDetailUiEvent.PostFetchFail -> binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_fail_request_message))
+            RecruitmentPostDetailUiEvent.ReportComplete -> InfoDialog(
                 context = this,
                 title = getString(R.string.all_report_complete_dialog_title),
                 message = getString(R.string.all_report_complete_dialog_message),
                 buttonLabel = getString(R.string.all_okay),
             ).show()
 
-            RecruitmentPostDetailUiEvent.REPORT_DUPLICATE -> InfoDialog(
+            RecruitmentPostDetailUiEvent.ReportDuplicate -> InfoDialog(
                 context = this,
                 title = getString(R.string.all_report_duplicate_dialog_title),
                 message = getString(R.string.all_report_duplicate_message),
                 buttonLabel = getString(R.string.all_okay),
             ).show()
+
+            RecruitmentPostDetailUiEvent.ReportFail -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
+            is RecruitmentPostDetailUiEvent.UnexpectedError -> showToast(content.errorMessage)
         }
-        viewModel.removeEvent()
     }
 
     private fun finishWithResult() {
         setResult(RESULT_OK)
         finish()
-    }
-
-    private fun showRequestCompanionDialog() {
-        RequestCompanionFragmentDialog().show(supportFragmentManager, "")
     }
 
     private fun navigateToEditPage() {
