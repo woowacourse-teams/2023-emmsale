@@ -99,11 +99,12 @@ public class FeedQueryService {
   public FeedDetailResponse findFeed(final Member member, final Long id) {
     final Feed feed = feedRepository.findById(id)
         .orElseThrow(() -> new FeedException(FeedExceptionType.NOT_FOUND_FEED));
-    validateBlockedMemberFeed(member, feed);
+    final List<Image> images = imageRepository.findAllByFeedId(feed.getId());
 
+    validateBlockedMemberFeed(member, feed);
     validateDeletedFeed(feed);
 
-    return FeedDetailResponse.from(feed);
+    return FeedDetailResponse.from(feed, images);
   }
 
   private void validateBlockedMemberFeed(final Member member, final Feed feed) {

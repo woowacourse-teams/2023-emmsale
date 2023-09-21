@@ -13,4 +13,7 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
   @Query("select i from Image i where i.type = 'FEED' and i.contentId in :feedIds")
   List<Image> findAllByFeedIdIn(List<Long> feedIds);
 
+
+  @Query("select i from Image i where i.type = 'FEED' and i.contentId = :feedId")
+  List<Image> findAllByFeedId(Long feedId);
 }

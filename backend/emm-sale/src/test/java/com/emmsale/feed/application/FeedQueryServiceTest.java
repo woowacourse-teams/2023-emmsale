@@ -161,7 +161,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       final Feed feed = feed1;
       final Long feedId = feed.getId();
 
-      final FeedDetailResponse expect = FeedDetailResponse.from(feed);
+      final FeedDetailResponse expect = FeedDetailResponse.from(feed, Collections.emptyList());
 
       //when
       final FeedDetailResponse actual = feedQueryService.findFeed(writer, feedId);
@@ -193,7 +193,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
     @Test
     @DisplayName("삭제된 피드를 조회하면 FORBIDDEN_DELETED_FEED 타입의 FeedException이 발생한다.")
     void findFeedWithDeletedFeedIdTest() {
-      //given;
+      //given
       feed1.delete();
       feedRepository.save(feed1);
 
@@ -216,16 +216,21 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("피드 이미지 조회 테스트")
   class FeedQueryWithImage {
 
-    @Test
-    @DisplayName("피드에 이미지가 있을 경우 피드 목록에서 이미지 리스트를 함께 반환한다.")
-    void findAllFeedsWithImages() {
-      //given
-      final List<Image> images = imageRepository.saveAll(List.of(
+    private List<Image> images;
+
+    @BeforeEach
+    void setUp() {
+      images = imageRepository.saveAll(List.of(
               new Image("image-uuid", ImageType.FEED, feed1.getId(), 1, LocalDateTime.now()),
               new Image("image-uuid", ImageType.FEED, feed1.getId(), 2, LocalDateTime.now())
           )
       );
+    }
 
+    @Test
+    @DisplayName("피드에 이미지가 있을 경우 피드 목록에서 이미지 리스트를 함께 반환한다.")
+    void findAllFeedsWithImages() {
+      //given
       final Long eventId = event.getId();
 
       final List<FeedSimpleResponse> feedSimpleResponses = List.of(
@@ -237,6 +242,21 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
 
       //when
       final FeedListResponse actual = feedQueryService.findAllFeeds(writer, eventId);
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
+
+    @Test
+    @DisplayName("피드에 이미지가 있을 경우 피드 목록에서 이미지 리스트를 함께 반환한다.")
+    void findDetailFeedWithImages() {
+//given
+      final FeedDetailResponse expect = FeedDetailResponse.from(feed1, images);
+
+      //when
+      final FeedDetailResponse actual = feedQueryService.findFeed(writer, feed1.getId());
 
       //then
       assertThat(actual)

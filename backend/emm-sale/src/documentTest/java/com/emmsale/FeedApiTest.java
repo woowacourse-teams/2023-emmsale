@@ -87,6 +87,7 @@ class FeedApiTest extends MockMvcTestHelper {
         fieldWithPath("writer.imageUrl").type(JsonFieldType.STRING).description("작성자 이미지 url"),
         fieldWithPath("title").type(JsonFieldType.STRING).description("피드 제목"),
         fieldWithPath("content").type(JsonFieldType.STRING).description("피드 내용"),
+        fieldWithPath("images").type(JsonFieldType.ARRAY).description("피드 이미지 url 리스트"),
         fieldWithPath("createdAt").type(JsonFieldType.STRING).description("피드 생성 일시"),
         fieldWithPath("updatedAt").type(JsonFieldType.STRING).description("피드 업데이트 일시")
     );
@@ -96,7 +97,8 @@ class FeedApiTest extends MockMvcTestHelper {
     final WriterProfileResponse writer = new WriterProfileResponse(8L, "작성자명",
         "https://member-image.com");
     final FeedDetailResponse response = new FeedDetailResponse(feedId, eventId, writer, "피드 제목",
-        "피드 상세 내용", LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)),
+        "피드 상세 내용", List.of("https://image1.url", "https://image2.url"),
+        LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)),
         LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)));
 
     when(feedQueryService.findFeed(any(), any())).thenReturn(response);

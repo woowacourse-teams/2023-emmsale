@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class FeedSimpleResponse {
 
   private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
+  private static final String IMAGE_URL_PREFIX = "https://d3ms3abrjbgefs.cloudfront.net/dev/";
 
   private final Long id;
   private final String title;
@@ -26,9 +27,10 @@ public class FeedSimpleResponse {
   @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime updatedAt;
 
-  public static FeedSimpleResponse from(final Feed feed, final List<Image> images, final Long commentCount) {
+  public static FeedSimpleResponse from(final Feed feed, final List<Image> images,
+      final Long commentCount) {
     final List<String> imageUrls = images.stream()
-        .map(Image::getName)
+        .map(image -> IMAGE_URL_PREFIX + image.getName())
         .collect(Collectors.toList());
 
     return new FeedSimpleResponse(
