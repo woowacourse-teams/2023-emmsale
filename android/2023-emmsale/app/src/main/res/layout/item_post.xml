@@ -6,6 +6,7 @@
     <data>
         <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern"/>
 
+        <import type="android.view.View" />
         <variable
             name="post"
             type="com.emmsale.data.model.Post" />
@@ -128,6 +129,8 @@
         <ImageView
             android:id="@+id/iv_post_title_image"
             app:imageUrl="@{post.titleImageUrl}"
+            android:visibility="@{post.titleImageUrl == null?View.GONE:View.VISIBLE}"
+            android:scaleType="centerCrop"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="1:1"

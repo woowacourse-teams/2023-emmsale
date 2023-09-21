@@ -77,7 +77,7 @@ class EventDetailViewModel(
         viewModelScope.launch {
             when (val isScrappedFetchResult = scrappedEventRepository.isScraped(eventId)) {
                 is Success -> _isScraped.value = isScrappedFetchResult.data
-                is Failure, NetworkError, is Unexpected -> changeToErrorState()
+                is Failure, NetworkError, is Unexpected -> {}
             }
         }
     }
@@ -108,17 +108,17 @@ class EventDetailViewModel(
     }
 
     private fun changeToSuccessState(eventDetail: EventDetail) {
-        _eventDetail.value = EventDetailUiState(SUCCESS, eventDetail)
+        _eventDetail.value =
+            _eventDetail.value.copy(fetchResult = SUCCESS, eventDetail = eventDetail)
         logEventClick(eventDetail.name, eventDetail.id)
     }
 
     private fun changeToLoadingState() {
-        _eventDetail.value = eventDetail.value.copy(fetchResult = LOADING)
+        _eventDetail.value = _eventDetail.value.copy(fetchResult = LOADING)
     }
 
     private fun changeToErrorState() {
-        _eventDetail.value = eventDetail.value.copy(fetchResult = ERROR)
-        _eventDetail.value = eventDetail.value.copy(fetchResult = ERROR)
+        _eventDetail.value = _eventDetail.value.copy(fetchResult = ERROR)
     }
 
     fun fetchHasWritingPermission() {

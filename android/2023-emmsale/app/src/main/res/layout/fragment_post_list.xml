@@ -8,7 +8,8 @@
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.common.FetchResult" />
+        <import type="com.emmsale.presentation.common.FetchResult"
+            alias="Result"/>
 
         <variable
             name="vm"
@@ -43,7 +44,7 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{vm.posts.fetchResult == FetchResult.LOADING ? View.VISIBLE : View.GONE}"
+            android:visibility="@{vm.posts.fetchResult == Result.LOADING ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +54,7 @@
             layout="@layout/layout_all_error_screen"
             android:background="@color/white"
             android:clickable="true"
-            android:visibility="@{vm.posts.fetchResult == FetchResult.ERROR ? View.VISIBLE : View.GONE}"
+            android:visibility="@{vm.posts.fetchResult == Result.ERROR ? View.VISIBLE : View.GONE}"
             bind:viewModel="@{vm}"
             tools:visibility="gone" />
 

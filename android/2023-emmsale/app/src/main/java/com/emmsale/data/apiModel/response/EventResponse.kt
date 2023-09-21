@@ -157,4 +157,6 @@ data class EventDetailResponse(
     val applyRemainingDays: Int,
     @SerialName("type")
     val type: String,
+    @SerialName("imageUrls")
+    val imageUrls: List<String> = emptyList(),
 )
