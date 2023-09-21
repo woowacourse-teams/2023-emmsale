@@ -39,7 +39,8 @@ class DefaultPostRepository(
         }
 
         val postDataFiles = HashMap<String, RequestBody>()
-        postDataFiles[EVENT_ID_KEY] = eventId.toString().toRequestBody("application/json".toMediaTypeOrNull())
+        postDataFiles[EVENT_ID_KEY] =
+            eventId.toString().toRequestBody("application/json".toMediaTypeOrNull())
         postDataFiles[TITLE_KEY] = title.toRequestBody("application/json".toMediaTypeOrNull())
         postDataFiles[CONTENT_KEY] = content.toRequestBody("application/json".toMediaTypeOrNull())
         return postService.uploadPost(postDataFiles, imageFiles)

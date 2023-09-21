@@ -53,7 +53,7 @@
             android:clickable="true"
             android:visibility="@{viewModel.recruitments.isError ? View.VISIBLE : View.GONE}"
             bind:viewModel="@{viewModel}"
-            tools:visibility="gone"/>
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

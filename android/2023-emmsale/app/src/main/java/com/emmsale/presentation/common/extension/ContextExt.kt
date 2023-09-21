@@ -123,5 +123,5 @@ private fun Context.createNotification(
 val Context.topActivityName: String?
     get() {
         val manager = getSystemService(FirebaseMessagingService.ACTIVITY_SERVICE) as ActivityManager
-        return manager.appTasks[0].taskInfo.topActivity?.className
+        return manager.appTasks.getOrNull(0)?.taskInfo?.topActivity?.className
     }

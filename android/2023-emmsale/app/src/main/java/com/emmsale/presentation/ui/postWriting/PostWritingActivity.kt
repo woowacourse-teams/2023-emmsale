@@ -16,6 +16,7 @@ import com.emmsale.databinding.ActivityPostWritingBinding
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.postWriting.recyclerView.PostWritingImageAdapter
 import com.emmsale.presentation.ui.postWriting.uiState.PostUploadResultUiState
 
@@ -78,7 +79,7 @@ class PostWritingActivity : AppCompatActivity() {
         val content = event.getContentIfNotHandled() ?: return
         when (content.fetchResult) {
             FetchResult.SUCCESS -> {
-                showToast(content.responseId.toString())
+                FeedDetailActivity.startActivity(this, content.responseId!!)
                 finish()
             }
 

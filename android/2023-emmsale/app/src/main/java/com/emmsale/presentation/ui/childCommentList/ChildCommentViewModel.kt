@@ -12,12 +12,15 @@ import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.KerdyApplication
+import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.common.viewModel.ViewModelFactory
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
-import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
+import com.emmsale.presentation.ui.childCommentList.uiState.CommentsUiState
+import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 import kotlinx.coroutines.launch
 
 class ChildCommentViewModel(
@@ -26,73 +29,107 @@ class ChildCommentViewModel(
     private val commentRepository: CommentRepository,
 ) : ViewModel(), Refreshable {
 
-    private val _isLogin = NotNullMutableLiveData(true)
-    val isLogin: NotNullLiveData<Boolean> = _isLogin
+    private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _comments = NotNullMutableLiveData(ChildCommentsUiState.FIRST_LOADING)
-    val comments: NotNullLiveData<ChildCommentsUiState> = _comments
+    private val _comments = NotNullMutableLiveData(CommentsUiState.Loading)
+    val comments: NotNullLiveData<CommentsUiState> = _comments
 
     private val _editingCommentId = MutableLiveData<Long?>()
     val editingCommentId: LiveData<Long?> = _editingCommentId
     val editingCommentContent = _editingCommentId.map {
-        (_comments.value.childComments + _comments.value.parentComment)
-            .find { comment -> comment.id == it }
-            ?.content
+        _comments.value.comments.find { commentUiState -> commentUiState.comment.id == it }?.comment?.content
     }
 
-    private val _event = MutableLiveData<ChildCommentsUiEvent?>(null)
-    val event: LiveData<ChildCommentsUiEvent?> = _event
+    private val _uiEvent: NotNullMutableLiveData<Event<ChildCommentsUiEvent>> =
+        NotNullMutableLiveData(Event(ChildCommentsUiEvent.None))
+    val uiEvent: NotNullLiveData<Event<ChildCommentsUiEvent>> = _uiEvent
 
     override fun refresh() {
-        _comments.value = _comments.value.changeToLoadingState()
         viewModelScope.launch {
-            val token = tokenRepository.getToken()
-            if (token == null) {
-                _isLogin.value = false
-                return@launch
-            }
-
             when (val result = commentRepository.getComment(parentCommentId)) {
-                is Failure, NetworkError -> _comments.value = _comments.value.changeToErrorState()
-                is Success ->
-                    _comments.value =
-                        _comments.value.changeChildCommentsState(result.data, token.uid)
+                is Failure, NetworkError ->
+                    _comments.value = _comments.value.copy(fetchResult = FetchResult.ERROR)
 
-                is Unexpected -> throw Throwable(result.error)
+                is Success ->
+                    _comments.value = _comments.value.copy(
+                        fetchResult = FetchResult.SUCCESS,
+                        comments = listOf(CommentUiState.create(uid, result.data)) +
+                            result.data.childComments.map {
+                                CommentUiState.create(uid, it)
+                            },
+                    )
+
+                is Unexpected ->
+                    _uiEvent.value =
+                        Event(ChildCommentsUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
 
-    fun saveChildComment(content: String, parentCommentId: Long, eventId: Long) {
+    fun saveChildComment(content: String, parentCommentId: Long, feedId: Long) {
         viewModelScope.launch {
-            when (val result = commentRepository.saveComment(content, eventId, parentCommentId)) {
-                is Failure, NetworkError -> _event.value = ChildCommentsUiEvent.POST_ERROR
-                is Success -> refresh()
-                is Unexpected -> throw Throwable(result.error)
+            _comments.value = _comments.value.copy(fetchResult = FetchResult.LOADING)
+            when (val result = commentRepository.saveComment(content, feedId, parentCommentId)) {
+                is Failure -> {
+                    _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostFail)
+                    _comments.value = _comments.value.copy(fetchResult = FetchResult.SUCCESS)
+                }
+
+                NetworkError ->
+                    _comments.value = _comments.value.copy(fetchResult = FetchResult.ERROR)
+
+                is Success -> {
+                    refresh()
+                    _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostComplete)
+                }
+
+                is Unexpected ->
+                    _uiEvent.value =
+                        Event(ChildCommentsUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
 
     fun updateComment(commentId: Long, content: String) {
         viewModelScope.launch {
+            _comments.value = _comments.value.copy(fetchResult = FetchResult.LOADING)
             when (val result = commentRepository.updateComment(commentId, content)) {
-                is Failure, NetworkError -> _event.value = ChildCommentsUiEvent.UPDATE_ERROR
+                is Failure -> {
+                    _uiEvent.value = Event(ChildCommentsUiEvent.CommentUpdateFail)
+                    _comments.value = _comments.value.copy(fetchResult = FetchResult.SUCCESS)
+                }
+
+                NetworkError ->
+                    _comments.value = _comments.value.copy(fetchResult = FetchResult.ERROR)
+
                 is Success -> {
                     _editingCommentId.value = null
                     refresh()
                 }
 
-                is Unexpected -> throw Throwable(result.error)
+                is Unexpected ->
+                    _uiEvent.value =
+                        Event(ChildCommentsUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
 
     fun deleteComment(commentId: Long) {
         viewModelScope.launch {
+            _comments.value = _comments.value.copy(fetchResult = FetchResult.LOADING)
             when (val result = commentRepository.deleteComment(commentId)) {
-                is Failure, NetworkError -> _event.value = ChildCommentsUiEvent.DELETE_ERROR
+                is Failure -> {
+                    _uiEvent.value = Event(ChildCommentsUiEvent.CommentDeleteFail)
+                    _comments.value = _comments.value.copy(fetchResult = FetchResult.SUCCESS)
+                }
+
+                NetworkError ->
+                    _comments.value = _comments.value.copy(fetchResult = FetchResult.ERROR)
+
                 is Success -> refresh()
-                is Unexpected -> throw Throwable(result.error)
+                is Unexpected ->
+                    _uiEvent.value =
+                        Event(ChildCommentsUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -107,33 +144,29 @@ class ChildCommentViewModel(
 
     fun reportComment(commentId: Long) {
         viewModelScope.launch {
-            val token = tokenRepository.getToken()
-            if (token == null) {
-                _isLogin.value = false
-                return@launch
-            }
+            _comments.value = _comments.value.copy(fetchResult = FetchResult.LOADING)
             val authorId =
-                (_comments.value.childComments + _comments.value.parentComment).find { it.id == commentId }?.authorId
-                    ?: return@launch
+                _comments.value.comments.find { it.comment.id == commentId }!!.comment.authorId
 
-            when (val result = commentRepository.reportComment(commentId, authorId, token.uid)) {
+            when (val result = commentRepository.reportComment(commentId, authorId, uid)) {
                 is Failure -> {
                     if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
-                        _event.value = ChildCommentsUiEvent.REPORT_DUPLICATE
+                        _uiEvent.value = Event(ChildCommentsUiEvent.CommentReportDuplicate)
                     } else {
-                        _event.value = ChildCommentsUiEvent.REPORT_ERROR
+                        _uiEvent.value = Event(ChildCommentsUiEvent.CommentReportFail)
                     }
+                    _comments.value = _comments.value.copy(fetchResult = FetchResult.SUCCESS)
                 }
 
-                NetworkError -> _event.value = ChildCommentsUiEvent.REPORT_ERROR
-                is Success -> _event.value = ChildCommentsUiEvent.REPORT_COMPLETE
-                is Unexpected -> throw Throwable(result.error)
+                NetworkError ->
+                    _comments.value = _comments.value.copy(fetchResult = FetchResult.ERROR)
+
+                is Success -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentReportComplete)
+                is Unexpected ->
+                    _uiEvent.value =
+                        Event(ChildCommentsUiEvent.UnexpectedError(result.error.toString()))
             }
         }
-    }
-
-    fun removeEvent() {
-        _event.value = null
     }
 
     companion object {

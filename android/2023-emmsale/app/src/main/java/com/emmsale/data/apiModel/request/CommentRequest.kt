@@ -10,11 +10,11 @@ data class CommentUpdateRequest(
 )
 
 @Serializable
-data class ChildCommentCreateRequest(
+data class CommentCreateRequest(
     @SerialName("content")
     val content: String,
-    @SerialName("eventId")
-    val eventId: Long,
+    @SerialName("feedId")
+    val feedId: Long,
     @SerialName("parentId")
     val parentId: Long? = null,
 )

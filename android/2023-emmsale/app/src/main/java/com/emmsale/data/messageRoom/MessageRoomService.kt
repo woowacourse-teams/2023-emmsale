@@ -1,9 +1,10 @@
 package com.emmsale.data.messageRoom
 
+import com.emmsale.data.apiModel.request.MessageRequest
 import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.messageRoom.dto.MessageRequest
 import com.emmsale.data.messageRoom.dto.MessageResponse
 import com.emmsale.data.messageRoom.dto.MessageRoomResponse
+import com.emmsale.data.messageRoom.dto.MessageSendResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -31,5 +32,5 @@ interface MessageRoomService {
     @POST("/messages")
     suspend fun sendMessage(
         @Body message: MessageRequest,
-    ): ApiResponse<Unit>
+    ): ApiResponse<MessageSendResponse>
 }

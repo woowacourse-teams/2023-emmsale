@@ -8,6 +8,8 @@
 
         <import type="android.view.View" />
 
+        <import type="com.emmsale.presentation.common.FetchResult" />
+
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel" />
@@ -115,7 +117,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="1dp"
-                            android:enabled="@{viewModel.comments.isLoading || etChildcommentsEditchildcommentcontent.text.toString().isBlank() ? false : true}"
+                            android:enabled="@{viewModel.comments.fetchResult == FetchResult.LOADING || etChildcommentsEditchildcommentcontent.text.toString().isBlank() ? false : true}"
                             android:padding="18dp"
                             android:text="@string/comments_comment_submit_button_label"
                             android:textColor="@color/all_enable_primary"
@@ -173,7 +175,7 @@
                         android:id="@+id/tv_childcomments_comment_update_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:enabled="@{viewModel.comments.isLoading || etChildcommentsCommentUpdate.text.toString().isBlank() ? false : true}"
+                        android:enabled="@{viewModel.comments.fetchResult == FetchResult.LOADING || etChildcommentsCommentUpdate.text.toString().isBlank() ? false : true}"
                         android:onClick="@{() -> updateComment.invoke()}"
                         android:paddingHorizontal="17dp"
                         android:paddingVertical="13dp"
@@ -189,7 +191,7 @@
                     style="?android:attr/progressBarStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.comments.isLoading ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{viewModel.comments.fetchResult == FetchResult.LOADING ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="@+id/rv_childcomments_childcomments"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -204,7 +206,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clickable="true"
-            android:visibility="@{viewModel.comments.isError ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.comments.fetchResult == FetchResult.ERROR ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

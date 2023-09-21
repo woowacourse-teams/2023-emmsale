@@ -30,11 +30,7 @@ data class MessageResponse(
 )
 
 @Serializable
-data class MessageRequest(
-    @SerialName("senderId")
-    val senderId: Long,
-    @SerialName("receiverId")
-    val receiverId: Long,
-    @SerialName("content")
-    val message: String,
+data class MessageSendResponse(
+    @SerialName("roomId")
+    val roomId: String,
 )

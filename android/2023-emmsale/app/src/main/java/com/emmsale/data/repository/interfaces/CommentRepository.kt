@@ -5,7 +5,7 @@ import com.emmsale.data.model.Comment
 
 interface CommentRepository {
 
-    suspend fun getComments(eventId: Long): ApiResponse<List<Comment>>
+    suspend fun getComments(feedId: Long): ApiResponse<List<Comment>>
 
     suspend fun getCommentsByMemberId(memberId: Long): ApiResponse<List<Comment>>
 
@@ -13,7 +13,7 @@ interface CommentRepository {
 
     suspend fun saveComment(
         content: String,
-        eventId: Long,
+        feedId: Long,
         parentId: Long? = null,
     ): ApiResponse<Unit>
 

@@ -7,15 +7,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityProfileBinding
+import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTagChip
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
-import com.emmsale.presentation.ui.profile.uiState.ProfileEvent
+import com.emmsale.presentation.ui.profile.uiState.ProfileUiEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 
 class ProfileActivity : AppCompatActivity() {
@@ -37,6 +40,8 @@ class ProfileActivity : AppCompatActivity() {
 
     private val menuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
+    private val sendMessageDialog: SendMessageDialog by lazy { SendMessageDialog() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -56,7 +61,7 @@ class ProfileActivity : AppCompatActivity() {
         binding.tbProfileToolbar.setNavigationOnClickListener { finish() }
         binding.tbProfileToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.profile_more -> showMoreMenu()
+                R.id.more -> showMoreMenu()
             }
             true
         }
@@ -65,12 +70,17 @@ class ProfileActivity : AppCompatActivity() {
     private fun showMoreMenu() {
         menuDialog.resetMenu()
         menuDialog.apply {
+            addMenuItemBelow("쪽지 보내기") { onSendMessageButtonClick() }
             if (viewModel.isBlocked()) {
                 addMenuItemBelow(getString(R.string.profilemenudialog_unblock_button_label)) { onUnblockButtonClick() }
             } else {
                 addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) { onBlockButtonClick() }
             }
         }.show()
+    }
+
+    private fun onSendMessageButtonClick() {
+        sendMessageDialog.show(supportFragmentManager, SendMessageDialog.TAG)
     }
 
     private fun onBlockButtonClick() {
@@ -109,25 +119,36 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupProfileEventUiLogic() {
-        viewModel.event.observe(this) {
-            handleEvents(it)
+        viewModel.uiEvent.observe(this) {
+            handleUiEvent(it)
         }
     }
 
-    private fun handleEvents(event: ProfileEvent?) {
-        if (event == null) return
-        when (event) {
-            ProfileEvent.BLOCK_FAIL -> binding.root.showSnackBar(getString(R.string.profile_block_fail_message))
-            ProfileEvent.BLOCK_COMPLETE -> InfoDialog(
+    private fun handleUiEvent(event: Event<ProfileUiEvent>) {
+        val content = event.getContentIfNotHandled() ?: return
+        when (content) {
+            ProfileUiEvent.BlockComplete -> InfoDialog(
                 context = this,
                 title = getString(R.string.profile_block_complete_dialog_title),
                 message = getString(R.string.profile_block_complete_dialog_message),
             ).show()
 
-            ProfileEvent.UNBLOCK_FAIL -> binding.root.showSnackBar(getString(R.string.profile_unblock_fail_message))
-            ProfileEvent.UNBLOCK_SUCCESS -> binding.root.showSnackBar(getString(R.string.profile_unblock_complete_message))
+            ProfileUiEvent.BlockFail -> binding.root.showSnackBar(getString(R.string.profile_block_fail_message))
+            is ProfileUiEvent.MessageSendComplete -> {
+                MessageListActivity.startActivity(
+                    this,
+                    content.roomId,
+                    content.otherId,
+                )
+                sendMessageDialog.dismiss()
+            }
+
+            ProfileUiEvent.MessageSendFail -> binding.root.showSnackBar(getString(R.string.sendmessagedialog_message_send_fail_message))
+            ProfileUiEvent.None -> {}
+            ProfileUiEvent.UnblockFail -> binding.root.showSnackBar(getString(R.string.profile_unblock_fail_message))
+            ProfileUiEvent.UnblockSuccess -> binding.root.showSnackBar(getString(R.string.profile_unblock_complete_message))
+            is ProfileUiEvent.UnexpectedError -> showToast(content.errorMessage)
         }
-        viewModel.removeEvent()
     }
 
     private fun handleLoginMember(profile: ProfileUiState) {

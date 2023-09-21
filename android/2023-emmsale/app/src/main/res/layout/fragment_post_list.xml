@@ -8,8 +8,9 @@
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.common.FetchResult"
-            alias="Result"/>
+        <import
+            type="com.emmsale.presentation.common.FetchResult"
+            alias="Result" />
 
         <variable
             name="vm"
@@ -49,7 +50,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone"/>
+            tools:visibility="gone" />
 
         <include
             layout="@layout/layout_all_error_screen"
