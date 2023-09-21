@@ -47,13 +47,4 @@ class JwtTokenProviderTest extends ServiceIntegrationTestHelper {
     //then
     assertThat(actualExceptionType).isEqualTo(expectExceptionType);
   }
-
-  @Test
-  @DisplayName("토큰을 사용한다.")
-  void Test() {
-    final JwtTokenProvider jwtTokenProvider1 = new JwtTokenProvider();
-
-    final String token = jwtTokenProvider1.createToken("1");
-    System.out.println(token);
-  }
 }
