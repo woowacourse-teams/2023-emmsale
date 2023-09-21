@@ -653,6 +653,9 @@ include::{snippets}/send-message/request-fields.adoc[]
 .HTTP request
 include::{snippets}/send-message/http-request.adoc[]
 
+.HTTP response 설명
+include::{snippets}/send-message/response-fields.adoc[]
+
 .HTTP response
 include::{snippets}/send-message/http-response.adoc[]
 
@@ -696,6 +699,7 @@ include::{snippets}/get-rooms-interlocutorId/http-request.adoc[]
 
 .HTTP request 설명
 senderId와 receiverId는 의미 없어서 참여자 ID들을 변수명에 상관없이 보내주시면 됩니다.
+
 include::{snippets}/get-rooms-interlocutorId/request-parameters.adoc[]
 
 .HTTP response
