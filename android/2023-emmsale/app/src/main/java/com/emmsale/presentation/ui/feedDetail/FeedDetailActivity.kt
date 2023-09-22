@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.databinding.ActivityFeedDetailBinding
@@ -297,7 +296,7 @@ class FeedDetailActivity : AppCompatActivity() {
     }
 
     private fun setUpFeedDetail() {
-        viewModel.feedDetail.distinctUntilChanged().observe(this) {
+        viewModel.feedDetail.observe(this) {
             feedDetailAdapter.setFeedDetail(it)
             commentsAdapter.submitList(it.comments)
         }
