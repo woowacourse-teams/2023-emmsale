@@ -37,7 +37,7 @@ class MessageListViewModel @Inject constructor(
     private val memberRepository: MemberRepository,
     private val messageRoomRepository: MessageRoomRepository,
 ) : ViewModel(), Refreshable {
-    private val roomId = savedStateHandle[KEY_ROOM_ID] ?: DEFAULT_ROOM_ID
+    val roomId = savedStateHandle[KEY_ROOM_ID] ?: DEFAULT_ROOM_ID
     private val otherUid = savedStateHandle[KEY_OTHER_UID] ?: DEFAULT_OTHER_ID
 
     private val myUid: Long = tokenRepository.getMyUid() ?: -1

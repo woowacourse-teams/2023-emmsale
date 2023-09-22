@@ -99,8 +99,11 @@ class MessageListActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         viewModel.refresh()
 
-        val profileUrl = intent?.getStringExtra(KEY_PROFILE_URL)
-        val otherName = intent?.getStringExtra(KEY_OTHER_NAME) ?: return
+        val roomId = intent?.getStringExtra(KEY_ROOM_ID)
+        if (roomId != viewModel.roomId) return
+
+        val profileUrl = intent.getStringExtra(KEY_PROFILE_URL)
+        val otherName = intent.getStringExtra(KEY_OTHER_NAME) ?: return
         val messageContent = intent.getStringExtra(KEY_MESSAGE_CONTENT) ?: return
         showNewMessage(profileUrl, otherName, messageContent)
     }

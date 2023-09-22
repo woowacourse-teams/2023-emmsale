@@ -38,27 +38,27 @@ class DefaultConfigRepository @Inject constructor(
     )
 
     override fun saveAllNotificationReceiveConfig(isReceive: Boolean) {
-        preferenceEditor.putBoolean(KEY_NOTIFICATION_RECEIVE, isReceive).apply()
+        preferenceEditor.putBoolean(KEY_NOTIFICATION_RECEIVE, isReceive).commit()
     }
 
     override fun saveFollowNotificationReceiveConfig(isReceive: Boolean) {
-        preferenceEditor.putBoolean(KEY_FOLLOW_NOTIFICATION_RECEIVE, isReceive).apply()
+        preferenceEditor.putBoolean(KEY_FOLLOW_NOTIFICATION_RECEIVE, isReceive).commit()
     }
 
     override fun saveCommentNotificationReceiveConfig(isReceive: Boolean) {
-        preferenceEditor.putBoolean(KEY_CHILD_COMMENT_NOTIFICATION_RECEIVE, isReceive).apply()
+        preferenceEditor.putBoolean(KEY_CHILD_COMMENT_NOTIFICATION_RECEIVE, isReceive).commit()
     }
 
     override fun saveInterestEventNotificationReceiveConfig(isReceive: Boolean) {
-        preferenceEditor.putBoolean(KEY_INTEREST_EVENT_NOTIFICATION_RECEIVE, isReceive).apply()
+        preferenceEditor.putBoolean(KEY_INTEREST_EVENT_NOTIFICATION_RECEIVE, isReceive).commit()
     }
 
     override fun saveMessageNotificationReceiveConfig(isReceive: Boolean) {
-        preferenceEditor.putBoolean(KEY_MESSAGE_NOTIFICATION_RECEIVE, isReceive).apply()
+        preferenceEditor.putBoolean(KEY_MESSAGE_NOTIFICATION_RECEIVE, isReceive).commit()
     }
 
     override fun saveAutoLoginConfig(isAutoLogin: Boolean) {
-        preferenceEditor.putBoolean(KEY_AUTO_LOGIN, isAutoLogin).apply()
+        preferenceEditor.putBoolean(KEY_AUTO_LOGIN, isAutoLogin).commit()
     }
 
     companion object {

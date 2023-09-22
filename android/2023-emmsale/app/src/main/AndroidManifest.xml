@@ -19,18 +19,18 @@
         tools:targetApi="33">
         <activity
             android:name=".presentation.ui.feedDetail.FeedDetailActivity"
-            android:screenOrientation="portrait"
             android:exported="false"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.messageList.MessageListActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.postWriting.PostWritingActivity"
-            android:screenOrientation="portrait"
             android:exported="false"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.splash.SplashActivity"

@@ -10,14 +10,14 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class AuthInterceptor(context: Context) : Interceptor {
-    private val userToken = EntryPointAccessors
+    private val tokenRepository = EntryPointAccessors
         .fromApplication<AuthInterceptorEntryPoint>(context)
         .getTokenRepository()
-        .getToken()
 
     override fun intercept(chain: Interceptor.Chain): Response {
+        val token = tokenRepository.getToken()
         val newRequest = chain.request().newBuilder()
-            .addHeader(ACCESS_TOKEN_HEADER, ACCESS_TOKEN_FORMAT.format(userToken?.accessToken))
+            .addHeader(ACCESS_TOKEN_HEADER, ACCESS_TOKEN_FORMAT.format(token?.accessToken))
             .build()
         return chain.proceed(newRequest)
     }
