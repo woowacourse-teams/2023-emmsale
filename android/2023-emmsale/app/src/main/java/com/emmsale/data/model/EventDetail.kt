@@ -18,5 +18,28 @@ data class EventDetail(
     val posterImageUrl: String?,
     val remainingDays: Int,
     val applyRemainingDays: Int,
+    val paymentType: Conference.PaymentType,
     val type: String,
-)
+) {
+    companion object {
+        val EmptyData: EventDetail = EventDetail(
+            id = -1,
+            name = "",
+            informationUrl = "",
+            organization = null,
+            startDate = LocalDateTime.now(),
+            endDate = LocalDateTime.now(),
+            applyStartDate = LocalDateTime.MAX,
+            applyEndDate = LocalDateTime.MAX,
+            location = "",
+            status = "",
+            applyStatus = "",
+            tags = emptyList(),
+            posterImageUrl = null,
+            remainingDays = 1,
+            applyRemainingDays = 1,
+            paymentType = Conference.PaymentType.FREE,
+            type = "",
+        )
+    }
+}
