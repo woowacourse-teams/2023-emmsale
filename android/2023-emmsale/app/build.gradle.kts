@@ -37,6 +37,11 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", "\"https://kerdy.kro.kr\"")
+            buildConfigField(
+                "String",
+                "IMAGE_URL_PREFIX",
+                "\"https://d3ms3abrjbgefs.cloudfront.net/dev/\"",
+            )
         }
         release {
             isShrinkResources = true
@@ -44,8 +49,15 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
+                "proguard-glide.pro",
+                "proguard-retrofit.pro",
             )
             buildConfigField("String", "BASE_URL", "\"https://prod.kerdy.kro.kr\"")
+            buildConfigField(
+                "String",
+                "IMAGE_URL_PREFIX",
+                "\"https://d3ms3abrjbgefs.cloudfront.net/prod/\"",
+            )
             signingConfig = signingConfigs.getByName("debug")
         }
     }

@@ -1,8 +1,8 @@
 package com.emmsale.data.mapper
 
 import android.util.Log
+import com.emmsale.BuildConfig
 import com.emmsale.data.apiModel.response.PostsResponse
-import com.emmsale.data.common.imagePrefixUrl
 import com.emmsale.data.model.Post
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -24,7 +24,7 @@ fun PostsResponse.toData(): List<Post> {
 
 private fun getTitleImageUrl(images: List<String>): String? {
     if (images.isEmpty()) return null
-    return imagePrefixUrl + images.firstOrNull()
+    return BuildConfig.IMAGE_URL_PREFIX + images.firstOrNull()
 }
 
 private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")
