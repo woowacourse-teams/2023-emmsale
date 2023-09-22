@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.RecruitmentPost;
+import com.emmsale.helper.JpaRepositorySliceTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import java.util.List;
@@ -13,15 +14,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.jdbc.Sql;
 
-@Sql("/data-test.sql")
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-@DataJpaTest
-class RecruitmentPostRepositoryTest {
+class RecruitmentPostRepositoryTest extends JpaRepositorySliceTestHelper {
 
   @Autowired
   private RecruitmentPostRepository recruitmentPostRepository;

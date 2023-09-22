@@ -5,6 +5,7 @@ import static com.emmsale.tag.TagFixture.프론트엔드;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.emmsale.helper.JpaRepositorySliceTestHelper;
 import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
@@ -13,15 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.jdbc.Sql;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-@Sql("/data-test.sql")
-class InterestTagRepositoryTest {
+class InterestTagRepositoryTest extends JpaRepositorySliceTestHelper {
 
   @Autowired
   private InterestTagRepository interestTagRepository;

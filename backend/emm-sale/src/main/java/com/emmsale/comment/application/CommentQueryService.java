@@ -1,6 +1,6 @@
 package com.emmsale.comment.application;
 
-import static com.emmsale.comment.exception.CommentExceptionType.NOT_EVENT_AND_MEMBER_ID_BOTH_NULL;
+import static com.emmsale.comment.exception.CommentExceptionType.NOT_FEED_AND_MEMBER_ID_BOTH_NULL;
 import static com.emmsale.comment.exception.CommentExceptionType.NOT_FOUND_COMMENT;
 
 import com.emmsale.block.domain.Block;
@@ -32,22 +32,22 @@ public class CommentQueryService {
   ) {
 
     final Optional<Long> optionalMemberId = commentFindRequest.getOptionalMemberId();
-    final Long eventId = commentFindRequest.getEventId();
+    final Long feedId = commentFindRequest.getFeedId();
 
-    validateBothNull(optionalMemberId, eventId);
+    validateBothNull(optionalMemberId, feedId);
 
     final List<Long> blockedMemberIds = getBlockedMemberIds(member);
 
     final List<Comment> comments = optionalMemberId
         .map(commentRepository::findByMemberId)
-        .orElse(commentRepository.findByEventId(eventId));
+        .orElse(commentRepository.findByFeedId(feedId));
 
     return CommentHierarchyResponse.convertAllFrom(comments, blockedMemberIds);
   }
 
-  private void validateBothNull(final Optional<Long> optionalMemberId, final Long eventId) {
-    if (optionalMemberId.isEmpty() && eventId == null) {
-      throw new CommentException(NOT_EVENT_AND_MEMBER_ID_BOTH_NULL);
+  private void validateBothNull(final Optional<Long> optionalMemberId, final Long feedId) {
+    if (optionalMemberId.isEmpty() && feedId == null) {
+      throw new CommentException(NOT_FEED_AND_MEMBER_ID_BOTH_NULL);
     }
   }
 

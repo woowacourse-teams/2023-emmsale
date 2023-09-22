@@ -13,6 +13,10 @@ drop table if exists kerdy.block;
 drop table if exists kerdy.update_notification;
 drop table if exists kerdy.report;
 drop table if exists kerdy.scrap;
+drop table if exists kerdy.message;
+drop table if exists kerdy.room;
+drop table if exists kerdy.feed;
+drop table if exists kerdy.image;
 
 create table activity
 (
@@ -185,3 +189,60 @@ create table report
 
 alter table member
     add column github_username varchar(40) not null default '';
+
+-- 2023-08-31 19:57
+
+create table room
+(
+    uuid             varchar(40) not null,
+    member_id        bigint      not null,
+    last_exited_time datetime(6),
+    primary key (uuid, member_id)
+);
+
+create table message
+(
+    id         bigint       not null auto_increment,
+    content    varchar(255) not null,
+    created_at datetime(6),
+    sender_id  bigint       not null,
+    room_id    varchar(40)  not null,
+    primary key (id)
+);
+
+-- 2023-09-01 23:06
+create table feed
+(
+    id         bigint auto_increment primary key,
+    writer_id  bigint        not null,
+    title      varchar(50)   not null,
+    content    varchar(1000) not null,
+    event_id   bigint        not null,
+    is_deleted bit           not null,
+    created_at datetime(6)   null,
+    updated_at datetime(6)   null
+);
+
+alter table comment rename column event_id to feed_id;
+
+-- 2023-09-14 13:39
+
+create table image
+(
+    id           bigint auto_increment primary key,
+    name         varchar(50) not null,
+    type         varchar(20) not null,
+    content_id   bigint      not null,
+    order_number int         not null,
+    created_at   datetime(6)
+);
+
+-- 2023-09-14 16:43
+alter table event
+    add column payment_type varchar(50) not null;
+alter table event
+    add column event_mode varchar(50) not null;
+
+-- 2023-09-20 20:25
+alter table event
+    add column organization varchar(50) not null;

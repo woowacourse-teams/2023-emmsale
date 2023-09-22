@@ -54,7 +54,7 @@ public class UpdateNotificationCommandService {
       return;
     }
 
-    updateNotificationRepository.deleteAllByIdInBatch(deleteIdsOwnMember);
+    updateNotificationRepository.deleteBatchByIdsIn(deleteIdsOwnMember);
   }
 
   private boolean hasNoNotificationToDeleteBy(final List<Long> deleteIds) {

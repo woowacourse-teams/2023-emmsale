@@ -4,9 +4,6 @@ import static com.emmsale.event.EventFixture.eventFixture;
 import static com.emmsale.event.EventFixture.인프콘_2023;
 import static com.emmsale.tag.TagFixture.AI;
 import static com.emmsale.tag.TagFixture.IOS;
-import static com.emmsale.tag.TagFixture.백엔드;
-import static com.emmsale.tag.TagFixture.안드로이드;
-import static com.emmsale.tag.TagFixture.프론트엔드;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -22,18 +19,14 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.tag.domain.Tag;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
 
 class EventTest {
 
@@ -59,11 +52,13 @@ class EventTest {
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String imageUrl = "https://image.com";
+    final String organization = "행사기관";
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, afterDateTime, beforeDateTime, beforeDateTime,
-            beforeDateTime, url, EventType.CONFERENCE, imageUrl));
+            beforeDateTime, url, EventType.CONFERENCE, imageUrl, PaymentType.FREE,
+            EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
   }
@@ -78,11 +73,13 @@ class EventTest {
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String imageUrl = "https://image.com";
+    final String organization = "행사기관";
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, beforeDateTime, afterDateTime,
-            afterDateTime, beforeDateTime, url, EventType.CONFERENCE, imageUrl));
+            afterDateTime, beforeDateTime, url, EventType.CONFERENCE, imageUrl, PaymentType.FREE,
+            EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END,
         exception.exceptionType());
@@ -98,11 +95,13 @@ class EventTest {
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String imageUrl = "https://image.com";
+    final String organization = "행사기관";
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, beforeDateTime, beforeDateTime,
-            beforeDateTime, afterDateTime, url, EventType.CONFERENCE, imageUrl));
+            beforeDateTime, afterDateTime, url, EventType.CONFERENCE, imageUrl, PaymentType.FREE,
+            EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_END_AFTER_EVENT_END, exception.exceptionType());
   }
@@ -117,11 +116,12 @@ class EventTest {
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String imageUrl = "https://image.com";
+    final String organization = "행사기관";
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, beforeDateTime, afterDateTime, afterDateTime, afterDateTime,
-            url, EventType.CONFERENCE, imageUrl));
+            url, EventType.CONFERENCE, imageUrl, PaymentType.FREE, EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_EVENT_START,
         exception.exceptionType());

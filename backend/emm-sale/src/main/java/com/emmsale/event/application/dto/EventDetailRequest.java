@@ -1,7 +1,9 @@
 package com.emmsale.event.application.dto;
 
 import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventType;
+import com.emmsale.event.domain.PaymentType;
 import com.emmsale.tag.application.dto.TagRequest;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,10 +12,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Getter
+@Setter
 public class EventDetailRequest {
 
   private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
@@ -43,6 +48,13 @@ public class EventDetailRequest {
   private final String imageUrl;
   private final EventType type;
 
+  private final EventMode eventMode;
+  private final PaymentType paymentType;
+
+  private final List<MultipartFile> images;
+
+  private final String organization;
+
   public Event toEvent() {
     return new Event(
         name,
@@ -53,7 +65,10 @@ public class EventDetailRequest {
         applyEndDateTime,
         informationUrl,
         type,
-        imageUrl
+        imageUrl,
+        paymentType,
+        eventMode,
+        organization
     );
   }
 }

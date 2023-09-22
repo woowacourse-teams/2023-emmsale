@@ -3,7 +3,6 @@ package com.emmsale.event.domain;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.emmsale.base.BaseEntity;
-import com.emmsale.comment.domain.Comment;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.member.domain.Member;
@@ -34,22 +33,39 @@ public class Event extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   @Column(nullable = false)
   private String name;
+
   @Column(nullable = false)
   private String location;
+
   @Embedded
   private EventPeriod eventPeriod;
+
   @Column(nullable = false)
   private String informationUrl;
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private EventType type;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private PaymentType paymentType;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private EventMode eventMode;
+
   private String imageUrl;
+
+  @Column(nullable = false)
+  private String organization;
+
   @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
-  @OneToMany(mappedBy = "event")
-  private List<Comment> comments;
+
   @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
   private List<RecruitmentPost> recruitmentPosts = new ArrayList<>();
 
@@ -62,15 +78,20 @@ public class Event extends BaseEntity {
       final LocalDateTime applyEndDate,
       final String informationUrl,
       final EventType eventType,
-      final String imageUrl
+      final String imageUrl,
+      final PaymentType paymentType,
+      final EventMode eventMode,
+      final String organization
   ) {
-
     this.name = name;
     this.location = location;
     this.eventPeriod = new EventPeriod(startDate, endDate, applyStartDate, applyEndDate);
     this.informationUrl = informationUrl;
     this.type = eventType;
     this.imageUrl = imageUrl;
+    this.paymentType = paymentType;
+    this.eventMode = eventMode;
+    this.organization = organization;
   }
 
   public RecruitmentPost createRecruitmentPost(final Member member, final String content) {

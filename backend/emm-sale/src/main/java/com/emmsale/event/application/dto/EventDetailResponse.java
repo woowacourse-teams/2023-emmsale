@@ -37,8 +37,14 @@ public class EventDetailResponse {
   private final Integer remainingDays;
   private final Integer applyRemainingDays;
   private final String type;
+  private final List<String> imageUrls;
+  private final String organization;
 
-  public static EventDetailResponse from(final Event event, final LocalDate today) {
+  public static EventDetailResponse from(
+      final Event event,
+      final LocalDate today,
+      final List<String> imageUrls
+  ) {
     final List<String> tagNames = event.getTags().stream()
         .map(EventTag::getTag)
         .map(Tag::getName)
@@ -59,7 +65,9 @@ public class EventDetailResponse {
         event.getImageUrl(),
         event.getEventPeriod().calculateRemainingDays(today),
         event.getEventPeriod().calculateApplyRemainingDays(today),
-        event.getType().toString()
+        event.getType().toString(),
+        imageUrls,
+        event.getOrganization()
     );
   }
 }

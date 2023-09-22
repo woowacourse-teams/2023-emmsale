@@ -13,4 +13,14 @@ public class MemberFixture {
     member.updateName("우르");
     return member;
   }
+
+  public static Member create(
+      final Long githubId,
+      final String githubUsername,
+      final String name
+  ) {
+    final Member member = new Member(githubId, "imageUrl", githubUsername);
+    member.updateName(name);
+    return member;
+  }
 }

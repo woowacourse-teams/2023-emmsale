@@ -18,6 +18,10 @@ spring:
   config:
     activate:
       on-profile: default
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
 
 logging:
   level:
@@ -46,6 +50,19 @@ firebase:
   project:
     id: kerdy
 
+data:
+  admin-url: http://localhost:3000
+
+cloud:
+  aws:
+    credentials:
+      instance-profile: true
+    s3:
+      bucket: test
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 ---
 

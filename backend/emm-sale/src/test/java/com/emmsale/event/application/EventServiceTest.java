@@ -33,14 +33,19 @@ import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.event.domain.EventType;
+import com.emmsale.event.domain.PaymentType;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
-import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.image.domain.Image;
+import com.emmsale.image.domain.ImageType;
+import com.emmsale.image.domain.repository.ImageRepository;
+import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
@@ -59,25 +64,34 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
-      List.of(), "IN_PROGRESS", "ENDED", null, 0, 0);
+      List.of(), "IN_PROGRESS", "ENDED", null, 0, 0, EventMode.OFFLINE.getValue(),
+      PaymentType.PAID.getValue());
   private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
-      List.of(), "IN_PROGRESS", "IN_PROGRESS", null, 0, 0);
+      List.of(), "IN_PROGRESS", "IN_PROGRESS", null, 0, 0, EventMode.ONLINE.getValue(),
+      PaymentType.PAID.getValue());
   private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스",
       null, null,
-      List.of(), "ENDED", "ENDED", null, 0, 0);
+      List.of(), "ENDED", "ENDED", null, 0, 0, EventMode.ONLINE.getValue(),
+      PaymentType.PAID.getValue());
   private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null,
-      List.of(), "UPCOMING", "IN_PROGRESS", null, 0, 0);
+      List.of(), "UPCOMING", "IN_PROGRESS", null, 0, 0, EventMode.ONLINE.getValue(),
+      PaymentType.PAID.getValue());
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
-      List.of(), "UPCOMING", "UPCOMING", null, 0, 0);
+      List.of(), "UPCOMING", "UPCOMING", null, 0, 0, EventMode.ONLINE.getValue(),
+      PaymentType.PAID.getValue());
   private static final EventResponse AI_아이디어_공모전 = new EventResponse(null, "AI 아이디어 공모전", null,
-      null, List.of(), "ENDED", "ENDED", null, 0, 0);
+      null, List.of(), "ENDED", "ENDED", null, 0, 0, EventMode.ONLINE.getValue(),
+      PaymentType.PAID.getValue());
   private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null, null,
-      List.of(), "IN_PROGRESS", "IN_PROGRESS", null, 0, 0);
+      List.of(), "IN_PROGRESS", "IN_PROGRESS", null, 0, 0, EventMode.ONLINE.getValue(),
+      PaymentType.PAID.getValue());
 
 
   private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
@@ -89,8 +103,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private EventTagRepository eventTagRepository;
   @Autowired
   private TagRepository tagRepository;
-  @MockBean
-  private EventPublisher eventPublisher;
+  @Autowired
+  private ImageRepository imageRepository;
+
+  private List<MultipartFile> mockMultipartFiles;
 
   @BeforeEach
   void init() {
@@ -114,6 +130,15 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
         new EventTag(모바일_컨퍼런스, 안드로이드), new EventTag(모바일_컨퍼런스, IOS), new EventTag(안드로이드_컨퍼런스, 안드로이드),
         new EventTag(웹_컨퍼런스, 백엔드), new EventTag(웹_컨퍼런스, 프론트엔드))
     );
+
+    mockMultipartFiles = List.of(
+        new MockMultipartFile(
+            "picture",
+            "picture.jpg",
+            MediaType.TEXT_PLAIN_VALUE,
+            "test data".getBytes()
+        )
+    );
   }
 
   @Nested
@@ -125,7 +150,16 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     void success() {
       //given
       final Event event = eventRepository.save(eventFixture());
-      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일());
+      imageRepository.save(
+          new Image("imageUrl1", ImageType.EVENT, event.getId(), 1, LocalDateTime.now())
+      );
+      imageRepository.save(
+          new Image("imageUrl2", ImageType.EVENT, event.getId(), 0, LocalDateTime.now())
+      );
+
+      final List<String> imageUrls = List.of("imageUrl2", "imageUrl1");
+
+      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일(), imageUrls);
 
       //when
       final EventDetailResponse actual = eventService.findEvent(event.getId(), 날짜_8월_10일());
@@ -483,13 +517,19 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     private final String eventLocation = "새로운 장소";
     private final String eventInformationUrl = "https://새로운-상세-URL.com";
     private final String imageUrl = "https://image.com";
+    private final PaymentType paymentType = PaymentType.FREE_PAID;
+    private final EventMode eventMode = EventMode.ON_OFFLINE;
     private final EventType type = EventType.CONFERENCE;
     private final LocalDate now = LocalDate.now();
+    private final String organization = "행사기관";
 
     @Test
     @DisplayName("이벤트를 성공적으로 저장한다.")
     void addEventTest() {
       //given
+      final Image image1 = new Image("image", ImageType.EVENT, 1L, 0, LocalDateTime.now());
+      final Image image2 = new Image("image", ImageType.EVENT, 1L, 0, LocalDateTime.now());
+
       final EventDetailRequest request = new EventDetailRequest(
           eventName,
           eventLocation,
@@ -500,10 +540,14 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           tagRequests,
           imageUrl,
-          type
+          type,
+          eventMode,
+          paymentType,
+          mockMultipartFiles,
+          organization
       );
 
-      doNothing().when(eventPublisher).publish((Event) any());
+      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
 
       //when
       final EventDetailResponse response = eventService.addEvent(request, now);
@@ -542,10 +586,14 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           tagRequests,
           imageUrl,
-          type
+          type,
+          eventMode,
+          paymentType,
+          mockMultipartFiles,
+          organization
       );
 
-      doNothing().when(eventPublisher).publish((Event) any());
+      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
@@ -574,10 +622,14 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           tagRequests,
           imageUrl,
-          type
+          type,
+          eventMode,
+          paymentType,
+          mockMultipartFiles,
+          organization
       );
 
-      doNothing().when(eventPublisher).publish((Event) any());
+      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
@@ -601,6 +653,9 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     private final String newInformationUrl = "https://새로운-상세-URL.com";
     private final String imageUrl = "https://image.com";
     private final LocalDate now = LocalDate.now();
+    private final PaymentType paymentType = PaymentType.FREE_PAID;
+    private final EventMode eventMode = EventMode.ON_OFFLINE;
+    private final String organization = "행사기관";
 
     @Test
     @DisplayName("이벤트를 성공적으로 업데이트한다.")
@@ -619,7 +674,11 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           newTagRequests,
           imageUrl,
-          EventType.CONFERENCE
+          EventType.CONFERENCE,
+          eventMode,
+          paymentType,
+          mockMultipartFiles,
+          organization
       );
 
       final Event event = eventRepository.save(인프콘_2023());
@@ -661,7 +720,11 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           newTagRequests,
           imageUrl,
-          EventType.CONFERENCE
+          EventType.CONFERENCE,
+          eventMode,
+          paymentType,
+          mockMultipartFiles,
+          organization
       );
 
       //when & then
@@ -688,7 +751,11 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           newTagRequests,
           imageUrl,
-          EventType.CONFERENCE
+          EventType.CONFERENCE,
+          eventMode,
+          paymentType,
+          mockMultipartFiles,
+          organization
       );
 
       final Event event = eventRepository.save(인프콘_2023());
@@ -719,7 +786,11 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           afterDateTime,
           newTagRequests,
           imageUrl,
-          EventType.CONFERENCE
+          EventType.CONFERENCE,
+          eventMode,
+          paymentType,
+          mockMultipartFiles,
+          organization
       );
 
       final Event event = eventRepository.save(인프콘_2023());

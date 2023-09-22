@@ -20,6 +20,10 @@ import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.event_publisher.EventPublisher;
+import com.emmsale.image.application.ImageCommandService;
+import com.emmsale.image.domain.Image;
+import com.emmsale.image.domain.ImageType;
+import com.emmsale.image.domain.repository.ImageRepository;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
@@ -47,12 +51,22 @@ public class EventService {
   private final EventTagRepository eventTagRepository;
   private final TagRepository tagRepository;
   private final EventPublisher eventPublisher;
+  private final ImageCommandService imageCommandService;
+  private final ImageRepository imageRepository;
 
   @Transactional(readOnly = true)
   public EventDetailResponse findEvent(final Long id, final LocalDate today) {
     final Event event = eventRepository.findById(id)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
-    return EventDetailResponse.from(event, today);
+
+    final List<String> imageUrls = imageRepository
+        .findAllByTypeAndContentId(ImageType.EVENT, event.getId())
+        .stream()
+        .sorted(comparing(Image::getOrder))
+        .map(Image::getName)
+        .collect(toList());
+
+    return EventDetailResponse.from(event, today, imageUrls);
   }
 
   @Transactional(readOnly = true)
@@ -133,9 +147,11 @@ public class EventService {
         );
   }
 
-  private List<EventResponse> filterByStatuses(final LocalDate today,
+  private List<EventResponse> filterByStatuses(
+      final LocalDate today,
       final List<EventStatus> statuses,
-      final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus
+  ) {
     if (isExistStatusName(statuses)) {
       return filterEventResponseByStatuses(today, statuses, eventsForEventStatus);
     }
@@ -146,9 +162,11 @@ public class EventService {
     return statuses != null;
   }
 
-  private List<EventResponse> filterEventResponseByStatuses(final LocalDate today,
+  private List<EventResponse> filterEventResponseByStatuses(
+      final LocalDate today,
       final List<EventStatus> statuses,
-      final EnumMap<EventStatus, List<Event>> eventsForEventStatus) {
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus
+  ) {
     return eventsForEventStatus.entrySet()
         .stream()
         .filter(entry -> statuses.contains(entry.getKey()))
@@ -162,14 +180,19 @@ public class EventService {
 
   public EventDetailResponse addEvent(final EventDetailRequest request, final LocalDate today) {
     final Event event = eventRepository.save(request.toEvent());
-
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
-
     event.addAllEventTags(tags);
+
+    final List<String> imageUrls = imageCommandService
+        .saveImages(ImageType.EVENT, event.getId(), request.getImages())
+        .stream()
+        .sorted(comparing(Image::getOrder))
+        .map(Image::getName)
+        .collect(toList());
 
     eventPublisher.publish(event);
 
-    return EventDetailResponse.from(event, today);
+    return EventDetailResponse.from(event, today, imageUrls);
   }
 
   public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request,
@@ -192,7 +215,14 @@ public class EventService {
         tags
     );
 
-    return EventDetailResponse.from(updatedEvent, today);
+    final List<String> imageUrls = imageRepository
+        .findAllByTypeAndContentId(ImageType.EVENT, event.getId())
+        .stream()
+        .sorted(comparing(Image::getOrder))
+        .map(Image::getName)
+        .collect(toList());
+
+    return EventDetailResponse.from(updatedEvent, today, imageUrls);
   }
 
   public void deleteEvent(final Long eventId) {
