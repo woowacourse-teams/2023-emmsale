@@ -16,7 +16,7 @@ class NotificationBoxFragmentStateAdapter(
     }
 
     companion object {
-        private const val NOTIFICATION_BOX_TAB_COUNT = 2
+        private const val NOTIFICATION_BOX_TAB_COUNT = 1
         private const val PRIMARY_NOTIFICATION_TAB_POSITION = 0
 
         private const val INVALID_FRAGMENT_POSITION_MESSAGE =
