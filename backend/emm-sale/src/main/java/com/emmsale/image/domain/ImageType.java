@@ -2,7 +2,7 @@ package com.emmsale.image.domain;
 
 public enum ImageType {
   FEED(5),
-  EVENT(2);
+  EVENT(200);
   
   private final int maxImageCount;
   

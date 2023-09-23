@@ -1,6 +1,7 @@
 package com.emmsale.image.application;
 
 import static com.emmsale.event.EventFixture.인프콘_2023;
+import static com.emmsale.member.MemberFixture.memberFixture;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -13,6 +14,7 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
+import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
 import com.emmsale.feed.exception.FeedExceptionType;
@@ -22,6 +24,8 @@ import com.emmsale.image.domain.ImageType;
 import com.emmsale.image.domain.repository.ImageRepository;
 import com.emmsale.image.exception.ImageException;
 import com.emmsale.image.exception.ImageExceptionType;
+import com.emmsale.member.domain.Member;
+import com.emmsale.member.domain.MemberRepository;
 import java.util.List;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +48,8 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
   private EventRepository eventRepository;
   @Autowired
   private FeedRepository feedRepository;
+  @Autowired
+  private MemberRepository memberRepository;
   private S3Client s3Client;
   
   @BeforeEach
@@ -140,15 +146,19 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
     void saveImages_fail_over_max_image_count() {
       //given
       final Event event = eventRepository.save(인프콘_2023());
+      final Member member = memberRepository.save(memberFixture());
+      final Feed feed = feedRepository.save(new Feed(event, member, "피드", "피드 내용"));
       final List<MultipartFile> files = List.of(
           new MockMultipartFile("test", "test1.png", "", new byte[]{}),
           new MockMultipartFile("test", "test2.png", "", new byte[]{}),
           new MockMultipartFile("test", "test3.png", "", new byte[]{}),
-          new MockMultipartFile("test", "test4.png", "", new byte[]{}));
+          new MockMultipartFile("test", "test4.png", "", new byte[]{}),
+          new MockMultipartFile("test", "test5.png", "", new byte[]{}),
+          new MockMultipartFile("test", "test6.png", "", new byte[]{}));
       
       //when
-      final ThrowingCallable actual = () -> imageCommandService.saveImages(ImageType.EVENT,
-          event.getId(), files);
+      final ThrowingCallable actual = () -> imageCommandService.saveImages(ImageType.FEED,
+          feed.getId(), files);
       
       //then
       assertThatThrownBy(actual).isInstanceOf(ImageException.class)
