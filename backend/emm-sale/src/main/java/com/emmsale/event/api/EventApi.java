@@ -51,7 +51,7 @@ public class EventApi {
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public EventDetailResponse addEvent(@RequestPart @Valid final EventDetailRequest request,
-      @RequestPart List<MultipartFile> images) {
+      @RequestPart final List<MultipartFile> images) {
     return eventService.addEvent(request, images, LocalDate.now());
   }
   
@@ -59,7 +59,7 @@ public class EventApi {
   @ResponseStatus(HttpStatus.OK)
   public EventDetailResponse updateEvent(@PathVariable final Long eventId,
       @RequestPart @Valid final EventDetailRequest request,
-      @RequestPart List<MultipartFile> images) {
+      @RequestPart final List<MultipartFile> images) {
     return eventService.updateEvent(eventId, request, images, LocalDate.now());
   }
   
