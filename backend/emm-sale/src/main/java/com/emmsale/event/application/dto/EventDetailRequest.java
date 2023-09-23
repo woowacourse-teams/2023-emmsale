@@ -14,15 +14,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Getter
 @Setter
 public class EventDetailRequest {
-
+  
   private static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
-
+  
   @NotBlank(message = "행사의 이름을 입력해 주세요.")
   private final String name;
   @NotBlank(message = "행사의 장소를 입력해 주세요.")
@@ -30,31 +29,29 @@ public class EventDetailRequest {
   @NotBlank(message = "행사의 상세 URL을 입력해 주세요.")
   @Pattern(regexp = "(http.?://).*", message = "http:// 혹은 https://로 시작하는 주소를 입력해 주세요.")
   private final String informationUrl;
-
+  
   @DateTimeFormat(pattern = DATE_TIME_FORMAT)
   @NotNull(message = "행사의 시작 일시를 입력해 주세요.")
   private final LocalDateTime startDateTime;
   @DateTimeFormat(pattern = DATE_TIME_FORMAT)
   @NotNull(message = "행사의 종료 일시를 입력해 주세요.")
   private final LocalDateTime endDateTime;
-
+  
   @DateTimeFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime applyStartDateTime;
   @DateTimeFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime applyEndDateTime;
-
+  
   private final List<TagRequest> tags;
-
+  
   private final String imageUrl;
   private final EventType type;
-
+  
   private final EventMode eventMode;
   private final PaymentType paymentType;
-
-  private final List<MultipartFile> images;
-
+  
   private final String organization;
-
+  
   public Event toEvent() {
     return new Event(
         name,
