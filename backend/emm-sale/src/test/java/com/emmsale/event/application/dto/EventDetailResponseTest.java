@@ -39,7 +39,7 @@ class EventDetailResponseTest {
         구름톤.getType().toString(),
         imageUrls,
         구름톤.getOrganization(),
-        PaymentType.FREE.getValue()
+        PaymentType.FREE_PAID.getValue()
     );
 
     //when
