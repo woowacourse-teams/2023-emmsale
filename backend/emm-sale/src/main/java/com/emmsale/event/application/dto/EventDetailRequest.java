@@ -51,7 +51,7 @@ public class EventDetailRequest {
   private final PaymentType paymentType;
 
   private final String organization;
-  
+
   public Event toEvent() {
     return new Event(
         name,
