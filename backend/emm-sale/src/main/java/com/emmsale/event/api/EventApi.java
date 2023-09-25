@@ -29,14 +29,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/events")
 @RequiredArgsConstructor
 public class EventApi {
-  
+
   private final EventService eventService;
-  
+
   @GetMapping("/{id}")
   public ResponseEntity<EventDetailResponse> findEventById(@PathVariable final Long id) {
     return ResponseEntity.ok(eventService.findEvent(id, LocalDate.now()));
   }
-  
+
   @GetMapping
   public ResponseEntity<List<EventResponse>> findEvents(
       @RequestParam final EventType category,
@@ -47,22 +47,22 @@ public class EventApi {
     return ResponseEntity.ok(
         eventService.findEvents(category, LocalDate.now(), startDate, endDate, tags, statuses));
   }
-  
+
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public EventDetailResponse addEvent(@RequestPart @Valid final EventDetailRequest request,
       @RequestPart final List<MultipartFile> images) {
     return eventService.addEvent(request, images, LocalDate.now());
   }
-  
-  @PutMapping("/{eventId}")
+
+  @PutMapping(path = "/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.OK)
   public EventDetailResponse updateEvent(@PathVariable final Long eventId,
       @RequestPart @Valid final EventDetailRequest request,
       @RequestPart final List<MultipartFile> images) {
     return eventService.updateEvent(eventId, request, images, LocalDate.now());
   }
-  
+
   @DeleteMapping("/{eventId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteEvent(@PathVariable final Long eventId) {

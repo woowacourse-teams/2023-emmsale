@@ -44,43 +44,43 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 @RequiredArgsConstructor
 public class EventService {
-  
+
   private static final String MIN_DATE = "2000-01-01";
   private static final String MAX_DATE = "2999-12-31";
-  
+
   private final EventRepository eventRepository;
   private final EventTagRepository eventTagRepository;
   private final TagRepository tagRepository;
   private final EventPublisher eventPublisher;
   private final ImageCommandService imageCommandService;
   private final ImageRepository imageRepository;
-  
+
   @Transactional(readOnly = true)
   public EventDetailResponse findEvent(final Long id, final LocalDate today) {
     final Event event = eventRepository.findById(id)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
-    
+
     final List<String> imageUrls = imageRepository
         .findAllByTypeAndContentId(ImageType.EVENT, event.getId())
         .stream()
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
         .collect(toList());
-    
+
     return EventDetailResponse.from(event, today, imageUrls);
   }
-  
+
   @Transactional(readOnly = true)
   public List<EventResponse> findEvents(final EventType category,
       final LocalDate nowDate, final String startDate, final String endDate,
       final List<String> tagNames, final List<EventStatus> statuses) {
     Specification<Event> spec = Specification.where(filterByCategory(category));
-    
+
     if (isExistTagNames(tagNames)) {
       validateTags(tagNames);
       spec = spec.and(filterByTags(tagNames));
     }
-    
+
     if (isExistFilterDate(startDate, endDate)) {
       final LocalDateTime startDateTime = validateStartDate(startDate);
       final LocalDateTime endDateTime = validateEndDate(endDate);
@@ -90,25 +90,25 @@ public class EventService {
     final List<Event> events = eventRepository.findAll(spec);
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events);
-    
+
     return filterByStatuses(nowDate, statuses, eventsForEventStatus);
   }
-  
+
   private boolean isExistTagNames(final List<String> tagNames) {
     return tagNames != null;
   }
-  
+
   private void validateTags(final List<String> tagNames) {
     final List<Tag> tags = tagRepository.findByNameIn(tagNames);
     if (tags.size() != tagNames.size()) {
       throw new TagException(NOT_FOUND_TAG);
     }
   }
-  
+
   private boolean isExistFilterDate(final String startDate, final String endDate) {
     return startDate != null || endDate != null;
   }
-  
+
   private LocalDateTime validateStartDate(final String date) {
     try {
       if (date == null) {
@@ -119,7 +119,7 @@ public class EventService {
       throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
     }
   }
-  
+
   private LocalDateTime validateEndDate(final String date) {
     try {
       if (date == null) {
@@ -130,14 +130,14 @@ public class EventService {
       throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
     }
   }
-  
+
   private void validateEndDateAfterDateStart(final LocalDateTime startDate,
       final LocalDateTime endDate) {
     if (endDate.isBefore(startDate)) {
       throw new EventException(EventExceptionType.START_DATE_AFTER_END_DATE);
     }
   }
-  
+
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
       final List<Event> events) {
     return events.stream()
@@ -147,7 +147,7 @@ public class EventService {
                 () -> new EnumMap<>(EventStatus.class), toList())
         );
   }
-  
+
   private List<EventResponse> filterByStatuses(
       final LocalDate today,
       final List<EventStatus> statuses,
@@ -158,11 +158,11 @@ public class EventService {
     }
     return EventResponse.mergeEventResponses(today, eventsForEventStatus);
   }
-  
+
   private boolean isExistStatusName(final List<EventStatus> statuses) {
     return statuses != null;
   }
-  
+
   private List<EventResponse> filterEventResponseByStatuses(
       final LocalDate today,
       final List<EventStatus> statuses,
@@ -178,34 +178,34 @@ public class EventService {
           return combinedEvents;
         });
   }
-  
+
   public EventDetailResponse addEvent(final EventDetailRequest request,
       final List<MultipartFile> images, final LocalDate today) {
     final Event event = eventRepository.save(request.toEvent());
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
     event.addAllEventTags(tags);
-    
+
     final List<String> imageUrls = imageCommandService
         .saveImages(ImageType.EVENT, event.getId(), images)
         .stream()
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
         .collect(toList());
-    
+
     eventPublisher.publish(event);
-    
+
     return EventDetailResponse.from(event, today, imageUrls);
   }
-  
+
   public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request,
       final List<MultipartFile> images, final LocalDate today) {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
-    
+
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
-    
+
     eventTagRepository.deleteAllByEventId(eventId);
-    
+
     final Event updatedEvent = event.updateEventContent(
         request.getName(),
         request.getLocation(),
@@ -223,10 +223,10 @@ public class EventService {
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
         .collect(toList());
-    
+
     return EventDetailResponse.from(updatedEvent, today, imageUrls);
   }
-  
+
   public void deleteEvent(final Long eventId) {
     if (!eventRepository.existsById(eventId)) {
       throw new EventException(NOT_FOUND_EVENT);
@@ -234,12 +234,12 @@ public class EventService {
     imageCommandService.deleteImages(ImageType.EVENT, eventId);
     eventRepository.deleteById(eventId);
   }
-  
+
   private List<Tag> findAllPersistTagsOrElseThrow(final List<TagRequest> tags) {
     if (tags == null || tags.isEmpty()) {
       return new ArrayList<>();
     }
-    
+
     return tags.stream()
         .map(tag -> tagRepository.findByName(tag.getName())
             .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_TAG)))
