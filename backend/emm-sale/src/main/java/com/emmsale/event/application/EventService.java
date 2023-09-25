@@ -216,9 +216,9 @@ public class EventService {
         request.getInformationUrl(),
         tags
     );
-    
-    final List<String> imageUrls = imageRepository
-        .findAllByTypeAndContentId(ImageType.EVENT, event.getId())
+    imageCommandService.deleteImages(ImageType.EVENT, eventId);
+    final List<String> imageUrls = imageCommandService
+        .saveImages(ImageType.EVENT, event.getId(), images)
         .stream()
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
