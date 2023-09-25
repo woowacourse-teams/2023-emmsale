@@ -57,7 +57,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 @WebMvcTest(EventApi.class)
 class EventApiTest extends MockMvcTestHelper {
-  
+
   private static final ResponseFieldsSnippet EVENT_DETAIL_RESPONSE_FILED = PayloadDocumentation.responseFields(
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("event 식별자"),
       fieldWithPath("name").type(JsonFieldType.STRING)
@@ -88,7 +88,7 @@ class EventApiTest extends MockMvcTestHelper {
       fieldWithPath("organization").description("행사기관"),
       fieldWithPath("paymentType").description("유무료 여부(유료,무료,유무료)")
   );
-  
+
   @Test
   @DisplayName("컨퍼런스의 상세정보를 조회할 수 있다.")
   void findEvent() throws Exception {
@@ -105,13 +105,13 @@ class EventApiTest extends MockMvcTestHelper {
 
     Mockito.when(eventService.findEvent(ArgumentMatchers.anyLong(), any()))
         .thenReturn(eventDetailResponse);
-    
+
     //when
     mockMvc.perform(get("/events/" + eventId)).andExpect(
             status().isOk())
         .andDo(MockMvcRestDocumentation.document("find-event", EVENT_DETAIL_RESPONSE_FILED));
   }
-  
+
   @Test
   @DisplayName("특정 카테고리의 행사 목록을 조회할 수 있으면 200 OK를 반환한다.")
   void findEvents() throws Exception {
@@ -129,7 +129,7 @@ class EventApiTest extends MockMvcTestHelper {
             .description("필터링하려는 상태(UPCOMING, IN_PROGRESS, ENDED)(option)")
             .optional()
     );
-    
+
     final ResponseFieldsSnippet responseFields = PayloadDocumentation.responseFields(
         fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
         fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
@@ -154,7 +154,7 @@ class EventApiTest extends MockMvcTestHelper {
         fieldWithPath("[].paymentType").type(JsonFieldType.STRING)
             .description("행사 유료 여부(유료, 무료, 유무료)")
     );
-    
+
     final List<EventResponse> eventResponses = List.of(
         new EventResponse(1L, "인프콘 2023", LocalDateTime.parse("2023-06-03T12:00:00"),
             LocalDateTime.parse("2023-09-03T12:00:00"),
@@ -172,12 +172,12 @@ class EventApiTest extends MockMvcTestHelper {
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
             3, -18, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue())
     );
-    
+
     Mockito.when(eventService.findEvents(any(EventType.class),
         any(LocalDate.class), eq("2023-07-01"),
         eq("2023-07-31"),
         eq(null), any())).thenReturn(eventResponses);
-    
+
     // when & then
     mockMvc.perform(get("/events")
             .param("category", "CONFERENCE")
@@ -188,7 +188,7 @@ class EventApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(MockMvcRestDocumentation.document("find-events", requestParameters, responseFields));
   }
-  
+
   @Test
   @DisplayName("이벤트를 성공적으로 업데이트하면 200, OK를 반환한다.")
   void updateEventTest() throws Exception {
@@ -199,7 +199,7 @@ class EventApiTest extends MockMvcTestHelper {
         MediaType.TEXT_PLAIN_VALUE,
         "test data".getBytes()
     );
-    
+
     final MockMultipartFile image2 = new MockMultipartFile(
         "picture",
         "picture.jpg",
@@ -208,30 +208,30 @@ class EventApiTest extends MockMvcTestHelper {
     );
     final long eventId = 1L;
     final Event event = EventFixture.인프콘_2023();
-    
+
     final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
         .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
-    
+
     final EventDetailRequest request = new EventDetailRequest(event.getName(),
         event.getLocation(), event.getInformationUrl(), event.getEventPeriod().getStartDate(),
         event.getEventPeriod().getEndDate(),
         event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
         tags, event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE,
         "행사기관");
-    
+
     final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
         request.getApplyStartDateTime(), request.getApplyEndDateTime(),
         request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
         request.getImageUrl(), 10, 10, request.getType().toString(),
-        List.of("imageUrl1", "imageUrl2"), "행사기관","유료");
-    
+        List.of("imageUrl1", "imageUrl2"), "행사기관", "유료");
+
     Mockito.when(eventService.updateEvent(eq(eventId), any(EventDetailRequest.class), any(), any()))
         .thenReturn(response);
-    
+
     String contents = objectMapper.writeValueAsString(request);
-    
+
     final RequestPartsSnippet requestPartsSnippet = requestParts(
         partWithName("images").description("이미지들").optional(),
         partWithName("request").description("행사 정보들"),
@@ -251,45 +251,45 @@ class EventApiTest extends MockMvcTestHelper {
             .optional(),
         partWithName("request.organization").description("행사 주최 기관").optional()
     );
-    
+
     //when
     MockMultipartHttpServletRequestBuilder builder = multipart(HttpMethod.PUT, "/events/" + eventId)
         .file("images", image1.getBytes())
         .file("images", image2.getBytes())
         .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
             StandardCharsets.UTF_8)));
-    
+
     final ResultActions result = mockMvc.perform(builder);
-    
+
     //when & then
     result.andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andDo(MockMvcRestDocumentation.document("update-event", requestPartsSnippet,
             EVENT_DETAIL_RESPONSE_FILED));
-    
-    
+
+
   }
-  
+
   @Test
   @DisplayName("이벤트를 성공적으로 삭제하면 204, NO_CONTENT를 반환한다.")
   void deleteEventTest() throws Exception {
     //given
     final long eventId = 1L;
-    
+
     Mockito.doNothing().when(eventService).deleteEvent(eventId);
     //when
     final ResultActions result = mockMvc.perform(
         delete("/events/" + eventId));
-    
+
     //then
     result.andExpect(status().isNoContent())
         .andDo(MockMvcResultHandlers.print()).andDo(
             MockMvcRestDocumentation.document("delete-event"));
   }
-  
+
   @Nested
   class AddEvent {
-    
+
     @Test
     @DisplayName("이벤트를 성공적으로 추가하면 201, CREATED 를 반환한다.")
     void addEventTest() throws Exception {
@@ -300,39 +300,39 @@ class EventApiTest extends MockMvcTestHelper {
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final MockMultipartFile image2 = new MockMultipartFile(
           "picture",
           "picture.jpg",
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final Event event = EventFixture.인프콘_2023();
-      
+
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
-      
+
       final EventDetailRequest request = new EventDetailRequest(event.getName(),
           event.getLocation(), event.getInformationUrl(), event.getEventPeriod().getStartDate(),
           event.getEventPeriod().getEndDate(),
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
           tags, event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE,
           "행사기관");
-      
+
       final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
           request.getApplyStartDateTime(), request.getApplyEndDateTime(),
           request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
           tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
           request.getImageUrl(), 10, 10, request.getType().toString(),
-          List.of("imageUrl1", "imageUrl2"), "행사기관","무료");
-      
+          List.of("imageUrl1", "imageUrl2"), "행사기관", "무료");
+
       Mockito.when(eventService.addEvent(any(EventDetailRequest.class), any(), any()))
           .thenReturn(response);
-      
+
       String contents = objectMapper.writeValueAsString(request);
-      
+
       final RequestPartsSnippet requestPartsSnippet = requestParts(
           partWithName("images").description("이미지들").optional(),
           partWithName("request").description("행사 정보들"),
@@ -352,23 +352,23 @@ class EventApiTest extends MockMvcTestHelper {
               .optional(),
           partWithName("request.organization").description("행사 주최 기관").optional()
       );
-      
+
       //when
       MockMultipartHttpServletRequestBuilder builder = multipart("/events")
           .file("images", image1.getBytes())
           .file("images", image2.getBytes())
           .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
               StandardCharsets.UTF_8)));
-      
+
       final ResultActions result = mockMvc.perform(builder);
-      
+
       //then
       result.andExpect(status().isCreated())
           .andDo(MockMvcResultHandlers.print())
           .andDo(MockMvcRestDocumentation.document("add-event", EVENT_DETAIL_RESPONSE_FILED,
               requestPartsSnippet));
     }
-    
+
     @ParameterizedTest
     @NullSource
     @EmptySource
@@ -381,16 +381,16 @@ class EventApiTest extends MockMvcTestHelper {
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final MockMultipartFile image2 = new MockMultipartFile(
           "picture",
           "picture.jpg",
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final Event event = EventFixture.인프콘_2023();
-      
+
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
       final EventDetailRequest request = new EventDetailRequest(
@@ -409,7 +409,7 @@ class EventApiTest extends MockMvcTestHelper {
           )
           .andExpect(status().isBadRequest());
     }
-    
+
     @ParameterizedTest
     @NullSource
     @EmptySource
@@ -422,16 +422,16 @@ class EventApiTest extends MockMvcTestHelper {
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final MockMultipartFile image2 = new MockMultipartFile(
           "picture",
           "picture.jpg",
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final Event event = EventFixture.인프콘_2023();
-      
+
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
       final EventDetailRequest request = new EventDetailRequest(
@@ -450,7 +450,7 @@ class EventApiTest extends MockMvcTestHelper {
           )
           .andExpect(status().isBadRequest());
     }
-    
+
     @ParameterizedTest
     @ValueSource(strings = {"httpexample.com", "http:example.com", "http:/example.com",
         "httpsexample.com", "https:example.com", "https:/example.com"})
@@ -464,16 +464,16 @@ class EventApiTest extends MockMvcTestHelper {
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final MockMultipartFile image2 = new MockMultipartFile(
           "picture",
           "picture.jpg",
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final Event event = EventFixture.인프콘_2023();
-      
+
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
       final EventDetailRequest request = new EventDetailRequest(
@@ -492,7 +492,7 @@ class EventApiTest extends MockMvcTestHelper {
           )
           .andExpect(status().isBadRequest());
     }
-    
+
     @ParameterizedTest
     @ValueSource(strings = {"23-01-01T12:00:00", "2023-1-01T12:00:00", "2023-01-1T12:00:00",
         "2023-01-01T2:00:00", "2023-01-01T12:0:00", "2023-01-01T12:00:0"})
@@ -507,16 +507,16 @@ class EventApiTest extends MockMvcTestHelper {
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final MockMultipartFile image2 = new MockMultipartFile(
           "picture",
           "picture.jpg",
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final Event event = EventFixture.인프콘_2023();
-      
+
       Map<String, String> request = new HashMap<>();
       request.put("name", event.getName());
       request.put("location", event.getLocation());
@@ -530,7 +530,7 @@ class EventApiTest extends MockMvcTestHelper {
       request.put("eventMode", event.getEventMode().name());
       request.put("paymentType", event.getPaymentType().name());
       request.put("organization", event.getOrganization());
-      
+
       String contents = objectMapper.writeValueAsString(request);
       //when & then
       mockMvc.perform(multipart("/events")
@@ -541,7 +541,7 @@ class EventApiTest extends MockMvcTestHelper {
           )
           .andExpect(status().isBadRequest());
     }
-    
+
     @ParameterizedTest
     @ValueSource(strings = {"23-01-02T12:00:00", "2023-1-02T12:00:00", "2023-01-2T12:00:00",
         "2023-01-02T2:00:00", "2023-01-02T12:0:00", "2023-01-02T12:00:0"})
@@ -555,16 +555,16 @@ class EventApiTest extends MockMvcTestHelper {
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final MockMultipartFile image2 = new MockMultipartFile(
           "picture",
           "picture.jpg",
           MediaType.TEXT_PLAIN_VALUE,
           "test data".getBytes()
       );
-      
+
       final Event event = EventFixture.인프콘_2023();
-      
+
       Map<String, String> request = new HashMap<>();
       request.put("name", event.getName());
       request.put("location", event.getLocation());
@@ -578,7 +578,7 @@ class EventApiTest extends MockMvcTestHelper {
       request.put("eventMode", event.getEventMode().name());
       request.put("paymentType", event.getPaymentType().name());
       request.put("organization", event.getOrganization());
-      
+
       String contents = objectMapper.writeValueAsString(request);
       //when & then
       mockMvc.perform(multipart("/events")
