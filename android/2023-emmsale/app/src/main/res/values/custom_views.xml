@@ -14,4 +14,11 @@
     </declare-styleable>
 
     <attr name="FilterTagStyle" format="reference" />
+
+    <declare-styleable name="NoContentView">
+        <attr name="noContentImageResId" format="reference" />
+        <attr name="noContentImageTint" format="color" />
+        <attr name="title" format="string" />
+        <attr name="description" format="string" />
+    </declare-styleable>
 </resources>
