@@ -29,7 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/menu_message_room_toolbar"
-            app:title="@string/messageroomlist_toolbar_title"
+            app:title="@string/messageroom_toolbar_title"
             app:titleCentered="true"
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
@@ -83,14 +83,14 @@
         <com.emmsale.presentation.common.views.NoContentView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:description="상대방의 프로필에서 채팅을 보내보세요!"
+            app:description="@string/messageroom_no_content_view_desc"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:noContentImageResId="@drawable/ic_no_result4"
             app:noContentImageTint="@color/primary_color"
-            app:title="아직 채팅방이 없어요!"
+            app:title="@string/messageroom_no_content_view_title"
             app:visible="@{vm.messageRooms.messageRooms.empty &amp;&amp; vm.messageRooms.fetchResult == FetchResult.SUCCESS}" />
 
         <ProgressBar

@@ -126,13 +126,13 @@
         <com.emmsale.presentation.common.views.NoContentView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:description="아직 상대방과 나눈 대화가 없어요!"
+            app:description="@string/messagelist_no_content_view_desc"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:noContentImageResId="@drawable/ic_no_result3"
-            app:title="먼저 메시지를 보내보세요!"
+            app:title="@string/messagelist_no_content_view_title"
             app:visible="@{vm.messages.messages.empty &amp;&amp; vm.messages.fetchResult == FetchResult.SUCCESS}" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

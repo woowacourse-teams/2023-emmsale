@@ -74,13 +74,13 @@
         <com.emmsale.presentation.common.views.NoContentView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:description="행사를 스크랩하면 여기서 확인할 수 있어요."
+            app:description="@string/scrappedevent_no_content_view_title"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:noContentImageResId="@drawable/ic_no_result1"
-            app:title="아직 스크랩한 행사가 없어요!"
+            app:title="@string/scrappedevent_no_content_view_desc"
             app:visible="@{vm.scrappedEvents.list.empty &amp;&amp; vm.scrappedEvents.fetchResult == FetchResult.SUCCESS}" />
 
         <ProgressBar

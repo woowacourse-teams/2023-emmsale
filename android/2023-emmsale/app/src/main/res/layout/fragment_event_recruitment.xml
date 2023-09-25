@@ -66,9 +66,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="100dp"
-                app:description="가장 먼저 행사에 같이 갈 사람을 구해보세요!"
+                app:description="@string/eventrecruitment_no_content_view_desc"
                 app:noContentImageResId="@drawable/ic_no_result2"
-                app:title="아직 같이가요 게시글이 없어요!" />
+                app:title="@string/eventrecruitment_no_content_view_title" />
 
         </androidx.core.widget.NestedScrollView>
 
