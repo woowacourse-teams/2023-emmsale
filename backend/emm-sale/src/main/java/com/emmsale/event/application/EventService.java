@@ -204,8 +204,8 @@ public class EventService {
 
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
 
+    // TODO: 2023/09/25 더 좋은 방법을 고민해보기
     eventTagRepository.deleteAllByEventId(eventId);
-
     final Event updatedEvent = event.updateEventContent(
         request.getName(),
         request.getLocation(),
@@ -216,9 +216,9 @@ public class EventService {
         request.getInformationUrl(),
         tags
     );
-
-    final List<String> imageUrls = imageRepository
-        .findAllByTypeAndContentId(ImageType.EVENT, event.getId())
+    imageCommandService.deleteImages(ImageType.EVENT, eventId);
+    final List<String> imageUrls = imageCommandService
+        .saveImages(ImageType.EVENT, event.getId(), images)
         .stream()
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
@@ -231,7 +231,7 @@ public class EventService {
     if (!eventRepository.existsById(eventId)) {
       throw new EventException(NOT_FOUND_EVENT);
     }
-
+    imageCommandService.deleteImages(ImageType.EVENT, eventId);
     eventRepository.deleteById(eventId);
   }
 
