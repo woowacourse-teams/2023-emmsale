@@ -1,6 +1,5 @@
 package com.emmsale.data.repository.concretes
 
-import android.util.Log
 import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
@@ -65,7 +64,6 @@ class DefaultRecruitmentRepository @Inject constructor(
     }
 
     private fun getRecruitmentIdFromResponse(result: Success<Unit>): Long {
-        Log.d("wooseok", result.toString())
         val locationHeader = result.headers[HEADER_LOCATION] as CharSequence
         val regex = "/(\\d+)$".toRegex()
         val matchResult = regex.find(locationHeader)

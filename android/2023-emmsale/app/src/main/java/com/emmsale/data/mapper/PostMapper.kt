@@ -1,6 +1,5 @@
 package com.emmsale.data.mapper
 
-import android.util.Log
 import com.emmsale.BuildConfig
 import com.emmsale.data.apiModel.response.PostsResponse
 import com.emmsale.data.model.Post
@@ -18,7 +17,7 @@ fun PostsResponse.toData(): List<Post> {
             createdAt = LocalDateTime.parse(postResponse.createdAt, dateTimeFormatter),
             updatedAt = LocalDateTime.parse(postResponse.updatedAt, dateTimeFormatter),
             commentCount = postResponse.commentCount,
-        ).apply { Log.d("wooseok", getTitleImageUrl(postResponse.imageUrls) ?: "") }
+        )
     }
 }
 
