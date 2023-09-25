@@ -55,7 +55,7 @@ public class EventApi {
     return eventService.addEvent(request, images, LocalDate.now());
   }
 
-  @PutMapping("/{eventId}")
+  @PutMapping(path = "/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.OK)
   public EventDetailResponse updateEvent(@PathVariable final Long eventId,
       @RequestPart @Valid final EventDetailRequest request,
