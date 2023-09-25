@@ -9,9 +9,9 @@
 
         <import type="kotlin.Unit" />
 
-        <import type="com.emmsale.data.model.Status" />
+        <import type="com.emmsale.data.model.EventStatus" />
 
-        <import type="com.emmsale.data.model.EventMode" />
+        <import type="com.emmsale.data.model.OnOfflineMode" />
 
         <import type="com.emmsale.data.model.PaymentType" />
 
@@ -52,9 +52,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/nanum_square_extra_bold"
-            android:text="@{event.getStatus()}"
-            android:textColor="@{event.status == `마감` ? @color/gray : @color/primary_color}"
+            android:textColor="@{event.competition.eventStatus == EventStatus.ENDED ? @color/gray : @color/primary_color}"
             android:textSize="13sp"
+            app:eventRemainingDays="@{event.competition.remainingDays}"
+            app:eventStatus="@{event.competition.eventStatus}"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
             app:layout_goneMarginTop="9dp"
@@ -79,11 +80,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@{event.competition.paymentType == PaymentType.PAID ? @string/all_paid : event.competition.paymentType == PaymentType.FREE ? @string/all_free : @string/all_paid_free}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
+            app:paymentType="@{event.competition.paymentType}"
             tools:text="무료" />
 
         <View
@@ -101,13 +102,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:text="@{event.competition.eventMode == EventMode.ONLINE ? @string/event_online : @string/event_offline}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_pay_type"
             app:layout_constraintStart_toStartOf="@+id/divider"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
             app:layout_constraintTop_toTopOf="@+id/tv_pay_type"
+            app:onOfflineMode="@{event.competition.onOfflineMode}"
             tools:text="온라인" />
 
         <com.google.android.material.chip.ChipGroup

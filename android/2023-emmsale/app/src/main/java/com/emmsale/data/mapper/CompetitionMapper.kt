@@ -2,9 +2,9 @@ package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.CompetitionResponse
 import com.emmsale.data.model.Competition
-import com.emmsale.data.model.EventMode
+import com.emmsale.data.model.EventStatus
+import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
-import com.emmsale.data.model.Status
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -18,23 +18,23 @@ fun CompetitionResponse.toData(): Competition = Competition(
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
     status = when (status) {
-        CompetitionResponse.Status.ENDED -> Status.ENDED
-        CompetitionResponse.Status.UPCOMING -> Status.UPCOMING
-        CompetitionResponse.Status.IN_PROGRESS -> Status.IN_PROGRESS
+        CompetitionResponse.Status.ENDED -> EventStatus.ENDED
+        CompetitionResponse.Status.UPCOMING -> EventStatus.UPCOMING
+        CompetitionResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
     },
     tags = tags,
     posterUrl = posterUrl,
-    dDay = dDay,
+    remainingDays = remainingDays,
     eventStatus = when (applyStatus) {
-        CompetitionResponse.Status.ENDED -> Status.ENDED
-        CompetitionResponse.Status.UPCOMING -> Status.UPCOMING
-        CompetitionResponse.Status.IN_PROGRESS -> Status.IN_PROGRESS
+        CompetitionResponse.Status.ENDED -> EventStatus.ENDED
+        CompetitionResponse.Status.UPCOMING -> EventStatus.UPCOMING
+        CompetitionResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
     },
     applyRemainingDays = applyRemainingDays,
-    eventMode = when (eventMode) {
-        CompetitionResponse.EventMode.ONLINE -> EventMode.ONLINE
-        CompetitionResponse.EventMode.OFFLINE -> EventMode.OFFLINE
-        CompetitionResponse.EventMode.ON_OFFLINE -> EventMode.ON_OFFLINE
+    onOfflineMode = when (onOfflineMode) {
+        CompetitionResponse.OnOfflineMode.ONLINE -> OnOfflineMode.ONLINE
+        CompetitionResponse.OnOfflineMode.OFFLINE -> OnOfflineMode.OFFLINE
+        CompetitionResponse.OnOfflineMode.ON_OFFLINE -> OnOfflineMode.ON_OFFLINE
     },
     paymentType = when (paymentType) {
         CompetitionResponse.PaymentType.FREE -> PaymentType.FREE

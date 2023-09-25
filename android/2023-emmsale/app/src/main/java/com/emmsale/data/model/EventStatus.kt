@@ -1,5 +1,5 @@
 package com.emmsale.data.model
 
-enum class Status {
+enum class EventStatus {
     IN_PROGRESS, UPCOMING, ENDED,
 }

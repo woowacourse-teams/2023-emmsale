@@ -146,6 +146,7 @@
                         android:textSize="12sp"
                         app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_place_title"
                         app:layout_constraintTop_toBottomOf="@id/tv_eventInfo_place"
+                        app:paymentType="@{vm.eventDetail.eventDetail.paymentType}"
                         tools:text="무료" />
 
                     <androidx.appcompat.widget.AppCompatImageView

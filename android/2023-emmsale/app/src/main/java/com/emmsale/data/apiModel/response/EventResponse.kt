@@ -22,11 +22,11 @@ data class ConferenceResponse(
     @SerialName("imageUrl")
     val posterUrl: String? = null,
     @SerialName("remainingDays")
-    val dDay: Int,
+    val remainingDays: Int,
     @SerialName("applyRemainingDays")
     val applyRemainingDays: Int,
     @SerialName("eventMode")
-    val eventMode: EventMode,
+    val onOfflineMode: OnOfflineMode,
     @SerialName("paymentType")
     val paymentType: PaymentType,
 ) {
@@ -41,7 +41,7 @@ data class ConferenceResponse(
         ENDED,
     }
 
-    enum class EventMode {
+    enum class OnOfflineMode {
         @SerialName("온라인")
         ONLINE,
 
@@ -83,11 +83,11 @@ data class CompetitionResponse(
     @SerialName("imageUrl")
     val posterUrl: String? = null,
     @SerialName("remainingDays")
-    val dDay: Int,
+    val remainingDays: Int,
     @SerialName("applyRemainingDays")
     val applyRemainingDays: Int,
     @SerialName("eventMode")
-    val eventMode: EventMode,
+    val onOfflineMode: OnOfflineMode,
     @SerialName("paymentType")
     val paymentType: PaymentType,
 ) {
@@ -102,7 +102,7 @@ data class CompetitionResponse(
         ENDED,
     }
 
-    enum class EventMode {
+    enum class OnOfflineMode {
         @SerialName("온라인")
         ONLINE,
 

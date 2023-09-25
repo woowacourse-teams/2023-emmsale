@@ -22,7 +22,7 @@ import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
-import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailUiState
+import com.emmsale.presentation.ui.eventDetail.uistate.EventDetailUiState
 import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

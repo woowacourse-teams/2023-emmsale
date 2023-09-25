@@ -1,5 +1,5 @@
 package com.emmsale.data.model
 
-enum class EventMode {
+enum class OnOfflineMode {
     ONLINE, OFFLINE, ON_OFFLINE,
 }

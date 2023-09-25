@@ -22,7 +22,7 @@ data class ScrappedEventResponse(
     @SerialName("imageUrl")
     val posterUrl: String? = null,
     @SerialName("remainingDays")
-    val dDay: Int,
+    val remainingDays: Int,
     @SerialName("applyRemainingDays")
     val applyRemainingDays: Int,
     @SerialName("eventMode")
