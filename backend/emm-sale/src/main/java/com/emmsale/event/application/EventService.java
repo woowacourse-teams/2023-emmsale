@@ -38,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -178,13 +179,14 @@ public class EventService {
         });
   }
 
-  public EventDetailResponse addEvent(final EventDetailRequest request, final LocalDate today) {
+  public EventDetailResponse addEvent(final EventDetailRequest request,
+      final List<MultipartFile> images, final LocalDate today) {
     final Event event = eventRepository.save(request.toEvent());
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
     event.addAllEventTags(tags);
 
     final List<String> imageUrls = imageCommandService
-        .saveImages(ImageType.EVENT, event.getId(), request.getImages())
+        .saveImages(ImageType.EVENT, event.getId(), images)
         .stream()
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
@@ -196,7 +198,7 @@ public class EventService {
   }
 
   public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request,
-      final LocalDate today) {
+      final List<MultipartFile> images, final LocalDate today) {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 

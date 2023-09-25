@@ -14,7 +14,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Getter
@@ -50,8 +49,6 @@ public class EventDetailRequest {
 
   private final EventMode eventMode;
   private final PaymentType paymentType;
-
-  private final List<MultipartFile> images;
 
   private final String organization;
 
