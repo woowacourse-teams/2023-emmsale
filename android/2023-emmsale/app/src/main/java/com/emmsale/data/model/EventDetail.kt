@@ -18,7 +18,7 @@ data class EventDetail(
     val posterImageUrl: String?,
     val remainingDays: Int,
     val applyRemainingDays: Int,
-    val paymentType: Conference.PaymentType,
+    val paymentType: PaymentType,
     val type: String,
 ) {
     companion object {
@@ -38,7 +38,7 @@ data class EventDetail(
             posterImageUrl = null,
             remainingDays = 1,
             applyRemainingDays = 1,
-            paymentType = Conference.PaymentType.FREE,
+            paymentType = PaymentType.FREE,
             type = "",
         )
     }

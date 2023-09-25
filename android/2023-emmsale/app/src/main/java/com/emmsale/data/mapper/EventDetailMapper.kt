@@ -1,8 +1,8 @@
 package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.EventDetailResponse
-import com.emmsale.data.model.Conference
 import com.emmsale.data.model.EventDetail
+import com.emmsale.data.model.PaymentType
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -24,9 +24,9 @@ fun EventDetailResponse.toData(): EventDetail = EventDetail(
     applyRemainingDays = applyRemainingDays,
     type = type,
     paymentType = when (paymentType) {
-        "유료" -> Conference.PaymentType.PAID
-        "무료" -> Conference.PaymentType.FREE
-        "유무료" -> Conference.PaymentType.PAID_OR_FREE
+        "유료" -> PaymentType.PAID
+        "무료" -> PaymentType.FREE
+        "유무료" -> PaymentType.PAID_OR_FREE
         else -> throw IllegalArgumentException("행사 상세 응답 비용 정보 매핑 실패")
     },
 )

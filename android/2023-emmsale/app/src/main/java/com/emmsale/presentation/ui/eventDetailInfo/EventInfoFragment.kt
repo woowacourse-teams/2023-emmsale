@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.emmsale.R
-import com.emmsale.data.model.Conference
+import com.emmsale.data.model.PaymentType
 import com.emmsale.databinding.FragmentEventInformationBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
@@ -35,9 +35,9 @@ class EventInfoFragment :
     private fun setUpEventDetail() {
         viewModel.eventDetail.observe(viewLifecycleOwner) {
             binding.tvEventInfoCost.text = when (it.eventDetail.paymentType) {
-                Conference.PaymentType.PAID -> "유료"
-                Conference.PaymentType.FREE -> "무료"
-                Conference.PaymentType.PAID_OR_FREE -> "유료/무료"
+                PaymentType.PAID -> getString(R.string.all_paid)
+                PaymentType.FREE -> getString(R.string.all_free)
+                PaymentType.PAID_OR_FREE -> getString(R.string.all_paid_free)
             }
         }
     }

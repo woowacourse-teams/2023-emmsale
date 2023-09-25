@@ -31,6 +31,9 @@
     <string name="all_finish_confirm_message">한 번 더 누르면 종료됩니다.</string>
     <string name="all_just_before">방금 전</string>
     <string name="all_is_updated">수정됨</string>
+    <string name="all_paid">유료</string>
+    <string name="all_free">무료</string>
+    <string name="all_paid_free">유료/무료</string>
 
     <string name="splash_app_update_title">업데이트</string>
     <string name="splash_app_update_message">새로운 버전이 출시되었어요!\n지금 바로 커디 스토어로 이동하시겠어요?</string>
@@ -124,8 +127,6 @@
     <string name="event_search_conference_description">컨퍼런스 검색 화면</string>
     <string name="event_competition">대회</string>
     <string name="event_conference">컨퍼런스</string>
-    <string name="event_free">무료</string>
-    <string name="event_paid">유료</string>
     <string name="event_online">온라인</string>
     <string name="event_offline">오프라인</string>
 

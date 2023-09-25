@@ -9,11 +9,11 @@
 
         <import type="kotlin.Unit" />
 
-        <import type="com.emmsale.data.model.ScrappedEvent.Status" />
+        <import type="com.emmsale.data.model.Status" />
 
-        <import type="com.emmsale.data.model.ScrappedEvent.EventMode" />
+        <import type="com.emmsale.data.model.EventMode" />
 
-        <import type="com.emmsale.data.model.ScrappedEvent.PaymentType" />
+        <import type="com.emmsale.data.model.PaymentType" />
 
         <variable
             name="event"
@@ -74,11 +74,11 @@
             tools:text="2023 인프콘" />
 
         <TextView
-            android:id="@+id/tv_is_free"
+            android:id="@+id/tv_pay_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@{event.data.paymentType==PaymentType.PAID ? @string/event_paid : @string/event_free}"
+            android:text="@{event.data.paymentType == PaymentType.PAID ? @string/all_paid : event.data.paymentType == PaymentType.FREE ? @string/all_free : @string/all_paid_free}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
@@ -91,9 +91,9 @@
             android:layout_height="0dp"
             android:layout_marginStart="6dp"
             android:background="@color/light_gray"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_is_free"
-            app:layout_constraintStart_toEndOf="@+id/tv_is_free"
-            app:layout_constraintTop_toTopOf="@+id/tv_is_free" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_pay_type"
+            app:layout_constraintStart_toEndOf="@+id/tv_pay_type"
+            app:layout_constraintTop_toTopOf="@+id/tv_pay_type" />
 
         <TextView
             android:id="@+id/tv_is_online"
@@ -103,10 +103,10 @@
             android:text="@{event.data.eventMode == EventMode.ONLINE ? @string/event_online : @string/event_offline}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_is_free"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_pay_type"
             app:layout_constraintStart_toStartOf="@+id/divider"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
-            app:layout_constraintTop_toTopOf="@+id/tv_is_free"
+            app:layout_constraintTop_toTopOf="@+id/tv_pay_type"
             tools:text="온라인" />
 
         <com.google.android.material.chip.ChipGroup
@@ -118,7 +118,7 @@
             app:eventChips="@{event.data.tags}"
             app:layout_constraintEnd_toEndOf="@+id/iv_event_poster"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
-            app:layout_constraintTop_toBottomOf="@+id/tv_is_free" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_pay_type" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

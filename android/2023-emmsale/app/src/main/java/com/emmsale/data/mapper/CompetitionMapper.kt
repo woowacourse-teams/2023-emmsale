@@ -2,6 +2,9 @@ package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.CompetitionResponse
 import com.emmsale.data.model.Competition
+import com.emmsale.data.model.EventMode
+import com.emmsale.data.model.PaymentType
+import com.emmsale.data.model.Status
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -15,28 +18,28 @@ fun CompetitionResponse.toData(): Competition = Competition(
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
     status = when (status) {
-        CompetitionResponse.Status.ENDED -> Competition.Status.ENDED
-        CompetitionResponse.Status.UPCOMING -> Competition.Status.UPCOMING
-        CompetitionResponse.Status.IN_PROGRESS -> Competition.Status.IN_PROGRESS
+        CompetitionResponse.Status.ENDED -> Status.ENDED
+        CompetitionResponse.Status.UPCOMING -> Status.UPCOMING
+        CompetitionResponse.Status.IN_PROGRESS -> Status.IN_PROGRESS
     },
     tags = tags,
     posterUrl = posterUrl,
     dDay = dDay,
     eventStatus = when (applyStatus) {
-        CompetitionResponse.Status.ENDED -> Competition.Status.ENDED
-        CompetitionResponse.Status.UPCOMING -> Competition.Status.UPCOMING
-        CompetitionResponse.Status.IN_PROGRESS -> Competition.Status.IN_PROGRESS
+        CompetitionResponse.Status.ENDED -> Status.ENDED
+        CompetitionResponse.Status.UPCOMING -> Status.UPCOMING
+        CompetitionResponse.Status.IN_PROGRESS -> Status.IN_PROGRESS
     },
     applyRemainingDays = applyRemainingDays,
     eventMode = when (eventMode) {
-        CompetitionResponse.EventMode.ONLINE -> Competition.EventMode.ONLINE
-        CompetitionResponse.EventMode.OFFLINE -> Competition.EventMode.OFFLINE
-        CompetitionResponse.EventMode.ON_OFFLINE -> Competition.EventMode.ON_OFFLINE
+        CompetitionResponse.EventMode.ONLINE -> EventMode.ONLINE
+        CompetitionResponse.EventMode.OFFLINE -> EventMode.OFFLINE
+        CompetitionResponse.EventMode.ON_OFFLINE -> EventMode.ON_OFFLINE
     },
     paymentType = when (paymentType) {
-        CompetitionResponse.PaymentType.FREE -> Competition.PaymentType.FREE
-        CompetitionResponse.PaymentType.PAID -> Competition.PaymentType.PAID
-        CompetitionResponse.PaymentType.PAID_OR_FREE -> Competition.PaymentType.PAID_OR_FREE
+        CompetitionResponse.PaymentType.FREE -> PaymentType.FREE
+        CompetitionResponse.PaymentType.PAID -> PaymentType.PAID
+        CompetitionResponse.PaymentType.PAID_OR_FREE -> PaymentType.PAID_OR_FREE
     },
 )
 

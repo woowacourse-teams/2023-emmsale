@@ -15,16 +15,4 @@ data class Competition(
     val applyRemainingDays: Int,
     val eventMode: EventMode,
     val paymentType: PaymentType,
-) {
-    enum class Status {
-        IN_PROGRESS, UPCOMING, ENDED,
-    }
-
-    enum class EventMode {
-        ONLINE, OFFLINE, ON_OFFLINE,
-    }
-
-    enum class PaymentType {
-        PAID, FREE, PAID_OR_FREE,
-    }
-}
+)

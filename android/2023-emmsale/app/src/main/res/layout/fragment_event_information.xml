@@ -142,7 +142,6 @@
                         android:layout_marginStart="42dp"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/nanum_square_regular"
-                        android:text="무료"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_place_title"
