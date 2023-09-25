@@ -39,6 +39,7 @@ public class EventDetailResponse {
   private final String type;
   private final List<String> imageUrls;
   private final String organization;
+  private final String paymentType;
 
   public static EventDetailResponse from(
       final Event event,
@@ -67,7 +68,8 @@ public class EventDetailResponse {
         event.getEventPeriod().calculateApplyRemainingDays(today),
         event.getType().toString(),
         imageUrls,
-        event.getOrganization()
+        event.getOrganization(),
+        event.getPaymentType().getValue()
     );
   }
 }
