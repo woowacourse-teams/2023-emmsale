@@ -80,6 +80,19 @@
             bind:viewModel="@{vm}"
             tools:visibility="gone" />
 
+        <com.emmsale.presentation.common.views.NoContentView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:description="상대방의 프로필에서 채팅을 보내보세요!"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:noContentImageResId="@drawable/ic_no_result4"
+            app:noContentImageTint="@color/primary_color"
+            app:title="아직 채팅방이 없어요!"
+            app:visible="@{vm.messageRooms.messageRooms.empty &amp;&amp; vm.messageRooms.fetchResult == FetchResult.SUCCESS}" />
+
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
