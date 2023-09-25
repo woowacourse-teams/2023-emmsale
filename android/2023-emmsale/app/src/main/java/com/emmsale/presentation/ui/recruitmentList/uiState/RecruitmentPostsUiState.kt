@@ -19,7 +19,7 @@ data class RecruitmentPostsUiState(
     companion object {
         fun from(recruitments: List<Recruitment>): RecruitmentPostsUiState {
             return RecruitmentPostsUiState(
-                list = recruitments.map { RecruitmentPostUiState.from(it) },
+                list = recruitments.map(RecruitmentPostUiState::from),
                 fetchResult = FetchResult.SUCCESS,
             )
         }
