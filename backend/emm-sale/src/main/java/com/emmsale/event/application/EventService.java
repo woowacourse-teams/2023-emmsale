@@ -231,7 +231,7 @@ public class EventService {
     if (!eventRepository.existsById(eventId)) {
       throw new EventException(NOT_FOUND_EVENT);
     }
-    
+    imageCommandService.deleteImages(ImageType.EVENT, eventId);
     eventRepository.deleteById(eventId);
   }
   
