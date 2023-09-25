@@ -204,8 +204,8 @@ public class EventService {
 
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
 
+    // TODO: 2023/09/25 더 좋은 방법을 고민해보기
     eventTagRepository.deleteAllByEventId(eventId);
-
     final Event updatedEvent = event.updateEventContent(
         request.getName(),
         request.getLocation(),
