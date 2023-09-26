@@ -54,7 +54,6 @@
             android:fontFamily="@font/nanum_square_extra_bold"
             android:textSize="13sp"
             app:eventStatus="@{event.competition.eventStatus}"
-            app:eventTextColor="@{event.competition.eventStatus}"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
             app:layout_goneMarginTop="9dp"

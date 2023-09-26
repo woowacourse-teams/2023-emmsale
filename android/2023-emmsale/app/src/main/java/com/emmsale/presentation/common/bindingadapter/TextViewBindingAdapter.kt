@@ -31,10 +31,19 @@ fun TextView.setEventStatus(
 ) {
     if (status == null) return
 
-    text = when (status) {
-        EventStatus.InProgress -> context.getString(R.string.all_in_progress)
-        is EventStatus.Upcoming -> context.getString(R.string.all_upcoming, status.remainingDays)
-        EventStatus.Ended -> context.getString(R.string.all_ended)
+    when (status) {
+        EventStatus.InProgress -> {
+            text = context.getString(R.string.all_in_progress)
+            setTextColor(context.getColor(R.color.primary_color))
+        }
+        is EventStatus.Upcoming -> {
+            text = context.getString(R.string.all_upcoming, status.remainingDays)
+            setTextColor(context.getColor(R.color.primary_color))
+        }
+        EventStatus.Ended -> {
+            text = context.getString(R.string.all_ended)
+            setTextColor(context.getColor(R.color.gray))
+        }
     }
 }
 
@@ -49,16 +58,4 @@ fun TextView.setOnOfflineMode(
         OnOfflineMode.ONLINE -> context.getString(R.string.all_online)
         OnOfflineMode.ON_OFFLINE -> context.getString(R.string.all_onoffline)
     }
-}
-
-@BindingAdapter("app:eventTextColor")
-fun TextView.setEventTextColor(
-    eventStatus: EventStatus,
-) {
-    val color = when (eventStatus) {
-        EventStatus.InProgress -> R.color.primary_color
-        is EventStatus.Upcoming -> R.color.primary_color
-        EventStatus.Ended -> R.color.gray
-    }
-    setTextColor(context.getColor(color))
 }
