@@ -39,6 +39,7 @@ class EventRecruitmentFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = viewModel
         initRecyclerView()
         setUpRecruitments()
     }

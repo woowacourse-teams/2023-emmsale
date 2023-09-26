@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.messageRoomList.uistate
 
-import com.emmsale.data.messageRoom.MessageRoom
+import com.emmsale.data.model.MessageRoom
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.FetchResultUiState
 

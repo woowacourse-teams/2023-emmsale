@@ -1,7 +1,6 @@
 package com.emmsale.di.modules.service
 
 import com.emmsale.data.common.ServiceFactory
-import com.emmsale.data.messageRoom.MessageRoomService
 import com.emmsale.data.service.ActivityService
 import com.emmsale.data.service.BlockedMemberService
 import com.emmsale.data.service.CommentService
@@ -11,6 +10,7 @@ import com.emmsale.data.service.FcmTokenService
 import com.emmsale.data.service.FeedService
 import com.emmsale.data.service.LoginService
 import com.emmsale.data.service.MemberService
+import com.emmsale.data.service.MessageRoomService
 import com.emmsale.data.service.MyPostService
 import com.emmsale.data.service.NotificationService
 import com.emmsale.data.service.PostService

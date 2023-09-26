@@ -4,6 +4,6 @@
     <item
         android:id="@+id/message_room_options"
         android:icon="@drawable/ic_message_room_options"
-        android:title="@string/messageroomlist_message_room_options_title"
+        android:title="@string/messageroom_message_room_options_title"
         app:showAsAction="always" />
 </menu>

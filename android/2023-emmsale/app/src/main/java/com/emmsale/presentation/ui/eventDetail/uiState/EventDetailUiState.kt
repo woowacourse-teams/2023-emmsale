@@ -6,5 +6,5 @@ import com.emmsale.presentation.common.FetchResultUiState
 
 data class EventDetailUiState(
     override val fetchResult: FetchResult = FetchResult.SUCCESS,
-    val eventDetail: EventDetail = EventDetail.EmptyData,
+    val eventDetail: EventDetail? = null,
 ) : FetchResultUiState()

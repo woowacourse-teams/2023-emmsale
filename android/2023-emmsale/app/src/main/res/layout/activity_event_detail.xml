@@ -93,9 +93,9 @@
                     android:layout_marginStart="17dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/nanum_square_bold"
-                    android:text="@{vm.eventDetail.eventDetail.status}"
                     android:textColor="@color/primary_color"
                     android:textSize="13sp"
+                    app:eventStatus="@{vm.eventDetail.eventDetail.eventStatus}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="D-Day" />

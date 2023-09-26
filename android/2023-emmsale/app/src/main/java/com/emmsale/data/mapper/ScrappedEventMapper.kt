@@ -1,6 +1,9 @@
 package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.ScrappedEventResponse
+import com.emmsale.data.model.EventStatus
+import com.emmsale.data.model.OnOfflineMode
+import com.emmsale.data.model.PaymentType
 import com.emmsale.data.model.ScrappedEvent
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -12,29 +15,27 @@ fun ScrappedEventResponse.toData(): ScrappedEvent = ScrappedEvent(
     name = name,
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
-    status = when (status) {
-        ScrappedEventResponse.Status.ENDED -> ScrappedEvent.Status.ENDED
-        ScrappedEventResponse.Status.UPCOMING -> ScrappedEvent.Status.UPCOMING
-        ScrappedEventResponse.Status.IN_PROGRESS -> ScrappedEvent.Status.IN_PROGRESS
+    applyStatus = when (applyStatus) {
+        ScrappedEventResponse.Status.ENDED -> EventStatus.Ended
+        ScrappedEventResponse.Status.UPCOMING -> EventStatus.Upcoming(applyRemainingDays)
+        ScrappedEventResponse.Status.IN_PROGRESS -> EventStatus.InProgress
     },
     tags = tags,
     posterUrl = posterUrl,
-    dDay = dDay,
-    eventStatus = when (applyStatus) {
-        ScrappedEventResponse.Status.ENDED -> ScrappedEvent.Status.ENDED
-        ScrappedEventResponse.Status.UPCOMING -> ScrappedEvent.Status.UPCOMING
-        ScrappedEventResponse.Status.IN_PROGRESS -> ScrappedEvent.Status.IN_PROGRESS
+    eventStatus = when (eventStatus) {
+        ScrappedEventResponse.Status.ENDED -> EventStatus.Ended
+        ScrappedEventResponse.Status.UPCOMING -> EventStatus.Upcoming(remainingDays)
+        ScrappedEventResponse.Status.IN_PROGRESS -> EventStatus.InProgress
     },
-    applyRemainingDays = applyRemainingDays,
-    eventMode = when (eventMode) {
-        ScrappedEventResponse.EventMode.ONLINE -> ScrappedEvent.EventMode.ONLINE
-        ScrappedEventResponse.EventMode.OFFLINE -> ScrappedEvent.EventMode.OFFLINE
-        ScrappedEventResponse.EventMode.ON_OFFLINE -> ScrappedEvent.EventMode.ON_OFFLINE
+    onOfflineMode = when (eventMode) {
+        ScrappedEventResponse.EventMode.ONLINE -> OnOfflineMode.ONLINE
+        ScrappedEventResponse.EventMode.OFFLINE -> OnOfflineMode.OFFLINE
+        ScrappedEventResponse.EventMode.ON_OFFLINE -> OnOfflineMode.ON_OFFLINE
     },
     paymentType = when (paymentType) {
-        ScrappedEventResponse.PaymentType.FREE -> ScrappedEvent.PaymentType.FREE
-        ScrappedEventResponse.PaymentType.PAID -> ScrappedEvent.PaymentType.PAID
-        ScrappedEventResponse.PaymentType.PAID_OR_FREE -> ScrappedEvent.PaymentType.PAID_OR_FREE
+        ScrappedEventResponse.PaymentType.FREE -> PaymentType.FREE
+        ScrappedEventResponse.PaymentType.PAID -> PaymentType.PAID
+        ScrappedEventResponse.PaymentType.PAID_OR_FREE -> PaymentType.PAID_OR_FREE
     },
 )
 

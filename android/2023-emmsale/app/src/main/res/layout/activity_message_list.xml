@@ -123,6 +123,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.emmsale.presentation.common.views.NoContentView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:description="@string/messagelist_no_content_view_desc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:noContentImageResId="@drawable/ic_no_result3"
+            app:title="@string/messagelist_no_content_view_title"
+            app:visible="@{vm.messages.messages.empty &amp;&amp; vm.messages.fetchResult == FetchResult.SUCCESS}" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_message_input"
             android:layout_width="0dp"
@@ -169,6 +181,5 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

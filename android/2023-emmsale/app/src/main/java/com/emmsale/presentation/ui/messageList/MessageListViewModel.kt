@@ -6,10 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Success
-import com.emmsale.data.message.Message
-import com.emmsale.data.messageRoom.MessageRoomRepository
 import com.emmsale.data.model.Member
+import com.emmsale.data.model.Message
 import com.emmsale.data.repository.interfaces.MemberRepository
+import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.livedata.NotNullLiveData

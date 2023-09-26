@@ -16,13 +16,13 @@ data class ScrappedEventResponse(
     @SerialName("tags")
     val tags: List<String>,
     @SerialName("status")
-    val status: Status,
+    val eventStatus: Status,
     @SerialName("applyStatus")
     val applyStatus: Status,
     @SerialName("imageUrl")
     val posterUrl: String? = null,
     @SerialName("remainingDays")
-    val dDay: Int,
+    val remainingDays: Int,
     @SerialName("applyRemainingDays")
     val applyRemainingDays: Int,
     @SerialName("eventMode")

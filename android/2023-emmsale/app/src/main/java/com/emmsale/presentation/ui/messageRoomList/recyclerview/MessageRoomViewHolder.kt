@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
-import com.emmsale.data.messageRoom.MessageRoom
+import com.emmsale.data.model.MessageRoom
 import com.emmsale.databinding.ItemMessageRoomBinding
 
 class MessageRoomViewHolder(

@@ -1,8 +1,9 @@
 package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.EventDetailResponse
-import com.emmsale.data.model.Conference
 import com.emmsale.data.model.EventDetail
+import com.emmsale.data.model.EventStatus
+import com.emmsale.data.model.PaymentType
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -16,19 +17,12 @@ fun EventDetailResponse.toData(): EventDetail = EventDetail(
     applyStartDate = applyStartDate.toLocalDateTime(),
     applyEndDate = applyEndDate.toLocalDateTime(),
     location = location,
-    status = status.toKoreanStatus(),
-    applyStatus = applyStatus.toKoreanApplyStatus(),
+    eventStatus = status.toEventStatus(remainingDays),
+    applyStatus = applyStatus.toEventStatus(applyRemainingDays),
     tags = tags,
     posterImageUrl = imageUrl ?: "",
-    remainingDays = remainingDays,
-    applyRemainingDays = applyRemainingDays,
     type = type,
-    paymentType = when (paymentType) {
-        "유료" -> Conference.PaymentType.PAID
-        "무료" -> Conference.PaymentType.FREE
-        "유무료" -> Conference.PaymentType.PAID_OR_FREE
-        else -> throw IllegalArgumentException("행사 상세 응답 비용 정보 매핑 실패")
-    },
+    paymentType = paymentType.toPaymentType(),
 )
 
 private fun String.toLocalDateTime(): LocalDateTime {
@@ -36,16 +30,14 @@ private fun String.toLocalDateTime(): LocalDateTime {
     return LocalDateTime.parse(this, format)
 }
 
-private fun String.toKoreanStatus(): String = when (this) {
-    "IN_PROGRESS" -> "진행 중"
-    "UPCOMING" -> "진행 예정"
-    "ENDED" -> "마감"
-    else -> throw IllegalArgumentException("행사 상세 정보의 상태를 변환하는 데 실패했습니다. api 스펙을 다시 확인해주세요.")
+private fun EventDetailResponse.Status.toEventStatus(days: Int): EventStatus = when (this) {
+    EventDetailResponse.Status.IN_PROGRESS -> EventStatus.InProgress
+    EventDetailResponse.Status.UPCOMING -> EventStatus.Upcoming(days)
+    EventDetailResponse.Status.ENDED -> EventStatus.Ended
 }
 
-private fun String.toKoreanApplyStatus(): String = when (this) {
-    "IN_PROGRESS" -> "진행 중"
-    "UPCOMING" -> "진행 예정"
-    "ENDED" -> "마감"
-    else -> throw IllegalArgumentException("행사 상세 정보의 신청 상태를 변환하는 데 실패했습니다. api 스펙을 다시 확인해주세요.")
+private fun EventDetailResponse.PaymentType.toPaymentType(): PaymentType = when (this) {
+    EventDetailResponse.PaymentType.PAID -> PaymentType.PAID
+    EventDetailResponse.PaymentType.FREE -> PaymentType.FREE
+    EventDetailResponse.PaymentType.PAID_OR_FREE -> PaymentType.PAID_OR_FREE
 }

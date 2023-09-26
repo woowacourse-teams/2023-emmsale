@@ -7,24 +7,10 @@ data class ScrappedEvent(
     val name: String,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
-    val status: Status,
+    val applyStatus: EventStatus,
     val tags: List<String>,
     val posterUrl: String?,
-    val dDay: Int,
-    val eventStatus: Status,
-    val applyRemainingDays: Int,
-    val eventMode: EventMode,
+    val eventStatus: EventStatus,
+    val onOfflineMode: OnOfflineMode,
     val paymentType: PaymentType,
-) {
-    enum class Status {
-        IN_PROGRESS, UPCOMING, ENDED,
-    }
-
-    enum class EventMode {
-        ONLINE, OFFLINE, ON_OFFLINE,
-    }
-
-    enum class PaymentType {
-        PAID, FREE, PAID_OR_FREE,
-    }
-}
+)

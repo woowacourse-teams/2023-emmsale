@@ -8,6 +8,8 @@
 
         <import type="android.view.View" />
 
+        <import type="com.emmsale.presentation.common.FetchResult" />
+
         <variable
             name="vm"
             type="com.emmsale.presentation.ui.scrappedEventList.ScrappedEventViewModel" />
@@ -61,22 +63,35 @@
             tools:itemCount="2"
             tools:listitem="@layout/item_conference" />
 
-        <ProgressBar
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:visibility="@{vm.scrappedEvents.loading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
-
         <include
             layout="@layout/layout_all_error_screen"
             android:background="@color/white"
             android:clickable="true"
-            android:visibility="@{vm.scrappedEvents.isError ? View.VISIBLE : View.GONE}"
+            app:visible="@{vm.scrappedEvents.fetchResult == FetchResult.ERROR}"
             bind:viewModel="@{vm}"
             tools:visibility="gone" />
+
+        <com.emmsale.presentation.common.views.NoContentView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:description="@string/scrappedevent_no_content_view_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:noContentImageResId="@drawable/ic_no_result1"
+            app:title="@string/scrappedevent_no_content_view_desc"
+            app:visible="@{vm.scrappedEvents.list.empty &amp;&amp; vm.scrappedEvents.fetchResult == FetchResult.SUCCESS}" />
+
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visible="@{vm.scrappedEvents.fetchResult == FetchResult.LOADING}"
+            tools:visibility="gone" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

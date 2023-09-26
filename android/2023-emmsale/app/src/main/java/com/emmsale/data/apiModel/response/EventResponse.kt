@@ -22,11 +22,11 @@ data class ConferenceResponse(
     @SerialName("imageUrl")
     val posterUrl: String? = null,
     @SerialName("remainingDays")
-    val dDay: Int,
+    val remainingDays: Int,
     @SerialName("applyRemainingDays")
     val applyRemainingDays: Int,
     @SerialName("eventMode")
-    val eventMode: EventMode,
+    val onOfflineMode: OnOfflineMode,
     @SerialName("paymentType")
     val paymentType: PaymentType,
 ) {
@@ -41,7 +41,7 @@ data class ConferenceResponse(
         ENDED,
     }
 
-    enum class EventMode {
+    enum class OnOfflineMode {
         @SerialName("온라인")
         ONLINE,
 
@@ -83,11 +83,11 @@ data class CompetitionResponse(
     @SerialName("imageUrl")
     val posterUrl: String? = null,
     @SerialName("remainingDays")
-    val dDay: Int,
+    val remainingDays: Int,
     @SerialName("applyRemainingDays")
     val applyRemainingDays: Int,
     @SerialName("eventMode")
-    val eventMode: EventMode,
+    val onOfflineMode: OnOfflineMode,
     @SerialName("paymentType")
     val paymentType: PaymentType,
 ) {
@@ -102,7 +102,7 @@ data class CompetitionResponse(
         ENDED,
     }
 
-    enum class EventMode {
+    enum class OnOfflineMode {
         @SerialName("온라인")
         ONLINE,
 
@@ -146,9 +146,9 @@ data class EventDetailResponse(
     @SerialName("location")
     val location: String,
     @SerialName("status")
-    val status: String,
+    val status: Status,
     @SerialName("applyStatus")
-    val applyStatus: String,
+    val applyStatus: Status,
     @SerialName("tags")
     val tags: List<String>,
     @SerialName("imageUrl")
@@ -162,5 +162,27 @@ data class EventDetailResponse(
     @SerialName("imageUrls")
     val imageUrls: List<String> = emptyList(),
     @SerialName("paymentType")
-    val paymentType: String,
-)
+    val paymentType: PaymentType,
+) {
+    enum class Status {
+        @SerialName("IN_PROGRESS")
+        IN_PROGRESS,
+
+        @SerialName("UPCOMING")
+        UPCOMING,
+
+        @SerialName("ENDED")
+        ENDED,
+    }
+
+    enum class PaymentType {
+        @SerialName("유료")
+        PAID,
+
+        @SerialName("무료")
+        FREE,
+
+        @SerialName("유무료")
+        PAID_OR_FREE,
+    }
+}
