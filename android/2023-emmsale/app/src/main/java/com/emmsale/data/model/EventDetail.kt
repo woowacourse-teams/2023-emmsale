@@ -16,8 +16,6 @@ data class EventDetail(
     val applyStatus: EventStatus,
     val tags: List<String>,
     val posterImageUrl: String?,
-    val remainingDays: Int,
-    val applyRemainingDays: Int,
     val paymentType: PaymentType,
     val type: String,
 )
