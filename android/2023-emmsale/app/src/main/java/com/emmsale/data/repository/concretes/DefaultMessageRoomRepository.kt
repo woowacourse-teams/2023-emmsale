@@ -35,15 +35,6 @@ class DefaultMessageRoomRepository @Inject constructor(
             .map(List<MessageResponse>::toData)
     }
 
-    override suspend fun getMessagesByMemberIds(
-        myUid: Long,
-        otherUid: Long,
-    ): ApiResponse<List<Message>> = withContext(dispatcher) {
-        messageRoomService
-            .getMessagesByMemberIds(myUid, otherUid)
-            .map(List<MessageResponse>::toData)
-    }
-
     override suspend fun sendMessage(
         senderId: Long,
         receiverId: Long,
