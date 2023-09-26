@@ -100,13 +100,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:text="@{event.conference.onOfflineMode == OnOfflineMode.ONLINE ? @string/all_online : @string/all_offline}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_pay_type"
             app:layout_constraintStart_toStartOf="@+id/divider"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
             app:layout_constraintTop_toTopOf="@+id/tv_pay_type"
+            app:onOfflineMode="@{event.conference.onOfflineMode}"
             tools:text="온라인" />
 
         <com.google.android.material.chip.ChipGroup
