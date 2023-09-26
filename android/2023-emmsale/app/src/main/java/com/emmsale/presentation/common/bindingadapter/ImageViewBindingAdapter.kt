@@ -113,7 +113,6 @@ fun ImageView.setCanZoomInImageUrl(
         .placeholder(R.drawable.img_all_loading)
         .error(R.mipmap.ic_launcher)
         .fallback(R.mipmap.ic_launcher)
-        .transform(CenterCrop())
         .into(this)
 
     if (!canZoomIn) return
