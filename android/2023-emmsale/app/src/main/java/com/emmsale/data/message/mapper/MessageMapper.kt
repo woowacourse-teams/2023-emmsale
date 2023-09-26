@@ -1,7 +1,7 @@
 package com.emmsale.data.message.mapper
 
-import com.emmsale.data.message.Message
-import com.emmsale.data.messageRoom.dto.MessageResponse
+import com.emmsale.data.apiModel.response.MessageResponse
+import com.emmsale.data.model.Message
 
 fun List<MessageResponse>.toData(): List<Message> = map { it.toData() }
 

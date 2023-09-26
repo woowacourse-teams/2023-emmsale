@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.messageRoomList.recyclerview
 
 import androidx.recyclerview.widget.DiffUtil
-import com.emmsale.data.messageRoom.MessageRoom
+import com.emmsale.data.model.MessageRoom
 
 object MessageRoomDiffUtil : DiffUtil.ItemCallback<MessageRoom>() {
     override fun areItemsTheSame(

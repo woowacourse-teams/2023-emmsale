@@ -1,6 +1,4 @@
-package com.emmsale.data.messageRoom
-
-import com.emmsale.data.message.Message
+package com.emmsale.data.model
 
 data class MessageRoom(
     val roomId: String,

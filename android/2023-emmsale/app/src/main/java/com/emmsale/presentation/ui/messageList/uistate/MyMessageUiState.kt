@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.messageList.uistate
 
-import com.emmsale.data.message.Message
+import com.emmsale.data.model.Message
 import java.time.LocalDateTime
 
 class MyMessageUiState(

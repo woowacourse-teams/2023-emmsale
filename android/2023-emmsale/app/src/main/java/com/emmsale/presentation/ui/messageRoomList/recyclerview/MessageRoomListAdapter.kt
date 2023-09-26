@@ -2,7 +2,7 @@ package com.emmsale.presentation.ui.messageRoomList.recyclerview
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.messageRoom.MessageRoom
+import com.emmsale.data.model.MessageRoom
 
 class MessageRoomListAdapter(
     private val onMessageRoomClick: (roomId: String, otherUid: Long) -> Unit,

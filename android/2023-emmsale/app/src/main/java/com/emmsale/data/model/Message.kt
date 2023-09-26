@@ -1,4 +1,4 @@
-package com.emmsale.data.message
+package com.emmsale.data.model
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

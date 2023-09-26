@@ -1,10 +1,10 @@
-package com.emmsale.data.messageRoom
+package com.emmsale.data.service
 
 import com.emmsale.data.apiModel.request.MessageRequest
+import com.emmsale.data.apiModel.response.MessageResponse
+import com.emmsale.data.apiModel.response.MessageRoomResponse
+import com.emmsale.data.apiModel.response.MessageSendResponse
 import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.messageRoom.dto.MessageResponse
-import com.emmsale.data.messageRoom.dto.MessageRoomResponse
-import com.emmsale.data.messageRoom.dto.MessageSendResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

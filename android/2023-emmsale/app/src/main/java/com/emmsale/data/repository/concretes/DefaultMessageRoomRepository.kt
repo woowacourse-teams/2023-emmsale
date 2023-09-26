@@ -1,12 +1,15 @@
-package com.emmsale.data.messageRoom
+package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.request.MessageRequest
+import com.emmsale.data.apiModel.response.MessageResponse
+import com.emmsale.data.apiModel.response.MessageRoomResponse
 import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.message.Message
+import com.emmsale.data.mapper.toData
 import com.emmsale.data.message.mapper.toData
-import com.emmsale.data.messageRoom.dto.MessageResponse
-import com.emmsale.data.messageRoom.dto.MessageRoomResponse
-import com.emmsale.data.messageRoom.mapper.toData
+import com.emmsale.data.model.Message
+import com.emmsale.data.model.MessageRoom
+import com.emmsale.data.repository.interfaces.MessageRoomRepository
+import com.emmsale.data.service.MessageRoomService
 import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

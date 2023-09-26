@@ -1,8 +1,8 @@
-package com.emmsale.data.messageRoom.mapper
+package com.emmsale.data.mapper
 
-import com.emmsale.data.message.Message
-import com.emmsale.data.messageRoom.MessageRoom
-import com.emmsale.data.messageRoom.dto.MessageRoomResponse
+import com.emmsale.data.apiModel.response.MessageRoomResponse
+import com.emmsale.data.model.Message
+import com.emmsale.data.model.MessageRoom
 
 fun List<MessageRoomResponse>.toData(): List<MessageRoom> = map { it.toData() }
 

@@ -1,7 +1,5 @@
 package com.emmsale.di.modules.repository
 
-import com.emmsale.data.messageRoom.DefaultMessageRoomRepository
-import com.emmsale.data.messageRoom.MessageRoomRepository
 import com.emmsale.data.repository.concretes.DefaultActivityRepository
 import com.emmsale.data.repository.concretes.DefaultBlockedMemberRepository
 import com.emmsale.data.repository.concretes.DefaultCommentRepository
@@ -14,6 +12,7 @@ import com.emmsale.data.repository.concretes.DefaultFcmTokenRepository
 import com.emmsale.data.repository.concretes.DefaultFeedRepository
 import com.emmsale.data.repository.concretes.DefaultLoginRepository
 import com.emmsale.data.repository.concretes.DefaultMemberRepository
+import com.emmsale.data.repository.concretes.DefaultMessageRoomRepository
 import com.emmsale.data.repository.concretes.DefaultMyPostRepository
 import com.emmsale.data.repository.concretes.DefaultNotificationRepository
 import com.emmsale.data.repository.concretes.DefaultPostRepository
@@ -32,6 +31,7 @@ import com.emmsale.data.repository.interfaces.FcmTokenRepository
 import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.data.repository.interfaces.LoginRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
+import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.MyPostRepository
 import com.emmsale.data.repository.interfaces.NotificationRepository
 import com.emmsale.data.repository.interfaces.PostRepository

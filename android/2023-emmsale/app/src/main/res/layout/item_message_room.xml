@@ -13,7 +13,7 @@
 
         <variable
             name="messageRoom"
-            type="com.emmsale.data.messageRoom.MessageRoom" />
+            type="com.emmsale.data.model.MessageRoom" />
 
         <variable
             name="onMessageRoomClick"
