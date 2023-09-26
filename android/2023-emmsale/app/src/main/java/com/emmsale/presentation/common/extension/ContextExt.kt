@@ -80,6 +80,7 @@ fun Context.showNotification(
     channelId: Int,
     intent: Intent = Intent(),
     largeIconUrl: String? = null,
+    groupKey: String? = null,
 ) {
     val notificationManager = NotificationManagerCompat.from(this)
 
@@ -92,6 +93,7 @@ fun Context.showNotification(
         notificationId = notificationId,
         intent = intent,
         largeIconUrl = largeIconUrl,
+        groupKey = groupKey,
     )
     notificationManager.notify(notificationId, notification)
 }
@@ -103,11 +105,14 @@ private fun Context.createNotification(
     notificationId: Int,
     intent: Intent? = null,
     largeIconUrl: String? = null,
+    groupKey: String? = null,
 ) = NotificationCompat.Builder(this, channelId.toString())
     .setSmallIcon(R.drawable.ic_all_notification)
     .setColor(ContextCompat.getColor(this, R.color.notification_icon_background_color))
     .setLargeIcon(largeIconUrl?.toBitmap(this))
     .setContentTitle(title)
+    .setGroupSummary(true)
+    .setGroup(groupKey)
     .setContentText(message)
     .setContentIntent(
         PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_MUTABLE),
