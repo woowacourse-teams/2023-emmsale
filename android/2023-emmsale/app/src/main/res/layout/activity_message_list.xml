@@ -173,6 +173,7 @@
                 android:clickable="@{vm.messages.fetchResult != FetchResult.LOADING}"
                 android:onClick="@{() -> vm.sendMessage(etMessageInput.getText().toString())}"
                 android:paddingHorizontal="8dp"
+                android:paddingVertical="8dp"
                 android:text="@string/messagelist_send_message"
                 android:textColor="@color/primary_color"
                 android:textSize="14sp"

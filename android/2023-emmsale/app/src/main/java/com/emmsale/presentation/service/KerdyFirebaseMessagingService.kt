@@ -142,6 +142,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         baseContext.showNotification(
             title = senderName,
             message = content,
+            notificationId = roomId.hashCode(),
             channelId = R.id.id_all_message_notification_channel,
             intent = MessageListActivity.getIntent(this, roomId, senderId),
             largeIconUrl = senderProfileUrl,
