@@ -78,11 +78,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@{event.conference.paymentType == PaymentType.PAID ? @string/all_paid : event.conference.paymentType == PaymentType.FREE ? @string/all_free : @string/all_paid_free}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
+            app:paymentType="@{event.conference.paymentType}"
             tools:text="무료" />
 
         <View
