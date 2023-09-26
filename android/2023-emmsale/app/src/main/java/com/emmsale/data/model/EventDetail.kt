@@ -20,4 +20,5 @@ data class EventDetail(
     val applyRemainingDays: Int,
     val paymentType: PaymentType,
     val type: String,
+    val imageUrls: List<String>,
 )

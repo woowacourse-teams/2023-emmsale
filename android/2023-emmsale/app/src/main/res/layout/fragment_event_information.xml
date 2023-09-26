@@ -32,7 +32,7 @@
                     android:layout_marginBottom="93dp">
 
                     <TextView
-                        android:id="@+id/tv_eventInfo_apply_date_title"
+                        android:id="@+id/tv_event_info_apply_date_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="17dp"
@@ -45,7 +45,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_eventInfo_apply_date"
+                        android:id="@+id/tv_even_info_apply_date"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="42dp"
@@ -57,13 +57,13 @@
                         app:dateTimeFormatter="@{DateTimePattern.MONTH_DAY_WEEKDAY}"
                         app:endDateTime="@{vm.eventDetail.eventDetail.applyEndDate}"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_date_title"
+                        app:layout_constraintStart_toEndOf="@+id/tv_event_info_date_title"
                         app:layout_constraintTop_toTopOf="parent"
                         app:startDateTime="@{vm.eventDetail.eventDetail.applyStartDate}"
                         tools:text="2023.08.15 12:00 ~ 2023.08.17 17:00" />
 
                     <TextView
-                        android:id="@+id/tv_eventInfo_date_title"
+                        android:id="@+id/tv_event_info_date_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="17dp"
@@ -73,10 +73,10 @@
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_eventInfo_apply_date" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_even_info_apply_date" />
 
                     <TextView
-                        android:id="@+id/tv_eventInfo_date"
+                        android:id="@+id/tv_event_info_date"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="42dp"
@@ -88,13 +88,13 @@
                         app:dateTimeFormatter="@{DateTimePattern.MONTH_DAY_WEEKDAY}"
                         app:endDateTime="@{vm.eventDetail.eventDetail.endDate}"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_date_title"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_eventInfo_apply_date"
+                        app:layout_constraintStart_toEndOf="@+id/tv_event_info_date_title"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_even_info_apply_date"
                         app:startDateTime="@{vm.eventDetail.eventDetail.startDate}"
                         tools:text="2023.8.15 12:00 " />
 
                     <TextView
-                        android:id="@+id/tv_eventInfo_place_title"
+                        android:id="@+id/tv_event_info_place_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="17dp"
@@ -104,10 +104,10 @@
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_eventInfo_date" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_event_info_date" />
 
                     <TextView
-                        android:id="@+id/tv_eventInfo_place"
+                        android:id="@+id/tv_event_info_place"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="42dp"
@@ -118,12 +118,12 @@
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_place_title"
-                        app:layout_constraintTop_toBottomOf="@id/tv_eventInfo_date"
+                        app:layout_constraintStart_toEndOf="@+id/tv_event_info_place_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_event_info_date"
                         tools:text="삼성동 코엑스 몰 2층 101" />
 
                     <TextView
-                        android:id="@+id/tv_eventInfo_cost_title"
+                        android:id="@+id/tv_event_info_cost_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="17dp"
@@ -133,10 +133,10 @@
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_eventInfo_place" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_event_info_place" />
 
                     <TextView
-                        android:id="@+id/tv_eventInfo_cost"
+                        android:id="@+id/tv_event_info_cost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="42dp"
@@ -144,22 +144,22 @@
                         android:fontFamily="@font/nanum_square_regular"
                         android:textColor="@color/black"
                         android:textSize="12sp"
-                        app:layout_constraintStart_toEndOf="@+id/tv_eventInfo_place_title"
-                        app:layout_constraintTop_toBottomOf="@id/tv_eventInfo_place"
+                        app:layout_constraintStart_toEndOf="@+id/tv_event_info_place_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_event_info_place"
                         app:paymentType="@{vm.eventDetail.eventDetail.paymentType}"
                         tools:text="무료" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/eventInfo_poster"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_event_info_images"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:adjustViewBounds="true"
-                        app:imageUrl="@{vm.eventDetail.eventDetail.posterImageUrl}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_eventInfo_cost"
-                        tools:src="@drawable/img_all_loading" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_event_info_cost"
+                        tools:listitem="@layout/item_event_information_image" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
         </androidx.core.widget.NestedScrollView>

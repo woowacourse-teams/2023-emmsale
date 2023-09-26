@@ -25,6 +25,7 @@ fun EventDetailResponse.toData(): EventDetail = EventDetail(
     applyRemainingDays = applyRemainingDays,
     type = type,
     paymentType = paymentType.toPaymentType(),
+    imageUrls = imageUrls.map { url -> "https://d3ms3abrjbgefs.cloudfront.net/dev/" + url },
 )
 
 private fun String.toLocalDateTime(): LocalDateTime {

@@ -98,3 +98,33 @@ fun ImageView.setCanZoomInRoundedImageUrl(
         }.show()
     }
 }
+
+@BindingAdapter(
+    "app:imageUrl",
+    "app:canZoomIn",
+    requireAll = true,
+)
+fun ImageView.setCanZoomInImageUrl(
+    imageUrl: String?,
+    canZoomIn: Boolean,
+) {
+    Glide.with(this)
+        .load(imageUrl)
+        .placeholder(R.drawable.img_all_loading)
+        .error(R.mipmap.ic_launcher)
+        .fallback(R.mipmap.ic_launcher)
+        .transform(CenterCrop())
+        .into(this)
+
+    if (!canZoomIn) return
+
+    setOnClickListener {
+        StfalconImageViewer.Builder(this.context, listOf(imageUrl)) { view, image ->
+            Glide.with(this.context)
+                .load(image)
+                .placeholder(R.drawable.img_all_loading)
+                .error(R.mipmap.ic_launcher)
+                .into(view)
+        }.show()
+    }
+}
