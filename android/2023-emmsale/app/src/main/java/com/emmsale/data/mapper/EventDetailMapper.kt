@@ -32,16 +32,14 @@ private fun String.toLocalDateTime(): LocalDateTime {
     return LocalDateTime.parse(this, format)
 }
 
-private fun String.toEventStatus(): EventStatus = when (this) {
-    "IN_PROGRESS" -> EventStatus.IN_PROGRESS
-    "UPCOMING" -> EventStatus.UPCOMING
-    "ENDED" -> EventStatus.ENDED
-    else -> throw IllegalArgumentException("행사 상세 정보의 신청 상태를 변환하는 데 실패했습니다. api 스펙을 다시 확인해주세요.")
+private fun EventDetailResponse.Status.toEventStatus(): EventStatus = when (this) {
+    EventDetailResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
+    EventDetailResponse.Status.UPCOMING -> EventStatus.UPCOMING
+    EventDetailResponse.Status.ENDED -> EventStatus.ENDED
 }
 
-private fun String.toPaymentType(): PaymentType = when (this) {
-    "유료" -> PaymentType.PAID
-    "무료" -> PaymentType.FREE
-    "유무료" -> PaymentType.PAID_OR_FREE
-    else -> throw IllegalArgumentException("행사 상세 응답 비용 정보 매핑 실패")
+private fun EventDetailResponse.PaymentType.toPaymentType(): PaymentType = when (this) {
+    EventDetailResponse.PaymentType.PAID -> PaymentType.PAID
+    EventDetailResponse.PaymentType.FREE -> PaymentType.FREE
+    EventDetailResponse.PaymentType.PAID_OR_FREE -> PaymentType.PAID_OR_FREE
 }
