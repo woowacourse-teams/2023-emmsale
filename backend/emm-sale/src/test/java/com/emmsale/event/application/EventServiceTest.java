@@ -71,27 +71,20 @@ import org.springframework.web.multipart.MultipartFile;
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
-      List.of(), "IN_PROGRESS", "ENDED", null, 0, 0, EventMode.OFFLINE.getValue(),
+      null, null, List.of(), null, EventMode.OFFLINE.getValue(),
       PaymentType.PAID.getValue());
-  private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null,
-      List.of(), "IN_PROGRESS", "IN_PROGRESS", null, 0, 0, EventMode.ONLINE.getValue(),
-      PaymentType.PAID.getValue());
-  private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스",
-      null, null,
-      List.of(), "ENDED", "ENDED", null, 0, 0, EventMode.ONLINE.getValue(),
-      PaymentType.PAID.getValue());
-  private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null,
-      List.of(), "UPCOMING", "IN_PROGRESS", null, 0, 0, EventMode.ONLINE.getValue(),
-      PaymentType.PAID.getValue());
+  private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null, null,
+      null, List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
+  private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스", null, null,
+      null, null, List.of(), EventMode.ONLINE.getValue(), null, PaymentType.PAID.getValue());
+  private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null, null,
+      null, List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
-      List.of(), "UPCOMING", "UPCOMING", null, 0, 0, EventMode.ONLINE.getValue(),
-      PaymentType.PAID.getValue());
+      null, null, List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
   private static final EventResponse AI_아이디어_공모전 = new EventResponse(null, "AI 아이디어 공모전", null,
-      null, List.of(), "ENDED", "ENDED", null, 0, 0, EventMode.ONLINE.getValue(),
-      PaymentType.PAID.getValue());
-  private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null, null,
-      List.of(), "IN_PROGRESS", "IN_PROGRESS", null, 0, 0, EventMode.ONLINE.getValue(),
-      PaymentType.PAID.getValue());
+      null, null, null, List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
+  private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null, null, null, null,
+      List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
 
 
   private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);

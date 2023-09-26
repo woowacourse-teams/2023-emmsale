@@ -131,46 +131,60 @@ class EventApiTest extends MockMvcTestHelper {
     );
 
     final ResponseFieldsSnippet responseFields = PayloadDocumentation.responseFields(
-        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
-        fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
-        fieldWithPath("[].startDate").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
+        PayloadDocumentation.fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
+        PayloadDocumentation.fieldWithPath("[].eventStartDate").type(JsonFieldType.STRING)
             .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
-        fieldWithPath("[].endDate").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("[].eventEndDate").type(JsonFieldType.STRING)
             .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
-        fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
+        PayloadDocumentation.fieldWithPath("[].applyStartDate").type(JsonFieldType.STRING)
+            .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
+        PayloadDocumentation.fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
+            .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
+        PayloadDocumentation.fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
             .description("행사 태그 목록"),
-        fieldWithPath("[].status").type(JsonFieldType.STRING)
-            .description("행사 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
-        fieldWithPath("[].applyStatus").type(JsonFieldType.STRING)
-            .description("행사 신청 기간의 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
-        fieldWithPath("[].remainingDays").type(JsonFieldType.NUMBER)
-            .description("행사 시작일까지 남은 일 수"),
-        fieldWithPath("[].applyRemainingDays").type(JsonFieldType.NUMBER)
-            .description("행사 신청 시작일까지 남은 일 수"),
-        fieldWithPath("[].imageUrl").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("[].imageUrl").type(JsonFieldType.STRING)
             .description("행사 이미지 URL"),
-        fieldWithPath("[].eventMode").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("[].eventMode").type(JsonFieldType.STRING)
             .description("행사 온라인 여부(온라인, 오프라인, 온오프라인)"),
-        fieldWithPath("[].paymentType").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("[].paymentType").type(JsonFieldType.STRING)
             .description("행사 유료 여부(유료, 무료, 유무료)")
     );
 
     final List<EventResponse> eventResponses = List.of(
-        new EventResponse(1L, "인프콘 2023", LocalDateTime.parse("2023-06-03T12:00:00"),
+        new EventResponse(
+            1L,
+            "인프콘 2023",
+            LocalDateTime.parse("2023-06-03T12:00:00"),
             LocalDateTime.parse("2023-09-03T12:00:00"),
-            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"), "IN_PROGRESS", "ENDED",
+            LocalDateTime.parse("2023-09-01T00:00:00"),
+            LocalDateTime.parse("2023-09-02T23:59:59"),
+            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"),
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3, -30, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue()),
-        new EventResponse(5L, "웹 컨퍼런스", LocalDateTime.parse("2023-07-03T12:00:00"),
-            LocalDateTime.parse("2023-08-03T12:00:00"), List.of("백엔드", "프론트엔드"),
-            "IN_PROGRESS", "IN_PROGRESS",
+            EventMode.ONLINE.getValue(),
+            PaymentType.PAID.getValue()
+        ),
+        new EventResponse(
+            5L,
+            "웹 컨퍼런스",
+            LocalDateTime.parse("2023-07-03T12:00:00"),
+            LocalDateTime.parse("2023-08-03T12:00:00"),
+            LocalDateTime.parse("2023-06-23T10:00:00"),
+            LocalDateTime.parse("2023-07-03T12:00:00"),
+            List.of("백엔드", "프론트엔드"),
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3, 3, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue()),
-        new EventResponse(2L, "AI 컨퍼런스", LocalDateTime.parse("2023-07-22T12:00:00"),
-            LocalDateTime.parse("2023-07-30T12:00:00"), List.of("AI"), "UPCOMING",
-            "IN_PROGRESS",
+            EventMode.ONLINE.getValue(),
+            PaymentType.PAID.getValue()),
+        new EventResponse(2L,
+            "AI 컨퍼런스",
+            LocalDateTime.parse("2023-07-22T12:00:00"),
+            LocalDateTime.parse("2023-07-30T12:00:00"),
+            LocalDateTime.parse("2023-07-01T00:00:00"),
+            LocalDateTime.parse("2023-07-21T23:59:59"),
+            List.of("AI"),
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3, -18, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue())
+            EventMode.ONLINE.getValue(),
+            PaymentType.PAID.getValue())
     );
 
     Mockito.when(eventService.findEvents(any(EventType.class),
@@ -230,7 +244,7 @@ class EventApiTest extends MockMvcTestHelper {
     Mockito.when(eventService.updateEvent(eq(eventId), any(EventDetailRequest.class), any(), any()))
         .thenReturn(response);
 
-    String contents = objectMapper.writeValueAsString(request);
+    final String contents = objectMapper.writeValueAsString(request);
 
     final RequestPartsSnippet requestPartsSnippet = requestParts(
         partWithName("images").description("이미지들").optional(),
@@ -253,7 +267,8 @@ class EventApiTest extends MockMvcTestHelper {
     );
 
     //when
-    MockMultipartHttpServletRequestBuilder builder = multipart(HttpMethod.PUT, "/events/" + eventId)
+    final MockMultipartHttpServletRequestBuilder builder = multipart(HttpMethod.PUT,
+        "/events/" + eventId)
         .file("images", image1.getBytes())
         .file("images", image2.getBytes())
         .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
@@ -331,7 +346,7 @@ class EventApiTest extends MockMvcTestHelper {
       Mockito.when(eventService.addEvent(any(EventDetailRequest.class), any(), any()))
           .thenReturn(response);
 
-      String contents = objectMapper.writeValueAsString(request);
+      final String contents = objectMapper.writeValueAsString(request);
 
       final RequestPartsSnippet requestPartsSnippet = requestParts(
           partWithName("images").description("이미지들").optional(),
@@ -354,7 +369,7 @@ class EventApiTest extends MockMvcTestHelper {
       );
 
       //when
-      MockMultipartHttpServletRequestBuilder builder = multipart("/events")
+      final MockMultipartHttpServletRequestBuilder builder = multipart("/events")
           .file("images", image1.getBytes())
           .file("images", image2.getBytes())
           .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
@@ -399,7 +414,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
           tags, event.getImageUrl(), event.getType(), event.getEventMode(),
           event.getPaymentType(), event.getOrganization());
-      String contents = objectMapper.writeValueAsString(request);
+      final String contents = objectMapper.writeValueAsString(request);
       //when & then
       mockMvc.perform(multipart("/events")
               .file("images", image1.getBytes())
@@ -440,7 +455,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
           tags, event.getImageUrl(), event.getType(), event.getEventMode(),
           event.getPaymentType(), event.getOrganization());
-      String contents = objectMapper.writeValueAsString(request);
+      final String contents = objectMapper.writeValueAsString(request);
       //when & then
       mockMvc.perform(multipart("/events")
               .file("images", image1.getBytes())
@@ -482,7 +497,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
           tags, event.getImageUrl(), event.getType(), event.getEventMode(),
           event.getPaymentType(), event.getOrganization());
-      String contents = objectMapper.writeValueAsString(request);
+      final String contents = objectMapper.writeValueAsString(request);
       //when & then
       mockMvc.perform(multipart("/events")
               .file("images", image1.getBytes())
@@ -517,7 +532,7 @@ class EventApiTest extends MockMvcTestHelper {
 
       final Event event = EventFixture.인프콘_2023();
 
-      Map<String, String> request = new HashMap<>();
+      final Map<String, String> request = new HashMap<>();
       request.put("name", event.getName());
       request.put("location", event.getLocation());
       request.put("informationUrl", event.getInformationUrl());
@@ -531,7 +546,7 @@ class EventApiTest extends MockMvcTestHelper {
       request.put("paymentType", event.getPaymentType().name());
       request.put("organization", event.getOrganization());
 
-      String contents = objectMapper.writeValueAsString(request);
+      final String contents = objectMapper.writeValueAsString(request);
       //when & then
       mockMvc.perform(multipart("/events")
               .file("images", image1.getBytes())
@@ -565,7 +580,7 @@ class EventApiTest extends MockMvcTestHelper {
 
       final Event event = EventFixture.인프콘_2023();
 
-      Map<String, String> request = new HashMap<>();
+      final Map<String, String> request = new HashMap<>();
       request.put("name", event.getName());
       request.put("location", event.getLocation());
       request.put("informationUrl", event.getInformationUrl());
@@ -579,7 +594,7 @@ class EventApiTest extends MockMvcTestHelper {
       request.put("paymentType", event.getPaymentType().name());
       request.put("organization", event.getOrganization());
 
-      String contents = objectMapper.writeValueAsString(request);
+      final String contents = objectMapper.writeValueAsString(request);
       //when & then
       mockMvc.perform(multipart("/events")
               .file("images", image1.getBytes())
