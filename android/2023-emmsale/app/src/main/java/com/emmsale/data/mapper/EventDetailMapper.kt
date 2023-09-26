@@ -31,9 +31,9 @@ private fun String.toLocalDateTime(): LocalDateTime {
 }
 
 private fun EventDetailResponse.Status.toEventStatus(days: Int): EventStatus = when (this) {
-    EventDetailResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
-    EventDetailResponse.Status.UPCOMING -> EventStatus.UPCOMING(days)
-    EventDetailResponse.Status.ENDED -> EventStatus.ENDED
+    EventDetailResponse.Status.IN_PROGRESS -> EventStatus.InProgress
+    EventDetailResponse.Status.UPCOMING -> EventStatus.Upcoming(days)
+    EventDetailResponse.Status.ENDED -> EventStatus.Ended
 }
 
 private fun EventDetailResponse.PaymentType.toPaymentType(): PaymentType = when (this) {

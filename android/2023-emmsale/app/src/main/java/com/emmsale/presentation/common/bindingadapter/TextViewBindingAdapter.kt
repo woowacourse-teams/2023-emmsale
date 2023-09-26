@@ -32,9 +32,9 @@ fun TextView.setEventStatus(
     if (status == null) return
 
     text = when (status) {
-        EventStatus.IN_PROGRESS -> context.getString(R.string.all_in_progress)
-        is EventStatus.UPCOMING -> context.getString(R.string.all_upcoming, status.remainingDays)
-        EventStatus.ENDED -> context.getString(R.string.all_ended)
+        EventStatus.InProgress -> context.getString(R.string.all_in_progress)
+        is EventStatus.Upcoming -> context.getString(R.string.all_upcoming, status.remainingDays)
+        EventStatus.Ended -> context.getString(R.string.all_ended)
     }
 }
 
@@ -56,9 +56,9 @@ fun TextView.setEventTextColor(
     eventStatus: EventStatus,
 ) {
     val color = when (eventStatus) {
-        EventStatus.IN_PROGRESS -> R.color.primary_color
-        is EventStatus.UPCOMING -> R.color.primary_color
-        EventStatus.ENDED -> R.color.gray
+        EventStatus.InProgress -> R.color.primary_color
+        is EventStatus.Upcoming -> R.color.primary_color
+        EventStatus.Ended -> R.color.gray
     }
     setTextColor(context.getColor(color))
 }
