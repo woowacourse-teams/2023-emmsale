@@ -1,4 +1,4 @@
-package com.emmsale.data.message.mapper
+package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.MessageResponse
 import com.emmsale.data.model.Message
