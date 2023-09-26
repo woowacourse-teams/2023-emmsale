@@ -50,3 +50,15 @@ fun TextView.setOnOfflineMode(
         OnOfflineMode.ON_OFFLINE -> context.getString(R.string.all_onoffline)
     }
 }
+
+@BindingAdapter("app:eventTextColor")
+fun TextView.setEventTextColor(
+    eventStatus: EventStatus,
+) {
+    val color = when (eventStatus) {
+        EventStatus.IN_PROGRESS -> R.color.primary_color
+        is EventStatus.UPCOMING -> R.color.primary_color
+        EventStatus.ENDED -> R.color.gray
+    }
+    setTextColor(context.getColor(color))
+}
