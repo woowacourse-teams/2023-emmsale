@@ -95,7 +95,6 @@
                     android:fontFamily="@font/nanum_square_bold"
                     android:textColor="@color/primary_color"
                     android:textSize="13sp"
-                    app:eventRemainingDays="@{vm.eventDetail.eventDetail.remainingDays}"
                     app:eventStatus="@{vm.eventDetail.eventDetail.eventStatus}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

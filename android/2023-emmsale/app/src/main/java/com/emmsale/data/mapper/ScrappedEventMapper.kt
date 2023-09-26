@@ -15,20 +15,18 @@ fun ScrappedEventResponse.toData(): ScrappedEvent = ScrappedEvent(
     name = name,
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
-    status = when (status) {
-        ScrappedEventResponse.Status.ENDED -> EventStatus.ENDED
-        ScrappedEventResponse.Status.UPCOMING -> EventStatus.UPCOMING
-        ScrappedEventResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
+    applyStatus = when (applyStatus) {
+        ScrappedEventResponse.Status.ENDED -> EventStatus.Ended
+        ScrappedEventResponse.Status.UPCOMING -> EventStatus.Upcoming(applyRemainingDays)
+        ScrappedEventResponse.Status.IN_PROGRESS -> EventStatus.InProgress
     },
     tags = tags,
     posterUrl = posterUrl,
-    remainingDays = remainingDays,
-    eventStatus = when (applyStatus) {
-        ScrappedEventResponse.Status.ENDED -> EventStatus.ENDED
-        ScrappedEventResponse.Status.UPCOMING -> EventStatus.UPCOMING
-        ScrappedEventResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
+    eventStatus = when (eventStatus) {
+        ScrappedEventResponse.Status.ENDED -> EventStatus.Ended
+        ScrappedEventResponse.Status.UPCOMING -> EventStatus.Upcoming(remainingDays)
+        ScrappedEventResponse.Status.IN_PROGRESS -> EventStatus.InProgress
     },
-    eventRemainingDays = applyRemainingDays,
     onOfflineMode = when (eventMode) {
         ScrappedEventResponse.EventMode.ONLINE -> OnOfflineMode.ONLINE
         ScrappedEventResponse.EventMode.OFFLINE -> OnOfflineMode.OFFLINE

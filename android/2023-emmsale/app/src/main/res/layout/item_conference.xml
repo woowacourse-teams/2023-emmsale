@@ -51,9 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/nanum_square_extra_bold"
-            android:textColor="@{event.conference.eventStatus == EventStatus.ENDED ? @color/gray : @color/primary_color}"
             android:textSize="13sp"
-            app:eventRemainingDays="@{event.conference.remainingDays}"
             app:eventStatus="@{event.conference.eventStatus}"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
@@ -79,11 +77,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@{event.conference.paymentType == PaymentType.PAID ? @string/all_paid : event.conference.paymentType == PaymentType.FREE ? @string/all_free : @string/all_paid_free}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
+            app:paymentType="@{event.conference.paymentType}"
             tools:text="무료" />
 
         <View
@@ -101,13 +99,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:text="@{event.conference.onOfflineMode == OnOfflineMode.ONLINE ? @string/all_online : @string/all_offline}"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_pay_type"
             app:layout_constraintStart_toStartOf="@+id/divider"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
             app:layout_constraintTop_toTopOf="@+id/tv_pay_type"
+            app:onOfflineMode="@{event.conference.onOfflineMode}"
             tools:text="온라인" />
 
         <com.google.android.material.chip.ChipGroup

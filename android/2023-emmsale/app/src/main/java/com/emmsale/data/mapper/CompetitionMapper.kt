@@ -17,20 +17,18 @@ fun CompetitionResponse.toData(): Competition = Competition(
     name = name,
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
-    status = when (status) {
-        CompetitionResponse.Status.ENDED -> EventStatus.ENDED
-        CompetitionResponse.Status.UPCOMING -> EventStatus.UPCOMING
-        CompetitionResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
+    applyStatus = when (applyStatus) {
+        CompetitionResponse.Status.ENDED -> EventStatus.Ended
+        CompetitionResponse.Status.UPCOMING -> EventStatus.Upcoming(applyRemainingDays)
+        CompetitionResponse.Status.IN_PROGRESS -> EventStatus.InProgress
     },
     tags = tags,
     posterUrl = posterUrl,
-    remainingDays = remainingDays,
-    eventStatus = when (applyStatus) {
-        CompetitionResponse.Status.ENDED -> EventStatus.ENDED
-        CompetitionResponse.Status.UPCOMING -> EventStatus.UPCOMING
-        CompetitionResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
+    eventStatus = when (status) {
+        CompetitionResponse.Status.ENDED -> EventStatus.Ended
+        CompetitionResponse.Status.UPCOMING -> EventStatus.Upcoming(remainingDays)
+        CompetitionResponse.Status.IN_PROGRESS -> EventStatus.InProgress
     },
-    applyRemainingDays = applyRemainingDays,
     onOfflineMode = when (onOfflineMode) {
         CompetitionResponse.OnOfflineMode.ONLINE -> OnOfflineMode.ONLINE
         CompetitionResponse.OnOfflineMode.OFFLINE -> OnOfflineMode.OFFLINE

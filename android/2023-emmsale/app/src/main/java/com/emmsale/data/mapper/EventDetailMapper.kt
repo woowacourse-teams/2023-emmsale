@@ -17,15 +17,12 @@ fun EventDetailResponse.toData(): EventDetail = EventDetail(
     applyStartDate = applyStartDate.toLocalDateTime(),
     applyEndDate = applyEndDate.toLocalDateTime(),
     location = location,
-    eventStatus = status.toEventStatus(),
-    applyStatus = applyStatus.toEventStatus(),
+    eventStatus = status.toEventStatus(remainingDays),
+    applyStatus = applyStatus.toEventStatus(applyRemainingDays),
     tags = tags,
     posterImageUrl = imageUrl ?: "",
-    remainingDays = remainingDays,
-    applyRemainingDays = applyRemainingDays,
     type = type,
     paymentType = paymentType.toPaymentType(),
-    imageUrls = imageUrls.map { url -> "https://d3ms3abrjbgefs.cloudfront.net/dev/" + url },
 )
 
 private fun String.toLocalDateTime(): LocalDateTime {
@@ -33,10 +30,10 @@ private fun String.toLocalDateTime(): LocalDateTime {
     return LocalDateTime.parse(this, format)
 }
 
-private fun EventDetailResponse.Status.toEventStatus(): EventStatus = when (this) {
-    EventDetailResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
-    EventDetailResponse.Status.UPCOMING -> EventStatus.UPCOMING
-    EventDetailResponse.Status.ENDED -> EventStatus.ENDED
+private fun EventDetailResponse.Status.toEventStatus(days: Int): EventStatus = when (this) {
+    EventDetailResponse.Status.IN_PROGRESS -> EventStatus.InProgress
+    EventDetailResponse.Status.UPCOMING -> EventStatus.Upcoming(days)
+    EventDetailResponse.Status.ENDED -> EventStatus.Ended
 }
 
 private fun EventDetailResponse.PaymentType.toPaymentType(): PaymentType = when (this) {

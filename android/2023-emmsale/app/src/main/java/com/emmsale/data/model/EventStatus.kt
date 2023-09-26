@@ -1,5 +1,7 @@
 package com.emmsale.data.model
 
-enum class EventStatus {
-    IN_PROGRESS, UPCOMING, ENDED,
+sealed class EventStatus {
+    object InProgress : EventStatus()
+    data class Upcoming(val remainingDays: Int) : EventStatus()
+    object Ended : EventStatus()
 }

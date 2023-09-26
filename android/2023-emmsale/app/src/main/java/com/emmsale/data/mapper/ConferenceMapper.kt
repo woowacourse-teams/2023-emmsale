@@ -17,20 +17,18 @@ fun ConferenceResponse.toData(): Conference = Conference(
     name = name,
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
-    status = when (status) {
-        ConferenceResponse.Status.ENDED -> EventStatus.ENDED
-        ConferenceResponse.Status.UPCOMING -> EventStatus.UPCOMING
-        ConferenceResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
+    applyStatus = when (applyStatus) {
+        ConferenceResponse.Status.ENDED -> EventStatus.Ended
+        ConferenceResponse.Status.UPCOMING -> EventStatus.Upcoming(applyRemainingDays)
+        ConferenceResponse.Status.IN_PROGRESS -> EventStatus.InProgress
     },
     tags = tags,
     posterUrl = posterUrl,
-    remainingDays = remainingDays,
-    eventStatus = when (applyStatus) {
-        ConferenceResponse.Status.ENDED -> EventStatus.ENDED
-        ConferenceResponse.Status.UPCOMING -> EventStatus.UPCOMING
-        ConferenceResponse.Status.IN_PROGRESS -> EventStatus.IN_PROGRESS
+    eventStatus = when (status) {
+        ConferenceResponse.Status.ENDED -> EventStatus.Ended
+        ConferenceResponse.Status.UPCOMING -> EventStatus.Upcoming(remainingDays)
+        ConferenceResponse.Status.IN_PROGRESS -> EventStatus.InProgress
     },
-    applyRemainingDays = applyRemainingDays,
     onOfflineMode = when (onOfflineMode) {
         ConferenceResponse.OnOfflineMode.ONLINE -> OnOfflineMode.ONLINE
         ConferenceResponse.OnOfflineMode.OFFLINE -> OnOfflineMode.OFFLINE

@@ -25,21 +25,25 @@ fun TextView.setPaymentType(
     }
 }
 
-@BindingAdapter(
-    "app:eventStatus",
-    "app:eventRemainingDays",
-    requireAll = false,
-)
+@BindingAdapter("app:eventStatus")
 fun TextView.setEventStatus(
-    eventStats: EventStatus? = null,
-    eventRemainingDays: Int = -1,
+    status: EventStatus? = null,
 ) {
-    if (eventStats == null) return
+    if (status == null) return
 
-    text = when (eventStats) {
-        EventStatus.IN_PROGRESS -> context.getString(R.string.all_in_progress)
-        EventStatus.UPCOMING -> context.getString(R.string.all_upcoming, eventRemainingDays)
-        EventStatus.ENDED -> context.getString(R.string.all_ended)
+    when (status) {
+        EventStatus.InProgress -> {
+            text = context.getString(R.string.all_in_progress)
+            setTextColor(context.getColor(R.color.primary_color))
+        }
+        is EventStatus.Upcoming -> {
+            text = context.getString(R.string.all_upcoming, status.remainingDays)
+            setTextColor(context.getColor(R.color.primary_color))
+        }
+        EventStatus.Ended -> {
+            text = context.getString(R.string.all_ended)
+            setTextColor(context.getColor(R.color.gray))
+        }
     }
 }
 
