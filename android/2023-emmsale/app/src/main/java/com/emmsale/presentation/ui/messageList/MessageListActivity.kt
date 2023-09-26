@@ -74,7 +74,14 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun scrollToEnd() {
-        binding.rvMessageList.scrollToPosition(viewModel.messages.value.messageSize - 1)
+        val lastPosition = viewModel.messages.value.messageSize - 1
+
+        // RecyclerView 버그로 scrollToPosition이 완전히 마지막으로 이동하지 않아서 아래와 같이 작성함.
+        binding.rvMessageList.scrollToPosition(lastPosition)
+        lifecycleScope.launch {
+            delay(50)
+            binding.rvMessageList.smoothScrollToPosition(lastPosition)
+        }
     }
 
     private fun smoothScrollToEnd() {
