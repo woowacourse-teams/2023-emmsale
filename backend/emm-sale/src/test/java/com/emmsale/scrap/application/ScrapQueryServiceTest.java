@@ -11,7 +11,6 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.scrap.domain.Scrap;
 import com.emmsale.scrap.domain.ScrapRepository;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -46,19 +45,17 @@ class ScrapQueryServiceTest extends ServiceIntegrationTestHelper {
 
     final List<EventResponse> expected = List.of(
         new EventResponse(event1.getId(), event1.getName(), event1.getEventPeriod().getStartDate(),
-            event1.getEventPeriod().getEndDate(),
-            Collections.emptyList(), "ENDED", "ENDED", event1.getImageUrl(), event1.getEventPeriod()
-            .calculateRemainingDays(LocalDate.now()), event1.getEventPeriod()
-            .calculateApplyRemainingDays(LocalDate.now()), event1
-            .getEventMode().getValue(), event1.getPaymentType().getValue()),
-
+            event1.getEventPeriod().getEndDate(), event1.getEventPeriod().getApplyStartDate(),
+            event1.getEventPeriod().getApplyEndDate(),
+            Collections.emptyList(), event1.getImageUrl(), event1.getEventMode().getValue(),
+            event1.getPaymentType().getValue()),
         new EventResponse(event2.getId(), event2.getName(), event2.getEventPeriod().getStartDate(),
-            event2.getEventPeriod().getEndDate(),
-            Collections.emptyList(), "ENDED", "ENDED", event2.getImageUrl(), event2.getEventPeriod()
-            .calculateRemainingDays(LocalDate.now()), event2.getEventPeriod()
-            .calculateApplyRemainingDays(LocalDate.now()), event2
-            .getEventMode().getValue(), event2.getPaymentType().getValue())
+            event2.getEventPeriod().getEndDate(), event2.getEventPeriod().getApplyStartDate(),
+            event2.getEventPeriod().getApplyEndDate(),
+            Collections.emptyList(), event2.getImageUrl(), event2.getEventMode().getValue(),
+            event2.getPaymentType().getValue())
     );
+
     //then
     assertThat(actual)
         .usingRecursiveComparison()

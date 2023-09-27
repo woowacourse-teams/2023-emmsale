@@ -29,6 +29,6 @@ public class ScrapQueryService {
         .stream()
         .map(Scrap::getEvent)
         .collect(groupingBy(event -> event.getEventPeriod().calculateEventStatus(LocalDate.now())));
-    return EventResponse.mergeEventResponses(LocalDate.now(), eventGroupByStatus);
+    return EventResponse.mergeEventResponses(eventGroupByStatus);
   }
 }
