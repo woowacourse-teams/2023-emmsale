@@ -427,5 +427,7 @@
     <string name="feeddetaildeletedialog_title">게시글 삭제</string>
     <string name="feeddetaildeletedialog_message">해당 게시글을 삭제하시겠습니까?</string>
     <string name="feeddetail_toolbar_title">게시글</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

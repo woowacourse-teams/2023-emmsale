@@ -153,9 +153,7 @@
                 app:tabIndicatorFullWidth="true"
                 app:tabIndicatorHeight="2dp"
                 app:tabSelectedTextAppearance="@style/EventDetail_SelectedTabStyle"
-                app:tabSelectedTextColor="@color/primary_color"
-                app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle"
-                app:tabTextColor="@color/black" />
+                app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.viewpager2.widget.ViewPager2

@@ -161,6 +161,8 @@ data class EventDetailResponse(
     val type: String,
     @SerialName("imageUrls")
     val imageUrls: List<String> = emptyList(),
+    @SerialName("eventMode")
+    val onOfflineMode: OnOfflineMode,
     @SerialName("paymentType")
     val paymentType: PaymentType,
 ) {
@@ -184,5 +186,16 @@ data class EventDetailResponse(
 
         @SerialName("유무료")
         PAID_OR_FREE,
+    }
+
+    enum class OnOfflineMode {
+        @SerialName("온라인")
+        ONLINE,
+
+        @SerialName("오프라인")
+        OFFLINE,
+
+        @SerialName("온오프라인")
+        ON_OFFLINE,
     }
 }
