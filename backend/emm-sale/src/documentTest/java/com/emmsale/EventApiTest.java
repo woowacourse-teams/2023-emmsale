@@ -86,7 +86,8 @@ class EventApiTest extends MockMvcTestHelper {
           .description("event의 타입"),
       fieldWithPath("imageUrls[]").description("이미지 URL들").optional(),
       fieldWithPath("organization").description("행사기관"),
-      fieldWithPath("paymentType").description("유무료 여부(유료,무료,유무료)")
+      fieldWithPath("paymentType").description("유무료 여부(유료,무료,유무료)"),
+      fieldWithPath("eventMode").description("유무료 여부(온라인,오프라인,온오프라인)")
   );
 
   @Test
@@ -101,7 +102,7 @@ class EventApiTest extends MockMvcTestHelper {
         "UPCOMING",
         "ENDED", List.of("코틀린", "백엔드", "안드로이드"),
         "https://www.image.com", 2, -12, EventType.COMPETITION.toString(),
-        List.of("imageUrl1", "imageUrl2"), "인프런", "유료");
+        List.of("imageUrl1", "imageUrl2"), "인프런", "유료", "온라인");
 
     Mockito.when(eventService.findEvent(ArgumentMatchers.anyLong(), any()))
         .thenReturn(eventDetailResponse);
@@ -225,7 +226,7 @@ class EventApiTest extends MockMvcTestHelper {
         request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
         request.getImageUrl(), 10, 10, request.getType().toString(),
-        List.of("imageUrl1", "imageUrl2"), "행사기관", "유료");
+        List.of("imageUrl1", "imageUrl2"), "행사기관", "유료", "온라인");
 
     Mockito.when(eventService.updateEvent(eq(eventId), any(EventDetailRequest.class), any(), any()))
         .thenReturn(response);
@@ -326,7 +327,7 @@ class EventApiTest extends MockMvcTestHelper {
           request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
           tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
           request.getImageUrl(), 10, 10, request.getType().toString(),
-          List.of("imageUrl1", "imageUrl2"), "행사기관", "무료");
+          List.of("imageUrl1", "imageUrl2"), "행사기관", "무료", "오프라인");
 
       Mockito.when(eventService.addEvent(any(EventDetailRequest.class), any(), any()))
           .thenReturn(response);

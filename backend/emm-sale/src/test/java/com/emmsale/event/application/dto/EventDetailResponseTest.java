@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.PaymentType;
 import java.time.LocalDate;
@@ -39,7 +40,8 @@ class EventDetailResponseTest {
         구름톤.getType().toString(),
         imageUrls,
         구름톤.getOrganization(),
-        PaymentType.FREE_PAID.getValue()
+        PaymentType.FREE_PAID.getValue(),
+        EventMode.ON_OFFLINE.getValue()
     );
 
     //when
