@@ -126,13 +126,21 @@ public class Event extends BaseEntity {
       final LocalDateTime applyStartDate,
       final LocalDateTime applyEndDate,
       final String informationUrl,
-      final List<Tag> tags
+      final List<Tag> tags,
+      final EventType type,
+      final EventMode eventMode,
+      final PaymentType paymentType,
+      final String organization
   ) {
     this.name = name;
     this.location = location;
     this.eventPeriod = new EventPeriod(startDate, endDate, applyStartDate, applyEndDate);
     this.informationUrl = informationUrl;
     this.tags = new ArrayList<>();
+    this.type = type;
+    this.eventMode = eventMode;
+    this.paymentType = paymentType;
+    this.organization = organization;
 
     addAllEventTags(tags);
 
