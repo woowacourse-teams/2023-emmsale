@@ -1,6 +1,7 @@
 package com.emmsale.notification.application;
 
 import com.emmsale.event_publisher.CommentNotificationEvent;
+import com.emmsale.event_publisher.EventNotificationEvent;
 import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.event_publisher.UpdateNotificationEvent;
 import com.emmsale.notification.domain.Notification;
@@ -61,6 +62,28 @@ public class NotificationEventListener {
       firebaseCloudMessageClient.sendMessageTo(
           notification,
           commentNotificationEvent.getReceiverId()
+      );
+
+    } catch (JsonProcessingException e) {
+      log.error("json 에러");
+    } catch (Exception e) {
+      log.error("파이어베이스 관련 에러, 알림 재요청 필요, {}", e.getMessage(), e);
+    }
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  @TransactionalEventListener
+  public void createEventNotification(final EventNotificationEvent eventNotificationEvent) {
+    try {
+      final String jsonData = objectMapper.writeValueAsString(eventNotificationEvent);
+
+      final Notification notification = notificationRepository.save(
+          new Notification(NotificationType.EVENT, jsonData)
+      );
+
+      firebaseCloudMessageClient.sendMessageTo(
+          notification,
+          eventNotificationEvent.getReceiverId()
       );
 
     } catch (JsonProcessingException e) {
