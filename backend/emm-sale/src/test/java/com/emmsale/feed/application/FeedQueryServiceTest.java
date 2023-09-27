@@ -231,6 +231,49 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
   }
 
   @Nested
+  @DisplayName("자신이 작성한 피드 목록 조회 테스트")
+  class FindAllMy {
+
+    @Test
+    @DisplayName("자신이 작성한 모든 피드를 조회한다.")
+    void findAllFeedsTest() {
+      //given
+      final List<FeedSimpleResponse> expect = List.of(
+          FeedSimpleResponse.from(feed1, Collections.emptyList(), 0L),
+          FeedSimpleResponse.from(feed2, Collections.emptyList(), 0L)
+      );
+
+      //when
+      final List<FeedSimpleResponse> actual = feedQueryService.findAllMyFeeds(writer);
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
+
+    @Test
+    @DisplayName("삭제된 피드는 자신이 작성한 피드 목록에 조회되지 않는다.")
+    void findAllFeedsWithWithDeletedFeedTest() {
+      //given
+      feed1.delete();
+      feedRepository.save(feed1);
+
+      final List<FeedSimpleResponse> expect = List.of(
+          FeedSimpleResponse.from(feed2, Collections.emptyList(), 0L)
+      );
+
+      //when
+      final List<FeedSimpleResponse> actual = feedQueryService.findAllMyFeeds(writer);
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expect);
+    }
+  }
+
+  @Nested
   @DisplayName("피드 이미지 조회 테스트")
   class FeedQueryWithImage {
 
