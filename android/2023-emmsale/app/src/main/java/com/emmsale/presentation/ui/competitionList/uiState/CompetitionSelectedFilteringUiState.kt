@@ -14,8 +14,12 @@ data class CompetitionSelectedFilteringUiState(
         .map { it.id }
         .toTypedArray()
 
-    val selectedFilterSize: Int =
-        competitionStatusFilteringOptions.size + competitionTagFilteringOptions.size
+    val isShowFilter: Boolean
+        get() {
+            if (selectedStartDate != null) return true
+            if (selectedEndDate != null) return true
+            return selectedStatusFilteringOptionIds.size + selectedTagFilteringOptionIds.size > 0
+        }
 
     fun removeFilteringOptionBy(filterId: Long): CompetitionSelectedFilteringUiState = copy(
         competitionStatusFilteringOptions = competitionStatusFilteringOptions.filterNot { filterOption ->

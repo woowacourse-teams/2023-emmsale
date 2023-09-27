@@ -14,13 +14,10 @@ import com.emmsale.presentation.common.extension.topActivityName
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
-import com.emmsale.presentation.ui.notificationPageList.NotificationBoxActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -42,11 +39,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val isNotificationReceive = config.isNotificationReceive
         if (!isNotificationReceive || tokenRepository.getToken() == null) return
 
-        when (message.data["notificationType"]) {
-            FOLLOW_NOTIFICATION_TYPE -> {
-                if (config.isFollowNotificationReceive) showFollowNotification(message)
-            }
-
+        when (message.data["notificationType"]?.uppercase()) {
             CHILD_COMMENT_NOTIFICATION_TYPE -> {
                 if (config.isCommentNotificationReceive) showChildCommentNotification(message)
             }
@@ -59,19 +52,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
                 if (config.isMessageNotificationReceive) showMessageNotification(message)
             }
         }
-    }
-
-    private fun showFollowNotification(message: RemoteMessage) {
-        val senderName = message.data["senderName"] ?: return
-
-        baseContext.showNotification(
-            title = getString(R.string.kerdyfirebasemessaging_follow_notification_title_format),
-            message = getString(R.string.kerdyfirebasemessaging_follow_notification_message_format).format(
-                senderName,
-            ),
-            channelId = R.id.id_all_follow_notification_channel,
-            intent = NotificationBoxActivity.getIntent(this),
-        )
     }
 
     private fun showChildCommentNotification(message: RemoteMessage) {
@@ -87,33 +67,33 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
 
         val childCommentId = message.data["redirectId"]?.toLong() ?: return
         val createdAt = message.data["createdAt"] ?: return
+        val content = message.data["content"] ?: return
+        val writerName = message.data["writer"] ?: return
+        val writerImageUrl = message.data["writerImageUrl"] ?: return
 
         val (feedId, parentCommentId) = getFeedIdAndParentCommentId(childCommentId)
         if (feedId == ERROR_FEED_ID) return
 
         baseContext.showNotification(
-            title = getString(R.string.kerdyfirebasemessaging_child_comment_notification_title_format),
-            message = createdAt.toTimeMessage(),
+            title = getString(R.string.kerdyfirebasemessaging_child_comment_notification_title),
+            message = getString(R.string.kerdyfirebasemessaging_child_comment_notification_content_format).format(writerName, content),
             channelId = R.id.id_all_child_comment_notification_channel,
             intent = ChildCommentActivity.getIntent(this, feedId, parentCommentId, true),
+            largeIconUrl = writerImageUrl,
         )
     }
 
     private fun showInterestEventNotification(message: RemoteMessage) {
         val eventId = message.data["redirectId"]?.toLong() ?: return
         val createdAt = message.data["createdAt"] ?: return
+        val title = message.data["title"] ?: return
 
         baseContext.showNotification(
             title = getString(R.string.kerdyfirebasemessaging_interest_event_notification_title_format),
-            message = createdAt.toTimeMessage(),
+            message = title,
             channelId = R.id.id_all_interest_event_notification_channel,
             intent = EventDetailActivity.getIntent(this, eventId),
         )
-    }
-
-    private fun String.toTimeMessage(): String {
-        val dateTime = LocalDateTime.parse(this, DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss"))
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(dateTime)
     }
 
     private fun showMessageNotification(message: RemoteMessage) {
@@ -153,7 +133,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     companion object {
         private const val ERROR_FEED_ID = -1L
 
-        private const val FOLLOW_NOTIFICATION_TYPE = "REQUEST"
         private const val CHILD_COMMENT_NOTIFICATION_TYPE = "COMMENT"
         private const val EVENT_NOTIFICATION_TYPE = "EVENT"
         private const val MESSAGE_NOTIFICATION_TYPE = "MESSAGE"

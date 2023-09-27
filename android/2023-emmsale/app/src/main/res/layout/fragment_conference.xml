@@ -88,10 +88,10 @@
             android:overScrollMode="never"
             android:paddingHorizontal="17dp"
             android:scrollbars="none"
-            android:visibility="@{viewModel.selectedFilter.selectedFilterSize > 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_event_filter">
+            app:layout_constraintTop_toBottomOf="@+id/btn_event_filter"
+            app:visible="@{viewModel.selectedFilter.isShowFilter}">
 
             <LinearLayout
                 android:id="@+id/layout_conference_filters"
