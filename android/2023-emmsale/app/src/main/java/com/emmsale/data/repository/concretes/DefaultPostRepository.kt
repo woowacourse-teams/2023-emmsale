@@ -2,7 +2,7 @@ package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.model.Post
+import com.emmsale.data.model.GeneralPost
 import com.emmsale.data.repository.interfaces.PostRepository
 import com.emmsale.data.service.PostService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -17,7 +17,7 @@ class DefaultPostRepository @Inject constructor(
     private val postService: PostService,
 ) : PostRepository {
 
-    override suspend fun getPosts(eventId: Long): ApiResponse<List<Post>> {
+    override suspend fun getPosts(eventId: Long): ApiResponse<List<GeneralPost>> {
         return postService
             .getPosts(eventId)
             .map { it.toData() }

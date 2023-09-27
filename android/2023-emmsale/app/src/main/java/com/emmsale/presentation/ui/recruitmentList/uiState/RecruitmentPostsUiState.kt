@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.recruitmentList.uiState
 
-import com.emmsale.data.model.Recruitment
+import com.emmsale.data.model.RecruitmentPost
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.FetchResultUiState
 
@@ -17,9 +17,9 @@ data class RecruitmentPostsUiState(
     )
 
     companion object {
-        fun from(recruitments: List<Recruitment>): RecruitmentPostsUiState {
+        fun from(recruitmentPosts: List<RecruitmentPost>): RecruitmentPostsUiState {
             return RecruitmentPostsUiState(
-                list = recruitments.map(RecruitmentPostUiState::from),
+                list = recruitmentPosts.map(RecruitmentPostUiState::from),
                 fetchResult = FetchResult.SUCCESS,
             )
         }

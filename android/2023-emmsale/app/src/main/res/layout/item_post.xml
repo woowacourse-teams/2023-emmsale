@@ -11,7 +11,7 @@
 
         <variable
             name="post"
-            type="com.emmsale.data.model.Post" />
+            type="com.emmsale.data.model.GeneralPost" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

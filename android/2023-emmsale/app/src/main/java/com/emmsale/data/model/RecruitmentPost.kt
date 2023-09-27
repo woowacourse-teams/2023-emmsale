@@ -2,7 +2,7 @@ package com.emmsale.data.model
 
 import java.time.LocalDate
 
-data class Recruitment(
+data class RecruitmentPost(
     val id: Long,
     val memberId: Long,
     val name: String,

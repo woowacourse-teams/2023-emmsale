@@ -1,11 +1,11 @@
 package com.emmsale.data.model
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
-data class MyPost(
+data class MyRecruitmentPost(
     val eventId: Long,
     val postId: Long,
     val eventName: String,
     val content: String? = null,
-    val updatedAt: LocalDate? = null,
+    val updatedAt: LocalDateTime? = null,
 )

@@ -11,7 +11,7 @@ import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.model.Recruitment
+import com.emmsale.data.model.RecruitmentPost
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.data.service.RecruitmentService
@@ -29,14 +29,14 @@ class DefaultRecruitmentRepository @Inject constructor(
 
     override suspend fun getEventRecruitments(
         eventId: Long,
-    ): ApiResponse<List<Recruitment>> = recruitmentService
+    ): ApiResponse<List<RecruitmentPost>> = recruitmentService
         .getRecruitments(eventId)
         .map(List<RecruitmentResponse>::toData)
 
     override suspend fun getEventRecruitment(
         eventId: Long,
         recruitmentId: Long,
-    ): ApiResponse<Recruitment> = recruitmentService
+    ): ApiResponse<RecruitmentPost> = recruitmentService
         .getRecruitment(eventId, recruitmentId)
         .map(RecruitmentResponse::toData)
 

@@ -2,7 +2,7 @@ package com.emmsale.data.model
 
 import java.time.LocalDateTime
 
-data class Post(
+data class GeneralPost(
     val id: Long,
     val eventId: Long,
     val title: String,

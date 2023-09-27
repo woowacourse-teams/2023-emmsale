@@ -12,14 +12,14 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.postList.PostListViewModel" />
+            type="com.emmsale.presentation.ui.generalPostList.GeneralPostListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="93dp"
-        tools:context=".presentation.ui.postList.PostListFragment">
+        tools:context=".presentation.ui.generalPostList.GeneralPostListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_postlist"
@@ -61,7 +61,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.posts.posts.empty &amp;&amp; vm.posts.fetchResult == FetchResult.SUCCESS}">
+            app:visible="@{vm.posts.generalPosts.empty &amp;&amp; vm.posts.fetchResult == FetchResult.SUCCESS}">
 
             <com.emmsale.presentation.common.views.NoContentView
                 android:layout_width="match_parent"

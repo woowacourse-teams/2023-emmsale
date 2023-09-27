@@ -7,7 +7,7 @@ import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
 import com.emmsale.data.common.callAdapter.Success
 import com.emmsale.data.common.callAdapter.Unexpected
-import com.emmsale.data.model.Recruitment
+import com.emmsale.data.model.RecruitmentPost
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
@@ -55,8 +55,8 @@ class EventRecruitmentViewModel @Inject constructor(
         _recruitments.value = _recruitments.value.changeToErrorState()
     }
 
-    private fun fetchSuccessRecruitments(recruitments: List<Recruitment>) {
-        _recruitments.value = RecruitmentPostsUiState.from(recruitments)
+    private fun fetchSuccessRecruitments(recruitmentPosts: List<RecruitmentPost>) {
+        _recruitments.value = RecruitmentPostsUiState.from(recruitmentPosts)
     }
 
     companion object {

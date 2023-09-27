@@ -1,12 +1,12 @@
-package com.emmsale.presentation.ui.postList.recyclerView
+package com.emmsale.presentation.ui.generalPostList.recyclerView
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.data.model.Post
+import com.emmsale.data.model.GeneralPost
 import com.emmsale.databinding.ItemPostBinding
 
-class PostViewHolder(
+class GeneralPostViewHolder(
     private val binding: ItemPostBinding,
     navigateToPostDetail: (postId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -19,18 +19,18 @@ class PostViewHolder(
         }
     }
 
-    fun bind(post: Post) {
-        binding.post = post
+    fun bind(generalPost: GeneralPost) {
+        binding.post = generalPost
     }
 
     companion object {
         fun create(
             parent: ViewGroup,
             navigateToPostDetail: (postId: Long) -> Unit,
-        ): PostViewHolder {
+        ): GeneralPostViewHolder {
             val binding =
                 ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return PostViewHolder(binding, navigateToPostDetail)
+            return GeneralPostViewHolder(binding, navigateToPostDetail)
         }
     }
 }

@@ -1,22 +1,22 @@
-package com.emmsale.presentation.ui.postList
+package com.emmsale.presentation.ui.generalPostList
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.callAdapter.Success
-import com.emmsale.data.model.Post
+import com.emmsale.data.model.GeneralPost
 import com.emmsale.data.repository.interfaces.PostRepository
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.ui.postList.uiState.PostsUiState
+import com.emmsale.presentation.ui.generalPostList.uiState.PostsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PostListViewModel @Inject constructor(
+class GeneralPostListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val postRepository: PostRepository,
 ) : ViewModel(), Refreshable {
@@ -43,8 +43,8 @@ class PostListViewModel @Inject constructor(
         }
     }
 
-    private fun NotNullMutableLiveData<PostsUiState>.toSuccessState(posts: List<Post>) {
-        this.value = PostsUiState(FetchResult.SUCCESS, posts)
+    private fun NotNullMutableLiveData<PostsUiState>.toSuccessState(generalPosts: List<GeneralPost>) {
+        this.value = PostsUiState(FetchResult.SUCCESS, generalPosts)
     }
 
     private fun NotNullMutableLiveData<PostsUiState>.toErrorState() {

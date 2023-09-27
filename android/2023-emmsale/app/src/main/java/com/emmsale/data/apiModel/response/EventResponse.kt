@@ -161,8 +161,6 @@ data class EventDetailResponse(
     val type: String,
     @SerialName("imageUrls")
     val imageUrls: List<String> = emptyList(),
-    @SerialName("eventMode")
-    val onOfflineMode: OnOfflineMode,
     @SerialName("paymentType")
     val paymentType: PaymentType,
 ) {

@@ -3,7 +3,7 @@ package com.emmsale.data.repository.concretes
 import com.emmsale.data.apiModel.response.MyPostResponse
 import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.model.MyPost
+import com.emmsale.data.model.MyRecruitmentPost
 import com.emmsale.data.repository.interfaces.MyPostRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.data.service.MyPostService
@@ -17,7 +17,7 @@ class DefaultMyPostRepository @Inject constructor(
         "[ERROR] 로그인되지 않은 사용자입니다."
     }
 
-    override suspend fun getMyPosts(): ApiResponse<List<MyPost>> {
+    override suspend fun getMyPosts(): ApiResponse<List<MyRecruitmentPost>> {
         return myPostService
             .getMyPosts(myUid)
             .map(List<MyPostResponse>::toData)

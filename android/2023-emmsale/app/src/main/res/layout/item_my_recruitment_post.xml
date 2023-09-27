@@ -7,7 +7,9 @@
 
         <variable
             name="myPost"
-            type="com.emmsale.presentation.ui.myPostList.uiState.MyPostUiState" />
+            type="com.emmsale.data.model.MyRecruitmentPost" />
+
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,7 +55,8 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/nanum_square_regular"
-            android:text="@{myPost.updatedAt}"
+            app:dateText="@{myPost.updatedAt}"
+            app:dateTimeFormatter="@{DateTimePattern.YEAR_MONTH_DAY}"
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,18 +1,18 @@
 package com.emmsale.data.repository.interfaces
 
 import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.model.Recruitment
+import com.emmsale.data.model.RecruitmentPost
 
 interface RecruitmentRepository {
 
     suspend fun getEventRecruitments(
         eventId: Long,
-    ): ApiResponse<List<Recruitment>>
+    ): ApiResponse<List<RecruitmentPost>>
 
     suspend fun getEventRecruitment(
         eventId: Long,
         recruitmentId: Long,
-    ): ApiResponse<Recruitment>
+    ): ApiResponse<RecruitmentPost>
 
     suspend fun postRecruitment(
         eventId: Long,

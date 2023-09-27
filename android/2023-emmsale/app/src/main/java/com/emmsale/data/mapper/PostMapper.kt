@@ -2,13 +2,13 @@ package com.emmsale.data.mapper
 
 import com.emmsale.BuildConfig
 import com.emmsale.data.apiModel.response.PostsResponse
-import com.emmsale.data.model.Post
+import com.emmsale.data.model.GeneralPost
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun PostsResponse.toData(): List<Post> {
+fun PostsResponse.toData(): List<GeneralPost> {
     return posts.map { postResponse ->
-        Post(
+        GeneralPost(
             id = postResponse.id,
             eventId = eventId,
             title = postResponse.title,

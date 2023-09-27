@@ -1,5 +1,6 @@
 package com.emmsale.data.common.callAdapter
 
+import android.util.Log
 import okhttp3.Headers
 import okhttp3.internal.EMPTY_HEADERS
 
@@ -8,7 +9,10 @@ sealed class ApiResponse<out T : Any> {
         is Success -> Success(transform(data), headers)
         is Failure -> Failure(code, message)
         is NetworkError -> NetworkError
-        is Unexpected -> Unexpected(error)
+        is Unexpected -> {
+            Log.d("ApiResponseError", error?.message.toString())
+            Unexpected(error)
+        }
     }
 }
 

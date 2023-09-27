@@ -1,22 +1,25 @@
 package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.MyPostResponse
-import com.emmsale.data.model.MyPost
+import com.emmsale.data.model.MyRecruitmentPost
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-fun List<MyPostResponse>.toData(): List<MyPost> = map { it.toData() }
-fun MyPostResponse.toData(): MyPost {
-    return MyPost(
-        postId = postId,
+fun List<MyPostResponse>.toData(): List<MyRecruitmentPost> = map { it.toData() }
+fun MyPostResponse.toData(): MyRecruitmentPost {
+    return MyRecruitmentPost(
         eventId = eventId,
+        postId = postId,
         eventName = eventName,
         content = content,
-        updatedAt = updatedAt.toLocalDate(),
+        updatedAt = updatedAt.toLocalDateTime(),
     )
 }
 
-private fun String.toLocalDate(): LocalDate {
+private fun String.toLocalDateTime(): LocalDateTime {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    return LocalDate.parse(this, formatter)
+    val localDate = LocalDate.parse(this, formatter)
+    return localDate.atTime(LocalTime.of(0, 0))
 }

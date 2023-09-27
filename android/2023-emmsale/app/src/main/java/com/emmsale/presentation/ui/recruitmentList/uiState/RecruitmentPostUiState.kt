@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.recruitmentList.uiState
 
-import com.emmsale.data.model.Recruitment
+import com.emmsale.data.model.RecruitmentPost
 
 data class RecruitmentPostUiState(
     val id: Long = DEFAULT_RECRUITMENT_ID,
@@ -38,27 +38,27 @@ data class RecruitmentPostUiState(
             isError = false,
         )
 
-        fun from(recruitment: Recruitment): RecruitmentPostUiState = RecruitmentPostUiState(
-            id = recruitment.id,
-            memberId = recruitment.memberId,
-            name = recruitment.name,
-            profileImageUrl = recruitment.imageUrl,
-            content = recruitment.content ?: "",
-            updatedAt = recruitment.updatedDate.toString(),
+        fun from(recruitmentPost: RecruitmentPost): RecruitmentPostUiState = RecruitmentPostUiState(
+            id = recruitmentPost.id,
+            memberId = recruitmentPost.memberId,
+            name = recruitmentPost.name,
+            profileImageUrl = recruitmentPost.imageUrl,
+            content = recruitmentPost.content ?: "",
+            updatedAt = recruitmentPost.updatedDate.toString(),
             isMyPost = false,
             isLoading = false,
             isError = false,
         )
 
-        fun create(recruitment: Recruitment, myUid: Long): RecruitmentPostUiState =
+        fun create(recruitmentPost: RecruitmentPost, myUid: Long): RecruitmentPostUiState =
             RecruitmentPostUiState(
-                id = recruitment.id,
-                memberId = recruitment.memberId,
-                name = recruitment.name,
-                profileImageUrl = recruitment.imageUrl,
-                content = recruitment.content ?: "",
-                updatedAt = recruitment.updatedDate.toString(),
-                isMyPost = recruitment.memberId == myUid,
+                id = recruitmentPost.id,
+                memberId = recruitmentPost.memberId,
+                name = recruitmentPost.name,
+                profileImageUrl = recruitmentPost.imageUrl,
+                content = recruitmentPost.content ?: "",
+                updatedAt = recruitmentPost.updatedDate.toString(),
+                isMyPost = recruitmentPost.memberId == myUid,
                 isLoading = false,
                 isError = false,
             )
