@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class EventNotificationEvent {
 
-  private static final String UPDATE_NOTIFICATION_EVENT_TYPE = "event";
+  private static final String UPDATE_NOTIFICATION_EVENT_TYPE = "EVENT";
 
   private final Long receiverId;
   private final Long redirectId;

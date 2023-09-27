@@ -10,11 +10,12 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class CommentNotificationEvent {
 
-  private static final String UPDATE_NOTIFICATION_COMMENT_TYPE = "comment";
+  private static final String UPDATE_NOTIFICATION_COMMENT_TYPE = "COMMENT";
 
   private final Long receiverId;
   private final Long redirectId;
   private final LocalDateTime createdAt;
+  private final String notificationType;
   private final String content;
   private final String writer;
   private final String writerImageUrl;
@@ -26,6 +27,7 @@ public class CommentNotificationEvent {
         member.getId(),
         redirectId,
         LocalDateTime.now(),
+        UPDATE_NOTIFICATION_COMMENT_TYPE,
         comment.getContent(),
         member.getName(),
         member.getImageUrl()
