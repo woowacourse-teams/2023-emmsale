@@ -12,10 +12,8 @@ import com.emmsale.notification.exception.NotificationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
-@Slf4j
 public class CommentNotificationMessageGenerator implements NotificationMessageGenerator {
 
   private final Notification notification;
