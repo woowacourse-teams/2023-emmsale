@@ -85,7 +85,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         viewModel.selectedFilter.observe(viewLifecycleOwner) { filters ->
             clearFilterViews()
             addFilterViews(filters.tagFilteringOptions + filters.statusFilteringOptions)
-            addDurationFilter(filters.startDateFilteringOption, filters.endDateFilteringOption)
+            addDurationFilter(filters.selectedStartDate, filters.selectedEndDate)
         }
     }
 
@@ -112,14 +112,14 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         val endDateString = endDate?.transformToDateString(requireContext(), true) ?: ""
         val durationString = "$startDateString$endDateString"
 
-        if (startDateString != null) {
-            binding.layoutConferenceFilters.addView(
-                createFilterTag(
-                    title = durationString,
-                    onClick = { viewModel.removeDurationFilteringOption() },
-                ),
-            )
-        }
+        if (startDateString == null) return
+
+        binding.layoutConferenceFilters.addView(
+            createFilterTag(
+                title = durationString,
+                onClick = { viewModel.removeDurationFilteringOption() },
+            ),
+        )
     }
 
     private fun createFilterTag(title: String, onClick: () -> Unit): FilterTag = filterChipOf {
@@ -141,8 +141,8 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
             context = requireContext(),
             selectedStatusIds = selectedFilter.selectedStatusFilteringOptionIds,
             selectedTagIds = selectedFilter.selectedTagFilteringOptionIds,
-            selectedStartDate = selectedFilter.startDateFilteringOption?.date,
-            selectedEndDate = selectedFilter.endDateFilteringOption?.date,
+            selectedStartDate = selectedFilter.selectedStartDate?.date,
+            selectedEndDate = selectedFilter.selectedEndDate?.date,
         )
         filterActivityLauncher.launch(filterActivityIntent)
     }
