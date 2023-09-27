@@ -543,14 +543,13 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type,
           eventMode,
           paymentType,
-          mockMultipartFiles,
           organization
       );
 
       doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
 
       //when
-      final EventDetailResponse response = eventService.addEvent(request, now);
+      final EventDetailResponse response = eventService.addEvent(request, mockMultipartFiles, now);
       final Event savedEvent = eventRepository.findById(response.getId()).get();
 
       //then
@@ -589,7 +588,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type,
           eventMode,
           paymentType,
-          mockMultipartFiles,
           organization
       );
 
@@ -597,7 +595,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventService.addEvent(request, now));
+          () -> eventService.addEvent(request, mockMultipartFiles, now));
 
       assertEquals(exception.exceptionType(), START_DATE_TIME_AFTER_END_DATE_TIME);
     }
@@ -625,7 +623,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           type,
           eventMode,
           paymentType,
-          mockMultipartFiles,
           organization
       );
 
@@ -633,7 +630,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventService.addEvent(request, now));
+          () -> eventService.addEvent(request, mockMultipartFiles, now));
 
       assertEquals(exception.exceptionType(), NOT_FOUND_TAG);
     }
@@ -677,7 +674,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           EventType.CONFERENCE,
           eventMode,
           paymentType,
-          mockMultipartFiles,
           organization
       );
 
@@ -685,7 +681,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final Long eventId = event.getId();
 
       //when
-      final EventDetailResponse response = eventService.updateEvent(eventId, updateRequest, now);
+      final EventDetailResponse response = eventService.updateEvent(eventId, updateRequest,
+          mockMultipartFiles, now);
       final Event updatedEvent = eventRepository.findById(eventId).get();
 
       //then
@@ -723,13 +720,12 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           EventType.CONFERENCE,
           eventMode,
           paymentType,
-          mockMultipartFiles,
           organization
       );
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventService.updateEvent(notExistsEventId, updateRequest, now));
+          () -> eventService.updateEvent(notExistsEventId, updateRequest, mockMultipartFiles, now));
 
       assertEquals(exception.exceptionType(), NOT_FOUND_EVENT);
     }
@@ -754,7 +750,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           EventType.CONFERENCE,
           eventMode,
           paymentType,
-          mockMultipartFiles,
           organization
       );
 
@@ -763,7 +758,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventService.updateEvent(eventId, updateRequest, now));
+          () -> eventService.updateEvent(eventId, updateRequest, mockMultipartFiles, now));
 
       assertEquals(exception.exceptionType(), START_DATE_TIME_AFTER_END_DATE_TIME);
     }
@@ -789,7 +784,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           EventType.CONFERENCE,
           eventMode,
           paymentType,
-          mockMultipartFiles,
           organization
       );
 
@@ -798,7 +792,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventService.updateEvent(eventId, updateRequest, now));
+          () -> eventService.updateEvent(eventId, updateRequest, mockMultipartFiles, now));
 
       assertEquals(exception.exceptionType(), NOT_FOUND_TAG);
     }

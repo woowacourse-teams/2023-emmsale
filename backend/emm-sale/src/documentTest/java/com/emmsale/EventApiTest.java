@@ -1,17 +1,14 @@
 package com.emmsale;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.event.EventFixture;
@@ -26,11 +23,12 @@ import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.PaymentType;
 import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.application.dto.TagRequest;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
@@ -43,12 +41,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.request.RequestParametersSnippet;
@@ -176,9 +174,9 @@ class EventApiTest extends MockMvcTestHelper {
     );
 
     Mockito.when(eventService.findEvents(any(EventType.class),
-        any(LocalDate.class), ArgumentMatchers.eq("2023-07-01"),
-        ArgumentMatchers.eq("2023-07-31"),
-        ArgumentMatchers.eq(null), any())).thenReturn(eventResponses);
+        any(LocalDate.class), eq("2023-07-01"),
+        eq("2023-07-31"),
+        eq(null), any())).thenReturn(eventResponses);
 
     // when & then
     mockMvc.perform(get("/events")
@@ -195,53 +193,81 @@ class EventApiTest extends MockMvcTestHelper {
   @DisplayName("이벤트를 성공적으로 업데이트하면 200, OK를 반환한다.")
   void updateEventTest() throws Exception {
     //given
+    final MockMultipartFile image1 = new MockMultipartFile(
+        "picture",
+        "picture.jpg",
+        MediaType.TEXT_PLAIN_VALUE,
+        "test data".getBytes()
+    );
+
+    final MockMultipartFile image2 = new MockMultipartFile(
+        "picture",
+        "picture.jpg",
+        MediaType.TEXT_PLAIN_VALUE,
+        "test data".getBytes()
+    );
     final long eventId = 1L;
     final Event event = EventFixture.인프콘_2023();
 
     final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
         .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
 
-    final EventDetailRequest request = new EventDetailRequest(event.getName(), event.getLocation(),
-        event.getInformationUrl(), event.getEventPeriod().getStartDate(),
+    final EventDetailRequest request = new EventDetailRequest(event.getName(),
+        event.getLocation(), event.getInformationUrl(), event.getEventPeriod().getStartDate(),
         event.getEventPeriod().getEndDate(),
-        event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(), tags,
-        event.getImageUrl(), event.getType(), EventMode.OFFLINE, PaymentType.PAID, null, "행사기관");
+        event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
+        tags, event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE,
+        "행사기관");
 
-    final EventDetailResponse response = new EventDetailResponse(eventId, request.getName(),
+    final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
         request.getApplyStartDateTime(), request.getApplyEndDateTime(),
         request.getLocation(), EventStatus.IN_PROGRESS.name(), EventStatus.ENDED.name(),
-        tags.stream().map(TagRequest::getName).collect(Collectors.toList()), request.getImageUrl(),
-        10, 10, request.getType().toString(), Collections.emptyList(), "행사기관", "유료");
+        tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
+        request.getImageUrl(), 10, 10, request.getType().toString(),
+        List.of("imageUrl1", "imageUrl2"), "행사기관", "유료");
 
-    Mockito.when(eventService.updateEvent(any(), any(),
-        any())).thenReturn(response);
+    Mockito.when(eventService.updateEvent(eq(eventId), any(EventDetailRequest.class), any(), any()))
+        .thenReturn(response);
 
-    final RequestFieldsSnippet requestFieldsSnippet = requestFields(
-        fieldWithPath("name").description("행사(Event) 이름"),
-        fieldWithPath("location").description("행사(Event) 장소"),
-        fieldWithPath("startDateTime").description("행사(Event) 시작일시"),
-        fieldWithPath("endDateTime").description("행사(Event) 종료일시"),
-        fieldWithPath("applyStartDateTime").description("행사(Event) 신청시작일시"),
-        fieldWithPath("applyEndDateTime").description("행사(Event) 신청종료일시"),
-        fieldWithPath("informationUrl").description("행사(Event) 상세 정보 URL"),
-        fieldWithPath("tags[].name").description("연관 태그명"),
-        fieldWithPath("imageUrl").description("행사(Event) 이미지url"),
-        fieldWithPath("type").description("행사(Event) 타입"),
-        fieldWithPath("eventMode").description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)"),
-        fieldWithPath("paymentType").description("행사 유료 여부(PAID, FREE, FREE_PAID)"),
-        fieldWithPath("images").description("이미지들").optional(),
-        fieldWithPath("organization").description("행사 기관")
+    String contents = objectMapper.writeValueAsString(request);
+
+    final RequestPartsSnippet requestPartsSnippet = requestParts(
+        partWithName("images").description("이미지들").optional(),
+        partWithName("request").description("행사 정보들"),
+        partWithName("request.name").description("행사(Event) 이름").optional(),
+        partWithName("request.location").description("행사(Event) 장소").optional(),
+        partWithName("request.startDateTime").description("행사(Event) 시작일시").optional(),
+        partWithName("request.endDateTime").description("행사(Event) 종료일시").optional(),
+        partWithName("request.applyStartDateTime").description("행사(Event) 신청시작일시").optional(),
+        partWithName("request.applyEndDateTime").description("행사(Event) 신청종료일시").optional(),
+        partWithName("request.informationUrl").description("행사(Event) 상세 정보 URL").optional(),
+        partWithName("request.tags[]").description("연관 태그명").optional(),
+        partWithName("request.imageUrl").description("행사(Event) imageUrl").optional(),
+        partWithName("request.type").description("Event 타입").optional(),
+        partWithName("request.eventMode").description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)")
+            .optional(),
+        partWithName("request.paymentType").description("행사 유료 여부(PAID, FREE, FREE_PAID)")
+            .optional(),
+        partWithName("request.organization").description("행사 주최 기관").optional()
     );
 
+    //when
+    MockMultipartHttpServletRequestBuilder builder = multipart(HttpMethod.PUT, "/events/" + eventId)
+        .file("images", image1.getBytes())
+        .file("images", image2.getBytes())
+        .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
+            StandardCharsets.UTF_8)));
+
+    final ResultActions result = mockMvc.perform(builder);
+
     //when & then
-    mockMvc.perform(put("/events/" + eventId)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isOk())
+    result.andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
-        .andDo(MockMvcRestDocumentation.document("update-event", requestFieldsSnippet,
+        .andDo(MockMvcRestDocumentation.document("update-event", requestPartsSnippet,
             EVENT_DETAIL_RESPONSE_FILED));
+
+
   }
 
   @Test
@@ -292,7 +318,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getEventPeriod().getEndDate(),
           event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
           tags, event.getImageUrl(), event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE,
-          List.of(image1, image2), "행사기관");
+          "행사기관");
 
       final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
@@ -302,58 +328,45 @@ class EventApiTest extends MockMvcTestHelper {
           request.getImageUrl(), 10, 10, request.getType().toString(),
           List.of("imageUrl1", "imageUrl2"), "행사기관", "무료");
 
-      Mockito.when(eventService.addEvent(any(), any()))
+      Mockito.when(eventService.addEvent(any(EventDetailRequest.class), any(), any()))
           .thenReturn(response);
 
-      final RequestParametersSnippet requestParam = requestParameters(
-          parameterWithName("name").description("행사(Event) 이름"),
-          parameterWithName("location").description("행사(Event) 장소"),
-          parameterWithName("startDateTime").description("행사(Event) 시작일시"),
-          parameterWithName("endDateTime").description("행사(Event) 종료일시"),
-          parameterWithName("applyStartDateTime").description("행사(Event) 신청시작일시"),
-          parameterWithName("applyEndDateTime").description("행사(Event) 신청종료일시"),
-          parameterWithName("informationUrl").description("행사(Event) 상세 정보 URL"),
-          parameterWithName("tags").description("연관 태그명"),
-          parameterWithName("imageUrl").description("행사(Event) imageUrl"),
-          parameterWithName("type").description("Event 타입"),
-          parameterWithName("eventMode").description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)"),
-          parameterWithName("paymentType").description("행사 유료 여부(PAID, FREE, FREE_PAID)")
-      );
+      String contents = objectMapper.writeValueAsString(request);
 
       final RequestPartsSnippet requestPartsSnippet = requestParts(
-          partWithName("images").description("이미지들").optional()
+          partWithName("images").description("이미지들").optional(),
+          partWithName("request").description("행사 정보들"),
+          partWithName("request.name").description("행사(Event) 이름").optional(),
+          partWithName("request.location").description("행사(Event) 장소").optional(),
+          partWithName("request.startDateTime").description("행사(Event) 시작일시").optional(),
+          partWithName("request.endDateTime").description("행사(Event) 종료일시").optional(),
+          partWithName("request.applyStartDateTime").description("행사(Event) 신청시작일시").optional(),
+          partWithName("request.applyEndDateTime").description("행사(Event) 신청종료일시").optional(),
+          partWithName("request.informationUrl").description("행사(Event) 상세 정보 URL").optional(),
+          partWithName("request.tags[]").description("연관 태그명").optional(),
+          partWithName("request.imageUrl").description("행사(Event) imageUrl").optional(),
+          partWithName("request.type").description("Event 타입").optional(),
+          partWithName("request.eventMode").description("행사 온오프라인 여부(ON_OFFLINE, OFFLINE, ONLINE)")
+              .optional(),
+          partWithName("request.paymentType").description("행사 유료 여부(PAID, FREE, FREE_PAID)")
+              .optional(),
+          partWithName("request.organization").description("행사 주최 기관").optional()
       );
 
       //when
       MockMultipartHttpServletRequestBuilder builder = multipart("/events")
           .file("images", image1.getBytes())
-          .file("images", image2.getBytes());
-
-      builder.param("name", request.getName())
-          .param("location", request.getLocation())
-          .param("informationUrl", request.getInformationUrl())
-          .param("startDateTime",
-              request.getStartDateTime().format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-          .param("endDateTime",
-              request.getEndDateTime().format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-          .param("applyStartDateTime", request.getApplyStartDateTime()
-              .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-          .param("applyEndDateTime", request.getApplyEndDateTime()
-              .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-          .param("tags", request.getTags().stream().map(TagRequest::getName)
-              .collect(Collectors.joining(",")))
-          .param("imageUrl", request.getImageUrl())
-          .param("type", request.getType().toString())
-          .param("eventMode", request.getEventMode().toString())
-          .param("paymentType", request.getPaymentType().toString());
+          .file("images", image2.getBytes())
+          .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
+              StandardCharsets.UTF_8)));
 
       final ResultActions result = mockMvc.perform(builder);
 
       //then
       result.andExpect(status().isCreated())
           .andDo(MockMvcResultHandlers.print())
-          .andDo(MockMvcRestDocumentation.document("add-event", requestParam,
-              EVENT_DETAIL_RESPONSE_FILED, requestPartsSnippet));
+          .andDo(MockMvcRestDocumentation.document("add-event", EVENT_DETAIL_RESPONSE_FILED,
+              requestPartsSnippet));
     }
 
     @ParameterizedTest
@@ -362,30 +375,38 @@ class EventApiTest extends MockMvcTestHelper {
     @DisplayName("이름에 빈 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
     void addEventWithEmptyNameTest(final String eventName) throws Exception {
       //given
+      final MockMultipartFile image1 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
+      final MockMultipartFile image2 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
       final Event event = EventFixture.인프콘_2023();
 
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
-
+      final EventDetailRequest request = new EventDetailRequest(
+          eventName, event.getLocation(), event.getInformationUrl(), event.getEventPeriod()
+          .getStartDate(), event.getEventPeriod().getEndDate(),
+          event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
+          tags, event.getImageUrl(), event.getType(), event.getEventMode(),
+          event.getPaymentType(), event.getOrganization());
+      String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(post("/events")
-              .param("name", eventName)
-              .param("location", event.getLocation())
-              .param("informationUrl", event.getInformationUrl())
-              .param("startDateTime", event.getEventPeriod().getStartDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("endDateTime", event.getEventPeriod().getEndDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("applyStartDateTime", event.getEventPeriod().getApplyStartDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("applyEndDateTime", event.getEventPeriod().getApplyEndDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("imageUrl", event.getImageUrl())
-              .param("type", event.getType().toString())
-              .param("eventMode", EventMode.ON_OFFLINE.toString())
-              .param("paymentType", PaymentType.FREE.toString())
-              .param("tags", tags.stream().map(TagRequest::getName)
-                  .collect(Collectors.joining(","))))
+      mockMvc.perform(multipart("/events")
+              .file("images", image1.getBytes())
+              .file("images", image2.getBytes())
+              .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
+                  StandardCharsets.UTF_8)))
+          )
           .andExpect(status().isBadRequest());
     }
 
@@ -395,30 +416,38 @@ class EventApiTest extends MockMvcTestHelper {
     @DisplayName("장소에 빈 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
     void addEventWithEmptyLocationTest(final String eventLocation) throws Exception {
       //given
+      final MockMultipartFile image1 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
+      final MockMultipartFile image2 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
       final Event event = EventFixture.인프콘_2023();
 
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
-
+      final EventDetailRequest request = new EventDetailRequest(
+          event.getName(), eventLocation, event.getInformationUrl(), event.getEventPeriod()
+          .getStartDate(), event.getEventPeriod().getEndDate(),
+          event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
+          tags, event.getImageUrl(), event.getType(), event.getEventMode(),
+          event.getPaymentType(), event.getOrganization());
+      String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(post("/events")
-              .param("name", event.getName())
-              .param("location", eventLocation)
-              .param("informationUrl", eventLocation)
-              .param("startDateTime", event.getEventPeriod().getStartDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("endDateTime", event.getEventPeriod().getEndDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("applyStartDateTime", event.getEventPeriod().getApplyStartDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("applyEndDateTime", event.getEventPeriod().getApplyEndDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("imageUrl", event.getImageUrl())
-              .param("type", event.getType().toString())
-              .param("eventMode", EventMode.ON_OFFLINE.toString())
-              .param("paymentType", PaymentType.FREE.toString())
-              .param("tags", tags.stream().map(TagRequest::getName)
-                  .collect(Collectors.joining(","))))
+      mockMvc.perform(multipart("/events")
+              .file("images", image1.getBytes())
+              .file("images", image2.getBytes())
+              .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
+                  StandardCharsets.UTF_8)))
+          )
           .andExpect(status().isBadRequest());
     }
 
@@ -429,32 +458,39 @@ class EventApiTest extends MockMvcTestHelper {
     @DisplayName("상세 URL에 http:// 혹은 https://로 시작하지 않는 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
     void addEventWithInvalidInformationUrlTest(final String informationUrl) throws Exception {
       //given
+      final MockMultipartFile image1 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
+      final MockMultipartFile image2 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
       final Event event = EventFixture.인프콘_2023();
 
       final List<TagRequest> tags = Stream.of(TagFixture.백엔드(), TagFixture.안드로이드())
           .map(tag -> new TagRequest(tag.getName())).collect(Collectors.toList());
-
-      //when
-      mockMvc.perform(post("/events")
-              .param("name", event.getName())
-              .param("location", event.getLocation())
-              .param("informationUrl", informationUrl)
-              .param("startDateTime", event.getEventPeriod().getStartDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("endDateTime", event.getEventPeriod().getEndDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("applyStartDateTime", event.getEventPeriod().getApplyStartDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("applyEndDateTime", event.getEventPeriod().getApplyEndDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")))
-              .param("imageUrl", event.getImageUrl())
-              .param("type", event.getType().toString())
-              .param("eventMode", EventMode.ON_OFFLINE.toString())
-              .param("paymentType", PaymentType.FREE.toString())
-              .param("tags", tags.stream().map(TagRequest::getName)
-                  .collect(Collectors.joining(","))))
+      final EventDetailRequest request = new EventDetailRequest(
+          event.getName(), event.getLocation(), informationUrl, event.getEventPeriod()
+          .getStartDate(), event.getEventPeriod().getEndDate(),
+          event.getEventPeriod().getApplyStartDate(), event.getEventPeriod().getApplyEndDate(),
+          tags, event.getImageUrl(), event.getType(), event.getEventMode(),
+          event.getPaymentType(), event.getOrganization());
+      String contents = objectMapper.writeValueAsString(request);
+      //when & then
+      mockMvc.perform(multipart("/events")
+              .file("images", image1.getBytes())
+              .file("images", image2.getBytes())
+              .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
+                  StandardCharsets.UTF_8)))
+          )
           .andExpect(status().isBadRequest());
-
     }
 
     @ParameterizedTest
@@ -462,16 +498,47 @@ class EventApiTest extends MockMvcTestHelper {
         "2023-01-01T2:00:00", "2023-01-01T12:0:00", "2023-01-01T12:00:0"})
     @NullSource
     @DisplayName("시작 일시에 null 혹은 다른 형식의 일시 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
-    void addEventWithUnformattedStartDateTimeTest(final String startDateTime) throws Exception {
+    void addEventWithUnformattedStartDateTimeTest(final String startDateTime)
+        throws Exception {
       //when & then
-      mockMvc.perform(post("/events").contentType(MediaType.APPLICATION_JSON_VALUE)
-              .param("name", "인프콘 2023")
-              .param("location", "코엑스")
-              .param("informationUrl", "https://~~~")
-              .param("startDateTime", startDateTime) // 이 변수의 값을 확인하고 올바른 값을 설정하세요.
-              .param("endDateTime", "2023-01-02T12:00:00")
-              .param("tags[0].name", "백엔드")
-              .param("tags[1].name", "안드로이드"))
+      final MockMultipartFile image1 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
+      final MockMultipartFile image2 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
+      final Event event = EventFixture.인프콘_2023();
+
+      Map<String, String> request = new HashMap<>();
+      request.put("name", event.getName());
+      request.put("location", event.getLocation());
+      request.put("informationUrl", event.getInformationUrl());
+      request.put("startDateTime", startDateTime);
+      request.put("endDateTime", event.getEventPeriod().getEndDate().toString());
+      request.put("applyStartDateTime", event.getEventPeriod().getApplyStartDate().toString());
+      request.put("applyEndDateTime", event.getEventPeriod().getApplyEndDate().toString());
+      request.put("imageUrl", event.getImageUrl());
+      request.put("type", event.getType().name());
+      request.put("eventMode", event.getEventMode().name());
+      request.put("paymentType", event.getPaymentType().name());
+      request.put("organization", event.getOrganization());
+
+      String contents = objectMapper.writeValueAsString(request);
+      //when & then
+      mockMvc.perform(multipart("/events")
+              .file("images", image1.getBytes())
+              .file("images", image2.getBytes())
+              .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
+                  StandardCharsets.UTF_8)))
+          )
           .andExpect(status().isBadRequest());
     }
 
@@ -482,16 +549,45 @@ class EventApiTest extends MockMvcTestHelper {
     @DisplayName("종료 일시에 null 혹은 다른 형식의 일시 값이 들어올 경우 400 BAD_REQUEST를 반환한다.")
     void addEventWithUnformattedEndDateTimeTest(final String endDateTime) throws Exception {
       //when & then
-      mockMvc.perform(post("/events")
-              .param("name", "인프콘 2023")
-              .param("location", "코엑스")
-              .param("informationUrl", "https://~~~")
-              .param("startDateTime", "2023-01-01T12:00:00")
-              .param("endDateTime", endDateTime) // 이 변수의 값을 확인하고 올바른 값을 설정하세요.
-              .param("tags[0].name", "백엔드")
-              .param("tags[1].name", "안드로이드"))
+      final MockMultipartFile image1 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
+      final MockMultipartFile image2 = new MockMultipartFile(
+          "picture",
+          "picture.jpg",
+          MediaType.TEXT_PLAIN_VALUE,
+          "test data".getBytes()
+      );
+
+      final Event event = EventFixture.인프콘_2023();
+
+      Map<String, String> request = new HashMap<>();
+      request.put("name", event.getName());
+      request.put("location", event.getLocation());
+      request.put("informationUrl", event.getInformationUrl());
+      request.put("startDateTime", event.getEventPeriod().getStartDate().toString());
+      request.put("endDateTime", endDateTime);
+      request.put("applyStartDateTime", event.getEventPeriod().getApplyStartDate().toString());
+      request.put("applyEndDateTime", event.getEventPeriod().getApplyEndDate().toString());
+      request.put("imageUrl", event.getImageUrl());
+      request.put("type", event.getType().name());
+      request.put("eventMode", event.getEventMode().name());
+      request.put("paymentType", event.getPaymentType().name());
+      request.put("organization", event.getOrganization());
+
+      String contents = objectMapper.writeValueAsString(request);
+      //when & then
+      mockMvc.perform(multipart("/events")
+              .file("images", image1.getBytes())
+              .file("images", image2.getBytes())
+              .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
+                  StandardCharsets.UTF_8)))
+          )
           .andExpect(status().isBadRequest());
     }
   }
-
 }

@@ -38,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -178,13 +179,14 @@ public class EventService {
         });
   }
 
-  public EventDetailResponse addEvent(final EventDetailRequest request, final LocalDate today) {
+  public EventDetailResponse addEvent(final EventDetailRequest request,
+      final List<MultipartFile> images, final LocalDate today) {
     final Event event = eventRepository.save(request.toEvent());
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
     event.addAllEventTags(tags);
 
     final List<String> imageUrls = imageCommandService
-        .saveImages(ImageType.EVENT, event.getId(), request.getImages())
+        .saveImages(ImageType.EVENT, event.getId(), images)
         .stream()
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
@@ -196,14 +198,14 @@ public class EventService {
   }
 
   public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request,
-      final LocalDate today) {
+      final List<MultipartFile> images, final LocalDate today) {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
 
+    // TODO: 2023/09/25 더 좋은 방법을 고민해보기
     eventTagRepository.deleteAllByEventId(eventId);
-
     final Event updatedEvent = event.updateEventContent(
         request.getName(),
         request.getLocation(),
@@ -214,9 +216,9 @@ public class EventService {
         request.getInformationUrl(),
         tags
     );
-
-    final List<String> imageUrls = imageRepository
-        .findAllByTypeAndContentId(ImageType.EVENT, event.getId())
+    imageCommandService.deleteImages(ImageType.EVENT, eventId);
+    final List<String> imageUrls = imageCommandService
+        .saveImages(ImageType.EVENT, event.getId(), images)
         .stream()
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
@@ -229,7 +231,7 @@ public class EventService {
     if (!eventRepository.existsById(eventId)) {
       throw new EventException(NOT_FOUND_EVENT);
     }
-
+    imageCommandService.deleteImages(ImageType.EVENT, eventId);
     eventRepository.deleteById(eventId);
   }
 
