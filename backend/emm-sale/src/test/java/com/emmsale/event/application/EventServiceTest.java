@@ -158,9 +158,11 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           new Image("imageUrl2", ImageType.EVENT, event.getId(), 0, LocalDateTime.now())
       );
 
-      final List<String> imageUrls = List.of("imageUrl2", "imageUrl1");
+      final String imageUrl = "imageUrl2";
+      final List<String> imageUrls = List.of("imageUrl1");
 
-      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일(), imageUrls);
+      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일(), imageUrl,
+          imageUrls);
 
       //when
       final EventDetailResponse actual = eventService.findEvent(event.getId(), 날짜_8월_10일());

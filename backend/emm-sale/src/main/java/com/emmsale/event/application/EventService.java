@@ -32,6 +32,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -66,8 +67,23 @@ public class EventService {
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
         .collect(toList());
+    final String thumbnailImageUrl = extractThumbnailImage(imageUrls);
+    final List<String> informationImageUrls = extractInformationImages(imageUrls);
+    return EventDetailResponse.from(event, today, thumbnailImageUrl, informationImageUrls);
+  }
 
-    return EventDetailResponse.from(event, today, imageUrls);
+  private String extractThumbnailImage(final List<String> imageUrls) {
+    if (imageUrls.isEmpty()) {
+      return null;
+    }
+    return imageUrls.get(0);
+  }
+
+  private List<String> extractInformationImages(final List<String> imageUrls) {
+    if (imageUrls.size() <= 1) {
+      return Collections.emptyList();
+    }
+    return imageUrls.subList(1, imageUrls.size());
   }
 
   @Transactional(readOnly = true)
@@ -193,8 +209,9 @@ public class EventService {
         .collect(toList());
 
     eventPublisher.publish(event);
-
-    return EventDetailResponse.from(event, today, imageUrls);
+    final String thumbnailImageUrl = extractThumbnailImage(imageUrls);
+    final List<String> informationImageUrls = extractInformationImages(imageUrls);
+    return EventDetailResponse.from(event, today, thumbnailImageUrl, informationImageUrls);
   }
 
   public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request,
@@ -223,8 +240,9 @@ public class EventService {
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
         .collect(toList());
-
-    return EventDetailResponse.from(updatedEvent, today, imageUrls);
+    final String thumbnailImageUrl = extractThumbnailImage(imageUrls);
+    final List<String> informationImageUrls = extractInformationImages(imageUrls);
+    return EventDetailResponse.from(updatedEvent, today, thumbnailImageUrl, informationImageUrls);
   }
 
   public void deleteEvent(final Long eventId) {
