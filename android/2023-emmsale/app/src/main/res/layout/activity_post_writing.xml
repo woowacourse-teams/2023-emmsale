@@ -5,12 +5,14 @@
 
     <data>
 
-        <variable
-            name="showAlbum"
-            type="kotlin.jvm.functions.Function0" />
+        <import type="com.emmsale.presentation.common.FetchResult" />
 
         <variable
             name="uploadPost"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="showAlbum"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
@@ -76,7 +78,7 @@
                     android:id="@+id/tv_post_writing_complete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
+                    android:clickable="@{vm.postUploadResult.peekContent().fetchResult!=FetchResult.LOADING}"
                     android:fontFamily="@font/nanum_square_bold"
                     android:onClick="@{()->uploadPost.invoke()}"
                     android:padding="17dp"
@@ -100,6 +102,7 @@
                 android:layout_height="match_parent">
 
                 <EditText
+                    android:text="@={vm.title}"
                     android:id="@+id/et_post_writing_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -128,6 +131,7 @@
 
                 <EditText
                     android:id="@+id/et_post_writing_content"
+                    android:text="@={vm.content}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
@@ -175,7 +179,7 @@
             android:id="@+id/progressBar_post_writing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            app:visible="@{vm.postUploadResult.peekContent().fetchResult == FetchResult.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
