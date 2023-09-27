@@ -192,7 +192,7 @@ public class EventService {
         .map(Image::getName)
         .collect(toList());
 
-    eventPublisher.publish(event);
+    eventPublisher.publish2(event);
 
     return EventDetailResponse.from(event, today, imageUrls);
   }

@@ -95,17 +95,17 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     final Event savedEvent = eventRepository.save(event);
 
     //when
-    eventPublisher.publish(savedEvent);
+    eventPublisher.publish2(savedEvent);
 
     //then
-    final ArgumentCaptor<UpdateNotificationEvent> captor = ArgumentCaptor.forClass(
-        UpdateNotificationEvent.class);
+    final ArgumentCaptor<EventNotificationEvent> captor = ArgumentCaptor.forClass(
+        EventNotificationEvent.class);
 
     verify(applicationEventPublisher, times(2)).publishEvent(captor.capture());
 
     final List<Long> actual = captor.getAllValues()
         .stream()
-        .map(UpdateNotificationEvent::getReceiverId)
+        .map(EventNotificationEvent::getReceiverId)
         .collect(Collectors.toList());
 
     assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
@@ -135,7 +135,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     final Event savedEvent = eventRepository.save(event);
 
     //when
-    eventPublisher.publish(savedEvent);
+    eventPublisher.publish2(savedEvent);
 
     //then
     verify(applicationEventPublisher, times(0))
@@ -157,7 +157,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     final Event savedEvent = eventRepository.save(event);
 
     //when
-    eventPublisher.publish(savedEvent);
+    eventPublisher.publish2(savedEvent);
 
     //then
     verify(applicationEventPublisher, times(0))

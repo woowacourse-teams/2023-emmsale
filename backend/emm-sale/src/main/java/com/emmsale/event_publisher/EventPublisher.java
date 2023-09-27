@@ -86,6 +86,30 @@ public class EventPublisher {
     );
   }
 
+  public void publish2(final Event event) {
+    final List<Long> tagIds = event.getTags()
+        .stream()
+        .map(it -> it.getTag().getId())
+        .collect(Collectors.toList());
+
+    final Set<Long> memberIds = interestTagRepository.findInterestTagsByTagIdIn(tagIds)
+        .stream()
+        .collect(Collectors.groupingBy(it -> it.getMember().getId()))
+        .keySet();
+
+    final List<Member> members = memberRepository.findAllByIdIn(memberIds);
+
+    publishEvent2(event, members);
+  }
+
+  private void publishEvent2(final Event event, final List<Member> members) {
+    members.forEach(
+        it -> applicationEventPublisher.publishEvent(
+            EventNotificationEvent.of(event, it.getId())
+        )
+    );
+  }
+
   public void publish(final Message message, final Long receiverId) {
     final MessageNotificationEvent event = MessageNotificationEvent.of(message, receiverId);
     applicationEventPublisher.publishEvent(event);
