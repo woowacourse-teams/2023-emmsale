@@ -31,16 +31,6 @@ public class EventPublisher {
         .orElse(Collections.emptySet());
 
     notificationCommentCandidates.stream()
-        .map(it -> UpdateNotificationEvent.of(it, trigger.getId()))
-        .forEach(applicationEventPublisher::publishEvent);
-  }
-
-  public void publish2(final Comment trigger, final Member loginMember) {
-    final Set<Comment> notificationCommentCandidates = trigger.getParent()
-        .map(parent -> findRelatedCommentsExcludingLoginMember(loginMember, parent))
-        .orElse(Collections.emptySet());
-
-    notificationCommentCandidates.stream()
         .map(it -> CommentNotificationEvent.of(it, trigger.getId()))
         .forEach(applicationEventPublisher::publishEvent);
   }
@@ -79,30 +69,6 @@ public class EventPublisher {
   }
 
   private void publishEvent(final Event event, final List<Member> members) {
-    members.forEach(
-        it -> applicationEventPublisher.publishEvent(
-            UpdateNotificationEvent.of(event, it.getId())
-        )
-    );
-  }
-
-  public void publish2(final Event event) {
-    final List<Long> tagIds = event.getTags()
-        .stream()
-        .map(it -> it.getTag().getId())
-        .collect(Collectors.toList());
-
-    final Set<Long> memberIds = interestTagRepository.findInterestTagsByTagIdIn(tagIds)
-        .stream()
-        .collect(Collectors.groupingBy(it -> it.getMember().getId()))
-        .keySet();
-
-    final List<Member> members = memberRepository.findAllByIdIn(memberIds);
-
-    publishEvent2(event, members);
-  }
-
-  private void publishEvent2(final Event event, final List<Member> members) {
     members.forEach(
         it -> applicationEventPublisher.publishEvent(
             EventNotificationEvent.of(event, it.getId())

@@ -95,7 +95,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     final Event savedEvent = eventRepository.save(event);
 
     //when
-    eventPublisher.publish2(savedEvent);
+    eventPublisher.publish(savedEvent);
 
     //then
     final ArgumentCaptor<EventNotificationEvent> captor = ArgumentCaptor.forClass(
@@ -135,7 +135,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     final Event savedEvent = eventRepository.save(event);
 
     //when
-    eventPublisher.publish2(savedEvent);
+    eventPublisher.publish(savedEvent);
 
     //then
     verify(applicationEventPublisher, times(0))
@@ -157,7 +157,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     final Event savedEvent = eventRepository.save(event);
 
     //when
-    eventPublisher.publish2(savedEvent);
+    eventPublisher.publish(savedEvent);
 
     //then
     verify(applicationEventPublisher, times(0))
@@ -187,7 +187,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
         Comment.createChild(feed, 부모_댓글, 로그인_사용자, "내용4"));
 
     //when
-    eventPublisher.publish2(알림_트리거_댓글, 로그인_사용자);
+    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
 
     //then
     verify(applicationEventPublisher, times(2))
@@ -212,7 +212,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish2(알림_트리거_댓글, 댓글_작성자1);
+    eventPublisher.publish(알림_트리거_댓글, 댓글_작성자1);
 
     //then
     verify(applicationEventPublisher, times(0))
@@ -231,7 +231,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish2(알림_트리거_댓글, 댓글_작성자1);
+    eventPublisher.publish(알림_트리거_댓글, 댓글_작성자1);
 
     //then
     verify(applicationEventPublisher, times(0))
@@ -266,7 +266,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish2(알림_트리거_댓글, 로그인_사용자);
+    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
 
     //then
     verify(applicationEventPublisher, times(1))
@@ -301,7 +301,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish2(알림_트리거_댓글, 로그인_사용자);
+    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
 
     //then
     verify(applicationEventPublisher, times(2))
