@@ -44,6 +44,7 @@ public class EventDetailResponse {
   public static EventDetailResponse from(
       final Event event,
       final LocalDate today,
+      final String imageUrl,
       final List<String> imageUrls
   ) {
     final List<String> tagNames = event.getTags().stream()
@@ -63,7 +64,7 @@ public class EventDetailResponse {
         event.getEventPeriod().calculateEventStatus(today).name(),
         event.getEventPeriod().calculateEventApplyStatus(today).name(),
         tagNames,
-        event.getImageUrl(),
+        imageUrl,
         event.getEventPeriod().calculateRemainingDays(today),
         event.getEventPeriod().calculateApplyRemainingDays(today),
         event.getType().toString(),
