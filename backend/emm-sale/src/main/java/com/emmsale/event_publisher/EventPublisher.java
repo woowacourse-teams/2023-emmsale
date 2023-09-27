@@ -31,7 +31,7 @@ public class EventPublisher {
         .orElse(Collections.emptySet());
 
     notificationCommentCandidates.stream()
-        .map(it -> CommentNotificationEvent.of(it, trigger.getId()))
+        .map(it -> CommentNotificationEvent.of(it, trigger))
         .forEach(applicationEventPublisher::publishEvent);
   }
 

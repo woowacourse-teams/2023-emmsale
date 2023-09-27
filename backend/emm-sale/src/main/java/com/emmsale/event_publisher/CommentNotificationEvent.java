@@ -20,15 +20,15 @@ public class CommentNotificationEvent {
   private final String writer;
   private final String writerImageUrl;
 
-  public static CommentNotificationEvent of(final Comment comment, final Long redirectId) {
+  public static CommentNotificationEvent of(final Comment comment, final Comment trigger) {
     final Member member = comment.getMember();
 
     return new CommentNotificationEvent(
         member.getId(),
-        redirectId,
+        trigger.getId(),
         LocalDateTime.now(),
         UPDATE_NOTIFICATION_COMMENT_TYPE,
-        comment.getContent(),
+        trigger.getContent(),
         member.getName(),
         member.getImageUrl()
     );
