@@ -118,10 +118,10 @@ class ConferenceViewModel @Inject constructor(
                 tagFilteringOptions = tagFilteringOptions.map(
                     ConferenceSelectedFilteringOptionUiState::from,
                 ),
-                startDateFilteringOption = startDate?.let(
+                selectedStartDate = startDate?.let(
                     ConferenceSelectedFilteringDateOptionUiState::from,
                 ),
-                endDateFilteringOption = endDate?.let(ConferenceSelectedFilteringDateOptionUiState::from),
+                selectedEndDate = endDate?.let(ConferenceSelectedFilteringDateOptionUiState::from),
             ),
         )
     }
@@ -158,8 +158,8 @@ class ConferenceViewModel @Inject constructor(
             fetchFilteredConferences(
                 selectedStatusFilteringOptionIds,
                 selectedTagFilteringOptionIds,
-                startDateFilteringOption?.date,
-                endDateFilteringOption?.date,
+                selectedStartDate?.date,
+                selectedEndDate?.date,
             )
         }
     }
