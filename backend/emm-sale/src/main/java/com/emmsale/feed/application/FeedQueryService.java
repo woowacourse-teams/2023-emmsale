@@ -18,6 +18,7 @@ import com.emmsale.image.domain.Image;
 import com.emmsale.image.domain.repository.ImageRepository;
 import com.emmsale.member.domain.Member;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -64,7 +65,7 @@ public class FeedQueryService {
   }
 
   private Map<Long, List<Image>> getFeedImagesMap(final List<Long> feedIds) {
-    return imageRepository.findAllByFeedIdIn(feedIds).stream()
+    final Map<Long, List<Image>> feedImagesMap = imageRepository.findAllByFeedIdIn(feedIds).stream()
         .collect(Collectors.groupingBy(
             Image::getContentId,
             Collectors.mapping(
@@ -72,6 +73,10 @@ public class FeedQueryService {
                 Collectors.toList()
             )
         ));
+
+    feedImagesMap.forEach((feedId, images) -> images.sort(Comparator.comparing(Image::getOrder)));
+
+    return feedImagesMap;
   }
 
   private Map<Long, Long> getFeedIdCommentCountMap(final List<Long> feedIds) {
@@ -104,6 +109,7 @@ public class FeedQueryService {
     final Feed feed = feedRepository.findById(id)
         .orElseThrow(() -> new FeedException(FeedExceptionType.NOT_FOUND_FEED));
     final List<Image> images = imageRepository.findAllByFeedId(feed.getId());
+    images.sort(Comparator.comparing(Image::getOrder));
 
     validateBlockedMemberFeed(member, feed);
     validateDeletedFeed(feed);

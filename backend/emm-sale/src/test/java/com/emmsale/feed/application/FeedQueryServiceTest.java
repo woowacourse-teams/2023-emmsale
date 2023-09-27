@@ -234,19 +234,23 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("피드 이미지 조회 테스트")
   class FeedQueryWithImage {
 
+    private Image image1;
+    private Image image2;
+    private Image image3;
     private List<Image> images;
 
     @BeforeEach
     void setUp() {
-      images = imageRepository.saveAll(List.of(
-              new Image("image-uuid", ImageType.FEED, feed1.getId(), 1, LocalDateTime.now()),
-              new Image("image-uuid", ImageType.FEED, feed1.getId(), 2, LocalDateTime.now())
-          )
-      );
+      image1 = new Image("image-uuid1", ImageType.FEED, feed1.getId(), 1, LocalDateTime.now());
+      image2 = new Image("image-uuid2", ImageType.FEED, feed1.getId(), 2, LocalDateTime.now());
+      image3 = new Image("image-uuid3", ImageType.FEED, feed1.getId(), 3, LocalDateTime.now());
+      images = List.of(image1, image2, image3);
+
+      imageRepository.saveAll(List.of(image2, image1, image3));
     }
 
     @Test
-    @DisplayName("피드에 이미지가 있을 경우 피드 목록에서 이미지 리스트를 함께 반환한다.")
+    @DisplayName("피드에 이미지가 있을 경우 피드 목록에서 이미지 리스트를 order순으로 정렬하여 함께 반환한다.")
     void findAllFeedsWithImages() {
       //given
       final Long eventId = event.getId();
@@ -268,7 +272,7 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
     }
 
     @Test
-    @DisplayName("피드에 이미지가 있을 경우 피드 목록에서 이미지 리스트를 함께 반환한다.")
+    @DisplayName("피드에 이미지가 있을 경우 피드 목록에서 이미지 리스트를 order순으로 정렬하여 함께 반환한다.")
     void findDetailFeedWithImages() {
       //given
       final FeedDetailResponse expect = FeedDetailResponse.from(feed1, images);
