@@ -6,12 +6,14 @@ import static com.emmsale.notification.exception.NotificationExceptionType.NOT_F
 
 import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.notification.application.generator.CommentNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.MessageNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.NotificationMessageGenerator;
 import com.emmsale.notification.application.generator.RequestNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.UpdateNotificationMessageGenerator;
 import com.emmsale.notification.domain.FcmToken;
 import com.emmsale.notification.domain.FcmTokenRepository;
+import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.RequestNotification;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.exception.NotificationException;
@@ -68,6 +70,13 @@ public class FirebaseCloudMessageClient {
     sendMessageTo(
         messageNotificationEvent.getReceiverId(),
         new MessageNotificationMessageGenerator(messageNotificationEvent)
+    );
+  }
+
+  public void sendMessageTo(final Notification notification, final Long receiverId) {
+    sendMessageTo(
+        receiverId,
+        new CommentNotificationMessageGenerator(notification)
     );
   }
 
