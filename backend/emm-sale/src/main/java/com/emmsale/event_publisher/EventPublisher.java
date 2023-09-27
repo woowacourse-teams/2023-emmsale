@@ -35,6 +35,16 @@ public class EventPublisher {
         .forEach(applicationEventPublisher::publishEvent);
   }
 
+  public void publish2(final Comment trigger, final Member loginMember) {
+    final Set<Comment> notificationCommentCandidates = trigger.getParent()
+        .map(parent -> findRelatedCommentsExcludingLoginMember(loginMember, parent))
+        .orElse(Collections.emptySet());
+
+    notificationCommentCandidates.stream()
+        .map(it -> CommentNotificationEvent.of(it, trigger.getId()))
+        .forEach(applicationEventPublisher::publishEvent);
+  }
+
   private Set<Comment> findRelatedCommentsExcludingLoginMember(
       final Member loginMember,
       final Comment parent

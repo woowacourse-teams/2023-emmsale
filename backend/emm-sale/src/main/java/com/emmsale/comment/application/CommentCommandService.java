@@ -50,7 +50,7 @@ public class CommentCommandService {
 
     final Comment savedComment = commentRepository.save(comment);
 
-    eventPublisher.publish(savedComment, member);
+    eventPublisher.publish2(savedComment, member);
 
     return CommentResponse.from(savedComment);
   }

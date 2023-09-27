@@ -187,11 +187,11 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
         Comment.createChild(feed, 부모_댓글, 로그인_사용자, "내용4"));
 
     //when
-    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
+    eventPublisher.publish2(알림_트리거_댓글, 로그인_사용자);
 
     //then
     verify(applicationEventPublisher, times(2))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(CommentNotificationEvent.class));
   }
 
   @Test
@@ -212,7 +212,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish(알림_트리거_댓글, 댓글_작성자1);
+    eventPublisher.publish2(알림_트리거_댓글, 댓글_작성자1);
 
     //then
     verify(applicationEventPublisher, times(0))
@@ -231,7 +231,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish(알림_트리거_댓글, 댓글_작성자1);
+    eventPublisher.publish2(알림_트리거_댓글, 댓글_작성자1);
 
     //then
     verify(applicationEventPublisher, times(0))
@@ -266,11 +266,11 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
+    eventPublisher.publish2(알림_트리거_댓글, 로그인_사용자);
 
     //then
     verify(applicationEventPublisher, times(1))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(CommentNotificationEvent.class));
   }
 
   @Test
@@ -301,11 +301,11 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
+    eventPublisher.publish2(알림_트리거_댓글, 로그인_사용자);
 
     //then
     verify(applicationEventPublisher, times(2))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(CommentNotificationEvent.class));
   }
 
   @Test
