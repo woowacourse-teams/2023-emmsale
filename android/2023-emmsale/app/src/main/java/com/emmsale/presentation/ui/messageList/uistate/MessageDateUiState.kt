@@ -5,4 +5,4 @@ import java.time.LocalDateTime
 class MessageDateUiState(
     override val messageType: MessageType = MessageType.DATE,
     messageDate: LocalDateTime,
-) : MessageUiState("", messageDate)
+) : MessageUiState(messageDate.toString(), messageDate)
