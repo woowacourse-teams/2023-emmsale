@@ -22,6 +22,7 @@ public class CommentNotificationEvent {
 
   public static CommentNotificationEvent of(final Comment comment, final Comment trigger) {
     final Member member = comment.getMember();
+    final Member triggerMember = trigger.getMember();
 
     return new CommentNotificationEvent(
         member.getId(),
@@ -29,9 +30,8 @@ public class CommentNotificationEvent {
         LocalDateTime.now(),
         UPDATE_NOTIFICATION_COMMENT_TYPE,
         trigger.getContent(),
-        member.getName(),
-        member.getImageUrl()
+        triggerMember.getName(),
+        triggerMember.getImageUrl()
     );
   }
-
 }
