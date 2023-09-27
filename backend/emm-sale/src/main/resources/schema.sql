@@ -255,6 +255,5 @@ create table notification
     id         bigint auto_increment primary key,
     type       varchar(20) not null,
     json_data   mediumtext  not null,
-    created_at datetime(6),
     is_read    bit         not null
 )
