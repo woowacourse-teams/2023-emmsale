@@ -117,7 +117,7 @@ class MessageListViewModel @Inject constructor(
     }
 
     private fun Message.createMessageDateUiState(): MessageDateUiState = MessageDateUiState(
-        date = createdAt.toString(),
+        messageDate = createdAt,
     )
 
     private fun Message.createChatMessageUiState(
