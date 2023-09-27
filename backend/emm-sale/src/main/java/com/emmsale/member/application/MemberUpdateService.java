@@ -9,6 +9,7 @@ import com.emmsale.member.exception.MemberExceptionType;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -42,5 +43,11 @@ public class MemberUpdateService {
     }
 
     memberRepository.deleteById(memberId);
+  }
+
+  public String updateMemberProfile(final MultipartFile image, final Long memberId,
+      final Member member) {
+
+    return null;
   }
 }

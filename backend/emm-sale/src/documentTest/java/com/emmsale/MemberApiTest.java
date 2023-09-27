@@ -10,6 +10,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -23,16 +24,21 @@ import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityResponses;
 import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.application.dto.OpenProfileUrlRequest;
+import com.emmsale.member.domain.Member;
+import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
 @WebMvcTest(MemberApi.class)
 class MemberApiTest extends MockMvcTestHelper {
@@ -254,5 +260,47 @@ class MemberApiTest extends MockMvcTestHelper {
         .andExpect(status().isNoContent())
         .andDo(print())
         .andDo(document("delete-member"));
+  }
+
+  @Test
+  @DisplayName("멤버 프로필을 변경할 수 있다.")
+  void updateProfile() throws Exception {
+    //given
+    final String imageUrl = "http://imageUrl.png";
+    final Long memberId = 1L;
+    final String accessToken = "access_token";
+    final MockMultipartHttpServletRequestBuilder builder = createUpdateProfileBuilder(memberId);
+
+    when(memberUpdateService.updateMemberProfile
+        (any(MultipartFile.class), anyLong(), any(Member.class)))
+        .thenReturn(imageUrl);
+
+    //when
+    mockMvc.perform(builder
+            .header("Authorization", accessToken))
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("update-profile"));
+  }
+
+  private MockMultipartHttpServletRequestBuilder createUpdateProfileBuilder(final Long memberId)
+      throws IOException {
+    final MockMultipartFile image = new MockMultipartFile(
+        "picture",
+        "picture.jpg",
+        MediaType.TEXT_PLAIN_VALUE,
+        "test data".getBytes()
+    );
+
+    final MockMultipartHttpServletRequestBuilder builder =
+        multipart("/members/{member-id}/profile", memberId)
+            .file("image", image.getBytes());
+
+    builder.with((mockHttpServletRequest) -> {
+      mockHttpServletRequest.setMethod("PATCH");
+      return mockHttpServletRequest;
+    });
+
+    return builder;
   }
 }
