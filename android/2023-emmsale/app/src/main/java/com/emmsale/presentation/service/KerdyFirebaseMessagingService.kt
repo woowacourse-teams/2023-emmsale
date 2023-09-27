@@ -14,7 +14,6 @@ import com.emmsale.presentation.common.extension.topActivityName
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
-import com.emmsale.presentation.ui.notificationPageList.NotificationBoxActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,10 +42,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         if (!isNotificationReceive || tokenRepository.getToken() == null) return
 
         when (message.data["notificationType"]) {
-            FOLLOW_NOTIFICATION_TYPE -> {
-                if (config.isFollowNotificationReceive) showFollowNotification(message)
-            }
-
             CHILD_COMMENT_NOTIFICATION_TYPE -> {
                 if (config.isCommentNotificationReceive) showChildCommentNotification(message)
             }
@@ -59,19 +54,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
                 if (config.isMessageNotificationReceive) showMessageNotification(message)
             }
         }
-    }
-
-    private fun showFollowNotification(message: RemoteMessage) {
-        val senderName = message.data["senderName"] ?: return
-
-        baseContext.showNotification(
-            title = getString(R.string.kerdyfirebasemessaging_follow_notification_title_format),
-            message = getString(R.string.kerdyfirebasemessaging_follow_notification_message_format).format(
-                senderName,
-            ),
-            channelId = R.id.id_all_follow_notification_channel,
-            intent = NotificationBoxActivity.getIntent(this),
-        )
     }
 
     private fun showChildCommentNotification(message: RemoteMessage) {
@@ -153,7 +135,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     companion object {
         private const val ERROR_FEED_ID = -1L
 
-        private const val FOLLOW_NOTIFICATION_TYPE = "REQUEST"
         private const val CHILD_COMMENT_NOTIFICATION_TYPE = "COMMENT"
         private const val EVENT_NOTIFICATION_TYPE = "EVENT"
         private const val MESSAGE_NOTIFICATION_TYPE = "MESSAGE"
