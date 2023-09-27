@@ -34,6 +34,7 @@ class EventInfoFragment :
     private fun setUpInformationUrls() {
         viewModel.eventDetail.observe(viewLifecycleOwner) { eventDetailUiState ->
             val imageUrls = eventDetailUiState.eventDetail?.imageUrls ?: return@observe
+            binding.rvEventInfoImages.setHasFixedSize(true)
             binding.rvEventInfoImages.adapter = EventInfoImageAdapter(imageUrls)
         }
     }
