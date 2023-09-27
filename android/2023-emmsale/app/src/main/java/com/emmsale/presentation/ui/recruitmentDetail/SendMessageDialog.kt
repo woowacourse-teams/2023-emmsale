@@ -43,6 +43,7 @@ class SendMessageDialog : DialogFragment() {
 
     private fun onSendButtonClick(message: String) {
         viewModel.sendMessage(message)
+        binding.etSendmessagedialogMessage.text.clear()
     }
 
     private fun onCancelButtonClick() {
