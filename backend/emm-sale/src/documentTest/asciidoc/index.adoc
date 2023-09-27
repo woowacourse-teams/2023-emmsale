@@ -748,14 +748,8 @@ Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Host: localhost:8080
 ```
 
-.HTTP request 설명
-include::{snippets}/post-feed/request-fields.adoc[]
-
 .HTTP response
 include::{snippets}/post-feed/http-response.adoc[]
-
-.HTTP response 설명
-include::{snippets}/post-feed/response-fields.adoc[]
 
 === `PUT`: 피드 업데이트
 
