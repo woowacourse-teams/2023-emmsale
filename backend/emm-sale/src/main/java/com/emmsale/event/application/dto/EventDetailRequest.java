@@ -43,8 +43,6 @@ public class EventDetailRequest {
   private final LocalDateTime applyEndDateTime;
 
   private final List<TagRequest> tags;
-
-  private final String imageUrl;
   private final EventType type;
 
   private final EventMode eventMode;

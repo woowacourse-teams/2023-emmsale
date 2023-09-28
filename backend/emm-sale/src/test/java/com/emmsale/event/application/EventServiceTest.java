@@ -582,9 +582,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("이벤트를 성공적으로 저장한다.")
     void addEventTest() {
       //given
-      final Image image1 = new Image("image", ImageType.EVENT, 1L, 0, LocalDateTime.now());
-      final Image image2 = new Image("image", ImageType.EVENT, 1L, 0, LocalDateTime.now());
-
       final EventDetailRequest request = new EventDetailRequest(
           eventName,
           eventLocation,
@@ -594,7 +591,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           beforeDateTime,
           afterDateTime,
           tagRequests,
-          imageUrl,
           type,
           eventMode,
           paymentType,
@@ -639,7 +635,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           beforeDateTime,
           afterDateTime,
           tagRequests,
-          imageUrl,
           type,
           eventMode,
           paymentType,
@@ -674,7 +669,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           beforeDateTime,
           afterDateTime,
           tagRequests,
-          imageUrl,
           type,
           eventMode,
           paymentType,
@@ -703,7 +697,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     private final String newName = "새로운 이름";
     private final String newLocation = "새로운 장소";
     private final String newInformationUrl = "https://새로운-상세-URL.com";
-    private final String imageUrl = "https://image.com";
     private final LocalDate now = LocalDate.now();
     private final PaymentType paymentType = PaymentType.FREE_PAID;
     private final EventMode eventMode = EventMode.ON_OFFLINE;
@@ -725,7 +718,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           beforeDateTime,
           afterDateTime,
           newTagRequests,
-          imageUrl,
           EventType.CONFERENCE,
           eventMode,
           paymentType,
@@ -771,7 +763,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           beforeDateTime,
           afterDateTime,
           newTagRequests,
-          imageUrl,
           EventType.CONFERENCE,
           eventMode,
           paymentType,
@@ -801,7 +792,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           beforeDateTime,
           afterDateTime,
           newTagRequests,
-          imageUrl,
           EventType.CONFERENCE,
           eventMode,
           paymentType,
@@ -835,7 +825,6 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           beforeDateTime,
           afterDateTime,
           newTagRequests,
-          imageUrl,
           EventType.CONFERENCE,
           eventMode,
           paymentType,
