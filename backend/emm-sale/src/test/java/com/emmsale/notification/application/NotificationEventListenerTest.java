@@ -11,8 +11,10 @@ import static org.mockito.Mockito.verify;
 import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.event_publisher.UpdateNotificationEvent;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.notification.domain.NotificationRepository;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,13 +28,18 @@ class NotificationEventListenerTest extends ServiceIntegrationTestHelper {
   @Autowired
   private UpdateNotificationRepository updateNotificationRepository;
   private FirebaseCloudMessageClient mockingFirebaseCloudMessageClient;
+  @Autowired
+  private NotificationRepository notificationRepository;
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @BeforeEach
   void setUp() {
     mockingFirebaseCloudMessageClient = mock(FirebaseCloudMessageClient.class);
 
     notificationEventListener = new NotificationEventListener(
-        updateNotificationRepository, mockingFirebaseCloudMessageClient
+        updateNotificationRepository, mockingFirebaseCloudMessageClient,
+        notificationRepository, objectMapper
     );
   }
 
