@@ -63,7 +63,6 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
             afterDateTime,
             "url",
             EventType.CONFERENCE,
-            "https://image.com",
             PaymentType.FREE_PAID,
             EventMode.ON_OFFLINE,
             "행사기간"
@@ -194,11 +193,11 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final CommentModifyRequest request = new CommentModifyRequest("변경된 내용");
     comment.delete();
 
-    final Comment deletedComment = commentRepository.save(comment);
+    final Long deletedCommentId = commentRepository.save(comment).getId();
 
     //when & then
     Assertions.assertThatThrownBy(
-            () -> commentCommandService.modify(deletedComment.getId(), 댓글_작성자, request))
+            () -> commentCommandService.modify(deletedCommentId, 댓글_작성자, request))
         .isInstanceOf(CommentException.class)
         .hasMessage(CommentExceptionType.FORBIDDEN_MODIFY_DELETED_COMMENT.errorMessage());
   }

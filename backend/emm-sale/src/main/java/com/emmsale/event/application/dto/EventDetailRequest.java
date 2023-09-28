@@ -62,7 +62,6 @@ public class EventDetailRequest {
         applyEndDateTime,
         informationUrl,
         type,
-        imageUrl,
         paymentType,
         eventMode,
         organization
