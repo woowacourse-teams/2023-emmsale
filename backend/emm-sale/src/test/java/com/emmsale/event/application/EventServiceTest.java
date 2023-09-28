@@ -15,6 +15,9 @@ import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_TAG;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_AFTER_END_DATE;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME;
+import static com.emmsale.image.ImageFixture.행사_이미지1;
+import static com.emmsale.image.ImageFixture.행사_이미지2;
+import static com.emmsale.image.ImageFixture.행사_이미지3;
 import static com.emmsale.tag.TagFixture.AI;
 import static com.emmsale.tag.TagFixture.IOS;
 import static com.emmsale.tag.TagFixture.백엔드;
@@ -54,6 +57,7 @@ import com.emmsale.tag.exception.TagException;
 import com.emmsale.tag.exception.TagExceptionType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -72,12 +76,12 @@ import org.springframework.web.multipart.MultipartFile;
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
-      null, null, List.of(), null, EventMode.OFFLINE.getValue(),
+      null, null, List.of(), "이미지1", EventMode.OFFLINE.getValue(),
       PaymentType.PAID.getValue());
   private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null, null,
-      null, List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
+      null, List.of(), "이미지1", EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
   private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스", null, null,
-      null, null, List.of(), EventMode.ONLINE.getValue(), null, PaymentType.PAID.getValue());
+      null, null, List.of(), "이미지1", EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
   private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null, null,
       null, List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
@@ -133,6 +137,18 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
             "test data".getBytes()
         )
     );
+    imageRepository.saveAll(List.of(
+        행사_이미지1(인프콘_2023.getId()),
+        행사_이미지2(인프콘_2023.getId()),
+        행사_이미지3(인프콘_2023.getId())
+    ));
+    imageRepository.saveAll(List.of(
+        행사_이미지1(웹_컨퍼런스.getId()),
+        행사_이미지2(웹_컨퍼런스.getId())
+    ));
+    imageRepository.saveAll(List.of(
+        행사_이미지1(안드로이드_컨퍼런스.getId())
+    ));
   }
 
   @Nested
@@ -150,12 +166,55 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       imageRepository.save(
           new Image("imageUrl2", ImageType.EVENT, event.getId(), 0, LocalDateTime.now())
       );
+      imageRepository.save(
+          new Image("imageUrl3", ImageType.EVENT, event.getId(), 2, LocalDateTime.now())
+      );
 
       final String imageUrl = "imageUrl2";
-      final List<String> imageUrls = List.of("imageUrl1");
+      final List<String> imageUrls = List.of("imageUrl1", "imageUrl3");
 
       final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일(), imageUrl,
           imageUrls);
+
+      //when
+      final EventDetailResponse actual = eventService.findEvent(event.getId(), 날짜_8월_10일());
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("이미지가 등록되지 않는 event의 imageUrl은 null, imageUrls는 빈 리스트로 반환된다.")
+    void success_imageUrl_null_imageUrls_empty() {
+      //given
+      final Event event = eventRepository.save(eventFixture());
+
+      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일(), null,
+          Collections.emptyList());
+
+      //when
+      final EventDetailResponse actual = eventService.findEvent(event.getId(), 날짜_8월_10일());
+
+      //then
+      assertThat(actual)
+          .usingRecursiveComparison()
+          .isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("이미지가 하나만 등록된 event의 imageUrls은 빈 리스트로 반환된다.")
+    void success_imageUrls_empty() {
+      //given
+      final Event event = eventRepository.save(eventFixture());
+      imageRepository.save(
+          new Image("imageUrl2", ImageType.EVENT, event.getId(), 0, LocalDateTime.now())
+      );
+
+      final String imageUrl = "imageUrl2";
+      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일(), imageUrl,
+          Collections.emptyList());
 
       //when
       final EventDetailResponse actual = eventService.findEvent(event.getId(), 날짜_8월_10일());
@@ -171,9 +230,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     void fail_EventNotFoundException() {
       //given
       final Long notFoundEventId = Long.MAX_VALUE;
-
+      final LocalDate today = 날짜_8월_10일();
       //when, then
-      assertThatThrownBy(() -> eventService.findEvent(notFoundEventId, 날짜_8월_10일()))
+      assertThatThrownBy(() ->
+          eventService.findEvent(notFoundEventId, today))
           .isInstanceOf(EventException.class)
           .hasMessage(NOT_FOUND_EVENT.errorMessage());
     }
@@ -197,7 +257,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -214,7 +274,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -231,7 +291,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -248,7 +308,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -265,7 +325,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -282,7 +342,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -299,7 +359,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -410,7 +470,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -428,7 +488,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -459,7 +519,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -477,7 +537,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
 
@@ -495,7 +555,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus")
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
           .isEqualTo(expectedEvents);
     }
   }
@@ -593,7 +653,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final EventException exception = assertThrowsExactly(EventException.class,
           () -> eventService.addEvent(request, mockMultipartFiles, now));
 
-      assertEquals(exception.exceptionType(), START_DATE_TIME_AFTER_END_DATE_TIME);
+      assertEquals(START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
     }
 
     @Test
@@ -628,7 +688,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final EventException exception = assertThrowsExactly(EventException.class,
           () -> eventService.addEvent(request, mockMultipartFiles, now));
 
-      assertEquals(exception.exceptionType(), NOT_FOUND_TAG);
+      assertEquals(NOT_FOUND_TAG, exception.exceptionType());
     }
   }
 
@@ -723,7 +783,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final EventException exception = assertThrowsExactly(EventException.class,
           () -> eventService.updateEvent(notExistsEventId, updateRequest, mockMultipartFiles, now));
 
-      assertEquals(exception.exceptionType(), NOT_FOUND_EVENT);
+      assertEquals(NOT_FOUND_EVENT, exception.exceptionType());
     }
 
     @Test
@@ -756,7 +816,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final EventException exception = assertThrowsExactly(EventException.class,
           () -> eventService.updateEvent(eventId, updateRequest, mockMultipartFiles, now));
 
-      assertEquals(exception.exceptionType(), START_DATE_TIME_AFTER_END_DATE_TIME);
+      assertEquals(START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
     }
 
     @Test
@@ -790,7 +850,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final EventException exception = assertThrowsExactly(EventException.class,
           () -> eventService.updateEvent(eventId, updateRequest, mockMultipartFiles, now));
 
-      assertEquals(exception.exceptionType(), NOT_FOUND_TAG);
+      assertEquals(NOT_FOUND_TAG, exception.exceptionType());
     }
   }
 
@@ -821,7 +881,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final EventException exception = assertThrowsExactly(EventException.class,
           () -> eventService.deleteEvent(notExistsEventId));
 
-      assertEquals(exception.exceptionType(), NOT_FOUND_EVENT);
+      assertEquals(NOT_FOUND_EVENT, exception.exceptionType());
     }
   }
 }

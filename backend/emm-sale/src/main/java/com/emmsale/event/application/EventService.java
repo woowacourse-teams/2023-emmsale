@@ -34,7 +34,10 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -104,10 +107,11 @@ public class EventService {
       spec = spec.and(EventSpecification.filterByPeriod(startDateTime, endDateTime));
     }
     final List<Event> events = eventRepository.findAll(spec);
+
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events);
 
-    return filterByStatuses(statuses, eventsForEventStatus);
+    return filterByStatuses(statuses, eventsForEventStatus, makeImageUrlPerEventId(events));
   }
 
   private boolean isExistTagNames(final List<String> tagNames) {
@@ -154,6 +158,19 @@ public class EventService {
     }
   }
 
+  // TODO: 2023/09/27 코드 중복 제거(ScrapService)
+  private Map<Long, String> makeImageUrlPerEventId(final List<Event> events) {
+    final List<Long> scrappedEventIds = events.stream()
+        .map(Event::getId)
+        .collect(Collectors.toList());
+    final List<Image> images = imageRepository.findAllThumbnailByEventIdIn(scrappedEventIds);
+    Map<Long, String> imageUrlPerEventId = new HashMap<>();
+    for (Image image : images) {
+      imageUrlPerEventId.put(image.getContentId(), image.getName());
+    }
+    return imageUrlPerEventId;
+  }
+
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
       final List<Event> events) {
     return events.stream()
@@ -166,12 +183,13 @@ public class EventService {
 
   private List<EventResponse> filterByStatuses(
       final List<EventStatus> statuses,
-      final EnumMap<EventStatus, List<Event>> eventsForEventStatus
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus,
+      final Map<Long, String> imageUrlPerEventId
   ) {
     if (isExistStatusName(statuses)) {
-      return filterEventResponseByStatuses(statuses, eventsForEventStatus);
+      return filterEventResponseByStatuses(statuses, eventsForEventStatus, imageUrlPerEventId);
     }
-    return EventResponse.mergeEventResponses(eventsForEventStatus);
+    return EventResponse.mergeEventResponses(eventsForEventStatus, imageUrlPerEventId);
   }
 
   private boolean isExistStatusName(final List<EventStatus> statuses) {
@@ -180,12 +198,14 @@ public class EventService {
 
   private List<EventResponse> filterEventResponseByStatuses(
       final List<EventStatus> statuses,
-      final EnumMap<EventStatus, List<Event>> eventsForEventStatus
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus,
+      final Map<Long, String> imageUrlPerEventId
   ) {
     return eventsForEventStatus.entrySet()
         .stream()
         .filter(entry -> statuses.contains(entry.getKey()))
-        .map(entry -> EventResponse.makeEventResponsesByStatus(entry.getValue()))
+        .map(
+            entry -> EventResponse.makeEventResponsesByStatus(entry.getValue(), imageUrlPerEventId))
         .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
           combinedEvents.addAll(eventsToAdd);
           return combinedEvents;

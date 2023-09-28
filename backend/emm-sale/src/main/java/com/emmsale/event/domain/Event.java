@@ -58,8 +58,6 @@ public class Event extends BaseEntity {
   @Column(nullable = false)
   private EventMode eventMode;
 
-  private String imageUrl;
-
   @Column(nullable = false)
   private String organization;
 
@@ -78,7 +76,6 @@ public class Event extends BaseEntity {
       final LocalDateTime applyEndDate,
       final String informationUrl,
       final EventType eventType,
-      final String imageUrl,
       final PaymentType paymentType,
       final EventMode eventMode,
       final String organization
@@ -88,7 +85,6 @@ public class Event extends BaseEntity {
     this.eventPeriod = new EventPeriod(startDate, endDate, applyStartDate, applyEndDate);
     this.informationUrl = informationUrl;
     this.type = eventType;
-    this.imageUrl = imageUrl;
     this.paymentType = paymentType;
     this.eventMode = eventMode;
     this.organization = organization;

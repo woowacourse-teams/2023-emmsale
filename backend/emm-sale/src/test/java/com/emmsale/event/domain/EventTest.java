@@ -57,7 +57,7 @@ class EventTest {
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, afterDateTime, beforeDateTime, beforeDateTime,
-            beforeDateTime, url, EventType.CONFERENCE, imageUrl, PaymentType.FREE,
+            beforeDateTime, url, EventType.CONFERENCE, PaymentType.FREE,
             EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
@@ -78,7 +78,7 @@ class EventTest {
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, beforeDateTime, afterDateTime,
-            afterDateTime, beforeDateTime, url, EventType.CONFERENCE, imageUrl, PaymentType.FREE,
+            afterDateTime, beforeDateTime, url, EventType.CONFERENCE, PaymentType.FREE,
             EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END,
@@ -100,7 +100,7 @@ class EventTest {
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, beforeDateTime, beforeDateTime,
-            beforeDateTime, afterDateTime, url, EventType.CONFERENCE, imageUrl, PaymentType.FREE,
+            beforeDateTime, afterDateTime, url, EventType.CONFERENCE, PaymentType.FREE,
             EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_END_AFTER_EVENT_END, exception.exceptionType());
@@ -121,7 +121,7 @@ class EventTest {
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, beforeDateTime, afterDateTime, afterDateTime, afterDateTime,
-            url, EventType.CONFERENCE, imageUrl, PaymentType.FREE, EventMode.ON_OFFLINE, organization));
+            url, EventType.CONFERENCE, PaymentType.FREE, EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_EVENT_START,
         exception.exceptionType());
