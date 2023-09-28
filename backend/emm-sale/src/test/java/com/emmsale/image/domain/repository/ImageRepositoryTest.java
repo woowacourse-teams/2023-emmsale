@@ -20,15 +20,35 @@ class ImageRepositoryTest extends JpaRepositorySliceTestHelper {
   private Image image2;
   private Image image3;
   private Image image4;
+  private Image image5;
+  private Image image6;
 
   @BeforeEach
   void setUp() {
     image1 = new Image("name1", ImageType.FEED, 1L, 1, LocalDateTime.now());
     image2 = new Image("name2", ImageType.FEED, 1L, 2, LocalDateTime.now());
     image3 = new Image("name3", ImageType.FEED, 2L, 1, LocalDateTime.now());
-    image4 = new Image("name4", ImageType.EVENT, 1L, 1, LocalDateTime.now());
+    image4 = new Image("name4", ImageType.EVENT, 1L, 0, LocalDateTime.now());
+    image5 = new Image("name5", ImageType.EVENT, 1L, 1, LocalDateTime.now());
+    image6 = new Image("name6", ImageType.EVENT, 2L, 0, LocalDateTime.now());
 
-    imageRepository.saveAll(List.of(image1, image2, image3, image4));
+    imageRepository.saveAll(List.of(image1, image2, image3, image4, image5, image6));
+  }
+
+  @Test
+  @DisplayName("복수 개의 행사 id들에 해당하는 섬네일 이미지들을 조회할 수 있다.")
+  void findAllThumbnailByEventIdIn() {
+    //given
+    final List<Image> expect = List.of(image4, image6);
+
+    //when
+    final List<Image> actual = imageRepository.findAllThumbnailByEventIdIn(List.of(1L, 2L));
+
+    //then
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .isEqualTo(expect);
+
   }
 
   @Test
