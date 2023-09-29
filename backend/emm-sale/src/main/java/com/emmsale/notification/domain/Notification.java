@@ -52,6 +52,10 @@ public class Notification {
     this.isRead = false;
   }
 
+  public boolean isOwner(final Long memberId) {
+    return receiverId.equals(memberId);
+  }
+
   public void read() {
     isRead = true;
   }
