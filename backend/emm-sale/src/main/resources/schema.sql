@@ -30,11 +30,11 @@ create table event
     id              bigint auto_increment primary key,
     created_at      datetime(6),
     updated_at      datetime(6),
-    end_date        datetime(6)  not null,
+    end_date        datetime(6) not null,
     information_url varchar(255) not null,
     location        varchar(255) not null,
     name            varchar(255) not null,
-    start_date      datetime(6)  not null,
+    start_date      datetime(6) not null,
     image_url       varchar(255),
     type            varchar(20)  not null
 );
@@ -60,7 +60,7 @@ create table comment
     is_deleted bit          not null,
     event_id   bigint       not null,
     member_id  bigint       not null,
-    parent_id  bigint       null
+    parent_id  bigint null
 );
 
 create table member_activity
@@ -128,7 +128,8 @@ alter table event_member
     add column updated_at datetime(6);
 
 -- 2023.08.08 17:04
-rename table notification TO request_notification;
+rename
+table notification TO request_notification;
 
 create table update_notification
 (
@@ -143,8 +144,8 @@ create table update_notification
 create table block
 (
     id                bigint auto_increment primary key,
-    block_member_id   bigint      not null,
-    request_member_id bigint      not null,
+    block_member_id   bigint not null,
+    request_member_id bigint not null,
     created_at        datetime(6) null,
     updated_at        datetime(6) null
 );
@@ -219,8 +220,8 @@ create table feed
     content    varchar(1000) not null,
     event_id   bigint        not null,
     is_deleted bit           not null,
-    created_at datetime(6)   null,
-    updated_at datetime(6)   null
+    created_at datetime(6) null,
+    updated_at datetime(6) null
 );
 
 alter table comment rename column event_id to feed_id;
@@ -246,3 +247,6 @@ alter table event
 -- 2023-09-20 20:25
 alter table event
     add column organization varchar(50) not null;
+
+-- 2023-09-29 18:33
+alter table event drop image_url;
