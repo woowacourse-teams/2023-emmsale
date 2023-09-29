@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.emmsale.notification.api.NotificationApi;
 import com.emmsale.notification.application.dto.NotificationAllResponse;
 import com.emmsale.notification.domain.NotificationType;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,28 +32,16 @@ class NotificationApiTest extends MockMvcTestHelper {
   @BeforeEach
   void setUp() {
     commentJsonData1 = "{"
-        + "\"receiverId\":1,"
-        + "\"redirectId\":5100,"
-        + "\"createdAt\":\"2023-09-27T15:41:59.802027\","
-        + "\"notificationType\":\"COMMENT\","
         + "\"content\":\"content\","
         + "\"writer\":\"writer\","
         + "\"writerImageUrl\":\"imageUrl\""
         + "}";
 
     eventJsonData1 = "{"
-        + "\"receiverId\":1,"
-        + "\"redirectId\":5101,"
-        + "\"notificationType\":\"EVENT\","
-        + "\"createdAt\":\"2023-09-27T15:41:59.802027\","
         + "\"title\":\"title\""
         + "}";
 
     commentJsonData2 = "{"
-        + "\"receiverId\":2,"
-        + "\"redirectId\":5102,"
-        + "\"createdAt\":\"2023-09-27T15:41:59.802027\","
-        + "\"notificationType\":\"COMMENT\","
         + "\"content\":\"content\","
         + "\"writer\":\"writer\","
         + "\"writerImageUrl\":\"imageUrl\""
@@ -72,7 +61,10 @@ class NotificationApiTest extends MockMvcTestHelper {
         fieldWithPath("[].notificationId").description("알림 ID"),
         fieldWithPath("[].type").description("알림 종류"),
         fieldWithPath("[].notificationInformation").description("알림 정보"),
-        fieldWithPath("[].isRead").description("사용자가 알림을 읽었는지 유무")
+        fieldWithPath("[].isRead").description("사용자가 알림을 읽었는지 유무"),
+        fieldWithPath("[].redirectId").description("알림을 생성한 곳을 리다이렉트 하기 위한 ID"),
+        fieldWithPath("[].receiverId").description("알림 받는 사람 ID"),
+        fieldWithPath("[].createdAt").description("알림 생성 시간")
     );
 
     final List<NotificationAllResponse> responses = List.of(
@@ -80,13 +72,19 @@ class NotificationApiTest extends MockMvcTestHelper {
             1L,
             NotificationType.COMMENT,
             commentJsonData1,
-            false
+            false,
+            1L,
+            225L,
+            LocalDateTime.now()
         ),
         new NotificationAllResponse(
             1L,
             NotificationType.EVENT,
             eventJsonData1,
-            false
+            false,
+            2L,
+            225L,
+            LocalDateTime.now()
         )
     );
 
