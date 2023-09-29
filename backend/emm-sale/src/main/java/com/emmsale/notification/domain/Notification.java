@@ -51,4 +51,8 @@ public class Notification {
     this.jsonData = jsonData;
     this.isRead = false;
   }
+
+  public void read() {
+    isRead = true;
+  }
 }
