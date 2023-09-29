@@ -667,3 +667,25 @@ include::{snippets}/get-all-notifications/http-response.adoc[]
 
 .HTTP response 설명
 include::{snippets}/get-all-notifications/response-fields.adoc[]
+
+=== `PATCH` : 알림 읽음 상태 변경
+
+.HTTP request
+include::{snippets}/patch-notification-read/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/patch-notification-read/path-parameters.adoc[]
+
+.HTTP response
+include::{snippets}/patch-notification-read/http-response.adoc[]
+
+=== `DELETE` : 알림 삭제
+
+.HTTP request
+include::{snippets}/delete-notifications/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/delete-notifications/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/delete-notifications/http-response.adoc[]

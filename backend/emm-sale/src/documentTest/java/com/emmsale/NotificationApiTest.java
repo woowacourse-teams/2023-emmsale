@@ -131,7 +131,7 @@ class NotificationApiTest extends MockMvcTestHelper {
   void test_deleteBatch() throws Exception {
     //given
     final RequestFieldsSnippet requestFields = requestFields(
-        fieldWithPath("deleteIds").description("삭제할 댓글 & 피드 알림 ID들")
+        fieldWithPath("deleteIds").description("삭제할 알림 ID들")
     );
 
     final NotificationDeleteRequest request =
