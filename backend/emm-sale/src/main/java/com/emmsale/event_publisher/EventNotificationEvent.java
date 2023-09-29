@@ -5,24 +5,28 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Getter
-public class EventNotificationEvent {
+public class EventNotificationEvent extends NotificationEvent {
 
   private static final String UPDATE_NOTIFICATION_EVENT_TYPE = "EVENT";
 
-  private final Long receiverId;
-  private final Long redirectId;
-  private final String notificationType;
-  private final LocalDateTime createdAt;
   private final String title;
+
+  public EventNotificationEvent(
+      final Long receiverId, final Long redirectId,
+      final LocalDateTime createdAt, final String notificationType,
+      final String title
+  ) {
+    super(receiverId, redirectId, createdAt, notificationType);
+    this.title = title;
+  }
 
   public static EventNotificationEvent of(final Event event, final Long receiverId) {
     return new EventNotificationEvent(
         receiverId,
         event.getId(),
-        UPDATE_NOTIFICATION_EVENT_TYPE,
         LocalDateTime.now(),
+        UPDATE_NOTIFICATION_EVENT_TYPE,
         event.getName()
     );
   }

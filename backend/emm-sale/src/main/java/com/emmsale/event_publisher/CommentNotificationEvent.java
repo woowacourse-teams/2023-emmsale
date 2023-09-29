@@ -6,19 +6,26 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Getter
-public class CommentNotificationEvent {
+public class CommentNotificationEvent extends NotificationEvent {
 
   private static final String UPDATE_NOTIFICATION_COMMENT_TYPE = "COMMENT";
 
-  private final Long receiverId;
-  private final Long redirectId;
-  private final LocalDateTime createdAt;
-  private final String notificationType;
   private final String content;
   private final String writer;
   private final String writerImageUrl;
+
+  public CommentNotificationEvent(
+      final Long receiverId, final Long redirectId,
+      final LocalDateTime createdAt, final String notificationType,
+      final String content, final String writer,
+      final String writerImageUrl
+  ) {
+    super(receiverId, redirectId, createdAt, notificationType);
+    this.content = content;
+    this.writer = writer;
+    this.writerImageUrl = writerImageUrl;
+  }
 
   public static CommentNotificationEvent of(final Comment comment, final Comment trigger) {
     final Member member = comment.getMember();
