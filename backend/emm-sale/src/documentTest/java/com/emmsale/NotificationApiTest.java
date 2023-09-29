@@ -5,8 +5,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,6 +24,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
@@ -55,7 +59,7 @@ class NotificationApiTest extends MockMvcTestHelper {
     final String accessToken = "Bearer Token";
 
     final RequestParametersSnippet requestParam = requestParameters(
-        RequestDocumentation.parameterWithName("member-id").description("알림을 조회할 멤버 ID"));
+        parameterWithName("member-id").description("알림을 조회할 멤버 ID"));
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].notificationId").description("알림 ID"),
@@ -99,5 +103,22 @@ class NotificationApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("get-all-notifications", requestParam, responseFields));
+  }
+
+  @Test
+  @DisplayName("read() : 알림 읽음 상태를 성공적으로 변경시켰다면 204 No Content를 반환할 수 있다.")
+  void test_read() throws Exception {
+    final PathParametersSnippet pathParams = pathParameters(
+        parameterWithName("notifications-id").description("읽음 상태 변경 시킬 알림 ID")
+    );
+
+    final String accessToken = "Bearer Token";
+
+    //when & then
+    mockMvc.perform(patch("/notifications/{notifications-id}/read", 1L)
+            .header("Authorization", accessToken))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("patch-notification-read", pathParams));
   }
 }
