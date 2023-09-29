@@ -56,7 +56,11 @@ public class NotificationEventListener {
       final String jsonData = objectMapper.writeValueAsString(commentNotificationEvent);
 
       final Notification notification = notificationRepository.save(
-          new Notification(NotificationType.COMMENT, jsonData)
+          new Notification(
+              NotificationType.COMMENT, commentNotificationEvent.getReceiverId(),
+              commentNotificationEvent.getRedirectId(), commentNotificationEvent.getCreatedAt(),
+              jsonData
+          )
       );
 
       firebaseCloudMessageClient.sendMessageTo(
@@ -78,7 +82,11 @@ public class NotificationEventListener {
       final String jsonData = objectMapper.writeValueAsString(eventNotificationEvent);
 
       final Notification notification = notificationRepository.save(
-          new Notification(NotificationType.EVENT, jsonData)
+          new Notification(
+              NotificationType.EVENT, eventNotificationEvent.getReceiverId(),
+              eventNotificationEvent.getRedirectId(), eventNotificationEvent.getCreatedAt(),
+              jsonData
+          )
       );
 
       firebaseCloudMessageClient.sendMessageTo(
