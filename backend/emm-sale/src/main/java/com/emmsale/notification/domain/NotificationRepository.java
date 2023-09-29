@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-  @Query(value = "select * from notification n "
-      + "where json_extract(json_data, '$.receiverId') = :receiverId", nativeQuery = true)
+  @Query("select n from Notification n where n.receiverId = :receiverId")
   List<Notification> findAllByReceiverId(@Param("receiverId") final Long receiverId);
 }

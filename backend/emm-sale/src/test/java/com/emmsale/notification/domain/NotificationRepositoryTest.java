@@ -1,6 +1,7 @@
 package com.emmsale.notification.domain;
 
 import com.emmsale.helper.JpaRepositorySliceTestHelper;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,28 +19,16 @@ class NotificationRepositoryTest extends JpaRepositorySliceTestHelper {
   @BeforeEach
   void setUp() {
     commentJsonData1 = "{"
-        + "\"receiverId\":26,"
-        + "\"redirectId\":5100,"
-        + "\"createdAt\":\"2023-09-27T15:41:59.802027\","
-        + "\"notificationType\":\"COMMENT\","
         + "\"content\":\"content\","
         + "\"writer\":\"writer\","
         + "\"writerImageUrl\":\"imageUrl\""
         + "}";
 
     eventJsonData1 = "{"
-        + "\"receiverId\":26,"
-        + "\"redirectId\":5101,"
-        + "\"notificationType\":\"EVENT\","
-        + "\"createdAt\":\"2023-09-27T15:41:59.802027\","
         + "\"title\":\"title\""
         + "}";
 
     commentJsonData2 = "{"
-        + "\"receiverId\":25,"
-        + "\"redirectId\":5102,"
-        + "\"createdAt\":\"2023-09-27T15:41:59.802027\","
-        + "\"notificationType\":\"COMMENT\","
         + "\"content\":\"content\","
         + "\"writer\":\"writer\","
         + "\"writerImageUrl\":\"imageUrl\""
@@ -53,14 +42,18 @@ class NotificationRepositoryTest extends JpaRepositorySliceTestHelper {
     final long receiverId = 26L;
 
     final Notification notification1 = notificationRepository.save(
-        new Notification(NotificationType.COMMENT, commentJsonData1)
+        new Notification(NotificationType.COMMENT, receiverId, 3333L, LocalDateTime.now(),
+            commentJsonData1)
     );
 
     final Notification notification2 = notificationRepository.save(
-        new Notification(NotificationType.EVENT, eventJsonData1)
+        new Notification(NotificationType.EVENT, receiverId, 3333L, LocalDateTime.now(),
+            eventJsonData1)
     );
 
-    notificationRepository.save(new Notification(NotificationType.COMMENT, commentJsonData2));
+    notificationRepository.save(
+        new Notification(NotificationType.COMMENT, receiverId, 3333L, LocalDateTime.now(),
+            commentJsonData2));
 
     final List<Notification> expect = List.of(notification1, notification2);
 
