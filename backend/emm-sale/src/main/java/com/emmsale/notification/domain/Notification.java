@@ -1,5 +1,6 @@
 package com.emmsale.notification.domain;
 
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -24,13 +25,29 @@ public class Notification {
   @Column(name = "type", nullable = false)
   private NotificationType type;
 
+  @Column(nullable = false)
+  private Long receiverId;
+
+  @Column(nullable = false)
+  private Long redirectId;
+
+  @Column(nullable = false)
+  private LocalDateTime createdAt;
+
   @Column(columnDefinition = "MEDIUMTEXT")
   private String jsonData;
 
   private boolean isRead;
 
-  public Notification(final NotificationType type, final String jsonData) {
+  public Notification(
+      final NotificationType type, final Long receiverId,
+      final Long redirectId, final LocalDateTime createdAt,
+      final String jsonData
+  ) {
     this.type = type;
+    this.receiverId = receiverId;
+    this.redirectId = redirectId;
+    this.createdAt = createdAt;
     this.jsonData = jsonData;
     this.isRead = false;
   }
