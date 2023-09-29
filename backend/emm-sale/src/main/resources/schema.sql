@@ -258,6 +258,9 @@ create table notification
     is_read   bit         not null
 );
 
+-- 2023-09-29 18:33
+alter table event drop image_url;
+
 -- 2023-09-30 01:24
 alter table notification
     add column receiver_id bigint default 0;
