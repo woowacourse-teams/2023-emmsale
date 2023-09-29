@@ -22,6 +22,7 @@ import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.message_room.application.MessageCommandService;
 import com.emmsale.message_room.application.RoomQueryService;
 import com.emmsale.notification.application.FcmTokenRegisterService;
+import com.emmsale.notification.application.NotificationQueryService;
 import com.emmsale.notification.application.RequestNotificationCommandService;
 import com.emmsale.notification.application.RequestNotificationQueryService;
 import com.emmsale.notification.application.UpdateNotificationCommandService;
@@ -114,6 +115,8 @@ abstract class MockMvcTestHelper {
   protected FeedQueryService feedQueryService;
   @MockBean
   private MemberArgumentResolver memberArgumentResolver;
+  @MockBean
+  protected NotificationQueryService notificationQueryService;
 
   @BeforeEach
   void setUp(final WebApplicationContext applicationContext,
