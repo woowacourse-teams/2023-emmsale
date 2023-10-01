@@ -19,7 +19,6 @@ class NotificationRepositoryTest extends JpaRepositorySliceTestHelper {
   private NotificationRepository notificationRepository;
 
   private Notification notification1, notification2, notification3;
-  private Long receiverId = 26L;
 
   @BeforeEach
   void setUp() {
@@ -40,17 +39,17 @@ class NotificationRepositoryTest extends JpaRepositorySliceTestHelper {
         + "}";
 
     notification1 = notificationRepository.save(
-        new Notification(NotificationType.COMMENT, receiverId, 3333L, LocalDateTime.now(),
+        new Notification(NotificationType.COMMENT, 26L, 3333L, LocalDateTime.now(),
             commentJsonData1)
     );
 
     notification2 = notificationRepository.save(
-        new Notification(NotificationType.EVENT, receiverId, 3333L, LocalDateTime.now(),
+        new Notification(NotificationType.EVENT, 26L, 3333L, LocalDateTime.now(),
             eventJsonData1)
     );
 
     notification3 = notificationRepository.save(
-        new Notification(NotificationType.COMMENT, receiverId, 3333L, LocalDateTime.now(),
+        new Notification(NotificationType.COMMENT, 3332L, 3333L, LocalDateTime.now(),
             commentJsonData2)
     );
   }
@@ -60,6 +59,7 @@ class NotificationRepositoryTest extends JpaRepositorySliceTestHelper {
   void test_findAllByReceiverId() throws Exception {
     //given
     final List<Notification> expect = List.of(notification1, notification2);
+    final long receiverId = 26L;
 
     //when
     final List<Notification> actual = notificationRepository.findAllByReceiverId(receiverId);
