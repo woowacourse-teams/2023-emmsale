@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class NotificationEvent {
+public abstract class NotificationEvent {
 
   @JsonIgnore
   private final Long receiverId;
