@@ -1,5 +1,6 @@
 package com.emmsale.image.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -25,13 +26,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 class S3ClientTest {
 
+  private static final String TEST_BUCKET = "Test";
+
   private S3Client s3Client;
   private AmazonS3 mockingAmazonS3;
 
   @BeforeEach
   void setUp() {
     mockingAmazonS3 = mock(AmazonS3.class);
-    s3Client = new S3Client(mockingAmazonS3);
+    s3Client = new S3Client(TEST_BUCKET, mockingAmazonS3);
   }
 
   @Test
@@ -83,5 +86,29 @@ class S3ClientTest {
     //then
     verify(mockingAmazonS3, times(3))
         .deleteObject(any(DeleteObjectRequest.class));
+  }
+
+  @Test
+  @DisplayName("convertImageUrl(): 이미지 이름을 imageUrl로 바꾼다.")
+  void convertImageUrl() {
+    final String imageName = "image.png";
+    final String expected = "Test/image.png";
+
+    final String actual = s3Client.convertImageUrl(imageName);
+
+    assertThat(actual)
+        .isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("convertImageName(): 이미지 이름을 imageName로 바꾼다.")
+  void convertImageName() {
+    final String imageUrl = "Test/image.png";
+    final String expected = "image.png";
+
+    final String actual = s3Client.convertImageName(imageUrl);
+
+    assertThat(actual)
+        .isEqualTo(expected);
   }
 }

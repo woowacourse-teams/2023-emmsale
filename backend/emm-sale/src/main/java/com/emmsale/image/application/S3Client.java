@@ -13,14 +13,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 //얘 @Component로 바꾸는 거 어떤가요? @Service보단 @Component가 더 적절한 것 같아요.
-@RequiredArgsConstructor
 public class S3Client {
 
   private static final String EXTENSION_DELIMITER = ".";
@@ -28,10 +26,13 @@ public class S3Client {
   private static final int MIN_EXTENSION_SEPARATOR_INDEX = 0;
   private static final String URL_DELIMITER = "/";
 
-  @Value("${cloud.aws.s3.bucket}")
-  private String bucket;
-
+  private final String bucket;
   private final AmazonS3 amazonS3;
+
+  public S3Client(@Value("${cloud.aws.s3.bucket}") final String bucket, final AmazonS3 amazonS3) {
+    this.bucket = bucket;
+    this.amazonS3 = amazonS3;
+  }
 
   public List<String> uploadImages(final List<MultipartFile> multipartFiles) {
     return multipartFiles.stream().map(this::uploadImage)
@@ -85,5 +86,9 @@ public class S3Client {
 
   public String convertImageUrl(final String imageName) {
     return String.join(URL_DELIMITER, bucket, imageName);
+  }
+
+  public String convertImageName(final String imageUrl) {
+    return imageUrl.split(bucket + URL_DELIMITER, 2)[1];
   }
 }
