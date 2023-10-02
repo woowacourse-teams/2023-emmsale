@@ -19,24 +19,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+//얘 @Component로 바꾸는 거 어떤가요? @Service보단 @Component가 더 적절한 것 같아요.
 @RequiredArgsConstructor
 public class S3Client {
 
   private static final String EXTENSION_DELIMITER = ".";
   private static final List<String> ALLOWED_FILE_EXTENSIONS = List.of(".jpg", ".png", ".jpeg");
   private static final int MIN_EXTENSION_SEPARATOR_INDEX = 0;
-  
+  private static final String URL_DELIMITER = "/";
+
   @Value("${cloud.aws.s3.bucket}")
   private String bucket;
-  
+
   private final AmazonS3 amazonS3;
-  
+
   public List<String> uploadImages(final List<MultipartFile> multipartFiles) {
     return multipartFiles.stream().map(this::uploadImage)
         .collect(Collectors.toList());
   }
 
-  private String uploadImage(final MultipartFile file) {
+  public String uploadImage(final MultipartFile file) {
     final String fileExtension = extractFileExtension(file);
     final String newFileName = UUID.randomUUID().toString().concat(fileExtension);
     final ObjectMetadata objectMetadata = configureObjectMetadata(file);
@@ -79,5 +81,9 @@ public class S3Client {
     } catch (SdkClientException exception) {
       throw new ImageException(ImageExceptionType.FAIL_S3_DELETE_IMAGE);
     }
+  }
+
+  public String convertImageUrl(final String imageName) {
+    return String.join(URL_DELIMITER, bucket, imageName);
   }
 }
