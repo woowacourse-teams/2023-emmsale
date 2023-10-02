@@ -1,11 +1,13 @@
 package com.emmsale.member.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.emmsale.member.MemberFixture;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,7 +34,7 @@ class MemberTest {
       String actual = member.getDescription();
 
       // then
-      Assertions.assertThat(actual).isEqualTo(inputDescription);
+      assertThat(actual).isEqualTo(inputDescription);
     }
 
     @Test
@@ -58,14 +60,35 @@ class MemberTest {
     @DisplayName("한줄 자기소개에 공백만 들어오면 빈 문자열로 업데이트한다.")
     void updateDescription_trim(final String inputDescription) {
       // given
-      Member member = MemberFixture.memberFixture();
+      final Member member = MemberFixture.memberFixture();
 
       //when
       member.updateDescription(inputDescription);
-      String actual = member.getDescription();
+      final String actual = member.getDescription();
 
       // then
-      Assertions.assertThat(actual).isEmpty();
+      assertThat(actual).isEmpty();
     }
   }
+
+  @Nested
+  @DisplayName("멤버가 자신의 프로필이미지가 github인지 판단한다.")
+  class IsNotGithubProfile {
+
+    @Test
+    void falseCase() {
+      final Member member = MemberFixture.memberFixture();
+      member.updateProfile("https://avatars.githubusercontent.com/o/v4");
+
+      assertFalse(member.isNotGithubProfile());
+    }
+
+    @Test
+    void trueCase() {
+      final Member member = MemberFixture.memberFixture();
+
+      assertTrue(member.isNotGithubProfile());
+    }
+  }
+
 }

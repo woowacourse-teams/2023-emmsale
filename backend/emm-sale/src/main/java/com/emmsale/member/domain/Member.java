@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
+  private static final String GITHUB_PROFILE_DOMAIN = "https://avatars.githubusercontent.com";
   private static final int MAX_DESCRIPTION_LENGTH = 100;
   private static final String DEFAULT_DESCRIPTION = "";
 
@@ -73,6 +74,10 @@ public class Member extends BaseEntity {
     this.description = description;
   }
 
+  public void updateProfile(final String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
   private void validateDescriptionNull(final String description) {
     if (description == null) {
       throw new MemberException(MemberExceptionType.NULL_DESCRIPTION);
@@ -97,13 +102,16 @@ public class Member extends BaseEntity {
     return isNotMe(member.getId());
   }
 
-
   public boolean isNotMe(final Long id) {
     return !this.id.equals(id);
   }
 
   public boolean isOnboarded() {
     return name != null;
+  }
+
+  public boolean isNotGithubProfile() {
+    return !imageUrl.contains(GITHUB_PROFILE_DOMAIN);
   }
 
   public Optional<String> getOptionalOpenProfileUrl() {
