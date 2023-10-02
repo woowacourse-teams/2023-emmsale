@@ -1,6 +1,7 @@
 package com.emmsale.member.application;
 
 import static com.emmsale.member.MemberFixture.memberFixture;
+import static com.emmsale.member.exception.MemberExceptionType.FORBIDDEN_UPDATE_PROFILE_IMAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -208,6 +209,21 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
           () -> verify(s3Client, times(1))
               .deleteImages(anyList())
       );
+    }
+
+    @Test
+    @DisplayName("member와 memberId가 다른 경우 Exception을 throw한다.")
+    void validateMemberIsNotMe() {
+      //given
+      final Member member = memberRepository.save(memberFixture());
+
+      //when && then
+      final ThrowingCallable testTarget = () ->
+          memberUpdateService.updateMemberProfile(image, member.getId() + 1, member);
+
+      assertThatThrownBy(testTarget)
+          .isInstanceOf(MemberException.class)
+          .hasMessage(FORBIDDEN_UPDATE_PROFILE_IMAGE.errorMessage());
     }
   }
 }

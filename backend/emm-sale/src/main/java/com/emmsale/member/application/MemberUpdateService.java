@@ -53,6 +53,10 @@ public class MemberUpdateService {
       final Long memberId,
       final Member member
   ) {
+    if (member.isNotMe(memberId)) {
+      throw new MemberException(MemberExceptionType.FORBIDDEN_UPDATE_PROFILE_IMAGE);
+    }
+
     if (member.isNotGithubProfile()) {
       final String imageName = s3Client.convertImageName(member.getImageUrl());
       s3Client.deleteImages(List.of(imageName));
