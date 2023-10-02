@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -49,7 +48,6 @@ class PostWritingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.rvPostWritingImageList.adapter = adapter
         setUpBinding()
         setUpPostUploadResult()
         setUpImageUrls()
@@ -57,6 +55,7 @@ class PostWritingActivity : AppCompatActivity() {
 
     private fun setUpBinding() {
         setContentView(binding.root)
+        binding.rvPostWritingImageList.adapter = adapter
         binding.vm = viewModel
         binding.navigateToBack = ::navigateToBack
         binding.showAlbum = ::showAlbum
@@ -76,12 +75,11 @@ class PostWritingActivity : AppCompatActivity() {
                 finish()
             }
 
-            FetchResult.LOADING -> binding.progressBarPostWriting.visibility = View.VISIBLE
-
             FetchResult.ERROR -> {
-                binding.progressBarPostWriting.visibility = View.GONE
                 showToast(getString(R.string.post_writing_upload_error))
             }
+
+            FetchResult.LOADING -> Unit
         }
     }
 
@@ -91,22 +89,20 @@ class PostWritingActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAlbum() {
-        photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-    }
-
     private fun uploadPost() {
-        // 임시로 일단 Activitiy
-        val title = binding.etPostWritingTitle.text.toString()
-        val content = binding.etPostWritingContent.text.toString()
-        if (title.isBlank() || content.isBlank()) {
-            showToast(getString(R.string.post_writing_empty_title_content_message))
+        if (!viewModel.isTitleValid()) {
+            showToast(getString(R.string.post_writing_title_warning))
             return
         }
-        viewModel.uploadPost(
-            title = binding.etPostWritingTitle.text.toString(),
-            content = binding.etPostWritingContent.text.toString(),
-        )
+        if (!viewModel.isContentValid()) {
+            showToast(getString(R.string.post_writing_content_warning))
+            return
+        }
+        viewModel.uploadPost()
+    }
+
+    private fun showAlbum() {
+        photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     private fun navigateToBack() {

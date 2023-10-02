@@ -31,15 +31,20 @@ class PostWritingViewModel @Inject constructor(
         MutableLiveData()
     val postUploadResult: LiveData<Event<PostUploadResultUiState>> = _postUploadResult
 
-    fun uploadPost(
-        title: String,
-        content: String,
-    ) {
+    val title = MutableLiveData<String>()
+    val content = MutableLiveData<String>()
+
+    fun uploadPost() {
         _postUploadResult.value = Event(PostUploadResultUiState(FetchResult.LOADING))
         viewModelScope.launch {
             when (
                 val fetchResult =
-                    postRepository.uploadPost(eventId, title, content, imageUrls.value)
+                    postRepository.uploadPost(
+                        eventId,
+                        title.value ?: DEFAULT_TITLE,
+                        content.value ?: DEFAULT_CONTENT,
+                        imageUrls.value,
+                    )
             ) {
                 is Success ->
                     _postUploadResult.value =
@@ -48,6 +53,14 @@ class PostWritingViewModel @Inject constructor(
                 else -> _postUploadResult.value = Event(PostUploadResultUiState(FetchResult.ERROR))
             }
         }
+    }
+
+    fun isTitleValid(): Boolean {
+        return (title?.value?.length ?: 0) >= MINIMUM_TITLE_LENGTH
+    }
+
+    fun isContentValid(): Boolean {
+        return (content?.value?.length ?: 0) >= MINIMUM_CONTENT_LENGTH
     }
 
     fun fetchImageUrls(imageUrls: List<String>) {
@@ -61,6 +74,10 @@ class PostWritingViewModel @Inject constructor(
 
     companion object {
         const val EVENT_ID_KEY = "EVENT_ID_KEY"
+        private const val DEFAULT_TITLE = ""
+        private const val DEFAULT_CONTENT = ""
         private const val DEFAULT_ID = -1L
+        private const val MINIMUM_TITLE_LENGTH = 1
+        private const val MINIMUM_CONTENT_LENGTH = 8
     }
 }
