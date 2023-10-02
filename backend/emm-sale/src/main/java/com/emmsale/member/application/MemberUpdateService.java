@@ -1,11 +1,13 @@
 package com.emmsale.member.application;
 
+import com.emmsale.image.application.S3Client;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
+import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberUpdateService {
 
   private final MemberRepository memberRepository;
+  private final S3Client s3Client;
 
   public void updateOpenProfileUrl(
       final Member member,
@@ -45,9 +48,20 @@ public class MemberUpdateService {
     memberRepository.deleteById(memberId);
   }
 
-  public String updateMemberProfile(final MultipartFile image, final Long memberId,
-      final Member member) {
+  public String updateMemberProfile(
+      final MultipartFile image,
+      final Long memberId,
+      final Member member
+  ) {
+    if (member.isNotGithubProfile()) {
+      final String imageName = s3Client.convertImageName(member.getImageUrl());
+      s3Client.deleteImages(List.of(imageName));
+    }
 
-    return null;
+    final String imageName = s3Client.uploadImage(image);
+    final String imageUrl = s3Client.convertImageUrl(imageName);
+    member.updateProfile(imageUrl);
+
+    return imageUrl;
   }
 }
