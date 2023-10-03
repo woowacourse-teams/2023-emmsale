@@ -106,7 +106,7 @@ fun ImageView.setCanZoomInRoundedImageUrl(
 )
 fun ImageView.setCanZoomInImageUrl(
     imageUrl: String?,
-    canZoomIn: Boolean,
+    canZoomIn: Boolean = false,
 ) {
     Glide.with(this)
         .load(imageUrl)

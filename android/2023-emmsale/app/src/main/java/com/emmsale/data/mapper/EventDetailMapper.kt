@@ -24,7 +24,7 @@ fun EventDetailResponse.toData(): EventDetail = EventDetail(
     posterImageUrl = imageUrl ?: "",
     type = type,
     paymentType = paymentType.toPaymentType(),
-    imageUrls = imageUrls.map { BuildConfig.IMAGE_URL_PREFIX + it },
+    detailImageUrls = imageUrls.map { BuildConfig.IMAGE_URL_PREFIX + it },
 )
 
 private fun String.toLocalDateTime(): LocalDateTime {

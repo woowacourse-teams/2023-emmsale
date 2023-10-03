@@ -18,5 +18,5 @@ data class EventDetail(
     val posterImageUrl: String?,
     val paymentType: PaymentType,
     val type: String,
-    val imageUrls: List<String>,
+    val detailImageUrls: List<String>,
 )

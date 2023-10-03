@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
-            name="imageUrl"
+            name="detailImageUrl"
             type="String" />
     </data>
 
@@ -15,10 +14,9 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/iv_detail_image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:canZoomIn="@{true}"
-            app:imageUrl="@{imageUrl}"
             android:adjustViewBounds="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
