@@ -78,7 +78,6 @@ class MemberTest {
     @Test
     void falseCase() {
       final Member member = MemberFixture.memberFixture();
-      member.updateProfile("https://avatars.githubusercontent.com/o/v4");
 
       assertFalse(member.isNotGithubProfile());
     }
@@ -86,6 +85,7 @@ class MemberTest {
     @Test
     void trueCase() {
       final Member member = MemberFixture.memberFixture();
+      member.updateProfile("custom profile");
 
       assertTrue(member.isNotGithubProfile());
     }
