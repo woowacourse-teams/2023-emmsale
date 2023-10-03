@@ -1,5 +1,6 @@
 package com.emmsale.data.mapper
 
+import com.emmsale.BuildConfig
 import com.emmsale.data.apiModel.response.EventDetailResponse
 import com.emmsale.data.model.EventDetail
 import com.emmsale.data.model.EventStatus
@@ -23,6 +24,7 @@ fun EventDetailResponse.toData(): EventDetail = EventDetail(
     posterImageUrl = imageUrl ?: "",
     type = type,
     paymentType = paymentType.toPaymentType(),
+    detailImageUrls = imageUrls.map { BuildConfig.IMAGE_URL_PREFIX + it },
 )
 
 private fun String.toLocalDateTime(): LocalDateTime {

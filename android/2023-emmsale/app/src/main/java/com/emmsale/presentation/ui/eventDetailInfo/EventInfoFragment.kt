@@ -10,6 +10,7 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.eventDetail.EventDetailViewModel
+import com.emmsale.presentation.ui.eventDetailInfo.recyclerView.EventInfoImageAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +28,15 @@ class EventInfoFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
+        setUpInformationUrls()
+    }
+
+    private fun setUpInformationUrls() {
+        viewModel.eventDetail.observe(viewLifecycleOwner) { eventDetailUiState ->
+            binding.rvEventInfoImages.setHasFixedSize(true)
+            val detailImageUrls = eventDetailUiState.eventDetail?.detailImageUrls ?: return@observe
+            binding.rvEventInfoImages.adapter = EventInfoImageAdapter(detailImageUrls)
+        }
     }
 
     companion object {
