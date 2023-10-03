@@ -6,8 +6,6 @@ import android.app.NotificationManager
 import com.emmsale.R
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 @HiltAndroidApp
 class KerdyApplication : Application() {
@@ -26,27 +24,11 @@ class KerdyApplication : Application() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         val notificationChannels = listOf(
-            createFollowNotificationChannel(),
             createChildCommentNotificationChannel(),
             createInterestEventNotificationChannel(),
             createMessageNotificationChannel(),
         )
         notificationManager.createNotificationChannels(notificationChannels)
-    }
-
-    private fun createFollowNotificationChannel(): NotificationChannel {
-        val channelId = R.id.id_all_follow_notification_channel
-        val channelName =
-            getString(R.string.kerdyfirebasemessaging_follow_notification_channel_name)
-        val channelDescription =
-            getString(R.string.kerdyfirebasemessaging_follow_notification_channel_description)
-        return NotificationChannel(
-            channelId.toString(),
-            channelName,
-            NotificationManager.IMPORTANCE_HIGH,
-        ).apply {
-            description = channelDescription
-        }
     }
 
     private fun createChildCommentNotificationChannel(): NotificationChannel {
@@ -69,7 +51,7 @@ class KerdyApplication : Application() {
         val channelName =
             getString(R.string.kerdyfirebasemessaging_interest_event_notification_channel_name)
         val channelDescription =
-            getString(R.string.kerdyfirebasemessaging_follow_notification_channel_description)
+            getString(R.string.kerdyfirebasemessaging_interest_event_notification_channel_description)
         return NotificationChannel(
             channelId.toString(),
             channelName,
@@ -97,6 +79,5 @@ class KerdyApplication : Application() {
     companion object {
         lateinit var firebaseAnalytics: FirebaseAnalytics
             private set
-        val applicationScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
     }
 }

@@ -112,14 +112,14 @@ class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
         val endDateString = endDate?.transformToDateString(requireContext(), true) ?: ""
         val durationString = "$startDateString$endDateString"
 
-        if (startDateString != null) {
-            binding.layoutCompetitionFilters.addView(
-                createFilterTag(
-                    title = durationString,
-                    onClick = { viewModel.removeDurationFilteringOption() },
-                ),
-            )
-        }
+        if (startDateString == null) return
+
+        binding.layoutCompetitionFilters.addView(
+            createFilterTag(
+                title = durationString,
+                onClick = { viewModel.removeDurationFilteringOption() },
+            ),
+        )
     }
 
     private fun createFilterTag(title: String, onClick: () -> Unit): FilterTag = filterChipOf {

@@ -54,8 +54,8 @@ class ProfileViewModel @Inject constructor(
     }
 
     override fun refresh() {
-        _profile.value = _profile.value.changeToLoadingState()
         viewModelScope.launch {
+            _profile.value = _profile.value.changeToLoadingState()
             val token = tokenRepository.getToken()
             if (token == null) {
                 _isLogin.value = false
@@ -94,6 +94,7 @@ class ProfileViewModel @Inject constructor(
                     is Unexpected -> throw Throwable(result.error)
                 }
             }
+            _profile.value = _profile.value.copy(isLoading = false)
         }
     }
 
@@ -103,6 +104,7 @@ class ProfileViewModel @Inject constructor(
 
     fun blockMember() {
         viewModelScope.launch {
+            _profile.value = _profile.value.copy(isLoading = true)
             when (val result = memberRepository.blockMember(memberId)) {
                 is Failure -> _uiEvent.value = Event(ProfileUiEvent.BlockFail)
 
@@ -115,11 +117,13 @@ class ProfileViewModel @Inject constructor(
                 is Unexpected ->
                     _uiEvent.value = Event(ProfileUiEvent.UnexpectedError(result.error.toString()))
             }
+            _profile.value = _profile.value.copy(isLoading = false)
         }
     }
 
     fun unblockMember() {
         viewModelScope.launch {
+            _profile.value = _profile.value.copy(isLoading = true)
             val blockId = _blockedMembers.value.find { it.blockedMemberId == memberId }?.blockId
                 ?: return@launch
             when (val result = blockedMemberRepository.deleteBlockedMember(blockId)) {
@@ -133,11 +137,13 @@ class ProfileViewModel @Inject constructor(
                 is Unexpected ->
                     _uiEvent.value = Event(ProfileUiEvent.UnexpectedError(result.error.toString()))
             }
+            _profile.value = _profile.value.copy(isLoading = false)
         }
     }
 
     fun sendMessage(message: String) {
         viewModelScope.launch {
+            _profile.value = _profile.value.copy(isLoading = true)
             when (
                 val result =
                     messageRoomRepository.sendMessage(uid, _profile.value.memberId, message)
@@ -154,6 +160,7 @@ class ProfileViewModel @Inject constructor(
                 is Unexpected ->
                     _uiEvent.value = Event(ProfileUiEvent.UnexpectedError(result.error.toString()))
             }
+            _profile.value = _profile.value.copy(isLoading = false)
         }
     }
 

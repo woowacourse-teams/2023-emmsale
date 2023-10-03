@@ -3,8 +3,8 @@ package com.emmsale.presentation.ui.conferenceList.uiState
 data class ConferenceSelectedFilteringUiState(
     val statusFilteringOptions: List<ConferenceSelectedFilteringOptionUiState> = emptyList(),
     val tagFilteringOptions: List<ConferenceSelectedFilteringOptionUiState> = emptyList(),
-    val startDateFilteringOption: ConferenceSelectedFilteringDateOptionUiState? = null,
-    val endDateFilteringOption: ConferenceSelectedFilteringDateOptionUiState? = null,
+    val selectedStartDate: ConferenceSelectedFilteringDateOptionUiState? = null,
+    val selectedEndDate: ConferenceSelectedFilteringDateOptionUiState? = null,
 ) {
     val selectedStatusFilteringOptionIds: Array<Long> = statusFilteringOptions
         .map { it.id }
@@ -14,7 +14,12 @@ data class ConferenceSelectedFilteringUiState(
         .map { it.id }
         .toTypedArray()
 
-    val selectedFilterSize = statusFilteringOptions.size + tagFilteringOptions.size
+    val isShowFilter: Boolean
+        get() {
+            if (selectedStartDate != null) return true
+            if (selectedEndDate != null) return true
+            return selectedStatusFilteringOptionIds.size + selectedTagFilteringOptionIds.size > 0
+        }
 
     fun removeFilteringOptionBy(filterId: Long): ConferenceSelectedFilteringUiState = copy(
         statusFilteringOptions = statusFilteringOptions.filterNot { filterOption ->
@@ -26,7 +31,7 @@ data class ConferenceSelectedFilteringUiState(
     )
 
     fun clearSelectedDate(): ConferenceSelectedFilteringUiState = copy(
-        startDateFilteringOption = null,
-        endDateFilteringOption = null,
+        selectedStartDate = null,
+        selectedEndDate = null,
     )
 }
