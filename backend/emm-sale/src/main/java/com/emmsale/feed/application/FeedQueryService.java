@@ -129,4 +129,24 @@ public class FeedQueryService {
       throw new FeedException(FeedExceptionType.FORBIDDEN_DELETED_FEED);
     }
   }
+
+  public List<FeedSimpleResponse> findAllMyFeeds(final Member member) {
+    final List<Feed> feeds = feedRepository.findByMember(member);
+
+    final List<Long> feedIds = feeds.stream()
+        .map(Feed::getId)
+        .collect(Collectors.toList());
+
+    final Map<Long, Long> feedCommentCounts = getFeedIdCommentCountMap(feedIds);
+    final Map<Long, List<Image>> feedImages = getFeedImagesMap(feedIds);
+
+    return feeds.stream()
+        .map(feed -> {
+          final List<Image> images = feedImages.getOrDefault(feed.getId(), Collections.emptyList());
+          final Long commentCount = feedCommentCounts.getOrDefault(feed.getId(),
+              DEFAULT_COMMENT_COUNT);
+          return FeedSimpleResponse.from(feed, images, commentCount);
+        })
+        .collect(Collectors.toList());
+  }
 }
