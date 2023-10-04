@@ -17,6 +17,7 @@ drop table if exists kerdy.message;
 drop table if exists kerdy.room;
 drop table if exists kerdy.feed;
 drop table if exists kerdy.image;
+drop table if exists kerdy.notification;
 
 create table activity
 (
@@ -247,6 +248,15 @@ alter table event
 -- 2023-09-20 20:25
 alter table event
     add column organization varchar(50) not null;
+
+-- 2023-09-27 10:54
+create table notification
+(
+    id         bigint auto_increment primary key,
+    type       varchar(20) not null,
+    json_data   mediumtext  not null,
+    is_read    bit         not null
+)
 
 -- 2023-09-29 18:33
 alter table event drop image_url;
