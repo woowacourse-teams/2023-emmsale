@@ -38,7 +38,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val config = configRepository.getConfig()
         val isNotificationReceive = config.isNotificationReceive
         if (!isNotificationReceive || tokenRepository.getToken() == null) return
-
         when (message.data["notificationType"]?.uppercase()) {
             CHILD_COMMENT_NOTIFICATION_TYPE -> {
                 if (config.isCommentNotificationReceive) showChildCommentNotification(message)
@@ -65,8 +64,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
 
-        val childCommentId = message.data["redirectId"]?.toLong() ?: return
-        val createdAt = message.data["createdAt"] ?: return
+        val childCommentId = message.data["triggerCommentId"]?.toLong() ?: return
         val content = message.data["content"] ?: return
         val writerName = message.data["writer"] ?: return
         val writerImageUrl = message.data["writerImageUrl"] ?: return
@@ -84,8 +82,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun showInterestEventNotification(message: RemoteMessage) {
-        val eventId = message.data["redirectId"]?.toLong() ?: return
-        val createdAt = message.data["createdAt"] ?: return
+        val eventId = message.data["redirectEventId"]?.toLong() ?: return
         val title = message.data["title"] ?: return
 
         baseContext.showNotification(
