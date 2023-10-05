@@ -141,7 +141,7 @@ public class EventService {
   private List<Event> filterBySearchKeyword(final String keyword, final Specification<Event> spec) {
     List<Event> events = eventRepository.findAll(spec);
     if (isExistKeyword(keyword)) {
-      final String[] keywords = keyword.split(" ");
+      final String[] keywords = keyword.trim().split(" ");
       events = events.stream()
           .filter(event -> isEventNameContainTokenIn(event, keywords))
           .collect(toList());
