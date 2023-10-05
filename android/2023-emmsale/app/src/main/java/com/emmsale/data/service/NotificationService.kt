@@ -33,17 +33,17 @@ interface NotificationService {
         @Path("request-notification-id") notificationId: Long,
     ): ApiResponse<Unit>
 
-    @GET("/update-notifications")
+    @GET("/notifications")
     suspend fun getUpdatedNotifications(
         @Query("member-id") memberId: Long,
     ): ApiResponse<List<UpdatedNotificationResponse>>
 
-    @PUT("/update-notifications/{update-notification-id}/read")
+    @PUT("/notifications/{notification-id}/read")
     suspend fun updateUpdatedNotificationReadStatus(
-        @Path("update-notification-id") notificationId: Long,
+        @Path("notification-id") notificationId: Long,
     ): ApiResponse<Unit>
 
-    @HTTP(method = "DELETE", path = "/update-notifications", hasBody = true)
+    @HTTP(method = "DELETE", path = "/notifications", hasBody = true)
     suspend fun deleteNotification(
         @Body notificationIds: NotificationListDeleteRequest,
     ): ApiResponse<Unit>

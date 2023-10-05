@@ -8,6 +8,7 @@ class InterestEventNotification(
     createdAt: LocalDateTime,
     isRead: Boolean,
     val eventId: Long,
+    val eventTitle: String,
 ) : UpdatedNotification(
     id = id,
     receiverId = receiverId,

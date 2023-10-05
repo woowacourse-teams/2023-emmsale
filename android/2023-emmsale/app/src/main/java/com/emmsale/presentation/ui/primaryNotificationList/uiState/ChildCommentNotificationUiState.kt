@@ -12,7 +12,6 @@ class ChildCommentNotificationUiState(
     val commentContent: String,
     val parentCommentId: Long,
     val feedId: Long,
-    val feedTitle: String,
     val commenterProfileImageUrl: String,
 ) : PrimaryNotificationUiState(
     notificationId = notificationId,
@@ -28,7 +27,6 @@ class ChildCommentNotificationUiState(
             commentContent == other.commentContent &&
             parentCommentId == other.parentCommentId &&
             feedId == other.feedId &&
-            feedTitle == other.feedTitle &&
             commenterProfileImageUrl == other.commenterProfileImageUrl
     }
 
@@ -38,7 +36,6 @@ class ChildCommentNotificationUiState(
         result = PRIME * result + commentContent.hashCode()
         result = PRIME * result + parentCommentId.hashCode()
         result = PRIME * result + feedId.hashCode()
-        result = PRIME * result + feedTitle.hashCode()
         result = PRIME * result + commenterProfileImageUrl.hashCode()
         return result
     }
@@ -53,7 +50,6 @@ class ChildCommentNotificationUiState(
             commentContent = notification.childCommentContent,
             parentCommentId = notification.parentCommentId,
             feedId = notification.feedId,
-            feedTitle = notification.feedTitle,
             commenterProfileImageUrl = notification.commentProfileImageUrl,
         )
     }

@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UpdatedNotificationResponse(
-    @SerialName("updateNotificationId")
+    @SerialName("notificationId")
     val id: Long,
     @SerialName("receiverId")
     val receiverId: Long,
@@ -17,22 +17,28 @@ data class UpdatedNotificationResponse(
     val type: String,
     @SerialName("isRead")
     val isRead: Boolean,
-    @SerialName("commentTypeNotification")
-    val commentTypeNotification: CommentTypeNotificationResponse? = null,
+    @SerialName("notificationInformation")
+    val notificationInformation: String? = null,
 )
 
 @Serializable
 data class CommentTypeNotificationResponse(
-    @SerialName("content")
-    val childCommentContent: String,
-    @SerialName("feedTitle")
-    val feedTitle: String,
-    @SerialName("commenterImageUrl")
+    @SerialName("writer")
+    val writer: String,
+    @SerialName("writerImageUrl")
     val commentProfileImageUrl: String,
     @SerialName("parentId")
     val parentId: Long = -1L,
     @SerialName("feedId")
     val feedId: Long = -1L,
+    @SerialName("content")
+    val content: String = "",
+)
+
+@Serializable
+data class EventTypeNotificationResponse(
+    @SerialName("title")
+    val eventTitle: String,
 )
 
 @Serializable
