@@ -24,10 +24,6 @@ import com.emmsale.message_room.application.RoomQueryService;
 import com.emmsale.notification.application.FcmTokenRegisterService;
 import com.emmsale.notification.application.NotificationCommandService;
 import com.emmsale.notification.application.NotificationQueryService;
-import com.emmsale.notification.application.RequestNotificationCommandService;
-import com.emmsale.notification.application.RequestNotificationQueryService;
-import com.emmsale.notification.application.UpdateNotificationCommandService;
-import com.emmsale.notification.application.UpdateNotificationQueryService;
 import com.emmsale.report.application.ReportCommandService;
 import com.emmsale.report.application.ReportQueryService;
 import com.emmsale.resolver.MemberArgumentResolver;
@@ -68,14 +64,6 @@ abstract class MockMvcTestHelper {
   protected ReportCommandService reportCommandService;
   @MockBean
   protected ReportQueryService reportQueryService;
-  @MockBean
-  protected UpdateNotificationQueryService updateNotificationQueryService;
-  @MockBean
-  protected UpdateNotificationCommandService updateNotificationCommandService;
-  @MockBean
-  protected RequestNotificationCommandService requestNotificationCommandService;
-  @MockBean
-  protected RequestNotificationQueryService requestNotificationQueryService;
   @MockBean
   protected FcmTokenRegisterService fcmTokenRegisterService;
   @MockBean
