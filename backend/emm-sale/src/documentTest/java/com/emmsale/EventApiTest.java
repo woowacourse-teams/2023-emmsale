@@ -127,6 +127,9 @@ class EventApiTest extends MockMvcTestHelper {
         RequestDocumentation.parameterWithName("tags").description("필터링하려는 태그(option)").optional(),
         RequestDocumentation.parameterWithName("statuses")
             .description("필터링하려는 상태(UPCOMING, IN_PROGRESS, ENDED)(option)")
+            .optional(),
+        RequestDocumentation.parameterWithName("keyword")
+            .description("검색하려는 키워드")
             .optional()
     );
 
@@ -156,11 +159,6 @@ class EventApiTest extends MockMvcTestHelper {
     );
 
     final List<EventResponse> eventResponses = List.of(
-        new EventResponse(1L, "인프콘 2023", LocalDateTime.parse("2023-06-03T12:00:00"),
-            LocalDateTime.parse("2023-09-03T12:00:00"),
-            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"), "IN_PROGRESS", "ENDED",
-            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3, -30, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue()),
         new EventResponse(5L, "웹 컨퍼런스", LocalDateTime.parse("2023-07-03T12:00:00"),
             LocalDateTime.parse("2023-08-03T12:00:00"), List.of("백엔드", "프론트엔드"),
             "IN_PROGRESS", "IN_PROGRESS",
@@ -184,6 +182,7 @@ class EventApiTest extends MockMvcTestHelper {
             .param("start_date", "2023-07-01")
             .param("end_date", "2023-07-31")
             .param("statuses", "UPCOMING,IN_PROGRESS")
+            .param("keyword", "컨퍼")
         )
         .andExpect(status().isOk())
         .andDo(MockMvcRestDocumentation.document("find-events", requestParameters, responseFields));
