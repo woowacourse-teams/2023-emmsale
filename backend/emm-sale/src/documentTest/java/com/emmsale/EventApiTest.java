@@ -174,7 +174,7 @@ class EventApiTest extends MockMvcTestHelper {
     Mockito.when(eventService.findEvents(any(EventType.class),
         any(LocalDate.class), eq("2023-07-01"),
         eq("2023-07-31"),
-        eq(null), any())).thenReturn(eventResponses);
+        eq(null), any(), eq("컨퍼"))).thenReturn(eventResponses);
 
     // when & then
     mockMvc.perform(get("/events")

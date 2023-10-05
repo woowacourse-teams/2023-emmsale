@@ -73,7 +73,7 @@ public class EventService {
   @Transactional(readOnly = true)
   public List<EventResponse> findEvents(final EventType category,
       final LocalDate nowDate, final String startDate, final String endDate,
-      final List<String> tagNames, final List<EventStatus> statuses) {
+      final List<String> tagNames, final List<EventStatus> statuses, final String keyword) {
     Specification<Event> spec = Specification.where(filterByCategory(category));
 
     if (isExistTagNames(tagNames)) {
@@ -87,7 +87,7 @@ public class EventService {
       validateEndDateAfterDateStart(startDateTime, endDateTime);
       spec = spec.and(EventSpecification.filterByPeriod(startDateTime, endDateTime));
     }
-    final List<Event> events = eventRepository.findAll(spec);
+    final List<Event> events = filterBySearchKeyword(keyword, spec);
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events);
 
@@ -136,6 +136,30 @@ public class EventService {
     if (endDate.isBefore(startDate)) {
       throw new EventException(EventExceptionType.START_DATE_AFTER_END_DATE);
     }
+  }
+
+  private List<Event> filterBySearchKeyword(final String keyword, final Specification<Event> spec) {
+    List<Event> events = eventRepository.findAll(spec);
+    if (isExistKeyword(keyword)) {
+      final String[] keywords = keyword.split(" ");
+      events = events.stream()
+          .filter(event -> isEventNameContainTokenIn(event, keywords))
+          .collect(toList());
+    }
+    return events;
+  }
+
+  private boolean isExistKeyword(final String keyword) {
+    return keyword != null && !keyword.trim().isEmpty();
+  }
+
+  private boolean isEventNameContainTokenIn(final Event event, final String[] keywords) {
+    for (String token : keywords) {
+      if (event.getName().contains(token)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
