@@ -16,6 +16,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.notification.NotificationFixture;
 import com.emmsale.notification.api.NotificationApi;
 import com.emmsale.notification.application.dto.NotificationDetailResponse;
 import com.emmsale.notification.application.dto.NotificationDeleteRequest;
@@ -34,27 +35,6 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 
 @WebMvcTest(NotificationApi.class)
 class NotificationApiTest extends MockMvcTestHelper {
-
-  private String commentJsonData1, commentJsonData2, eventJsonData1;
-
-  @BeforeEach
-  void setUp() {
-    commentJsonData1 = "{"
-        + "\"content\":\"content\","
-        + "\"writer\":\"writer\","
-        + "\"writerImageUrl\":\"imageUrl\""
-        + "}";
-
-    eventJsonData1 = "{"
-        + "\"title\":\"title\""
-        + "}";
-
-    commentJsonData2 = "{"
-        + "\"content\":\"content\","
-        + "\"writer\":\"writer\","
-        + "\"writerImageUrl\":\"imageUrl\""
-        + "}";
-  }
 
   @Test
   @DisplayName("find() : 현재 로그인 한 사용자가 받은 알림들을 성공적으로 조회한다면 200 OK를 반환할 수 있다.")
@@ -79,7 +59,7 @@ class NotificationApiTest extends MockMvcTestHelper {
         new NotificationDetailResponse(
             1L,
             NotificationType.COMMENT,
-            commentJsonData1,
+            NotificationFixture.commentJsonData(),
             false,
             1L,
             225L,
@@ -88,7 +68,7 @@ class NotificationApiTest extends MockMvcTestHelper {
         new NotificationDetailResponse(
             1L,
             NotificationType.EVENT,
-            eventJsonData1,
+            NotificationFixture.eventJsonData(),
             false,
             2L,
             225L,
