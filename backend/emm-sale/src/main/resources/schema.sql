@@ -266,5 +266,5 @@ alter table notification
     add column redirect_id bigint default 0;
 
 alter table notification
-    add column created_at datetime(6);
+    add column created_at datetime(6) default current_timestamp(6);
 
