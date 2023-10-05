@@ -155,11 +155,11 @@ public class EventService {
 
   private boolean isEventNameContainTokenIn(final Event event, final String[] keywords) {
     for (String token : keywords) {
-      if (event.getName().contains(token)) {
-        return true;
+      if (!event.getName().contains(token)) {
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
