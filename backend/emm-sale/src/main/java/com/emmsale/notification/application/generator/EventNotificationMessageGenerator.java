@@ -24,16 +24,11 @@ public class EventNotificationMessageGenerator implements NotificationMessageGen
       final ObjectMapper objectMapper,
       final MemberRepository memberRepository
   ) {
-    final String jsonData = notification.getJsonData();
-
     try {
-
-      final Data data = objectMapper.readValue(jsonData, Data.class);
-
-      validateIsExistedReceiver(memberRepository, Long.valueOf(data.getReceiverId()));
+      validateIsExistedReceiver(memberRepository, notification.getReceiverId());
 
       final EventNotificationMessage message = new EventNotificationMessage(
-          DEFAULT_VALIDATE_ONLY, new Message(data, targetToken)
+          DEFAULT_VALIDATE_ONLY, new Message(Data.from(notification), targetToken)
       );
 
       return objectMapper.writeValueAsString(message);
