@@ -14,11 +14,10 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
-//얘 @Component로 바꾸는 거 어떤가요? @Service보단 @Component가 더 적절한 것 같아요.
+@Component
 public class S3Client {
 
   private static final String EXTENSION_DELIMITER = ".";
