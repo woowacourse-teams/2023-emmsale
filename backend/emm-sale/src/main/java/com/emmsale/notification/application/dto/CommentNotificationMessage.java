@@ -1,6 +1,10 @@
 package com.emmsale.notification.application.dto;
 
+import com.emmsale.notification.domain.Notification;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -31,5 +35,20 @@ public class CommentNotificationMessage {
     private final String content;
     private final String writer;
     private final String writerImageUrl;
+
+    public static Data from(final Notification notification) {
+      final JsonObject jsonData = JsonParser.parseString(notification.getJsonData())
+          .getAsJsonObject();
+
+      return new Data(
+          notification.getReceiverId().toString(),
+          notification.getRedirectId().toString(),
+          notification.getType().name(),
+          notification.getCreatedAt().toString(),
+          jsonData.get("content").getAsString(),
+          jsonData.get("writer").getAsString(),
+          jsonData.get("writerImageUrl").getAsString()
+      );
+    }
   }
 }
