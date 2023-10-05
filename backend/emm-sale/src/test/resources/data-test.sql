@@ -17,6 +17,7 @@ truncate table message;
 truncate table room;
 truncate table feed;
 truncate table image;
+truncate table notification;
 
 insert into activity(id, type, name)
 values (1, 'CLUB', 'YAPP');

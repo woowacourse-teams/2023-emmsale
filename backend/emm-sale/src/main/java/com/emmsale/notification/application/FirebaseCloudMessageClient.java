@@ -6,12 +6,16 @@ import static com.emmsale.notification.exception.NotificationExceptionType.NOT_F
 
 import com.emmsale.event_publisher.MessageNotificationEvent;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.notification.application.generator.CommentNotificationMessageGenerator;
+import com.emmsale.notification.application.generator.EventNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.MessageNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.NotificationMessageGenerator;
 import com.emmsale.notification.application.generator.RequestNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.UpdateNotificationMessageGenerator;
 import com.emmsale.notification.domain.FcmToken;
 import com.emmsale.notification.domain.FcmTokenRepository;
+import com.emmsale.notification.domain.Notification;
+import com.emmsale.notification.domain.NotificationType;
 import com.emmsale.notification.domain.RequestNotification;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.exception.NotificationException;
@@ -19,6 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +47,12 @@ public class FirebaseCloudMessageClient {
   private static final String POSTFIX_FCM_REQUEST_URL = "/messages:send";
   private static final String FIREBASE_KEY_PATH = "kerdy-submodule/firebase-kerdy.json";
   private static final String GOOGLE_AUTH_URL = "https://www.googleapis.com/auth/cloud-platform";
+  private static final Map<NotificationType, Function<Notification, NotificationMessageGenerator>> GENERATOR_MAP =
+      Map.of(
+          NotificationType.EVENT, EventNotificationMessageGenerator::new,
+          NotificationType.COMMENT, CommentNotificationMessageGenerator::new
+      );
+
 
   private final ObjectMapper objectMapper;
   private final MemberRepository memberRepository;
@@ -68,6 +80,13 @@ public class FirebaseCloudMessageClient {
     sendMessageTo(
         messageNotificationEvent.getReceiverId(),
         new MessageNotificationMessageGenerator(messageNotificationEvent)
+    );
+  }
+
+  public void sendMessageTo(final Notification notification, final Long receiverId) {
+    sendMessageTo(
+        receiverId,
+        GENERATOR_MAP.get(notification.getType()).apply(notification)
     );
   }
 

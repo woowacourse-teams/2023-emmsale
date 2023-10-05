@@ -3,6 +3,7 @@ package com.emmsale.comment.application;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -19,6 +20,8 @@ import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.notification.domain.Notification;
+import com.emmsale.notification.domain.NotificationRepository;
 import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.domain.UpdateNotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +43,8 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
   private MemberRepository memberRepository;
   @Autowired
   private UpdateNotificationRepository updateNotificationRepository;
+  @Autowired
+  private NotificationRepository notificationRepository;
   private Member 댓글_작성자1;
   private Member 댓글_작성자2;
   private Feed feed;
@@ -70,8 +75,8 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
     //then
     assertAll(
         () -> verify(firebaseCloudMessageClient, times(1)).sendMessageTo(
-            any(UpdateNotification.class)),
-        () -> assertEquals(1, updateNotificationRepository.findAll().size())
+            any(Notification.class), anyLong()),
+        () -> assertEquals(1, notificationRepository.findAll().size())
     );
   }
 
@@ -93,8 +98,8 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
     //then
     assertAll(
         () -> verify(firebaseCloudMessageClient, times(1)).sendMessageTo(
-            any(UpdateNotification.class)),
-        () -> assertEquals(1, updateNotificationRepository.findAll().size())
+            any(Notification.class), anyLong()),
+        () -> assertEquals(1, notificationRepository.findAll().size())
     );
   }
 }
