@@ -260,10 +260,10 @@ create table notification
 
 -- 2023-09-30 01:24
 alter table notification
-    add column receiver_id bigint not null;
+    add column receiver_id bigint default 0;
 
 alter table notification
-    add column redirect_id bigint not null;
+    add column redirect_id bigint default 0;
 
 alter table notification
     add column created_at datetime(6);
