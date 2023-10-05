@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class NotificationAllResponse {
+public class NotificationDetailResponse {
 
   private final Long notificationId;
   private final NotificationType type;
@@ -22,8 +22,8 @@ public class NotificationAllResponse {
   @JsonFormat(pattern = "yyyy:MM:dd:HH:mm:ss")
   private final LocalDateTime createdAt;
 
-  public static NotificationAllResponse from(final Notification notification) {
-    return new NotificationAllResponse(
+  public static NotificationDetailResponse from(final Notification notification) {
+    return new NotificationDetailResponse(
         notification.getId(),
         notification.getType(),
         notification.getJsonData(),

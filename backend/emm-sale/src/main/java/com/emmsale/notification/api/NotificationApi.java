@@ -3,7 +3,7 @@ package com.emmsale.notification.api;
 import com.emmsale.member.domain.Member;
 import com.emmsale.notification.application.NotificationCommandService;
 import com.emmsale.notification.application.NotificationQueryService;
-import com.emmsale.notification.application.dto.NotificationAllResponse;
+import com.emmsale.notification.application.dto.NotificationDetailResponse;
 import com.emmsale.notification.application.dto.NotificationDeleteRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class NotificationApi {
   private final NotificationCommandService notificationCommandService;
 
   @GetMapping("/notifications")
-  public List<NotificationAllResponse> find(
+  public List<NotificationDetailResponse> find(
       final Member authMember,
       @RequestParam("member-id") final Long loginMemberId
   ) {

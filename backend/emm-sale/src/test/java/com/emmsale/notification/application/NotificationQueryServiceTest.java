@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.notification.application.dto.NotificationAllResponse;
+import com.emmsale.notification.application.dto.NotificationDetailResponse;
 import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.NotificationRepository;
 import com.emmsale.notification.domain.NotificationType;
@@ -76,13 +76,13 @@ class NotificationQueryServiceTest extends ServiceIntegrationTestHelper {
         )
     );
 
-    final List<NotificationAllResponse> expect = List.of(
-        NotificationAllResponse.from(notification1),
-        NotificationAllResponse.from(notification2)
+    final List<NotificationDetailResponse> expect = List.of(
+        NotificationDetailResponse.from(notification1),
+        NotificationDetailResponse.from(notification2)
     );
 
     //when
-    final List<NotificationAllResponse> actual = notificationQueryService.findAllByMemberId(
+    final List<NotificationDetailResponse> actual = notificationQueryService.findAllByMemberId(
         loginMember, loginMember.getId()
     );
 

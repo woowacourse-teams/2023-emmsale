@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.notification.api.NotificationApi;
-import com.emmsale.notification.application.dto.NotificationAllResponse;
+import com.emmsale.notification.application.dto.NotificationDetailResponse;
 import com.emmsale.notification.application.dto.NotificationDeleteRequest;
 import com.emmsale.notification.domain.NotificationType;
 import java.time.LocalDateTime;
@@ -75,8 +75,8 @@ class NotificationApiTest extends MockMvcTestHelper {
         fieldWithPath("[].createdAt").description("알림 생성 시간")
     );
 
-    final List<NotificationAllResponse> responses = List.of(
-        new NotificationAllResponse(
+    final List<NotificationDetailResponse> responses = List.of(
+        new NotificationDetailResponse(
             1L,
             NotificationType.COMMENT,
             commentJsonData1,
@@ -85,7 +85,7 @@ class NotificationApiTest extends MockMvcTestHelper {
             225L,
             LocalDateTime.now()
         ),
-        new NotificationAllResponse(
+        new NotificationDetailResponse(
             1L,
             NotificationType.EVENT,
             eventJsonData1,
