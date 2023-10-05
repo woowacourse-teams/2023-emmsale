@@ -1,7 +1,6 @@
 package com.emmsale.presentation.service
 
 import android.content.Intent
-import android.util.Log
 import com.emmsale.R
 import com.emmsale.data.common.callAdapter.Failure
 import com.emmsale.data.common.callAdapter.NetworkError
@@ -39,7 +38,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val config = configRepository.getConfig()
         val isNotificationReceive = config.isNotificationReceive
         if (!isNotificationReceive || tokenRepository.getToken() == null) return
-        Log.d("wooseok", message.data.toString())
+
         when (message.data["notificationType"]?.uppercase()) {
             CHILD_COMMENT_NOTIFICATION_TYPE -> {
                 if (config.isCommentNotificationReceive) showChildCommentNotification(message)
