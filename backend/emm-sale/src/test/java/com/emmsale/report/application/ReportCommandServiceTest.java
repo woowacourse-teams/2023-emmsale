@@ -15,8 +15,6 @@ import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.notification.domain.RequestNotification;
-import com.emmsale.notification.domain.RequestNotificationRepository;
 import com.emmsale.report.application.dto.ReportCreateRequest;
 import com.emmsale.report.application.dto.ReportCreateResponse;
 import com.emmsale.report.domain.ReportType;
@@ -47,8 +45,6 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
   private CommentRepository commentRepository;
   @Autowired
   private RecruitmentPostRepository recruitmentPostRepository;
-  @Autowired
-  private RequestNotificationRepository requestNotificationRepository;
 
   @BeforeEach
   void init() {
@@ -62,8 +58,6 @@ class ReportCommandServiceTest extends ServiceIntegrationTestHelper {
     commentRepository.save(Comment.createRoot(feed, 신고_대상자, "상대방에게 불쾌감을 줄 수 있는 내용"));
     commentRepository.save(Comment.createRoot(feed, 신고자, "그냥 댓글"));
     recruitmentPostRepository.save(new RecruitmentPost(신고_대상자, event, "사회적 논란을 불러일으킬 수 있는 내용"));
-    requestNotificationRepository.save(
-        new RequestNotification(신고_대상자_ID, 신고자_ID, event.getId(), "모욕감을 줄 수 있는 내용"));
   }
 
   @Nested
