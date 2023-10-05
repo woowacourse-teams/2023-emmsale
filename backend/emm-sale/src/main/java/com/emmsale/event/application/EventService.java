@@ -1,6 +1,8 @@
 package com.emmsale.event.application;
 
 import static com.emmsale.event.domain.repository.EventSpecification.filterByCategory;
+import static com.emmsale.event.domain.repository.EventSpecification.filterByNameContainsSearchKeywords;
+import static com.emmsale.event.domain.repository.EventSpecification.filterByPeriod;
 import static com.emmsale.event.domain.repository.EventSpecification.filterByTags;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
@@ -15,7 +17,6 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.repository.EventRepository;
-import com.emmsale.event.domain.repository.EventSpecification;
 import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
@@ -76,22 +77,25 @@ public class EventService {
       final List<String> tagNames, final List<EventStatus> statuses, final String keyword) {
     Specification<Event> spec = Specification.where(filterByCategory(category));
 
-    if (isExistTagNames(tagNames)) {
-      validateTags(tagNames);
-      spec = spec.and(filterByTags(tagNames));
-    }
+    spec = filterByTagIfExist(tagNames, spec);
+    spec = filterByDateIfExist(startDate, endDate, spec);
+    spec = filterByKeywordIfExist(keyword, spec);
 
-    if (isExistFilterDate(startDate, endDate)) {
-      final LocalDateTime startDateTime = validateStartDate(startDate);
-      final LocalDateTime endDateTime = validateEndDate(endDate);
-      validateEndDateAfterDateStart(startDateTime, endDateTime);
-      spec = spec.and(EventSpecification.filterByPeriod(startDateTime, endDateTime));
-    }
-    final List<Event> events = filterBySearchKeyword(keyword, spec);
+    List<Event> events = eventRepository.findAll(spec);
+
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events);
 
     return filterByStatuses(nowDate, statuses, eventsForEventStatus);
+  }
+
+  private Specification<Event> filterByTagIfExist(final List<String> tagNames,
+      Specification<Event> spec) {
+    if (isExistTagNames(tagNames)) {
+      validateTags(tagNames);
+      spec = spec.and(filterByTags(tagNames));
+    }
+    return spec;
   }
 
   private boolean isExistTagNames(final List<String> tagNames) {
@@ -103,6 +107,17 @@ public class EventService {
     if (tags.size() != tagNames.size()) {
       throw new TagException(NOT_FOUND_TAG);
     }
+  }
+
+  private Specification<Event> filterByDateIfExist(final String startDate, final String endDate,
+      Specification<Event> spec) {
+    if (isExistFilterDate(startDate, endDate)) {
+      final LocalDateTime startDateTime = validateStartDate(startDate);
+      final LocalDateTime endDateTime = validateEndDate(endDate);
+      validateEndDateAfterDateStart(startDateTime, endDateTime);
+      spec = spec.and(filterByPeriod(startDateTime, endDateTime));
+    }
+    return spec;
   }
 
   private boolean isExistFilterDate(final String startDate, final String endDate) {
@@ -138,28 +153,17 @@ public class EventService {
     }
   }
 
-  private List<Event> filterBySearchKeyword(final String keyword, final Specification<Event> spec) {
-    List<Event> events = eventRepository.findAll(spec);
+  private Specification<Event> filterByKeywordIfExist(final String keyword,
+      Specification<Event> spec) {
     if (isExistKeyword(keyword)) {
       final String[] keywords = keyword.trim().split(" ");
-      events = events.stream()
-          .filter(event -> isEventNameContainTokenIn(event, keywords))
-          .collect(toList());
+      spec = spec.and(filterByNameContainsSearchKeywords(keywords));
     }
-    return events;
+    return spec;
   }
 
   private boolean isExistKeyword(final String keyword) {
     return keyword != null && !keyword.trim().isEmpty();
-  }
-
-  private boolean isEventNameContainTokenIn(final Event event, final String[] keywords) {
-    for (String token : keywords) {
-      if (!event.getName().contains(token)) {
-        return false;
-      }
-    }
-    return true;
   }
 
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
