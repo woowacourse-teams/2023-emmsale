@@ -17,12 +17,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -94,5 +96,15 @@ public class MemberApi {
   ) {
     memberUpdateService.deleteMember(member, memberId);
     return ResponseEntity.noContent().build();
+  }
+
+  @PatchMapping("/members/{memberId}/profile")
+  public ResponseEntity<String> updateProfile(
+      @PathVariable final Long memberId,
+      final MultipartFile image,
+      final Member member
+  ) {
+    final String imageUrl = memberUpdateService.updateMemberProfile(image, memberId, member);
+    return ResponseEntity.ok(imageUrl);
   }
 }
