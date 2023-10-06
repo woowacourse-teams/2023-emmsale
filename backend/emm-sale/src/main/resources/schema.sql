@@ -252,8 +252,19 @@ alter table event
 -- 2023-09-27 10:54
 create table notification
 (
-    id         bigint auto_increment primary key,
-    type       varchar(20) not null,
-    json_data   mediumtext  not null,
-    is_read    bit         not null
-)
+    id        bigint auto_increment primary key,
+    type      varchar(20) not null,
+    json_data mediumtext  not null,
+    is_read   bit         not null
+);
+
+-- 2023-09-30 01:24
+alter table notification
+    add column receiver_id bigint default 0;
+
+alter table notification
+    add column redirect_id bigint default 0;
+
+alter table notification
+    add column created_at datetime(6) default current_timestamp(6);
+
