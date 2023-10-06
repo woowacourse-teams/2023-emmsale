@@ -47,4 +47,20 @@ public class CommentNotificationEvent extends NotificationEvent {
         trigger.getParentIdOrSelfId()
     );
   }
+
+  public static CommentNotificationEvent of(final Comment comment, final Member receiver) {
+    final Member sender = comment.getMember();
+
+    return new CommentNotificationEvent(
+        receiver.getId(),
+        comment.getId(),
+        LocalDateTime.now(),
+        UPDATE_NOTIFICATION_COMMENT_TYPE,
+        comment.getContent(),
+        sender.getName(),
+        sender.getImageUrl(),
+        comment.getFeed().getId(),
+        comment.getParentIdOrSelfId()
+    );
+  }
 }

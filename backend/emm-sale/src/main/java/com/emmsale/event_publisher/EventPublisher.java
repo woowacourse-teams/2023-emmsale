@@ -25,14 +25,22 @@ public class EventPublisher {
   private final MemberRepository memberRepository;
   private final CommentRepository commentRepository;
 
-  public void publish(final Comment trigger, final Member loginMember) {
+  public void publish(final Comment trigger) {
+    final Member sender = trigger.getMember();
+
     final Set<Comment> notificationCommentCandidates = trigger.getParent()
-        .map(parent -> findRelatedCommentsExcludingLoginMember(loginMember, parent))
+        .map(parent -> findRelatedCommentsExcludingLoginMember(sender, parent))
         .orElse(Collections.emptySet());
 
     notificationCommentCandidates.stream()
         .map(it -> CommentNotificationEvent.of(it, trigger))
         .forEach(applicationEventPublisher::publishEvent);
+  }
+
+  public void publish(final Comment comment, final Member receiver) {
+    if (comment.isNotOwner(receiver.getId())) {
+      applicationEventPublisher.publishEvent(CommentNotificationEvent.of(comment, receiver));
+    }
   }
 
   private Set<Comment> findRelatedCommentsExcludingLoginMember(
