@@ -27,7 +27,7 @@ data class CommentTypeNotificationResponse(
     val writer: String,
     @SerialName("writerImageUrl")
     val commentProfileImageUrl: String,
-    @SerialName("parentId")
+    @SerialName("parentCommentId")
     val parentId: Long = -1L,
     @SerialName("feedId")
     val feedId: Long = -1L,

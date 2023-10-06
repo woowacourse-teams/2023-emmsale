@@ -37,7 +37,7 @@ fun UpdatedNotificationResponse.toData(): UpdatedNotification = when (type) {
             Json.decodeFromString<CommentTypeNotificationResponse>(
                 notificationInformation ?: throw IllegalArgumentException("코멘트 알림에 정보가 없어요"),
             )
-        Log.d("wooseok", commentNotificationInformation.content)
+        Log.d("wooseok", commentNotificationInformation.toString())
         ChildCommentNotification(
             id = id,
             receiverId = receiverId,
