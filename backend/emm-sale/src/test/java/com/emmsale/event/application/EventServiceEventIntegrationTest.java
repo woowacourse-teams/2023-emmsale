@@ -71,7 +71,6 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
             new TagRequest(안드로이드().getName()),
             new TagRequest(백엔드().getName())
         ),  // Assuming you don't have a direct TagRequest list from Event.
-        "https://image.url",
         EventType.CONFERENCE,
         EventMode.ON_OFFLINE,
         PaymentType.FREE_PAID,
@@ -116,7 +115,6 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
         List.of(
             new TagRequest(IOS().getName())
         ),  // Assuming you don't have a direct TagRequest list from Event.
-        "https://image.url",
         EventType.CONFERENCE,
         EventMode.ON_OFFLINE,
         PaymentType.FREE_PAID,
@@ -151,7 +149,6 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
         List.of(
             new TagRequest(IOS().getName())
         ),  // Assuming you don't have a direct TagRequest list from Event.
-        "https://image.url",
         EventType.CONFERENCE,
         EventMode.ON_OFFLINE,
         PaymentType.FREE_PAID,
