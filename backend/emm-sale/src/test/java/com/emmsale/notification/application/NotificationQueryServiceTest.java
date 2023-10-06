@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.notification.NotificationFixture;
 import com.emmsale.notification.application.dto.NotificationDetailResponse;
 import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.NotificationRepository;
@@ -25,27 +26,6 @@ class NotificationQueryServiceTest extends ServiceIntegrationTestHelper {
   @Autowired
   private MemberRepository memberRepository;
 
-  private String commentJsonData1, commentJsonData2, eventJsonData1;
-
-  @BeforeEach
-  void setUp() {
-    commentJsonData1 = "{"
-        + "\"content\":\"content\","
-        + "\"writer\":\"writer\","
-        + "\"writerImageUrl\":\"imageUrl\""
-        + "}";
-
-    eventJsonData1 = "{"
-        + "\"title\":\"title\""
-        + "}";
-
-    commentJsonData2 = "{"
-        + "\"content\":\"content\","
-        + "\"writer\":\"writer\","
-        + "\"writerImageUrl\":\"imageUrl\""
-        + "}";
-  }
-
   @Test
   @DisplayName("findAllByMemberId() : 해당 사용자가 받은 알림들을 모두 조회할 수 있다.")
   void test_findAllByMemberId() throws Exception {
@@ -56,7 +36,7 @@ class NotificationQueryServiceTest extends ServiceIntegrationTestHelper {
         new Notification(
             NotificationType.COMMENT, loginMember.getId(),
             3333L, LocalDateTime.now(),
-            commentJsonData1
+            NotificationFixture.commentJsonData()
         )
     );
 
@@ -64,7 +44,7 @@ class NotificationQueryServiceTest extends ServiceIntegrationTestHelper {
         new Notification(
             NotificationType.EVENT, loginMember.getId(),
             3333L, LocalDateTime.now(),
-            eventJsonData1
+            NotificationFixture.eventJsonData()
         )
     );
 
@@ -72,7 +52,7 @@ class NotificationQueryServiceTest extends ServiceIntegrationTestHelper {
         new Notification(
             NotificationType.COMMENT, 3223L,
             3333L, LocalDateTime.now(),
-            commentJsonData2
+            NotificationFixture.commentJsonData()
         )
     );
 
