@@ -5,12 +5,19 @@ package com.emmsale.presentation.common.extension
 import android.content.Context
 import androidx.annotation.StringRes
 import com.emmsale.R
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.abs
+
+private const val MIN_HOUR = 1
+private const val MAX_HOUR = 24
+private const val MAX_MINUTE = 60
 
 fun LocalDateTime.toRelativeTime(context: Context): String {
     val currentDateTime = LocalDateTime.now()
+    val duration = Duration.between(currentDateTime, this)
 
     if (year < currentDateTime.year) {
         return format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
@@ -23,29 +30,21 @@ fun LocalDateTime.toRelativeTime(context: Context): String {
         return format(DateTimeFormatter.ofPattern("MM.dd"))
     }
 
-    if (year == currentDateTime.year &&
-        monthValue == currentDateTime.monthValue &&
-        dayOfMonth == currentDateTime.dayOfMonth &&
-        hour != currentDateTime.hour
-    ) {
+    if (duration.toHours() in MIN_HOUR..MAX_HOUR) {
         val dateFormatter = DateTimeFormatter.ofPattern(
             context.getString(
                 R.string.before_hour_format,
-                currentDateTime.hour.minus(hour),
+                abs(duration.toHours()),
             ),
         )
         return format(dateFormatter)
     }
 
-    if (year == currentDateTime.year &&
-        monthValue == currentDateTime.monthValue &&
-        dayOfMonth == currentDateTime.dayOfMonth &&
-        hour == currentDateTime.hour
-    ) {
+    if (duration.toHours() < MIN_HOUR) {
         val dateFormatter = DateTimeFormatter.ofPattern(
             context.getString(
                 R.string.before_minute_format,
-                currentDateTime.minute.minus(minute),
+                abs(duration.toMinutes()),
             ),
         )
         return format(dateFormatter)
