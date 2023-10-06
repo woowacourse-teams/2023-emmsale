@@ -271,3 +271,8 @@ alter table notification
 
 alter table notification
     add column created_at datetime(6) default current_timestamp(6);
+
+-- 2023-10-05 17:06
+drop table update_notification;
+
+drop table request_notification;

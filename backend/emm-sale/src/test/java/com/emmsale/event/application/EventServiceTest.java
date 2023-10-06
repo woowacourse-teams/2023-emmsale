@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
@@ -48,7 +49,7 @@ import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.image.domain.Image;
 import com.emmsale.image.domain.ImageType;
 import com.emmsale.image.domain.repository.ImageRepository;
-import com.emmsale.notification.domain.UpdateNotification;
+import com.emmsale.notification.domain.Notification;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
@@ -597,7 +598,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           organization
       );
 
-      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
+      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
 
       //when
       final EventDetailResponse response = eventService.addEvent(request, mockMultipartFiles, now);
@@ -641,7 +642,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           organization
       );
 
-      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
+      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
@@ -675,7 +676,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           organization
       );
 
-      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
+      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
