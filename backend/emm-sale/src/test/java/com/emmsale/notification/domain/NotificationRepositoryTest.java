@@ -3,6 +3,7 @@ package com.emmsale.notification.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.emmsale.helper.JpaRepositorySliceTestHelper;
+import com.emmsale.notification.NotificationFixture;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,35 +23,19 @@ class NotificationRepositoryTest extends JpaRepositorySliceTestHelper {
 
   @BeforeEach
   void setUp() {
-    final String commentJsonData1 = "{"
-        + "\"content\":\"content\","
-        + "\"writer\":\"writer\","
-        + "\"writerImageUrl\":\"imageUrl\""
-        + "}";
-
-    final String eventJsonData1 = "{"
-        + "\"title\":\"title\""
-        + "}";
-
-    final String commentJsonData2 = "{"
-        + "\"content\":\"content\","
-        + "\"writer\":\"writer\","
-        + "\"writerImageUrl\":\"imageUrl\""
-        + "}";
-
     notification1 = notificationRepository.save(
         new Notification(NotificationType.COMMENT, 26L, 3333L, LocalDateTime.now(),
-            commentJsonData1)
+            NotificationFixture.commentJsonData())
     );
 
     notification2 = notificationRepository.save(
         new Notification(NotificationType.EVENT, 26L, 3333L, LocalDateTime.now(),
-            eventJsonData1)
+            NotificationFixture.eventJsonData())
     );
 
     notification3 = notificationRepository.save(
         new Notification(NotificationType.COMMENT, 3332L, 3333L, LocalDateTime.now(),
-            commentJsonData2)
+            NotificationFixture.commentJsonData())
     );
   }
 

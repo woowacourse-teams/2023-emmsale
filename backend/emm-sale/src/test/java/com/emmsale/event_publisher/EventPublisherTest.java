@@ -15,9 +15,9 @@ import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
-import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
+import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.MemberFixture;
 import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
@@ -139,7 +139,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(0))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(EventNotificationEvent.class));
   }
 
   @Test
@@ -161,7 +161,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(0))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(EventNotificationEvent.class));
   }
 
   /**
@@ -216,7 +216,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(0))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(EventNotificationEvent.class));
   }
 
   @Test
@@ -235,7 +235,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(0))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(EventNotificationEvent.class));
   }
 
   @Test

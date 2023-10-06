@@ -22,8 +22,6 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.NotificationRepository;
-import com.emmsale.notification.domain.UpdateNotification;
-import com.emmsale.notification.domain.UpdateNotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,8 +39,6 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
   private CommentRepository commentRepository;
   @Autowired
   private MemberRepository memberRepository;
-  @Autowired
-  private UpdateNotificationRepository updateNotificationRepository;
   @Autowired
   private NotificationRepository notificationRepository;
   private Member 댓글_작성자1;
@@ -64,7 +60,7 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
     //given
     final Comment 부모_댓글 = commentRepository.save(Comment.createRoot(feed, 댓글_작성자1, "내용1"));
 
-    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
+    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
 
     final CommentAddRequest 알림_트리거_댓글_요청 =
         new CommentAddRequest("내용2", feed.getId(), 부모_댓글.getId());
@@ -87,7 +83,7 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
     final Comment 부모_댓글 = commentRepository.save(Comment.createRoot(feed, 댓글_작성자1, "내용1"));
 
     doThrow(new IllegalArgumentException("파이어베이스 에러"))
-        .when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
+        .when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
 
     final CommentAddRequest 알림_트리거_댓글_요청 =
         new CommentAddRequest("내용2", feed.getId(), 부모_댓글.getId());

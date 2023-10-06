@@ -4,7 +4,6 @@ import com.emmsale.comment.domain.Comment;
 import com.emmsale.member.domain.Member;
 import java.time.LocalDateTime;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class CommentNotificationEvent extends NotificationEvent {
@@ -14,17 +13,22 @@ public class CommentNotificationEvent extends NotificationEvent {
   private final String content;
   private final String writer;
   private final String writerImageUrl;
+  private final Long feedId;
+  private final Long parentCommentId;
 
-  public CommentNotificationEvent(
+  private CommentNotificationEvent(
       final Long receiverId, final Long redirectId,
       final LocalDateTime createdAt, final String notificationType,
       final String content, final String writer,
-      final String writerImageUrl
+      final String writerImageUrl, final Long feedId,
+      final Long parentCommentId
   ) {
     super(receiverId, redirectId, createdAt, notificationType);
     this.content = content;
     this.writer = writer;
     this.writerImageUrl = writerImageUrl;
+    this.feedId = feedId;
+    this.parentCommentId = parentCommentId;
   }
 
   public static CommentNotificationEvent of(final Comment comment, final Comment trigger) {
@@ -38,7 +42,9 @@ public class CommentNotificationEvent extends NotificationEvent {
         UPDATE_NOTIFICATION_COMMENT_TYPE,
         trigger.getContent(),
         triggerMember.getName(),
-        triggerMember.getImageUrl()
+        triggerMember.getImageUrl(),
+        trigger.getFeed().getId(),
+        trigger.getParentIdOrSelfId()
     );
   }
 }

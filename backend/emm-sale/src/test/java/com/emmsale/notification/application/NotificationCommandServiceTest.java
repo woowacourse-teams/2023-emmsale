@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.notification.NotificationFixture;
 import com.emmsale.notification.application.dto.NotificationDeleteRequest;
-import com.emmsale.notification.application.dto.UpdateNotificationDeleteRequest;
 import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.NotificationRepository;
 import com.emmsale.notification.domain.NotificationType;
@@ -37,29 +37,19 @@ class NotificationCommandServiceTest extends ServiceIntegrationTestHelper {
   void setUp() {
     member = memberRepository.findById(1L).get();
 
-    final String commentJsonData1 = "{"
-        + "\"content\":\"content\","
-        + "\"writer\":\"writer\","
-        + "\"writerImageUrl\":\"imageUrl\""
-        + "}";
-
     notification1 = notificationRepository.save(
         new Notification(
             NotificationType.COMMENT, member.getId(),
             3333L, LocalDateTime.now(),
-            commentJsonData1
+            NotificationFixture.commentJsonData()
         )
     );
-
-    final String eventJsonData1 = "{"
-        + "\"title\":\"title\""
-        + "}";
 
     notification2 = notificationRepository.save(
         new Notification(
             NotificationType.EVENT, 2L,
             3333L, LocalDateTime.now(),
-            eventJsonData1
+            NotificationFixture.eventJsonData()
         )
     );
   }

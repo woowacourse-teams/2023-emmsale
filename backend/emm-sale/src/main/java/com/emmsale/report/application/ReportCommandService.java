@@ -6,8 +6,6 @@ import com.emmsale.event.domain.RecruitmentPost;
 import com.emmsale.event.domain.repository.RecruitmentPostRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.notification.domain.RequestNotification;
-import com.emmsale.notification.domain.RequestNotificationRepository;
 import com.emmsale.report.application.dto.ReportCreateRequest;
 import com.emmsale.report.application.dto.ReportCreateResponse;
 import com.emmsale.report.domain.Report;
@@ -28,7 +26,6 @@ public class ReportCommandService {
   private final MemberRepository memberRepository;
   private final CommentRepository commentRepository;
   private final RecruitmentPostRepository recruitmentPostRepository;
-  private final RequestNotificationRepository requestNotificationRepository;
 
   public ReportCreateResponse create(final ReportCreateRequest reportRequest, final Member member) {
     validateReportRequest(reportRequest, member);
@@ -78,9 +75,6 @@ public class ReportCommandService {
     if (reportRequest.getType() == ReportType.RECRUITMENT_POST) {
       validateRecruitmentPost(reportRequest);
     }
-    if (reportRequest.getType() == ReportType.REQUEST_NOTIFICATION) {
-      validateRequestNotification(reportRequest);
-    }
   }
 
   private void validateComment(final ReportCreateRequest reportRequest) {
@@ -96,15 +90,6 @@ public class ReportCommandService {
             reportRequest.getContentId())
         .orElseThrow(() -> new ReportException(ReportExceptionType.NOT_FOUND_CONTENT));
     if (recruitmentPost.isNotOwner(reportRequest.getReportedId())) {
-      throw new ReportException(ReportExceptionType.REPORTED_MISMATCH_WRITER);
-    }
-  }
-
-  private void validateRequestNotification(final ReportCreateRequest reportCreateRequest) {
-    RequestNotification requestNotification = requestNotificationRepository.findById(
-            reportCreateRequest.getContentId())
-        .orElseThrow(() -> new ReportException(ReportExceptionType.NOT_FOUND_CONTENT));
-    if (requestNotification.isNotSender(reportCreateRequest.getReportedId())) {
       throw new ReportException(ReportExceptionType.REPORTED_MISMATCH_WRITER);
     }
   }
