@@ -12,7 +12,6 @@ import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -38,7 +37,7 @@ interface NotificationService {
         @Query("member-id") memberId: Long,
     ): ApiResponse<List<UpdatedNotificationResponse>>
 
-    @PUT("/notifications/{notification-id}/read")
+    @PATCH("/notifications/{notification-id}/read")
     suspend fun updateUpdatedNotificationReadStatus(
         @Path("notification-id") notificationId: Long,
     ): ApiResponse<Unit>
