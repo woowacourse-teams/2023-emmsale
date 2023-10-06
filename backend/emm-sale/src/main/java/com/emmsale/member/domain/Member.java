@@ -38,7 +38,6 @@ public class Member extends BaseEntity {
   @Column(nullable = false)
   private String githubUsername;
 
-
   public Member(final Long id, final Long githubId, final String imageUrl, final String name,
       final String githubUsername) {
     this.id = id;
@@ -111,7 +110,7 @@ public class Member extends BaseEntity {
   }
 
   public boolean isNotGithubProfile() {
-    return !imageUrl.contains(GITHUB_PROFILE_DOMAIN);
+    return !imageUrl.startsWith(GITHUB_PROFILE_DOMAIN);
   }
 
   public Optional<String> getOptionalOpenProfileUrl() {
