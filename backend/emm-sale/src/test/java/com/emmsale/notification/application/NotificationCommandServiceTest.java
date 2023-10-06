@@ -10,7 +10,6 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.notification.NotificationFixture;
 import com.emmsale.notification.application.dto.NotificationDeleteRequest;
-import com.emmsale.notification.application.dto.UpdateNotificationDeleteRequest;
 import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.NotificationRepository;
 import com.emmsale.notification.domain.NotificationType;
