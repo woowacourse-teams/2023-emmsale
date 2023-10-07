@@ -112,8 +112,8 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
     private fun setupUiState() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             if (uiState !is PrimaryNotificationScreenUiState.Success) return@observe
-            recentNotificationAdapter.submitList(uiState.recentNotifications)
-            pastNotificationAdapter.submitList(uiState.pastNotifications)
+            recentNotificationAdapter.submitList(uiState.recentNotifications.sortedByDescending { it.createdAt })
+            pastNotificationAdapter.submitList(uiState.pastNotifications.sortedByDescending { it.createdAt })
         }
     }
 
