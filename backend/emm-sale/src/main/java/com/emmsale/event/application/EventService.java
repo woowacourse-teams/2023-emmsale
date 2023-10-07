@@ -163,7 +163,7 @@ public class EventService {
   }
 
   private boolean isExistKeyword(final String keyword) {
-    return keyword != null && !keyword.trim().isEmpty();
+    return keyword != null && !keyword.isBlank();
   }
 
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
