@@ -17,10 +17,9 @@ fun List<NotificationResponse>.toData(): List<UpdatedNotification> = map { it.to
 
 fun NotificationResponse.toData(): UpdatedNotification = when (notificationType) {
     NotificationType.EVENT -> {
-        val eventNotificationInformation =
-            Json.decodeFromString<EventTypeNotificationResponse>(
-                additionalInformation ?: throw IllegalArgumentException("이벤트 알림에 정보가 없어요"),
-            )
+        val eventNotificationInformation = Json.decodeFromString<EventTypeNotificationResponse>(
+            requireNotNull(additionalInformation) { "이벤트 알림에 추가 정보가 없어요" },
+        )
         InterestEventNotification(
             id = notificationId,
             receiverId = receiverId,
@@ -34,7 +33,7 @@ fun NotificationResponse.toData(): UpdatedNotification = when (notificationType)
     NotificationType.COMMENT -> {
         val commentNotificationInformation =
             Json.decodeFromString<CommentTypeNotificationResponse>(
-                additionalInformation ?: throw IllegalArgumentException("코멘트 알림에 정보가 없어요"),
+                requireNotNull(additionalInformation) { "댓글 알림에 추가 정보가 없어요" },
             )
 
         ChildCommentNotification(
