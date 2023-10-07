@@ -9,6 +9,7 @@ class InterestEventNotificationUiState(
     createdAt: LocalDateTime,
     isRead: Boolean,
     val eventId: Long,
+    val eventTitle: String,
 ) : PrimaryNotificationUiState(
     notificationId = notificationId,
     receiverId = receiverId,
@@ -36,6 +37,7 @@ class InterestEventNotificationUiState(
             createdAt = notification.createdAt,
             isRead = notification.isRead,
             eventId = notification.eventId,
+            eventTitle = notification.eventTitle,
         )
     }
 }

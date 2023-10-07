@@ -2,8 +2,8 @@ package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentNotificationReportCreateRequest
+import com.emmsale.data.apiModel.response.NotificationResponse
 import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
-import com.emmsale.data.apiModel.response.UpdatedNotificationResponse
 import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.mapper.toRequestModel
@@ -42,21 +42,21 @@ class DefaultNotificationRepository @Inject constructor(
     override suspend fun updateNotificationReadStatus(
         notificationId: Long,
     ): ApiResponse<Unit> = withContext(dispatcher) {
-        notificationService.updateNotificationReadStatus(notificationId)
+        notificationService.updateRecruitmentNotificationReadStatus(notificationId)
     }
 
     override suspend fun getUpdatedNotifications(
         memberId: Long,
     ): ApiResponse<List<UpdatedNotification>> = withContext(dispatcher) {
         notificationService
-            .getUpdatedNotifications(memberId)
-            .map(List<UpdatedNotificationResponse>::toData)
+            .getNotifications(memberId)
+            .map(List<NotificationResponse>::toData)
     }
 
     override suspend fun updateUpdatedNotificationReadStatus(
         notificationId: Long,
     ): ApiResponse<Unit> = withContext(dispatcher) {
-        notificationService.updateUpdatedNotificationReadStatus(notificationId)
+        notificationService.updateNotificationReadStatus(notificationId)
     }
 
     override suspend fun deleteUpdatedNotifications(

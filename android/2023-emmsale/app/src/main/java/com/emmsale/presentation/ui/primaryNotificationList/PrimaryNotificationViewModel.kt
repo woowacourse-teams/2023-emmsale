@@ -24,9 +24,9 @@ class PrimaryNotificationViewModel @Inject constructor(
     private val notificationRepository: NotificationRepository,
 ) : ViewModel(), Refreshable {
 
-    private val _uiState =
+    private val _allNotificationsUiState =
         NotNullMutableLiveData<PrimaryNotificationScreenUiState>(PrimaryNotificationScreenUiState.Loading)
-    val uiState: NotNullLiveData<PrimaryNotificationScreenUiState> = _uiState
+    val uiState: NotNullLiveData<PrimaryNotificationScreenUiState> = _allNotificationsUiState
 
     private val _uiEvent = NotNullMutableLiveData(Event(PrimaryNotificationsUiEvent.NONE))
     val uiEvent: NotNullLiveData<Event<PrimaryNotificationsUiEvent>> = _uiEvent
@@ -41,10 +41,11 @@ class PrimaryNotificationViewModel @Inject constructor(
 
             when (val result = notificationRepository.getUpdatedNotifications(uid)) {
                 is Failure, NetworkError ->
-                    _uiState.value = PrimaryNotificationScreenUiState.Error
+                    _allNotificationsUiState.value = PrimaryNotificationScreenUiState.Error
 
                 is Success ->
-                    _uiState.value = PrimaryNotificationScreenUiState.Success.from(result.data)
+                    _allNotificationsUiState.value =
+                        PrimaryNotificationScreenUiState.Success.from(result.data)
 
                 is Unexpected -> throw Throwable(result.error)
             }
@@ -53,7 +54,7 @@ class PrimaryNotificationViewModel @Inject constructor(
 
     fun deleteAllPastNotifications() {
         viewModelScope.launch {
-            val currentUiState = _uiState.value
+            val currentUiState = _allNotificationsUiState.value
             if (currentUiState !is PrimaryNotificationScreenUiState.Success) return@launch
             val pastNotificationIds = currentUiState.pastNotifications.map { it.notificationId }
             when (

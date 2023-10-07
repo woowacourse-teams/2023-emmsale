@@ -66,7 +66,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         val childCommentId = message.data["redirectId"]?.toLong() ?: return
-        val createdAt = message.data["createdAt"] ?: return
         val content = message.data["content"] ?: return
         val writerName = message.data["writer"] ?: return
         val writerImageUrl = message.data["writerImageUrl"] ?: return
@@ -85,7 +84,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun showInterestEventNotification(message: RemoteMessage) {
         val eventId = message.data["redirectId"]?.toLong() ?: return
-        val createdAt = message.data["createdAt"] ?: return
         val title = message.data["title"] ?: return
 
         baseContext.showNotification(

@@ -5,73 +5,63 @@ package com.emmsale.presentation.common.extension
 import android.content.Context
 import androidx.annotation.StringRes
 import com.emmsale.R
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.abs
 
-fun LocalDateTime.toRelativeTime(context: Context): String {
-    val currentDateTime = LocalDateTime.now()
+private const val MIN_HOUR = 1
+private const val MAX_HOUR = 24
 
-    if (year < currentDateTime.year) {
-        return format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
+fun LocalDateTime.toRelativeTime(
+    standardTime: LocalDateTime = LocalDateTime.now(),
+    context: Context,
+): String {
+    val durationHours = abs(Duration.between(standardTime, this).toHours())
+
+    return when {
+        year < standardTime.year -> format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
+
+        durationHours >= MAX_HOUR -> format(DateTimeFormatter.ofPattern("MM.dd"))
+
+        durationHours in MIN_HOUR..MAX_HOUR -> {
+            val dateFormatter = DateTimeFormatter.ofPattern(
+                context.getString(R.string.before_hour_format, durationHours),
+            )
+            format(dateFormatter)
+        }
+
+        durationHours < MIN_HOUR -> {
+            val dateFormatter = DateTimeFormatter.ofPattern(
+                context.getString(R.string.before_minute_format, durationHours),
+            )
+            format(dateFormatter)
+        }
+
+        else -> ""
     }
-
-    if (year == currentDateTime.year &&
-        monthValue <= currentDateTime.monthValue &&
-        dayOfMonth < currentDateTime.dayOfMonth
-    ) {
-        return format(DateTimeFormatter.ofPattern("MM.dd"))
-    }
-
-    if (year == currentDateTime.year &&
-        monthValue == currentDateTime.monthValue &&
-        dayOfMonth == currentDateTime.dayOfMonth &&
-        hour != currentDateTime.hour
-    ) {
-        val dateFormatter = DateTimeFormatter.ofPattern(
-            context.getString(
-                R.string.before_hour_format,
-                currentDateTime.hour.minus(hour),
-            ),
-        )
-        return format(dateFormatter)
-    }
-
-    if (year == currentDateTime.year &&
-        monthValue == currentDateTime.monthValue &&
-        dayOfMonth == currentDateTime.dayOfMonth &&
-        hour == currentDateTime.hour
-    ) {
-        val dateFormatter = DateTimeFormatter.ofPattern(
-            context.getString(
-                R.string.before_minute_format,
-                currentDateTime.minute.minus(minute),
-            ),
-        )
-        return format(dateFormatter)
-    }
-
-    return ""
 }
 
-fun LocalDateTime.toMessageRelativeTime(context: Context): String {
-    val currentDateTime = LocalDateTime.now()
-
-    if (year < currentDateTime.year) {
+fun LocalDateTime.toMessageRelativeTime(
+    standardTime: LocalDateTime = LocalDateTime.now(),
+    context: Context,
+): String {
+    if (year < standardTime.year) {
         return format(DateTimeFormatter.ofPattern(context.getString(R.string.year_month_day)))
     }
 
-    if (year == currentDateTime.year &&
-        monthValue <= currentDateTime.monthValue &&
-        dayOfMonth < currentDateTime.dayOfMonth
+    if (year == standardTime.year &&
+        monthValue <= standardTime.monthValue &&
+        dayOfMonth < standardTime.dayOfMonth
     ) {
         return format(DateTimeFormatter.ofPattern(context.getString(R.string.month_day)))
     }
 
-    if (year == currentDateTime.year &&
-        monthValue == currentDateTime.monthValue &&
-        dayOfMonth == currentDateTime.dayOfMonth &&
-        minute != currentDateTime.minute
+    if (year == standardTime.year &&
+        monthValue == standardTime.monthValue &&
+        dayOfMonth == standardTime.dayOfMonth &&
+        minute != standardTime.minute
     ) {
         val dateFormatter = DateTimeFormatter.ofPattern(
             context.getString(R.string.am_pm_hour_minute),
