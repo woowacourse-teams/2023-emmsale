@@ -13,12 +13,13 @@ import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+@JvmName("NotificationResponse")
 fun List<NotificationResponse>.toData(): List<UpdatedNotification> = map { it.toData() }
 
 fun NotificationResponse.toData(): UpdatedNotification = when (notificationType) {
     NotificationType.EVENT -> {
         val eventNotificationInformation = Json.decodeFromString<EventTypeNotificationResponse>(
-            requireNotNull(additionalInformation) { "이벤트 알림에 추가 정보가 없어요" },
+            requireNotNull(extraNotificationInformation) { "이벤트 알림에 추가 정보가 없어요" },
         )
         InterestEventNotification(
             id = notificationId,
@@ -33,7 +34,7 @@ fun NotificationResponse.toData(): UpdatedNotification = when (notificationType)
     NotificationType.COMMENT -> {
         val commentNotificationInformation =
             Json.decodeFromString<CommentTypeNotificationResponse>(
-                requireNotNull(additionalInformation) { "댓글 알림에 추가 정보가 없어요" },
+                requireNotNull(extraNotificationInformation) { "댓글 알림에 추가 정보가 없어요" },
             )
 
         ChildCommentNotification(
@@ -66,5 +67,6 @@ fun RecruitmentNotificationResponse.toData(): RecruitmentNotification = Recruitm
     notificationDate = createdAt.toLocalDateTime(),
 )
 
+@JvmName("RecruitmentNotificationResponse")
 fun List<RecruitmentNotificationResponse>.toData(): List<RecruitmentNotification> =
     map { it.toData() }

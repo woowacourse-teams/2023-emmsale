@@ -18,7 +18,7 @@ data class NotificationResponse(
     @SerialName("isRead")
     val isRead: Boolean,
     @SerialName("notificationInformation")
-    val additionalInformation: String? = null,
+    val extraNotificationInformation: String? = null,
 ) {
     enum class NotificationType {
         @SerialName("EVENT")
