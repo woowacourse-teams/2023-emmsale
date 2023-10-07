@@ -19,7 +19,7 @@ fun NotificationResponse.toData(): UpdatedNotification = when (notificationType)
     NotificationType.EVENT -> {
         val eventNotificationInformation =
             Json.decodeFromString<EventTypeNotificationResponse>(
-                notificationInformation ?: throw IllegalArgumentException("이벤트 알림에 정보가 없어요"),
+                additionalInformation ?: throw IllegalArgumentException("이벤트 알림에 정보가 없어요"),
             )
         InterestEventNotification(
             id = notificationId,
@@ -34,7 +34,7 @@ fun NotificationResponse.toData(): UpdatedNotification = when (notificationType)
     NotificationType.COMMENT -> {
         val commentNotificationInformation =
             Json.decodeFromString<CommentTypeNotificationResponse>(
-                notificationInformation ?: throw IllegalArgumentException("코멘트 알림에 정보가 없어요"),
+                additionalInformation ?: throw IllegalArgumentException("코멘트 알림에 정보가 없어요"),
             )
 
         ChildCommentNotification(
@@ -46,7 +46,7 @@ fun NotificationResponse.toData(): UpdatedNotification = when (notificationType)
             childCommentId = redirectId,
             childCommentContent = commentNotificationInformation.content,
             feedId = commentNotificationInformation.feedId,
-            commentProfileImageUrl = commentNotificationInformation.commentProfileImageUrl,
+            commentProfileImageUrl = commentNotificationInformation.writerProfileImageUrl,
         )
     }
 }

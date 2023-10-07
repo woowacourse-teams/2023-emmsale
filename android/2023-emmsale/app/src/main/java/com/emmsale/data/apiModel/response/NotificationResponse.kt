@@ -18,7 +18,7 @@ data class NotificationResponse(
     @SerialName("isRead")
     val isRead: Boolean,
     @SerialName("notificationInformation")
-    val notificationInformation: String? = null,
+    val additionalInformation: String? = null,
 ) {
     enum class NotificationType {
         @SerialName("EVENT")
@@ -32,9 +32,9 @@ data class NotificationResponse(
 @Serializable
 data class CommentTypeNotificationResponse(
     @SerialName("writer")
-    val writer: String,
+    val writerName: String,
     @SerialName("writerImageUrl")
-    val commentProfileImageUrl: String,
+    val writerProfileImageUrl: String,
     @SerialName("parentCommentId")
     val parentId: Long = -1L,
     @SerialName("feedId")
