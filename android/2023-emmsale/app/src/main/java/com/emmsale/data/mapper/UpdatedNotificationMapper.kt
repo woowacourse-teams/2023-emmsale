@@ -1,6 +1,5 @@
 package com.emmsale.data.mapper
 
-import android.util.Log
 import com.emmsale.data.apiModel.response.CommentTypeNotificationResponse
 import com.emmsale.data.apiModel.response.EventTypeNotificationResponse
 import com.emmsale.data.apiModel.response.UpdatedNotificationResponse
@@ -37,7 +36,7 @@ fun UpdatedNotificationResponse.toData(): UpdatedNotification = when (type) {
             Json.decodeFromString<CommentTypeNotificationResponse>(
                 notificationInformation ?: throw IllegalArgumentException("코멘트 알림에 정보가 없어요"),
             )
-        Log.d("wooseok", commentNotificationInformation.toString())
+
         ChildCommentNotification(
             id = id,
             receiverId = receiverId,
