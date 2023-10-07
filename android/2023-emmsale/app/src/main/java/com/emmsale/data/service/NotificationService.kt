@@ -4,8 +4,8 @@ import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentNotificationReportCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentNotificationStatusUpdateRequest
 import com.emmsale.data.apiModel.response.NotificationReportResponse
+import com.emmsale.data.apiModel.response.NotificationResponse
 import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
-import com.emmsale.data.apiModel.response.UpdatedNotificationResponse
 import com.emmsale.data.common.callAdapter.ApiResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -28,17 +28,17 @@ interface NotificationService {
     ): ApiResponse<Unit>
 
     @PATCH("/request-notifications/{request-notification-id}/read")
-    suspend fun updateNotificationReadStatus(
+    suspend fun updateRecruitmentNotificationReadStatus(
         @Path("request-notification-id") notificationId: Long,
     ): ApiResponse<Unit>
 
     @GET("/notifications")
-    suspend fun getUpdatedNotifications(
+    suspend fun getNotifications(
         @Query("member-id") memberId: Long,
-    ): ApiResponse<List<UpdatedNotificationResponse>>
+    ): ApiResponse<List<NotificationResponse>>
 
     @PATCH("/notifications/{notification-id}/read")
-    suspend fun updateUpdatedNotificationReadStatus(
+    suspend fun updateNotificationReadStatus(
         @Path("notification-id") notificationId: Long,
     ): ApiResponse<Unit>
 

@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UpdatedNotificationResponse(
+data class NotificationResponse(
     @SerialName("notificationId")
-    val id: Long,
+    val notificationId: Long,
     @SerialName("receiverId")
     val receiverId: Long,
     @SerialName("redirectId")
@@ -14,12 +14,20 @@ data class UpdatedNotificationResponse(
     @SerialName("createdAt")
     val createdAt: String, // 2023:08:23:12:00:00
     @SerialName("type")
-    val type: String,
+    val notificationType: NotificationType,
     @SerialName("isRead")
     val isRead: Boolean,
     @SerialName("notificationInformation")
     val notificationInformation: String? = null,
-)
+) {
+    enum class NotificationType {
+        @SerialName("EVENT")
+        EVENT,
+
+        @SerialName("COMMENT")
+        COMMENT,
+    }
+}
 
 @Serializable
 data class CommentTypeNotificationResponse(
