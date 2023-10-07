@@ -72,7 +72,7 @@ public class EventService {
         .collect(toList());
     final String thumbnailImageUrl = extractThumbnailImage(imageUrls);
     final List<String> informationImageUrls = extractInformationImages(imageUrls);
-    return EventDetailResponse.from(event, today, thumbnailImageUrl, informationImageUrls);
+    return EventDetailResponse.from(event, thumbnailImageUrl, informationImageUrls);
   }
 
   private String extractThumbnailImage(final List<String> imageUrls) {
@@ -213,7 +213,7 @@ public class EventService {
   }
 
   public EventDetailResponse addEvent(final EventDetailRequest request,
-      final List<MultipartFile> images, final LocalDate today) {
+      final List<MultipartFile> images) {
     final Event event = eventRepository.save(request.toEvent());
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
     event.addAllEventTags(tags);
@@ -228,11 +228,11 @@ public class EventService {
     eventPublisher.publish(event);
     final String thumbnailImageUrl = extractThumbnailImage(imageUrls);
     final List<String> informationImageUrls = extractInformationImages(imageUrls);
-    return EventDetailResponse.from(event, today, thumbnailImageUrl, informationImageUrls);
+    return EventDetailResponse.from(event, thumbnailImageUrl, informationImageUrls);
   }
 
   public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request,
-      final List<MultipartFile> images, final LocalDate today) {
+      final List<MultipartFile> images) {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
@@ -259,7 +259,7 @@ public class EventService {
         .collect(toList());
     final String thumbnailImageUrl = extractThumbnailImage(imageUrls);
     final List<String> informationImageUrls = extractInformationImages(imageUrls);
-    return EventDetailResponse.from(updatedEvent, today, thumbnailImageUrl, informationImageUrls);
+    return EventDetailResponse.from(updatedEvent, thumbnailImageUrl, informationImageUrls);
   }
 
   public void deleteEvent(final Long eventId) {

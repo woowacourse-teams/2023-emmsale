@@ -173,7 +173,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       final String imageUrl = "imageUrl2";
       final List<String> imageUrls = List.of("imageUrl1", "imageUrl3");
 
-      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일(), imageUrl,
+      final EventDetailResponse expected = EventDetailResponse.from(event, imageUrl,
           imageUrls);
 
       //when
@@ -191,7 +191,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       //given
       final Event event = eventRepository.save(eventFixture());
 
-      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일(), null,
+      final EventDetailResponse expected = EventDetailResponse.from(event, null,
           Collections.emptyList());
 
       //when
@@ -213,7 +213,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       );
 
       final String imageUrl = "imageUrl2";
-      final EventDetailResponse expected = EventDetailResponse.from(event, 날짜_8월_10일(), imageUrl,
+      final EventDetailResponse expected = EventDetailResponse.from(event, imageUrl,
           Collections.emptyList());
 
       //when
@@ -598,10 +598,11 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           organization
       );
 
-      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
+      doNothing().when(firebaseCloudMessageClient)
+          .sendMessageTo(any(Notification.class), anyLong());
 
       //when
-      final EventDetailResponse response = eventService.addEvent(request, mockMultipartFiles, now);
+      final EventDetailResponse response = eventService.addEvent(request, mockMultipartFiles);
       final Event savedEvent = eventRepository.findById(response.getId()).get();
 
       //then
@@ -642,11 +643,12 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           organization
       );
 
-      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
+      doNothing().when(firebaseCloudMessageClient)
+          .sendMessageTo(any(Notification.class), anyLong());
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventService.addEvent(request, mockMultipartFiles, now));
+          () -> eventService.addEvent(request, mockMultipartFiles));
 
       assertEquals(START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
     }
@@ -676,11 +678,12 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           organization
       );
 
-      doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
+      doNothing().when(firebaseCloudMessageClient)
+          .sendMessageTo(any(Notification.class), anyLong());
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventService.addEvent(request, mockMultipartFiles, now));
+          () -> eventService.addEvent(request, mockMultipartFiles));
 
       assertEquals(NOT_FOUND_TAG, exception.exceptionType());
     }
@@ -730,7 +733,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       //when
       final EventDetailResponse response = eventService.updateEvent(eventId, updateRequest,
-          mockMultipartFiles, now);
+          mockMultipartFiles);
       final Event updatedEvent = eventRepository.findById(eventId).get();
 
       //then
@@ -772,7 +775,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventService.updateEvent(notExistsEventId, updateRequest, mockMultipartFiles, now));
+          () -> eventService.updateEvent(notExistsEventId, updateRequest, mockMultipartFiles));
 
       assertEquals(NOT_FOUND_EVENT, exception.exceptionType());
     }
@@ -804,7 +807,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventService.updateEvent(eventId, updateRequest, mockMultipartFiles, now));
+          () -> eventService.updateEvent(eventId, updateRequest, mockMultipartFiles));
 
       assertEquals(START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
     }
@@ -837,7 +840,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventService.updateEvent(eventId, updateRequest, mockMultipartFiles, now));
+          () -> eventService.updateEvent(eventId, updateRequest, mockMultipartFiles));
 
       assertEquals(NOT_FOUND_TAG, exception.exceptionType());
     }
