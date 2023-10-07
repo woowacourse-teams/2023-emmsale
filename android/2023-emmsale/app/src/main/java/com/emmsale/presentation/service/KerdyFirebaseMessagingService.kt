@@ -75,7 +75,10 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
 
         baseContext.showNotification(
             title = getString(R.string.kerdyfirebasemessaging_child_comment_notification_title),
-            message = getString(R.string.kerdyfirebasemessaging_child_comment_notification_content_format).format(writerName, content),
+            message = getString(R.string.kerdyfirebasemessaging_child_comment_notification_content_format).format(
+                writerName,
+                content,
+            ),
             channelId = R.id.id_all_child_comment_notification_channel,
             intent = ChildCommentActivity.getIntent(this, feedId, parentCommentId, true),
             largeIconUrl = writerImageUrl,

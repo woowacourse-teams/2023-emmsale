@@ -9,7 +9,7 @@
 
         <import type="kotlin.Unit" />
 
-        <import type="com.emmsale.data.model.EventStatus" />
+        <import type="com.emmsale.data.model.EventProgressStatus" />
 
         <import type="com.emmsale.data.model.OnOfflineMode" />
 
@@ -53,7 +53,8 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/nanum_square_extra_bold"
             android:textSize="13sp"
-            app:eventStatus="@{event.competition.eventStatus}"
+            app:eventProgressStatus="@{event.competition.progressStatus}"
+            app:eventApplicationStatus="@{event.competition.applicationStatus}"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
             app:layout_goneMarginTop="9dp"

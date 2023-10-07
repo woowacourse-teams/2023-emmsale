@@ -1,9 +1,11 @@
 package com.emmsale.presentation.common.bindingadapter
 
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.emmsale.R
-import com.emmsale.data.model.EventStatus
+import com.emmsale.data.model.EventApplicationStatus
+import com.emmsale.data.model.EventProgressStatus
 import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
 
@@ -25,24 +27,34 @@ fun TextView.setPaymentType(
     }
 }
 
-@BindingAdapter("app:eventStatus")
+@BindingAdapter("app:eventProgressStatus", "app:eventApplicationStatus")
 fun TextView.setEventStatus(
-    status: EventStatus? = null,
+    progressStatus: EventProgressStatus,
+    applicationStatue: EventApplicationStatus,
 ) {
-    if (status == null) return
-
-    when (status) {
-        EventStatus.InProgress -> {
+    when {
+        progressStatus is EventProgressStatus.InProgress -> {
             text = context.getString(R.string.all_in_progress)
-            setTextColor(context.getColor(R.color.primary_color))
+            setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
-        is EventStatus.Upcoming -> {
-            text = context.getString(R.string.all_upcoming, status.remainingDays)
-            setTextColor(context.getColor(R.color.primary_color))
+        applicationStatue is EventApplicationStatus.InProgress -> {
+            context.getString(R.string.all_application_in_progress, applicationStatue.remainingDays)
+            setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
-        EventStatus.Ended -> {
-            text = context.getString(R.string.all_ended)
-            setTextColor(context.getColor(R.color.gray))
+
+        applicationStatue is EventApplicationStatus.UpComing -> {
+            context.getString(R.string.all_application_up_coming, applicationStatue.remainingDays)
+            setTextColor(ContextCompat.getColor(context, R.color.primary_color))
+        }
+
+        progressStatus is EventProgressStatus.UpComing -> {
+            context.getString(R.string.all_up_coming, progressStatus.remainingDays)
+            setTextColor(ContextCompat.getColor(context, R.color.primary_color))
+        }
+
+        else -> {
+            context.getString(R.string.all_ended)
+            setTextColor(ContextCompat.getColor(context, R.color.gray))
         }
     }
 }

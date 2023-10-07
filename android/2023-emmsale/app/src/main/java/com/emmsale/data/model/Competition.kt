@@ -7,10 +7,16 @@ data class Competition(
     val name: String,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
-    val applyStatus: EventStatus,
+    val applicationStartDate: LocalDateTime,
+    val applicationEndDate: LocalDateTime,
     val tags: List<String>,
     val posterUrl: String?,
-    val eventStatus: EventStatus,
     val onOfflineMode: OnOfflineMode,
     val paymentType: PaymentType,
-)
+) {
+    val progressStatus: EventProgressStatus
+        get() = EventProgressStatus.create(startDate, endDate)
+
+    val applicationStatus: EventApplicationStatus
+        get() = EventApplicationStatus.create(applicationStartDate, applicationEndDate)
+}

@@ -2,7 +2,6 @@ package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.CompetitionResponse
 import com.emmsale.data.model.Competition
-import com.emmsale.data.model.EventStatus
 import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
 import java.time.LocalDateTime
@@ -17,18 +16,10 @@ fun CompetitionResponse.toData(): Competition = Competition(
     name = name,
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
-    applyStatus = when (applyStatus) {
-        CompetitionResponse.Status.ENDED -> EventStatus.Ended
-        CompetitionResponse.Status.UPCOMING -> EventStatus.Upcoming(applyRemainingDays)
-        CompetitionResponse.Status.IN_PROGRESS -> EventStatus.InProgress
-    },
+    applicationStartDate = parseDate(applyStartDate),
+    applicationEndDate = parseDate(applyEndDate),
     tags = tags,
     posterUrl = posterUrl,
-    eventStatus = when (status) {
-        CompetitionResponse.Status.ENDED -> EventStatus.Ended
-        CompetitionResponse.Status.UPCOMING -> EventStatus.Upcoming(remainingDays)
-        CompetitionResponse.Status.IN_PROGRESS -> EventStatus.InProgress
-    },
     onOfflineMode = when (onOfflineMode) {
         CompetitionResponse.OnOfflineMode.ONLINE -> OnOfflineMode.ONLINE
         CompetitionResponse.OnOfflineMode.OFFLINE -> OnOfflineMode.OFFLINE

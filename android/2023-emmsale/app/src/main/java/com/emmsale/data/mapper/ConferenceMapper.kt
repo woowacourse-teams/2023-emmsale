@@ -2,7 +2,6 @@ package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.ConferenceResponse
 import com.emmsale.data.model.Conference
-import com.emmsale.data.model.EventStatus
 import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
 import java.time.LocalDateTime
@@ -17,18 +16,10 @@ fun ConferenceResponse.toData(): Conference = Conference(
     name = name,
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
-    applyStatus = when (applyStatus) {
-        ConferenceResponse.Status.ENDED -> EventStatus.Ended
-        ConferenceResponse.Status.UPCOMING -> EventStatus.Upcoming(applyRemainingDays)
-        ConferenceResponse.Status.IN_PROGRESS -> EventStatus.InProgress
-    },
+    applicationStartDate = parseDate(applyStartDate),
+    applicationEndDate = parseDate(applyEndDate),
     tags = tags,
     posterUrl = posterUrl,
-    eventStatus = when (status) {
-        ConferenceResponse.Status.ENDED -> EventStatus.Ended
-        ConferenceResponse.Status.UPCOMING -> EventStatus.Upcoming(remainingDays)
-        ConferenceResponse.Status.IN_PROGRESS -> EventStatus.InProgress
-    },
     onOfflineMode = when (onOfflineMode) {
         ConferenceResponse.OnOfflineMode.ONLINE -> OnOfflineMode.ONLINE
         ConferenceResponse.OnOfflineMode.OFFLINE -> OnOfflineMode.OFFLINE

@@ -95,7 +95,8 @@
                     android:fontFamily="@font/nanum_square_bold"
                     android:textColor="@color/primary_color"
                     android:textSize="13sp"
-                    app:eventStatus="@{vm.eventDetail.eventDetail.eventStatus}"
+                    app:eventProgressStatus="@{vm.eventDetail.eventDetail.progressStatus}"
+                    app:eventApplicationStatus="@{vm.eventDetail.eventDetail.applicationStatus}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="D-Day" />

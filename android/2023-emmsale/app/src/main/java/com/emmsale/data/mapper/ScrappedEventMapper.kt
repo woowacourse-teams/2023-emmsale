@@ -1,7 +1,6 @@
 package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.ScrappedEventResponse
-import com.emmsale.data.model.EventStatus
 import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
 import com.emmsale.data.model.ScrappedEvent
@@ -15,18 +14,10 @@ fun ScrappedEventResponse.toData(): ScrappedEvent = ScrappedEvent(
     name = name,
     startDate = parseDate(startDate),
     endDate = parseDate(endDate),
-    applyStatus = when (applyStatus) {
-        ScrappedEventResponse.Status.ENDED -> EventStatus.Ended
-        ScrappedEventResponse.Status.UPCOMING -> EventStatus.Upcoming(applyRemainingDays)
-        ScrappedEventResponse.Status.IN_PROGRESS -> EventStatus.InProgress
-    },
+    applicationStartDate = parseDate(applyStartDate),
+    applicationEndDate = parseDate(applyEndDate),
     tags = tags,
     posterUrl = posterUrl,
-    eventStatus = when (eventStatus) {
-        ScrappedEventResponse.Status.ENDED -> EventStatus.Ended
-        ScrappedEventResponse.Status.UPCOMING -> EventStatus.Upcoming(remainingDays)
-        ScrappedEventResponse.Status.IN_PROGRESS -> EventStatus.InProgress
-    },
     onOfflineMode = when (eventMode) {
         ScrappedEventResponse.EventMode.ONLINE -> OnOfflineMode.ONLINE
         ScrappedEventResponse.EventMode.OFFLINE -> OnOfflineMode.OFFLINE
