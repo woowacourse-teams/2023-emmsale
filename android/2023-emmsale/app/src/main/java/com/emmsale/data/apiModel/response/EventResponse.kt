@@ -13,34 +13,19 @@ data class ConferenceResponse(
     val startDate: String, // format : "2023:09:03:12:00:00",
     @SerialName("endDate")
     val endDate: String, // format : "2023:09:03:12:00:00",
+    @SerialName("applyStartDate")
+    val applyStartDate: String, // format : "2023:09:03:12:00:00"
+    @SerialName("applyEndDate")
+    val applyEndDate: String, // format : "2023:09:03:12:00:00"
     @SerialName("tags")
     val tags: List<String>,
-    @SerialName("status")
-    val status: Status,
-    @SerialName("applyStatus")
-    val applyStatus: Status,
     @SerialName("imageUrl")
     val posterUrl: String? = null,
-    @SerialName("remainingDays")
-    val remainingDays: Int,
-    @SerialName("applyRemainingDays")
-    val applyRemainingDays: Int,
     @SerialName("eventMode")
     val onOfflineMode: OnOfflineMode,
     @SerialName("paymentType")
     val paymentType: PaymentType,
 ) {
-    enum class Status {
-        @SerialName("IN_PROGRESS")
-        IN_PROGRESS,
-
-        @SerialName("UPCOMING")
-        UPCOMING,
-
-        @SerialName("ENDED")
-        ENDED,
-    }
-
     enum class OnOfflineMode {
         @SerialName("온라인")
         ONLINE,
@@ -74,34 +59,19 @@ data class CompetitionResponse(
     val startDate: String, // format : "2023:09:03:12:00:00",
     @SerialName("endDate")
     val endDate: String, // format : "2023:09:03:12:00:00",
+    @SerialName("applyStartDate")
+    val applyStartDate: String, // format : "2023:09:03:12:00:00"
+    @SerialName("applyEndDate")
+    val applyEndDate: String, // format : "2023:09:03:12:00:00"
     @SerialName("tags")
     val tags: List<String>,
-    @SerialName("status")
-    val status: Status,
-    @SerialName("applyStatus")
-    val applyStatus: Status,
     @SerialName("imageUrl")
     val posterUrl: String? = null,
-    @SerialName("remainingDays")
-    val remainingDays: Int,
-    @SerialName("applyRemainingDays")
-    val applyRemainingDays: Int,
     @SerialName("eventMode")
     val onOfflineMode: OnOfflineMode,
     @SerialName("paymentType")
     val paymentType: PaymentType,
 ) {
-    enum class Status {
-        @SerialName("IN_PROGRESS")
-        IN_PROGRESS,
-
-        @SerialName("UPCOMING")
-        UPCOMING,
-
-        @SerialName("ENDED")
-        ENDED,
-    }
-
     enum class OnOfflineMode {
         @SerialName("온라인")
         ONLINE,
@@ -145,18 +115,10 @@ data class EventDetailResponse(
     val applyEndDate: String,
     @SerialName("location")
     val location: String,
-    @SerialName("status")
-    val status: Status,
-    @SerialName("applyStatus")
-    val applyStatus: Status,
     @SerialName("tags")
     val tags: List<String>,
     @SerialName("imageUrl")
     val imageUrl: String?,
-    @SerialName("remainingDays")
-    val remainingDays: Int,
-    @SerialName("applyRemainingDays")
-    val applyRemainingDays: Int,
     @SerialName("type")
     val type: String,
     @SerialName("imageUrls")
@@ -164,17 +126,6 @@ data class EventDetailResponse(
     @SerialName("paymentType")
     val paymentType: PaymentType,
 ) {
-    enum class Status {
-        @SerialName("IN_PROGRESS")
-        IN_PROGRESS,
-
-        @SerialName("UPCOMING")
-        UPCOMING,
-
-        @SerialName("ENDED")
-        ENDED,
-    }
-
     enum class PaymentType {
         @SerialName("유료")
         PAID,
