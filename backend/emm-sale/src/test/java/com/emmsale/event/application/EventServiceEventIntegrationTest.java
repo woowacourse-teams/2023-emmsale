@@ -22,7 +22,6 @@ import com.emmsale.notification.domain.Notification;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -78,7 +77,7 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventService.addEvent(eventDetailRequest, null, LocalDate.now());
+    eventService.addEvent(eventDetailRequest, null);
 
     //then
     verify(firebaseCloudMessageClient, times(2))
@@ -122,7 +121,7 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventService.addEvent(eventDetailRequest, null, LocalDate.now());
+    eventService.addEvent(eventDetailRequest, null);
 
     //then
     verify(firebaseCloudMessageClient, times(0))
@@ -156,7 +155,7 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventService.addEvent(eventDetailRequest, null, LocalDate.now());
+    eventService.addEvent(eventDetailRequest, null);
 
     //then
     verify(firebaseCloudMessageClient, times(0))
