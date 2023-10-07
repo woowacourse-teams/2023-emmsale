@@ -51,12 +51,12 @@ enum class DateTimePattern {
     },
     RELATIVE_TIME {
         override fun format(context: Context, localDateTime: LocalDateTime): String {
-            return localDateTime.toRelativeTime(context)
+            return localDateTime.toRelativeTime(context = context)
         }
     },
     AM_PM_HOUR_MINUTE {
         override fun format(context: Context, localDateTime: LocalDateTime): String {
-            return localDateTime.toMessageRelativeTime(context)
+            return localDateTime.toMessageRelativeTime(context = context)
         }
     },
     YEAR_MONTH_DAY_WEEKDAY {
