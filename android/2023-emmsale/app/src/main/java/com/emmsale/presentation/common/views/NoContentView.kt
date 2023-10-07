@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.use
 import com.bumptech.glide.Glide
 import com.emmsale.R
 import com.emmsale.databinding.LayoutNoContentBinding

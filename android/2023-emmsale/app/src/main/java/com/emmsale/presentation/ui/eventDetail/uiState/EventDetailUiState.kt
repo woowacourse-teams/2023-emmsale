@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.eventDetail.uistate
+package com.emmsale.presentation.ui.eventDetail.uiState
 
 import com.emmsale.data.model.EventDetail
 import com.emmsale.presentation.common.FetchResult
