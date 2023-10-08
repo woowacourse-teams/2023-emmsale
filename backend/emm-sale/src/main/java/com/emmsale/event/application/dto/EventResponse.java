@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toList;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,56 +23,45 @@ public class EventResponse {
   private final Long id;
   private final String name;
   @JsonFormat(pattern = DATE_TIME_FORMAT)
-  private final LocalDateTime startDate;
+  private final LocalDateTime eventStartDate;
   @JsonFormat(pattern = DATE_TIME_FORMAT)
-  private final LocalDateTime endDate;
+  private final LocalDateTime eventEndDate;
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime applyStartDate;
+  @JsonFormat(pattern = DATE_TIME_FORMAT)
+  private final LocalDateTime applyEndDate;
   private final List<String> tags;
-  private final String status;
-  private final String applyStatus;
   private final String imageUrl;
-  private final int remainingDays;
-  private final int applyRemainingDays;
   private final String eventMode;
   private final String paymentType;
 
-  public static List<EventResponse> makeEventResponsesByStatus(
-      final LocalDate today,
-      final EventStatus status,
-      final List<Event> events
-  ) {
+  public static List<EventResponse> makeEventResponsesByStatus(final List<Event> events) {
     return events.stream()
-        .map(event -> EventResponse.from(today, status, event))
+        .map(EventResponse::from)
         .collect(toList());
   }
 
   public static List<EventResponse> mergeEventResponses(
-      final LocalDate today,
       final Map<EventStatus, List<Event>> groupByEventStatus
   ) {
-    return groupByEventStatus.entrySet().stream()
-        .map(entry -> makeEventResponsesByStatus(today, entry.getKey(), entry.getValue()))
+    return groupByEventStatus.values().stream()
+        .map(EventResponse::makeEventResponsesByStatus)
         .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
           combinedEvents.addAll(eventsToAdd);
           return combinedEvents;
         });
   }
 
-  private static EventResponse from(
-      final LocalDate today,
-      final EventStatus status,
-      final Event event
-  ) {
+  private static EventResponse from(final Event event) {
     return new EventResponse(
         event.getId(),
         event.getName(),
         event.getEventPeriod().getStartDate(),
         event.getEventPeriod().getEndDate(),
+        event.getEventPeriod().getApplyStartDate(),
+        event.getEventPeriod().getApplyEndDate(),
         event.extractTags(),
-        status.name(),
-        event.getEventPeriod().calculateEventApplyStatus(today).name(),
         event.getImageUrl(),
-        event.getEventPeriod().calculateRemainingDays(today),
-        event.getEventPeriod().calculateApplyRemainingDays(today),
         event.getEventMode().getValue(),
         event.getPaymentType().getValue()
     );
