@@ -21,7 +21,6 @@ public class EventFixture {
         LocalDateTime.of(2023, 8, 15, 15, 0),
         "http://infcon.com",
         EventType.CONFERENCE,
-        "https://image.url",
         PaymentType.PAID,
         EventMode.OFFLINE,
         "인프런"
@@ -32,10 +31,7 @@ public class EventFixture {
     return new Event("인프콘 2023", "코엑스", LocalDateTime.parse("2023-06-01T12:00:00"),
         LocalDateTime.parse("2023-09-01T12:00:00"), LocalDateTime.parse("2023-05-01T12:00:00"),
         LocalDateTime.parse("2023-06-01T12:00:00"), "https://~~~", EventType.CONFERENCE,
-        "https://image.url",
-        PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE,
-        "인프런"
+        PaymentType.FREE_PAID, EventMode.ON_OFFLINE, "인프런"
     );
   }
 
@@ -43,10 +39,7 @@ public class EventFixture {
     return new Event("AI 컨퍼런스", "코엑스", LocalDateTime.parse("2023-07-22T12:00:00"),
         LocalDateTime.parse("2023-07-30T12:00:00"), LocalDateTime.parse("2023-07-01T12:00:00"),
         LocalDateTime.parse("2023-07-22T12:00:00"), "https://~~~", EventType.CONFERENCE,
-        "https://image.url",
-        PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE,
-        "행사기관"
+        PaymentType.FREE_PAID, EventMode.ON_OFFLINE, "행사기관"
     );
   }
 
@@ -54,10 +47,7 @@ public class EventFixture {
     return new Event("모바일 컨퍼런스", "코엑스", LocalDateTime.parse("2023-08-03T12:00:00"),
         LocalDateTime.parse("2023-09-03T12:00:00"), LocalDateTime.parse("2023-08-01T12:00:00"),
         LocalDateTime.parse("2023-08-02T12:00:00"), "https://~~~", EventType.CONFERENCE,
-        "https://image.url",
-        PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE,
-        "행사기관"
+        PaymentType.FREE_PAID, EventMode.ON_OFFLINE, "행사기관"
     );
   }
 
@@ -65,10 +55,7 @@ public class EventFixture {
     return new Event("안드로이드 컨퍼런스", "코엑스", LocalDateTime.parse("2023-06-29T12:00:00"),
         LocalDateTime.parse("2023-07-16T12:00:00"), LocalDateTime.parse("2023-06-01T12:00:00"),
         LocalDateTime.parse("2023-06-20T12:00:00"), "https://~~~", EventType.CONFERENCE,
-        "https://image.url",
-        PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE,
-        "행사기관"
+        PaymentType.FREE_PAID, EventMode.ON_OFFLINE, "행사기관"
     );
   }
 
@@ -76,10 +63,7 @@ public class EventFixture {
     return new Event("웹 컨퍼런스", "코엑스", LocalDateTime.parse("2023-07-03T12:00:00"),
         LocalDateTime.parse("2023-08-03T12:00:00"), LocalDateTime.parse("2023-07-03T12:00:00"),
         LocalDateTime.parse("2023-08-03T12:00:00"), "https://~~~", EventType.CONFERENCE,
-        "https://image.url",
-        PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE,
-        "행사기관"
+        PaymentType.FREE_PAID, EventMode.ON_OFFLINE, "행사기관"
     );
   }
 
@@ -87,11 +71,7 @@ public class EventFixture {
     return new Event("AI 아이디어 공모전", "코엑스", LocalDateTime.parse("2023-06-29T12:00:00"),
         LocalDateTime.parse("2023-07-16T12:00:00"), LocalDateTime.parse("2023-06-01T12:00:00"),
         LocalDateTime.parse("2023-07-16T12:00:00"), "https://~~~",
-        EventType.COMPETITION,
-        "https://image.url",
-        PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE,
-        "행사기관"
+        EventType.COMPETITION, PaymentType.FREE_PAID, EventMode.ON_OFFLINE, "행사기관"
     );
   }
 
@@ -99,11 +79,7 @@ public class EventFixture {
     return new Event("구름톤", "코엑스", LocalDateTime.parse("2023-07-03T12:00:00"),
         LocalDateTime.parse("2023-08-03T12:00:00"), LocalDateTime.parse("2023-07-03T12:00:00"),
         LocalDateTime.parse("2023-08-03T12:00:00"), "https://~~~",
-        EventType.COMPETITION,
-        "https://image.url",
-        PaymentType.FREE_PAID,
-        EventMode.ON_OFFLINE,
-        "행사기관"
+        EventType.COMPETITION, PaymentType.FREE_PAID, EventMode.ON_OFFLINE, "행사기관"
     );
   }
 

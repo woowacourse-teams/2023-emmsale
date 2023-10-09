@@ -10,14 +10,10 @@ import com.emmsale.notification.application.generator.CommentNotificationMessage
 import com.emmsale.notification.application.generator.EventNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.MessageNotificationMessageGenerator;
 import com.emmsale.notification.application.generator.NotificationMessageGenerator;
-import com.emmsale.notification.application.generator.RequestNotificationMessageGenerator;
-import com.emmsale.notification.application.generator.UpdateNotificationMessageGenerator;
 import com.emmsale.notification.domain.FcmToken;
 import com.emmsale.notification.domain.FcmTokenRepository;
 import com.emmsale.notification.domain.Notification;
 import com.emmsale.notification.domain.NotificationType;
-import com.emmsale.notification.domain.RequestNotification;
-import com.emmsale.notification.domain.UpdateNotification;
 import com.emmsale.notification.exception.NotificationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -61,20 +57,6 @@ public class FirebaseCloudMessageClient {
 
   @Value("${firebase.project.id}")
   private String projectId;
-
-  public void sendMessageTo(final RequestNotification requestNotification) {
-    sendMessageTo(
-        requestNotification.getReceiverId(),
-        new RequestNotificationMessageGenerator(requestNotification)
-    );
-  }
-
-  public void sendMessageTo(final UpdateNotification updateNotification) {
-    sendMessageTo(
-        updateNotification.getReceiverId(),
-        new UpdateNotificationMessageGenerator(updateNotification)
-    );
-  }
 
   public void sendMessageTo(final MessageNotificationEvent messageNotificationEvent) {
     sendMessageTo(
