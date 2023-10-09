@@ -32,8 +32,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -66,8 +70,23 @@ public class EventService {
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
         .collect(toList());
+    final String thumbnailImageUrl = extractThumbnailImage(imageUrls);
+    final List<String> informationImageUrls = extractInformationImages(imageUrls);
+    return EventDetailResponse.from(event, thumbnailImageUrl, informationImageUrls);
+  }
 
-    return EventDetailResponse.from(event, today, imageUrls);
+  private String extractThumbnailImage(final List<String> imageUrls) {
+    if (imageUrls.isEmpty()) {
+      return null;
+    }
+    return imageUrls.get(0);
+  }
+
+  private List<String> extractInformationImages(final List<String> imageUrls) {
+    if (imageUrls.size() <= 1) {
+      return Collections.emptyList();
+    }
+    return imageUrls.subList(1, imageUrls.size());
   }
 
   @Transactional(readOnly = true)
@@ -88,10 +107,11 @@ public class EventService {
       spec = spec.and(EventSpecification.filterByPeriod(startDateTime, endDateTime));
     }
     final List<Event> events = eventRepository.findAll(spec);
+
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events);
 
-    return filterByStatuses(nowDate, statuses, eventsForEventStatus);
+    return filterByStatuses(statuses, eventsForEventStatus, makeImageUrlPerEventId(events));
   }
 
   private boolean isExistTagNames(final List<String> tagNames) {
@@ -115,7 +135,7 @@ public class EventService {
         return LocalDate.parse(MIN_DATE).atStartOfDay();
       }
       return LocalDate.parse(date).atStartOfDay();
-    } catch (DateTimeParseException exception) {
+    } catch (final DateTimeParseException exception) {
       throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
     }
   }
@@ -126,7 +146,7 @@ public class EventService {
         return LocalDate.parse(MAX_DATE).atTime(23, 59, 59);
       }
       return LocalDate.parse(date).atTime(23, 59, 59);
-    } catch (DateTimeParseException exception) {
+    } catch (final DateTimeParseException exception) {
       throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
     }
   }
@@ -136,6 +156,19 @@ public class EventService {
     if (endDate.isBefore(startDate)) {
       throw new EventException(EventExceptionType.START_DATE_AFTER_END_DATE);
     }
+  }
+
+  // TODO: 2023/09/27 코드 중복 제거(ScrapService)
+  private Map<Long, String> makeImageUrlPerEventId(final List<Event> events) {
+    final List<Long> scrappedEventIds = events.stream()
+        .map(Event::getId)
+        .collect(Collectors.toList());
+    final List<Image> images = imageRepository.findAllThumbnailByEventIdIn(scrappedEventIds);
+    Map<Long, String> imageUrlPerEventId = new HashMap<>();
+    for (Image image : images) {
+      imageUrlPerEventId.put(image.getContentId(), image.getName());
+    }
+    return imageUrlPerEventId;
   }
 
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
@@ -149,14 +182,14 @@ public class EventService {
   }
 
   private List<EventResponse> filterByStatuses(
-      final LocalDate today,
       final List<EventStatus> statuses,
-      final EnumMap<EventStatus, List<Event>> eventsForEventStatus
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus,
+      final Map<Long, String> imageUrlPerEventId
   ) {
     if (isExistStatusName(statuses)) {
-      return filterEventResponseByStatuses(today, statuses, eventsForEventStatus);
+      return filterEventResponseByStatuses(statuses, eventsForEventStatus, imageUrlPerEventId);
     }
-    return EventResponse.mergeEventResponses(today, eventsForEventStatus);
+    return EventResponse.mergeEventResponses(eventsForEventStatus, imageUrlPerEventId);
   }
 
   private boolean isExistStatusName(final List<EventStatus> statuses) {
@@ -164,15 +197,15 @@ public class EventService {
   }
 
   private List<EventResponse> filterEventResponseByStatuses(
-      final LocalDate today,
       final List<EventStatus> statuses,
-      final EnumMap<EventStatus, List<Event>> eventsForEventStatus
+      final EnumMap<EventStatus, List<Event>> eventsForEventStatus,
+      final Map<Long, String> imageUrlPerEventId
   ) {
     return eventsForEventStatus.entrySet()
         .stream()
         .filter(entry -> statuses.contains(entry.getKey()))
-        .map(entry -> EventResponse.makeEventResponsesByStatus(today, entry.getKey(),
-            entry.getValue()))
+        .map(
+            entry -> EventResponse.makeEventResponsesByStatus(entry.getValue(), imageUrlPerEventId))
         .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
           combinedEvents.addAll(eventsToAdd);
           return combinedEvents;
@@ -180,7 +213,7 @@ public class EventService {
   }
 
   public EventDetailResponse addEvent(final EventDetailRequest request,
-      final List<MultipartFile> images, final LocalDate today) {
+      final List<MultipartFile> images) {
     final Event event = eventRepository.save(request.toEvent());
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
     event.addAllEventTags(tags);
@@ -193,12 +226,13 @@ public class EventService {
         .collect(toList());
 
     eventPublisher.publish(event);
-
-    return EventDetailResponse.from(event, today, imageUrls);
+    final String thumbnailImageUrl = extractThumbnailImage(imageUrls);
+    final List<String> informationImageUrls = extractInformationImages(imageUrls);
+    return EventDetailResponse.from(event, thumbnailImageUrl, informationImageUrls);
   }
 
   public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request,
-      final List<MultipartFile> images, final LocalDate today) {
+      final List<MultipartFile> images) {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
@@ -227,8 +261,9 @@ public class EventService {
         .sorted(comparing(Image::getOrder))
         .map(Image::getName)
         .collect(toList());
-
-    return EventDetailResponse.from(updatedEvent, today, imageUrls);
+    final String thumbnailImageUrl = extractThumbnailImage(imageUrls);
+    final List<String> informationImageUrls = extractInformationImages(imageUrls);
+    return EventDetailResponse.from(updatedEvent, thumbnailImageUrl, informationImageUrls);
   }
 
   public void deleteEvent(final Long eventId) {

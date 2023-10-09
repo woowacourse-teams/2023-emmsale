@@ -7,7 +7,6 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.PaymentType;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +19,7 @@ class EventDetailResponseTest {
   void createEventDetailResponseTest() {
     //given
     final Event 구름톤 = EventFixture.구름톤();
-    final LocalDate 날짜 = LocalDate.of(2023, 7, 1);
+    final String thumbnailUrl = "thumbnail";
     final List<String> imageUrls = List.of("imageUrl1", "imageUrl2");
 
     final EventDetailResponse expected = new EventDetailResponse(
@@ -32,11 +31,8 @@ class EventDetailResponseTest {
         구름톤.getEventPeriod().getApplyStartDate(),
         구름톤.getEventPeriod().getApplyEndDate(),
         구름톤.getLocation(),
-        EventStatus.UPCOMING.name(),
-        EventStatus.UPCOMING.name(),
         Collections.emptyList(),
-        구름톤.getImageUrl(),
-        2, 2,
+        thumbnailUrl,
         구름톤.getType().toString(),
         imageUrls,
         구름톤.getOrganization(),
@@ -45,7 +41,7 @@ class EventDetailResponseTest {
     );
 
     //when
-    final EventDetailResponse actual = EventDetailResponse.from(구름톤, 날짜, imageUrls);
+    final EventDetailResponse actual = EventDetailResponse.from(구름톤, thumbnailUrl, imageUrls);
 
     //then
     assertThat(actual)

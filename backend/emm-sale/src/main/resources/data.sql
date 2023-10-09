@@ -7,9 +7,7 @@ truncate table tag;
 truncate table event_tag;
 truncate table member_tag;
 truncate table event_member;
-truncate table request_notification;
 truncate table fcm_token;
-truncate table update_notification;
 truncate table block;
 truncate table report;
 truncate table scrap;
@@ -77,96 +75,86 @@ values (7, '정보보안');
 
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (1, '인프콘 2023', '2023-06-01T12:00:00', '2023-09-01T12:00:00', '2023-05-01T12:00:00',
         '2023-06-01T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
-        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
         'CONFERENCE', 'OFFLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
-                  location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  location, information_url, created_at, updated_at, type, event_mode, payment_type,
+                  organization)
 values (2, 'AI 컨퍼런스', '2023-07-22T12:00:00', '2023-07-30T12:00:00', '2023-07-01T12:00:00',
         '2023-07-22T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
-        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
         'CONFERENCE', 'ONLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (3, '모바일 컨퍼런스', '2023-08-03T12:00:00', '2023-09-03T12:00:00', '2023-08-01T12:00:00',
         '2023-08-02T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
-        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
         'CONFERENCE', 'ONLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (4, '안드로이드 컨퍼런스', '2023-06-29T12:00:00', '2023-07-16T12:00:00', '2023-06-01T12:00:00',
         '2023-06-20T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
-        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
         'CONFERENCE', 'ONLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (5, '웹 컨퍼런스', '2023-07-03T12:00:00', '2023-08-03T12:00:00', '2023-07-03T12:00:00',
         '2023-08-03T12:00:00', '코엑스', 'https://www.naver.com',
-        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), null, 'CONFERENCE', 'ONLINE', 'PAID', '행사기관');
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'CONFERENCE', 'ONLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (6, '옛날 웹 컨퍼런스', '2022-07-03T12:00:00', '2022-08-03T12:00:00', '2022-07-03T12:00:00',
         '2022-08-03T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
-        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
         'CONFERENCE', 'ONLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (7, '알고리즘 경진대회', '2023-06-01T12:00:00', '2023-09-01T12:00:00', '2023-06-01T12:00:00',
         '2023-09-01T12:00:00', '온라인', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
-        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
         'COMPETITION', 'ONLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (8, '첨단 해커톤', '2023-07-22T12:00:00', '2023-07-30T12:00:00', '2023-07-22T12:00:00',
         '2023-07-30T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
-        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
         'COMPETITION', 'ONLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (9, 'AI 아이디어 공모전', '2023-08-03T12:00:00', '2023-09-03T12:00:00', '2023-08-03T12:00:00',
         '2023-09-03T12:00:00', '코엑스', 'https://www.naver.com',
-        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), null, 'COMPETITION', 'ONLINE', 'PAID', '행사기관');
+        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'COMPETITION', 'ONLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (10, '구름톤', '2023-06-29T12:00:00', '2023-07-16T12:00:00', '2023-06-29T12:00:00',
         '2023-07-16T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
-        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
         'COMPETITION', 'ONLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location, information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (11, 'CTF', '2023-07-03T12:00:00', '2023-08-03T12:00:00', '2023-07-03T12:00:00',
         '2023-08-03T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
-        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
         'COMPETITION', 'ONLINE', 'PAID', '행사기관');
 insert into event(id, name, start_date, end_date, apply_start_date, apply_end_date,
                   location,
                   information_url, created_at, updated_at,
-                  image_url, type, event_mode, payment_type, organization)
+                  type, event_mode, payment_type, organization)
 values (12, '보안 경진대회', '2022-07-03T12:00:00', '2022-08-03T12:00:00', '2022-07-03T12:00:00',
         '2022-08-03T12:00:00', '코엑스', 'https://www.naver.com',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
-        'https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg',
         'COMPETITION', 'ONLINE', 'PAID', '행사기관');
 
 
