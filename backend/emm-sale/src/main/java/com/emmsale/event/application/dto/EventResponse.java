@@ -30,7 +30,7 @@ public class EventResponse {
   @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime applyEndDate;
   private final List<String> tags;
-  private final String imageUrl;
+  private final String thumbnailUrl;
   private final String eventMode;
   private final String paymentType;
 
@@ -53,7 +53,7 @@ public class EventResponse {
         });
   }
 
-  private static EventResponse from(final Event event, final String imageUrl) {
+  private static EventResponse from(final Event event, final String thumbnailUrl) {
     return new EventResponse(
         event.getId(),
         event.getName(),
@@ -62,7 +62,7 @@ public class EventResponse {
         event.getEventPeriod().getApplyStartDate(),
         event.getEventPeriod().getApplyEndDate(),
         event.extractTags(),
-        imageUrl,
+        thumbnailUrl,
         event.getEventMode().getValue(),
         event.getPaymentType().getValue()
     );

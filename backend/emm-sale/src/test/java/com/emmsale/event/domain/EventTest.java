@@ -51,7 +51,6 @@ class EventTest {
     final String url = "https://information-url.com";
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
-    final String imageUrl = "https://image.com";
     final String organization = "행사기관";
 
     //when & then
@@ -72,7 +71,6 @@ class EventTest {
     final String url = "https://information-url.com";
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
-    final String imageUrl = "https://image.com";
     final String organization = "행사기관";
 
     //when & then
@@ -94,7 +92,6 @@ class EventTest {
     final String url = "https://information-url.com";
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
-    final String imageUrl = "https://image.com";
     final String organization = "행사기관";
 
     //when & then
@@ -115,7 +112,6 @@ class EventTest {
     final String url = "https://information-url.com";
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
-    final String imageUrl = "https://image.com";
     final String organization = "행사기관";
 
     //when & then

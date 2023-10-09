@@ -170,10 +170,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           new Image("imageUrl3", ImageType.EVENT, event.getId(), 2, LocalDateTime.now())
       );
 
-      final String imageUrl = "imageUrl2";
+      final String thumbnailUrl = "imageUrl2";
       final List<String> imageUrls = List.of("imageUrl1", "imageUrl3");
 
-      final EventDetailResponse expected = EventDetailResponse.from(event, imageUrl,
+      final EventDetailResponse expected = EventDetailResponse.from(event, thumbnailUrl,
           imageUrls);
 
       //when
@@ -212,8 +212,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
           new Image("imageUrl2", ImageType.EVENT, event.getId(), 0, LocalDateTime.now())
       );
 
-      final String imageUrl = "imageUrl2";
-      final EventDetailResponse expected = EventDetailResponse.from(event, imageUrl,
+      final String thumbnailUrl = "imageUrl2";
+      final EventDetailResponse expected = EventDetailResponse.from(event, thumbnailUrl,
           Collections.emptyList());
 
       //when

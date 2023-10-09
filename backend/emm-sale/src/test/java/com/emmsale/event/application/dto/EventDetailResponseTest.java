@@ -17,7 +17,7 @@ class EventDetailResponseTest {
   void createEventDetailResponseTest() {
     //given
     final Event 구름톤 = EventFixture.구름톤();
-    final String imageUrl = "thumbnail";
+    final String thumbnailUrl = "thumbnail";
     final List<String> imageUrls = List.of("imageUrl1", "imageUrl2");
 
     final EventDetailResponse expected = new EventDetailResponse(
@@ -30,7 +30,7 @@ class EventDetailResponseTest {
         구름톤.getEventPeriod().getApplyEndDate(),
         구름톤.getLocation(),
         Collections.emptyList(),
-        imageUrl,
+        thumbnailUrl,
         구름톤.getType().toString(),
         imageUrls,
         구름톤.getOrganization(),
@@ -38,7 +38,7 @@ class EventDetailResponseTest {
     );
 
     //when
-    final EventDetailResponse actual = EventDetailResponse.from(구름톤, imageUrl, imageUrls);
+    final EventDetailResponse actual = EventDetailResponse.from(구름톤, thumbnailUrl, imageUrls);
 
     //then
     assertThat(actual)

@@ -30,7 +30,7 @@ public class EventDetailResponse {
   private final LocalDateTime applyEndDate;
   private final String location;
   private final List<String> tags;
-  private final String imageUrl;
+  private final String thumbnailUrl;
   private final String type;
   private final List<String> imageUrls;
   private final String organization;
@@ -38,7 +38,7 @@ public class EventDetailResponse {
 
   public static EventDetailResponse from(
       final Event event,
-      final String imageUrl,
+      final String thumbnailUrl,
       final List<String> imageUrls
   ) {
     final List<String> tagNames = event.getTags().stream()
@@ -56,7 +56,7 @@ public class EventDetailResponse {
         event.getEventPeriod().getApplyEndDate(),
         event.getLocation(),
         tagNames,
-        imageUrl,
+        thumbnailUrl,
         event.getType().toString(),
         imageUrls,
         event.getOrganization(),
