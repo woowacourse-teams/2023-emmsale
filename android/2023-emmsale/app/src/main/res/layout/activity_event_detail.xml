@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="17dp"
                     android:layout_marginTop="11dp"
-                    android:fontFamily="@font/nanum_square_bold"
+                    android:textStyle="bold"
                     android:textColor="@color/primary_color"
                     android:textSize="13sp"
                     app:eventProgressStatus="@{vm.eventDetail.eventDetail.progressStatus}"

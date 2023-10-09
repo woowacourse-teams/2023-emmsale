@@ -29,31 +29,33 @@ fun TextView.setPaymentType(
 
 @BindingAdapter("app:eventProgressStatus", "app:eventApplicationStatus")
 fun TextView.setEventStatus(
-    progressStatus: EventProgressStatus,
-    applicationStatue: EventApplicationStatus,
+    progressStatus: EventProgressStatus? = null,
+    applicationStatue: EventApplicationStatus? = null,
 ) {
+    if (progressStatus == null || applicationStatue == null) return
+
     when {
         progressStatus is EventProgressStatus.InProgress -> {
             text = context.getString(R.string.all_in_progress)
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
         applicationStatue is EventApplicationStatus.InProgress -> {
-            context.getString(R.string.all_application_in_progress, applicationStatue.remainingDays)
+            text = context.getString(R.string.all_application_in_progress, applicationStatue.remainingDays)
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
 
         applicationStatue is EventApplicationStatus.UpComing -> {
-            context.getString(R.string.all_application_up_coming, applicationStatue.remainingDays)
+            text = context.getString(R.string.all_application_up_coming, applicationStatue.remainingDays)
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
 
         progressStatus is EventProgressStatus.UpComing -> {
-            context.getString(R.string.all_up_coming, progressStatus.remainingDays)
+            text = context.getString(R.string.all_up_coming, progressStatus.remainingDays)
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
 
         else -> {
-            context.getString(R.string.all_ended)
+            text = context.getString(R.string.all_ended)
             setTextColor(ContextCompat.getColor(context, R.color.gray))
         }
     }

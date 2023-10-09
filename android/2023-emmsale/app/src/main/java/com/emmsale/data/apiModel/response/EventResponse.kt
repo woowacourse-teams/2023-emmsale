@@ -9,9 +9,9 @@ data class ConferenceResponse(
     val id: Long,
     @SerialName("name")
     val name: String,
-    @SerialName("startDate")
+    @SerialName("eventStartDate")
     val startDate: String, // format : "2023:09:03:12:00:00",
-    @SerialName("endDate")
+    @SerialName("eventEndDate")
     val endDate: String, // format : "2023:09:03:12:00:00",
     @SerialName("applyStartDate")
     val applyStartDate: String, // format : "2023:09:03:12:00:00"
@@ -55,9 +55,9 @@ data class CompetitionResponse(
     val id: Long,
     @SerialName("name")
     val name: String,
-    @SerialName("startDate")
+    @SerialName("eventStartDate")
     val startDate: String, // format : "2023:09:03:12:00:00",
-    @SerialName("endDate")
+    @SerialName("eventEndDate")
     val endDate: String, // format : "2023:09:03:12:00:00",
     @SerialName("applyStartDate")
     val applyStartDate: String, // format : "2023:09:03:12:00:00"
@@ -115,6 +115,14 @@ data class EventDetailResponse(
     val applyEndDate: String,
     @SerialName("location")
     val location: String,
+    @SerialName("status") // 필요 없는 것
+    val status: String,
+    @SerialName("applyStatus") // 필요 없는 것
+    val applyStatus: String,
+    @SerialName("remainingDays") // 필요 없는 것
+    val remainingDays: Int,
+    @SerialName("applyRemainingDays") // 필요 없는 것
+    val applyRemainingDays: Int,
     @SerialName("tags")
     val tags: List<String>,
     @SerialName("imageUrl")

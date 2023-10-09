@@ -9,9 +9,9 @@ data class ScrappedEventResponse(
     val id: Long,
     @SerialName("name")
     val name: String,
-    @SerialName("startDate")
+    @SerialName("eventStartDate")
     val startDate: String, // format : "2023:09:03:12:00:00",
-    @SerialName("endDate")
+    @SerialName("eventEndDate")
     val endDate: String, // format : "2023:09:03:12:00:00",
     @SerialName("applyStartDate")
     val applyStartDate: String,
