@@ -248,7 +248,11 @@ public class EventService {
         request.getApplyStartDateTime(),
         request.getApplyEndDateTime(),
         request.getInformationUrl(),
-        tags
+        tags,
+        request.getType(),
+        request.getEventMode(),
+        request.getPaymentType(),
+        request.getOrganization()
     );
     imageCommandService.deleteImages(ImageType.EVENT, eventId);
     final List<String> imageUrls = imageCommandService

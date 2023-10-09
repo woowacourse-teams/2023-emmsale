@@ -35,6 +35,7 @@ public class EventDetailResponse {
   private final List<String> imageUrls;
   private final String organization;
   private final String paymentType;
+  private final String eventMode;
 
   public static EventDetailResponse from(
       final Event event,
@@ -60,7 +61,8 @@ public class EventDetailResponse {
         event.getType().toString(),
         imageUrls,
         event.getOrganization(),
-        event.getPaymentType().getValue()
+        event.getPaymentType().getValue(),
+        event.getEventMode().getValue()
     );
   }
 }
