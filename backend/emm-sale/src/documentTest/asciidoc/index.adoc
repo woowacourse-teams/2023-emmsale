@@ -178,6 +178,18 @@ include::{snippets}/delete-interest-tag/http-response.adoc[]
 .HTTP response 설명
 include::{snippets}/delete-interest-tag/response-fields.adoc[]
 
+=== `PATCH` : 사용자의 프로필을 변경한다.
+
+.HTTP request
+```http
+POST /members/2/profile HTTP/1.1
+Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Host: localhost:8080
+```
+
+.HTTP response
+include::{snippets}/update-profile/http-response.adoc[]
+
 == Event
 
 === `GET` : 행사 상세정보 조회

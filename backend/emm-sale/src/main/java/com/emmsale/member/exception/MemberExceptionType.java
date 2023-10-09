@@ -57,6 +57,11 @@ public enum MemberExceptionType implements BaseExceptionType {
   NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER(
       HttpStatus.UNAUTHORIZED,
       "사용자가 일치하지 않습니다."
+  ),
+
+  FORBIDDEN_UPDATE_PROFILE_IMAGE(
+      HttpStatus.FORBIDDEN,
+      "해당하는 멤버의 프로필을 바꿀 권한이 없습니다."
   );
 
   private final HttpStatus httpStatus;
