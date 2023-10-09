@@ -46,15 +46,39 @@
             tools:src="@drawable/img_all_loading" />
 
         <TextView
-            android:id="@+id/tv_event_status"
+            android:id="@+id/tv_application_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textStyle="bold"
             android:textSize="13sp"
-            app:eventProgressStatus="@{event.scrappedEvent.progressStatus}"
             app:eventApplicationStatus="@{event.scrappedEvent.applicationStatus}"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
+            app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
+            app:layout_goneMarginTop="9dp"
+            tools:text="D-21"
+            tools:textColor="@color/primary_color" />
+
+        <View
+            android:id="@+id/divider_event_status"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="6dp"
+            android:background="@color/light_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_application_status"
+            app:layout_constraintStart_toEndOf="@+id/tv_application_status"
+            app:layout_constraintTop_toTopOf="@+id/tv_application_status" />
+
+        <TextView
+            android:id="@+id/tv_progress_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="6dp"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            app:eventProgressStatus="@{event.scrappedEvent.progressStatus}"
+            app:layout_constraintStart_toEndOf="@+id/divider_event_status"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
             app:layout_goneMarginTop="9dp"
             tools:text="D-21"
@@ -70,7 +94,7 @@
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
-            app:layout_constraintTop_toBottomOf="@+id/tv_event_status"
+            app:layout_constraintTop_toBottomOf="@+id/tv_application_status"
             tools:text="2023 인프콘" />
 
         <TextView

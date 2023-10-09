@@ -27,36 +27,56 @@ fun TextView.setPaymentType(
     }
 }
 
-@BindingAdapter("app:eventProgressStatus", "app:eventApplicationStatus")
-fun TextView.setEventStatus(
-    progressStatus: EventProgressStatus? = null,
+@BindingAdapter("app:eventApplicationStatus")
+fun TextView.setEventApplicationStatus(
     applicationStatue: EventApplicationStatus? = null,
 ) {
-    if (progressStatus == null || applicationStatue == null) return
+    if (applicationStatue == null) return
 
-    when {
-        progressStatus is EventProgressStatus.InProgress -> {
+    when (applicationStatue) {
+        EventApplicationStatus.Ended -> {
+            text = "신청 마감"
+            setTextColor(ContextCompat.getColor(context, R.color.gray))
+        }
+
+        is EventApplicationStatus.InProgress -> {
+            text = context.getString(
+                R.string.all_application_in_progress,
+                applicationStatue.remainingDays,
+            )
+            setTextColor(ContextCompat.getColor(context, R.color.primary_color))
+        }
+
+        is EventApplicationStatus.UpComing -> {
+            text = context.getString(
+                R.string.all_application_up_coming,
+                applicationStatue.remainingDays,
+            )
+            setTextColor(ContextCompat.getColor(context, R.color.primary_color))
+        }
+    }
+}
+
+@BindingAdapter("app:eventProgressStatus")
+fun TextView.setEventProgressStatus(
+    progressStatus: EventProgressStatus? = null,
+) {
+    if (progressStatus == null) return
+
+    when (progressStatus) {
+        EventProgressStatus.Ended -> {
+            text = context.getString(R.string.all_ended)
+            setTextColor(ContextCompat.getColor(context, R.color.gray))
+        }
+
+        EventProgressStatus.InProgress -> {
             text = context.getString(R.string.all_in_progress)
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
-        applicationStatue is EventApplicationStatus.InProgress -> {
-            text = context.getString(R.string.all_application_in_progress, applicationStatue.remainingDays)
-            setTextColor(ContextCompat.getColor(context, R.color.primary_color))
-        }
 
-        applicationStatue is EventApplicationStatus.UpComing -> {
-            text = context.getString(R.string.all_application_up_coming, applicationStatue.remainingDays)
-            setTextColor(ContextCompat.getColor(context, R.color.primary_color))
-        }
-
-        progressStatus is EventProgressStatus.UpComing -> {
+        is EventProgressStatus.UpComing -> {
             text = context.getString(R.string.all_up_coming, progressStatus.remainingDays)
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
-        }
-
-        else -> {
-            text = context.getString(R.string.all_ended)
-            setTextColor(ContextCompat.getColor(context, R.color.gray))
         }
     }
 }

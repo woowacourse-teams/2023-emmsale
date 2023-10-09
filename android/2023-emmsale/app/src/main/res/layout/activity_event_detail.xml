@@ -87,19 +87,43 @@
                 app:layout_anchorGravity="bottom">
 
                 <TextView
-                    android:id="@+id/tv_eventdetail_eventstatus"
+                    android:id="@+id/tv_application_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="17dp"
                     android:layout_marginTop="11dp"
                     android:textStyle="bold"
-                    android:textColor="@color/primary_color"
                     android:textSize="13sp"
-                    app:eventProgressStatus="@{vm.eventDetail.eventDetail.progressStatus}"
                     app:eventApplicationStatus="@{vm.eventDetail.eventDetail.applicationStatus}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="D-Day" />
+                    tools:text="D-21"
+                    tools:textColor="@color/primary_color" />
+
+                <View
+                    android:id="@+id/divider_event_status"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="6dp"
+                    android:background="@color/light_gray"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_application_status"
+                    app:layout_constraintStart_toEndOf="@+id/tv_application_status"
+                    app:layout_constraintTop_toTopOf="@+id/tv_application_status" />
+
+                <TextView
+                    android:id="@+id/tv_progress_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textStyle="bold"
+                    android:textSize="13sp"
+                    app:eventProgressStatus="@{vm.eventDetail.eventDetail.progressStatus}"
+                    app:layout_constraintStart_toEndOf="@+id/divider_event_status"
+                    app:layout_constraintTop_toTopOf="@id/tv_application_status"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_application_status"
+                    app:layout_goneMarginTop="9dp"
+                    tools:text="D-21"
+                    tools:textColor="@color/primary_color" />
 
                 <TextView
                     android:id="@+id/tv_eventdetail_eventname"
@@ -115,7 +139,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_eventdetail_eventstatus"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_application_status"
                     tools:text="AWS 부산 클라우드데이 2023 AWS" />
 
                 <TextView
