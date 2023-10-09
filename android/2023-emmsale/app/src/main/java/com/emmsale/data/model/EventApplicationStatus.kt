@@ -16,12 +16,18 @@ sealed interface EventApplicationStatus {
             val nowDateTime = LocalDateTime.now()
             return when {
                 nowDateTime.isBefore(applicationStartDate) -> UpComing(
-                    ChronoUnit.DAYS.between(nowDateTime, applicationStartDate).toInt(),
+                    ChronoUnit.DAYS.between(
+                        nowDateTime.toLocalDate(),
+                        applicationStartDate.toLocalDate(),
+                    ).toInt(),
                 )
 
                 nowDateTime.isAfter(applicationEndDate) -> Ended
                 else -> InProgress(
-                    ChronoUnit.DAYS.between(nowDateTime, applicationEndDate).toInt(),
+                    ChronoUnit.DAYS.between(
+                        nowDateTime.toLocalDate(),
+                        applicationEndDate.toLocalDate(),
+                    ).toInt(),
                 )
             }
         }

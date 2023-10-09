@@ -13,7 +13,8 @@ sealed interface EventProgressStatus {
             val nowDateTime = LocalDateTime.now()
             return when {
                 nowDateTime.isBefore(startDate) -> UpComing(
-                    ChronoUnit.DAYS.between(nowDateTime, startDate).toInt(),
+                    ChronoUnit.DAYS.between(nowDateTime.toLocalDate(), startDate.toLocalDate())
+                        .toInt(),
                 )
 
                 nowDateTime.isAfter(endDate) -> Ended
