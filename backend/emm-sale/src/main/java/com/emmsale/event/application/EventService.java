@@ -91,7 +91,7 @@ public class EventService {
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDate, events);
 
-    return filterByStatuses(nowDate, statuses, eventsForEventStatus);
+    return filterByStatuses(statuses, eventsForEventStatus);
   }
 
   private boolean isExistTagNames(final List<String> tagNames) {
@@ -115,7 +115,7 @@ public class EventService {
         return LocalDate.parse(MIN_DATE).atStartOfDay();
       }
       return LocalDate.parse(date).atStartOfDay();
-    } catch (DateTimeParseException exception) {
+    } catch (final DateTimeParseException exception) {
       throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
     }
   }
@@ -126,7 +126,7 @@ public class EventService {
         return LocalDate.parse(MAX_DATE).atTime(23, 59, 59);
       }
       return LocalDate.parse(date).atTime(23, 59, 59);
-    } catch (DateTimeParseException exception) {
+    } catch (final DateTimeParseException exception) {
       throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
     }
   }
@@ -149,14 +149,13 @@ public class EventService {
   }
 
   private List<EventResponse> filterByStatuses(
-      final LocalDate today,
       final List<EventStatus> statuses,
       final EnumMap<EventStatus, List<Event>> eventsForEventStatus
   ) {
     if (isExistStatusName(statuses)) {
-      return filterEventResponseByStatuses(today, statuses, eventsForEventStatus);
+      return filterEventResponseByStatuses(statuses, eventsForEventStatus);
     }
-    return EventResponse.mergeEventResponses(today, eventsForEventStatus);
+    return EventResponse.mergeEventResponses(eventsForEventStatus);
   }
 
   private boolean isExistStatusName(final List<EventStatus> statuses) {
@@ -164,15 +163,13 @@ public class EventService {
   }
 
   private List<EventResponse> filterEventResponseByStatuses(
-      final LocalDate today,
       final List<EventStatus> statuses,
       final EnumMap<EventStatus, List<Event>> eventsForEventStatus
   ) {
     return eventsForEventStatus.entrySet()
         .stream()
         .filter(entry -> statuses.contains(entry.getKey()))
-        .map(entry -> EventResponse.makeEventResponsesByStatus(today, entry.getKey(),
-            entry.getValue()))
+        .map(entry -> EventResponse.makeEventResponsesByStatus(entry.getValue()))
         .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
           combinedEvents.addAll(eventsToAdd);
           return combinedEvents;
