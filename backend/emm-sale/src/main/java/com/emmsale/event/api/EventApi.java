@@ -43,9 +43,11 @@ public class EventApi {
       @RequestParam(name = "start_date", required = false) final String startDate,
       @RequestParam(name = "end_date", required = false) final String endDate,
       @RequestParam(required = false) final List<String> tags,
-      @RequestParam(required = false) final List<EventStatus> statuses) {
+      @RequestParam(required = false) final List<EventStatus> statuses,
+      @RequestParam(required = false) final String keyword) {
     return ResponseEntity.ok(
-        eventService.findEvents(category, LocalDate.now(), startDate, endDate, tags, statuses));
+        eventService.findEvents(category, LocalDate.now(), startDate, endDate, tags, statuses,
+            keyword));
   }
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
