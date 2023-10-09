@@ -1,7 +1,5 @@
 package com.emmsale.event.application.dto;
 
-import static java.util.stream.Collectors.toList;
-
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -9,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -31,28 +30,30 @@ public class EventResponse {
   @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime applyEndDate;
   private final List<String> tags;
-  private final String imageUrl;
+  private final String thumbnailUrl;
   private final String eventMode;
   private final String paymentType;
 
-  public static List<EventResponse> makeEventResponsesByStatus(final List<Event> events) {
+  public static List<EventResponse> makeEventResponsesByStatus(final List<Event> events,
+      final Map<Long, String> imageUrlPerEventId) {
     return events.stream()
-        .map(EventResponse::from)
-        .collect(toList());
+        .map(event -> EventResponse.from(event, imageUrlPerEventId.get(event.getId())))
+        .collect(Collectors.toList());
   }
 
   public static List<EventResponse> mergeEventResponses(
-      final Map<EventStatus, List<Event>> groupByEventStatus
+      final Map<EventStatus, List<Event>> groupByEventStatus,
+      final Map<Long, String> imageUrlPerEventId
   ) {
     return groupByEventStatus.values().stream()
-        .map(EventResponse::makeEventResponsesByStatus)
+        .map(events -> makeEventResponsesByStatus(events, imageUrlPerEventId))
         .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
           combinedEvents.addAll(eventsToAdd);
           return combinedEvents;
         });
   }
 
-  private static EventResponse from(final Event event) {
+  private static EventResponse from(final Event event, final String thumbnailUrl) {
     return new EventResponse(
         event.getId(),
         event.getName(),
@@ -61,7 +62,7 @@ public class EventResponse {
         event.getEventPeriod().getApplyStartDate(),
         event.getEventPeriod().getApplyEndDate(),
         event.extractTags(),
-        event.getImageUrl(),
+        thumbnailUrl,
         event.getEventMode().getValue(),
         event.getPaymentType().getValue()
     );

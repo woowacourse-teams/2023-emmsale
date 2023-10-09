@@ -84,8 +84,8 @@ class ScrapApiTest extends MockMvcTestHelper {
             .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
         PayloadDocumentation.fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
             .description("행사 태그 목록"),
-        PayloadDocumentation.fieldWithPath("[].imageUrl").type(JsonFieldType.STRING)
-            .description("행사 이미지 URL"),
+        PayloadDocumentation.fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING)
+            .description("행사 섬네일 이미지 URL"),
         PayloadDocumentation.fieldWithPath("[].eventMode").type(JsonFieldType.STRING)
             .description("행사 온라인 여부(온라인, 오프라인, 온오프라인)"),
         PayloadDocumentation.fieldWithPath("[].paymentType").type(JsonFieldType.STRING)
