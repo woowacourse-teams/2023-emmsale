@@ -1,5 +1,6 @@
 package com.emmsale.data.mapper
 
+import com.emmsale.BuildConfig
 import com.emmsale.data.apiModel.response.CompetitionResponse
 import com.emmsale.data.model.Competition
 import com.emmsale.data.model.OnOfflineMode
@@ -19,7 +20,7 @@ fun CompetitionResponse.toData(): Competition = Competition(
     applicationStartDate = parseDate(applyStartDate),
     applicationEndDate = parseDate(applyEndDate),
     tags = tags,
-    posterUrl = posterUrl,
+    posterUrl = posterUrl?.let { BuildConfig.IMAGE_URL_PREFIX + it },
     onOfflineMode = when (onOfflineMode) {
         CompetitionResponse.OnOfflineMode.ONLINE -> OnOfflineMode.ONLINE
         CompetitionResponse.OnOfflineMode.OFFLINE -> OnOfflineMode.OFFLINE

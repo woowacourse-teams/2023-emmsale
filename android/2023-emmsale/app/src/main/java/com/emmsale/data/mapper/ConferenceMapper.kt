@@ -1,5 +1,6 @@
 package com.emmsale.data.mapper
 
+import com.emmsale.BuildConfig
 import com.emmsale.data.apiModel.response.ConferenceResponse
 import com.emmsale.data.model.Conference
 import com.emmsale.data.model.OnOfflineMode
@@ -19,7 +20,7 @@ fun ConferenceResponse.toData(): Conference = Conference(
     applicationStartDate = parseDate(applyStartDate),
     applicationEndDate = parseDate(applyEndDate),
     tags = tags,
-    posterUrl = posterUrl,
+    posterUrl = posterUrl?.let { BuildConfig.IMAGE_URL_PREFIX + it },
     onOfflineMode = when (onOfflineMode) {
         ConferenceResponse.OnOfflineMode.ONLINE -> OnOfflineMode.ONLINE
         ConferenceResponse.OnOfflineMode.OFFLINE -> OnOfflineMode.OFFLINE

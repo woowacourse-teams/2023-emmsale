@@ -19,7 +19,7 @@ data class ScrappedEventResponse(
     val applyEndDate: String,
     @SerialName("tags")
     val tags: List<String>,
-    @SerialName("imageUrl")
+    @SerialName("thumbnailUrl")
     val posterUrl: String? = null,
     @SerialName("eventMode")
     val eventMode: EventMode,

@@ -19,7 +19,7 @@ data class ConferenceResponse(
     val applyEndDate: String, // format : "2023:09:03:12:00:00"
     @SerialName("tags")
     val tags: List<String>,
-    @SerialName("imageUrl")
+    @SerialName("thumbnailUrl")
     val posterUrl: String? = null,
     @SerialName("eventMode")
     val onOfflineMode: OnOfflineMode,
@@ -65,7 +65,7 @@ data class CompetitionResponse(
     val applyEndDate: String, // format : "2023:09:03:12:00:00"
     @SerialName("tags")
     val tags: List<String>,
-    @SerialName("imageUrl")
+    @SerialName("thumbnailUrl")
     val posterUrl: String? = null,
     @SerialName("eventMode")
     val onOfflineMode: OnOfflineMode,
@@ -99,8 +99,6 @@ data class CompetitionResponse(
 data class EventDetailResponse(
     @SerialName("id")
     val id: Long,
-    @SerialName("organization")
-    val organization: String,
     @SerialName("name")
     val name: String,
     @SerialName("informationUrl")
@@ -115,24 +113,20 @@ data class EventDetailResponse(
     val applyEndDate: String,
     @SerialName("location")
     val location: String,
-    @SerialName("status") // 필요 없는 것
-    val status: String,
-    @SerialName("applyStatus") // 필요 없는 것
-    val applyStatus: String,
-    @SerialName("remainingDays") // 필요 없는 것
-    val remainingDays: Int,
-    @SerialName("applyRemainingDays") // 필요 없는 것
-    val applyRemainingDays: Int,
     @SerialName("tags")
     val tags: List<String>,
-    @SerialName("imageUrl")
-    val imageUrl: String?,
+    @SerialName("thumbnailUrl")
+    val thumbnailUrl: String?,
     @SerialName("type")
     val type: String,
     @SerialName("imageUrls")
     val imageUrls: List<String> = emptyList(),
+    @SerialName("organization")
+    val organization: String,
     @SerialName("paymentType")
     val paymentType: PaymentType,
+    @SerialName("eventMode")
+    val onOfflineMode: OnOfflineMode,
 ) {
     enum class PaymentType {
         @SerialName("유료")
@@ -143,5 +137,16 @@ data class EventDetailResponse(
 
         @SerialName("유무료")
         PAID_OR_FREE,
+    }
+
+    enum class OnOfflineMode {
+        @SerialName("온라인")
+        ONLINE,
+
+        @SerialName("오프라인")
+        OFFLINE,
+
+        @SerialName("온오프라인")
+        ON_OFFLINE,
     }
 }

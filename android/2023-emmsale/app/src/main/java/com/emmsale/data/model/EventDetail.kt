@@ -15,6 +15,7 @@ data class EventDetail(
     val tags: List<String>,
     val posterImageUrl: String?,
     val paymentType: PaymentType,
+    val onOfflineMode: OnOfflineMode,
     val type: String,
     val detailImageUrls: List<String>,
 ) {

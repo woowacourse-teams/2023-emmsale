@@ -1,5 +1,6 @@
 package com.emmsale.data.mapper
 
+import com.emmsale.BuildConfig
 import com.emmsale.data.apiModel.response.ScrappedEventResponse
 import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
@@ -17,7 +18,7 @@ fun ScrappedEventResponse.toData(): ScrappedEvent = ScrappedEvent(
     applicationStartDate = parseDate(applyStartDate),
     applicationEndDate = parseDate(applyEndDate),
     tags = tags,
-    posterUrl = posterUrl,
+    posterUrl = posterUrl?.let { BuildConfig.IMAGE_URL_PREFIX + it },
     onOfflineMode = when (eventMode) {
         ScrappedEventResponse.EventMode.ONLINE -> OnOfflineMode.ONLINE
         ScrappedEventResponse.EventMode.OFFLINE -> OnOfflineMode.OFFLINE
