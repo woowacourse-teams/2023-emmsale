@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.emmsale.databinding.ActivityEventSearchBinding
+import com.emmsale.presentation.ui.eventSearch.recyclerView.EventSearchAdapter
 
 class EventSearchActivity : AppCompatActivity() {
     private val binding by lazy { ActivityEventSearchBinding.inflate(layoutInflater) }
@@ -22,8 +23,11 @@ class EventSearchActivity : AppCompatActivity() {
     }
 
     private fun setupSearchResultRecyclerView() {
-        binding.rvEventSearchResult.addItemDecoration(
-            DividerItemDecoration(this, DividerItemDecoration.VERTICAL),
-        )
+        with(binding.rvEventSearchResult) {
+            adapter = EventSearchAdapter()
+            addItemDecoration(
+                DividerItemDecoration(this@EventSearchActivity, DividerItemDecoration.VERTICAL),
+            )
+        }
     }
 }
