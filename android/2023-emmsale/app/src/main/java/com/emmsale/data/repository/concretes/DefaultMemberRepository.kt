@@ -76,7 +76,7 @@ class DefaultMemberRepository @Inject constructor(
         memberService.updateMemberProfileImage(
             memberId = memberId,
             profileImageFile = formDataFile,
-        )
+        ).map { it.imageUrl }
     }
 
     override suspend fun addMemberActivities(
