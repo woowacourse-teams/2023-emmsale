@@ -27,10 +27,16 @@ public class S3Client {
 
   private final String bucket;
   private final AmazonS3 amazonS3;
+  private final String cloudFrontPrefix;
 
-  public S3Client(@Value("${cloud.aws.s3.bucket}") final String bucket, final AmazonS3 amazonS3) {
+  public S3Client(
+      @Value("${cloud.aws.s3.bucket}") final String bucket,
+      @Value("${cloud.aws.cloudfront-prefix}") final String cloudFrontPrefix,
+      final AmazonS3 amazonS3
+  ) {
     this.bucket = bucket;
     this.amazonS3 = amazonS3;
+    this.cloudFrontPrefix = cloudFrontPrefix;
   }
 
   public List<String> uploadImages(final List<MultipartFile> multipartFiles) {
@@ -88,6 +94,6 @@ public class S3Client {
   }
 
   public String convertImageName(final String imageUrl) {
-    return imageUrl.split(bucket + URL_DELIMITER, 2)[1];
+    return imageUrl.split(cloudFrontPrefix + URL_DELIMITER, 2)[1];
   }
 }
