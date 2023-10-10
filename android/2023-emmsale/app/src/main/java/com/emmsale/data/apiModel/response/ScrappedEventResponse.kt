@@ -9,38 +9,23 @@ data class ScrappedEventResponse(
     val id: Long,
     @SerialName("name")
     val name: String,
-    @SerialName("startDate")
+    @SerialName("eventStartDate")
     val startDate: String, // format : "2023:09:03:12:00:00",
-    @SerialName("endDate")
+    @SerialName("eventEndDate")
     val endDate: String, // format : "2023:09:03:12:00:00",
+    @SerialName("applyStartDate")
+    val applyStartDate: String,
+    @SerialName("applyEndDate")
+    val applyEndDate: String,
     @SerialName("tags")
     val tags: List<String>,
-    @SerialName("status")
-    val eventStatus: Status,
-    @SerialName("applyStatus")
-    val applyStatus: Status,
-    @SerialName("imageUrl")
+    @SerialName("thumbnailUrl")
     val posterUrl: String? = null,
-    @SerialName("remainingDays")
-    val remainingDays: Int,
-    @SerialName("applyRemainingDays")
-    val applyRemainingDays: Int,
     @SerialName("eventMode")
     val eventMode: EventMode,
     @SerialName("paymentType")
     val paymentType: PaymentType,
 ) {
-    enum class Status {
-        @SerialName("IN_PROGRESS")
-        IN_PROGRESS,
-
-        @SerialName("UPCOMING")
-        UPCOMING,
-
-        @SerialName("ENDED")
-        ENDED,
-    }
-
     enum class EventMode {
         @SerialName("온라인")
         ONLINE,
