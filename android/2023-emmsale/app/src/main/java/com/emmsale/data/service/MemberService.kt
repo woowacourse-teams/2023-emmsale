@@ -7,12 +7,15 @@ import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
 import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
 import com.emmsale.data.apiModel.response.MemberActivitiesResponse
 import com.emmsale.data.apiModel.response.MemberResponse
-import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.common.callAdapter.ApiResponse
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -37,6 +40,12 @@ interface MemberService {
     suspend fun updateMemberOpenProfileUrl(
         @Body memberOpenProfileUrlUpdateRequest: MemberOpenProfileUrlUpdateRequest,
     ): ApiResponse<Unit>
+
+    @PATCH("/members/{memberId}/profile")
+    suspend fun updateMemberProfileImage(
+        @Path("memberId") memberId: Long,
+        @Part profileImageFile: MultipartBody.Part,
+    ): ApiResponse<String>
 
     @POST("/members/activities")
     suspend fun addMemberActivities(
