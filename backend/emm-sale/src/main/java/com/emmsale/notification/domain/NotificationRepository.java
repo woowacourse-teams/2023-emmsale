@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface UpdateNotificationRepository extends JpaRepository<UpdateNotification, Long> {
+public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-  List<UpdateNotification> findAllByReceiverId(final Long receiverId);
+  @Query("select n from Notification n where n.receiverId = :receiverId")
+  List<Notification> findAllByReceiverId(@Param("receiverId") final Long receiverId);
 
-  List<UpdateNotification> findAllByIdIn(final List<Long> notificationIds);
+  List<Notification> findAllByIdIn(final List<Long> notificationIds);
 
   @Modifying
-  @Query("delete from UpdateNotification un where un.id in :ids")
+  @Query("delete from Notification n where n.id in :ids")
   void deleteBatchByIdsIn(@Param("ids") final List<Long> notificationIds);
 }

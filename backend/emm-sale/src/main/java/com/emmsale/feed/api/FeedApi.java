@@ -5,6 +5,7 @@ import com.emmsale.feed.application.FeedQueryService;
 import com.emmsale.feed.application.dto.FeedDetailResponse;
 import com.emmsale.feed.application.dto.FeedListResponse;
 import com.emmsale.feed.application.dto.FeedPostRequest;
+import com.emmsale.feed.application.dto.FeedSimpleResponse;
 import com.emmsale.feed.application.dto.FeedUpdateRequest;
 import com.emmsale.feed.application.dto.FeedUpdateResponse;
 import com.emmsale.member.domain.Member;
@@ -41,6 +42,11 @@ public class FeedApi {
   @GetMapping("/{id}")
   public FeedDetailResponse findFeed(final Member member, @PathVariable final Long id) {
     return feedQueryService.findFeed(member, id);
+  }
+
+  @GetMapping("/my")
+  public List<FeedSimpleResponse> findAllMyFeeds(final Member member) {
+    return feedQueryService.findAllMyFeeds(member);
   }
 
   @PostMapping

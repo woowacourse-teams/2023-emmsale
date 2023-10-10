@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 public class EventSpecification {
@@ -37,5 +38,17 @@ public class EventSpecification {
                 criteriaBuilder.greaterThanOrEqualTo(root.get("eventPeriod").get("endDate"),
                     startDate))
         );
+  }
+
+  public static Specification<Event> filterByNameContainsSearchKeywords(final String[] keywords) {
+    return (root, query, criteriaBuilder) -> {
+      Predicate[] predicates = new Predicate[keywords.length];
+
+      for (int i = 0; i < keywords.length; i++) {
+        predicates[i] = criteriaBuilder.like(root.get("name"), "%" + keywords[i] + "%");
+      }
+
+      return criteriaBuilder.and(predicates);
+    };
   }
 }
