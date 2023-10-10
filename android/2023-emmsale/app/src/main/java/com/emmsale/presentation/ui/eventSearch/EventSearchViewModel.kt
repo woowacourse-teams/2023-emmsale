@@ -1,6 +1,7 @@
 package com.emmsale.presentation.ui.eventSearch
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.emmsale.data.common.callAdapter.ApiResponse
@@ -34,6 +35,8 @@ class EventSearchViewModel @Inject constructor(
         .mapLatest { query -> eventRepository.searchEvents(query).toUiState() }
         .asLiveData()
 
+    val eventSearchHistories: LiveData<List<Event>> = MutableLiveData(emptyList())
+
     private fun ApiResponse<List<Event>>.toUiState(): EventSearchUiState = when (this) {
         is Success -> EventSearchUiState(data, FetchResult.SUCCESS)
         is Failure, is Unexpected -> EventSearchUiState(emptyList(), FetchResult.ERROR)
@@ -42,6 +45,13 @@ class EventSearchViewModel @Inject constructor(
 
     fun searchEvents(searchQuery: String) {
         this.eventSearchQuery.value = searchQuery
+    }
+
+    fun deleteSearchHistoryById(eventId: Long) {
+    }
+
+    // TODO("검색 기록 전체 삭제 기능 구현")
+    fun deleteAllSearchHistory() {
     }
 
     companion object {

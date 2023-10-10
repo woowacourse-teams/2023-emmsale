@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.eventSearch.recyclerView
+package com.emmsale.presentation.ui.eventSearch.recyclerView.eventSearch
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

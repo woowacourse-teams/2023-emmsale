@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.emmsale.data.model.Event
 import com.emmsale.databinding.ActivityEventSearchBinding
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
-import com.emmsale.presentation.ui.eventSearch.recyclerView.EventSearchAdapter
+import com.emmsale.presentation.ui.eventSearch.recyclerView.eventSearch.EventSearchAdapter
+import com.emmsale.presentation.ui.eventSearch.recyclerView.eventSearchHistory.EventSearchHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,12 +16,20 @@ class EventSearchActivity : AppCompatActivity() {
     private val binding by lazy { ActivityEventSearchBinding.inflate(layoutInflater) }
     private val viewModel: EventSearchViewModel by viewModels()
     private val eventSearchAdapter by lazy { EventSearchAdapter(::navigateToEventDetail) }
+    private val eventSearchHistoryAdapter by lazy {
+        EventSearchHistoryAdapter(
+            onHistoryClick = ::navigateToEventDetail,
+            onDeleteClick = { event -> viewModel.deleteSearchHistoryById(event.id) },
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupBinding()
         setupSearchResultRecyclerView()
-        collectEventSearchResults()
+        setupSearchHistoryRecyclerView()
+        observeEventSearchResults()
+        observeEventSearchHistories()
     }
 
     private fun setupBinding() {
@@ -38,9 +47,21 @@ class EventSearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun collectEventSearchResults() {
+    private fun setupSearchHistoryRecyclerView() {
+        with(binding.rvEventSearchHistory) {
+            adapter = eventSearchHistoryAdapter
+        }
+    }
+
+    private fun observeEventSearchResults() {
         viewModel.eventSearchResults.observe(this) { eventSearchUiState ->
             eventSearchAdapter.submitList(eventSearchUiState.events)
+        }
+    }
+
+    private fun observeEventSearchHistories() {
+        viewModel.eventSearchHistories.observe(this) { eventSearchHistories ->
+            eventSearchHistoryAdapter.submitList(eventSearchHistories)
         }
     }
 
