@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 sealed interface EventProgressStatus {
-    data class UpComing(val remainingDays: Int) : EventProgressStatus
+    data class UpComing(val daysUntilStart: Int) : EventProgressStatus
     object InProgress : EventProgressStatus
     object Ended : EventProgressStatus
 

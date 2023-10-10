@@ -42,7 +42,7 @@ fun TextView.setEventApplyingStatus(
         is EventApplyingStatus.InProgress -> {
             text = context.getString(
                 R.string.all_applying_in_progress,
-                applicationStatus.remainingDays,
+                applicationStatus.daysUntilDeadline,
             )
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
@@ -50,7 +50,7 @@ fun TextView.setEventApplyingStatus(
         is EventApplyingStatus.UpComing -> {
             text = context.getString(
                 R.string.all_applying_up_coming,
-                applicationStatus.remainingDays,
+                applicationStatus.daysUntilStart,
             )
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
@@ -75,7 +75,7 @@ fun TextView.setEventProgressStatus(
         }
 
         is EventProgressStatus.UpComing -> {
-            text = context.getString(R.string.all_event_up_coming, progressStatus.remainingDays)
+            text = context.getString(R.string.all_event_up_coming, progressStatus.daysUntilStart)
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
     }

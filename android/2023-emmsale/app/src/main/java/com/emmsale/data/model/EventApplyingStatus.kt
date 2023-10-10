@@ -4,29 +4,29 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 sealed interface EventApplyingStatus {
-    data class UpComing(val remainingDays: Int) : EventApplyingStatus
-    data class InProgress(val remainingDays: Int) : EventApplyingStatus
+    data class UpComing(val daysUntilStart: Int) : EventApplyingStatus
+    data class InProgress(val daysUntilDeadline: Int) : EventApplyingStatus
     object Ended : EventApplyingStatus
 
     companion object {
         fun create(
-            applicationStartDate: LocalDateTime,
-            applicationEndDate: LocalDateTime,
+            applyingStartDate: LocalDateTime,
+            applyingEndDate: LocalDateTime,
         ): EventApplyingStatus {
             val nowDateTime = LocalDateTime.now()
             return when {
-                nowDateTime.isBefore(applicationStartDate) -> UpComing(
+                nowDateTime.isBefore(applyingStartDate) -> UpComing(
                     ChronoUnit.DAYS.between(
                         nowDateTime.toLocalDate(),
-                        applicationStartDate.toLocalDate(),
+                        applyingStartDate.toLocalDate(),
                     ).toInt(),
                 )
 
-                nowDateTime.isAfter(applicationEndDate) -> Ended
+                nowDateTime.isAfter(applyingEndDate) -> Ended
                 else -> InProgress(
                     ChronoUnit.DAYS.between(
                         nowDateTime.toLocalDate(),
-                        applicationEndDate.toLocalDate(),
+                        applyingEndDate.toLocalDate(),
                     ).toInt(),
                 )
             }
