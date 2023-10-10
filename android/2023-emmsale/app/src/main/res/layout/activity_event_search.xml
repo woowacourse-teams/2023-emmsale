@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.emmsale.presentation.common.FetchResult" />
+
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.eventSearch.EventSearchViewModel" />
@@ -93,7 +95,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/v_event_search"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
-            app:visible="@{!etEventSearch.text.toString().trim().isEmpty() || viewModel.eventSearchResults.eventSize > 0}" />
+            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}" />
 
         <TextView
             android:id="@+id/tv_event_count"
@@ -107,7 +109,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/tv_event_prefix"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
-            app:visible="@{!etEventSearch.text.toString().trim().isEmpty() || viewModel.eventSearchResults.eventSize > 0}"
+            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}"
             tools:text="2" />
 
         <TextView
@@ -121,7 +123,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/tv_event_count"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
-            app:visible="@{!etEventSearch.text.toString().trim().isEmpty() || viewModel.eventSearchResults.eventSize > 0}" />
+            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}" />
 
         <View
             android:id="@+id/divider"
@@ -142,7 +144,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider"
+            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}"
             tools:listitem="@layout/item_conference" />
+
+        <com.emmsale.presentation.common.views.NoContentView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/rv_event_search_result"
+            app:noContentImageResId="@drawable/ic_no_result1"
+            app:title="@string/eventsearch_no_search_result_title"
+            app:visible="@{!etEventSearch.text.toString().trim().isEmpty() &amp;&amp; viewModel.eventSearchResults.eventSize == 0}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

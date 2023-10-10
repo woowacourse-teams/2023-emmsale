@@ -433,4 +433,5 @@
 
     <string name="eventsearch_toolbar_title">검색하기</string>
     <string name="eventsearch_edittext_hint">검색어를 입력하세요.</string>
+    <string name="eventsearch_no_search_result_title">검색 결과가 없습니다.</string>
 </resources>

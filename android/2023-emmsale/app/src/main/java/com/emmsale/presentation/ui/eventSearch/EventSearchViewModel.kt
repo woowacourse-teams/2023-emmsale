@@ -13,12 +13,10 @@ import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.ui.eventSearch.uistate.EventSearchUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
@@ -34,7 +32,6 @@ class EventSearchViewModel @Inject constructor(
         .map { query -> query.trim() }
         .distinctUntilChanged()
         .mapLatest { query -> eventRepository.searchEvents(query).toUiState() }
-        .flowOn(Dispatchers.IO)
         .asLiveData()
 
     private fun ApiResponse<List<Event>>.toUiState(): EventSearchUiState = when (this) {
