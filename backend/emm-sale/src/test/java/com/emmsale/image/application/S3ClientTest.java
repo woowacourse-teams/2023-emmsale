@@ -93,7 +93,7 @@ class S3ClientTest {
   @DisplayName("convertImageUrl(): 이미지 이름을 imageUrl로 바꾼다.")
   void convertImageUrl() {
     final String imageName = "image.png";
-    final String expected = "Test/image.png";
+    final String expected = CLOUD_FRONT_PREFIX + "/image.png";
 
     final String actual = s3Client.convertImageUrl(imageName);
 
