@@ -90,7 +90,7 @@ public class S3Client {
   }
 
   public String convertImageUrl(final String imageName) {
-    return String.join(URL_DELIMITER, bucket, imageName);
+    return String.join(URL_DELIMITER, cloudFrontPrefix, imageName);
   }
 
   public String convertImageName(final String imageUrl) {
