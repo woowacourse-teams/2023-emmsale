@@ -95,7 +95,8 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/v_event_search"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
-            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}" />
+            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_event_count"
@@ -110,7 +111,8 @@
             app:layout_constraintStart_toEndOf="@id/tv_event_prefix"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
             app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}"
-            tools:text="2" />
+            tools:text="2"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_event_suffix"
@@ -123,7 +125,8 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/tv_event_count"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
-            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}" />
+            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}"
+            tools:visibility="gone" />
 
         <View
             android:id="@+id/divider"
@@ -133,7 +136,7 @@
             android:background="@color/light_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_event_prefix" />
+            app:layout_constraintTop_toBottomOf="@id/barrier" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_event_search_result"
@@ -145,7 +148,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider"
             app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}"
-            tools:listitem="@layout/item_conference" />
+            tools:listitem="@layout/item_conference"
+            tools:visibility="gone" />
 
         <com.emmsale.presentation.common.views.NoContentView
             android:layout_width="0dp"
@@ -157,6 +161,55 @@
             app:noContentImageResId="@drawable/ic_no_result1"
             app:title="@string/eventsearch_no_search_result_title"
             app:visible="@{!etEventSearch.text.toString().trim().isEmpty() &amp;&amp; viewModel.eventSearchResults.eventSize == 0}" />
+
+        <TextView
+            android:id="@+id/tv_search_history_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/eventsearch_serach_history_title"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/v_event_search"
+            app:layout_constraintTop_toBottomOf="@id/v_event_search"
+            app:visible="@{etEventSearch.text.toString().trim().isEmpty()}" />
+
+        <TextView
+            android:id="@+id/btn_delete_history"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/eventsearch_search_history_delete_all"
+            android:textColor="@color/light_gray"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/v_event_search"
+            app:layout_constraintTop_toBottomOf="@id/v_event_search"
+            app:visible="@{etEventSearch.text.toString().trim().isEmpty()}" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="tv_search_history_title, tv_event_prefix" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_event_search_history"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:visible="@{etEventSearch.text.toString().trim().isEmpty()}"
+            tools:listitem="@layout/item_event_search_history" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
