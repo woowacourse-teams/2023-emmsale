@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.emmsale.data.model.Event
 import com.emmsale.databinding.ActivityEventSearchBinding
+import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventSearch.recyclerView.EventSearchAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -12,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class EventSearchActivity : AppCompatActivity() {
     private val binding by lazy { ActivityEventSearchBinding.inflate(layoutInflater) }
     private val viewModel: EventSearchViewModel by viewModels()
-    private val eventSearchAdapter: EventSearchAdapter by lazy { EventSearchAdapter() }
+    private val eventSearchAdapter by lazy { EventSearchAdapter(::navigateToEventDetail) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,5 +42,9 @@ class EventSearchActivity : AppCompatActivity() {
         viewModel.eventSearchResults.observe(this) { eventSearchUiState ->
             eventSearchAdapter.submitList(eventSearchUiState.events)
         }
+    }
+
+    private fun navigateToEventDetail(event: Event) {
+        EventDetailActivity.startActivity(this, event.id)
     }
 }

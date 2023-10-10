@@ -9,10 +9,15 @@ import com.emmsale.databinding.ItemConferenceBinding
 
 class EventSearchViewHolder(
     parent: ViewGroup,
+    onEventClick: (event: Event) -> Unit,
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false),
 ) {
     private val binding = ItemConferenceBinding.bind(itemView)
+
+    init {
+        binding.onClickConference = onEventClick
+    }
 
     fun bind(event: Event) {
         binding.event = event
