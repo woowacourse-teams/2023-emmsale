@@ -6,6 +6,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
 import com.emmsale.R
+import com.emmsale.data.model.Event
 import com.emmsale.databinding.FragmentConferenceBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
@@ -15,7 +16,6 @@ import com.emmsale.presentation.ui.conferenceFilter.ConferenceFilterActivity
 import com.emmsale.presentation.ui.conferenceList.recyclerView.ConferenceRecyclerViewAdapter
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringOptionUiState
-import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceUiState
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -74,7 +74,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     private fun setupEventsObserver() {
         viewModel.conferences.observe(viewLifecycleOwner) { eventsResult ->
             when {
-                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.conferences) {
+                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.events) {
                     binding.rvEvents.scrollToPosition(0)
                 }
             }
@@ -131,8 +131,8 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         binding.btnEventFilter.setOnClickListener { navigateToEventFilter() }
     }
 
-    private fun navigateToEventDetail(event: ConferenceUiState) {
-        EventDetailActivity.startActivity(requireContext(), event.conference.id)
+    private fun navigateToEventDetail(event: Event) {
+        EventDetailActivity.startActivity(requireContext(), event.id)
     }
 
     private fun navigateToEventFilter() {

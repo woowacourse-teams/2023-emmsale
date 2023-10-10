@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
+import com.emmsale.data.model.Event
 import com.emmsale.databinding.ItemConferenceBinding
-import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceUiState
 
 class ConferenceViewHolder(
     parent: ViewGroup,
-    onClickConference: (ConferenceUiState) -> Unit,
+    onClickConference: (Event) -> Unit,
 ) : ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false),
 ) {
@@ -19,7 +19,7 @@ class ConferenceViewHolder(
         binding.onClickConference = onClickConference
     }
 
-    fun bind(event: ConferenceUiState) {
+    fun bind(event: Event) {
         binding.event = event
     }
 }
