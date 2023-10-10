@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 class S3ClientTest {
 
   private static final String TEST_BUCKET = "Test";
+  private static final String CLOUD_FRONT_PREFIX = "cloudFrontPrefix";
 
   private S3Client s3Client;
   private AmazonS3 mockingAmazonS3;
@@ -34,7 +35,7 @@ class S3ClientTest {
   @BeforeEach
   void setUp() {
     mockingAmazonS3 = mock(AmazonS3.class);
-    s3Client = new S3Client(TEST_BUCKET, mockingAmazonS3);
+    s3Client = new S3Client(TEST_BUCKET, CLOUD_FRONT_PREFIX, mockingAmazonS3);
   }
 
   @Test
@@ -92,7 +93,7 @@ class S3ClientTest {
   @DisplayName("convertImageUrl(): 이미지 이름을 imageUrl로 바꾼다.")
   void convertImageUrl() {
     final String imageName = "image.png";
-    final String expected = "Test/image.png";
+    final String expected = CLOUD_FRONT_PREFIX + "/image.png";
 
     final String actual = s3Client.convertImageUrl(imageName);
 
@@ -103,7 +104,7 @@ class S3ClientTest {
   @Test
   @DisplayName("convertImageName(): 이미지 이름을 imageName로 바꾼다.")
   void convertImageName() {
-    final String imageUrl = "Test/image.png";
+    final String imageUrl = CLOUD_FRONT_PREFIX + "/image.png";
     final String expected = "image.png";
 
     final String actual = s3Client.convertImageName(imageUrl);
