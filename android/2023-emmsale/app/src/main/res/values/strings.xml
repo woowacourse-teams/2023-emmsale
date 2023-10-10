@@ -429,5 +429,6 @@
     <string name="feeddetail_toolbar_title">게시글</string>
     <string name="post_writing_title_warning">제목을 입력해 주세요</string>
     <string name="post_writing_content_warning">내용은 8자 이상이어야 합니다</string>
+    <string name="post_writing_image_permission_denied_message">사진 권한이 거부되었습니다.</string>
 
 </resources>
