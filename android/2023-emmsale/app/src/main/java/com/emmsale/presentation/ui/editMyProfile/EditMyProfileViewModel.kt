@@ -123,6 +123,27 @@ class EditMyProfileViewModel @Inject constructor(
         }
     }
 
+    fun updateProfileImage(profileImageUrl: String) {
+        viewModelScope.launch {
+            val token = tokenRepository.getToken()
+            if (token == null) {
+                _isLogin.value = false
+                return@launch
+            }
+            when (
+                val result =
+                    memberRepository.updateMemberProfileImage(token.uid, profileImageUrl)
+            ) {
+                is Success -> _profile.value = _profile.value.updateProfileImageUrl(result.data)
+
+                is Failure, NetworkError ->
+                    _errorEvents.value = EditMyProfileErrorEvent.PROFILE_IMAGE_UPDATE
+
+                is Unexpected -> throw Throwable(result.error)
+            }
+        }
+    }
+
     fun updateDescription(description: String) {
         viewModelScope.launch {
             val token = tokenRepository.getToken()

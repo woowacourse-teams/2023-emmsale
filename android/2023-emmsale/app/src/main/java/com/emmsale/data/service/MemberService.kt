@@ -12,6 +12,7 @@ import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -41,6 +42,7 @@ interface MemberService {
         @Body memberOpenProfileUrlUpdateRequest: MemberOpenProfileUrlUpdateRequest,
     ): ApiResponse<Unit>
 
+    @Multipart // <- 이 부분이 중요
     @PATCH("/members/{memberId}/profile")
     suspend fun updateMemberProfileImage(
         @Path("memberId") memberId: Long,

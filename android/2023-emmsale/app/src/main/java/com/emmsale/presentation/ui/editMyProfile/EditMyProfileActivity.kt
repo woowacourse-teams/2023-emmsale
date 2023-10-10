@@ -2,11 +2,16 @@ package com.emmsale.presentation.ui.editMyProfile
 
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -49,6 +54,30 @@ class EditMyProfileActivity : AppCompatActivity() {
         binding.showFieldTags = ::showFieldTags
         binding.showEducations = ::showEducations
         binding.showClubs = ::showClubs
+        binding.editProfileImage = ::editProfileImage
+    }
+
+    private fun editProfileImage() {
+        photoPicker.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+    }
+
+    private val photoPicker = registerForActivityResult(
+        PickVisualMedia(),
+    ) { uri ->
+        if (uri == null) return@registerForActivityResult
+        viewModel.updateProfileImage(
+            getAbsolutePathFromUri(uri) ?: return@registerForActivityResult,
+        )
+    }
+
+    private fun getAbsolutePathFromUri(uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = contentResolver.query(uri, projection, null, null, null)
+        return cursor?.use {
+            val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            it.moveToFirst()
+            it.getString(columnIndex)
+        }
     }
 
     private fun showFieldTags() {
@@ -191,6 +220,7 @@ class EditMyProfileActivity : AppCompatActivity() {
             EditMyProfileErrorEvent.DESCRIPTION_UPDATE -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_description_error_message))
             EditMyProfileErrorEvent.ACTIVITY_REMOVE -> binding.root.showSnackBar(getString(R.string.editmyprofile_activity_remove_error_message))
             EditMyProfileErrorEvent.ACTIVITIES_ADD -> binding.root.showSnackBar(getString(R.string.editmyprofile_acitivities_add_error_message))
+            EditMyProfileErrorEvent.PROFILE_IMAGE_UPDATE -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_profile_image_error_message))
             else -> return
         }
         viewModel.removeError()

@@ -35,6 +35,10 @@ data class EditMyProfileUiState(
         description = description,
     )
 
+    fun updateProfileImageUrl(profileImageUrl: String): EditMyProfileUiState = copy(
+        imageUrl = profileImageUrl,
+    )
+
     companion object {
         val FIRST_LOADING = EditMyProfileUiState(
             id = -1,

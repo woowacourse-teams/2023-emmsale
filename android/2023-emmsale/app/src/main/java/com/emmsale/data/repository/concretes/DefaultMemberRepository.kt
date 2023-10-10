@@ -68,7 +68,7 @@ class DefaultMemberRepository @Inject constructor(
         val file = File(profileImageUrl)
         val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val formDataFile = MultipartBody.Part.createFormData(
-            DefaultPostRepository.IMAGES_KEY,
+            IMAGE_KEY,
             file.name,
             requestFile,
         )
@@ -107,5 +107,9 @@ class DefaultMemberRepository @Inject constructor(
         memberService.blockMember(
             MemberBlockCreateRequest(memberId),
         )
+    }
+
+    companion object {
+        private const val IMAGE_KEY = "image"
     }
 }
