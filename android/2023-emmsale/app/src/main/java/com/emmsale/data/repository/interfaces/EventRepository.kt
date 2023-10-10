@@ -1,7 +1,6 @@
 package com.emmsale.data.repository.interfaces
 
 import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.model.Competition
 import com.emmsale.data.model.CompetitionStatus
 import com.emmsale.data.model.ConferenceStatus
 import com.emmsale.data.model.Event
@@ -23,7 +22,7 @@ interface EventRepository {
         tags: List<EventTag> = emptyList(),
         startDate: LocalDate? = null,
         endDate: LocalDate? = null,
-    ): ApiResponse<List<Competition>>
+    ): ApiResponse<List<Event>>
 
     suspend fun getEventDetail(eventId: Long): ApiResponse<EventDetail>
 }

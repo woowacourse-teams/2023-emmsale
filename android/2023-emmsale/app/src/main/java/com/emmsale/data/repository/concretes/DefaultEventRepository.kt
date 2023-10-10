@@ -6,7 +6,6 @@ import com.emmsale.data.apiModel.response.EventDetailResponse
 import com.emmsale.data.common.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toApiModel
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.model.Competition
 import com.emmsale.data.model.CompetitionStatus
 import com.emmsale.data.model.ConferenceStatus
 import com.emmsale.data.model.Event
@@ -26,6 +25,7 @@ class DefaultEventRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val eventService: EventService,
 ) : EventRepository {
+
     override suspend fun getConferences(
         statuses: List<ConferenceStatus>,
         tags: List<EventTag>,
@@ -46,7 +46,7 @@ class DefaultEventRepository @Inject constructor(
         tags: List<EventTag>,
         startDate: LocalDate?,
         endDate: LocalDate?,
-    ): ApiResponse<List<Competition>> = withContext(dispatcher) {
+    ): ApiResponse<List<Event>> = withContext(dispatcher) {
         eventService.getCompetitions(
             category = EventCategory.COMPETITION.toApiModel(),
             statuses = statuses.toApiModel(),
