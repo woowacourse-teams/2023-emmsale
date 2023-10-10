@@ -427,7 +427,10 @@
     <string name="feeddetaildeletedialog_title">게시글 삭제</string>
     <string name="feeddetaildeletedialog_message">해당 게시글을 삭제하시겠습니까?</string>
     <string name="feeddetail_toolbar_title">게시글</string>
+
     <string name="post_writing_title_warning">제목을 입력해 주세요</string>
     <string name="post_writing_content_warning">내용은 8자 이상이어야 합니다</string>
 
+    <string name="eventsearch_toolbar_title">검색하기</string>
+    <string name="eventsearch_edittext_hint">검색어를 입력하세요.</string>
 </resources>

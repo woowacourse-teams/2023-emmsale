@@ -17,7 +17,9 @@
         android:theme="@style/Theme.Emmsale"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
-        <activity android:name=".presentation.ui.eventSearch.EventSearchActivity" />
+        <activity
+            android:name=".presentation.ui.eventSearch.EventSearchActivity"
+            android:exported="true" />
         <activity
             android:name=".presentation.ui.feedDetail.FeedDetailActivity"
             android:exported="false"

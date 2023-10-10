@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -12,7 +13,130 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".presentation.ui.eventSearch.EventSearchActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_event_search"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            android:keepScreenOn="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/eventsearch_toolbar_title"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
+
+        <View
+            android:id="@+id/v_event_search"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_marginHorizontal="17dp"
+            android:background="@drawable/bg_eventsearch_search"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_event_search" />
+
+        <ImageView
+            android:id="@+id/iv_event_search"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginVertical="12dp"
+            android:layout_marginStart="12dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_green_search"
+            app:layout_constraintBottom_toBottomOf="@id/v_event_search"
+            app:layout_constraintDimensionRatio="W, 1:1"
+            app:layout_constraintStart_toStartOf="@id/v_event_search"
+            app:layout_constraintTop_toTopOf="@id/v_event_search" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            app:boxBackgroundMode="none"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/light_gray"
+            app:hintAnimationEnabled="false"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toBottomOf="@id/iv_event_search"
+            app:layout_constraintEnd_toEndOf="@id/v_event_search"
+            app:layout_constraintStart_toEndOf="@id/iv_event_search"
+            app:layout_constraintTop_toTopOf="@id/iv_event_search">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_event_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="@string/eventsearch_edittext_hint"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/light_gray"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_event_prefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/event_count_prefix"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/v_event_search"
+            app:layout_constraintTop_toBottomOf="@id/v_event_search" />
+
+        <TextView
+            android:id="@+id/tv_event_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="24dp"
+            android:textColor="@color/primary_color"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tv_event_prefix"
+            app:layout_constraintTop_toBottomOf="@id/v_event_search"
+            tools:text="2" />
+
+        <TextView
+            android:id="@+id/tv_event_suffix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/event_count_suffix"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tv_event_count"
+            app:layout_constraintTop_toBottomOf="@id/v_event_search" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/light_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_event_prefix" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_event_search_result"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            tools:listitem="@layout/item_conference" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
