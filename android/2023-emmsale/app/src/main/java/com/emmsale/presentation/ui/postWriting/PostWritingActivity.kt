@@ -44,7 +44,16 @@ class PostWritingActivity : AppCompatActivity() {
     private val lowVersionAlbumLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             val imageUrls = getImageUrlsFromActivityResult(result)
-            viewModel.fetchImageUrls(imageUrls = imageUrls)
+            when {
+                imageUrls.size > MAX_IMAGE_COUNT -> {
+                    showAlbum()
+                    showToast(R.string.post_writing_max_image_count_warning_message)
+                }
+
+                imageUrls.isEmpty() -> Unit
+
+                else -> viewModel.fetchImageUrls(imageUrls = imageUrls)
+            }
         }
 
     private fun getImageUrlsFromActivityResult(result: ActivityResult): List<String> {
