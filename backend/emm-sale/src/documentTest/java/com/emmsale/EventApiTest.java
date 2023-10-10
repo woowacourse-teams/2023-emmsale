@@ -109,8 +109,8 @@ class EventApiTest extends MockMvcTestHelper {
   void findEvents() throws Exception {
     // given
     final RequestParametersSnippet requestParameters = requestParameters(
-        RequestDocumentation.parameterWithName("category")
-            .description("행사 카테고리(CONFERENCE, COMPETITION)"),
+        RequestDocumentation.parameterWithName("category").optional()
+            .description("행사 카테고리(CONFERENCE, COMPETITION)(option)"),
         RequestDocumentation.parameterWithName("start_date")
             .description("필터링하려는 기간의 시작일(yyyy:mm:dd)(option)")
             .optional(),
@@ -223,7 +223,7 @@ class EventApiTest extends MockMvcTestHelper {
         request.getLocation(),
         tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
         "image1.jpg", request.getType().toString(),
-        List.of("imageUrl1", "imageUrl2"), "행사기관", "유료","온라인");
+        List.of("imageUrl1", "imageUrl2"), "행사기관", "유료", "온라인");
 
     Mockito.when(eventService.updateEvent(eq(eventId), any(EventDetailRequest.class), any()))
         .thenReturn(response);
@@ -325,7 +325,7 @@ class EventApiTest extends MockMvcTestHelper {
           request.getLocation(),
           tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
           "image1.jpg", request.getType().toString(),
-          List.of("imageUrl1", "imageUrl2"), "행사기관", "무료","오프라인");
+          List.of("imageUrl1", "imageUrl2"), "행사기관", "무료", "오프라인");
 
       Mockito.when(eventService.addEvent(any(EventDetailRequest.class), any()))
           .thenReturn(response);

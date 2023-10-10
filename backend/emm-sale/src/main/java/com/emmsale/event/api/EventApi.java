@@ -39,7 +39,7 @@ public class EventApi {
 
   @GetMapping
   public ResponseEntity<List<EventResponse>> findEvents(
-      @RequestParam final EventType category,
+      @RequestParam(required = false) final EventType category,
       @RequestParam(name = "start_date", required = false) final String startDate,
       @RequestParam(name = "end_date", required = false) final String endDate,
       @RequestParam(required = false) final List<String> tags,

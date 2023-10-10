@@ -94,8 +94,8 @@ public class EventService {
   public List<EventResponse> findEvents(final EventType category,
       final LocalDate nowDate, final String startDate, final String endDate,
       final List<String> tagNames, final List<EventStatus> statuses, final String keyword) {
-    Specification<Event> spec = Specification.where(filterByCategory(category));
-
+    Specification<Event> spec = (root, query, criteriaBuilder) -> null;
+    spec = filterByCategoryIfExist(category, spec);
     spec = filterByTagIfExist(tagNames, spec);
     spec = filterByDateIfExist(startDate, endDate, spec);
     spec = filterByKeywordIfExist(keyword, spec);
@@ -106,6 +106,18 @@ public class EventService {
         = groupByEventStatus(nowDate, events);
 
     return filterByStatuses(statuses, eventsForEventStatus, makeImageUrlPerEventId(events));
+  }
+
+  private Specification<Event> filterByCategoryIfExist(final EventType category,
+      Specification<Event> spec) {
+    if (isExistCategory(category)) {
+      spec = spec.and(filterByCategory(category));
+    }
+    return spec;
+  }
+
+  private boolean isExistCategory(final EventType category) {
+    return category != null;
   }
 
   private Specification<Event> filterByTagIfExist(final List<String> tagNames,
