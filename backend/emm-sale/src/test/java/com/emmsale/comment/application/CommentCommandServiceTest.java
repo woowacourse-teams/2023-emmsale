@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 
 import com.emmsale.comment.application.dto.CommentAddRequest;
@@ -25,7 +26,7 @@ import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.notification.domain.UpdateNotification;
+import com.emmsale.notification.domain.Notification;
 import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +64,6 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
             afterDateTime,
             "url",
             EventType.CONFERENCE,
-            "https://image.com",
             PaymentType.FREE_PAID,
             EventMode.ON_OFFLINE,
             "행사기간"
@@ -82,7 +82,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
 
     final CommentAddRequest 부모_댓글_요청 = new CommentAddRequest(content, feed.getId(), null);
 
-    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
+    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
 
     //when
     final CommentResponse 부모_댓글_응답 = commentCommandService.create(부모_댓글_요청, 댓글_작성자);
@@ -105,7 +105,7 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final CommentResponse 부모_댓글_응답 = commentCommandService.create(부모_댓글_요청, 댓글_작성자);
     final CommentAddRequest 자식_댓글_요청 = new CommentAddRequest(content, feed.getId(), 1L);
 
-    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
+    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
 
     //when
     final CommentResponse 자식_댓글_응답 = commentCommandService.create(자식_댓글_요청, 댓글_작성자);
@@ -194,11 +194,11 @@ class CommentCommandServiceTest extends ServiceIntegrationTestHelper {
     final CommentModifyRequest request = new CommentModifyRequest("변경된 내용");
     comment.delete();
 
-    final Comment deletedComment = commentRepository.save(comment);
+    final Long deletedCommentId = commentRepository.save(comment).getId();
 
     //when & then
     Assertions.assertThatThrownBy(
-            () -> commentCommandService.modify(deletedComment.getId(), 댓글_작성자, request))
+            () -> commentCommandService.modify(deletedCommentId, 댓글_작성자, request))
         .isInstanceOf(CommentException.class)
         .hasMessage(CommentExceptionType.FORBIDDEN_MODIFY_DELETED_COMMENT.errorMessage());
   }

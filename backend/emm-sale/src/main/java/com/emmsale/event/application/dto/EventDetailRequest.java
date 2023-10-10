@@ -14,7 +14,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Getter
@@ -44,14 +43,10 @@ public class EventDetailRequest {
   private final LocalDateTime applyEndDateTime;
 
   private final List<TagRequest> tags;
-
-  private final String imageUrl;
   private final EventType type;
 
   private final EventMode eventMode;
   private final PaymentType paymentType;
-
-  private final List<MultipartFile> images;
 
   private final String organization;
 
@@ -65,7 +60,6 @@ public class EventDetailRequest {
         applyEndDateTime,
         informationUrl,
         type,
-        imageUrl,
         paymentType,
         eventMode,
         organization

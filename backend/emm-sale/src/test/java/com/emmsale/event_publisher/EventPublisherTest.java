@@ -15,9 +15,9 @@ import com.emmsale.comment.domain.CommentRepository;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
-import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
+import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.MemberFixture;
 import com.emmsale.member.domain.InterestTag;
 import com.emmsale.member.domain.InterestTagRepository;
@@ -98,14 +98,14 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     eventPublisher.publish(savedEvent);
 
     //then
-    final ArgumentCaptor<UpdateNotificationEvent> captor = ArgumentCaptor.forClass(
-        UpdateNotificationEvent.class);
+    final ArgumentCaptor<EventNotificationEvent> captor = ArgumentCaptor.forClass(
+        EventNotificationEvent.class);
 
     verify(applicationEventPublisher, times(2)).publishEvent(captor.capture());
 
     final List<Long> actual = captor.getAllValues()
         .stream()
-        .map(UpdateNotificationEvent::getReceiverId)
+        .map(EventNotificationEvent::getReceiverId)
         .collect(Collectors.toList());
 
     assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
@@ -139,7 +139,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(0))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(EventNotificationEvent.class));
   }
 
   @Test
@@ -161,7 +161,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(0))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(EventNotificationEvent.class));
   }
 
   /**
@@ -191,7 +191,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(2))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(CommentNotificationEvent.class));
   }
 
   @Test
@@ -216,7 +216,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(0))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(EventNotificationEvent.class));
   }
 
   @Test
@@ -235,7 +235,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(0))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(EventNotificationEvent.class));
   }
 
   @Test
@@ -270,7 +270,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(1))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(CommentNotificationEvent.class));
   }
 
   @Test
@@ -305,7 +305,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
 
     //then
     verify(applicationEventPublisher, times(2))
-        .publishEvent(any(UpdateNotificationEvent.class));
+        .publishEvent(any(CommentNotificationEvent.class));
   }
 
   @Test

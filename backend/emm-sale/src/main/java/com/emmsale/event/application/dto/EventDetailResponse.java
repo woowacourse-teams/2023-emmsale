@@ -6,7 +6,6 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.tag.domain.Tag;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -30,19 +29,17 @@ public class EventDetailResponse {
   @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime applyEndDate;
   private final String location;
-  private final String status;
-  private final String applyStatus;
   private final List<String> tags;
-  private final String imageUrl;
-  private final Integer remainingDays;
-  private final Integer applyRemainingDays;
+  private final String thumbnailUrl;
   private final String type;
   private final List<String> imageUrls;
   private final String organization;
+  private final String paymentType;
+  private final String eventMode;
 
   public static EventDetailResponse from(
       final Event event,
-      final LocalDate today,
+      final String thumbnailUrl,
       final List<String> imageUrls
   ) {
     final List<String> tagNames = event.getTags().stream()
@@ -59,15 +56,13 @@ public class EventDetailResponse {
         event.getEventPeriod().getApplyStartDate(),
         event.getEventPeriod().getApplyEndDate(),
         event.getLocation(),
-        event.getEventPeriod().calculateEventStatus(today).name(),
-        event.getEventPeriod().calculateEventApplyStatus(today).name(),
         tagNames,
-        event.getImageUrl(),
-        event.getEventPeriod().calculateRemainingDays(today),
-        event.getEventPeriod().calculateApplyRemainingDays(today),
+        thumbnailUrl,
         event.getType().toString(),
         imageUrls,
-        event.getOrganization()
+        event.getOrganization(),
+        event.getPaymentType().getValue(),
+        event.getEventMode().getValue()
     );
   }
 }

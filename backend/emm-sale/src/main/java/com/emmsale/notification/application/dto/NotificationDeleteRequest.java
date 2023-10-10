@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class UpdateNotificationDeleteRequest {
+public class NotificationDeleteRequest {
 
   private final List<Long> deleteIds;
 
-  private UpdateNotificationDeleteRequest() {
+  private NotificationDeleteRequest() {
     this(null);
   }
 }

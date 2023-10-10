@@ -3,6 +3,7 @@ package com.emmsale.comment.application;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -19,8 +20,8 @@ import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
-import com.emmsale.notification.domain.UpdateNotification;
-import com.emmsale.notification.domain.UpdateNotificationRepository;
+import com.emmsale.notification.domain.Notification;
+import com.emmsale.notification.domain.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
   @Autowired
   private MemberRepository memberRepository;
   @Autowired
-  private UpdateNotificationRepository updateNotificationRepository;
+  private NotificationRepository notificationRepository;
   private Member 댓글_작성자1;
   private Member 댓글_작성자2;
   private Feed feed;
@@ -59,7 +60,7 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
     //given
     final Comment 부모_댓글 = commentRepository.save(Comment.createRoot(feed, 댓글_작성자1, "내용1"));
 
-    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
+    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
 
     final CommentAddRequest 알림_트리거_댓글_요청 =
         new CommentAddRequest("내용2", feed.getId(), 부모_댓글.getId());
@@ -70,8 +71,8 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
     //then
     assertAll(
         () -> verify(firebaseCloudMessageClient, times(1)).sendMessageTo(
-            any(UpdateNotification.class)),
-        () -> assertEquals(1, updateNotificationRepository.findAll().size())
+            any(Notification.class), anyLong()),
+        () -> assertEquals(1, notificationRepository.findAll().size())
     );
   }
 
@@ -82,7 +83,7 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
     final Comment 부모_댓글 = commentRepository.save(Comment.createRoot(feed, 댓글_작성자1, "내용1"));
 
     doThrow(new IllegalArgumentException("파이어베이스 에러"))
-        .when(firebaseCloudMessageClient).sendMessageTo(any(UpdateNotification.class));
+        .when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
 
     final CommentAddRequest 알림_트리거_댓글_요청 =
         new CommentAddRequest("내용2", feed.getId(), 부모_댓글.getId());
@@ -93,8 +94,8 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
     //then
     assertAll(
         () -> verify(firebaseCloudMessageClient, times(1)).sendMessageTo(
-            any(UpdateNotification.class)),
-        () -> assertEquals(1, updateNotificationRepository.findAll().size())
+            any(Notification.class), anyLong()),
+        () -> assertEquals(1, notificationRepository.findAll().size())
     );
   }
 }
