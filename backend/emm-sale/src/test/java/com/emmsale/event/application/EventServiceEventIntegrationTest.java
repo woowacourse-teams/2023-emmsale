@@ -22,7 +22,6 @@ import com.emmsale.notification.domain.Notification;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -71,7 +70,6 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
             new TagRequest(안드로이드().getName()),
             new TagRequest(백엔드().getName())
         ),  // Assuming you don't have a direct TagRequest list from Event.
-        "https://image.url",
         EventType.CONFERENCE,
         EventMode.ON_OFFLINE,
         PaymentType.FREE_PAID,
@@ -79,7 +77,7 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventService.addEvent(eventDetailRequest, null, LocalDate.now());
+    eventService.addEvent(eventDetailRequest, null);
 
     //then
     verify(firebaseCloudMessageClient, times(2))
@@ -116,7 +114,6 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
         List.of(
             new TagRequest(IOS().getName())
         ),  // Assuming you don't have a direct TagRequest list from Event.
-        "https://image.url",
         EventType.CONFERENCE,
         EventMode.ON_OFFLINE,
         PaymentType.FREE_PAID,
@@ -124,7 +121,7 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventService.addEvent(eventDetailRequest, null, LocalDate.now());
+    eventService.addEvent(eventDetailRequest, null);
 
     //then
     verify(firebaseCloudMessageClient, times(0))
@@ -151,7 +148,6 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
         List.of(
             new TagRequest(IOS().getName())
         ),  // Assuming you don't have a direct TagRequest list from Event.
-        "https://image.url",
         EventType.CONFERENCE,
         EventMode.ON_OFFLINE,
         PaymentType.FREE_PAID,
@@ -159,7 +155,7 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventService.addEvent(eventDetailRequest, null, LocalDate.now());
+    eventService.addEvent(eventDetailRequest, null);
 
     //then
     verify(firebaseCloudMessageClient, times(0))

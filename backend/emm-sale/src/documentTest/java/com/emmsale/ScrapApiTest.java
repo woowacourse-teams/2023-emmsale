@@ -36,42 +36,56 @@ class ScrapApiTest extends MockMvcTestHelper {
   void findAllScraps() throws Exception {
     //given
     final List<EventResponse> expectedScrapResponse = List.of(
-        new EventResponse(1L, "인프콘 2023", LocalDateTime.parse("2023-06-03T12:00:00"),
+        new EventResponse(
+            1L,
+            "인프콘 2023",
+            LocalDateTime.parse("2023-06-03T12:00:00"),
             LocalDateTime.parse("2023-09-03T12:00:00"),
-            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"), "IN_PROGRESS", "ENDED",
+            LocalDateTime.parse("2023-09-01T00:00:00"),
+            LocalDateTime.parse("2023-09-02T23:59:59"),
+            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"),
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3, -30, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue()),
-        new EventResponse(5L, "웹 컨퍼런스", LocalDateTime.parse("2023-07-03T12:00:00"),
-            LocalDateTime.parse("2023-08-03T12:00:00"), List.of("백엔드", "프론트엔드"),
-            "IN_PROGRESS", "IN_PROGRESS",
+            EventMode.ONLINE.getValue(),
+            PaymentType.PAID.getValue()
+        ),
+        new EventResponse(
+            5L,
+            "웹 컨퍼런스",
+            LocalDateTime.parse("2023-07-03T12:00:00"),
+            LocalDateTime.parse("2023-08-03T12:00:00"),
+            LocalDateTime.parse("2023-06-23T10:00:00"),
+            LocalDateTime.parse("2023-07-03T12:00:00"),
+            List.of("백엔드", "프론트엔드"),
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3, 3, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue()),
-        new EventResponse(2L, "AI 컨퍼런스", LocalDateTime.parse("2023-07-22T12:00:00"),
-            LocalDateTime.parse("2023-07-30T12:00:00"), List.of("AI"), "UPCOMING",
-            "IN_PROGRESS",
+            EventMode.ONLINE.getValue(),
+            PaymentType.PAID.getValue()),
+        new EventResponse(2L,
+            "AI 컨퍼런스",
+            LocalDateTime.parse("2023-07-22T12:00:00"),
+            LocalDateTime.parse("2023-07-30T12:00:00"),
+            LocalDateTime.parse("2023-07-01T00:00:00"),
+            LocalDateTime.parse("2023-07-21T23:59:59"),
+            List.of("AI"),
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            3, -18, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue())
+            EventMode.ONLINE.getValue(),
+            PaymentType.PAID.getValue())
     );
 
     final ResponseFieldsSnippet responseFields = PayloadDocumentation.responseFields(
         PayloadDocumentation.fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
         PayloadDocumentation.fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
-        PayloadDocumentation.fieldWithPath("[].startDate").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("[].eventStartDate").type(JsonFieldType.STRING)
             .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
-        PayloadDocumentation.fieldWithPath("[].endDate").type(JsonFieldType.STRING)
+        PayloadDocumentation.fieldWithPath("[].eventEndDate").type(JsonFieldType.STRING)
+            .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
+        PayloadDocumentation.fieldWithPath("[].applyStartDate").type(JsonFieldType.STRING)
+            .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
+        PayloadDocumentation.fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
             .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
         PayloadDocumentation.fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
             .description("행사 태그 목록"),
-        PayloadDocumentation.fieldWithPath("[].status").type(JsonFieldType.STRING)
-            .description("행사 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
-        PayloadDocumentation.fieldWithPath("[].applyStatus").type(JsonFieldType.STRING)
-            .description("행사 신청 기간의 진행 상황(IN_PROGRESS, UPCOMING, ENDED)"),
-        PayloadDocumentation.fieldWithPath("[].remainingDays").type(JsonFieldType.NUMBER)
-            .description("행사 시작일까지 남은 일 수"),
-        PayloadDocumentation.fieldWithPath("[].applyRemainingDays").type(JsonFieldType.NUMBER)
-            .description("행사 신청 시작일까지 남은 일 수"),
-        PayloadDocumentation.fieldWithPath("[].imageUrl").type(JsonFieldType.STRING)
-            .description("행사 이미지 URL"),
+        PayloadDocumentation.fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING)
+            .description("행사 섬네일 이미지 URL"),
         PayloadDocumentation.fieldWithPath("[].eventMode").type(JsonFieldType.STRING)
             .description("행사 온라인 여부(온라인, 오프라인, 온오프라인)"),
         PayloadDocumentation.fieldWithPath("[].paymentType").type(JsonFieldType.STRING)

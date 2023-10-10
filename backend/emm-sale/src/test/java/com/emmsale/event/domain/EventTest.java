@@ -51,13 +51,12 @@ class EventTest {
     final String url = "https://information-url.com";
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
-    final String imageUrl = "https://image.com";
     final String organization = "행사기관";
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, afterDateTime, beforeDateTime, beforeDateTime,
-            beforeDateTime, url, EventType.CONFERENCE, imageUrl, PaymentType.FREE,
+            beforeDateTime, url, EventType.CONFERENCE, PaymentType.FREE,
             EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
@@ -72,13 +71,12 @@ class EventTest {
     final String url = "https://information-url.com";
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
-    final String imageUrl = "https://image.com";
     final String organization = "행사기관";
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, beforeDateTime, afterDateTime,
-            afterDateTime, beforeDateTime, url, EventType.CONFERENCE, imageUrl, PaymentType.FREE,
+            afterDateTime, beforeDateTime, url, EventType.CONFERENCE, PaymentType.FREE,
             EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END,
@@ -94,13 +92,12 @@ class EventTest {
     final String url = "https://information-url.com";
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
-    final String imageUrl = "https://image.com";
     final String organization = "행사기관";
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, beforeDateTime, beforeDateTime,
-            beforeDateTime, afterDateTime, url, EventType.CONFERENCE, imageUrl, PaymentType.FREE,
+            beforeDateTime, afterDateTime, url, EventType.CONFERENCE, PaymentType.FREE,
             EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_END_AFTER_EVENT_END, exception.exceptionType());
@@ -115,13 +112,12 @@ class EventTest {
     final String url = "https://information-url.com";
     final LocalDateTime beforeDateTime = LocalDateTime.now();
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
-    final String imageUrl = "https://image.com";
     final String organization = "행사기관";
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> new Event(name, location, beforeDateTime, afterDateTime, afterDateTime, afterDateTime,
-            url, EventType.CONFERENCE, imageUrl, PaymentType.FREE, EventMode.ON_OFFLINE, organization));
+            url, EventType.CONFERENCE, PaymentType.FREE, EventMode.ON_OFFLINE, organization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_EVENT_START,
         exception.exceptionType());
@@ -137,6 +133,10 @@ class EventTest {
     final LocalDateTime newEndDateTime = newStartDateTime.plusDays(1);
     final String newInformationUrl = "https://새로운-상세-URL.com";
     final List<Tag> newTags = List.of(IOS(), AI());
+    final EventType newType = EventType.COMPETITION;
+    final EventMode newEventMode = EventMode.ONLINE;
+    final PaymentType newPaymentType = PaymentType.FREE;
+    final String newOrganization = "새로운 기관";
 
     final Event event = 인프콘_2023();
 
@@ -149,7 +149,11 @@ class EventTest {
         newStartDateTime,
         newEndDateTime,
         newInformationUrl,
-        newTags
+        newTags,
+        newType,
+        newEventMode,
+        newPaymentType,
+        newOrganization
     );
 
     //then
@@ -173,13 +177,18 @@ class EventTest {
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String newInformationUrl = "https://새로운-상세-URL.com";
     final List<Tag> newTags = List.of(IOS(), AI());
+    final EventType newType = EventType.COMPETITION;
+    final EventMode newEventMode = EventMode.ONLINE;
+    final PaymentType newPaymentType = PaymentType.FREE;
+    final String newOrganization = "새로운 기관";
 
     final Event event = 인프콘_2023();
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> event.updateEventContent(newName, newLocation, afterDateTime, beforeDateTime,
-            beforeDateTime, afterDateTime, newInformationUrl, newTags));
+            beforeDateTime, afterDateTime, newInformationUrl, newTags, newType, newEventMode,
+            newPaymentType, newOrganization));
 
     assertEquals(EventExceptionType.START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
   }
@@ -194,13 +203,18 @@ class EventTest {
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String newInformationUrl = "https://새로운-상세-URL.com";
     final List<Tag> newTags = List.of(IOS(), AI());
+    final EventType newType = EventType.COMPETITION;
+    final EventMode newEventMode = EventMode.ONLINE;
+    final PaymentType newPaymentType = PaymentType.FREE;
+    final String newOrganization = "새로운 기관";
 
     final Event event = 인프콘_2023();
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> event.updateEventContent(newName, newLocation, beforeDateTime, afterDateTime,
-            afterDateTime, beforeDateTime, newInformationUrl, newTags));
+            afterDateTime, beforeDateTime, newInformationUrl, newTags, newType, newEventMode,
+            newPaymentType, newOrganization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_SUBSCRIPTION_END,
         exception.exceptionType());
@@ -216,13 +230,18 @@ class EventTest {
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String newInformationUrl = "https://새로운-상세-URL.com";
     final List<Tag> newTags = List.of(IOS(), AI());
+    final EventType newType = EventType.COMPETITION;
+    final EventMode newEventMode = EventMode.ONLINE;
+    final PaymentType newPaymentType = PaymentType.FREE;
+    final String newOrganization = "새로운 기관";
 
     final Event event = 인프콘_2023();
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> event.updateEventContent(newName, newLocation, beforeDateTime, beforeDateTime,
-            beforeDateTime, afterDateTime, newInformationUrl, newTags));
+            beforeDateTime, afterDateTime, newInformationUrl, newTags, newType, newEventMode,
+            newPaymentType, newOrganization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_END_AFTER_EVENT_END, exception.exceptionType());
   }
@@ -237,13 +256,18 @@ class EventTest {
     final LocalDateTime afterDateTime = beforeDateTime.plusDays(1);
     final String newInformationUrl = "https://새로운-상세-URL.com";
     final List<Tag> newTags = List.of(IOS(), AI());
+    final EventType newType = EventType.COMPETITION;
+    final EventMode newEventMode = EventMode.ONLINE;
+    final PaymentType newPaymentType = PaymentType.FREE;
+    final String newOrganization = "새로운 기관";
 
     final Event event = 인프콘_2023();
 
     //when & then
     final EventException exception = assertThrowsExactly(EventException.class,
         () -> event.updateEventContent(newName, newLocation, beforeDateTime, afterDateTime,
-            afterDateTime, afterDateTime, newInformationUrl, newTags));
+            afterDateTime, afterDateTime, newInformationUrl, newTags, newType, newEventMode,
+            newPaymentType, newOrganization));
 
     assertEquals(EventExceptionType.SUBSCRIPTION_START_AFTER_EVENT_START,
         exception.exceptionType());

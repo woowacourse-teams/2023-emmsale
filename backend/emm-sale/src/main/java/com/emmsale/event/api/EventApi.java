@@ -43,16 +43,18 @@ public class EventApi {
       @RequestParam(name = "start_date", required = false) final String startDate,
       @RequestParam(name = "end_date", required = false) final String endDate,
       @RequestParam(required = false) final List<String> tags,
-      @RequestParam(required = false) final List<EventStatus> statuses) {
+      @RequestParam(required = false) final List<EventStatus> statuses,
+      @RequestParam(required = false) final String keyword) {
     return ResponseEntity.ok(
-        eventService.findEvents(category, LocalDate.now(), startDate, endDate, tags, statuses));
+        eventService.findEvents(category, LocalDate.now(), startDate, endDate, tags, statuses,
+            keyword));
   }
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public EventDetailResponse addEvent(@RequestPart @Valid final EventDetailRequest request,
       @RequestPart final List<MultipartFile> images) {
-    return eventService.addEvent(request, images, LocalDate.now());
+    return eventService.addEvent(request, images);
   }
 
   @PutMapping(path = "/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -60,7 +62,7 @@ public class EventApi {
   public EventDetailResponse updateEvent(@PathVariable final Long eventId,
       @RequestPart @Valid final EventDetailRequest request,
       @RequestPart final List<MultipartFile> images) {
-    return eventService.updateEvent(eventId, request, images, LocalDate.now());
+    return eventService.updateEvent(eventId, request, images);
   }
 
   @DeleteMapping("/{eventId}")
