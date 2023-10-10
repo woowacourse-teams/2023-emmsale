@@ -9,8 +9,8 @@ data class EventDetail(
     val organization: String? = null,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
-    val applicationStartDate: LocalDateTime,
-    val applicationEndDate: LocalDateTime,
+    val applyingStartDate: LocalDateTime,
+    val applyingEndDate: LocalDateTime,
     val location: String,
     val tags: List<String>,
     val posterImageUrl: String?,
@@ -23,5 +23,5 @@ data class EventDetail(
         get() = EventProgressStatus.create(startDate, endDate)
 
     val applicationStatus: EventApplyingStatus
-        get() = EventApplyingStatus.create(applicationStartDate, applicationEndDate)
+        get() = EventApplyingStatus.create(applyingStartDate, applyingEndDate)
 }

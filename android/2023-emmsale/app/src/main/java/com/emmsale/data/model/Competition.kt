@@ -7,8 +7,8 @@ data class Competition(
     val name: String,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
-    val applicationStartDate: LocalDateTime,
-    val applicationEndDate: LocalDateTime,
+    val applyingStartDate: LocalDateTime,
+    val applyingEndDate: LocalDateTime,
     val tags: List<String>,
     val posterUrl: String?,
     val onOfflineMode: OnOfflineMode,
@@ -18,5 +18,5 @@ data class Competition(
         get() = EventProgressStatus.create(startDate, endDate)
 
     val applicationStatus: EventApplyingStatus
-        get() = EventApplyingStatus.create(applicationStartDate, applicationEndDate)
+        get() = EventApplyingStatus.create(applyingStartDate, applyingEndDate)
 }

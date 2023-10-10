@@ -55,11 +55,11 @@
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:dateTimeFormatter="@{DateTimePattern.MONTH_DAY_WEEKDAY}"
-                        app:endDateTime="@{vm.eventDetail.eventDetail.applicationEndDate}"
+                        app:endDateTime="@{vm.eventDetail.eventDetail.applyingEndDate}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/tv_event_info_date_title"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:startDateTime="@{vm.eventDetail.eventDetail.applicationStartDate}"
+                        app:startDateTime="@{vm.eventDetail.eventDetail.applyingStartDate}"
                         tools:text="2023.08.15 12:00 ~ 2023.08.17 17:00" />
 
                     <TextView
