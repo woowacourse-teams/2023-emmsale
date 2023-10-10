@@ -35,9 +35,10 @@
     <string name="all_free">무료</string>
     <string name="all_paid_free">유료/무료</string>
     <string name="all_in_progress">진행 중</string>
-    <string name="all_application_in_progress">신청 마감 D-%d</string>
-    <string name="all_application_up_coming">신청 시작 D-%d</string>
-    <string name="all_up_coming">행사 시작 D-%d</string>
+    <string name="all_applying_ended">신청 마감</string>
+    <string name="all_applying_in_progress">신청 마감 D-%d</string>
+    <string name="all_applying_up_coming">신청 시작 D-%d</string>
+    <string name="all_event_up_coming">행사 시작 D-%d</string>
     <string name="all_ended">마감</string>
     <string name="all_online">온라인</string>
     <string name="all_offline">오프라인</string>

@@ -27,30 +27,30 @@ fun TextView.setPaymentType(
     }
 }
 
-@BindingAdapter("app:eventApplicationStatus")
-fun TextView.setEventApplicationStatus(
-    applicationStatue: EventApplicationStatus? = null,
+@BindingAdapter("app:eventApplyingStatus")
+fun TextView.setEventApplyingStatus(
+    applicationStatus: EventApplicationStatus? = null,
 ) {
-    if (applicationStatue == null) return
+    if (applicationStatus == null) return
 
-    when (applicationStatue) {
+    when (applicationStatus) {
         EventApplicationStatus.Ended -> {
-            text = "신청 마감"
+            text = context.getString(R.string.all_applying_ended)
             setTextColor(ContextCompat.getColor(context, R.color.gray))
         }
 
         is EventApplicationStatus.InProgress -> {
             text = context.getString(
-                R.string.all_application_in_progress,
-                applicationStatue.remainingDays,
+                R.string.all_applying_in_progress,
+                applicationStatus.remainingDays,
             )
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
 
         is EventApplicationStatus.UpComing -> {
             text = context.getString(
-                R.string.all_application_up_coming,
-                applicationStatue.remainingDays,
+                R.string.all_applying_up_coming,
+                applicationStatus.remainingDays,
             )
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
@@ -75,7 +75,7 @@ fun TextView.setEventProgressStatus(
         }
 
         is EventProgressStatus.UpComing -> {
-            text = context.getString(R.string.all_up_coming, progressStatus.remainingDays)
+            text = context.getString(R.string.all_event_up_coming, progressStatus.remainingDays)
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
     }
