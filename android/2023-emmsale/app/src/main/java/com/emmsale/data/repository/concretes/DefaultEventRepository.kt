@@ -62,6 +62,24 @@ class DefaultEventRepository @Inject constructor(
             .map(EventDetailResponse::toData)
     }
 
+    override suspend fun searchEvents(
+        keyword: String,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        tags: List<EventTag>,
+        statuses: List<ConferenceStatus>,
+        category: String?,
+    ): ApiResponse<List<Event>> = withContext(dispatcher) {
+        eventService.searchEvents(
+            keyword = keyword,
+            startDate = startDate?.toRequestFormat(),
+            endDate = endDate?.toRequestFormat(),
+            tags = tags.map { it.name },
+            statuses = statuses.toApiModel(),
+            category = category,
+        ).map(List<ConferenceResponse>::toData)
+    }
+
     private fun EventCategory.toApiModel(): String = when (this) {
         EventCategory.CONFERENCE -> "CONFERENCE"
         EventCategory.COMPETITION -> "COMPETITION"

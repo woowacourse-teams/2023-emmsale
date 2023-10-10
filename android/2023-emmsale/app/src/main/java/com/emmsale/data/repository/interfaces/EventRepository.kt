@@ -25,4 +25,13 @@ interface EventRepository {
     ): ApiResponse<List<Event>>
 
     suspend fun getEventDetail(eventId: Long): ApiResponse<EventDetail>
+
+    suspend fun searchEvents(
+        keyword: String,
+        startDate: LocalDate? = null,
+        endDate: LocalDate? = null,
+        tags: List<EventTag> = emptyList(),
+        statuses: List<ConferenceStatus> = emptyList(),
+        category: String? = null,
+    ): ApiResponse<List<Event>>
 }

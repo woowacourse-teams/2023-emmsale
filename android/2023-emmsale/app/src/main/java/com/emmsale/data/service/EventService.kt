@@ -31,4 +31,14 @@ interface EventService {
     suspend fun getEventDetail(
         @Path("eventId") eventId: Long,
     ): ApiResponse<EventDetailResponse>
+
+    @GET("/events")
+    suspend fun searchEvents(
+        @Query("keyword") keyword: String,
+        @Query("start_date") startDate: String? = null,
+        @Query("end_date") endDate: String? = null,
+        @Query("tags") tags: List<String> = emptyList(),
+        @Query("statuses") statuses: List<String> = emptyList(),
+        @Query("category") category: String? = null,
+    ): ApiResponse<List<ConferenceResponse>>
 }
