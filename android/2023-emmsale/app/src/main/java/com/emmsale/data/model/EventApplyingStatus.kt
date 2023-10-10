@@ -3,16 +3,16 @@ package com.emmsale.data.model
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-sealed interface EventApplicationStatus {
-    data class UpComing(val remainingDays: Int) : EventApplicationStatus
-    data class InProgress(val remainingDays: Int) : EventApplicationStatus
-    object Ended : EventApplicationStatus
+sealed interface EventApplyingStatus {
+    data class UpComing(val remainingDays: Int) : EventApplyingStatus
+    data class InProgress(val remainingDays: Int) : EventApplyingStatus
+    object Ended : EventApplyingStatus
 
     companion object {
         fun create(
             applicationStartDate: LocalDateTime,
             applicationEndDate: LocalDateTime,
-        ): EventApplicationStatus {
+        ): EventApplyingStatus {
             val nowDateTime = LocalDateTime.now()
             return when {
                 nowDateTime.isBefore(applicationStartDate) -> UpComing(

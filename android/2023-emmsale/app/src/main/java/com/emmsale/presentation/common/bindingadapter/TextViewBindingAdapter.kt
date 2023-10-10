@@ -4,7 +4,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.emmsale.R
-import com.emmsale.data.model.EventApplicationStatus
+import com.emmsale.data.model.EventApplyingStatus
 import com.emmsale.data.model.EventProgressStatus
 import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
@@ -29,17 +29,17 @@ fun TextView.setPaymentType(
 
 @BindingAdapter("app:eventApplyingStatus")
 fun TextView.setEventApplyingStatus(
-    applicationStatus: EventApplicationStatus? = null,
+    applicationStatus: EventApplyingStatus? = null,
 ) {
     if (applicationStatus == null) return
 
     when (applicationStatus) {
-        EventApplicationStatus.Ended -> {
+        EventApplyingStatus.Ended -> {
             text = context.getString(R.string.all_applying_ended)
             setTextColor(ContextCompat.getColor(context, R.color.gray))
         }
 
-        is EventApplicationStatus.InProgress -> {
+        is EventApplyingStatus.InProgress -> {
             text = context.getString(
                 R.string.all_applying_in_progress,
                 applicationStatus.remainingDays,
@@ -47,7 +47,7 @@ fun TextView.setEventApplyingStatus(
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
 
-        is EventApplicationStatus.UpComing -> {
+        is EventApplyingStatus.UpComing -> {
             text = context.getString(
                 R.string.all_applying_up_coming,
                 applicationStatus.remainingDays,

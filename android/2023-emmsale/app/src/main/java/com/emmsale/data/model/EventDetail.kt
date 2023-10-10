@@ -22,6 +22,6 @@ data class EventDetail(
     val progressStatus: EventProgressStatus
         get() = EventProgressStatus.create(startDate, endDate)
 
-    val applicationStatus: EventApplicationStatus
-        get() = EventApplicationStatus.create(applicationStartDate, applicationEndDate)
+    val applicationStatus: EventApplyingStatus
+        get() = EventApplyingStatus.create(applicationStartDate, applicationEndDate)
 }
