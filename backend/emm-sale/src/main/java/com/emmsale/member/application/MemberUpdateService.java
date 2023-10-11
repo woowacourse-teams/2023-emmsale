@@ -2,6 +2,8 @@ package com.emmsale.member.application;
 
 import com.emmsale.image.application.S3Client;
 import com.emmsale.member.application.dto.DescriptionRequest;
+import com.emmsale.member.application.dto.MemberImageResponse;
+import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
@@ -48,7 +50,7 @@ public class MemberUpdateService {
     memberRepository.deleteById(memberId);
   }
 
-  public String updateMemberProfile(
+  public MemberImageResponse updateMemberProfile(
       final MultipartFile image,
       final Long memberId,
       final Member member
@@ -66,6 +68,6 @@ public class MemberUpdateService {
     final String imageUrl = s3Client.convertImageUrl(imageName);
     member.updateProfile(imageUrl);
 
-    return imageUrl;
+    return new MemberImageResponse(imageUrl);
   }
 }

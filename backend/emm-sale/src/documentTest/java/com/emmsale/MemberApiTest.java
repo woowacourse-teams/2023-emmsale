@@ -22,6 +22,7 @@ import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.MemberImageResponse;
 import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
@@ -266,14 +267,14 @@ class MemberApiTest extends MockMvcTestHelper {
   @DisplayName("멤버 프로필을 변경할 수 있다.")
   void updateProfile() throws Exception {
     //given
-    final String imageUrl = "http://imageUrl.png";
+    final MemberImageResponse memberImageResponse = new MemberImageResponse("http://imageUrl.png");
     final Long memberId = 1L;
     final String accessToken = "access_token";
     final MockMultipartHttpServletRequestBuilder builder = createUpdateProfileBuilder(memberId);
 
     when(memberUpdateService.updateMemberProfile
         (any(MultipartFile.class), anyLong(), any(Member.class)))
-        .thenReturn(imageUrl);
+        .thenReturn(memberImageResponse);
 
     //when
     mockMvc.perform(builder
