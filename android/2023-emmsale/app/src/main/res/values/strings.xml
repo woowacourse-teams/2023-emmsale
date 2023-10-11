@@ -348,6 +348,7 @@
     <string name="editmyprofile_activity_remove_error_message">활동을 삭제하는 데 실패했어요 😥</string>
     <string name="editmyprofile_acitivities_add_error_message">활동들을 추가하는 데 실패했어요 😥</string>
     <string name="editmyprofile_update_profile_image_error_message">프로필 사진을 변경하는 데 실패했어요 😥</string>
+    <string name="editmyprofile_image_access_denied_message">프로필을 변경하려면 사진 권한이 필요해요 🥲</string>
 
     <string name="editmyprofilebottomdialog_field_selection_guide">최대 %d개까지 선택 가능합니다.</string>
 

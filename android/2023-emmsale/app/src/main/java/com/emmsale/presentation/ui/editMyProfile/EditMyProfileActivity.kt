@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.editMyProfile
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
@@ -10,14 +11,18 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
 import com.emmsale.presentation.common.extension.showSnackBar
+import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapterDecoration
@@ -35,6 +40,21 @@ class EditMyProfileActivity : AppCompatActivity() {
     private val fieldsDialog by lazy { FieldsAddBottomDialogFragment() }
     private val educationsDialog by lazy { EducationsAddBottomDialogFragment() }
     private val clubsDialog by lazy { ClubsAddBottomDialogFragment() }
+
+    private val underTiramisuAlbumLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            val imageUrl = getImageUrlFromActivityResult(result) ?: return@registerForActivityResult
+            viewModel.updateProfileImage(profileImageUrl = imageUrl)
+        }
+
+    private val overTiramisuAlbumLauncher = registerForActivityResult(
+        PickVisualMedia(),
+    ) { uri ->
+        if (uri == null) return@registerForActivityResult
+        viewModel.updateProfileImage(
+            getAbsolutePathFromUri(uri) ?: return@registerForActivityResult,
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,20 +74,14 @@ class EditMyProfileActivity : AppCompatActivity() {
         binding.showFieldTags = ::showFieldTags
         binding.showEducations = ::showEducations
         binding.showClubs = ::showClubs
-        binding.editProfileImage = ::editProfileImage
+        binding.editProfileImage = ::showAlbum
     }
 
-    private fun editProfileImage() {
-        photoPicker.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
-    }
+    private fun getImageUrlFromActivityResult(result: ActivityResult): String? {
+        val clipData = result.data?.clipData
 
-    private val photoPicker = registerForActivityResult(
-        PickVisualMedia(),
-    ) { uri ->
-        if (uri == null) return@registerForActivityResult
-        viewModel.updateProfileImage(
-            getAbsolutePathFromUri(uri) ?: return@registerForActivityResult,
-        )
+        val uri = clipData?.getItemAt(0)?.uri ?: return null
+        return getAbsolutePathFromUri(uri)
     }
 
     private fun getAbsolutePathFromUri(uri: Uri): String? {
@@ -226,7 +240,67 @@ class EditMyProfileActivity : AppCompatActivity() {
         viewModel.removeError()
     }
 
+    private fun showAlbum() {
+        if (android.os.Build.VERSION.SDK_INT >= TIRAMISU_VERSION) {
+            overTiramisuAlbumLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+        } else {
+            when {
+                isImageAccessPermissionGranted() -> {
+                    val intent = Intent().apply {
+                        type = "image/*"
+                        putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
+                        action = Intent.ACTION_PICK
+                    }
+                    underTiramisuAlbumLauncher.launch(intent)
+                }
+
+                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                    requestPermissions(
+                        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                        REQUEST_STORAGE,
+                    )
+                }
+
+                else -> {
+                    requestPermissions(
+                        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                        REQUEST_STORAGE,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun isImageAccessPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_STORAGE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showAlbum()
+                } else {
+                    showToast(getString(R.string.editmyprofile_image_access_denied_message))
+                }
+            }
+
+            else -> Unit
+        }
+    }
+
     companion object {
+        private const val REQUEST_STORAGE = 100
+        private const val TIRAMISU_VERSION = 33
+
         fun startActivity(context: Context) {
             context.startActivity(Intent(context, EditMyProfileActivity::class.java))
         }

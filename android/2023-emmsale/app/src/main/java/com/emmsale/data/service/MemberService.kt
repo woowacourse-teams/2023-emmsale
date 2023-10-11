@@ -8,7 +8,7 @@ import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
 import com.emmsale.data.apiModel.response.MemberActivitiesResponse
 import com.emmsale.data.apiModel.response.MemberResponse
 import com.emmsale.data.apiModel.response.ProfileImageUrlResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
