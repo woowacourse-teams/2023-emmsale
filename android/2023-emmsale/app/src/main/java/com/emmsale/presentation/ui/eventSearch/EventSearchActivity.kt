@@ -34,9 +34,9 @@ class EventSearchActivity : AppCompatActivity() {
         setupBinding()
         setupSearchResultRecyclerView()
         setupSearchHistoryRecyclerView()
+        setupDeleteAllBtn()
         observeEventSearchResults()
         observeEventSearchHistories()
-        setupDeleteAllBtn()
     }
 
     private fun setupBinding() {

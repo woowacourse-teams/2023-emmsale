@@ -16,7 +16,9 @@ class DefaultEventSearchRepository @Inject constructor(
     private val dao: EventSearchDao,
 ) : EventSearchRepository {
     override suspend fun getAll(): List<EventSearch> = withContext(dispatcher) {
-        dao.getAll().map { it.toData() }
+        dao.getAll()
+            .distinctBy { eventSearch -> eventSearch.query }
+            .map(EventSearchEntity::toData)
     }
 
     override suspend fun save(searchQuery: String) {
