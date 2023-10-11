@@ -77,7 +77,12 @@ class EventSearchViewModel @Inject constructor(
         }
     }
 
-    fun deleteAllSearchHistory() {}
+    fun deleteAllSearchHistory() {
+        viewModelScope.launch {
+            eventSearchRepository.deleteAll()
+            getAllEventSearchHistories()
+        }
+    }
 
     companion object {
         private const val INITIAL_QUERY = ""

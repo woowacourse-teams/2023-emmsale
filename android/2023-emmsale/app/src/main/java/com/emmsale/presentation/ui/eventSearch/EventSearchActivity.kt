@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.emmsale.R
 import com.emmsale.databinding.ActivityEventSearchBinding
+import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventSearch.recyclerView.eventSearch.EventSearchAdapter
 import com.emmsale.presentation.ui.eventSearch.recyclerView.eventSearchHistory.EventSearchHistoryAdapter
@@ -34,6 +36,7 @@ class EventSearchActivity : AppCompatActivity() {
         setupSearchHistoryRecyclerView()
         observeEventSearchResults()
         observeEventSearchHistories()
+        setupDeleteAllBtn()
     }
 
     private fun setupBinding() {
@@ -52,7 +55,10 @@ class EventSearchActivity : AppCompatActivity() {
     }
 
     private fun setupSearchHistoryRecyclerView() {
-        binding.rvEventSearchHistory.adapter = eventSearchHistoryAdapter
+        with(binding.rvEventSearchHistory) {
+            adapter = eventSearchHistoryAdapter
+            itemAnimator = null
+        }
     }
 
     private fun observeEventSearchResults() {
@@ -69,5 +75,20 @@ class EventSearchActivity : AppCompatActivity() {
 
     private fun navigateToEventDetail(eventId: Long) {
         EventDetailActivity.startActivity(this, eventId)
+    }
+
+    private fun setupDeleteAllBtn() {
+        binding.btnDeleteAllSearchQuery.setOnClickListener {
+            showDeleteAllQueryDialog()
+        }
+    }
+
+    private fun showDeleteAllQueryDialog() {
+        ConfirmDialog(
+            this,
+            getString(R.string.eventsearch_delete_all_query_dialog_title),
+            getString(R.string.eventsearch_delete_all_query_dialog_desc),
+            onPositiveButtonClick = viewModel::deleteAllSearchHistory,
+        ).show()
     }
 }
