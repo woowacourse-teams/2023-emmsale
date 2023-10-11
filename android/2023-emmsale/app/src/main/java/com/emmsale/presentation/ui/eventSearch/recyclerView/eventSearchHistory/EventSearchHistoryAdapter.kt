@@ -3,12 +3,12 @@ package com.emmsale.presentation.ui.eventSearch.recyclerView.eventSearchHistory
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.EventSearch
+import com.emmsale.data.model.EventSearchHistory
 
 class EventSearchHistoryAdapter(
-    private val onHistoryClick: (eventSearch: EventSearch) -> Unit,
-    private val onDeleteClick: (eventSearch: EventSearch) -> Unit,
-) : ListAdapter<EventSearch, EventSearchHistoryViewHolder>(diffUtil) {
+    private val onHistoryClick: (eventSearch: EventSearchHistory) -> Unit,
+    private val onDeleteClick: (eventSearch: EventSearchHistory) -> Unit,
+) : ListAdapter<EventSearchHistory, EventSearchHistoryViewHolder>(diffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -21,15 +21,15 @@ class EventSearchHistoryAdapter(
     }
 
     companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<EventSearch>() {
+        private val diffUtil = object : DiffUtil.ItemCallback<EventSearchHistory>() {
             override fun areItemsTheSame(
-                oldItem: EventSearch,
-                newItem: EventSearch,
+                oldItem: EventSearchHistory,
+                newItem: EventSearchHistory,
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: EventSearch,
-                newItem: EventSearch,
+                oldItem: EventSearchHistory,
+                newItem: EventSearchHistory,
             ): Boolean = oldItem == newItem
         }
     }

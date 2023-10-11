@@ -11,7 +11,7 @@ import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.model.Event
-import com.emmsale.data.model.EventSearch
+import com.emmsale.data.model.EventSearchHistory
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.EventSearchRepository
 import com.emmsale.presentation.common.FetchResult
@@ -40,8 +40,8 @@ class EventSearchViewModel @Inject constructor(
         .mapLatest { query -> eventRepository.searchEvents(query).toUiState() }
         .asLiveData()
 
-    private val _eventSearchHistories = MutableLiveData<List<EventSearch>>()
-    val eventSearchHistories: LiveData<List<EventSearch>> = _eventSearchHistories
+    private val _eventSearchHistories = MutableLiveData<List<EventSearchHistory>>()
+    val eventSearchHistories: LiveData<List<EventSearchHistory>> = _eventSearchHistories
 
     private fun ApiResponse<List<Event>>.toUiState(): EventSearchResultsUiState = when (this) {
         is Success -> EventSearchResultsUiState(data, FetchResult.SUCCESS)
@@ -70,7 +70,7 @@ class EventSearchViewModel @Inject constructor(
         }
     }
 
-    fun deleteSearchHistory(eventSearch: EventSearch) {
+    fun deleteSearchHistory(eventSearch: EventSearchHistory) {
         viewModelScope.launch {
             eventSearchRepository.delete(eventSearch)
             getAllEventSearchHistories()

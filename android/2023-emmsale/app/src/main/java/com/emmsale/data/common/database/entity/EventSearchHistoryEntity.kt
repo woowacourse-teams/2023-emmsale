@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "event_search")
-data class EventSearchEntity(
+data class EventSearchHistoryEntity(
     @ColumnInfo("query") val query: String,
     @ColumnInfo("created_at") val createdAt: Long = System.currentTimeMillis(),
 ) {

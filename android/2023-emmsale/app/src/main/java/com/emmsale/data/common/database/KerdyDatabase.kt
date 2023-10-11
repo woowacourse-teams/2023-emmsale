@@ -4,19 +4,20 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.emmsale.data.common.database.dao.EventSearchDao
-import com.emmsale.data.common.database.entity.EventSearchEntity
+import com.emmsale.data.common.database.dao.EventSearchHistoryDao
+import com.emmsale.data.common.database.entity.EventSearchHistoryEntity
 
 @Database(
-    entities = [EventSearchEntity::class],
+    entities = [EventSearchHistoryEntity::class],
     version = 1,
     exportSchema = false,
 )
 abstract class KerdyDatabase : RoomDatabase() {
-    abstract fun eventDao(): EventSearchDao
+    abstract fun eventDao(): EventSearchHistoryDao
 
     companion object {
         private const val DATABASE_NAME = "kerdy_database"
+
         private var instance: KerdyDatabase? = null
 
         @Synchronized

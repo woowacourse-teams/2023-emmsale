@@ -1,7 +1,7 @@
 package com.emmsale.di.modules.dao
 
 import com.emmsale.data.common.database.KerdyDatabase
-import com.emmsale.data.common.database.dao.EventSearchDao
+import com.emmsale.data.common.database.dao.EventSearchHistoryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +15,5 @@ class DaoModule {
     @Singleton
     fun provideEventSearchDao(
         database: KerdyDatabase,
-    ): EventSearchDao = database.eventDao()
+    ): EventSearchHistoryDao = database.eventDao()
 }

@@ -7,21 +7,21 @@
 
         <import type="kotlin.jvm.functions.Function1" />
 
-        <import type="com.emmsale.data.model.EventSearch" />
+        <import type="com.emmsale.data.model.EventSearchHistory" />
 
         <import type="kotlin.Unit" />
 
         <variable
             name="onHistoryClick"
-            type="Function1&lt;EventSearch, Unit>" />
+            type="Function1&lt;EventSearchHistory, Unit>" />
 
         <variable
             name="onDeleteClick"
-            type="Function1&lt;EventSearch, Unit>" />
+            type="Function1&lt;EventSearchHistory, Unit>" />
 
         <variable
             name="eventSearch"
-            type="EventSearch" />
+            type="EventSearchHistory" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
