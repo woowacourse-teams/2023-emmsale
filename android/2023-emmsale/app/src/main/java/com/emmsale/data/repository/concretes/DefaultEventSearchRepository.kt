@@ -1,6 +1,7 @@
 package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.common.database.dao.EventSearchDao
+import com.emmsale.data.common.database.entity.EventSearchEntity
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.mapper.toEntity
 import com.emmsale.data.model.EventSearch
@@ -18,9 +19,9 @@ class DefaultEventSearchRepository @Inject constructor(
         dao.getAll().map { it.toData() }
     }
 
-    override suspend fun save(eventSearch: EventSearch) {
+    override suspend fun save(searchQuery: String) {
         withContext(dispatcher) {
-            dao.save(eventSearch.toEntity())
+            dao.save(EventSearchEntity(query = searchQuery))
         }
     }
 

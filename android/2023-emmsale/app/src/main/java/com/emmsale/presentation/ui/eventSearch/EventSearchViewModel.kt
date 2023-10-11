@@ -59,7 +59,8 @@ class EventSearchViewModel @Inject constructor(
 
     fun saveEventSearch() {
         viewModelScope.launch {
-            eventSearchRepository.save(EventSearch(query = eventSearchQuery.value))
+            eventSearchRepository.save(eventSearchQuery.value)
+            getAllEventSearchHistories()
         }
     }
 
