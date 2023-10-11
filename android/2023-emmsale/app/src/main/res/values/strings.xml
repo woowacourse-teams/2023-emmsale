@@ -398,6 +398,10 @@
     <string name="post_writing_content_hint">내용을 입력하세요.</string>
     <string name="post_writing_upload_error">업로드에 실패하였습니다</string>
     <string name="post_writing_empty_title_content_message">제목 또는 내용을 채워주세요!!</string>
+    <string name="post_writing_title_warning">제목을 입력해 주세요</string>
+    <string name="post_writing_content_warning">내용은 8자 이상이어야 합니다</string>
+    <string name="post_writing_image_permission_denied_message">사진 권한이 거부되었습니다.</string>
+    <string name="post_writing_max_image_count_warning_message">최대 5장까지만 선택 가능합니다</string>
 
     <string name="messageroom_toolbar_title">메시지</string>
     <string name="messageroom_message_room_options_title">더보기</string>
@@ -427,9 +431,4 @@
     <string name="feeddetaildeletedialog_title">게시글 삭제</string>
     <string name="feeddetaildeletedialog_message">해당 게시글을 삭제하시겠습니까?</string>
     <string name="feeddetail_toolbar_title">게시글</string>
-    <string name="post_writing_title_warning">제목을 입력해 주세요</string>
-    <string name="post_writing_content_warning">내용은 8자 이상이어야 합니다</string>
-    <string name="post_writing_image_permission_denied_message">사진 권한이 거부되었습니다.</string>
-    <string name="post_writing_max_image_count_warning_message">최대 5장까지만 선택 가능합니다</string>
-
 </resources>
