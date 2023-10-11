@@ -95,7 +95,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/v_event_search"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
-            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}"
+            app:visible="@{!etEventSearch.text.toString().isBlank()}"
             tools:visibility="gone" />
 
         <TextView
@@ -110,7 +110,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/tv_event_prefix"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
-            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}"
+            app:visible="@{!etEventSearch.text.toString().isBlank()}"
             tools:text="2"
             tools:visibility="gone" />
 
@@ -125,7 +125,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/tv_event_count"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
-            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}"
+            app:visible="@{!etEventSearch.text.toString().isBlank()}"
             tools:visibility="gone" />
 
         <View
@@ -147,7 +147,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider"
-            app:visible="@{!etEventSearch.text.toString().trim().isEmpty()}"
+            app:visible="@{!etEventSearch.text.toString().isBlank()}"
             tools:listitem="@layout/item_conference"
             tools:visibility="gone" />
 
@@ -160,7 +160,7 @@
             app:layout_constraintTop_toTopOf="@id/rv_event_search_result"
             app:noContentImageResId="@drawable/ic_no_result1"
             app:title="@string/eventsearch_no_search_result_title"
-            app:visible="@{!etEventSearch.text.toString().trim().isEmpty() &amp;&amp; viewModel.eventSearchResults.eventSize == 0}" />
+            app:visible="@{!etEventSearch.text.toString().isBlank() &amp;&amp; viewModel.eventSearchResults.eventSize == 0}" />
 
         <TextView
             android:id="@+id/tv_search_history_title"
@@ -173,7 +173,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/v_event_search"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
-            app:visible="@{etEventSearch.text.toString().trim().isEmpty()}" />
+            app:visible="@{etEventSearch.text.toString().isBlank()}" />
 
         <TextView
             android:id="@+id/btn_delete_all_search_query"
@@ -189,7 +189,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/v_event_search"
             app:layout_constraintTop_toBottomOf="@id/v_event_search"
-            app:visible="@{etEventSearch.text.toString().trim().isEmpty()}" />
+            app:visible="@{etEventSearch.text.toString().isBlank()}" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier"
@@ -208,7 +208,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider"
-            app:visible="@{etEventSearch.text.toString().trim().isEmpty()}"
+            app:visible="@{etEventSearch.text.toString().isBlank()}"
             tools:listitem="@layout/item_event_search_history" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
