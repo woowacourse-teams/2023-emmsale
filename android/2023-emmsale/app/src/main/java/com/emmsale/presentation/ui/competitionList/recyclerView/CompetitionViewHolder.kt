@@ -5,14 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
+import com.emmsale.data.model.Event
 import com.emmsale.databinding.ItemCompetitionBinding
 import com.emmsale.presentation.common.views.EventTagChip
 import com.emmsale.presentation.common.views.eventChipOf
-import com.emmsale.presentation.ui.competitionList.uiState.CompetitionUiState
 
 class CompetitionViewHolder(
     parent: ViewGroup,
-    onClickCompetition: (CompetitionUiState) -> Unit,
+    onClickCompetition: (Event) -> Unit,
 ) : ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_competition, parent, false),
 ) {
@@ -22,10 +22,10 @@ class CompetitionViewHolder(
         binding.onClickCompetition = onClickCompetition
     }
 
-    fun bind(event: CompetitionUiState) {
+    fun bind(event: Event) {
         binding.event = event
         binding.cgEventTags.removeAllViews()
-        event.competition.tags.forEach(::addEventChip)
+        event.tags.forEach(::addEventChip)
     }
 
     private fun addEventChip(tagName: String) {

@@ -1,6 +1,6 @@
 package com.emmsale.di.modules.service
 
-import com.emmsale.data.common.ServiceFactory
+import com.emmsale.data.common.retrofit.ServiceFactory
 import com.emmsale.data.service.ActivityService
 import com.emmsale.data.service.BlockedMemberService
 import com.emmsale.data.service.CommentService

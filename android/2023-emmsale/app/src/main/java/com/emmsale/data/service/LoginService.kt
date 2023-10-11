@@ -1,7 +1,7 @@
 package com.emmsale.data.service
 
 import com.emmsale.data.apiModel.response.LoginResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import retrofit2.http.POST
 import retrofit2.http.Query
 

@@ -2,7 +2,7 @@ package com.emmsale.data.model
 
 import java.time.LocalDateTime
 
-data class Competition(
+data class Event(
     val id: Long,
     val name: String,
     val startDate: LocalDateTime,

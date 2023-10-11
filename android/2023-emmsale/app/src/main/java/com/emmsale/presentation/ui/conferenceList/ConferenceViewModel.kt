@@ -2,13 +2,13 @@ package com.emmsale.presentation.ui.conferenceList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.common.callAdapter.Failure
-import com.emmsale.data.common.callAdapter.NetworkError
-import com.emmsale.data.common.callAdapter.Success
-import com.emmsale.data.common.callAdapter.Unexpected
-import com.emmsale.data.model.Conference
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.NetworkError
+import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.model.ConferenceStatus
+import com.emmsale.data.model.Event
 import com.emmsale.data.model.EventTag
 import com.emmsale.data.repository.interfaces.ConferenceStatusRepository
 import com.emmsale.data.repository.interfaces.EventRepository
@@ -19,7 +19,6 @@ import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringUiState
-import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -62,7 +61,7 @@ class ConferenceViewModel @Inject constructor(
                 )
 
                 is Success -> _conferences.value = _conferences.value.copy(
-                    conferences = result.data.map(ConferenceUiState::from),
+                    events = result.data,
                     isLoading = false,
                     isError = false,
                 )
@@ -77,7 +76,7 @@ class ConferenceViewModel @Inject constructor(
         tags: List<EventTag>,
         startDate: LocalDate?,
         endDate: LocalDate?,
-    ): ApiResponse<List<Conference>> = eventRepository.getConferences(
+    ): ApiResponse<List<Event>> = eventRepository.getConferences(
         statuses = statuses,
         tags = tags,
         startDate = startDate,

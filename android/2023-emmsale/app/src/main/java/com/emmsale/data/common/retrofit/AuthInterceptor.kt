@@ -1,4 +1,4 @@
-package com.emmsale.data.common
+package com.emmsale.data.common.retrofit
 
 import android.content.Context
 import com.emmsale.data.repository.interfaces.TokenRepository

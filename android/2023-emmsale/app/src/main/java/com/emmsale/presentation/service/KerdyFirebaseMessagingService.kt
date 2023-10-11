@@ -2,10 +2,10 @@ package com.emmsale.presentation.service
 
 import android.content.Intent
 import com.emmsale.R
-import com.emmsale.data.common.callAdapter.Failure
-import com.emmsale.data.common.callAdapter.NetworkError
-import com.emmsale.data.common.callAdapter.Success
-import com.emmsale.data.common.callAdapter.Unexpected
+import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.NetworkError
+import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.TokenRepository

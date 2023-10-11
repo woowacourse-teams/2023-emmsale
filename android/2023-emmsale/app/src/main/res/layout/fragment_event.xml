@@ -20,7 +20,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/menu_main_toolbar" />
+            app:menu="@menu/menu_main_toolbar">
+
+            <LinearLayout
+                android:id="@+id/btn_event_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="10dp"
+                android:layout_marginStart="17dp"
+                android:layout_marginEnd="63dp"
+                android:background="@drawable/bg_event_search">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="9dp"
+                    android:layout_marginStart="13dp"
+                    android:src="@drawable/ic_event_search" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_event"

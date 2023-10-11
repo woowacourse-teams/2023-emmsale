@@ -6,7 +6,7 @@ import com.emmsale.data.apiModel.request.RecruitmentNotificationStatusUpdateRequ
 import com.emmsale.data.apiModel.response.NotificationReportResponse
 import com.emmsale.data.apiModel.response.NotificationResponse
 import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP

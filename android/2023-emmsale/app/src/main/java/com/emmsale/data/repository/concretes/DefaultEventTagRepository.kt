@@ -2,7 +2,7 @@ package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.request.InterestEventTagUpdateRequest
 import com.emmsale.data.apiModel.response.EventTagResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.dataSource.remote.EventTagRemoteDataSource
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.EventTag

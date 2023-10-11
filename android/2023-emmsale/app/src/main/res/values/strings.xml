@@ -431,4 +431,12 @@
     <string name="feeddetaildeletedialog_title">게시글 삭제</string>
     <string name="feeddetaildeletedialog_message">해당 게시글을 삭제하시겠습니까?</string>
     <string name="feeddetail_toolbar_title">게시글</string>
+
+    <string name="eventsearch_toolbar_title">검색하기</string>
+    <string name="eventsearch_edittext_hint">검색어를 입력하세요.</string>
+    <string name="eventsearch_no_search_result_title">검색 결과가 없습니다.</string>
+    <string name="eventsearch_serach_history_title">최근 검색어</string>
+    <string name="eventsearch_search_history_delete_all">전체 삭제</string>
+    <string name="eventsearch_delete_all_query_dialog_title">전체 삭제</string>
+    <string name="eventsearch_delete_all_query_dialog_desc">최근 검색어를 모두 삭제하시겠어요?</string>
 </resources>

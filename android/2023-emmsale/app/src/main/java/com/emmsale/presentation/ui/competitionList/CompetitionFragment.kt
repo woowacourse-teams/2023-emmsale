@@ -6,6 +6,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
 import com.emmsale.R
+import com.emmsale.data.model.Event
 import com.emmsale.databinding.FragmentCompetitionBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
@@ -15,7 +16,6 @@ import com.emmsale.presentation.ui.competitionFilter.CompetitionFilterActivity
 import com.emmsale.presentation.ui.competitionList.recyclerView.CompetitionRecyclerViewAdapter
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringOptionUiState
-import com.emmsale.presentation.ui.competitionList.uiState.CompetitionUiState
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -74,7 +74,7 @@ class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
     private fun setupEventsObserver() {
         viewModel.competitions.observe(viewLifecycleOwner) { eventsResult ->
             when {
-                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.competitions) {
+                !eventsResult.isLoading -> eventAdapter.submitList(eventsResult.events) {
                     binding.rvEvents.scrollToPosition(0)
                 }
             }
@@ -131,8 +131,8 @@ class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
         binding.btnEventFilter.setOnClickListener { navigateToEventFilter() }
     }
 
-    private fun navigateToEventDetail(event: CompetitionUiState) {
-        EventDetailActivity.startActivity(requireContext(), event.competition.id)
+    private fun navigateToEventDetail(event: Event) {
+        EventDetailActivity.startActivity(requireContext(), event.id)
     }
 
     private fun navigateToEventFilter() {

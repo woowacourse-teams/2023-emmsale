@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.emmsale.presentation.common.FetchResult" />
+
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.eventSearch.EventSearchViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".presentation.ui.eventSearch.EventSearchActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_event_search"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            android:keepScreenOn="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/eventsearch_toolbar_title"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
+
+        <View
+            android:id="@+id/v_event_search"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_marginHorizontal="17dp"
+            android:background="@drawable/bg_eventsearch_search"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_event_search" />
+
+        <ImageView
+            android:id="@+id/iv_event_search"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginVertical="12dp"
+            android:layout_marginStart="12dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_green_search"
+            app:layout_constraintBottom_toBottomOf="@id/v_event_search"
+            app:layout_constraintDimensionRatio="W, 1:1"
+            app:layout_constraintStart_toStartOf="@id/v_event_search"
+            app:layout_constraintTop_toTopOf="@id/v_event_search" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            app:boxBackgroundMode="none"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/light_gray"
+            app:hintAnimationEnabled="false"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toBottomOf="@id/iv_event_search"
+            app:layout_constraintEnd_toEndOf="@id/v_event_search"
+            app:layout_constraintStart_toEndOf="@id/iv_event_search"
+            app:layout_constraintTop_toTopOf="@id/iv_event_search">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_event_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="@string/eventsearch_edittext_hint"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@={viewModel.eventSearchQuery}"
+                android:textColor="@color/black"
+                android:textColorHint="@color/light_gray"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_event_prefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/event_count_prefix"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/v_event_search"
+            app:layout_constraintTop_toBottomOf="@id/v_event_search"
+            app:visible="@{!etEventSearch.text.toString().isBlank()}"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_event_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="24dp"
+            android:text="@{viewModel.eventSearchResults.eventSize}"
+            android:textColor="@color/primary_color"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tv_event_prefix"
+            app:layout_constraintTop_toBottomOf="@id/v_event_search"
+            app:visible="@{!etEventSearch.text.toString().isBlank()}"
+            tools:text="2"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_event_suffix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/event_count_suffix"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tv_event_count"
+            app:layout_constraintTop_toBottomOf="@id/v_event_search"
+            app:visible="@{!etEventSearch.text.toString().isBlank()}"
+            tools:visibility="gone" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/light_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_event_search_result"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:visible="@{!etEventSearch.text.toString().isBlank()}"
+            tools:listitem="@layout/item_conference"
+            tools:visibility="gone" />
+
+        <com.emmsale.presentation.common.views.NoContentView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/rv_event_search_result"
+            app:noContentImageResId="@drawable/ic_no_result1"
+            app:title="@string/eventsearch_no_search_result_title"
+            app:visible="@{!etEventSearch.text.toString().isBlank() &amp;&amp; viewModel.eventSearchResults.eventSize == 0}" />
+
+        <TextView
+            android:id="@+id/tv_search_history_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/eventsearch_serach_history_title"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/v_event_search"
+            app:layout_constraintTop_toBottomOf="@id/v_event_search"
+            app:visible="@{etEventSearch.text.toString().isBlank()}" />
+
+        <TextView
+            android:id="@+id/btn_delete_all_search_query"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/eventsearch_search_history_delete_all"
+            android:textColor="@color/light_gray"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/v_event_search"
+            app:layout_constraintTop_toBottomOf="@id/v_event_search"
+            app:visible="@{etEventSearch.text.toString().isBlank()}" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="tv_search_history_title, tv_event_prefix" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_event_search_history"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:visible="@{etEventSearch.text.toString().isBlank()}"
+            tools:listitem="@layout/item_event_search_history" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

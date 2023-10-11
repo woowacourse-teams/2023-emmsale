@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.ui.conferenceList.uiState.ConferenceUiState" />
-
         <import type="kotlin.Unit" />
 
         <import type="com.emmsale.data.model.EventProgressStatus" />
@@ -15,13 +13,15 @@
 
         <import type="com.emmsale.data.model.PaymentType" />
 
+        <import type="com.emmsale.data.model.Event" />
+
         <variable
             name="event"
-            type="com.emmsale.presentation.ui.conferenceList.uiState.ConferenceUiState" />
+            type="Event" />
 
         <variable
             name="onClickConference"
-            type="kotlin.jvm.functions.Function1&lt;ConferenceUiState, Unit>" />
+            type="kotlin.jvm.functions.Function1&lt;Event, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:contentDescription="@string/event_poster_description"
-            app:imageUrl="@{event.conference.posterUrl}"
+            app:imageUrl="@{event.posterUrl}"
             app:layout_constraintDimensionRatio="326:180"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,9 +50,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:textStyle="bold"
             android:textSize="13sp"
-            app:eventApplyingStatus="@{event.conference.applicationStatus}"
+            android:textStyle="bold"
+            app:eventApplyingStatus="@{event.applicationStatus}"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
             app:layout_goneMarginTop="9dp"
@@ -73,11 +73,11 @@
             android:id="@+id/tv_progress_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_marginStart="6dp"
-            android:textStyle="bold"
+            android:layout_marginTop="12dp"
             android:textSize="13sp"
-            app:eventProgressStatus="@{event.conference.progressStatus}"
+            android:textStyle="bold"
+            app:eventProgressStatus="@{event.progressStatus}"
             app:layout_constraintStart_toEndOf="@+id/divider_event_status"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
             app:layout_goneMarginTop="9dp"
@@ -89,7 +89,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="9dp"
-            android:text="@{event.conference.name}"
+            android:text="@{event.name}"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
@@ -106,7 +106,7 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
-            app:paymentType="@{event.conference.paymentType}"
+            app:paymentType="@{event.paymentType}"
             tools:text="무료" />
 
         <View
@@ -130,7 +130,7 @@
             app:layout_constraintStart_toStartOf="@+id/divider"
             app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
             app:layout_constraintTop_toTopOf="@+id/tv_pay_type"
-            app:onOfflineMode="@{event.conference.onOfflineMode}"
+            app:onOfflineMode="@{event.onOfflineMode}"
             tools:text="온라인" />
 
         <com.google.android.material.chip.ChipGroup
@@ -139,7 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="10dp"
-            app:eventChips="@{event.conference.tags}"
+            app:eventChips="@{event.tags}"
             app:layout_constraintEnd_toEndOf="@+id/iv_event_poster"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/tv_pay_type" />

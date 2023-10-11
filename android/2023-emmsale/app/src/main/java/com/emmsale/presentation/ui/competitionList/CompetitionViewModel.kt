@@ -2,13 +2,13 @@ package com.emmsale.presentation.ui.competitionList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.common.callAdapter.Failure
-import com.emmsale.data.common.callAdapter.NetworkError
-import com.emmsale.data.common.callAdapter.Success
-import com.emmsale.data.common.callAdapter.Unexpected
-import com.emmsale.data.model.Competition
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.NetworkError
+import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.model.CompetitionStatus
+import com.emmsale.data.model.Event
 import com.emmsale.data.model.EventTag
 import com.emmsale.data.repository.interfaces.CompetitionStatusRepository
 import com.emmsale.data.repository.interfaces.EventRepository
@@ -19,7 +19,6 @@ import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringUiState
-import com.emmsale.presentation.ui.competitionList.uiState.CompetitionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -62,7 +61,7 @@ class CompetitionViewModel @Inject constructor(
                 )
 
                 is Success -> _competitions.value = _competitions.value.copy(
-                    competitions = result.data.map(CompetitionUiState::from),
+                    events = result.data,
                     isLoading = false,
                     isError = false,
                 )
@@ -77,7 +76,7 @@ class CompetitionViewModel @Inject constructor(
         tags: List<EventTag>,
         startDate: LocalDate?,
         endDate: LocalDate?,
-    ): ApiResponse<List<Competition>> = eventRepository.getCompetitions(
+    ): ApiResponse<List<Event>> = eventRepository.getCompetitions(
         statuses = statuses,
         tags = tags,
         startDate = startDate,

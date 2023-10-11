@@ -3,13 +3,12 @@ package com.emmsale.data.repository.concretes
 import com.emmsale.data.apiModel.response.CompetitionResponse
 import com.emmsale.data.apiModel.response.ConferenceResponse
 import com.emmsale.data.apiModel.response.EventDetailResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toApiModel
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.model.Competition
 import com.emmsale.data.model.CompetitionStatus
-import com.emmsale.data.model.Conference
 import com.emmsale.data.model.ConferenceStatus
+import com.emmsale.data.model.Event
 import com.emmsale.data.model.EventCategory
 import com.emmsale.data.model.EventDetail
 import com.emmsale.data.model.EventTag
@@ -26,12 +25,13 @@ class DefaultEventRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val eventService: EventService,
 ) : EventRepository {
+
     override suspend fun getConferences(
         statuses: List<ConferenceStatus>,
         tags: List<EventTag>,
         startDate: LocalDate?,
         endDate: LocalDate?,
-    ): ApiResponse<List<Conference>> = withContext(dispatcher) {
+    ): ApiResponse<List<Event>> = withContext(dispatcher) {
         eventService.getConferences(
             category = EventCategory.CONFERENCE.toApiModel(),
             statuses = statuses.toApiModel(),
@@ -46,7 +46,7 @@ class DefaultEventRepository @Inject constructor(
         tags: List<EventTag>,
         startDate: LocalDate?,
         endDate: LocalDate?,
-    ): ApiResponse<List<Competition>> = withContext(dispatcher) {
+    ): ApiResponse<List<Event>> = withContext(dispatcher) {
         eventService.getCompetitions(
             category = EventCategory.COMPETITION.toApiModel(),
             statuses = statuses.toApiModel(),
@@ -60,6 +60,24 @@ class DefaultEventRepository @Inject constructor(
         return eventService
             .getEventDetail(eventId)
             .map(EventDetailResponse::toData)
+    }
+
+    override suspend fun searchEvents(
+        keyword: String,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        tags: List<EventTag>,
+        statuses: List<ConferenceStatus>,
+        category: String?,
+    ): ApiResponse<List<Event>> = withContext(dispatcher) {
+        eventService.searchEvents(
+            keyword = keyword,
+            startDate = startDate?.toRequestFormat(),
+            endDate = endDate?.toRequestFormat(),
+            tags = tags.map { it.name },
+            statuses = statuses.toApiModel(),
+            category = category,
+        ).map(List<ConferenceResponse>::toData)
     }
 
     private fun EventCategory.toApiModel(): String = when (this) {

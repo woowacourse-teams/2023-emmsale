@@ -1,4 +1,4 @@
-package com.emmsale.data.common.callAdapter
+package com.emmsale.data.common.retrofit.callAdapter
 
 import okhttp3.Request
 import okio.Timeout

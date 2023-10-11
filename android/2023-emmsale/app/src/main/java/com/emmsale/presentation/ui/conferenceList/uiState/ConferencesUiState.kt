@@ -1,9 +1,11 @@
 package com.emmsale.presentation.ui.conferenceList.uiState
 
+import com.emmsale.data.model.Event
+
 data class ConferencesUiState(
-    val conferences: List<ConferenceUiState> = emptyList(),
+    val events: List<Event> = emptyList(),
     val isLoading: Boolean = false,
     val isError: Boolean = false,
 ) {
-    val conferenceSize: Int = conferences.size
+    val conferenceSize: Int = events.size
 }

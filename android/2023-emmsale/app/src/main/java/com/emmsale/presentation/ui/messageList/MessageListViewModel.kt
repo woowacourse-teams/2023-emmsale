@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.model.Member
 import com.emmsale.data.model.Message
 import com.emmsale.data.repository.interfaces.MemberRepository

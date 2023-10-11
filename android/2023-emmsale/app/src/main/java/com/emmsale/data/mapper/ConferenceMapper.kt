@@ -2,7 +2,7 @@ package com.emmsale.data.mapper
 
 import com.emmsale.BuildConfig
 import com.emmsale.data.apiModel.response.ConferenceResponse
-import com.emmsale.data.model.Conference
+import com.emmsale.data.model.Event
 import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
 import java.time.LocalDateTime
@@ -10,9 +10,9 @@ import java.time.format.DateTimeFormatter
 
 private const val DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss"
 
-fun List<ConferenceResponse>.toData(): List<Conference> = map { it.toData() }
+fun List<ConferenceResponse>.toData(): List<Event> = map { it.toData() }
 
-fun ConferenceResponse.toData(): Conference = Conference(
+fun ConferenceResponse.toData(): Event = Event(
     id = id,
     name = name,
     startDate = parseDate(startDate),

@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.postList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.model.Post
 import com.emmsale.data.repository.interfaces.PostRepository
 import com.emmsale.presentation.common.FetchResult

@@ -5,11 +5,11 @@ import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentRequestCreateRequest
 import com.emmsale.data.apiModel.response.RecruitmentResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.common.callAdapter.Failure
-import com.emmsale.data.common.callAdapter.NetworkError
-import com.emmsale.data.common.callAdapter.Success
-import com.emmsale.data.common.callAdapter.Unexpected
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.NetworkError
+import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Recruitment
 import com.emmsale.data.repository.interfaces.RecruitmentRepository

@@ -4,7 +4,7 @@ import com.emmsale.data.apiModel.request.CommentCreateRequest
 import com.emmsale.data.apiModel.request.CommentReportCreateRequest
 import com.emmsale.data.apiModel.request.CommentUpdateRequest
 import com.emmsale.data.apiModel.response.CommentFamilyApiModel
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Comment
 import com.emmsale.data.repository.interfaces.CommentRepository

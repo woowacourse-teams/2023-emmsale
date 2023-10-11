@@ -1,4 +1,4 @@
-package com.emmsale.data.common.callAdapter
+package com.emmsale.data.common.retrofit.callAdapter
 
 import retrofit2.Call
 import retrofit2.CallAdapter
