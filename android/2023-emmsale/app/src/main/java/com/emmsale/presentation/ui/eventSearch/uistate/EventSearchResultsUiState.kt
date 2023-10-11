@@ -4,7 +4,7 @@ import com.emmsale.data.model.Event
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.FetchResultUiState
 
-data class EventSearchUiState(
+data class EventSearchResultsUiState(
     val events: List<Event>,
     override val fetchResult: FetchResult,
 ) : FetchResultUiState() {

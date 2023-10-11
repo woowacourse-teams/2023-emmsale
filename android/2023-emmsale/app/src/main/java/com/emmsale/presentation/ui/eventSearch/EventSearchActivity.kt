@@ -73,8 +73,8 @@ class EventSearchActivity : AppCompatActivity() {
     }
 
     private fun observeEventSearchResults() {
-        viewModel.eventSearchResults.observe(this) { eventSearchUiState ->
-            eventSearchAdapter.submitList(eventSearchUiState.events)
+        viewModel.eventSearchResults.observe(this) { eventSearchResults ->
+            eventSearchAdapter.submitList(eventSearchResults.events)
         }
     }
 

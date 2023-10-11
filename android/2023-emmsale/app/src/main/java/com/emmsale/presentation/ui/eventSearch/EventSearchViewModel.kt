@@ -15,7 +15,7 @@ import com.emmsale.data.model.EventSearch
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.EventSearchRepository
 import com.emmsale.presentation.common.FetchResult
-import com.emmsale.presentation.ui.eventSearch.uistate.EventSearchUiState
+import com.emmsale.presentation.ui.eventSearch.uistate.EventSearchResultsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
@@ -32,7 +32,7 @@ class EventSearchViewModel @Inject constructor(
     private val eventSearchRepository: EventSearchRepository,
 ) : ViewModel() {
     val eventSearchQuery: MutableStateFlow<String> = MutableStateFlow(INITIAL_QUERY)
-    val eventSearchResults: LiveData<EventSearchUiState> = eventSearchQuery
+    val eventSearchResults: LiveData<EventSearchResultsUiState> = eventSearchQuery
         .debounce(SEARCH_DEBOUNCE_TIME)
         .filter { query -> query.isNotBlank() }
         .map { query -> query.trim() }
@@ -43,10 +43,10 @@ class EventSearchViewModel @Inject constructor(
     private val _eventSearchHistories = MutableLiveData<List<EventSearch>>()
     val eventSearchHistories: LiveData<List<EventSearch>> = _eventSearchHistories
 
-    private fun ApiResponse<List<Event>>.toUiState(): EventSearchUiState = when (this) {
-        is Success -> EventSearchUiState(data, FetchResult.SUCCESS)
-        is Failure, is Unexpected -> EventSearchUiState(emptyList(), FetchResult.ERROR)
-        is NetworkError -> EventSearchUiState(emptyList(), FetchResult.ERROR)
+    private fun ApiResponse<List<Event>>.toUiState(): EventSearchResultsUiState = when (this) {
+        is Success -> EventSearchResultsUiState(data, FetchResult.SUCCESS)
+        is Failure, is Unexpected -> EventSearchResultsUiState(emptyList(), FetchResult.ERROR)
+        is NetworkError -> EventSearchResultsUiState(emptyList(), FetchResult.ERROR)
     }
 
     init {
