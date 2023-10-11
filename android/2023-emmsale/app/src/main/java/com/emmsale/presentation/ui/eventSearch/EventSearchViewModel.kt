@@ -31,7 +31,7 @@ class EventSearchViewModel @Inject constructor(
     private val eventRepository: EventRepository,
     private val eventSearchRepository: EventSearchRepository,
 ) : ViewModel() {
-    val eventSearchQuery = MutableStateFlow(INITIAL_QUERY)
+    val eventSearchQuery: MutableStateFlow<String> = MutableStateFlow(INITIAL_QUERY)
     val eventSearchResults: LiveData<EventSearchUiState> = eventSearchQuery
         .debounce(SEARCH_DEBOUNCE_TIME)
         .filter { query -> query.isNotBlank() }
