@@ -5,6 +5,7 @@ import android.view.View
 import com.emmsale.R
 import com.emmsale.databinding.FragmentEventBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.ui.eventSearch.EventSearchActivity
 import com.emmsale.presentation.ui.notificationPageList.NotificationBoxActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -23,7 +24,14 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
     private fun initView() {
         selectConferenceTab()
         initEventViewPager()
-        initNotificationButtonClickListener()
+        initNotificationView()
+        initEventSearchView()
+    }
+
+    private fun initEventSearchView() {
+        binding.btnEventSearch.setOnClickListener {
+            EventSearchActivity.startActivity(requireContext())
+        }
     }
 
     private fun selectConferenceTab() {
@@ -65,7 +73,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
         })
     }
 
-    private fun initNotificationButtonClickListener() {
+    private fun initNotificationView() {
         binding.tbEventToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.notification_button -> NotificationBoxActivity.startActivity(requireContext())

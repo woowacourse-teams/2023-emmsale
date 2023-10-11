@@ -23,6 +23,7 @@
             app:menu="@menu/menu_main_toolbar">
 
             <LinearLayout
+                android:id="@+id/btn_event_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="10dp"

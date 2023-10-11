@@ -1,5 +1,7 @@
 package com.emmsale.presentation.ui.eventSearch
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -90,5 +92,11 @@ class EventSearchActivity : AppCompatActivity() {
             getString(R.string.eventsearch_delete_all_query_dialog_desc),
             onPositiveButtonClick = viewModel::deleteAllSearchHistory,
         ).show()
+    }
+
+    companion object {
+        fun startActivity(context: Context) {
+            context.startActivity(Intent(context, EventSearchActivity::class.java))
+        }
     }
 }
