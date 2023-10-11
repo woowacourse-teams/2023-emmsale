@@ -37,6 +37,7 @@ class EventSearchActivity : AppCompatActivity() {
         setupSearchResultRecyclerView()
         setupSearchHistoryRecyclerView()
         setupDeleteAllBtn()
+        setupEventSearchToolbar()
         observeEventSearchResults()
         observeEventSearchHistories()
     }
@@ -63,6 +64,14 @@ class EventSearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupDeleteAllBtn() {
+        binding.btnDeleteAllSearchQuery.setOnClickListener { showDeleteAllQueryDialog() }
+    }
+
+    private fun setupEventSearchToolbar() {
+        binding.tbEventSearch.setNavigationOnClickListener { finish() }
+    }
+
     private fun observeEventSearchResults() {
         viewModel.eventSearchResults.observe(this) { eventSearchUiState ->
             eventSearchAdapter.submitList(eventSearchUiState.events)
@@ -77,12 +86,6 @@ class EventSearchActivity : AppCompatActivity() {
 
     private fun navigateToEventDetail(eventId: Long) {
         EventDetailActivity.startActivity(this, eventId)
-    }
-
-    private fun setupDeleteAllBtn() {
-        binding.btnDeleteAllSearchQuery.setOnClickListener {
-            showDeleteAllQueryDialog()
-        }
     }
 
     private fun showDeleteAllQueryDialog() {
