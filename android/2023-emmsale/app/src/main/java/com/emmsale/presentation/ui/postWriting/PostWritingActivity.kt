@@ -33,15 +33,7 @@ class PostWritingActivity : AppCompatActivity() {
         PostWritingImageAdapter(deleteImage = viewModel::deleteImageUrl)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setUpBinding()
-        setUpPostUploadResult()
-        setUpImageUrls()
-    }
-
-    // use when build version under 33
-    private val lowVersionAlbumLauncher =
+    private val underTiramisuAlbumLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             val imageUrls = getImageUrlsFromActivityResult(result)
             when {
@@ -56,6 +48,19 @@ class PostWritingActivity : AppCompatActivity() {
             }
         }
 
+    private val overTiramisuAlbumLauncher = registerForActivityResult(
+        ActivityResultContracts.PickMultipleVisualMedia(MAX_IMAGE_COUNT),
+    ) { uris ->
+        viewModel.fetchImageUrls(uris.map { getAbsolutePathFromUri(it) ?: "" })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setUpBinding()
+        setUpPostUploadResult()
+        setUpImageUrls()
+    }
+
     private fun getImageUrlsFromActivityResult(result: ActivityResult): List<String> {
         val clipData = result.data?.clipData
 
@@ -67,13 +72,6 @@ class PostWritingActivity : AppCompatActivity() {
             }
         }
         return emptyList()
-    }
-
-    // use when build version 33
-    private val highVersionAlbumLauncher = registerForActivityResult(
-        ActivityResultContracts.PickMultipleVisualMedia(MAX_IMAGE_COUNT),
-    ) { uris ->
-        viewModel.fetchImageUrls(uris.map { getAbsolutePathFromUri(it) ?: "" })
     }
 
     private fun getAbsolutePathFromUri(uri: Uri): String? {
@@ -132,7 +130,7 @@ class PostWritingActivity : AppCompatActivity() {
 
     private fun showAlbum() {
         if (android.os.Build.VERSION.SDK_INT >= 33) {
-            highVersionAlbumLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            overTiramisuAlbumLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         } else {
             when {
                 isImageAccessPermissionGranted() -> {
@@ -141,7 +139,7 @@ class PostWritingActivity : AppCompatActivity() {
                         putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                         action = Intent.ACTION_PICK
                     }
-                    lowVersionAlbumLauncher.launch(intent)
+                    underTiramisuAlbumLauncher.launch(intent)
                 }
 
                 shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> {
