@@ -3,7 +3,7 @@ package com.emmsale.data.repository.concretes
 import com.emmsale.data.apiModel.request.MessageRequest
 import com.emmsale.data.apiModel.response.MessageResponse
 import com.emmsale.data.apiModel.response.MessageRoomResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Message
 import com.emmsale.data.model.MessageRoom

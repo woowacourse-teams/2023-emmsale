@@ -4,13 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.emmsale.data.common.callAdapter.ApiResponse
-import com.emmsale.data.common.callAdapter.Failure
-import com.emmsale.data.common.callAdapter.NetworkError
-import com.emmsale.data.common.callAdapter.Success
-import com.emmsale.data.common.callAdapter.Unexpected
+import androidx.lifecycle.viewModelScope
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.NetworkError
+import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.model.Event
+import com.emmsale.data.model.EventSearch
 import com.emmsale.data.repository.interfaces.EventRepository
+import com.emmsale.data.repository.interfaces.EventSearchRepository
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.ui.eventSearch.uistate.EventSearchUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,13 +23,15 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class EventSearchViewModel @Inject constructor(
     private val eventRepository: EventRepository,
+    private val eventSearchRepository: EventSearchRepository,
 ) : ViewModel() {
-    private val eventSearchQuery = MutableStateFlow(INITIAL_QUERY)
+    val eventSearchQuery = MutableStateFlow(INITIAL_QUERY)
     val eventSearchResults: LiveData<EventSearchUiState> = eventSearchQuery
         .debounce(SEARCH_DEBOUNCE_TIME)
         .filter { query -> query.trim().isNotEmpty() }
@@ -35,7 +40,8 @@ class EventSearchViewModel @Inject constructor(
         .mapLatest { query -> eventRepository.searchEvents(query).toUiState() }
         .asLiveData()
 
-    val eventSearchHistories: LiveData<List<Event>> = MutableLiveData(emptyList())
+    private val _eventSearchHistories = MutableLiveData<List<EventSearch>>()
+    val eventSearchHistories: LiveData<List<EventSearch>> = _eventSearchHistories
 
     private fun ApiResponse<List<Event>>.toUiState(): EventSearchUiState = when (this) {
         is Success -> EventSearchUiState(data, FetchResult.SUCCESS)
@@ -43,16 +49,34 @@ class EventSearchViewModel @Inject constructor(
         is NetworkError -> EventSearchUiState(emptyList(), FetchResult.ERROR)
     }
 
+    init {
+        getAllEventSearchHistories()
+    }
+
     fun searchEvents(searchQuery: String) {
         this.eventSearchQuery.value = searchQuery
     }
 
-    fun deleteSearchHistoryById(eventId: Long) {
+    fun saveEventSearch() {
+        viewModelScope.launch {
+            eventSearchRepository.save(EventSearch(query = eventSearchQuery.value))
+        }
     }
 
-    // TODO("검색 기록 전체 삭제 기능 구현")
-    fun deleteAllSearchHistory() {
+    private fun getAllEventSearchHistories() {
+        viewModelScope.launch {
+            _eventSearchHistories.value = eventSearchRepository.getAll()
+        }
     }
+
+    fun deleteSearchHistory(eventSearch: EventSearch) {
+        viewModelScope.launch {
+            eventSearchRepository.delete(eventSearch)
+            getAllEventSearchHistories()
+        }
+    }
+
+    fun deleteAllSearchHistory() {}
 
     companion object {
         private const val INITIAL_QUERY = ""

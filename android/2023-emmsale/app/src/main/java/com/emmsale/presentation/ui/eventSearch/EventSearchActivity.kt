@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.emmsale.data.model.Event
 import com.emmsale.databinding.ActivityEventSearchBinding
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.eventSearch.recyclerView.eventSearch.EventSearchAdapter
@@ -15,11 +14,16 @@ import dagger.hilt.android.AndroidEntryPoint
 class EventSearchActivity : AppCompatActivity() {
     private val binding by lazy { ActivityEventSearchBinding.inflate(layoutInflater) }
     private val viewModel: EventSearchViewModel by viewModels()
-    private val eventSearchAdapter by lazy { EventSearchAdapter(::navigateToEventDetail) }
+    private val eventSearchAdapter by lazy {
+        EventSearchAdapter { event ->
+            viewModel.saveEventSearch()
+            navigateToEventDetail(event.id)
+        }
+    }
     private val eventSearchHistoryAdapter by lazy {
         EventSearchHistoryAdapter(
-            onHistoryClick = ::navigateToEventDetail,
-            onDeleteClick = { event -> viewModel.deleteSearchHistoryById(event.id) },
+            onHistoryClick = { eventSearch -> viewModel.searchEvents(eventSearch.query) },
+            onDeleteClick = viewModel::deleteSearchHistory,
         )
     }
 
@@ -48,9 +52,7 @@ class EventSearchActivity : AppCompatActivity() {
     }
 
     private fun setupSearchHistoryRecyclerView() {
-        with(binding.rvEventSearchHistory) {
-            adapter = eventSearchHistoryAdapter
-        }
+        binding.rvEventSearchHistory.adapter = eventSearchHistoryAdapter
     }
 
     private fun observeEventSearchResults() {
@@ -65,7 +67,7 @@ class EventSearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToEventDetail(event: Event) {
-        EventDetailActivity.startActivity(this, event.id)
+    private fun navigateToEventDetail(eventId: Long) {
+        EventDetailActivity.startActivity(this, eventId)
     }
 }

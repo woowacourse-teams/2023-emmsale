@@ -7,6 +7,7 @@ import com.emmsale.data.repository.concretes.DefaultCompetitionStatusRepository
 import com.emmsale.data.repository.concretes.DefaultConferenceStatusRepository
 import com.emmsale.data.repository.concretes.DefaultConfigRepository
 import com.emmsale.data.repository.concretes.DefaultEventRepository
+import com.emmsale.data.repository.concretes.DefaultEventSearchRepository
 import com.emmsale.data.repository.concretes.DefaultEventTagRepository
 import com.emmsale.data.repository.concretes.DefaultFcmTokenRepository
 import com.emmsale.data.repository.concretes.DefaultFeedRepository
@@ -26,6 +27,7 @@ import com.emmsale.data.repository.interfaces.CompetitionStatusRepository
 import com.emmsale.data.repository.interfaces.ConferenceStatusRepository
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.EventRepository
+import com.emmsale.data.repository.interfaces.EventSearchRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
 import com.emmsale.data.repository.interfaces.FcmTokenRepository
 import com.emmsale.data.repository.interfaces.FeedRepository
@@ -75,6 +77,12 @@ abstract class RepositoryModule {
     abstract fun bindEventRepository(
         impl: DefaultEventRepository,
     ): EventRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindEventSearchRepository(
+        impl: DefaultEventSearchRepository,
+    ): EventSearchRepository
 
     @Binds
     @Singleton

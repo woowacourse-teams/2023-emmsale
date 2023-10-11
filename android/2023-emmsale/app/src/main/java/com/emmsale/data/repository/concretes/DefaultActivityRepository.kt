@@ -1,7 +1,7 @@
 package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.response.ActivitiesResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Activity
 import com.emmsale.data.repository.interfaces.ActivityRepository

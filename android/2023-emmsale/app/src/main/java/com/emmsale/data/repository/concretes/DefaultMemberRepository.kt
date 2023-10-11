@@ -6,7 +6,7 @@ import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
 import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
 import com.emmsale.data.apiModel.response.MemberResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Member
 import com.emmsale.data.repository.interfaces.MemberRepository

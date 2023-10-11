@@ -76,8 +76,8 @@
                 android:hint="@string/eventsearch_edittext_hint"
                 android:inputType="text"
                 android:maxLines="1"
-                android:onTextChanged="@{(query, _, __, ___) -> viewModel.searchEvents(query.toString())}"
                 android:singleLine="true"
+                android:text="@={viewModel.eventSearchQuery}"
                 android:textColor="@color/black"
                 android:textColorHint="@color/light_gray"
                 android:textSize="14sp" />

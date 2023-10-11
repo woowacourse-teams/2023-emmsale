@@ -1,8 +1,8 @@
-package com.emmsale.data.common
+package com.emmsale.data.common.retrofit
 
 import android.content.Context
 import com.emmsale.BuildConfig
-import com.emmsale.data.common.callAdapter.KerdyCallAdapterFactory
+import com.emmsale.data.common.retrofit.callAdapter.KerdyCallAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.repository.interfaces.PostRepository
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult
@@ -56,11 +56,11 @@ class PostWritingViewModel @Inject constructor(
     }
 
     fun isTitleValid(): Boolean {
-        return (title?.value?.length ?: 0) >= MINIMUM_TITLE_LENGTH
+        return (title.value?.length ?: 0) >= MINIMUM_TITLE_LENGTH
     }
 
     fun isContentValid(): Boolean {
-        return (content?.value?.length ?: 0) >= MINIMUM_CONTENT_LENGTH
+        return (content.value?.length ?: 0) >= MINIMUM_CONTENT_LENGTH
     }
 
     fun fetchImageUrls(imageUrls: List<String>) {

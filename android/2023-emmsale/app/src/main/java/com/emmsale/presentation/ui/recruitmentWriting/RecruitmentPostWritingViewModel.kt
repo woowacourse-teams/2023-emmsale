@@ -3,10 +3,10 @@ package com.emmsale.presentation.ui.recruitmentWriting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.callAdapter.Failure
-import com.emmsale.data.common.callAdapter.NetworkError
-import com.emmsale.data.common.callAdapter.Success
-import com.emmsale.data.common.callAdapter.Unexpected
+import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.NetworkError
+import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.presentation.common.firebase.analytics.logWriting
 import com.emmsale.presentation.common.livedata.NotNullLiveData

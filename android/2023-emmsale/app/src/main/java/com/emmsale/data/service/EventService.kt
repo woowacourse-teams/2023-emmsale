@@ -3,7 +3,7 @@ package com.emmsale.data.service
 import com.emmsale.data.apiModel.response.CompetitionResponse
 import com.emmsale.data.apiModel.response.ConferenceResponse
 import com.emmsale.data.apiModel.response.EventDetailResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

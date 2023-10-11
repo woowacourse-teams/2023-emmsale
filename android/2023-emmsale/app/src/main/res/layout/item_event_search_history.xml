@@ -7,27 +7,27 @@
 
         <import type="kotlin.jvm.functions.Function1" />
 
-        <import type="com.emmsale.data.model.Event" />
+        <import type="com.emmsale.data.model.EventSearch" />
 
         <import type="kotlin.Unit" />
 
         <variable
             name="onHistoryClick"
-            type="Function1&lt;Event, Unit>" />
+            type="Function1&lt;EventSearch, Unit>" />
 
         <variable
             name="onDeleteClick"
-            type="Function1&lt;Event, Unit>" />
+            type="Function1&lt;EventSearch, Unit>" />
 
         <variable
-            name="event"
-            type="Event" />
+            name="eventSearch"
+            type="EventSearch" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> onHistoryClick.invoke(event)}">
+        android:onClick="@{() -> onHistoryClick.invoke(eventSearch)}">
 
         <TextView
             android:id="@+id/tv_event_search_history"
@@ -39,6 +39,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:singleLine="true"
+            android:text="@{eventSearch.query}"
             android:textColor="@color/black"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +52,7 @@
             android:id="@+id/btn_event_search_history_delete"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:onClick="@{() -> onDeleteClick.invoke(event)}"
+            android:onClick="@{() -> onDeleteClick.invoke(eventSearch)}"
             android:paddingVertical="10dp"
             android:src="@drawable/ic_eventsearch_history_delete"
             app:layout_constraintBottom_toBottomOf="parent"

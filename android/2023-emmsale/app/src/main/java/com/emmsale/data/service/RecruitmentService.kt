@@ -6,7 +6,7 @@ import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentRequestCreateRequest
 import com.emmsale.data.apiModel.response.RecruitmentReportResponse
 import com.emmsale.data.apiModel.response.RecruitmentResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

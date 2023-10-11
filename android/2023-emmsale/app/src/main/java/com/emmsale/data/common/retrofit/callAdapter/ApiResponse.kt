@@ -1,4 +1,4 @@
-package com.emmsale.data.common.callAdapter
+package com.emmsale.data.common.retrofit.callAdapter
 
 import okhttp3.Headers
 import okhttp3.internal.EMPTY_HEADERS

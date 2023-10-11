@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
-import com.emmsale.data.model.Event
+import com.emmsale.data.model.EventSearch
 import com.emmsale.databinding.ItemEventSearchHistoryBinding
 
 class EventSearchHistoryViewHolder(
     parent: ViewGroup,
-    onHistoryClick: (event: Event) -> Unit,
-    onDeleteClick: (event: Event) -> Unit,
+    onHistoryClick: (eventSearch: EventSearch) -> Unit,
+    onDeleteClick: (eventSearch: EventSearch) -> Unit,
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_event_search_history, parent, false),
 ) {
@@ -21,7 +21,7 @@ class EventSearchHistoryViewHolder(
         binding.onDeleteClick = onDeleteClick
     }
 
-    fun bind(event: Event) {
-        binding.event = event
+    fun bind(eventSearch: EventSearch) {
+        binding.eventSearch = eventSearch
     }
 }

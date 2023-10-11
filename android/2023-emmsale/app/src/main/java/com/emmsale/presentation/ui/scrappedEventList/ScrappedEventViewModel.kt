@@ -2,7 +2,7 @@ package com.emmsale.presentation.ui.scrappedEventList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.livedata.NotNullLiveData

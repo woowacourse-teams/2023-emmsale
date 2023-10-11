@@ -3,7 +3,7 @@ package com.emmsale.data.repository.concretes
 import com.emmsale.data.apiModel.response.CompetitionResponse
 import com.emmsale.data.apiModel.response.ConferenceResponse
 import com.emmsale.data.apiModel.response.EventDetailResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toApiModel
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.CompetitionStatus

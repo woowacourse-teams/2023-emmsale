@@ -2,7 +2,7 @@ package com.emmsale.data.service
 
 import com.emmsale.data.apiModel.request.ScrappedEventCreateRequest
 import com.emmsale.data.apiModel.response.ScrappedEventResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

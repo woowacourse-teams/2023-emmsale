@@ -6,7 +6,7 @@ import com.emmsale.data.apiModel.request.CommentUpdateRequest
 import com.emmsale.data.apiModel.response.CommentFamilyApiModel
 import com.emmsale.data.apiModel.response.CommentReportResponse
 import com.emmsale.data.apiModel.response.CommentResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

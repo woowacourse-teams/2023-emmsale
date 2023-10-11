@@ -4,7 +4,7 @@ import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentNotificationReportCreateRequest
 import com.emmsale.data.apiModel.response.NotificationResponse
 import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
-import com.emmsale.data.common.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.mapper.toRequestModel
 import com.emmsale.data.model.RecruitmentNotification

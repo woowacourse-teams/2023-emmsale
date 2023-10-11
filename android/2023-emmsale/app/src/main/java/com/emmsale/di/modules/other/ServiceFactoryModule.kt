@@ -1,7 +1,7 @@
 package com.emmsale.di.modules.other
 
 import android.content.Context
-import com.emmsale.data.common.ServiceFactory
+import com.emmsale.data.common.retrofit.ServiceFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
