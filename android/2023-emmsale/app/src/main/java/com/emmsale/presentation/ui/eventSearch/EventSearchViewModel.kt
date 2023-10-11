@@ -34,7 +34,7 @@ class EventSearchViewModel @Inject constructor(
     val eventSearchQuery = MutableStateFlow(INITIAL_QUERY)
     val eventSearchResults: LiveData<EventSearchUiState> = eventSearchQuery
         .debounce(SEARCH_DEBOUNCE_TIME)
-        .filter { query -> query.trim().isNotEmpty() }
+        .filter { query -> query.isNotBlank() }
         .map { query -> query.trim() }
         .distinctUntilChanged()
         .mapLatest { query -> eventRepository.searchEvents(query).toUiState() }
