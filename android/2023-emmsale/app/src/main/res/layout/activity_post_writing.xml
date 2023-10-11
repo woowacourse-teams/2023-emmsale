@@ -102,7 +102,6 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:text="@={vm.title}"
                     android:id="@+id/et_post_writing_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -112,6 +111,7 @@
                     android:fontFamily="@font/nanum_square_bold"
                     android:hint="@string/post_writing_title_hint"
                     android:inputType="text"
+                    android:text="@={vm.title}"
                     android:textColorHint="@color/gray"
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -131,7 +131,6 @@
 
                 <EditText
                     android:id="@+id/et_post_writing_content"
-                    android:text="@={vm.content}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
@@ -142,6 +141,7 @@
                     android:lineHeight="17dp"
                     android:maxLines="100"
                     android:paddingBottom="30dp"
+                    android:text="@={vm.content}"
                     android:textColorHint="@color/light_gray"
                     android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -179,10 +179,10 @@
             android:id="@+id/progressBar_post_writing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{vm.postUploadResult.peekContent().fetchResult == FetchResult.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visible="@{vm.postUploadResult.peekContent().fetchResult == FetchResult.LOADING}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

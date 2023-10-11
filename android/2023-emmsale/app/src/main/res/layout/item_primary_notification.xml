@@ -60,11 +60,11 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="12dp"
             android:ellipsize="end"
+            android:fontFamily="@font/nanum_square_extra_bold"
             android:maxLines="1"
             android:text="@string/primarynotification_interest_event_message"
             android:textColor="@color/black"
             android:textSize="14sp"
-            android:fontFamily="@font/nanum_square_extra_bold"
             app:layout_constraintEnd_toStartOf="@id/btn_delete"
             app:layout_constraintStart_toEndOf="@+id/iv_member_profile"
             app:layout_constraintTop_toTopOf="@+id/iv_member_profile" />
@@ -73,29 +73,29 @@
             android:id="@+id/tv_comment_event_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{interestEventNotification.eventTitle}"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/nanum_square_bold"
+            android:text="@{interestEventNotification.eventTitle}"
             android:textColor="@color/black"
             android:textSize="14sp"
-            tools:text="안드로이드 최대 행사 드로이드 나이츠"
-            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_comment"
             app:layout_constraintTop_toBottomOf="@+id/tv_comment"
-            app:layout_constraintStart_toStartOf="@+id/tv_comment" />
+            tools:text="안드로이드 최대 행사 드로이드 나이츠" />
 
 
         <TextView
             android:id="@+id/tv_comment_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:dateText="@{interestEventNotification.createdAt}"
-            app:dateTimeFormatter="@{DateTimePattern.RELATIVE_TIME}"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/nanum_square_regular"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
+            app:dateText="@{interestEventNotification.createdAt}"
+            app:dateTimeFormatter="@{DateTimePattern.RELATIVE_TIME}"
             app:layout_constraintStart_toStartOf="@+id/tv_comment"
-            tools:text="07.28"
-            android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_comment_event_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_comment_event_title"
+            tools:text="07.28" />
 
         <ImageView
             android:id="@+id/btn_delete"
