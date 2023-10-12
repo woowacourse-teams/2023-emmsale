@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
@@ -22,6 +23,7 @@ import com.emmsale.presentation.common.views.ConfirmDialog
 import com.google.firebase.messaging.FirebaseMessagingService
 import java.time.LocalDate
 
+private const val PACKAGE = "package"
 fun Context.showToast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
@@ -39,22 +41,31 @@ fun Context.checkPostNotificationPermission(): Boolean {
 }
 
 fun AppCompatActivity.showPermissionRequestDialog(
+    message: String = getString(R.string.login_post_notification_permission_needed_message),
+    title: String = getString(R.string.login_post_notification_permission_needed_title),
     onConfirm: () -> Unit = {},
     onDenied: () -> Unit = {},
 ) {
     ConfirmDialog(
         context = this,
-        title = getString(R.string.login_post_notification_permission_needed_title),
-        message = getString(R.string.login_post_notification_permission_needed_message),
+        title = title,
+        message = message,
         onPositiveButtonClick = onConfirm,
         onNegativeButtonClick = onDenied,
         onCancel = onDenied,
     ).show()
 }
 
-fun AppCompatActivity.navigateToNotificationSettings(launcher: ActivityResultLauncher<Intent>) {
+fun Context.navigateToNotificationSettings(launcher: ActivityResultLauncher<Intent>) {
     val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-        putExtra(Settings.EXTRA_APP_PACKAGE, baseContext.packageName)
+        putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+    }
+    launcher.launch(intent)
+}
+
+fun Context.navigateToApplicationDetailSetting(launcher: ActivityResultLauncher<Intent>) {
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        data = Uri.fromParts(PACKAGE, packageName, null)
     }
     launcher.launch(intent)
 }
