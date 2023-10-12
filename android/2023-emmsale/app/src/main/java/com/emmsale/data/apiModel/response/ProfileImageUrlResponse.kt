@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ProfileImageUrlResponse(
     @SerialName("imageUrl")
-    val imageUrl: String,
+    val profileImageUrl: String,
 )
