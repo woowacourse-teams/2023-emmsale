@@ -134,9 +134,7 @@ class EditMyProfileViewModel @Inject constructor(
                 val result =
                     memberRepository.updateMemberProfileImage(token.uid, profileImageUrl)
             ) {
-                is Success -> {
-                    _profile.value = _profile.value.updateProfileImageUrl(result.data)
-                }
+                is Success -> _profile.value = _profile.value.updateProfileImageUrl(result.data)
 
                 is Failure, NetworkError ->
                     _errorEvents.value = EditMyProfileErrorEvent.PROFILE_IMAGE_UPDATE

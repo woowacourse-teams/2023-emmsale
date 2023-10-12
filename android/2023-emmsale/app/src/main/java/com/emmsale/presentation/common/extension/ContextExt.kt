@@ -13,7 +13,6 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -40,7 +39,7 @@ fun Context.checkPostNotificationPermission(): Boolean {
     ) == PackageManager.PERMISSION_GRANTED
 }
 
-fun AppCompatActivity.showPermissionRequestDialog(
+fun Context.showPermissionRequestDialog(
     message: String = getString(R.string.login_post_notification_permission_needed_message),
     title: String = getString(R.string.login_post_notification_permission_needed_title),
     onConfirm: () -> Unit = {},

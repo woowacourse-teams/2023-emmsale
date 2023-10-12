@@ -3,6 +3,7 @@ package com.emmsale.presentation.common.imageUtil
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 
 fun Uri.convertToAbsolutePath(context: Context): String? {
@@ -20,3 +21,6 @@ fun Uri.convertToAbsolutePath(context: Context): String? {
         it.getString(columnIndex)
     }
 }
+
+fun isPhotoPickerAvailable(): Boolean =
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU

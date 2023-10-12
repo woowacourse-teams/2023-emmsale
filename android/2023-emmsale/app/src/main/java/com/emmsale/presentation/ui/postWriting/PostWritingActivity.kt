@@ -19,6 +19,7 @@ import com.emmsale.presentation.common.extension.navigateToApplicationDetailSett
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.imageUtil.convertToAbsolutePath
+import com.emmsale.presentation.common.imageUtil.isPhotoPickerAvailable
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.postWriting.PostWritingViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.postWriting.recyclerView.PostWritingImageAdapter
@@ -34,7 +35,7 @@ class PostWritingActivity : AppCompatActivity() {
         PostWritingImageAdapter(deleteImage = viewModel::deleteImageUrl)
     }
 
-    private val requestImagePermissionLauncher = registerForActivityResult(
+    private val requestImagePermissionDialogLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
         if (isGranted) showAlbum()
@@ -135,7 +136,7 @@ class PostWritingActivity : AppCompatActivity() {
                 if (shouldShowRequestPermissionRationale(READ_EXTERNAL_STORAGE)) {
                     showImagePermissionRequestDialog()
                 } else {
-                    requestImagePermissionLauncher.launch(READ_EXTERNAL_STORAGE)
+                    requestImagePermissionDialogLauncher.launch(READ_EXTERNAL_STORAGE)
                 }
             } else {
                 val intent = Intent(Intent.ACTION_PICK).apply {
@@ -146,9 +147,6 @@ class PostWritingActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun isPhotoPickerAvailable(): Boolean =
-        ActivityResultContracts.PickVisualMedia.isPhotoPickerAvailable(this)
 
     private fun isImageAccessPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
