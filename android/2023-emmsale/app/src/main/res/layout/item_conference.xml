@@ -15,8 +15,6 @@
 
         <import type="com.emmsale.data.model.Event" />
 
-        <import type="android.view.View" />
-
         <variable
             name="event"
             type="Event" />
@@ -54,7 +52,7 @@
             android:layout_marginTop="12dp"
             android:textSize="13sp"
             android:textStyle="bold"
-            android:visibility="@{event.progressStatus instanceof EventProgressStatus.Ended ? View.GONE : View.VISIBLE}"
+            app:visible="@{!(event.progressStatus instanceof EventProgressStatus.Ended)}"
             app:eventApplyingStatus="@{event.applicationStatus}"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
@@ -68,7 +66,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="6dp"
             android:background="@color/light_gray"
-            android:visibility="@{event.progressStatus instanceof EventProgressStatus.Ended ? View.GONE : View.VISIBLE}"
+            app:visible="@{!(event.progressStatus instanceof EventProgressStatus.Ended)}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_application_status"
             app:layout_constraintStart_toEndOf="@+id/tv_application_status"
             app:layout_constraintTop_toTopOf="@+id/tv_application_status" />

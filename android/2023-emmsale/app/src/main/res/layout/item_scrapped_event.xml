@@ -15,8 +15,6 @@
 
         <import type="com.emmsale.data.model.PaymentType" />
 
-        <import type="android.view.View" />
-
         <variable
             name="event"
             type="ScrappedEventUiState" />
@@ -58,7 +56,7 @@
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
             app:layout_goneMarginTop="9dp"
-            android:visibility="@{event.scrappedEvent.progressStatus instanceof EventProgressStatus.Ended ? View.GONE : View.VISIBLE}"
+            app:visible="@{!(event.scrappedEvent.progressStatus instanceof EventProgressStatus.Ended)}"
             tools:text="D-21"
             tools:textColor="@color/primary_color" />
 
@@ -67,7 +65,7 @@
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_marginStart="6dp"
-            android:visibility="@{event.scrappedEvent.progressStatus instanceof EventProgressStatus.Ended ? View.GONE : View.VISIBLE}"
+            app:visible="@{!(event.scrappedEvent.progressStatus instanceof EventProgressStatus.Ended)}"
             android:background="@color/light_gray"
             app:layout_constraintBottom_toBottomOf="@+id/tv_application_status"
             app:layout_constraintStart_toEndOf="@+id/tv_application_status"
