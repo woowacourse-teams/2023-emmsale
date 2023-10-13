@@ -8,6 +8,7 @@ import com.emmsale.R
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Locale
 import kotlin.math.abs
 
@@ -34,7 +35,10 @@ fun LocalDateTime.toRelativeTime(
 
         durationHours < MIN_HOUR -> {
             val dateFormatter = DateTimeFormatter.ofPattern(
-                context.getString(R.string.before_minute_format, durationHours),
+                context.getString(
+                    R.string.before_minute_format,
+                    abs(ChronoUnit.MINUTES.between(standardTime, this)),
+                ),
             )
             format(dateFormatter)
         }
