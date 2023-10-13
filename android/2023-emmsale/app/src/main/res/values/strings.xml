@@ -37,12 +37,15 @@
     <string name="all_in_progress">진행 중</string>
     <string name="all_applying_ended">신청 마감</string>
     <string name="all_applying_in_progress">신청 마감 D-%d</string>
+    <string name="all_applying_in_progress_d_day">신청 마감 D-DAY</string>
     <string name="all_applying_up_coming">신청 시작 D-%d</string>
+    <string name="all_applying_up_coming_d_day">신청 시작 D-DAY</string>
     <string name="all_event_up_coming">행사 시작 D-%d</string>
-    <string name="all_ended">마감</string>
+    <string name="all_event_up_coming_d_day">행사 시작 D-DAY</string>
     <string name="all_online">온라인</string>
     <string name="all_offline">오프라인</string>
     <string name="all_onoffline">온/오프라인</string>
+    <string name="all_ended">종료</string>
 
     <string name="splash_app_update_title">업데이트</string>
     <string name="splash_app_update_message">새로운 버전이 출시되었어요!\n지금 바로 커디 스토어로 이동하시겠어요?</string>
