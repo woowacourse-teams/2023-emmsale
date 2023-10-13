@@ -78,28 +78,17 @@
                     tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차" />
 
                 <ImageView
-                    android:id="@+id/iv_myprofile_imagedecoration"
+                    android:id="@+id/iv_myprofile_memberimage"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
                     android:layout_marginTop="37dp"
                     android:layout_marginEnd="12dp"
-                    android:importantForAccessibility="no"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/bg_profile_imagedecoration" />
-
-                <ImageView
-                    android:id="@+id/iv_myprofile_memberimage"
-                    android:layout_width="82dp"
-                    android:layout_height="82dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="7dp"
                     android:contentDescription="@string/profile_memberimagedescription"
                     android:scaleType="centerCrop"
                     app:imageUrl="@{viewModel.myProfile.memberImageUrl}"
                     app:isCircle="@{true}"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_myprofile_imagedecoration"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_imagedecoration"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:src="@tools:sample/avatars" />
 
                 <View
