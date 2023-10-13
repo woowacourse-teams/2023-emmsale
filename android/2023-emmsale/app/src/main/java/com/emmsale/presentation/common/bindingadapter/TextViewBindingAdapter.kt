@@ -9,6 +9,8 @@ import com.emmsale.data.model.EventProgressStatus
 import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
 
+private const val D_DAY = 0
+
 @BindingAdapter("android:text")
 fun TextView.setNumberText(numberText: Int) {
     text = numberText.toString()
@@ -40,18 +42,26 @@ fun TextView.setEventApplyingStatus(
         }
 
         is EventApplyingStatus.InProgress -> {
-            text = context.getString(
-                R.string.all_applying_in_progress,
-                applicationStatus.daysUntilDeadline.toString().convertDigitToDAYIfDDay(),
-            )
+            text = if (applicationStatus.daysUntilDeadline == D_DAY) {
+                context.getString(R.string.all_applying_in_progress_d_day)
+            } else {
+                context.getString(
+                    R.string.all_applying_in_progress,
+                    applicationStatus.daysUntilDeadline,
+                )
+            }
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
 
         is EventApplyingStatus.UpComing -> {
-            text = context.getString(
-                R.string.all_applying_up_coming,
-                applicationStatus.daysUntilStart.toString().convertDigitToDAYIfDDay(),
-            )
+            text = if (applicationStatus.daysUntilStart == D_DAY) {
+                context.getString(R.string.all_applying_up_coming_d_day)
+            } else {
+                context.getString(
+                    R.string.all_applying_up_coming,
+                    applicationStatus.daysUntilStart,
+                )
+            }
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
     }
@@ -75,16 +85,19 @@ fun TextView.setEventProgressStatus(
         }
 
         is EventProgressStatus.UpComing -> {
-            text = context.getString(
-                R.string.all_event_up_coming,
-                progressStatus.daysUntilStart.toString().convertDigitToDAYIfDDay(),
-            )
+            text = if (progressStatus.daysUntilStart == D_DAY) {
+                context.getString(R.string.all_event_up_coming_d_day)
+            } else {
+                context.getString(
+                    R.string.all_event_up_coming,
+                    progressStatus.daysUntilStart,
+                )
+            }
+
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
     }
 }
-
-private fun String.convertDigitToDAYIfDDay(): String = if (this == "0") "DAY" else this
 
 @BindingAdapter("app:onOfflineMode")
 fun TextView.setOnOfflineMode(
