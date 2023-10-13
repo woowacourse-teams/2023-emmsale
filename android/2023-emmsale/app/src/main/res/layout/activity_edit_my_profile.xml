@@ -23,6 +23,10 @@
         <variable
             name="showClubs"
             type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="editProfileImage"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -142,6 +146,7 @@
                     android:contentDescription="@string/editmyprofile_member_image"
                     app:imageUrl="@{viewModel.profile.imageUrl}"
                     app:isCircle="@{true}"
+                    android:onClick="@{()->editProfileImage.invoke()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:srcCompat="@tools:sample/avatars" />

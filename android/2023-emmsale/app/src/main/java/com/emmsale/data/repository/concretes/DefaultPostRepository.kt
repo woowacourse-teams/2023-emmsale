@@ -31,7 +31,7 @@ class DefaultPostRepository @Inject constructor(
     ): ApiResponse<Long> {
         val imageFiles = imageUrls.map { imageUrl ->
             val file = File(imageUrl)
-            val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(
                 IMAGES_KEY,
                 file.name,

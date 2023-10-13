@@ -14,6 +14,10 @@ import com.emmsale.data.service.MemberService
 import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import javax.inject.Inject
 
 class DefaultMemberRepository @Inject constructor(
@@ -57,6 +61,24 @@ class DefaultMemberRepository @Inject constructor(
         )
     }
 
+    override suspend fun updateMemberProfileImage(
+        memberId: Long,
+        profileImageUrl: String,
+    ): ApiResponse<String> = withContext(dispatcher) {
+        val file = File(profileImageUrl)
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+        val formDataFile = MultipartBody.Part.createFormData(
+            IMAGE_KEY,
+            file.name,
+            requestFile,
+        )
+
+        memberService.updateMemberProfileImage(
+            memberId = memberId,
+            profileImageFile = formDataFile,
+        ).map { it.profileImageUrl }
+    }
+
     override suspend fun addMemberActivities(
         activityIds: List<Long>,
     ): ApiResponse<Unit> = withContext(dispatcher) {
@@ -85,5 +107,9 @@ class DefaultMemberRepository @Inject constructor(
         memberService.blockMember(
             MemberBlockCreateRequest(memberId),
         )
+    }
+
+    companion object {
+        private const val IMAGE_KEY = "image"
     }
 }
