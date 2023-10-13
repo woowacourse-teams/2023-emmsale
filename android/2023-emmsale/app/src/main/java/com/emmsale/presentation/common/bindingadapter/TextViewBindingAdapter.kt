@@ -42,7 +42,7 @@ fun TextView.setEventApplyingStatus(
         is EventApplyingStatus.InProgress -> {
             text = context.getString(
                 R.string.all_applying_in_progress,
-                applicationStatus.daysUntilDeadline,
+                applicationStatus.daysUntilDeadline.toString().convertDigitToDAYIfDDay(),
             )
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
@@ -50,7 +50,7 @@ fun TextView.setEventApplyingStatus(
         is EventApplyingStatus.UpComing -> {
             text = context.getString(
                 R.string.all_applying_up_coming,
-                applicationStatus.daysUntilStart,
+                applicationStatus.daysUntilStart.toString().convertDigitToDAYIfDDay(),
             )
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
@@ -75,11 +75,16 @@ fun TextView.setEventProgressStatus(
         }
 
         is EventProgressStatus.UpComing -> {
-            text = context.getString(R.string.all_event_up_coming, progressStatus.daysUntilStart)
+            text = context.getString(
+                R.string.all_event_up_coming,
+                progressStatus.daysUntilStart.toString().convertDigitToDAYIfDDay(),
+            )
             setTextColor(ContextCompat.getColor(context, R.color.primary_color))
         }
     }
 }
+
+private fun String.convertDigitToDAYIfDDay(): String = if (this == "0") "DAY" else this
 
 @BindingAdapter("app:onOfflineMode")
 fun TextView.setOnOfflineMode(

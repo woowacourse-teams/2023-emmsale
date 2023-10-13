@@ -15,6 +15,8 @@
 
         <import type="com.emmsale.data.model.PaymentType" />
 
+        <import type="android.view.View" />
+
         <variable
             name="event"
             type="ScrappedEventUiState" />
@@ -56,6 +58,7 @@
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
             app:layout_goneMarginTop="9dp"
+            android:visibility="@{event.scrappedEvent.progressStatus instanceof EventProgressStatus.Ended ? View.GONE : View.VISIBLE}"
             tools:text="D-21"
             tools:textColor="@color/primary_color" />
 
@@ -64,6 +67,7 @@
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_marginStart="6dp"
+            android:visibility="@{event.scrappedEvent.progressStatus instanceof EventProgressStatus.Ended ? View.GONE : View.VISIBLE}"
             android:background="@color/light_gray"
             app:layout_constraintBottom_toBottomOf="@+id/tv_application_status"
             app:layout_constraintStart_toEndOf="@+id/tv_application_status"
@@ -77,10 +81,10 @@
             android:layout_marginTop="12dp"
             android:textSize="13sp"
             android:textStyle="bold"
+            app:layout_goneMarginStart="0dp"
             app:eventProgressStatus="@{event.scrappedEvent.progressStatus}"
             app:layout_constraintStart_toEndOf="@+id/divider_event_status"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
-            app:layout_goneMarginTop="9dp"
             tools:text="D-21"
             tools:textColor="@color/primary_color" />
 
@@ -88,13 +92,13 @@
             android:id="@+id/tv_event_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
             android:text="@{event.scrappedEvent.name}"
             android:textColor="@color/black"
+            android:layout_marginTop="9dp"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
-            app:layout_constraintTop_toBottomOf="@+id/tv_application_status"
+            app:layout_constraintTop_toBottomOf="@+id/tv_progress_status"
             tools:text="2023 인프콘" />
 
         <TextView
