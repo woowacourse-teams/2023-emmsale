@@ -16,3 +16,10 @@
 -keep class com.emmsale.data.repository.concretes.DefaultPostRepository { *; }
 -keep class com.emmsale.data.service.** {*;}
 
+# Keep the classes of Kerdy class itself and its fields from obfuscation
+-keep class com.emmsale.data.repository.concretes.DefaultLoginRepository { *; }
+-keep class com.emmsale.presentation.ui.login.** {*;}
+
+# Keep the classes of Kerdy class itself and its fields from obfuscation
+-keep class com.emmsale.data.** {*;}
+
