@@ -39,10 +39,6 @@
         <variable
             name="logout"
             type="kotlin.jvm.functions.Function0" />
-
-        <variable
-            name="showOpenProfileUrlConfig"
-            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

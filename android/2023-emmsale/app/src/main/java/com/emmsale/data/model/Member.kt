@@ -6,5 +6,5 @@ data class Member(
     val name: String,
     val description: String,
     val profileImageUrl: String,
-    val openProfileUrl: String,
+    val activities: List<Activity> = emptyList(),
 )

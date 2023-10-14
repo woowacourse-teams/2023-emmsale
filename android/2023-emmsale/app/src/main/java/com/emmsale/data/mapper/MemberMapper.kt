@@ -9,5 +9,4 @@ fun MemberResponse.toData() = Member(
     name = name,
     description = description,
     profileImageUrl = imageUrl,
-    openProfileUrl = openProfileUrl,
 )
