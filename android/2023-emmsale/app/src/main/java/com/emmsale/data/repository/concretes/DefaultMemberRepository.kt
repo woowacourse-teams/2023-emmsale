@@ -4,14 +4,20 @@ import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
 import com.emmsale.data.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
-import com.emmsale.data.apiModel.response.MemberResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.NetworkError
+import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.mapper.toData
+import com.emmsale.data.model.Activity
 import com.emmsale.data.model.Member
 import com.emmsale.data.repository.interfaces.MemberRepository
+import com.emmsale.data.service.ActivityService
 import com.emmsale.data.service.MemberService
 import com.emmsale.di.modules.other.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -22,14 +28,40 @@ import javax.inject.Inject
 class DefaultMemberRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val memberService: MemberService,
+    private val activityService: ActivityService,
 ) : MemberRepository {
 
     override suspend fun getMember(
         memberId: Long,
     ): ApiResponse<Member> = withContext(dispatcher) {
-        memberService
-            .getMember(memberId)
-            .map(MemberResponse::toData)
+        val deferredActivities = async {
+            activityService.getActivities(memberId).map { it.toData() }
+        }
+
+        val deferredMember = async {
+            memberService.getMember(memberId).map { it.toData() }
+        }
+
+        when (val memberApiResponse = deferredMember.await()) {
+            is Success -> getMemberFromActivities(
+                memberApiResponse.data,
+                deferredActivities.await(),
+            )
+
+            else -> memberApiResponse
+        }
+    }
+
+    private fun getMemberFromActivities(
+        member: Member,
+        activitiesApiResponse: ApiResponse<List<Activity>>,
+    ): ApiResponse<Member> {
+        return when (activitiesApiResponse) {
+            is Success -> Success(member.copy(activities = activitiesApiResponse.data))
+            is Failure -> Failure(activitiesApiResponse.code, activitiesApiResponse.message)
+            NetworkError -> NetworkError
+            is Unexpected -> Unexpected(activitiesApiResponse.error)
+        }
     }
 
     override suspend fun createMember(
