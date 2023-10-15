@@ -1,36 +1,35 @@
 package com.emmsale.presentation.ui.myProfile.uiState
 
 import com.emmsale.data.model.Activity
-import com.emmsale.data.model.ActivityType
+import com.emmsale.data.model.ActivityType.CLUB
+import com.emmsale.data.model.ActivityType.EDUCATION
+import com.emmsale.data.model.ActivityType.FIELD
 import com.emmsale.data.model.Member
-import com.emmsale.presentation.ui.profile.uiState.ActivityUiState
 
 data class MyProfileUiState(
     val isLoading: Boolean = true,
     val isError: Boolean = false,
-    val memberId: Long = -1,
-    val memberName: String = "",
-    val description: String = "",
-    val memberImageUrl: String = "",
-    val fields: List<ActivityUiState> = listOf(),
-    val educations: List<ActivityUiState> = listOf(),
-    val clubs: List<ActivityUiState> = listOf(),
+    val member: Member = Member(),
 ) {
+    val fields: List<Activity>
+        get() = member.activities.filter { it.activityType == FIELD }
+
+    val educations: List<Activity>
+        get() = member.activities.filter { it.activityType == EDUCATION }
+
+    val clubs: List<Activity>
+        get() = member.activities.filter { it.activityType == CLUB }
+
     fun changeMemberState(member: Member): MyProfileUiState = copy(
         isLoading = false,
         isError = false,
-        memberId = member.id,
-        memberName = member.name,
-        description = member.description,
-        memberImageUrl = member.profileImageUrl,
+        member = member,
     )
 
     fun changeActivitiesState(activities: List<Activity>): MyProfileUiState = copy(
         isLoading = false,
         isError = false,
-        fields = activities.getActivityUiStatesOf(ActivityType.FIELD),
-        educations = activities.getActivityUiStatesOf(ActivityType.EDUCATION),
-        clubs = activities.getActivityUiStatesOf(ActivityType.CLUB),
+        member = member.copy(activities = activities),
     )
 
     fun changeToLoadingState(): MyProfileUiState = copy(
@@ -40,9 +39,4 @@ data class MyProfileUiState(
     fun changeToErrorState(): MyProfileUiState = copy(
         isError = true,
     )
-
-    private fun List<Activity>.getActivityUiStatesOf(activityType: ActivityType): List<ActivityUiState> {
-        return this.filter { it.activityType == activityType }
-            .map { ActivityUiState.from(it) }
-    }
 }
