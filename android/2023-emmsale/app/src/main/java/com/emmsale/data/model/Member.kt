@@ -8,6 +8,15 @@ data class Member(
     val profileImageUrl: String = "",
     val activities: List<Activity> = emptyList(),
 ) {
+    val fields: List<Activity>
+        get() = activities.filter { it.activityType == ActivityType.FIELD }
+
+    val educations: List<Activity>
+        get() = activities.filter { it.activityType == ActivityType.EDUCATION }
+
+    val clubs: List<Activity>
+        get() = activities.filter { it.activityType == ActivityType.CLUB }
+
     companion object {
         private const val DEFAULT_ID = -1L
     }

@@ -65,7 +65,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     private fun handleFields(myProfile: MyProfileUiState) {
         binding.cgMyprofileFields.removeAllViews()
 
-        myProfile.fields.forEach {
+        myProfile.member.fields.forEach {
             val tagView = CategoryTagChip(requireContext()).apply { text = it.name }
             binding.cgMyprofileFields.addView(tagView)
         }
@@ -73,9 +73,9 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
 
     private fun handleActivities(myProfile: MyProfileUiState) {
         (binding.rvMyprofileEducations.adapter as ActivitiesAdapter).submitList(
-            myProfile.educations,
+            myProfile.member.educations,
         )
-        (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfile.clubs)
+        (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfile.member.clubs)
     }
 
     private fun initToolbar() {

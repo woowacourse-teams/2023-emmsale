@@ -6,7 +6,6 @@ import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
-import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -21,7 +20,6 @@ import javax.inject.Inject
 class MyProfileViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
-    private val activityRepository: ActivityRepository,
 ) : ViewModel(), Refreshable {
 
     private val _isLogin = NotNullMutableLiveData(true)
@@ -38,25 +36,13 @@ class MyProfileViewModel @Inject constructor(
                 _isLogin.value = false
                 return@launch
             }
-            launch {
-                when (val result = memberRepository.getMember(token.uid)) {
-                    is Failure, NetworkError ->
-                        _myProfile.value = _myProfile.value.changeToErrorState()
 
-                    is Success -> _myProfile.value = _myProfile.value.changeMemberState(result.data)
-                    is Unexpected -> throw Throwable(result.error)
-                }
-            }
-            launch {
-                when (val result = activityRepository.getActivities(token.uid)) {
-                    is Failure, NetworkError ->
-                        _myProfile.value = _myProfile.value.changeToErrorState()
+            when (val result = memberRepository.getMember(token.uid)) {
+                is Failure, NetworkError ->
+                    _myProfile.value = _myProfile.value.changeToErrorState()
 
-                    is Success ->
-                        _myProfile.value = _myProfile.value.changeActivitiesState(result.data)
-
-                    is Unexpected -> throw Throwable(result.error)
-                }
+                is Success -> _myProfile.value = _myProfile.value.changeMemberState(result.data)
+                is Unexpected -> throw Throwable(result.error)
             }
         }
     }
