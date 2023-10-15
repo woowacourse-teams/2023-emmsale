@@ -33,7 +33,7 @@ class DefaultMemberRepository @Inject constructor(
             .map(MemberResponse::toData)
     }
 
-    override suspend fun updateMember(
+    override suspend fun createMember(
         name: String,
         activityIds: List<Long>,
     ): ApiResponse<Unit> = withContext(dispatcher) {
