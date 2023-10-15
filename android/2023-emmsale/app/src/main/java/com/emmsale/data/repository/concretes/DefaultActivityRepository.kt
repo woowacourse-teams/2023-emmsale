@@ -2,6 +2,7 @@ package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.response.ActivitiesResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Activity
 import com.emmsale.data.repository.interfaces.ActivityRepository
@@ -15,11 +16,23 @@ class DefaultActivityRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val activityService: ActivityService,
 ) : ActivityRepository {
+    private var allActivities: List<Activity> = emptyList()
 
     override suspend fun getActivities(): ApiResponse<List<Activity>> = withContext(dispatcher) {
-        activityService
-            .getActivities()
-            .map(List<ActivitiesResponse>::toData)
+        if (allActivities.isNotEmpty()) {
+            return@withContext Success(allActivities)
+        } else {
+            val result = activityService
+                .getActivities()
+                .map(List<ActivitiesResponse>::toData)
+
+            if (result is Success) {
+                allActivities = result.data
+                return@withContext result
+            } else {
+                return@withContext result
+            }
+        }
     }
 
     override suspend fun getActivities(

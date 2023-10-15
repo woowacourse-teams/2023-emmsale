@@ -3,8 +3,8 @@ package com.emmsale.presentation.ui.editMyProfile.recyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.emmsale.data.model.Activity
 import com.emmsale.databinding.ItemEditmyprofileActivityBinding
-import com.emmsale.presentation.ui.editMyProfile.uiState.ActivityUiState
 
 class ActivityViewHolder(
     private val binding: ItemEditmyprofileActivityBinding,
@@ -17,7 +17,7 @@ class ActivityViewHolder(
         }
     }
 
-    fun bind(activity: ActivityUiState) {
+    fun bind(activity: Activity) {
         binding.activity = activity
     }
 

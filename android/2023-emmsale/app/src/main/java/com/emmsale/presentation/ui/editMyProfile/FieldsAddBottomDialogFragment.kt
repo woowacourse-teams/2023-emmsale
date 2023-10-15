@@ -34,6 +34,7 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
         initDataBinding()
         setupUiLogic()
+        viewModel.fetchAllActivities()
     }
 
     private fun initDataBinding() {
@@ -51,15 +52,15 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupFieldsUiLogic() {
-        viewModel.selectableFields.observe(viewLifecycleOwner) {
+        viewModel.activities.observe(viewLifecycleOwner) {
             binding.cgEditmyprofilefieldsdialogFields.removeAllViews()
-            it.forEach { field ->
+            it.fields.forEach { field ->
                 binding.cgEditmyprofilefieldsdialogFields.addView(
                     activityChipOf {
-                        text = field.name
+                        text = field.activity.name
                         isChecked = field.isSelected
                         setOnCheckedChangeListener { _, isChecked ->
-                            viewModel.setFieldSelection(field.id, isChecked)
+                            viewModel.toggleActivitySelection(field.activity.id)
                         }
                     },
                 )

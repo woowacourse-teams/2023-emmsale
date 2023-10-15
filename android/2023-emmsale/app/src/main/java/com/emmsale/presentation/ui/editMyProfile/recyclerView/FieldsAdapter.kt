@@ -3,11 +3,11 @@ package com.emmsale.presentation.ui.editMyProfile.recyclerView
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.presentation.ui.editMyProfile.uiState.ActivityUiState
+import com.emmsale.data.model.Activity
 
 class FieldsAdapter(
     private val removeField: (activityId: Long) -> Unit,
-) : ListAdapter<ActivityUiState, FieldViewHolder>(diffUtil) {
+) : ListAdapter<Activity, FieldViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FieldViewHolder {
         return FieldViewHolder.create(parent, removeField)
@@ -18,15 +18,15 @@ class FieldsAdapter(
     }
 
     companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<ActivityUiState>() {
+        private val diffUtil = object : DiffUtil.ItemCallback<Activity>() {
             override fun areItemsTheSame(
-                oldItem: ActivityUiState,
-                newItem: ActivityUiState,
+                oldItem: Activity,
+                newItem: Activity,
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ActivityUiState,
-                newItem: ActivityUiState,
+                oldItem: Activity,
+                newItem: Activity,
             ): Boolean = oldItem == newItem
         }
     }

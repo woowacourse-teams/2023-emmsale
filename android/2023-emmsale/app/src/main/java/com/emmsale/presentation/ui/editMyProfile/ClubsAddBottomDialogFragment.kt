@@ -33,9 +33,9 @@ class ClubsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initDataBinding()
         setupUiLogic()
+        viewModel.fetchAllActivities()
     }
 
     private fun initDataBinding() {
@@ -53,15 +53,15 @@ class ClubsAddBottomDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupClubsUiLogic() {
-        viewModel.selectableClubs.observe(viewLifecycleOwner) {
+        viewModel.activities.observe(viewLifecycleOwner) {
             binding.cgEditmyprofileclubsdialogClubs.removeAllViews()
-            it.forEach { club ->
+            it.clubs.forEach { club ->
                 binding.cgEditmyprofileclubsdialogClubs.addView(
                     activityChipOf {
-                        text = club.name
+                        text = club.activity.name
                         isChecked = club.isSelected
-                        setOnCheckedChangeListener { _, isChecked ->
-                            viewModel.setClubSelection(club.id, isChecked)
+                        setOnCheckedChangeListener { _, _ ->
+                            viewModel.toggleActivitySelection(club.activity.id)
                         }
                     },
                 )

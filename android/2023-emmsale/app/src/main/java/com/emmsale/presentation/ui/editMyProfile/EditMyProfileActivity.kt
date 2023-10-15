@@ -211,18 +211,14 @@ class EditMyProfileActivity : AppCompatActivity() {
 
     private fun setupProfileUiLogic() {
         viewModel.profile.observe(this) {
-            handleFields(it)
             handleActivities(it)
         }
     }
 
-    private fun handleFields(profile: EditMyProfileUiState) {
-        (binding.rvEditmyprofileFields.adapter as FieldsAdapter).submitList(profile.fields)
-    }
-
     private fun handleActivities(profile: EditMyProfileUiState) {
-        (binding.rvEditmyprofileClubs.adapter as ActivitiesAdapter).submitList(profile.clubs)
-        (binding.rvEditmyprofileEducations.adapter as ActivitiesAdapter).submitList(profile.educations)
+        (binding.rvEditmyprofileFields.adapter as FieldsAdapter).submitList(profile.member.fields)
+        (binding.rvEditmyprofileClubs.adapter as ActivitiesAdapter).submitList(profile.member.clubs)
+        (binding.rvEditmyprofileEducations.adapter as ActivitiesAdapter).submitList(profile.member.educations)
     }
 
     private fun setupErrorsUiLogic() {

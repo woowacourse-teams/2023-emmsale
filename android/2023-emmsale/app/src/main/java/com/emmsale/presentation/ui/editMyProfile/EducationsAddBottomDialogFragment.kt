@@ -34,6 +34,7 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
         initDataBinding()
         setupUiLogic()
+        viewModel.fetchAllActivities()
     }
 
     private fun initDataBinding() {
@@ -51,15 +52,15 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupEducationsUiLogic() {
-        viewModel.selectableEducations.observe(viewLifecycleOwner) {
+        viewModel.activities.observe(viewLifecycleOwner) {
             binding.cgEditmyprofileeducationsdialogEducations.removeAllViews()
-            it.forEach { education ->
+            it.educations.forEach { education ->
                 binding.cgEditmyprofileeducationsdialogEducations.addView(
                     activityChipOf {
-                        text = education.name
+                        text = education.activity.name
                         isChecked = education.isSelected
-                        setOnCheckedChangeListener { _, isChecked ->
-                            viewModel.setEducationSelection(education.id, isChecked)
+                        setOnCheckedChangeListener { _, _ ->
+                            viewModel.toggleActivitySelection(education.activity.id)
                         }
                     },
                 )
