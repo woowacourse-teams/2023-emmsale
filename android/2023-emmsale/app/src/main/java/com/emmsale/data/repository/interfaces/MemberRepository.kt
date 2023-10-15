@@ -11,8 +11,6 @@ interface MemberRepository {
 
     suspend fun updateMemberDescription(description: String): ApiResponse<Unit>
 
-    suspend fun updateMemberOpenProfileUrl(openProfileUrl: String): ApiResponse<Unit>
-
     suspend fun updateMemberProfileImage(
         memberId: Long,
         profileImageUrl: String,

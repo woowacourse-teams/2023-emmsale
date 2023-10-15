@@ -4,7 +4,6 @@ import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
 import com.emmsale.data.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
-import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
 import com.emmsale.data.apiModel.response.MemberResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
@@ -50,14 +49,6 @@ class DefaultMemberRepository @Inject constructor(
     ): ApiResponse<Unit> = withContext(dispatcher) {
         memberService.updateMemberDescription(
             MemberDescriptionUpdateRequest(description),
-        )
-    }
-
-    override suspend fun updateMemberOpenProfileUrl(
-        openProfileUrl: String,
-    ): ApiResponse<Unit> = withContext(dispatcher) {
-        memberService.updateMemberOpenProfileUrl(
-            MemberOpenProfileUrlUpdateRequest(openProfileUrl),
         )
     }
 
