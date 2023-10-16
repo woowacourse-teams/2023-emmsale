@@ -56,11 +56,11 @@ public class EventPeriod {
     }
   }
 
-  public EventStatus calculateEventStatus(final LocalDate now) {
-    if (now.isBefore(startDate.toLocalDate())) {
+  public EventStatus calculateEventStatus(final LocalDateTime now) {
+    if (now.isBefore(startDate)) {
       return EventStatus.UPCOMING;
     }
-    if (now.isAfter(endDate.toLocalDate())) {
+    if (now.isAfter(endDate)) {
       return EventStatus.ENDED;
     }
     return EventStatus.IN_PROGRESS;

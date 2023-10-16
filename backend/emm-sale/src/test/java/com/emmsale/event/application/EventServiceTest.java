@@ -90,7 +90,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null, null, null, null,
       List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
 
-  private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
+  private static final LocalDateTime TODAY = LocalDateTime.of(2023, 7, 21, 0, 0);
   @Autowired
   private EventService eventService;
   @Autowired

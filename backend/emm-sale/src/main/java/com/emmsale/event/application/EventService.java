@@ -92,7 +92,7 @@ public class EventService {
 
   @Transactional(readOnly = true)
   public List<EventResponse> findEvents(final EventType category,
-      final LocalDate nowDate, final String startDate, final String endDate,
+      final LocalDateTime nowDate, final String startDate, final String endDate,
       final List<String> tagNames, final List<EventStatus> statuses, final String keyword) {
     Specification<Event> spec = (root, query, criteriaBuilder) -> null;
     spec = filterByCategoryIfExist(category, spec);
@@ -210,7 +210,7 @@ public class EventService {
     return keyword != null && !keyword.isBlank();
   }
 
-  private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
+  private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDateTime nowDate,
       final List<Event> events) {
     return events.stream()
         .sorted(comparing(event -> event.getEventPeriod().getStartDate()))

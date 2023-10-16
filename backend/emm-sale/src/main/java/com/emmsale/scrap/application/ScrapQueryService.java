@@ -10,7 +10,7 @@ import com.emmsale.image.domain.repository.ImageRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.scrap.domain.Scrap;
 import com.emmsale.scrap.domain.ScrapRepository;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +35,8 @@ public class ScrapQueryService {
         .collect(Collectors.toList());
 
     final Map<EventStatus, List<Event>> eventGroupByStatus = scrappedEvents.stream()
-        .collect(groupingBy(event -> event.getEventPeriod().calculateEventStatus(LocalDate.now())));
+        .collect(
+            groupingBy(event -> event.getEventPeriod().calculateEventStatus(LocalDateTime.now())));
 
     return EventResponse.mergeEventResponses(eventGroupByStatus,
         makeImageUrlPerEventId(scrappedEvents));
