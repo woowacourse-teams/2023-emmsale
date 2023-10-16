@@ -275,6 +275,7 @@ class EventTest {
         exception.exceptionType());
   }
 
+  @Deprecated
   @Test
   @DisplayName("현재날짜로부터 남은 날짜를 계산할 수 있다.")
   void calculateRemainingDay() {
@@ -290,6 +291,7 @@ class EventTest {
         .isEqualTo(5);
   }
 
+  @Deprecated
   @Test
   @DisplayName("현재날짜로부터 신청 시작일까지 남은 날짜를 계산할 수 있다.")
   void calculateApplyRemainingDay() {

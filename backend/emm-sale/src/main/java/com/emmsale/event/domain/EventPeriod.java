@@ -66,20 +66,23 @@ public class EventPeriod {
     return EventStatus.IN_PROGRESS;
   }
 
+  @Deprecated
   public int calculateRemainingDays(final LocalDate today) {
     return java.time.Period.between(today, startDate.toLocalDate()).getDays();
   }
 
-  public EventStatus calculateEventApplyStatus(final LocalDate now) {
-    if (now.isBefore(applyStartDate.toLocalDate())) {
+  @Deprecated
+  public EventStatus calculateEventApplyStatus(final LocalDateTime now) {
+    if (now.isBefore(applyStartDate)) {
       return EventStatus.UPCOMING;
     }
-    if (now.isAfter(applyEndDate.toLocalDate())) {
+    if (now.isAfter(applyEndDate)) {
       return EventStatus.ENDED;
     }
     return EventStatus.IN_PROGRESS;
   }
 
+  @Deprecated
   public int calculateApplyRemainingDays(final LocalDate today) {
     return java.time.Period.between(today, applyStartDate.toLocalDate()).getDays();
   }
