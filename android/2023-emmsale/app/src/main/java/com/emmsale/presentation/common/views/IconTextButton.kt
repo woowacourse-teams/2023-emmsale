@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.use
 import com.emmsale.R
 
 class IconTextButton : AppCompatButton {
