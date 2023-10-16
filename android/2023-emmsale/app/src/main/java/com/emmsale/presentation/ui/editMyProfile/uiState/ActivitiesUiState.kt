@@ -26,7 +26,8 @@ data class ActivitiesUiState(
         allActivities: List<Activity>,
         myActivities: List<Activity>,
     ): ActivitiesUiState {
-        val unSelectedActivities = allActivities.filter { !myActivities.contains(it) }
+        val unSelectedActivities = allActivities
+            .filterNot { myActivities.contains(it) }
             .map { ActivityUiState(it, false) }
 
         return copy(
@@ -47,6 +48,6 @@ data class ActivitiesUiState(
     )
 
     fun toggleIsSelected(activityId: Long): ActivitiesUiState = copy(
-        activities = activities.map { if (it.activity.id == activityId) it.toggleIsSelected() else it },
+        activities = activities.map { if (it.activity.id == activityId) it.toggleSelection() else it },
     )
 }

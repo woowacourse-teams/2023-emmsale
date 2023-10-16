@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.emmsale.databinding.FragmentEditmyprofileEducationsAddBottomDialogBinding
+import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.activityChipOf
+import com.emmsale.presentation.ui.editMyProfile.uiState.ActivityUiState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,18 +55,25 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupEducationsUiLogic() {
-        viewModel.activities.observe(viewLifecycleOwner) {
+        viewModel.activities.observe(viewLifecycleOwner) { allActivities ->
             binding.cgEditmyprofileeducationsdialogEducations.removeAllViews()
-            it.educations.forEach { education ->
-                binding.cgEditmyprofileeducationsdialogEducations.addView(
-                    activityChipOf {
-                        text = education.activity.name
-                        isChecked = education.isSelected
-                        setOnCheckedChangeListener { _, _ ->
-                            viewModel.toggleActivitySelection(education.activity.id)
-                        }
-                    },
-                )
+            binding.cgEditmyprofileeducationsdialogEducations.addChips(allActivities.clubs)
+        }
+    }
+
+    private fun ChipGroup.addChips(clubs: List<ActivityUiState>) {
+        clubs.forEach { club ->
+            val chip = getActivityTag(club)
+            addView(chip)
+        }
+    }
+
+    private fun getActivityTag(club: ActivityUiState): ActivityTag {
+        return activityChipOf {
+            text = club.activity.name
+            isChecked = club.isSelected
+            setOnCheckedChangeListener { _, _ ->
+                viewModel.toggleActivitySelection(club.activity.id)
             }
         }
     }

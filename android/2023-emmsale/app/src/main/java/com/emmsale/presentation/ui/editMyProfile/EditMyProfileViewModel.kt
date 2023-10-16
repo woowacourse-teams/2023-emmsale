@@ -63,16 +63,14 @@ class EditMyProfileViewModel @Inject constructor(
     fun fetchAllActivities() {
         viewModelScope.launch {
             when (val result = activityRepository.getActivities()) {
+                is Success -> _activities.value = _activities.value.fetchUnSelectedActivities(
+                    allActivities = result.data,
+                    myActivities = profile.value.member.activities,
+                )
+
                 is Failure, NetworkError ->
                     _activities.value =
                         _activities.value.changeToErrorState()
-
-                is Success -> {
-                    _activities.value = _activities.value.fetchUnSelectedActivities(
-                        allActivities = result.data,
-                        myActivities = profile.value.member.activities,
-                    )
-                }
 
                 is Unexpected -> throw Throwable(result.error)
             }

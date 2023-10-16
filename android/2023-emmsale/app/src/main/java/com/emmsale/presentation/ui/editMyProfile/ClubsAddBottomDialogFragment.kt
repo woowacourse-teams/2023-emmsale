@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.emmsale.databinding.FragmentEditmyprofileClubsAddBottomDialogBinding
+import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.activityChipOf
+import com.emmsale.presentation.ui.editMyProfile.uiState.ActivityUiState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,18 +56,25 @@ class ClubsAddBottomDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupClubsUiLogic() {
-        viewModel.activities.observe(viewLifecycleOwner) {
+        viewModel.activities.observe(viewLifecycleOwner) { allActivities ->
             binding.cgEditmyprofileclubsdialogClubs.removeAllViews()
-            it.clubs.forEach { club ->
-                binding.cgEditmyprofileclubsdialogClubs.addView(
-                    activityChipOf {
-                        text = club.activity.name
-                        isChecked = club.isSelected
-                        setOnCheckedChangeListener { _, _ ->
-                            viewModel.toggleActivitySelection(club.activity.id)
-                        }
-                    },
-                )
+            binding.cgEditmyprofileclubsdialogClubs.addChips(allActivities.clubs)
+        }
+    }
+
+    private fun ChipGroup.addChips(clubs: List<ActivityUiState>) {
+        clubs.forEach { club ->
+            val chip = getActivityTag(club)
+            addView(chip)
+        }
+    }
+
+    private fun getActivityTag(club: ActivityUiState): ActivityTag {
+        return activityChipOf {
+            text = club.activity.name
+            isChecked = club.isSelected
+            setOnCheckedChangeListener { _, _ ->
+                viewModel.toggleActivitySelection(club.activity.id)
             }
         }
     }

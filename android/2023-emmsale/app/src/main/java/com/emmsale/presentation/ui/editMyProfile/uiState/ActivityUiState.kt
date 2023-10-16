@@ -6,7 +6,7 @@ data class ActivityUiState(
     val activity: Activity,
     val isSelected: Boolean,
 ) {
-    fun toggleIsSelected(): ActivityUiState = copy(
+    fun toggleSelection(): ActivityUiState = copy(
         isSelected = !isSelected,
     )
 
