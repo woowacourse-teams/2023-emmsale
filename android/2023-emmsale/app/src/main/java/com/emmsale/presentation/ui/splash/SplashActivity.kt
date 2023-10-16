@@ -71,7 +71,10 @@ class SplashActivity : ComponentActivity() {
 
         appUpdateManager.appUpdateInfo.addListener(
             onSuccess = { updateInfo -> updateInfo.handleUpdateInfo(isAutoLogin) },
-            onFailed = { navigateToNextScreen(isAutoLogin) },
+            onFailed = {
+                showToast(R.string.splash_not_installed_playstore)
+                navigateToPlayStore()
+            },
         )
     }
 
@@ -87,7 +90,7 @@ class SplashActivity : ComponentActivity() {
             this,
             title = getString(R.string.splash_app_update_title),
             message = getString(R.string.splash_app_update_message),
-            onPositiveButtonClick = ::navigateToAppStore,
+            onPositiveButtonClick = ::navigateToPlayStore,
             onNegativeButtonClick = {
                 showToast(R.string.splash_app_update_canceled_message)
                 finishAffinity()
@@ -95,9 +98,11 @@ class SplashActivity : ComponentActivity() {
         ).show()
     }
 
-    private fun navigateToAppStore() {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
-        finish()
+    private fun navigateToPlayStore() {
+        val intent = Intent(Intent.ACTION_VIEW)
+            .addCategory(Intent.CATEGORY_BROWSABLE)
+            .setData(Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+        startActivity(intent)
     }
 
     private fun navigateToNextScreen(isAutoLogin: Boolean) {
