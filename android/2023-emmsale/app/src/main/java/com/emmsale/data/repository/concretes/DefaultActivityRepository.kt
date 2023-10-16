@@ -19,20 +19,16 @@ class DefaultActivityRepository @Inject constructor(
     private var allActivities: List<Activity> = emptyList()
 
     override suspend fun getActivities(): ApiResponse<List<Activity>> = withContext(dispatcher) {
-        if (allActivities.isNotEmpty()) {
-            return@withContext Success(allActivities)
-        } else {
-            val result = activityService
-                .getActivities()
-                .map(List<ActivitiesResponse>::toData)
+        if (allActivities.isNotEmpty()) return@withContext Success(allActivities)
+        val result = activityService
+            .getActivities()
+            .map(List<ActivitiesResponse>::toData)
 
-            if (result is Success) {
-                allActivities = result.data
-                return@withContext result
-            } else {
-                return@withContext result
-            }
+        if (result is Success) {
+            allActivities = result.data
+            return@withContext result
         }
+        return@withContext result
     }
 
     override suspend fun getActivities(
