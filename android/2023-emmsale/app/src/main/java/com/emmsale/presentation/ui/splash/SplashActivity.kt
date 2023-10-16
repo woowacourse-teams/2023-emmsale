@@ -71,7 +71,7 @@ class SplashActivity : ComponentActivity() {
 
         appUpdateManager.appUpdateInfo.addListener(
             onSuccess = { updateInfo -> updateInfo.handleUpdateInfo(isAutoLogin) },
-            onFailed = { showToast(R.string.all_network_error_title) },
+            onFailed = { navigateToNextScreen(isAutoLogin) },
         )
     }
 
