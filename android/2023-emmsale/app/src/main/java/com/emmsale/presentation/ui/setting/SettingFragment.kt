@@ -15,7 +15,6 @@ import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.myCommentList.MyCommentsActivity
 import com.emmsale.presentation.ui.myPostList.MyPostActivity
 import com.emmsale.presentation.ui.notificationConfig.NotificationConfigActivity
-import com.emmsale.presentation.ui.openProfileUrlConfig.OpenProfileUrlConfigActivity
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
 import com.emmsale.presentation.ui.useTerm.UseTermWebViewActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +45,6 @@ class SettingFragment :
         binding.showBlocks = ::showBlocks
         binding.showUseTerm = ::showUseTerm
         binding.logout = ::logout
-        binding.showOpenProfileUrlConfig = ::showOpenProfileUrlConfig
     }
 
     private fun showWritings() {
@@ -67,10 +65,6 @@ class SettingFragment :
 
     private fun showUseTerm() {
         UseTermWebViewActivity.startActivity(requireContext())
-    }
-
-    private fun showOpenProfileUrlConfig() {
-        OpenProfileUrlConfigActivity.startActivity(requireContext())
     }
 
     private fun logout() {

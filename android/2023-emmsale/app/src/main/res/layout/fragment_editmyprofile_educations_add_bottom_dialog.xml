@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:background="@drawable/bg_all_two_state_button"
-            android:enabled="@{viewModel.selectedEducationsSize > 0}"
+            android:enabled="@{viewModel.activities.selectedEducationsSize > 0}"
             android:gravity="center"
             android:onClick="@{() -> addEducations.invoke()}"
             android:paddingVertical="21dp"

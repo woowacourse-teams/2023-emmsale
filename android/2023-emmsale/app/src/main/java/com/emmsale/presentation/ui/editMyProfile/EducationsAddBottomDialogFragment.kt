@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.emmsale.databinding.FragmentEditmyprofileEducationsAddBottomDialogBinding
+import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.activityChipOf
+import com.emmsale.presentation.ui.editMyProfile.uiState.ActivityUiState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,6 +37,7 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
         initDataBinding()
         setupUiLogic()
+        viewModel.fetchAllActivities()
     }
 
     private fun initDataBinding() {
@@ -51,18 +55,25 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupEducationsUiLogic() {
-        viewModel.selectableEducations.observe(viewLifecycleOwner) {
+        viewModel.activities.observe(viewLifecycleOwner) { allActivities ->
             binding.cgEditmyprofileeducationsdialogEducations.removeAllViews()
-            it.forEach { education ->
-                binding.cgEditmyprofileeducationsdialogEducations.addView(
-                    activityChipOf {
-                        text = education.name
-                        isChecked = education.isSelected
-                        setOnCheckedChangeListener { _, isChecked ->
-                            viewModel.setEducationSelection(education.id, isChecked)
-                        }
-                    },
-                )
+            binding.cgEditmyprofileeducationsdialogEducations.addChips(allActivities.clubs)
+        }
+    }
+
+    private fun ChipGroup.addChips(clubs: List<ActivityUiState>) {
+        clubs.forEach { club ->
+            val chip = getActivityTag(club)
+            addView(chip)
+        }
+    }
+
+    private fun getActivityTag(club: ActivityUiState): ActivityTag {
+        return activityChipOf {
+            text = club.activity.name
+            isChecked = club.isSelected
+            setOnCheckedChangeListener { _, _ ->
+                viewModel.toggleActivitySelection(club.activity.id)
             }
         }
     }

@@ -1,53 +1,45 @@
 package com.emmsale.presentation.ui.editMyProfile.uiState
 
-import com.emmsale.data.model.Activity
-import com.emmsale.data.model.ActivityType
 import com.emmsale.data.model.Member
 
 data class EditMyProfileUiState(
-    val id: Long,
-    val name: String,
-    val imageUrl: String,
-    val description: String,
-    val fields: List<ActivityUiState>,
-    val clubs: List<ActivityUiState>,
-    val educations: List<ActivityUiState>,
+    val isLoading: Boolean = true,
+    val isError: Boolean = false,
+    val member: Member = Member(),
 ) {
+
+    val selectableFieldSize: Int
+        get() = (MAX_FIELDS_COUNT - member.fields.size).coerceAtLeast(0)
+
     fun changeMemberState(member: Member): EditMyProfileUiState = copy(
-        id = member.id,
-        name = member.name,
-        imageUrl = member.profileImageUrl,
-        description = member.description,
+        isLoading = false,
+        isError = false,
+        member = member,
     )
 
-    fun changeActivities(activities: List<Activity>): EditMyProfileUiState = copy(
-        fields = activities.getActivityUiStatesOf(ActivityType.FIELD),
-        clubs = activities.getActivityUiStatesOf(ActivityType.CLUB),
-        educations = activities.getActivityUiStatesOf(ActivityType.EDUCATION),
+    fun changeToLoadingState(): EditMyProfileUiState = copy(
+        isLoading = true,
     )
 
-    private fun List<Activity>.getActivityUiStatesOf(activityType: ActivityType): List<ActivityUiState> {
-        return this.filter { it.activityType == activityType }
-            .map(ActivityUiState.Companion::from)
-    }
+    fun changeToErrorState(): EditMyProfileUiState = copy(
+        isError = true,
+    )
 
     fun changeDescription(description: String): EditMyProfileUiState = copy(
-        description = description,
+        member = member.copy(description = description),
     )
 
     fun updateProfileImageUrl(profileImageUrl: String): EditMyProfileUiState = copy(
-        imageUrl = profileImageUrl,
+        member = member.copy(profileImageUrl = profileImageUrl),
     )
 
     companion object {
         val FIRST_LOADING = EditMyProfileUiState(
-            id = -1,
-            name = "",
-            imageUrl = "",
-            description = "",
-            fields = listOf(),
-            clubs = listOf(),
-            educations = listOf(),
+            isLoading = true,
+            isError = false,
+            member = Member(),
         )
+
+        private const val MAX_FIELDS_COUNT = 4
     }
 }

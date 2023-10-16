@@ -66,7 +66,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="23dp"
-                        android:text="@{viewModel.profile.memberName}"
+                        android:text="@{viewModel.profile.member.name}"
                         android:textSize="17sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@+id/tv_profile_hello"
@@ -79,7 +79,7 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="9dp"
                         android:layout_marginEnd="19dp"
-                        android:text="@{viewModel.profile.description.isBlank() ? @string/profile_no_description : viewModel.profile.description}"
+                        android:text="@{viewModel.profile.member.description.isBlank() ? @string/profile_no_description : viewModel.profile.member.description}"
                         android:textSize="13sp"
                         app:layout_constraintEnd_toStartOf="@+id/iv_profile_memberimage"
                         app:layout_constraintStart_toStartOf="@+id/tv_profile_membername"
@@ -97,7 +97,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:contentDescription="@string/profile_memberimagedescription"
                         android:scaleType="centerCrop"
-                        app:imageUrl="@{viewModel.profile.memberImageUrl}"
+                        app:imageUrl="@{viewModel.profile.member.profileImageUrl}"
                         app:isCircle="@{true}"
                         tools:src="@tools:sample/avatars" />
 

@@ -67,7 +67,7 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch {
             _activities.value = _activities.value.copy(isLoading = true)
             when (
-                val result = memberRepository.updateMember(
+                val result = memberRepository.createMember(
                     name.value!!,
                     _activities.value.selectedActivityIds,
                 )

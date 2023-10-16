@@ -63,7 +63,7 @@
                         android:layout_marginTop="13dp"
                         android:fontFamily="@font/nanum_square_bold"
                         android:gravity="center"
-                        android:text="@{@string/sendmessagedialog_message(vm.profile.memberName)}"
+                        android:text="@{@string/sendmessagedialog_message(vm.profile.member.name)}"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"

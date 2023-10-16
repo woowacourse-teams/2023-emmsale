@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:background="@drawable/bg_all_two_state_button"
-            android:enabled="@{viewModel.selectedClubsSize > 0}"
+            android:enabled="@{viewModel.activities.selectedClubsSize > 0}"
             android:gravity="center"
             android:onClick="@{() -> addClubs.invoke()}"
             android:paddingVertical="21dp"

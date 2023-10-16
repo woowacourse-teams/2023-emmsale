@@ -7,7 +7,6 @@ import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
-import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.BlockedMemberRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
@@ -28,14 +27,13 @@ class ProfileViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
-    private val activityRepository: ActivityRepository,
     private val messageRoomRepository: MessageRoomRepository,
     private val blockedMemberRepository: BlockedMemberRepository,
 ) : ViewModel(), Refreshable {
     private val memberId: Long = requireNotNull(savedStateHandle[KEY_MEMBER_ID]) {
         "[ERROR] 멤버 아이디를 가져오지 못했어요."
     }
-    val uid: Long by lazy { tokenRepository.getMyUid()!! }
+    private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
     private val _isLogin = NotNullMutableLiveData(true)
     val isLogin: NotNullLiveData<Boolean> = _isLogin
@@ -61,40 +59,34 @@ class ProfileViewModel @Inject constructor(
                 _isLogin.value = false
                 return@launch
             }
-            launch {
-                when (val result = memberRepository.getMember(memberId)) {
-                    is Failure, NetworkError ->
-                        _profile.value = _profile.value.changeToFetchingErrorState()
 
-                    is Success ->
-                        _profile.value = _profile.value.changeMemberState(result.data, token.uid)
+            when (val result = memberRepository.getMember(memberId)) {
+                is Failure, NetworkError ->
+                    _profile.value = _profile.value.changeToFetchingErrorState()
 
-                    is Unexpected -> throw Throwable(result.error)
-                }
+                is Success ->
+                    _profile.value = _profile.value.changeMemberState(result.data, token.uid)
+
+                is Unexpected -> throw Throwable(result.error)
             }
-            launch {
-                when (val result = activityRepository.getActivities(memberId)) {
-                    is Failure, NetworkError ->
-                        _profile.value = _profile.value.changeToFetchingErrorState()
 
-                    is Success ->
-                        _profile.value = _profile.value.changeActivityState(result.data)
+            fetchBlockedMembers()
 
-                    is Unexpected -> throw Throwable(result.error)
-                }
-            }
-            launch {
-                when (val result = blockedMemberRepository.getBlockedMembers()) {
-                    is Failure, NetworkError ->
-                        _profile.value = _profile.value.changeToFetchingErrorState()
-
-                    is Success ->
-                        _blockedMembers.value = result.data.map { BlockedMemberUiState.from(it) }
-
-                    is Unexpected -> throw Throwable(result.error)
-                }
-            }
             _profile.value = _profile.value.copy(isLoading = false)
+        }
+    }
+
+    private fun fetchBlockedMembers() {
+        viewModelScope.launch {
+            when (val result = blockedMemberRepository.getBlockedMembers()) {
+                is Failure, NetworkError ->
+                    _profile.value = _profile.value.changeToFetchingErrorState()
+
+                is Success ->
+                    _blockedMembers.value = result.data.map { BlockedMemberUiState.from(it) }
+
+                is Unexpected -> throw Throwable(result.error)
+            }
         }
     }
 
@@ -146,7 +138,7 @@ class ProfileViewModel @Inject constructor(
             _profile.value = _profile.value.copy(isLoading = true)
             when (
                 val result =
-                    messageRoomRepository.sendMessage(uid, _profile.value.memberId, message)
+                    messageRoomRepository.sendMessage(uid, _profile.value.member.id, message)
             ) {
                 is Failure ->
                     _uiEvent.value = Event(ProfileUiEvent.MessageSendFail)
@@ -154,7 +146,7 @@ class ProfileViewModel @Inject constructor(
                 NetworkError -> _profile.value = _profile.value.copy(isError = true)
                 is Success ->
                     _uiEvent.value = Event(
-                        ProfileUiEvent.MessageSendComplete(result.data, _profile.value.memberId),
+                        ProfileUiEvent.MessageSendComplete(result.data, _profile.value.member.id),
                     )
 
                 is Unexpected ->

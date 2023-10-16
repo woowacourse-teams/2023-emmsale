@@ -157,7 +157,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun handleFields(profile: ProfileUiState) {
         binding.cgProfileFields.removeAllViews()
 
-        profile.fields.forEach {
+        profile.member.fields.forEach {
             val tagView = CategoryTagChip(this).apply { text = it.name }
             binding.cgProfileFields.addView(tagView)
         }
@@ -165,9 +165,12 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun handleActivities(profile: ProfileUiState) {
         (binding.rvProfileEducations.adapter as ActivitiesAdapter).submitList(
-            profile.educations,
+            profile.member.educations,
         )
-        (binding.rvProfileClubs.adapter as ActivitiesAdapter).submitList(profile.clubs)
+
+        (binding.rvProfileClubs.adapter as ActivitiesAdapter).submitList(
+            profile.member.clubs,
+        )
     }
 
     private fun initActivitiesRecyclerView() {
