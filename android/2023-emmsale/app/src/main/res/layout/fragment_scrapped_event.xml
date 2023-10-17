@@ -54,12 +54,12 @@
             android:id="@+id/rv_scrapped_events"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/bg_event_recyclerview"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_events_count"
+            tools:background="@drawable/bg_event_recyclerview"
             tools:itemCount="2"
             tools:listitem="@layout/item_conference" />
 
