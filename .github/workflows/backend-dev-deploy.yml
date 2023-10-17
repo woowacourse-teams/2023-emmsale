@@ -37,9 +37,10 @@ jobs:
       #
       #      - name: Gradle에 실행 권한 부여
       #        run: chmod +x gradlew
+      - name: workflow_dispatch에서 지정한 branch로 checkout
+        uses: actions/checkout@v3
 
       - name: Get current UNIX timestamp
-        uses: actions/checkout@v3
         run: echo "CURRENT_TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
 
       - name: Print timestamp
