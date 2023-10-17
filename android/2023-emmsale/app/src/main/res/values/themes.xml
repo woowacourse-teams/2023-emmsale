@@ -5,8 +5,8 @@
         <item name="colorSecondary">@color/primary_color</item>
         <item name="colorAccent">@color/primary_color</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:statusBarColor">@color/status_bar_color</item>
         <item name="bottomNavigationStyle">@style/bottomNavigationViewStyle</item>
         <item name="android:textViewStyle">@style/basicTextFontStyle</item>
         <item name="bottomSheetDialogTheme">
