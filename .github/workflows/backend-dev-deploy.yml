@@ -3,6 +3,9 @@ name: Kerdy Backend Dev Server CI/CD
 on:
   workflow_dispatch:
 
+env:
+  TIMESTAMP: $(date +%s)
+
 jobs:
   build:
     name: 빌드
@@ -38,10 +41,8 @@ jobs:
       #      - name: Gradle에 실행 권한 부여
       #        run: chmod +x gradlew
 
-      - name: Get current UNIX timestamp
-        run: echo "CURRENT_TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
-      - name: Print timestamp
-        run: echo $CURRENT_TIMESTAMP
+      - name: echo timestamp
+        run: echo $TIMESTAMP
   #
   #      - name: Actions/Caches에 Gradle 라이브러리 캐싱
   #        id: cache-gradle
@@ -78,7 +79,8 @@ jobs:
     runs-on: [ self-hosted, label-dev ]
     steps:
       - name: echo timestamp
-        run: echo $CURRENT_TIMESTAMP
+        run: echo $TIMESTAMP
+
 #      - name: 도커 실행
 #        run: |
 #          docker stop kerdy && docker rm kerdy && docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev
