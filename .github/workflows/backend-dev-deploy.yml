@@ -3,9 +3,6 @@ name: Kerdy Backend Dev Server CI/CD
 on:
   workflow_dispatch:
 
-env:
-  timestamp:
-
 jobs:
   build:
     name: 빌드
