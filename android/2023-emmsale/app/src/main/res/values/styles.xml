@@ -76,11 +76,11 @@
         <item name="android:font">@font/nanum_square_bold</item>
     </style>
 
-    <style name="RoundBottomSheetDialogStyle" parent="Theme.Design.BottomSheetDialog">
+    <style name="RoundBottomSheetDialogStyle" parent="Theme.Material3.DayNight.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/RoundBottomSheetModalStyle</item>
     </style>
 
-    <style name="RoundBottomSheetModalStyle" parent="Widget.Design.BottomSheet.Modal">
+    <style name="RoundBottomSheetModalStyle" parent="Widget.Material3.BottomSheet.Modal">
         <item name="android:background">@drawable/bg_all_bottom_dialog</item>
     </style>
 </resources>

@@ -27,7 +27,6 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,6 +86,7 @@
                         android:lineSpacingExtra="2dp"
                         android:maxLength="255"
                         android:padding="12dp"
+                        android:textColor="@color/black"
                         android:textColorHint="@color/gray"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -111,30 +111,13 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/materialDivider_sendmessagedialog" />
 
-                    <Button
-                        android:id="@+id/btn_sendmessagedialog_positive"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="1dp"
-                        android:backgroundTint="@color/white"
-                        android:enabled="@{!vm.profile.isLoading &amp;&amp; !etSendmessagedialogMessage.text.toString().isBlank() ? true : false}"
-                        android:fontFamily="@font/nanum_square_bold"
-                        android:onClick="@{() -> onSendButtonClick.invoke(etSendmessagedialogMessage.getText().toString())}"
-                        android:text="@string/sendmessagedialog_send_button_label"
-                        android:textColor="@color/all_enable_primary"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/materialDivider_sendmessagedialog_vertical"
-                        app:layout_constraintTop_toTopOf="@+id/materialDivider_sendmessagedialog_vertical" />
-
-                    <Button
+                    <TextView
                         android:id="@+id/btn_sendmessagedialog_negative"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginEnd="1dp"
-                        android:backgroundTint="@color/white"
                         android:fontFamily="@font/nanum_square_bold"
+                        android:gravity="center"
                         android:onClick="@{() -> onCancelButtonClick.invoke()}"
                         android:text="@string/requestcompanion_dialog_negative_button_text"
                         android:textColor="@color/black"
@@ -142,6 +125,23 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/materialDivider_sendmessagedialog_vertical"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/materialDivider_sendmessagedialog_vertical" />
+
+                    <TextView
+                        android:id="@+id/btn_sendmessagedialog_positive"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="1dp"
+                        android:enabled="@{!vm.profile.isLoading &amp;&amp; !etSendmessagedialogMessage.text.toString().isBlank() ? true : false}"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:gravity="center"
+                        android:onClick="@{() -> onSendButtonClick.invoke(etSendmessagedialogMessage.getText().toString())}"
+                        android:text="@string/sendmessagedialog_send_button_label"
+                        android:textColor="@color/all_enable_primary"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/materialDivider_sendmessagedialog_vertical"
                         app:layout_constraintTop_toTopOf="@+id/materialDivider_sendmessagedialog_vertical" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
