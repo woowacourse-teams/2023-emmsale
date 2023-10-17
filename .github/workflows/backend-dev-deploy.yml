@@ -82,8 +82,8 @@ jobs:
     runs-on: [ self-hosted, label-dev ]
     steps:
       - name: 도커 실행
-        run: |
-#          docker stop kerdy && docker rm kerdy && docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev:${{ needs.build.outputs.current_timestamp }}
+        run:
+          #          docker stop kerdy && docker rm kerdy && docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev:${{ needs.build.outputs.current_timestamp }}
           docker run -d -p 8081:8080 --name kerdy -e TZ=Asia/Seoul --network host ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev:${{ needs.build.outputs.current_timestamp }}
 
       - name: 슬랙 메시지 보내기
