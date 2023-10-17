@@ -10,23 +10,93 @@ jobs:
     defaults:
       run:
         working-directory: backend/emm-sale
+    #    services:
+    #      mysql:
+    #        image: mysql:8.0.28
+    #        env:
+    #          MYSQL_USER: user
+    #          MYSQL_PASSWORD: password
+    #          MYSQL_ROOT_PASSWORD: 1234
+    #          MYSQL_DATABASE: kerdy
+    #        ports:
+    #          - 3306:3306
+    #        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    #    steps:
+    #      - name: workflow_dispatch에서 지정한 branch로 checkout
+    #        uses: actions/checkout@v3
+    #        with:
+    #          token: ${{ secrets.SUBMODULE_TOKEN }}
+    #          submodules: true
+
+    #      - name: JDK 11로 설정
+    #        uses: actions/setup-java@v3
+    #        with:
+    #          java-version: 11
+    #          distribution: 'corretto'
+    #
+    #      - name: Gradle에 실행 권한 부여
+    #        run: chmod +x gradlew
     outputs:
-      output1: ${{ steps.step1.outputs.test }}
-      output2: ${{ steps.step2.outputs.test }}
+      current_timestamp: ${{ steps.timestamp.outputs.timestamp }}
+
     steps:
       - name: workflow_dispatch에서 지정한 branch로 checkout
         uses: actions/checkout@v3
-      - id: step1
-        run: echo "test=hello" >> "$GITHUB_OUTPUT"
-      - id: step2
-        run: echo "test=world" >> "$GITHUB_OUTPUT"
+      # ... (기타 스텝들)
+      - name: Get and set current UNIX timestamp
+        id: timestamp
+        run: echo "::set-output name=timestamp::$(date +%s)"
 
+  #
+  #      - name: Actions/Caches에 Gradle 라이브러리 캐싱
+  #        id: cache-gradle
+  #        uses: actions/cache@v3
+  #        with:
+  #          path: ~/.gradle/caches
+  #          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+  #          restore-keys: ${{ runner.os }}-gradle-
+  #      # RestDocs의 index.html 업데이트 반영을 위해 2번 build하도록 함
+  #      - name: gradle 빌드
+  #        run: ./gradlew build && ./gradlew build
+  #
+  #      - name: 도커 빌더 생성 및 부팅
+  #        uses: docker/setup-buildx-action@v2
+  #
+  #      - name: 도커 허브에 로그인
+  #        uses: docker/login-action@v2
+  #        with:
+  #          username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #          password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #
+  #      - name: 도커 이미지 빌드 및 푸시
+  #        uses: docker/build-push-action@v4
+  #        with:
+  #          context: backend/emm-sale
+  #          file: backend/emm-sale/Dockerfile-dev
+  #          platforms: linux/arm64/v8
+  #          push: true
+  #          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev:latest
+  #
   deploy:
     needs: build
     name: 배포
     runs-on: [ self-hosted, label-dev ]
     steps:
-      - env:
-          OUTPUT1: ${{needs.job1.outputs.output1}}
-          OUTPUT2: ${{needs.job1.outputs.output2}}
-        run: echo "$OUTPUT1 $OUTPUT2"
+      - name: Echo timestamp from build job
+        run: echo ${{ needs.build.outputs.current_timestamp }}
+#      - name: 도커 실행
+#        run: |
+#          docker stop kerdy && docker rm kerdy && docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev
+#          docker run -d -p 8080:8080 --name kerdy -e TZ=Asia/Seoul --network host ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev
+#
+#      - name: 슬랙 메시지 보내기
+#        uses: 8398a7/action-slack@v3
+#        with:
+#          mention: 'here'
+#          if_mention: failure
+#          status: ${{ job.status }}
+#          fields: workflow,job,commit,message,ref,author,took
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#        if: always()
