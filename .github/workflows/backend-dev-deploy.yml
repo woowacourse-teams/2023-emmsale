@@ -3,6 +3,9 @@ name: Kerdy Backend Dev Server CI/CD
 on:
   workflow_dispatch:
 
+env:
+  timestamp:
+
 jobs:
   build:
     name: 빌드
@@ -41,10 +44,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Get current UNIX timestamp
-        run: echo "CURRENT_TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
-
-      - name: Print timestamp
-        run: echo $CURRENT_TIMESTAMP
+        id: timestamp
+        run: echo “CURRENT_TIMESTAMP=$(date +%s)” >> $GITHUB_ENV
+      - name: Set timestamp as output
+        id: output_timestamp
+        run: echo “::set-output name=timestamp::$CURRENT_TIMESTAMP”
+    outputs:
+      current_timestamp: ${{ steps.output_timestamp.outputs.timestamp }}
   #
   #      - name: Actions/Caches에 Gradle 라이브러리 캐싱
   #        id: cache-gradle
@@ -80,8 +86,8 @@ jobs:
     name: 배포
     runs-on: [ self-hosted, label-dev ]
     steps:
-      - name: echo timestamp
-        run: echo $CURRENT_TIMESTAMP
+      - name: Echo timestamp from build job
+        run: echo ${{ needs.build.outputs.current_timestamp }}
 #      - name: 도커 실행
 #        run: |
 #          docker stop kerdy && docker rm kerdy && docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev
