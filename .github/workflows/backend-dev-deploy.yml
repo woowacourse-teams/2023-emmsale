@@ -48,7 +48,7 @@ jobs:
         id: timestamp
         run: echo "::set-output name=timestamp::$(date +%s)"
       - name: Echo timestamp from build job
-        run: echo ${{ needs.build.outputs.current_timestamp }}
+        run: echo ${{ steps.timestamp.outputs.timestamp }}
 
   #
   #      - name: Actions/Caches에 Gradle 라이브러리 캐싱
