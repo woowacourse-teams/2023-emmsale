@@ -41,6 +41,8 @@ jobs:
       current_timestamp: ${{ steps.timestamp.outputs.timestamp }}
 
     steps:
+      - name: workflow_dispatch에서 지정한 branch로 checkout
+        uses: actions/checkout@v3
       # ... (기타 스텝들)
       - name: Get and set current UNIX timestamp
         id: timestamp
