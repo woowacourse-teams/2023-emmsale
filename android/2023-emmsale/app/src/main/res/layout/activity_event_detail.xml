@@ -37,12 +37,13 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        tools:background="@color/white">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarlayout_eventdetail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
@@ -83,7 +84,6 @@
                 android:id="@+id/cl_event_detail_event_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:paddingBottom="20dp"
                 app:layout_anchor="@id/appbarlayout_eventdetail"
                 app:layout_anchorGravity="bottom">
@@ -96,10 +96,10 @@
                     android:layout_marginTop="11dp"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    app:visible="@{!(vm.eventDetail.eventDetail.progressStatus instanceof EventProgressStatus.Ended)}"
                     app:eventApplyingStatus="@{vm.eventDetail.eventDetail.applicationStatus}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:visible="@{!(vm.eventDetail.eventDetail.progressStatus instanceof EventProgressStatus.Ended)}"
                     tools:text="D-21"
                     tools:textColor="@color/primary_color" />
 
@@ -108,11 +108,11 @@
                     android:layout_width="1dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="6dp"
-                    app:visible="@{!(vm.eventDetail.eventDetail.progressStatus instanceof EventProgressStatus.Ended)}"
                     android:background="@color/light_gray"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_application_status"
                     app:layout_constraintStart_toEndOf="@+id/tv_application_status"
-                    app:layout_constraintTop_toTopOf="@+id/tv_application_status" />
+                    app:layout_constraintTop_toTopOf="@+id/tv_application_status"
+                    app:visible="@{!(vm.eventDetail.eventDetail.progressStatus instanceof EventProgressStatus.Ended)}" />
 
                 <TextView
                     android:id="@+id/tv_progress_status"
@@ -121,11 +121,11 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="11dp"
                     android:textSize="13sp"
-                    app:layout_goneMarginStart="17dp"
                     android:textStyle="bold"
                     app:eventProgressStatus="@{vm.eventDetail.eventDetail.progressStatus}"
                     app:layout_constraintStart_toEndOf="@+id/divider_event_status"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_goneMarginStart="17dp"
                     tools:text="D-21"
                     tools:textColor="@color/primary_color" />
 
@@ -177,6 +177,7 @@
                 android:id="@+id/tablayout_eventdetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 app:tabBackground="@drawable/bg_tablayout_indicator"
                 app:tabIndicatorColor="@color/primary_color"
                 app:tabIndicatorFullWidth="true"
@@ -191,7 +192,6 @@
             android:id="@+id/vp_eventdetail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
