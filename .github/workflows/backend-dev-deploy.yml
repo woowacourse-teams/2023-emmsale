@@ -43,13 +43,13 @@ jobs:
       - name: Create Timestamp File
         run: |
           CURRENT_TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-          echo "$CURRENT_TIMESTAMP" > timestamp.txt
+          echo "$CURRENT_TIMESTAMP" > /timestamp.txt
 
       - name: Upload Timestamp Artifact
         uses: actions/upload-artifact@v2
         with:
           name: timestamp-artifact
-          path: timestamp.txt
+          path: /timestamp.txt
 
   #
   #      - name: Actions/Caches에 Gradle 라이브러리 캐싱
