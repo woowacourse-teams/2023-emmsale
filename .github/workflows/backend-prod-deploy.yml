@@ -21,13 +21,21 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
+    outputs:
+      current_timestamp: ${{ steps.timestamp.outputs.timestamp }}
     steps:
       - name: workflow_dispatch에서 지정한 branch로 checkout
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.SUBMODULE_TOKEN }}
           submodules: true
+
+      - name: unix 타임스탬프 얻기
+        id: timestamp
+        run: echo "::set-output name=timestamp::$(date +%s)"
+
+      - name: unix 타임스탬프 확인하기
+        run: echo ${{ steps.timestamp.outputs.timestamp }}
 
       - name: firebase key 생성
         run: |
@@ -72,7 +80,7 @@ jobs:
           file: backend/emm-sale/Dockerfile-prod
           platforms: linux/arm64/v8
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kerdy:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kerdy:${{ steps.timestamp.outputs.timestamp }}
 
   deploy:
     needs: build
@@ -80,9 +88,8 @@ jobs:
     runs-on: [ self-hosted, label-prod ]
     steps:
       - name: 도커 실행
-        run: |
-          docker stop kerdy && docker rm kerdy && docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
-          docker run -d -p 8080:8080 -v /home/ubuntu/logs/:/logs/ -e TZ=Asia/Seoul --name kerdy ${{ secrets.DOCKERHUB_USERNAME }}/kerdy
+        run:
+          sudo /home/ubuntu/deploy.sh ${{ secrets.DOCKERHUB_USERNAME }} ${{ needs.build.outputs.current_timestamp }}
 
       - name: 슬랙 메시지 보내기
         uses: 8398a7/action-slack@v3
