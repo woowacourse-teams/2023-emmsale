@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -16,7 +17,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_all_bottom_dialog"
         android:paddingHorizontal="17dp"
         android:paddingBottom="17dp">
 
@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="49dp"
             android:text="@string/editmyprofile_field_label"
+            android:textColor="@color/black"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +52,8 @@
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/tv_editmyprofilefieldsdialog_interest_tag_label"
-            app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofilefieldsdialog_interest_tag_label" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofilefieldsdialog_interest_tag_label"
+            tools:text="최대 2개까지 선택 가능합니다." />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cg_editmyprofilefieldsdialog_fields"

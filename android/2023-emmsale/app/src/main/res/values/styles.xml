@@ -75,4 +75,12 @@
         <item name="android:textSize">14sp</item>
         <item name="android:font">@font/nanum_square_bold</item>
     </style>
+
+    <style name="RoundBottomSheetDialogStyle" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundBottomSheetModalStyle</item>
+    </style>
+
+    <style name="RoundBottomSheetModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_all_bottom_dialog</item>
+    </style>
 </resources>
