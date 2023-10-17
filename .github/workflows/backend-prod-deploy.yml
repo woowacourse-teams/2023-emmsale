@@ -79,7 +79,7 @@ jobs:
           file: backend/emm-sale/Dockerfile-prod
           platforms: linux/arm64/v8
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kerdy:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kerdy:${{ steps.timestamp.outputs.timestamp }}
 
   deploy:
     needs: build
