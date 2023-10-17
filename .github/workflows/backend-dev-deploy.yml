@@ -40,14 +40,17 @@ jobs:
       - name: workflow_dispatch에서 지정한 branch로 checkout
         uses: actions/checkout@v3
 
-      - name: Get and set current UNIX timestamp
-        id: timestamp
+      - name: Create Timestamp File
         run: |
-          CURRENT_TIMESTAMP=$(date +%s)
-          echo “CURRENT_TIMESTAMP=$CURRENT_TIMESTAMP” >> $GITHUB_ENV
-          echo “::set-output name=timestamp::$CURRENT_TIMESTAMP”
-    outputs:
-      current_timestamp: ${{ steps.timestamp.outputs.timestamp }}
+          CURRENT_TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+          echo "$CURRENT_TIMESTAMP" > timestamp.txt
+
+      - name: Upload Timestamp Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: timestamp-artifact
+          path: timestamp.txt
+
   #
   #      - name: Actions/Caches에 Gradle 라이브러리 캐싱
   #        id: cache-gradle
@@ -83,8 +86,15 @@ jobs:
     name: 배포
     runs-on: [ self-hosted, label-dev ]
     steps:
-      - name: Echo timestamp from build job
-        run: echo ${{ needs.build.outputs.current_timestamp }}
+      - name: Download Timestamp Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: timestamp-artifact
+          path: timestamp-artifact
+      - name: Read Timestamp
+        run: |
+          TIMESTAMP_CONTENT=$(cat timestamp-artifact/timestamp.txt)
+          echo "Timestamp Content: $TIMESTAMP_CONTENT"
 #      - name: 도커 실행
 #        run: |
 #          docker stop kerdy && docker rm kerdy && docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/kerdy-dev
