@@ -12,13 +12,13 @@
         android:maxSdkVersion="32" />
 
     <application
-        android:requestLegacyExternalStorage="true"
         android:name=".presentation.KerdyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Emmsale"
@@ -53,10 +53,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".presentation.ui.openProfileUrlConfig.OpenProfileUrlConfigActivity"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.myPostList.MyPostActivity"
             android:screenOrientation="portrait"
