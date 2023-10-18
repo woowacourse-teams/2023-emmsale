@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Theme.Emmsale" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Emmsale" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorSecondary">@color/primary_color</item>
         <item name="colorAccent">@color/primary_color</item>
