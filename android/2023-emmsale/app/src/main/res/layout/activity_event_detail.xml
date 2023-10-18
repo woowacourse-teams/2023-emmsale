@@ -75,6 +75,7 @@
                     android:id="@+id/tb_eventdetail"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
+                    android:background="@color/white"
                     app:layout_collapseMode="pin"
                     app:navigationIcon="@drawable/ic_all_arrowback" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -96,10 +97,10 @@
                     android:layout_marginTop="11dp"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    app:visible="@{!(vm.eventDetail.eventDetail.progressStatus instanceof EventProgressStatus.Ended)}"
                     app:eventApplyingStatus="@{vm.eventDetail.eventDetail.applicationStatus}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:visible="@{!(vm.eventDetail.eventDetail.progressStatus instanceof EventProgressStatus.Ended)}"
                     tools:text="D-21"
                     tools:textColor="@color/primary_color" />
 
@@ -108,11 +109,11 @@
                     android:layout_width="1dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="6dp"
-                    app:visible="@{!(vm.eventDetail.eventDetail.progressStatus instanceof EventProgressStatus.Ended)}"
                     android:background="@color/light_gray"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_application_status"
                     app:layout_constraintStart_toEndOf="@+id/tv_application_status"
-                    app:layout_constraintTop_toTopOf="@+id/tv_application_status" />
+                    app:layout_constraintTop_toTopOf="@+id/tv_application_status"
+                    app:visible="@{!(vm.eventDetail.eventDetail.progressStatus instanceof EventProgressStatus.Ended)}" />
 
                 <TextView
                     android:id="@+id/tv_progress_status"
@@ -121,11 +122,11 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="11dp"
                     android:textSize="13sp"
-                    app:layout_goneMarginStart="17dp"
                     android:textStyle="bold"
                     app:eventProgressStatus="@{vm.eventDetail.eventDetail.progressStatus}"
                     app:layout_constraintStart_toEndOf="@+id/divider_event_status"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_goneMarginStart="17dp"
                     tools:text="D-21"
                     tools:textColor="@color/primary_color" />
 
