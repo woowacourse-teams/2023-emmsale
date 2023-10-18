@@ -40,7 +40,7 @@
             android:layout_height="0.5dp"
             android:background="@color/gray"
             app:layout_constraintBottom_toBottomOf="@id/tb_toolbar" />
-
+      
         <ScrollView
             android:id="@+id/scrollView2"
             android:layout_width="0dp"
