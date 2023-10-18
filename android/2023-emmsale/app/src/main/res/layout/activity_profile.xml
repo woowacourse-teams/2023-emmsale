@@ -26,7 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/menu_all_toolbar_more"
-            app:navigationIcon="@drawable/ic_back"
+            app:navigationIcon="@drawable/ic_all_back"
             app:title="@string/profile_toolbar_title"
             app:titleCentered="true"
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
@@ -92,13 +92,13 @@
                         android:layout_height="82dp"
                         android:layout_marginTop="37dp"
                         android:layout_marginEnd="12dp"
-                        android:importantForAccessibility="no"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         android:contentDescription="@string/profile_memberimagedescription"
+                        android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
                         app:imageUrl="@{viewModel.profile.member.profileImageUrl}"
                         app:isCircle="@{true}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:src="@tools:sample/avatars" />
 
                     <View
@@ -259,6 +259,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_profile_toolbar"
             bind:viewModel="@{viewModel}"
-            tools:visibility="gone"/>
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

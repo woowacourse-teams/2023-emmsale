@@ -42,7 +42,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/menu_all_toolbar_more"
-            app:navigationIcon="@drawable/ic_back"
+            app:navigationIcon="@drawable/ic_all_back"
             app:title="@string/feeddetail_toolbar_title"
             app:titleCentered="true"
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
