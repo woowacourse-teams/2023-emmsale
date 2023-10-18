@@ -42,7 +42,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_back"
+            app:navigationIcon="@drawable/ic_all_back"
             app:title="@string/editmyprofile_edit_profile"
             app:titleCentered="true"
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
@@ -78,7 +78,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
                     android:background="@android:color/transparent"
-                    android:drawableEnd="@drawable/ic_profile_education"
                     android:fontFamily="@font/nanum_square_regular"
                     android:hint="@string/editmyprofile_description_hint"
                     android:importantForAutofill="no"

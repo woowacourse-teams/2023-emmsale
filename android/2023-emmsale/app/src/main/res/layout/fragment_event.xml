@@ -55,7 +55,8 @@
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="@dimen/tab_indicator_height"
             app:tabSelectedTextColor="@color/primary_color"
-            app:tabTextAppearance="@style/KerdyTextStyleBlackBold14" />
+            app:tabTextAppearance="@style/KerdyTextStyleBlackBold14"
+            app:tabTextColor="@color/black" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_event"

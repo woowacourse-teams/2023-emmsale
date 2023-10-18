@@ -31,7 +31,7 @@ class CancelablePrimaryTag(
 
     private fun initTextView(context: Context) {
         setTextSize(Dimension.SP, 13F)
-        setTextColor(ContextCompat.getColor(context, R.color.black))
+        setTextColor(ContextCompat.getColor(context, R.color.event_tag_text_color))
     }
 
     private fun initBackground(context: Context) {

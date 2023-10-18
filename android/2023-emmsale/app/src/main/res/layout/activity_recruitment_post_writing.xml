@@ -20,14 +20,14 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_toolbar"
+            style="@style/PostWritingToolbarStyle"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
+            android:layout_marginEnd="7dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="7dp"
-            app:navigationIcon="@drawable/ic_back"
-            style="@style/PostWritingToolbarStyle"
+            app:navigationIcon="@drawable/ic_all_back"
             app:title="@string/recruitmentpostwriting_appbar_title_text"
             app:titleCentered="true"
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/gray"
-            app:layout_constraintBottom_toBottomOf="@id/tb_toolbar"/>
+            app:layout_constraintBottom_toBottomOf="@id/tb_toolbar" />
 
         <EditText
             android:id="@+id/et_recruitmentwriting"

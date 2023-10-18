@@ -16,6 +16,6 @@ class CategoryTagChip(
         setTextSize(Dimension.SP, 13F)
         gravity = Gravity.CENTER
         background = ContextCompat.getDrawable(context, R.drawable.bg_profile_categorytag)
-        setTextColor(ContextCompat.getColor(context, R.color.black))
+        setTextColor(ContextCompat.getColor(context, R.color.event_tag_text_color))
     }
 }

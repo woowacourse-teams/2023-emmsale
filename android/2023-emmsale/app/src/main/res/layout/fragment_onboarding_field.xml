@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/onboarding_back_press_desc"
             android:paddingVertical="20dp"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_all_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
