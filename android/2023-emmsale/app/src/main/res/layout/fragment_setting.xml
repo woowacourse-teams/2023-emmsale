@@ -41,292 +41,298 @@
             type="kotlin.jvm.functions.Function0" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tb_setting_toolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/iv_setting_member_image"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="2dp"
-            android:contentDescription="@string/setting_member_image_description"
-            app:imageUrl="@{viewModel.member.imageUrl}"
-            app:isCircle="@{true}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_setting_toolbar"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/tv_setting_member_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="13dp"
-            android:text="@{viewModel.member.name}"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/iv_setting_member_image"
-            app:layout_constraintTop_toTopOf="@+id/iv_setting_member_image"
-            tools:text="김커디" />
-
-        <TextView
-            android:id="@+id/tv_setting_github_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:text="@{viewModel.member.githubId}"
-            android:textColor="#8b8b8b"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@+id/tv_setting_member_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_setting_member_name"
-            tools:text="git1234567@github.com" />
-
-        <TextView
-            android:id="@+id/tv_setting_written_comments_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="17dp"
-            android:background="@drawable/bg_setting_button"
-            android:gravity="center"
-            android:onClick="@{() -> showWrittenComments.invoke()}"
-            android:paddingVertical="12dp"
-            android:text="@string/setting_written_comments_button_label"
-            android:textSize="11sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/iv_setting_member_image"
-            app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image" />
-
-        <com.emmsale.presentation.common.views.VerticalDivider
-            android:id="@+id/verticaldivider_setting_vertical_divider"
-            android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_setting_written_comments_button" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_setting_notification_setting_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="17dp"
-            android:onClick="@{() -> showNotificationSetting.invoke()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/verticaldivider_setting_vertical_divider">
-
-            <TextView
-                android:id="@+id/tv_setting_notification_setting_button_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/setting_notification_setting_button_label"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tb_setting_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_setting_notification_setting_button_decoration"
+                android:id="@+id/iv_setting_member_image"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="2dp"
+                android:contentDescription="@string/setting_member_image_description"
+                app:imageUrl="@{viewModel.member.imageUrl}"
+                app:isCircle="@{true}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tb_setting_toolbar"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_setting_member_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="13dp"
+                android:text="@{viewModel.member.name}"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/iv_setting_member_image"
+                app:layout_constraintTop_toTopOf="@+id/iv_setting_member_image"
+                tools:text="김커디" />
+
+            <TextView
+                android:id="@+id/tv_setting_github_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="@{viewModel.member.githubId}"
+                android:textColor="#8b8b8b"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_setting_member_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_setting_member_name"
+                tools:text="git1234567@github.com" />
+
+            <TextView
+                android:id="@+id/tv_setting_written_comments_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="17dp"
+                android:background="@drawable/bg_setting_button"
+                android:gravity="center"
+                android:onClick="@{() -> showWrittenComments.invoke()}"
+                android:paddingVertical="12dp"
+                android:text="@string/setting_written_comments_button_label"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/iv_setting_member_image"
+                app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image" />
+
+            <com.emmsale.presentation.common.views.VerticalDivider
+                android:id="@+id/verticaldivider_setting_vertical_divider"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_setting_written_comments_button" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_setting_notification_setting_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="17dp"
+                android:onClick="@{() -> showNotificationSetting.invoke()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/verticaldivider_setting_vertical_divider">
+
+                <TextView
+                    android:id="@+id/tv_setting_notification_setting_button_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/setting_notification_setting_button_label"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_setting_notification_setting_button_decoration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_setting_button_decoration" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_setting_blocks_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginEnd="17dp"
+                android:onClick="@{() -> showBlocks.invoke()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_setting_notification_setting_button">
+
+                <TextView
+                    android:id="@+id/tv_setting_blocks_button_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/setting_blocks_button_label"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_setting_blocks_button_decoration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_setting_button_decoration" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_setting_use_term_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginEnd="17dp"
+                android:onClick="@{() -> showUseTerm.invoke()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_setting_blocks_button">
+
+                <TextView
+                    android:id="@+id/tv_setting_use_term_button_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/setting_use_term_button_label"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_setting_use_term_button_decoration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_setting_button_decoration" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_setting_version_info_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginEnd="17dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_setting_use_term_button">
+
+                <TextView
+                    android:id="@+id/tv_setting_version_info_button_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/setting_version_info_button_label"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_setting_version_info"
+                    android:layout_width="15dp"
+                    android:layout_height="10dp"
+                    android:text="@{viewModel.appVersion}"
+                    android:textColor="#b1b1b1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="1.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_setting_account_delete_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginEnd="17dp"
+                android:onClick="@{() -> deleteMember.invoke()}"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_setting_version_info_button">
+
+                <TextView
+                    android:id="@+id/tv_setting_account_delete_button_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/setting_account_delete_button_label"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_setting_logout_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginEnd="17dp"
+                android:onClick="@{() -> logout.invoke()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_setting_version_info_button">
+
+                <TextView
+                    android:id="@+id/tv_setting_logout_button_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/setting_logout_button_label"
+                    android:textColor="@color/important"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <ProgressBar
+                android:id="@+id/pb_setting_progress_bar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.member.isLoading ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_setting_button_decoration" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_setting_blocks_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginEnd="17dp"
-            android:onClick="@{() -> showBlocks.invoke()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_notification_setting_button">
-
-            <TextView
-                android:id="@+id/tv_setting_blocks_button_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/setting_blocks_button_label"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_setting_blocks_button_decoration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
+            <include
+                layout="@layout/layout_all_error_screen"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:visibility="@{viewModel.member.isError ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_setting_button_decoration" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_setting_use_term_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginEnd="17dp"
-            android:onClick="@{() -> showUseTerm.invoke()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_blocks_button">
-
-            <TextView
-                android:id="@+id/tv_setting_use_term_button_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/setting_use_term_button_label"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_setting_use_term_button_decoration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_setting_button_decoration" />
+                app:layout_constraintTop_toBottomOf="@+id/tb_setting_toolbar"
+                bind:viewModel="@{viewModel}"
+                tools:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_setting_version_info_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginEnd="17dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_use_term_button">
-
-            <TextView
-                android:id="@+id/tv_setting_version_info_button_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/setting_version_info_button_label"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_setting_version_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.appVersion}"
-                android:textColor="#b1b1b1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="1.0" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_setting_account_delete_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginEnd="17dp"
-            android:onClick="@{() -> deleteMember.invoke()}"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_version_info_button">
-
-            <TextView
-                android:id="@+id/tv_setting_account_delete_button_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/setting_account_delete_button_label"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_setting_logout_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginEnd="17dp"
-            android:onClick="@{() -> logout.invoke()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_setting_version_info_button">
-
-            <TextView
-                android:id="@+id/tv_setting_logout_button_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/setting_logout_button_label"
-                android:textColor="@color/important"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <ProgressBar
-            android:id="@+id/pb_setting_progress_bar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.member.isLoading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <include
-            layout="@layout/layout_all_error_screen"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/white"
-            android:visibility="@{viewModel.member.isError ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_setting_toolbar"
-            bind:viewModel="@{viewModel}"
-            tools:visibility="gone" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>
