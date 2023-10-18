@@ -22,11 +22,12 @@ class MainActivity : AppCompatActivity() {
 
     private var backPressedTime: Long = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate(bundle: Bundle?) {
+        super.onCreate(bundle)
         setContentView(binding.root)
-        if (savedInstanceState == null) addAllFragments()
-        initBottomNavigationView()
+        if (bundle == null) addAllFragments()
+
+        initBottomNavigationView(bundle?.getInt(KEY_SELECTED_ITEM_ID))
         initBackPressedDispatcher()
     }
 
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initBottomNavigationView() {
+    private fun initBottomNavigationView(selectedItemId: Int? = null) {
         binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             return@setOnItemSelectedListener true
         }
 
-        binding.bnvMain.selectedItemId = R.id.mi_main_event
+        binding.bnvMain.selectedItemId = selectedItemId ?: R.id.mi_main_event
     }
 
     private fun addAllFragments() {
@@ -71,15 +72,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun showFragment(tag: String) {
         supportFragmentManager.commit {
-            val fragment = requireNotNull(supportFragmentManager.findFragmentByTag(tag)) {
-                "[ERROR] 태그 ${tag}로 프래그먼트를 찾을 수 없습니다. 프래그먼트 초기화 로직을 다시 살펴보세요."
-            }
-            supportFragmentManager.fragments.forEach { hide(it) }
-            show(fragment)
+            supportFragmentManager.fragments.forEach(::hide)
+            supportFragmentManager.findFragmentByTag(tag)?.let(::show)
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_SELECTED_ITEM_ID, binding.bnvMain.selectedItemId)
+    }
+
     companion object {
+        private const val KEY_SELECTED_ITEM_ID = "key_selected_item_id"
+
         fun startActivity(context: Context) {
             val intent = Intent(context, MainActivity::class.java)
             context.startActivity(intent)
