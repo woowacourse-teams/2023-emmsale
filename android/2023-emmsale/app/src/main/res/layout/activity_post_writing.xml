@@ -8,15 +8,7 @@
         <import type="com.emmsale.presentation.common.FetchResult" />
 
         <variable
-            name="uploadPost"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
             name="showAlbum"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
-            name="navigateToBack"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
@@ -30,72 +22,32 @@
         android:background="@color/white"
         tools:context=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbarlayout_post_writing"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/white"
-            android:gravity="center"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_toolbar"
+            style="@style/PostWritingToolbarStyle"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            android:layout_marginEnd="7dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_postwriting_toolbar"
+            app:navigationIcon="@drawable/ic_all_back"
+            app:title="@string/recruitmentpostwriting_appbar_title_text"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iv_post_writing_backpress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:onClick="@{()->navigateToBack.invoke()}"
-                    android:padding="17dp"
-                    android:src="@drawable/ic_all_back"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_post_writing_appbartitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:text="@string/recruitmentpostwriting_appbar_title_text"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/gray"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_post_writing_complete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="@{vm.postUploadResult.peekContent().fetchResult!=FetchResult.LOADING}"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:onClick="@{()->uploadPost.invoke()}"
-                    android:padding="17dp"
-                    android:text="@string/recruitmentpostwriting_register_button_text"
-                    android:textColor="@color/primary_color"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.appbar.AppBarLayout>
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toBottomOf="@id/tb_toolbar" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/iv_post_writing_camera"
-            app:layout_constraintTop_toBottomOf="@id/appbarlayout_post_writing">
+            app:layout_constraintTop_toBottomOf="@id/tb_toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

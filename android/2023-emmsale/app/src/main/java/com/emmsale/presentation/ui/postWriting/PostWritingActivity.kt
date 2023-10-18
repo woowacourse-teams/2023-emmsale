@@ -71,6 +71,8 @@ class PostWritingActivity : AppCompatActivity() {
         setUpBinding()
         setUpPostUploadResult()
         setUpImageUrls()
+        setUpRegisterButtonClick()
+        setUpBackButtonClick()
     }
 
     private fun getImageUrlsFromActivityResult(result: ActivityResult): List<String> {
@@ -90,9 +92,7 @@ class PostWritingActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.rvPostWritingImageList.adapter = adapter
         binding.vm = viewModel
-        binding.navigateToBack = ::navigateToBack
         binding.showAlbum = ::showAlbum
-        binding.uploadPost = ::uploadPost
         binding.lifecycleOwner = this
     }
 
@@ -117,6 +117,13 @@ class PostWritingActivity : AppCompatActivity() {
     private fun setUpImageUrls() {
         viewModel.imageUrls.observe(this) { imageUrls ->
             adapter.submitList(imageUrls)
+        }
+    }
+
+    private fun setUpRegisterButtonClick() {
+        binding.tbToolbar.setOnMenuItemClickListener {
+            uploadPost()
+            true
         }
     }
 
@@ -164,8 +171,10 @@ class PostWritingActivity : AppCompatActivity() {
         )
     }
 
-    private fun navigateToBack() {
-        finish()
+    private fun setUpBackButtonClick() {
+        binding.tbToolbar.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     companion object {

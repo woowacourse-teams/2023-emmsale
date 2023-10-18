@@ -105,12 +105,12 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
     }
 
     private fun initClickListener() {
-        initOptionButtonClick()
-        initRequestCompanionButtonClick()
-        initBackPressButtonClick()
-        initBackPressIconClick()
-        initProfileClick()
-        initNavigateToEventDetailButtonClick()
+        setUpOptionButtonClick()
+        setUpRequestCompanionButtonClick()
+        setUpBackPressButtonClick()
+        setUpBackPressIconClick()
+        setUpProfileClick()
+        setUpNavigateToEventDetailButtonClick()
     }
 
     private fun setupEventUiLogic() {
@@ -119,41 +119,42 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun initRequestCompanionButtonClick() {
+    private fun setUpRequestCompanionButtonClick() {
         binding.btnRecruitmentdetailRequestCompanion.setOnClickListener {
             sendMessageDialog.show(supportFragmentManager, SendMessageDialog.TAG)
         }
     }
 
-    private fun initOptionButtonClick() {
-        binding.ivRecruitmentdetailOption.setOnClickListener {
+    private fun setUpOptionButtonClick() {
+        binding.tbToolbar.setOnMenuItemClickListener {
             if (viewModel.recruitmentPost.value.isMyPost) {
                 postEditorDialog.show()
             } else {
                 postReportDialog.show()
             }
+            true
         }
     }
 
-    private fun initNavigateToEventDetailButtonClick() {
+    private fun setUpNavigateToEventDetailButtonClick() {
         binding.btnRecruitmentdetailNavigateToEventDetail.setOnClickListener {
             EventDetailActivity.startActivity(this, viewModel.eventId)
         }
     }
 
-    private fun initBackPressButtonClick() {
+    private fun setUpBackPressButtonClick() {
         onBackPressedDispatcher.addCallback(this) {
             finishWithResult()
         }
     }
 
-    private fun initBackPressIconClick() {
-        binding.ivRecruitmentdetailBackpress.setOnClickListener {
+    private fun setUpBackPressIconClick() {
+        binding.tbToolbar.setNavigationOnClickListener {
             finishWithResult()
         }
     }
 
-    private fun initProfileClick() {
+    private fun setUpProfileClick() {
         binding.ivRecruitmentdetailProfileImage.setOnClickListener {
             ProfileActivity.startActivity(this, viewModel.recruitmentPost.value.memberId)
         }
@@ -216,7 +217,6 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
 
     companion object {
         private const val FROM_MY_POST_KEY = "FROM_MY_POST_KEY"
-        private const val DEFAULT__ID = -1L
 
         fun getIntent(
             context: Context,

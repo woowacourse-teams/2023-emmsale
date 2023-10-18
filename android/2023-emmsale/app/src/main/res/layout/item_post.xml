@@ -46,7 +46,7 @@
             app:layout_constraintEnd_toStartOf="@+id/iv_post_title_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_post_title"
-            tools:text="행사 시간 공유 좀 해주실 분 부탁드려요요요ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ" />
+            tools:text="행사 시간 공유 좀 해주실 분 부탁드려요" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/icon_post_comment"

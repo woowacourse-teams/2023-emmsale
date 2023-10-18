@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.emmsale.R
 import com.emmsale.databinding.FragmentEditmyprofileFieldsAddBottomDialogBinding
 import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.activityChipOf
@@ -28,7 +29,6 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
     ): View {
         _binding = FragmentEditmyprofileFieldsAddBottomDialogBinding
             .inflate(layoutInflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -39,6 +39,8 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
         setupUiLogic()
         viewModel.fetchAllActivities()
     }
+
+    override fun getTheme(): Int = R.style.RoundBottomSheetDialogStyle
 
     private fun initDataBinding() {
         binding.viewModel = viewModel
@@ -57,23 +59,23 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
     private fun setupFieldsUiLogic() {
         viewModel.activities.observe(viewLifecycleOwner) { allActivities ->
             binding.cgEditmyprofilefieldsdialogFields.removeAllViews()
-            binding.cgEditmyprofilefieldsdialogFields.addChips(allActivities.clubs)
+            binding.cgEditmyprofilefieldsdialogFields.addChips(allActivities.fields)
         }
     }
 
-    private fun ChipGroup.addChips(clubs: List<ActivityUiState>) {
-        clubs.forEach { club ->
-            val chip = getActivityTag(club)
+    private fun ChipGroup.addChips(fields: List<ActivityUiState>) {
+        fields.forEach { field ->
+            val chip = getActivityTag(field)
             addView(chip)
         }
     }
 
-    private fun getActivityTag(club: ActivityUiState): ActivityTag {
+    private fun getActivityTag(field: ActivityUiState): ActivityTag {
         return activityChipOf {
-            text = club.activity.name
-            isChecked = club.isSelected
+            text = field.activity.name
+            isChecked = field.isSelected
             setOnCheckedChangeListener { _, _ ->
-                viewModel.toggleActivitySelection(club.activity.id)
+                viewModel.toggleActivitySelection(field.activity.id)
             }
         }
     }

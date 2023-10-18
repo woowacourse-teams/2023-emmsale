@@ -1,13 +1,12 @@
 package com.emmsale.presentation.ui.profile
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.emmsale.R
 import com.emmsale.databinding.DialogSendMessageBinding
 
 class SendMessageDialog : DialogFragment() {
@@ -24,16 +23,16 @@ class SendMessageDialog : DialogFragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = DialogSendMessageBinding.inflate(inflater, container, false)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initDataBinding()
     }
+
+    override fun getTheme(): Int = R.style.RoundBottomSheetDialogStyle
 
     private fun initDataBinding() {
         binding.vm = viewModel

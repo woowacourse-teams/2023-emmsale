@@ -26,14 +26,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         tools:context=".presentation.ui.childCommentList.ChildCommentActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_childcomments_toolbar"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
-            android:background="@color/white"
             android:keepScreenOn="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +70,6 @@
                     android:id="@+id/layout_childcomments_postchildcomment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
                     android:paddingStart="17dp"
                     android:paddingTop="8dp"
                     android:paddingEnd="17dp"
@@ -97,7 +94,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="1dp"
-                            android:background="@android:color/transparent"
+                            android:background="@null"
                             android:fontFamily="@font/nanum_square_regular"
                             android:hint="@string/childcomments_edit_child_comment_hint"
                             android:importantForAutofill="no"
@@ -134,7 +131,6 @@
                     android:id="@+id/layout_childcomments_comment_update"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
                     android:clickable="@{layoutChildcommentsCommentUpdate.visibility == View.VISIBLE}"
                     android:elevation="5dp"
                     android:paddingTop="8dp"
