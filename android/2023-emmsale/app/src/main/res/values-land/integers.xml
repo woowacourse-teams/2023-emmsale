@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="event_column_size">3</integer>
+    <integer name="event_search_column_size">2</integer>
 </resources>
