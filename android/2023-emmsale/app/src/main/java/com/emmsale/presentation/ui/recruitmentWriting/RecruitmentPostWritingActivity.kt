@@ -10,6 +10,7 @@ import com.emmsale.databinding.ActivityRecruitmentPostWritingBinding
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
 import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostWritingUiState
+import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.EDIT
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.POST
 import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingViewModel.Companion.EVENT_ID_KEY
@@ -39,7 +40,7 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
     private fun setUpRecruitmentWriting() {
         viewModel.recruitmentWriting.observe(this) { recruitmentWriting ->
             onWritingResultStateChange(recruitmentWriting)
-            onWritingModeStateChange(recruitmentWriting)
+            changeMenuText(recruitmentWriting.writingMode)
         }
     }
 
@@ -62,16 +63,13 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
         }
     }
 
-    private fun onWritingModeStateChange(recruitmentWriting: RecruitmentPostWritingUiState) {
-        when (recruitmentWriting.writingMode) {
-            POST -> {
-                binding.tvRecruitmentwritingComplete.text =
-                    getString(R.string.recruitmentpostwriting_register_button_text)
-            }
+    private fun changeMenuText(writingMode: WritingModeUiState) {
+        binding.tbToolbar.menu.clear()
+        when (writingMode) {
+            POST -> binding.tbToolbar.inflateMenu(R.menu.menu_postwriting_toolbar)
 
             EDIT -> {
-                binding.tvRecruitmentwritingComplete.text =
-                    getString(R.string.recruitmentpostwriting_edit_button_text)
+                binding.tbToolbar.inflateMenu(R.menu.menu_postedit_toolbar)
                 binding.etRecruitmentwriting.setText(viewModel.recruitmentContentToEdit)
             }
         }
@@ -97,22 +95,23 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
         binding.root.showSnackBar(getString(R.string.recruitmentpostwriting_edit_success_message))
 
     private fun initBackPressIconClick() {
-        binding.ivRecruitmentwritingBackpress.setOnClickListener {
+        binding.tbToolbar.setNavigationOnClickListener {
             finish()
         }
     }
 
     private fun initCompleteButtonClick() {
-        binding.tvRecruitmentwritingComplete.setOnClickListener {
+        binding.tbToolbar.setOnMenuItemClickListener {
             val content = binding.etRecruitmentwriting.text.toString()
             if (content.isEmpty()) {
                 binding.root.showSnackBar(getString(R.string.recruitmentpostwriting_no_content_error_message))
-                return@setOnClickListener
+                true
             }
             when (viewModel.recruitmentWriting.value.writingMode) {
                 EDIT -> viewModel.editRecruitment(content)
                 POST -> viewModel.postRecruitment(content)
             }
+            true
         }
     }
 

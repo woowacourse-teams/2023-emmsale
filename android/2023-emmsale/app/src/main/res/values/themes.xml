@@ -19,4 +19,13 @@
     <style name="Theme.Emmsale.FullScreen" parent="Theme.Emmsale">
         <item name="android:windowFullscreen">true</item>
     </style>
+
+    <style name="PostWritingToolbarStyle" parent="@style/Widget.Material3.Toolbar">
+        <item name="materialThemeOverlay">@style/ToolbarThemeOverlay</item>
+    </style>
+
+    <style name="ToolbarThemeOverlay" parent="">
+        <item name="actionMenuTextColor">@color/primary_color</item>
+    </style>
+
 </resources>

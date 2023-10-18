@@ -18,65 +18,25 @@
         android:background="@color/white"
         tools:context=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbarlayout_recruitmentwriting"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/white"
-            android:gravity="center"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="7dp"
+            app:navigationIcon="@drawable/ic_back"
+            style="@style/PostWritingToolbarStyle"
+            app:title="@string/recruitmentpostwriting_appbar_title_text"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iv_recruitmentwriting_backpress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:padding="17dp"
-                    android:src="@drawable/ic_all_arrowback"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_recruitmentwriting_appbartitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:text="@string/recruitmentpostwriting_appbar_title_text"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/gray"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_recruitmentwriting_complete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:padding="17dp"
-                    android:text="@string/recruitmentpostwriting_register_button_text"
-                    android:textColor="@color/primary_color"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toBottomOf="@id/tb_toolbar"/>
 
         <EditText
             android:id="@+id/et_recruitmentwriting"
@@ -95,7 +55,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appbarlayout_recruitmentwriting" />
+            app:layout_constraintTop_toBottomOf="@+id/tb_toolbar" />
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -104,6 +64,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/appbarlayout_recruitmentwriting" />
+            app:layout_constraintTop_toTopOf="@+id/tb_toolbar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
