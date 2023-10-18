@@ -18,11 +18,16 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        selectConferenceTab()
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        val selectedPosition = savedInstanceState?.getInt(KEY_TAB_POSITION) ?: CONFERENCE_TAB
+        selectTab(selectedPosition)
     }
 
     private fun initView() {
-        selectConferenceTab()
+        selectTab()
         initEventViewPager()
         initNotificationView()
         initEventSearchView()
@@ -34,10 +39,8 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
         }
     }
 
-    private fun selectConferenceTab() {
-        binding.tlEvent.getTabAt(CONFERENCE_TAB).apply {
-            this?.select()
-        }
+    private fun selectTab(position: Int = CONFERENCE_TAB) {
+        binding.tlEvent.getTabAt(position)?.select()
     }
 
     private fun initEventViewPager() {
@@ -82,8 +85,15 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_TAB_POSITION, binding.vpEvent.currentItem)
+    }
+
     companion object {
         const val TAG = "TAG_EVENT"
+
+        private const val KEY_TAB_POSITION = "key_tab_position"
         private const val CONFERENCE_TAB = 1
     }
 }
