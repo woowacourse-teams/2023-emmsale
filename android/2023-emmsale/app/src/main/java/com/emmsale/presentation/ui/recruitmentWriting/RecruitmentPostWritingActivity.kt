@@ -39,7 +39,7 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
     private fun setUpRecruitmentWriting() {
         viewModel.recruitmentWriting.observe(this) { recruitmentWriting ->
             onWritingResultStateChange(recruitmentWriting)
-            onWritingModeStateChange(recruitmentWriting)
+            changeMenuText(recruitmentWriting)
         }
     }
 
@@ -62,7 +62,7 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
         }
     }
 
-    private fun onWritingModeStateChange(recruitmentWriting: RecruitmentPostWritingUiState) {
+    private fun changeMenuText(recruitmentWriting: RecruitmentPostWritingUiState) {
         binding.tbToolbar.menu.clear()
         when (recruitmentWriting.writingMode) {
             POST -> binding.tbToolbar.inflateMenu(R.menu.menu_postwriting_toolbar)
