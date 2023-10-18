@@ -8,15 +8,7 @@
         <import type="com.emmsale.presentation.common.FetchResult" />
 
         <variable
-            name="uploadPost"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
             name="showAlbum"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
-            name="navigateToBack"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
@@ -31,7 +23,7 @@
         tools:context=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_post_writing_toolbar"
+            android:id="@+id/tb_toolbar"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
             android:background="@color/white"
@@ -44,19 +36,19 @@
             app:navigationIcon="@drawable/ic_back"
             app:title="@string/recruitmentpostwriting_appbar_title_text"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle"/>
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/gray"
-            app:layout_constraintBottom_toBottomOf="@id/tb_post_writing_toolbar" />
+            app:layout_constraintBottom_toBottomOf="@id/tb_toolbar"/>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/iv_post_writing_camera"
-            app:layout_constraintTop_toBottomOf="@id/tb_post_writing_toolbar">
+            app:layout_constraintTop_toBottomOf="@id/tb_toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

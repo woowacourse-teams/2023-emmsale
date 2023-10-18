@@ -121,7 +121,7 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     private fun setUpRegisterButtonClick() {
-        binding.tbPostWritingToolbar.setOnMenuItemClickListener {
+        binding.tbToolbar.setOnMenuItemClickListener {
             uploadPost()
             true
         }
@@ -172,7 +172,7 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     private fun setUpBackButtonClick() {
-        binding.tbPostWritingToolbar.setNavigationOnClickListener {
+        binding.tbToolbar.setNavigationOnClickListener {
             finish()
         }
     }

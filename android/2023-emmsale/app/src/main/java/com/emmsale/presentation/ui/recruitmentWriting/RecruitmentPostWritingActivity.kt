@@ -63,15 +63,12 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
     }
 
     private fun onWritingModeStateChange(recruitmentWriting: RecruitmentPostWritingUiState) {
+        binding.tbToolbar.menu.clear()
         when (recruitmentWriting.writingMode) {
-            POST -> {
-                binding.tvRecruitmentwritingComplete.text =
-                    getString(R.string.recruitmentpostwriting_register_button_text)
-            }
+            POST -> binding.tbToolbar.inflateMenu(R.menu.menu_postwriting_toolbar)
 
             EDIT -> {
-                binding.tvRecruitmentwritingComplete.text =
-                    getString(R.string.recruitmentpostwriting_edit_button_text)
+                binding.tbToolbar.inflateMenu(R.menu.menu_postedit_toolbar)
                 binding.etRecruitmentwriting.setText(viewModel.recruitmentContentToEdit)
             }
         }
@@ -97,22 +94,23 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
         binding.root.showSnackBar(getString(R.string.recruitmentpostwriting_edit_success_message))
 
     private fun initBackPressIconClick() {
-        binding.ivRecruitmentwritingBackpress.setOnClickListener {
+        binding.tbToolbar.setNavigationOnClickListener {
             finish()
         }
     }
 
     private fun initCompleteButtonClick() {
-        binding.tvRecruitmentwritingComplete.setOnClickListener {
+        binding.tbToolbar.setOnMenuItemClickListener {
             val content = binding.etRecruitmentwriting.text.toString()
             if (content.isEmpty()) {
                 binding.root.showSnackBar(getString(R.string.recruitmentpostwriting_no_content_error_message))
-                return@setOnClickListener
+                true
             }
             when (viewModel.recruitmentWriting.value.writingMode) {
                 EDIT -> viewModel.editRecruitment(content)
                 POST -> viewModel.postRecruitment(content)
             }
+            true
         }
     }
 
