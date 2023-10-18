@@ -12,9 +12,9 @@ class BottomDialogMenuItem(
 ) : AppCompatTextView(context, attrs, R.style.BottomDialogMenuItemStyle) {
 
     init {
-        val verticalPadding =
-            resources.getDimension(R.dimen.padding_bottommenudialog_menu_item_vertical)
-                .roundToInt()
+        val verticalPadding = resources
+            .getDimension(R.dimen.padding_bottommenudialog_menu_item_vertical)
+            .roundToInt()
         setPadding(0, verticalPadding, 0, verticalPadding)
     }
 }

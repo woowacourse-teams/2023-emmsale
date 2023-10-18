@@ -33,7 +33,6 @@
         android:id="@+id/cl_editmyprofile_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         tools:context=".presentation.ui.editMyProfile.EditMyProfileActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -130,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:layout_marginEnd="17dp"
+                    android:layout_marginEnd="16dp"
                     android:contentDescription="@string/editmyprofile_field_add_button"
                     android:onClick="@{() -> showFieldTags.invoke()}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -144,9 +143,9 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="17dp"
                     android:contentDescription="@string/editmyprofile_member_image"
+                    android:onClick="@{()->editProfileImage.invoke()}"
                     app:imageUrl="@{viewModel.profile.member.profileImageUrl}"
                     app:isCircle="@{true}"
-                    android:onClick="@{()->editProfileImage.invoke()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:srcCompat="@tools:sample/avatars" />
@@ -166,11 +165,11 @@
                     android:id="@+id/rv_editmyprofile_fields"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="17dp"
                     android:layout_marginTop="23dp"
-                    android:layout_marginEnd="17dp"
+                    android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
+                    android:paddingHorizontal="17dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -239,8 +238,7 @@
                     android:background="@drawable/bg_profile_activityicon"
                     android:importantForAccessibility="no"
                     app:layout_constraintStart_toStartOf="@+id/tv_editmyprofile_activity_label"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_choose_activity_message"
-                    app:srcCompat="@drawable/ic_profile_education" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_choose_activity_message" />
 
                 <TextView
                     android:id="@+id/tv_editmyprofile_educations_label"
@@ -310,8 +308,7 @@
                     android:background="@drawable/bg_profile_activityicon"
                     android:importantForAccessibility="no"
                     app:layout_constraintStart_toStartOf="@+id/iv_editmyprofile_education_icon"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_education_add_button"
-                    app:srcCompat="@drawable/ic_profile_education" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_education_add_button" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

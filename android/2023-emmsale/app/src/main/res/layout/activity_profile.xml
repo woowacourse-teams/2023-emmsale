@@ -15,8 +15,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_profile_toolbar"
@@ -92,13 +91,13 @@
                         android:layout_height="82dp"
                         android:layout_marginTop="37dp"
                         android:layout_marginEnd="12dp"
-                        android:importantForAccessibility="no"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         android:contentDescription="@string/profile_memberimagedescription"
+                        android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
                         app:imageUrl="@{viewModel.profile.member.profileImageUrl}"
                         app:isCircle="@{true}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:src="@tools:sample/avatars" />
 
                     <View
@@ -130,8 +129,7 @@
                         android:background="@drawable/bg_profile_activityicon"
                         android:importantForAccessibility="no"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/view_profile_divider"
-                        app:srcCompat="@drawable/ic_profile_education" />
+                        app:layout_constraintTop_toBottomOf="@+id/view_profile_divider" />
 
                     <TextView
                         android:id="@+id/tv_profile_educationslabel"
@@ -167,8 +165,7 @@
                         android:background="@drawable/bg_profile_activityicon"
                         android:importantForAccessibility="no"
                         app:layout_constraintStart_toStartOf="@+id/iv_profile_educationicon"
-                        app:layout_constraintTop_toBottomOf="@+id/rv_profile_educations"
-                        app:srcCompat="@drawable/ic_profile_education" />
+                        app:layout_constraintTop_toBottomOf="@+id/rv_profile_educations" />
 
                     <TextView
                         android:id="@+id/tv_profile_clubslabel"
@@ -259,6 +256,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_profile_toolbar"
             bind:viewModel="@{viewModel}"
-            tools:visibility="gone"/>
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

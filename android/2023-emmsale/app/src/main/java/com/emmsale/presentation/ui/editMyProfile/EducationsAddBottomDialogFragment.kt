@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.emmsale.R
 import com.emmsale.databinding.FragmentEditmyprofileEducationsAddBottomDialogBinding
 import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.activityChipOf
@@ -39,6 +40,8 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
         setupUiLogic()
         viewModel.fetchAllActivities()
     }
+
+    override fun getTheme(): Int = R.style.RoundBottomSheetDialogStyle
 
     private fun initDataBinding() {
         binding.viewModel = viewModel

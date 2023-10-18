@@ -16,7 +16,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        tools:background="@color/white">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_myprofile_toolbar"
@@ -75,7 +75,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
                     app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_membername"
-                    tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차" />
+                    tools:text="안녕하세요 커디입니다." />
 
                 <ImageView
                     android:id="@+id/iv_myprofile_memberimage"
@@ -120,8 +120,7 @@
                     android:background="@drawable/bg_profile_activityicon"
                     android:importantForAccessibility="no"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_myprofile_divider"
-                    app:srcCompat="@drawable/ic_profile_education" />
+                    app:layout_constraintTop_toBottomOf="@+id/view_myprofile_divider" />
 
                 <TextView
                     android:id="@+id/tv_myprofile_educationslabel"
@@ -157,8 +156,7 @@
                     android:background="@drawable/bg_profile_activityicon"
                     android:importantForAccessibility="no"
                     app:layout_constraintStart_toStartOf="@+id/iv_myprofile_educationicon"
-                    app:layout_constraintTop_toBottomOf="@+id/rv_myprofile_educations"
-                    app:srcCompat="@drawable/ic_profile_education" />
+                    app:layout_constraintTop_toBottomOf="@+id/rv_myprofile_educations" />
 
                 <TextView
                     android:id="@+id/tv_myprofile_clubslabel"
