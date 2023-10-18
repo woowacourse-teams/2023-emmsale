@@ -1,0 +1,21 @@
+<resources>
+
+    <style name="Theme.Emmsale" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorSecondary">@color/primary_color</item>
+        <item name="colorAccent">@color/primary_color</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="bottomNavigationStyle">@style/bottomNavigationViewStyle</item>
+        <item name="android:textViewStyle">@style/basicTextFontStyle</item>
+        <item name="bottomSheetDialogTheme">
+            @style/ThemeOverlay.MaterialComponents.BottomSheetDialog
+        </item>
+        <item name="IconTextButtonStyle">@style/IconTextButtonStyle</item>
+        <item name="FilterTagStyle">@style/FilterTagStyle</item>
+    </style>
+
+    <style name="Theme.Emmsale.FullScreen" parent="Theme.Emmsale">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>
