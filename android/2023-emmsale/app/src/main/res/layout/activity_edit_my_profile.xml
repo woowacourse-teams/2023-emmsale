@@ -79,7 +79,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
                     android:background="@android:color/transparent"
-                    android:drawableEnd="@drawable/ic_profile_education"
                     android:fontFamily="@font/nanum_square_regular"
                     android:hint="@string/editmyprofile_description_hint"
                     android:importantForAutofill="no"
@@ -144,9 +143,9 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="17dp"
                     android:contentDescription="@string/editmyprofile_member_image"
+                    android:onClick="@{()->editProfileImage.invoke()}"
                     app:imageUrl="@{viewModel.profile.member.profileImageUrl}"
                     app:isCircle="@{true}"
-                    android:onClick="@{()->editProfileImage.invoke()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:srcCompat="@tools:sample/avatars" />
