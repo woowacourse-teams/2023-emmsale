@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.emmsale.R
 import com.emmsale.databinding.FragmentEditmyprofileFieldsAddBottomDialogBinding
 import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.activityChipOf
@@ -28,7 +29,6 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
     ): View {
         _binding = FragmentEditmyprofileFieldsAddBottomDialogBinding
             .inflate(layoutInflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -39,6 +39,8 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
         setupUiLogic()
         viewModel.fetchAllActivities()
     }
+
+    override fun getTheme(): Int = R.style.RoundBottomSheetDialogStyle
 
     private fun initDataBinding() {
         binding.viewModel = viewModel

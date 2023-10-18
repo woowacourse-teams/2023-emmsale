@@ -1,24 +1,21 @@
 package com.emmsale.presentation.common.views.bottomMenuDialog
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.ViewGroup
+import com.emmsale.R
 import com.emmsale.databinding.DialogBottomMenuBinding
 import com.emmsale.presentation.common.views.VerticalDivider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class BottomMenuDialog(context: Context) : BottomSheetDialog(context) {
-
-    private val binding: DialogBottomMenuBinding by lazy {
-        DialogBottomMenuBinding.inflate(layoutInflater)
-    }
+class BottomMenuDialog(
+    context: Context,
+) : BottomSheetDialog(context, R.style.RoundBottomSheetDialogStyle) {
+    private val binding by lazy { DialogBottomMenuBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
         initDialogWindow()
     }
 
@@ -51,7 +48,6 @@ class BottomMenuDialog(context: Context) : BottomSheetDialog(context) {
     }
 
     private fun initDialogWindow() {
-        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window?.attributes?.let {
             it.width = ViewGroup.LayoutParams.MATCH_PARENT
             it.height = ViewGroup.LayoutParams.WRAP_CONTENT
