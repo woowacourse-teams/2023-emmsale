@@ -14,7 +14,6 @@
         </item>
         <item name="IconTextButtonStyle">@style/IconTextButtonStyle</item>
         <item name="FilterTagStyle">@style/FilterTagStyle</item>
-        <item name="toolbarStyle">@style/PostWritingToolbarStyle</item>
     </style>
 
     <style name="Theme.Emmsale.FullScreen" parent="Theme.Emmsale">
