@@ -115,7 +115,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/iv_feeddetail_feed_author_image"
             app:layout_constraintTop_toBottomOf="@+id/rv_feeddetail_feed_detail_images"
-            app:srcCompat="@drawable/ic_feeddetail_comment_count" />
+            app:srcCompat="@drawable/ic_all_comment" />
 
         <TextView
             android:id="@+id/tv_feeddetail_comments_count"
