@@ -32,8 +32,10 @@ class CompetitionViewHolder(
         binding.cgEventTags.addView(createEventChip(itemView.context, tagName))
     }
 
-    private fun createEventChip(context: Context, tagName: String): EventTagChip =
-        context.eventChipOf {
-            text = tagName
-        }
+    private fun createEventChip(
+        context: Context,
+        tagName: String,
+    ): EventTagChip = context.eventChipOf {
+        text = tagName
+    }
 }

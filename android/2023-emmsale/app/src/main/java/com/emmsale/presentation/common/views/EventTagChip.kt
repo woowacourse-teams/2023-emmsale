@@ -21,7 +21,7 @@ class EventTagChip : AppCompatTextView {
         gravity = Gravity.CENTER
         minimumHeight = 0
         background = ContextCompat.getDrawable(context, R.drawable.bg_event_tag)
-        setTextColor(ContextCompat.getColor(context, R.color.black))
+        setTextColor(ContextCompat.getColor(context, R.color.event_tag_text_color))
     }
 }
 
