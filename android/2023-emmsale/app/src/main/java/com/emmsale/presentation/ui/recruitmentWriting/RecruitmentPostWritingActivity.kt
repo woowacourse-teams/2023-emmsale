@@ -10,6 +10,7 @@ import com.emmsale.databinding.ActivityRecruitmentPostWritingBinding
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
 import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostWritingUiState
+import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.EDIT
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.POST
 import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingViewModel.Companion.EVENT_ID_KEY
@@ -39,7 +40,7 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
     private fun setUpRecruitmentWriting() {
         viewModel.recruitmentWriting.observe(this) { recruitmentWriting ->
             onWritingResultStateChange(recruitmentWriting)
-            changeMenuText(recruitmentWriting)
+            changeMenuText(recruitmentWriting.writingMode)
         }
     }
 
@@ -62,9 +63,9 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeMenuText(recruitmentWriting: RecruitmentPostWritingUiState) {
+    private fun changeMenuText(writingMode: WritingModeUiState) {
         binding.tbToolbar.menu.clear()
-        when (recruitmentWriting.writingMode) {
+        when (writingMode) {
             POST -> binding.tbToolbar.inflateMenu(R.menu.menu_postwriting_toolbar)
 
             EDIT -> {
