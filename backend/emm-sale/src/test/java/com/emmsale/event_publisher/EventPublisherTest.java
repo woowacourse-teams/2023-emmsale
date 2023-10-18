@@ -187,7 +187,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
         Comment.createChild(feed, 부모_댓글, 로그인_사용자, "내용4"));
 
     //when
-    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
+    eventPublisher.publish(알림_트리거_댓글);
 
     //then
     verify(applicationEventPublisher, times(2))
@@ -212,7 +212,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish(알림_트리거_댓글, 댓글_작성자1);
+    eventPublisher.publish(알림_트리거_댓글);
 
     //then
     verify(applicationEventPublisher, times(0))
@@ -231,7 +231,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish(알림_트리거_댓글, 댓글_작성자1);
+    eventPublisher.publish(알림_트리거_댓글);
 
     //then
     verify(applicationEventPublisher, times(0))
@@ -266,7 +266,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
+    eventPublisher.publish(알림_트리거_댓글);
 
     //then
     verify(applicationEventPublisher, times(1))
@@ -301,7 +301,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventPublisher.publish(알림_트리거_댓글, 로그인_사용자);
+    eventPublisher.publish(알림_트리거_댓글);
 
     //then
     verify(applicationEventPublisher, times(2))
@@ -336,5 +336,42 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     assertThat(actualEvent)
         .usingRecursiveComparison()
         .isEqualTo(expectedEvent);
+  }
+
+  @Test
+  @DisplayName("publish(Comment, Member) : 피드에 ROOT 댓글이 작성되면 피드의 작성자에게 알림이 발송된다.")
+  void test_publish_to_feed_writer_when_root_comment_created() throws Exception {
+    //given
+    final Member 댓글_작성자1 = memberRepository.findById(1L).get();
+    eventRepository.save(event);
+    feedRepository.save(feed);
+    final Comment 알림_트리거_댓글 = commentRepository.save(
+        Comment.createRoot(feed, 댓글_작성자1, "내용1")
+    );
+
+    //when
+    eventPublisher.publish(알림_트리거_댓글, feed.getWriter());
+
+    //then
+    verify(applicationEventPublisher, times(1))
+        .publishEvent(any(NotificationEvent.class));
+  }
+
+  @Test
+  @DisplayName("publish(Comment, Member) : 피드 작성자와 피드의 ROOT 댓글 작성자가 동일할 경우 알림을 발송하지 않는다.")
+  void test_do_not_publish_notification_if_comment_writer_equals_feed_writer() throws Exception {
+    //given
+    eventRepository.save(event);
+    feedRepository.save(feed);
+    final Comment 알림_트리거_댓글 = commentRepository.save(
+        Comment.createRoot(feed, feed.getWriter(), "내용1")
+    );
+
+    //when
+    eventPublisher.publish(알림_트리거_댓글, feed.getWriter());
+
+    //then
+    verify(applicationEventPublisher, times(0))
+        .publishEvent(any(EventNotificationEvent.class));
   }
 }
