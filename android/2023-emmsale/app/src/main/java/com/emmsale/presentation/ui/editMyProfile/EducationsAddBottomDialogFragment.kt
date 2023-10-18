@@ -60,23 +60,23 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
     private fun setupEducationsUiLogic() {
         viewModel.activities.observe(viewLifecycleOwner) { allActivities ->
             binding.cgEditmyprofileeducationsdialogEducations.removeAllViews()
-            binding.cgEditmyprofileeducationsdialogEducations.addChips(allActivities.clubs)
+            binding.cgEditmyprofileeducationsdialogEducations.addChips(allActivities.educations)
         }
     }
 
-    private fun ChipGroup.addChips(clubs: List<ActivityUiState>) {
-        clubs.forEach { club ->
-            val chip = getActivityTag(club)
+    private fun ChipGroup.addChips(educations: List<ActivityUiState>) {
+        educations.forEach { education ->
+            val chip = getActivityTag(education)
             addView(chip)
         }
     }
 
-    private fun getActivityTag(club: ActivityUiState): ActivityTag {
+    private fun getActivityTag(education: ActivityUiState): ActivityTag {
         return activityChipOf {
-            text = club.activity.name
-            isChecked = club.isSelected
+            text = education.activity.name
+            isChecked = education.isSelected
             setOnCheckedChangeListener { _, _ ->
-                viewModel.toggleActivitySelection(club.activity.id)
+                viewModel.toggleActivitySelection(education.activity.id)
             }
         }
     }

@@ -59,23 +59,23 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
     private fun setupFieldsUiLogic() {
         viewModel.activities.observe(viewLifecycleOwner) { allActivities ->
             binding.cgEditmyprofilefieldsdialogFields.removeAllViews()
-            binding.cgEditmyprofilefieldsdialogFields.addChips(allActivities.clubs)
+            binding.cgEditmyprofilefieldsdialogFields.addChips(allActivities.fields)
         }
     }
 
-    private fun ChipGroup.addChips(clubs: List<ActivityUiState>) {
-        clubs.forEach { club ->
-            val chip = getActivityTag(club)
+    private fun ChipGroup.addChips(fields: List<ActivityUiState>) {
+        fields.forEach { field ->
+            val chip = getActivityTag(field)
             addView(chip)
         }
     }
 
-    private fun getActivityTag(club: ActivityUiState): ActivityTag {
+    private fun getActivityTag(field: ActivityUiState): ActivityTag {
         return activityChipOf {
-            text = club.activity.name
-            isChecked = club.isSelected
+            text = field.activity.name
+            isChecked = field.isSelected
             setOnCheckedChangeListener { _, _ ->
-                viewModel.toggleActivitySelection(club.activity.id)
+                viewModel.toggleActivitySelection(field.activity.id)
             }
         }
     }
