@@ -27,7 +27,7 @@
         <activity
             android:name=".presentation.ui.messageList.MessageListActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".presentation.ui.postWriting.PostWritingActivity" />
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
