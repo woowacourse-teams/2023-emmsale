@@ -49,8 +49,6 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
-                "proguard-glide.pro",
-                "proguard-retrofit.pro",
             )
             buildConfigField("String", "BASE_URL", "\"https://prod.kerdy.kro.kr\"")
             buildConfigField(
