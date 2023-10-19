@@ -23,7 +23,6 @@ import com.emmsale.event.domain.PaymentType;
 import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.application.dto.TagRequest;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -171,7 +170,7 @@ class EventApiTest extends MockMvcTestHelper {
     );
 
     Mockito.when(eventService.findEvents(any(EventType.class),
-        any(LocalDate.class), eq("2023-07-01"),
+        any(LocalDateTime.class), eq("2023-07-01"),
         eq("2023-07-31"),
         eq(null), any(), eq("컨퍼"))).thenReturn(eventResponses);
 

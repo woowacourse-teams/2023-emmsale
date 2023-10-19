@@ -92,7 +92,7 @@ public class EventService {
 
   @Transactional(readOnly = true)
   public List<EventResponse> findEvents(final EventType category,
-      final LocalDate nowDate, final String startDate, final String endDate,
+      final LocalDateTime nowDateTime, final String startDate, final String endDate,
       final List<String> tagNames, final List<EventStatus> statuses, final String keyword) {
     Specification<Event> spec = (root, query, criteriaBuilder) -> null;
     spec = filterByCategoryIfExist(category, spec);
@@ -103,7 +103,7 @@ public class EventService {
     final List<Event> events = eventRepository.findAll(spec);
 
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
-        = groupByEventStatus(nowDate, events);
+        = groupByEventStatus(nowDateTime, events);
 
     return filterByStatuses(statuses, eventsForEventStatus, makeImageUrlPerEventId(events));
   }
@@ -210,12 +210,12 @@ public class EventService {
     return keyword != null && !keyword.isBlank();
   }
 
-  private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
+  private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDateTime nowDateTime,
       final List<Event> events) {
     return events.stream()
         .sorted(comparing(event -> event.getEventPeriod().getStartDate()))
         .collect(
-            groupingBy(event -> event.getEventPeriod().calculateEventStatus(nowDate),
+            groupingBy(event -> event.getEventPeriod().calculateEventStatus(nowDateTime),
                 () -> new EnumMap<>(EventStatus.class), toList())
         );
   }

@@ -7,6 +7,7 @@ import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class EventApi {
       @RequestParam(required = false) final List<EventStatus> statuses,
       @RequestParam(required = false) final String keyword) {
     return ResponseEntity.ok(
-        eventService.findEvents(category, LocalDate.now(), startDate, endDate, tags, statuses,
+        eventService.findEvents(category, LocalDateTime.now(), startDate, endDate, tags, statuses,
             keyword));
   }
 
