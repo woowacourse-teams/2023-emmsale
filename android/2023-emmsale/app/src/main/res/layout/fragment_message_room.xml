@@ -27,10 +27,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/menu_message_room_toolbar"
             app:title="@string/messageroom_toolbar_title"
             app:titleCentered="true"
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
+<!--app:menu="@menu/menu_message_room_toolbar" 삭제 기능 구현시 추가 예정-->
 
         <View
             android:id="@+id/divider"

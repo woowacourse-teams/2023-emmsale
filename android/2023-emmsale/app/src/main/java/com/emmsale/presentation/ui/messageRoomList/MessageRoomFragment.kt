@@ -18,6 +18,11 @@ class MessageRoomFragment : BaseFragment<FragmentMessageRoomBinding>() {
 
     private lateinit var messageRoomListAdapter: MessageRoomListAdapter
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupBinding()

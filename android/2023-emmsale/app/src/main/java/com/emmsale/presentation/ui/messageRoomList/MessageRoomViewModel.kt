@@ -24,10 +24,6 @@ class MessageRoomViewModel @Inject constructor(
     private val _messageRooms = NotNullMutableLiveData(MemberRoomListUiState())
     val messageRooms: NotNullLiveData<MemberRoomListUiState> = _messageRooms
 
-    init {
-        refresh()
-    }
-
     override fun refresh() {
         fetchMessageRooms()
     }
