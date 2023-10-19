@@ -296,6 +296,7 @@
     <string name="setting_use_term_button_label">이용 약관</string>
     <string name="setting_version_info_button_label">버전 정보</string>
     <string name="setting_account_delete_button_label">계정 삭제</string>
+    <string name="setting_inquire_button_label">문의 하기</string>
     <string name="setting_logout_button_label">로그아웃</string>
     <string name="setting_blocks_button_label">차단 목록</string>
     <string name="setting_writings_button_label">작성한 글</string>

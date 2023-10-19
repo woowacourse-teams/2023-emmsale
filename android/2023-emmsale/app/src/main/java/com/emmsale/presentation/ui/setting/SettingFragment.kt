@@ -1,6 +1,8 @@
 package com.emmsale.presentation.ui.setting
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -45,6 +47,7 @@ class SettingFragment :
         binding.showBlocks = ::showBlocks
         binding.showUseTerm = ::showUseTerm
         binding.logout = ::logout
+        binding.showInquirePage = ::showInquirePage
     }
 
     private fun showWritings() {
@@ -76,6 +79,11 @@ class SettingFragment :
             negativeButtonLabel = getString(R.string.logoutdialog_negative_button_label),
             onPositiveButtonClick = { viewModel.logout() },
         ).show()
+    }
+
+    private fun showInquirePage() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(INQUIRE_PAGE_URL))
+        startActivity(intent)
     }
 
     private fun setupUiLogic() {
@@ -119,5 +127,6 @@ class SettingFragment :
 
     companion object {
         const val TAG: String = "TAG_SETTING"
+        private const val INQUIRE_PAGE_URL = "https://forms.gle/wqivV4RKHgcmsHWN9"
     }
 }

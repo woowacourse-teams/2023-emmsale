@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:background="@drawable/bg_all_two_state_button"
-            android:enabled="@{viewModel.profile.selectableFieldSize > 0 &amp;&amp; viewModel.activities.selectedFieldsSize &lt;=viewModel.profile.selectableFieldSize }"
+            android:enabled="@{viewModel.activities.selectedFieldsSize > 0 &amp;&amp; viewModel.activities.selectedFieldsSize &lt;=viewModel.profile.selectableFieldSize }"
             android:gravity="center"
             android:onClick="@{() -> addFields.invoke()}"
             android:paddingVertical="21dp"
