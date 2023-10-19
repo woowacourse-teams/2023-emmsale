@@ -95,6 +95,7 @@ class SplashActivity : ComponentActivity() {
                 showToast(R.string.splash_app_update_canceled_message)
                 finishAffinity()
             },
+            cancelable = false,
         ).show()
     }
 
