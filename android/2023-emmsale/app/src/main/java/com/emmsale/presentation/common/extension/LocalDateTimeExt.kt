@@ -55,9 +55,8 @@ fun LocalDateTime.toMessageRelativeTime(
         return format(DateTimeFormatter.ofPattern(context.getString(R.string.year_month_day)))
     }
 
-    if (year == standardTime.year &&
-        monthValue <= standardTime.monthValue &&
-        dayOfMonth < standardTime.dayOfMonth
+    if ((year == standardTime.year && monthValue < standardTime.monthValue) ||
+        (monthValue == standardTime.monthValue && dayOfMonth < standardTime.dayOfMonth)
     ) {
         return format(DateTimeFormatter.ofPattern(context.getString(R.string.month_day)))
     }
