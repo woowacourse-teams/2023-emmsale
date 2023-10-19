@@ -4,8 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-    <!--Image Permission-->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
@@ -25,111 +23,45 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity android:name=".presentation.ui.eventSearch.EventSearchActivity" />
-        <activity
-            android:name=".presentation.ui.feedDetail.FeedDetailActivity"
-            android:exported="false"
-
-            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".presentation.ui.feedDetail.FeedDetailActivity" />
         <activity
             android:name=".presentation.ui.messageList.MessageListActivity"
             android:launchMode="singleTask"
-
-            android:windowSoftInputMode="adjustResize|stateVisible"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.postWriting.PostWritingActivity"
-            android:exported="false"
-
-            tools:ignore="LockedOrientationActivity" />
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".presentation.ui.postWriting.PostWritingActivity" />
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true"
-
-            android:theme="@style/Theme.Emmsale.SplashScreen"
-            tools:ignore="LockedOrientationActivity">
+            android:theme="@style/Theme.Emmsale.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".presentation.ui.myPostList.MyPostActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.notificationTagConfig.NotificationTagConfigActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.myCommentList.MyCommentsActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.blockMemberList.MemberBlockActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.notificationConfig.NotificationConfigActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.editMyProfile.EditMyProfileActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.profile.ProfileActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.notificationPageList.NotificationBoxActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.childCommentList.ChildCommentActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.useTerm.UseTermWebViewActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.conferenceFilter.ConferenceFilterActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.competitionFilter.CompetitionFilterActivity"
-
-            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".presentation.ui.myPostList.MyPostActivity" />
+        <activity android:name=".presentation.ui.notificationTagConfig.NotificationTagConfigActivity" />
+        <activity android:name=".presentation.ui.myCommentList.MyCommentsActivity" />
+        <activity android:name=".presentation.ui.blockMemberList.MemberBlockActivity" />
+        <activity android:name=".presentation.ui.notificationConfig.NotificationConfigActivity" />
+        <activity android:name=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity" />
+        <activity android:name=".presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity" />
+        <activity android:name=".presentation.ui.editMyProfile.EditMyProfileActivity" />
+        <activity android:name=".presentation.ui.profile.ProfileActivity" />
+        <activity android:name=".presentation.ui.notificationPageList.NotificationBoxActivity" />
+        <activity android:name=".presentation.ui.childCommentList.ChildCommentActivity" />
+        <activity android:name=".presentation.ui.useTerm.UseTermWebViewActivity" />
+        <activity android:name=".presentation.ui.conferenceFilter.ConferenceFilterActivity" />
+        <activity android:name=".presentation.ui.competitionFilter.CompetitionFilterActivity" />
         <activity
             android:name=".presentation.ui.main.MainActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.onboarding.OnboardingActivity"
-
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".presentation.ui.eventDetail.EventDetailActivity"
-
-            tools:ignore="LockedOrientationActivity" />
+            android:launchMode="singleTask" />
+        <activity android:name=".presentation.ui.onboarding.OnboardingActivity" />
+        <activity android:name=".presentation.ui.eventDetail.EventDetailActivity" />
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:exported="true"
             android:launchMode="singleTask"
-
-            android:theme="@style/Theme.Emmsale.FullScreen"
-            tools:ignore="LockedOrientationActivity">
+            android:theme="@style/Theme.Emmsale.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

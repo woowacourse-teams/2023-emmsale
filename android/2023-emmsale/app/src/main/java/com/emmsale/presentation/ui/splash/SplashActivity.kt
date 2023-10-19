@@ -2,6 +2,7 @@ package com.emmsale.presentation.ui.splash
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -121,5 +122,12 @@ class SplashActivity : ComponentActivity() {
     private fun navigateToLoginScreen() {
         LoginActivity.startActivity(this)
         finish()
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent = Intent(
+            context,
+            SplashActivity::class.java,
+        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 }
