@@ -23,6 +23,10 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -38,6 +42,9 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var tokenRepository: TokenRepository
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private val singleThreadCoroutine = newSingleThreadContext("KerdyFirebaseMessagingService")
+
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         checkAppUpdate(message)
@@ -47,7 +54,11 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val appUpdateManager = AppUpdateManagerFactory.create(this)
 
         appUpdateManager.appUpdateInfo.addListener(
-            onSuccess = { updateInfo -> showNotification(message, updateInfo.isUpdateNeeded()) },
+            onSuccess = { updateInfo ->
+                CoroutineScope(singleThreadCoroutine).launch {
+                    showNotification(message, updateInfo.isUpdateNeeded())
+                }
+            },
             onFailed = {
                 showToast(R.string.splash_not_installed_playstore)
                 navigateToPlayStore()
