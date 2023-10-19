@@ -29,6 +29,7 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
     ): View {
         _binding = FragmentEditmyprofileFieldsAddBottomDialogBinding
             .inflate(layoutInflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -37,7 +38,7 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
         initDataBinding()
         setupUiLogic()
-        viewModel.fetchAllActivities()
+        viewModel.fetchUnselectedActivities()
     }
 
     override fun getTheme(): Int = R.style.RoundBottomSheetDialogStyle
