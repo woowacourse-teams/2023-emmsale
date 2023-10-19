@@ -8,18 +8,5 @@
 # is used.
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
-# Keep the classes of Kerdy class itself and its fields from obfuscation
--keep class com.emmsale.data.apiModel.response.UpdatedMemberInterestEventTagResponse { *; }
--keep class com.emmsale.data.common.callAdapter.* { *; }
-
-# Keep the classes of Kerdy class itself and its fields from obfuscation
--keep class com.emmsale.data.repository.concretes.DefaultPostRepository { *; }
--keep class com.emmsale.data.service.** {*;}
-
-# Keep the classes of Kerdy class itself and its fields from obfuscation
--keep class com.emmsale.data.repository.concretes.DefaultLoginRepository { *; }
--keep class com.emmsale.presentation.ui.login.** {*;}
-
-# Keep the classes of Kerdy class itself and its fields from obfuscation
--keep class com.emmsale.data.** {*;}
-
+# ApiResponse 클래스 축소 및 난독화 해제하여 CallAdapter에서 retrofit2.Call<ApiResponse>를 반환하는 CallAdapter 만들 수 있도록 변경
+-keep class com.emmsale.data.common.retrofit.callAdapter.ApiResponse
