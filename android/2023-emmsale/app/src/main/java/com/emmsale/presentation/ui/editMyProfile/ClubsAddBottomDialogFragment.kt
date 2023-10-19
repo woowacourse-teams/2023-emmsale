@@ -39,7 +39,7 @@ class ClubsAddBottomDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         initDataBinding()
         setupUiLogic()
-        viewModel.fetchAllUnSelectedActivities()
+        viewModel.fetchUnselectedActivities()
     }
 
     override fun getTheme(): Int = R.style.RoundBottomSheetDialogStyle

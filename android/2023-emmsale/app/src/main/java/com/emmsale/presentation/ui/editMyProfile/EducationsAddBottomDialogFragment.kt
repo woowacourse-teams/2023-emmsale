@@ -38,7 +38,7 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
         initDataBinding()
         setupUiLogic()
-        viewModel.fetchAllUnSelectedActivities()
+        viewModel.fetchUnselectedActivities()
     }
 
     override fun getTheme(): Int = R.style.RoundBottomSheetDialogStyle
