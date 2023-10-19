@@ -12,4 +12,8 @@
 
     <dimen name="my_first_message_top_margin">17dp</dimen>
     <dimen name="my_not_fisrt_message_top_margin">4dp</dimen>
+
+    <dimen name="event_count_text_margin_top">16dp</dimen>
+
+    <dimen name="eventsearch_recent_search_title_margin_top">24dp</dimen>
 </resources>

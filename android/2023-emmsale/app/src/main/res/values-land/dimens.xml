@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="event_count_text_margin_top">2dp</dimen>
+
+    <dimen name="eventsearch_recent_search_title_margin_top">8dp</dimen>
+</resources>

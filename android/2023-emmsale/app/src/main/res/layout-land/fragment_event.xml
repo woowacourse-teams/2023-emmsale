@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@color/white"
+        tools:context=".presentation.ui.eventPageList.EventFragment">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_event_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_main_toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/btn_event_search"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginEnd="63dp"
+                    android:background="@drawable/bg_event_search"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent="0.5">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="9dp"
+                        android:layout_marginStart="13dp"
+                        android:src="@drawable/ic_event_search" />
+
+                </LinearLayout>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_event"
+                    android:layout_width="0dp"
+                    android:layout_height="38dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/btn_event_search"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tabBackground="@drawable/bg_tablayout_indicator"
+                    app:tabGravity="fill"
+                    app:tabIndicatorColor="@color/color_tab_indicator"
+                    app:tabIndicatorFullWidth="true"
+                    app:tabIndicatorHeight="@dimen/tab_indicator_height"
+                    app:tabSelectedTextColor="@color/primary_color"
+                    app:tabTextAppearance="@style/KerdyTextStyleBlackBold14"
+                    app:tabTextColor="@color/black" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_event"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_event_toolbar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -22,14 +22,14 @@
             android:id="@+id/tb_event_search"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
-            android:keepScreenOn="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_all_back"
             app:title="@string/eventsearch_toolbar_title"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle"
+            app:visible="@{!@bool/is_landscape}" />
 
         <View
             android:id="@+id/v_event_search"
@@ -88,7 +88,7 @@
             android:id="@+id/tv_event_prefix"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_margin="@dimen/eventsearch_recent_search_title_margin_top"
             android:text="@string/event_count_prefix"
             android:textColor="@color/black"
             android:textSize="12sp"
@@ -103,13 +103,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:layout_marginTop="24dp"
             android:text="@{viewModel.eventSearchResults.eventSize}"
             android:textColor="@color/primary_color"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/tv_event_prefix"
-            app:layout_constraintTop_toBottomOf="@id/v_event_search"
+            app:layout_constraintTop_toTopOf="@id/tv_event_prefix"
             app:visible="@{!etEventSearch.text.toString().isBlank()}"
             tools:text="2"
             tools:visibility="gone" />
@@ -118,13 +117,12 @@
             android:id="@+id/tv_event_suffix"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:text="@string/event_count_suffix"
             android:textColor="@color/black"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/tv_event_count"
-            app:layout_constraintTop_toBottomOf="@id/v_event_search"
+            app:layout_constraintTop_toTopOf="@id/tv_event_prefix"
             app:visible="@{!etEventSearch.text.toString().isBlank()}"
             tools:visibility="gone" />
 
@@ -142,11 +140,12 @@
             android:id="@+id/rv_event_search_result"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider"
+            app:spanCount="@integer/event_search_column_size"
             app:visible="@{!etEventSearch.text.toString().isBlank()}"
             tools:listitem="@layout/item_conference"
             tools:visibility="gone" />
@@ -166,7 +165,7 @@
             android:id="@+id/tv_search_history_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/eventsearch_recent_search_title_margin_top"
             android:text="@string/eventsearch_serach_history_title"
             android:textColor="@color/black"
             android:textSize="13sp"
@@ -178,8 +177,7 @@
         <TextView
             android:id="@+id/btn_delete_all_search_query"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginTop="24dp"
+            android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
@@ -187,8 +185,8 @@
             android:textColor="@color/light_gray"
             android:textSize="13sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tv_search_history_title"
             app:layout_constraintEnd_toEndOf="@id/v_event_search"
-            app:layout_constraintTop_toBottomOf="@id/v_event_search"
             app:visible="@{etEventSearch.text.toString().isBlank()}" />
 
         <androidx.constraintlayout.widget.Barrier

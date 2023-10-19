@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/event_count_text_margin_top"
             android:text="@string/event_count_prefix"
             android:textColor="@color/black"
             android:textSize="12sp"
@@ -107,11 +107,12 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="7dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sv_filters"
+            app:spanCount="@integer/event_column_size"
             tools:itemCount="5"
             tools:listitem="@layout/item_competition" />
 

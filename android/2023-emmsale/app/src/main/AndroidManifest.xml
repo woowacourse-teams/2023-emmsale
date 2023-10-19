@@ -28,23 +28,23 @@
         <activity
             android:name=".presentation.ui.feedDetail.FeedDetailActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.messageList.MessageListActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustResize|stateVisible"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.postWriting.PostWritingActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.Emmsale.SplashScreen"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -55,79 +55,79 @@
         </activity>
         <activity
             android:name=".presentation.ui.myPostList.MyPostActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.notificationTagConfig.NotificationTagConfigActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.myCommentList.MyCommentsActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.blockMemberList.MemberBlockActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.notificationConfig.NotificationConfigActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.editMyProfile.EditMyProfileActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.profile.ProfileActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.notificationPageList.NotificationBoxActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.childCommentList.ChildCommentActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.useTerm.UseTermWebViewActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.conferenceFilter.ConferenceFilterActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.competitionFilter.CompetitionFilterActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.main.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.onboarding.OnboardingActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.eventDetail.EventDetailActivity"
-            android:screenOrientation="portrait"
+
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.Emmsale.FullScreen"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
