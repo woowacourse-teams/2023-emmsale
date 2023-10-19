@@ -51,26 +51,16 @@
             bind:viewModel="@{vm}"
             tools:visibility="gone" />
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scrollbars="none"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+        <com.emmsale.presentation.common.views.NoContentView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            app:description="@string/postlist_no_content_view_desc"
+            app:visible="@{vm.recruitments.list.empty &amp;&amp; vm.recruitments.fetchResult == FetchResult.SUCCESS}"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.recruitments.list.empty &amp;&amp; vm.recruitments.fetchResult == FetchResult.SUCCESS}">
-
-            <com.emmsale.presentation.common.views.NoContentView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="100dp"
-                app:description="@string/eventrecruitment_no_content_view_desc"
-                app:noContentImageResId="@drawable/ic_no_result2"
-                app:title="@string/eventrecruitment_no_content_view_title" />
-
-        </androidx.core.widget.NestedScrollView>
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:noContentImageResId="@drawable/ic_no_result2"
+            app:title="@string/postlist_no_content_view_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
