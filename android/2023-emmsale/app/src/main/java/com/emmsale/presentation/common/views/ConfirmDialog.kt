@@ -18,6 +18,7 @@ class ConfirmDialog(
     private val negativeButtonLabel: String = context.getString(R.string.all_cancel),
     private val onPositiveButtonClick: () -> Unit = {},
     private val onNegativeButtonClick: () -> Unit = {},
+    private val cancelable: Boolean = true,
     private val onCancel: () -> Unit = {},
 ) : Dialog(context) {
     private val binding: DialogConfirmBinding by lazy { DialogConfirmBinding.inflate(layoutInflater) }
@@ -26,6 +27,7 @@ class ConfirmDialog(
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        setCanceledOnTouchOutside(cancelable)
         initDialogWindow()
         initDataBinding()
         setOnCancelListener { onCancel() }
