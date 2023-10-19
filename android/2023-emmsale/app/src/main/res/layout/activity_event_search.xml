@@ -88,7 +88,7 @@
             android:id="@+id/tv_event_prefix"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/eventsearch_recent_search_title_margin_top"
+            android:layout_marginTop="@dimen/eventsearch_recent_search_title_margin_top"
             android:text="@string/event_count_prefix"
             android:textColor="@color/black"
             android:textSize="12sp"
