@@ -24,18 +24,21 @@ class SendMessageDialog : DialogFragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = DialogRecruitmentpostdetailSendMessageBinding.inflate(inflater, container, false)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        binding.lifecycleOwner = viewLifecycleOwner
+        setupWindow()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initDataBinding()
+        setupDataBinding()
     }
 
-    private fun initDataBinding() {
+    private fun setupWindow() {
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+    private fun setupDataBinding() {
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
         binding.onSendButtonClick = ::onSendButtonClick
         binding.onCancelButtonClick = ::onCancelButtonClick
