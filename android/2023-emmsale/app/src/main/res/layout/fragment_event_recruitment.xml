@@ -54,6 +54,7 @@
         <androidx.core.widget.NestedScrollView
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:visible="@{vm.recruitments.list.empty &amp;&amp; vm.recruitments.fetchResult == FetchResult.SUCCESS}"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -62,7 +63,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp"
                 app:description="@string/postlist_no_content_view_desc"
-                app:visible="@{vm.recruitments.list.empty &amp;&amp; vm.recruitments.fetchResult == FetchResult.SUCCESS}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:noContentImageResId="@drawable/ic_no_result2"
                 app:title="@string/postlist_no_content_view_title" />
