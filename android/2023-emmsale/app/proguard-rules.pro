@@ -10,3 +10,7 @@
 
 # ApiResponse 클래스 축소 및 난독화 해제하여 CallAdapter에서 retrofit2.Call<ApiResponse>를 반환하는 CallAdapter 만들 수 있도록 변경
 -keep class com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+
+# Keep the classes of Kerdy class itself and its fields from obfuscation
+# temp
+-keep class com.emmsale.data.** {*;}
