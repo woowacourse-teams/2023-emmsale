@@ -60,7 +60,7 @@ class EditMyProfileViewModel @Inject constructor(
         }
     }
 
-    fun fetchAllActivities() {
+    fun fetchAllUnSelectedActivities() {
         viewModelScope.launch {
             when (val result = activityRepository.getActivities()) {
                 is Success -> _activities.value = _activities.value.fetchUnSelectedActivities(

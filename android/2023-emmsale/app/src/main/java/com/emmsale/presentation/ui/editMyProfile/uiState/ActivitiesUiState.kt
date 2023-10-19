@@ -12,15 +12,18 @@ data class ActivitiesUiState(
 ) {
     val fields = activities.filter { it.activity.activityType == FIELD }
 
-    val selectedFieldsSize = fields.count { it.isSelected }
+    val selectedFieldsSize: Int
+        get() = fields.count { it.isSelected }
 
     val educations = activities.filter { it.activity.activityType == EDUCATION }
 
-    val selectedEducationsSize = educations.count { it.isSelected }
+    val selectedEducationsSize: Int
+        get() = educations.count { it.isSelected }
 
     val clubs = activities.filter { it.activity.activityType == CLUB }
 
-    val selectedClubsSize = clubs.count { it.isSelected }
+    val selectedClubsSize: Int
+        get() = clubs.count { it.isSelected }
 
     fun fetchUnSelectedActivities(
         allActivities: List<Activity>,
