@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -29,8 +30,14 @@ import kotlinx.coroutines.launch
 class MessageListActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
     private val viewModel: MessageListViewModel by viewModels()
+    private val imm by lazy { getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
 
-    private lateinit var messageListAdapter: MessageListAdapter
+    private val messageListAdapter by lazy {
+        MessageListAdapter(
+            onProfileClick = ::navigateToProfile,
+            onBackgroundClick = ::hideKeyboard,
+        )
+    }
 
     private var job: Job? = null
 
@@ -47,6 +54,7 @@ class MessageListActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.vm = viewModel
         binding.lifecycleOwner = this
+        binding.root.setOnClickListener { hideKeyboard() }
     }
 
     private fun setupToolbar() {
@@ -56,7 +64,6 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun setupMessageRecyclerView() {
-        messageListAdapter = MessageListAdapter(::navigateToProfile)
         binding.rvMessageList.setHasFixedSize(true)
         binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
@@ -145,6 +152,10 @@ class MessageListActivity : AppCompatActivity() {
 
     private fun hideBottomMessage() {
         binding.clNewMessage.visibility = View.GONE
+    }
+
+    private fun hideKeyboard() {
+        imm.hideSoftInputFromWindow(binding.etMessageInput.windowToken, 0)
     }
 
     companion object {

@@ -11,12 +11,18 @@ import com.emmsale.presentation.ui.messageList.uistate.MessageUiState.MessageTyp
 
 class MessageListAdapter(
     private val onProfileClick: (uid: Long) -> Unit,
+    private val onBackgroundClick: () -> Unit,
 ) : ListAdapter<MessageUiState, MessageViewHolder>(MessageDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return when (viewType) {
-            MessageType.MY.ordinal -> MyMessageViewHolder(parent)
-            MessageType.OTHER.ordinal -> OtherMessageViewHolder(parent, onProfileClick)
-            MessageType.DATE.ordinal -> MessageDateViewHolder(parent)
+            MessageType.MY.ordinal -> MyMessageViewHolder(parent, onBackgroundClick)
+            MessageType.OTHER.ordinal -> OtherMessageViewHolder(
+                parent,
+                onProfileClick,
+                onBackgroundClick,
+            )
+
+            MessageType.DATE.ordinal -> MessageDateViewHolder(parent, onBackgroundClick)
             else -> throw IllegalArgumentException(INVALID_VIEW_TYPE_ERROR)
         }
     }
