@@ -13,128 +13,135 @@
             type="com.emmsale.presentation.ui.competitionList.CompetitionViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        onRefresh="@{() -> viewModel.refresh()}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:background="@color/white"
-        tools:context=".presentation.ui.competitionFilter.CompetitionFilterActivity">
+        app:swipeRefreshColor="@{@color/primary_color}">
 
-        <TextView
-            android:id="@+id/tv_events_prefix"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="@dimen/event_count_text_margin_top"
-            android:text="@string/event_count_prefix"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_events_count"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="6dp"
-            android:gravity="center"
-            android:text="@{@string/event_count_format(viewModel.competitions.competitionSize)}"
-            android:textColor="@color/primary_color"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_events_prefix"
-            app:layout_constraintStart_toEndOf="@+id/tv_events_prefix"
-            app:layout_constraintTop_toTopOf="@+id/tv_events_prefix"
-            tools:text="58" />
-
-        <LinearLayout
-            android:id="@+id/btn_event_filter"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="17dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_events_prefix"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_events_prefix">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="2dp"
-                android:contentDescription="@string/event_filter"
-                android:src="@drawable/ic_event_filter" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:background="@color/white"
+            tools:context=".presentation.ui.competitionFilter.CompetitionFilterActivity">
 
             <TextView
-                android:id="@+id/tv_filter"
+                android:id="@+id/tv_events_prefix"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/event_filter"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="@dimen/event_count_text_margin_top"
+                android:text="@string/event_count_prefix"
                 android:textColor="@color/black"
                 android:textSize="12sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
-
-        <HorizontalScrollView
-            android:id="@+id/sv_filters"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            android:paddingHorizontal="17dp"
-            android:scrollbars="none"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_event_filter"
-            app:visible="@{viewModel.selectedFilter.isShowFilter}">
+            <TextView
+                android:id="@+id/tv_events_count"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="6dp"
+                android:gravity="center"
+                android:text="@{@string/event_count_format(viewModel.competitions.competitionSize)}"
+                android:textColor="@color/primary_color"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_events_prefix"
+                app:layout_constraintStart_toEndOf="@+id/tv_events_prefix"
+                app:layout_constraintTop_toTopOf="@+id/tv_events_prefix"
+                tools:text="58" />
 
             <LinearLayout
-                android:id="@+id/layout_competition_filters"
+                android:id="@+id/btn_event_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="17dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_events_prefix"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_events_prefix">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="2dp"
+                    android:contentDescription="@string/event_filter"
+                    android:src="@drawable/ic_event_filter" />
+
+                <TextView
+                    android:id="@+id/tv_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/event_filter"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:id="@+id/sv_filters"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingHorizontal="17dp"
+                android:scrollbars="none"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_event_filter"
+                app:visible="@{viewModel.selectedFilter.isShowFilter}">
+
+                <LinearLayout
+                    android:id="@+id/layout_competition_filters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_events"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="7dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sv_filters"
+                app:spanCount="@integer/event_column_size"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_competition" />
+
+            <ProgressBar
+                android:id="@+id/progressbar_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:indeterminate="true"
+                android:visibility="@{viewModel.competitions.loading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
 
-        </HorizontalScrollView>
+            <include
+                layout="@layout/layout_all_error_screen"
+                android:background="@color/white"
+                android:clickable="true"
+                android:visibility="@{viewModel.competitions.isError ? View.VISIBLE : View.GONE}"
+                bind:viewModel="@{viewModel}"
+                tools:visibility="gone" />
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_events"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="7dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sv_filters"
-            app:spanCount="@integer/event_column_size"
-            tools:itemCount="5"
-            tools:listitem="@layout/item_competition" />
-
-        <ProgressBar
-            android:id="@+id/progressbar_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="@{viewModel.competitions.loading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
-
-        <include
-            layout="@layout/layout_all_error_screen"
-            android:background="@color/white"
-            android:clickable="true"
-            android:visibility="@{viewModel.competitions.isError ? View.VISIBLE : View.GONE}"
-            bind:viewModel="@{viewModel}"
-            tools:visibility="gone" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>
