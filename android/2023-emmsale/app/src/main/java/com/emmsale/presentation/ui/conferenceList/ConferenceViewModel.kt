@@ -38,12 +38,12 @@ class ConferenceViewModel @Inject constructor(
     val selectedFilter: NotNullLiveData<ConferenceSelectedFilteringUiState> = _selectedFilter
 
     init {
+        _selectedFilter.value = ConferenceSelectedFilteringUiState()
         refresh()
     }
 
     override fun refresh() {
-        _selectedFilter.value = ConferenceSelectedFilteringUiState()
-        fetchConferences()
+        fetchFilteredConferences()
     }
 
     private fun fetchConferences(
