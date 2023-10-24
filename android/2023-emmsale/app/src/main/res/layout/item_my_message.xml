@@ -7,21 +7,37 @@
 
         <import type="android.view.View" />
 
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
+
         <variable
             name="message"
             type="com.emmsale.presentation.ui.messageList.uistate.MyMessageUiState" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="@{message.message.isEmpty() ? View.GONE : View.VISIBLE}">
+        android:gravity="end"
+        android:paddingStart="20dp"
+        android:paddingEnd="17dp"
+        app:visible="@{!message.message.isEmpty()}">
 
-        <com.emmsale.presentation.common.views.WrapWidthTextView
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_chat_time"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="17dp"
+            android:layout_gravity="bottom"
+            android:layout_marginEnd="6dp"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            app:dateText="@{message.createdAt}"
+            app:dateTimeFormatter="@{DateTimePattern.AM_PM_HOUR_MINUTE}"
+            tools:text="오후 2:58" />
+
+        <TextView
+            android:id="@+id/tv_chat_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_mymessage_message"
             android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
@@ -29,11 +45,8 @@
             android:textColor="@color/my_message_text_color"
             android:textSize="12sp"
             app:layoutMarginTop="@{message.first ? @dimen/my_first_message_top_margin : @dimen/my_not_fisrt_message_top_margin}"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="행사 같이 가시는거 어떠세요?" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </layout>
