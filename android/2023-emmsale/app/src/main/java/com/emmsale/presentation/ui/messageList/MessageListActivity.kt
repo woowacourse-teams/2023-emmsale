@@ -63,7 +63,7 @@ class MessageListActivity : AppCompatActivity() {
         binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
         binding.rvMessageList.setOnTouchListener { _, event ->
-            keyboardHider.calculateHideState(event)
+            keyboardHider.handleHideness(event)
         }
     }
 

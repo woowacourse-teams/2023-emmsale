@@ -20,7 +20,7 @@ class KeyboardHider(
     private val canHideKeyboard: Boolean
         get() = movedY < sensitivity
 
-    fun calculateHideState(event: MotionEvent): Boolean {
+    fun handleHideness(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> startY = event.y
             MotionEvent.ACTION_MOVE -> movedY = abs(event.y - startY)
