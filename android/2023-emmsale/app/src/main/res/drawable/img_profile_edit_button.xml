@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item>
+    <shape android:shape="oval">
+      <solid android:color="@color/white" />
+      <padding
+          android:bottom="7.5dp"
+          android:left="6.67dp"
+          android:right="6.67dp"
+          android:top="7.5dp" />
+    </shape>
+  </item>
+  <item android:drawable="@drawable/ic_editmyprofile_image_edit" />
+</layer-list>
