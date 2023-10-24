@@ -52,7 +52,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider"
-            tools:itemCount="12"
+            app:stackFromEnd="true"
+            tools:itemCount="2"
             tools:listitem="@layout/item_other_message" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -149,7 +150,6 @@
                 android:id="@+id/et_message_input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
                 android:layout_marginStart="19dp"
                 android:background="@null"
                 android:hint="@string/messagelist_message_send_hint"
@@ -157,6 +157,7 @@
                 android:maxHeight="30dp"
                 android:maxLength="255"
                 android:maxLines="2"
+                android:paddingVertical="16dp"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btn_send_message"
