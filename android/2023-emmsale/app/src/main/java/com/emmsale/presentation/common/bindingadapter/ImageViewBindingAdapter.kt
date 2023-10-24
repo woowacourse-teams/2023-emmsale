@@ -127,3 +127,35 @@ fun ImageView.setCanZoomInImageUrl(
         }.show()
     }
 }
+
+class MaskTransformation(
+    private val mask: Drawable,
+) : BitmapTransformation() {
+
+    private val paint = Paint().apply {
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+    }
+
+    override fun updateDiskCacheKey(messageDigest: MessageDigest) {
+        messageDigest.update(mask.hashCode().toByte())
+    }
+
+    override fun transform(
+        pool: BitmapPool,
+        toTransform: Bitmap,
+        outWidth: Int,
+        outHeight: Int
+    ): Bitmap {
+        val width = toTransform.width
+        val height = toTransform.height
+
+        val bitmap = pool.get(width, height, Bitmap.Config.ARGB_8888)
+        bitmap.setHasAlpha(true)
+
+        val canvas = Canvas(bitmap)
+        mask.setBounds(0, 0, outWidth, outHeight)
+        mask.draw(canvas)
+        canvas.drawBitmap(toTransform, 0f, 0f, paint)
+        return bitmap
+    }
+}
