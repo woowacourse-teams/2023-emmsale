@@ -66,18 +66,22 @@ class MessageListActivity : AppCompatActivity() {
         binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
         binding.rvMessageList.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> isScreenScrolled = false
-                MotionEvent.ACTION_MOVE -> isScreenScrolled = true
-                MotionEvent.ACTION_UP -> {
-                    if (!isScreenScrolled) {
-                        isScreenScrolled = false
-                        hideKeyboard()
-                    }
+            handleKeyboardWithRecyclerView(event)
+        }
+    }
+
+    private fun handleKeyboardWithRecyclerView(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> isScreenScrolled = false
+            MotionEvent.ACTION_MOVE -> isScreenScrolled = true
+            MotionEvent.ACTION_UP -> {
+                if (!isScreenScrolled) {
+                    isScreenScrolled = false
+                    hideKeyboard()
                 }
             }
-            false
         }
+        return false
     }
 
     private fun navigateToProfile(uid: Long) {
