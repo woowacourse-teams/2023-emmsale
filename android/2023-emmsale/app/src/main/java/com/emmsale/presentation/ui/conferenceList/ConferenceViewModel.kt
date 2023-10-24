@@ -42,8 +42,7 @@ class ConferenceViewModel @Inject constructor(
     }
 
     override fun refresh() {
-        _selectedFilter.value = ConferenceSelectedFilteringUiState()
-        fetchConferences()
+        fetchFilteredConferences()
     }
 
     private fun fetchConferences(

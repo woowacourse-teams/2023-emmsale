@@ -42,8 +42,7 @@ class CompetitionViewModel @Inject constructor(
     }
 
     override fun refresh() {
-        _selectedFilter.value = CompetitionSelectedFilteringUiState()
-        fetchCompetitions()
+        fetchFilteredCompetitions()
     }
 
     private fun fetchCompetitions(

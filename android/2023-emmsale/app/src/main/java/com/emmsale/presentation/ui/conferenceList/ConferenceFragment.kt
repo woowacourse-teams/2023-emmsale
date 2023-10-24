@@ -24,9 +24,7 @@ import java.time.LocalDate
 class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
     override val layoutResId: Int = R.layout.fragment_conference
     private val viewModel: ConferenceViewModel by viewModels()
-    private val eventAdapter: ConferenceRecyclerViewAdapter by lazy {
-        ConferenceRecyclerViewAdapter(::navigateToEventDetail)
-    }
+    private val eventAdapter by lazy { ConferenceRecyclerViewAdapter(::navigateToEventDetail) }
     private val filterActivityLauncher =
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult

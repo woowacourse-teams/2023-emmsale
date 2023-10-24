@@ -40,6 +40,7 @@ class EventSearchActivity : AppCompatActivity() {
         setupEventSearchToolbar()
         observeEventSearchResults()
         observeEventSearchHistories()
+        binding.etEventSearch.requestFocus()
     }
 
     private fun setupBinding() {
