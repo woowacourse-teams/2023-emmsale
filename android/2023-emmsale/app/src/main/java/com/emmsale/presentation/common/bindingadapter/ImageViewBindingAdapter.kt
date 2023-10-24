@@ -1,130 +1,71 @@
 package com.emmsale.presentation.common.bindingadapter
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.emmsale.R
 import com.emmsale.presentation.common.extension.dp
 import com.stfalcon.imageviewer.StfalconImageViewer
-
-@BindingAdapter("app:imageUrl")
-fun ImageView.setImage(imageUrl: String?) {
-    Glide.with(this)
-        .load(imageUrl)
-        .placeholder(R.drawable.img_all_loading)
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
-        .into(this)
-}
+import java.security.MessageDigest
 
 @BindingAdapter(
     "app:imageUrl",
-    "app:roundedImageRadius",
-    requireAll = true,
-)
-fun ImageView.setRoundedImageUrl(
-    imageUrl: String?,
-    radius: Int,
-) {
-    Glide.with(this)
-        .load(imageUrl)
-        .placeholder(R.drawable.img_all_loading)
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
-        .transform(CenterCrop(), RoundedCorners(radius.dp))
-        .into(this)
-}
-
-@BindingAdapter(
-    "app:imageUrl",
-    "app:isCircle",
     "app:loadingImage",
     "app:defaultImage",
-    requireAll = false,
-)
-fun ImageView.setCircleImage(
-    imageUrl: String?,
-    isCircle: Boolean,
-    loadingImageRes: Drawable? = ContextCompat.getDrawable(context, R.drawable.img_all_loading),
-    defaultImageRes: Drawable? = ContextCompat.getDrawable(context, R.mipmap.ic_launcher),
-) {
-    if (!isCircle) {
-        setImage(imageUrl)
-        return
-    }
-
-    Glide.with(this)
-        .load(imageUrl)
-        .placeholder(loadingImageRes)
-        .error(defaultImageRes)
-        .fallback(defaultImageRes)
-        .transform(CenterCrop(), CircleCrop())
-        .into(this)
-}
-
-@BindingAdapter(
-    "app:imageUrl",
+    "app:mask",
+    "app:isCircle",
     "app:roundedImageRadius",
     "app:canZoomIn",
-    requireAll = true,
+    requireAll = false
 )
-fun ImageView.setCanZoomInRoundedImageUrl(
+fun ImageView.setImage(
     imageUrl: String?,
-    radius: Int,
-    canZoomIn: Boolean,
+    loadingImage: Drawable?,
+    defaultImage: Drawable?,
+    mask: Drawable?,
+    isCircle: Boolean?,
+    radius: Int?,
+    canZoomIn: Boolean?,
 ) {
     Glide.with(this)
         .load(imageUrl)
-        .placeholder(R.drawable.img_all_loading)
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
-        .transform(CenterCrop(), RoundedCorners(radius.dp))
+        .placeholder(
+            loadingImage
+                ?: AppCompatResources.getDrawable(context, R.drawable.img_all_loading)
+        )
+        .error(defaultImage ?: AppCompatResources.getDrawable(context, R.mipmap.ic_launcher))
+        .let {
+            when {
+                mask != null -> it.transform(CenterCrop(), MaskTransformation(mask))
+                isCircle == true -> it.transform(CenterCrop(), CircleCrop())
+                radius != null -> it.transform(CenterCrop(), RoundedCorners(radius.dp))
+                else -> it
+            }
+        }
         .into(this)
 
-    if (!canZoomIn) return
-
-    setOnClickListener {
-        StfalconImageViewer.Builder(this.context, listOf(imageUrl)) { view, image ->
-            Glide.with(this.context)
-                .load(image)
-                .placeholder(R.drawable.img_all_loading)
-                .error(R.mipmap.ic_launcher)
-                .into(view)
-        }.show()
-    }
-}
-
-@BindingAdapter(
-    "app:imageUrl",
-    "app:canZoomIn",
-    requireAll = true,
-)
-fun ImageView.setCanZoomInImageUrl(
-    imageUrl: String?,
-    canZoomIn: Boolean = false,
-) {
-    Glide.with(this)
-        .load(imageUrl)
-        .placeholder(R.drawable.img_all_loading)
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
-        .into(this)
-
-    if (!canZoomIn) return
-
-    setOnClickListener {
-        StfalconImageViewer.Builder(this.context, listOf(imageUrl)) { view, image ->
-            Glide.with(this.context)
-                .load(image)
-                .placeholder(R.drawable.img_all_loading)
-                .error(R.mipmap.ic_launcher)
-                .into(view)
-        }.show()
+    if (canZoomIn == true) {
+        setOnClickListener {
+            StfalconImageViewer.Builder(this.context, listOf(imageUrl)) { view, image ->
+                Glide.with(this.context)
+                    .load(image)
+                    .placeholder(R.drawable.img_all_loading)
+                    .error(R.mipmap.ic_launcher)
+                    .into(view)
+            }.show()
+        }
     }
 }
 
