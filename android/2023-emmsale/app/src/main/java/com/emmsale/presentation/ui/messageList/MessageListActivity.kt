@@ -60,6 +60,11 @@ class MessageListActivity : AppCompatActivity() {
         binding.rvMessageList.setHasFixedSize(true)
         binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
+        binding.rvMessageList.setOnScrollChangeListener { v, _, _, _, _ ->
+            if (!v.canScrollVertically(BOTTOM_SCROLL_DIRECTION)) {
+                hideBottomMessage()
+            }
+        }
     }
 
     private fun navigateToProfile(uid: Long) {
@@ -148,6 +153,7 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val BOTTOM_SCROLL_DIRECTION = 1
         private const val KEY_PROFILE_URL = "KEY_PROFILE_URL"
         private const val KEY_OTHER_NAME = "KEY_OTHER_NAME"
         private const val KEY_MESSAGE_CONTENT = "KEY_MESSAGE_CONTENT"
