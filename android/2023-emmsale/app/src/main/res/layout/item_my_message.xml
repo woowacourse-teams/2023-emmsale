@@ -18,8 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:paddingStart="20dp"
-        android:paddingEnd="17dp"
         app:visible="@{!message.message.isBlank()}">
 
         <TextView

@@ -25,7 +25,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
         app:layoutMarginTop="@{message.shownProfile ? @dimen/other_message_with_profile_layout_top_margin : @dimen/other_message_without_profile_layout_top_margin}"
         app:visible="@{!message.message.isBlank()}">
 
