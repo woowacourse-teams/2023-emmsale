@@ -20,7 +20,7 @@
         android:gravity="end"
         android:paddingStart="20dp"
         android:paddingEnd="17dp"
-        app:visible="@{!message.message.isEmpty()}">
+        app:visible="@{!message.message.isBlank()}">
 
         <TextView
             android:id="@+id/tv_chat_time"
