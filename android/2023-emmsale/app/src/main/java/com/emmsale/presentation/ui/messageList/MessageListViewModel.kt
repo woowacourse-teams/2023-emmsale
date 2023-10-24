@@ -84,7 +84,10 @@ class MessageListViewModel @Inject constructor(
     }
 
     private fun updateMessages(newMessages: List<Message>) {
-        _messages.value = messages.value.toSuccess(newMessages.toUiState())
+        val messagesNotBlank = newMessages
+            .filter { it.message.isNotBlank() }
+            .toUiState()
+        _messages.value = messages.value.toSuccess(messagesNotBlank)
     }
 
     private fun List<Message>.toUiState(): List<MessageUiState> {
