@@ -124,7 +124,9 @@ class MessageListActivity : AppCompatActivity() {
         val layoutManager = binding.rvMessageList.layoutManager as LinearLayoutManager
         val lastVisiblePos = layoutManager.findLastVisibleItemPosition()
         val itemCount = viewModel.messages.value.messages.size
-        if (lastVisiblePos <= itemCount - 3) {
+        val lastPosition = itemCount - 1
+
+        if (lastVisiblePos != lastPosition) {
             job?.cancel()
             job = lifecycleScope.launch {
                 showBottomMessage(profileUrl, otherName, messageContent)
