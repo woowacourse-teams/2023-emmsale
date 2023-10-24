@@ -47,7 +47,7 @@ fun LocalDateTime.toRelativeTime(
     }
 }
 
-fun LocalDateTime.toMessageRelativeTime(
+fun LocalDateTime.toRelativeDateTime(
     standardTime: LocalDateTime = LocalDateTime.now(),
     context: Context,
 ): String {

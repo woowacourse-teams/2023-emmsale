@@ -5,7 +5,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.emmsale.R
 import com.emmsale.presentation.common.extension.format
-import com.emmsale.presentation.common.extension.toMessageRelativeTime
+import com.emmsale.presentation.common.extension.toRelativeDateTime
 import com.emmsale.presentation.common.extension.toRelativeTime
 import java.time.LocalDateTime
 
@@ -54,9 +54,9 @@ enum class DateTimePattern {
             return localDateTime.toRelativeTime(context = context)
         }
     },
-    AM_PM_HOUR_MINUTE {
+    RELATIVE_DATE_TIME {
         override fun format(context: Context, localDateTime: LocalDateTime): String {
-            return localDateTime.toMessageRelativeTime(context = context)
+            return localDateTime.toRelativeDateTime(context = context)
         }
     },
     YEAR_MONTH_DAY_WEEKDAY {
