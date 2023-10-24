@@ -9,15 +9,10 @@ import com.emmsale.presentation.ui.messageList.uistate.MyMessageUiState
 
 class MyMessageViewHolder(
     parent: ViewGroup,
-    onBackgroundClick: () -> Unit,
 ) : MessageViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_my_message, parent, false),
 ) {
     val binding = ItemMyMessageBinding.bind(itemView)
-
-    init {
-        binding.root.setOnClickListener { onBackgroundClick() }
-    }
 
     override fun bind(message: MessageUiState) {
         if (message !is MyMessageUiState) return

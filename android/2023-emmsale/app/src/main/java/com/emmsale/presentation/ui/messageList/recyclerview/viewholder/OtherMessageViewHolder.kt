@@ -10,7 +10,6 @@ import com.emmsale.presentation.ui.messageList.uistate.OtherMessageUiState
 class OtherMessageViewHolder(
     parent: ViewGroup,
     onProfileClick: (uid: Long) -> Unit,
-    onBackgroundClick: () -> Unit,
 ) : MessageViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_other_message, parent, false),
 ) {
@@ -18,7 +17,6 @@ class OtherMessageViewHolder(
 
     init {
         binding.onProfileClick = onProfileClick
-        binding.root.setOnClickListener { onBackgroundClick() }
     }
 
     override fun bind(message: MessageUiState) {

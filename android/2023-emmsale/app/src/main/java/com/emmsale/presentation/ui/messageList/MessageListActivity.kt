@@ -3,8 +3,10 @@ package com.emmsale.presentation.ui.messageList
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -32,12 +34,7 @@ class MessageListActivity : AppCompatActivity() {
     private val viewModel: MessageListViewModel by viewModels()
     private val imm by lazy { getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
 
-    private val messageListAdapter by lazy {
-        MessageListAdapter(
-            onProfileClick = ::navigateToProfile,
-            onBackgroundClick = ::hideKeyboard,
-        )
-    }
+    private val messageListAdapter by lazy { MessageListAdapter(onProfileClick = ::navigateToProfile) }
 
     private var job: Job? = null
 
@@ -54,7 +51,6 @@ class MessageListActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.vm = viewModel
         binding.lifecycleOwner = this
-        binding.root.setOnClickListener { hideKeyboard() }
     }
 
     private fun setupToolbar() {
@@ -154,8 +150,15 @@ class MessageListActivity : AppCompatActivity() {
         binding.clNewMessage.visibility = View.GONE
     }
 
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            hideKeyboard()
+        }
+        return true
+    }
+
     private fun hideKeyboard() {
-        imm.hideSoftInputFromWindow(binding.etMessageInput.windowToken, 0)
+        imm.hideSoftInputFromWindow(binding.etMessageInput.windowToken, HIDE_IMPLICIT_ONLY)
     }
 
     companion object {
