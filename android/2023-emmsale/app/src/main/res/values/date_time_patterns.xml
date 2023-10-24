@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="month_day_weekday">M월 d일(E)</string>
-    <string name="am_pm_hour_minute">a hh시 mm분</string>
+    <string name="am_pm_hour_minute">a h시 mm분</string>
     <string name="year_month_day">yyyy.MM.dd</string>
     <string name="month_day">MM.dd</string>
     <string name="year_month_day_weekday">yyyy년 MM월 dd일 E요일</string>

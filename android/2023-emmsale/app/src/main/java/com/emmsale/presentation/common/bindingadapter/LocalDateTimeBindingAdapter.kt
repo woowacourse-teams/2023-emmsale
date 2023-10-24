@@ -64,6 +64,11 @@ enum class DateTimePattern {
             return localDateTime.format(context, R.string.year_month_day_weekday)
         }
     },
+    AM_PM_HOUR_MINUTE {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            return localDateTime.format(context, R.string.am_pm_hour_minute)
+        }
+    },
     ;
 
     abstract fun format(context: Context, localDateTime: LocalDateTime): String
