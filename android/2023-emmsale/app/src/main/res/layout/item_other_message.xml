@@ -11,6 +11,8 @@
 
         <import type="kotlin.jvm.functions.Function1" />
 
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
+
         <variable
             name="message"
             type="com.emmsale.presentation.ui.messageList.uistate.OtherMessageUiState" />
@@ -24,8 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
-        android:visibility="@{message.message.isEmpty() ? View.GONE : View.VISIBLE}"
-        app:layoutMarginTop="@{message.shownProfile ? @dimen/other_message_with_profile_layout_top_margin : @dimen/other_message_without_profile_layout_top_margin}">
+        app:layoutMarginTop="@{message.shownProfile ? @dimen/other_message_with_profile_layout_top_margin : @dimen/other_message_without_profile_layout_top_margin}"
+        app:visible="@{!message.message.isEmpty()}">
 
         <ImageView
             android:id="@+id/iv_member_profile"
@@ -49,17 +51,16 @@
             android:text="@{message.memberName}"
             android:textSize="11sp"
             android:textStyle="bold"
-            android:visibility="@{message.shownProfile ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toEndOf="@id/iv_member_profile"
             app:layout_constraintTop_toTopOf="@id/iv_member_profile"
+            app:visible="@{message.shownProfile}"
             tools:text="김커디" />
 
-
-        <com.emmsale.presentation.common.views.WrapWidthTextView
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_chat_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
-            android:layout_marginEnd="20dp"
             android:background="@drawable/bg_othermessage_message"
             android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
@@ -67,11 +68,31 @@
             android:textColor="@color/other_message_text_color"
             android:textSize="12sp"
             app:layoutMarginTop="@{message.shownProfile ? @dimen/other_message_with_profile_top_margin : @dimen/other_message_without_profile_top_margin}"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_chat_time"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@id/iv_member_profile"
             app:layout_constraintTop_toBottomOf="@id/tv_member_name"
-            tools:text="안녕안녕안녕안녕안안녕안녕안녕" />
+            tools:text="저랑 같이 가실래요?" />
+
+        <TextView
+            android:id="@+id/tv_chat_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            app:dateText="@{message.createdAt}"
+            app:dateTimeFormatter="@{DateTimePattern.AM_PM_HOUR_MINUTE}"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/tv_chat_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_chat_content"
+            tools:text="오후 2:58" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
