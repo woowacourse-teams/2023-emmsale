@@ -1,12 +1,12 @@
 package com.emmsale.presentation.ui.messageList
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -33,6 +33,7 @@ class MessageListActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
     private val viewModel: MessageListViewModel by viewModels()
     private val imm by lazy { getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
+    private var isScreenScrolled = false
 
     private val messageListAdapter by lazy { MessageListAdapter(onProfileClick = ::navigateToProfile) }
 
@@ -59,10 +60,24 @@ class MessageListActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupMessageRecyclerView() {
         binding.rvMessageList.setHasFixedSize(true)
         binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
+        binding.rvMessageList.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> isScreenScrolled = false
+                MotionEvent.ACTION_MOVE -> isScreenScrolled = true
+                MotionEvent.ACTION_UP -> {
+                    if (!isScreenScrolled) {
+                        isScreenScrolled = false
+                        hideKeyboard()
+                    }
+                }
+            }
+            false
+        }
     }
 
     private fun navigateToProfile(uid: Long) {
@@ -150,15 +165,8 @@ class MessageListActivity : AppCompatActivity() {
         binding.clNewMessage.visibility = View.GONE
     }
 
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            hideKeyboard()
-        }
-        return true
-    }
-
     private fun hideKeyboard() {
-        imm.hideSoftInputFromWindow(binding.etMessageInput.windowToken, HIDE_IMPLICIT_ONLY)
+        imm.hideSoftInputFromWindow(binding.etMessageInput.windowToken, 0)
     }
 
     companion object {
