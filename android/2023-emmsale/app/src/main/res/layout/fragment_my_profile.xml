@@ -72,7 +72,6 @@
                     android:text="@{viewModel.myProfile.member.description.isBlank() ? @string/profile_no_description : viewModel.myProfile.member.description }"
                     android:textSize="13sp"
                     app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_member_image"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
                     app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_membername"
                     tools:text="안녕하세요 커디입니다."
