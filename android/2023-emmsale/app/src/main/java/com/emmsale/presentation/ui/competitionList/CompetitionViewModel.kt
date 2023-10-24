@@ -38,7 +38,6 @@ class CompetitionViewModel @Inject constructor(
     val selectedFilter: NotNullLiveData<CompetitionSelectedFilteringUiState> = _selectedFilter
 
     init {
-        _selectedFilter.value = CompetitionSelectedFilteringUiState()
         refresh()
     }
 
