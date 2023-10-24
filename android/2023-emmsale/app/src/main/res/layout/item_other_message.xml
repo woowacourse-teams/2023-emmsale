@@ -81,7 +81,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginStart="6dp"
-            android:layout_marginEnd="20dp"
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:dateText="@{message.createdAt}"
