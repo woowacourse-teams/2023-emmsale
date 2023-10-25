@@ -9,7 +9,7 @@ import kotlin.math.abs
 class KeyboardHider(
     private val targetView: View,
     private val sensitivity: Float = DEFAULT_SENSITIVITY,
-    private val isDeliverTouchEvent: Boolean = WILL_TOUCH_EVENT_DELIVER,
+    private val willConsumeTouchEvent: Boolean = WILL_TOUCH_EVENT_DELIVER,
 ) {
     private val imm by lazy {
         targetView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -24,7 +24,7 @@ class KeyboardHider(
             MotionEvent.ACTION_MOVE -> movedY = abs(event.y - startY)
             MotionEvent.ACTION_UP -> if (canHideKeyboard()) hideKeyboard()
         }
-        return isDeliverTouchEvent
+        return willConsumeTouchEvent
     }
 
     private fun canHideKeyboard(): Boolean {
