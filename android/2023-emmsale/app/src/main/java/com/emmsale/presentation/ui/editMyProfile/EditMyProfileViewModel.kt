@@ -79,6 +79,7 @@ class EditMyProfileViewModel @Inject constructor(
     }
 
     fun updateProfileImage(profileImageFile: File) {
+        _profile.value = _profile.value.copy(isLoading = true)
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
@@ -96,6 +97,7 @@ class EditMyProfileViewModel @Inject constructor(
 
                 is Unexpected -> throw Throwable(result.error)
             }
+            _profile.value = _profile.value.copy(isLoading = false)
         }
     }
 
