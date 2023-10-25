@@ -66,27 +66,39 @@
                 <TextView
                     android:id="@+id/tv_myprofile_onelineintroduce"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="9dp"
+                    android:layout_height="0dp"
+                    android:layout_marginVertical="9dp"
                     android:layout_marginEnd="19dp"
                     android:text="@{viewModel.myProfile.member.description.isBlank() ? @string/profile_no_description : viewModel.myProfile.member.description }"
                     android:textSize="13sp"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_memberimage"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_member_image"
                     app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
                     app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_membername"
-                    tools:text="안녕하세요 커디입니다." />
+                    tools:text="안녕하세요 커디입니다."
+                    app:layout_constraintBottom_toTopOf="@+id/cg_myprofile_fields" />
 
                 <ImageView
-                    android:id="@+id/iv_myprofile_memberimage"
-                    android:layout_width="82dp"
-                    android:layout_height="82dp"
-                    android:layout_marginTop="37dp"
-                    android:layout_marginEnd="12dp"
+                    android:id="@+id/iv_myprofile_image_decoration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="17dp"
+                    android:src="@drawable/img_profile_image_decoration"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:importantForAccessibility="no" />
+
+                <ImageView
+                    android:id="@+id/iv_myprofile_member_image"
+                    android:layout_width="120dp"
+                    android:layout_height="106dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="22dp"
                     android:contentDescription="@string/profile_memberimagedescription"
-                    android:scaleType="centerCrop"
+                    android:importantForAccessibility="no"
                     app:imageUrl="@{viewModel.myProfile.member.profileImageUrl}"
-                    app:isCircle="@{true}"
+                    app:mask="@{@drawable/img_profile_image_masking}"
+                    app:canZoomIn="@{true}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@tools:sample/avatars" />
@@ -186,36 +198,14 @@
                     tools:itemCount="2"
                     tools:listitem="@layout/item_profile_activities" />
 
-                <ImageView
-                    android:id="@+id/iv_myprofile_educationlabeldecorator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:importantForAccessibility="no"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_myprofile_educationslabel"
-                    app:layout_constraintStart_toEndOf="@+id/tv_myprofile_educationslabel"
-                    app:layout_constraintTop_toTopOf="@+id/tv_myprofile_educationslabel"
-                    app:srcCompat="@drawable/ic_profile_activitylabeldecorator" />
-
-                <ImageView
-                    android:id="@+id/iv_myprofile_clublabeldecorator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:importantForAccessibility="no"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_myprofile_clubslabel"
-                    app:layout_constraintStart_toEndOf="@+id/tv_myprofile_clubslabel"
-                    app:layout_constraintTop_toTopOf="@+id/tv_myprofile_clubslabel"
-                    app:srcCompat="@drawable/ic_profile_activitylabeldecorator" />
-
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/cg_myprofile_fields"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="29dp"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_memberimage"
+                    android:layout_marginTop="25dp"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_myprofile_image_decoration"
                     app:layout_constraintStart_toStartOf="@+id/tv_myprofile_hello"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_onelineintroduce">
+                    app:layout_constraintTop_toBottomOf="@+id/iv_myprofile_image_decoration">
 
                 </com.google.android.material.chip.ChipGroup>
 

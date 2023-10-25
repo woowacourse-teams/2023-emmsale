@@ -1,129 +1,122 @@
 package com.emmsale.presentation.common.bindingadapter
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.emmsale.R
 import com.emmsale.presentation.common.extension.dp
 import com.stfalcon.imageviewer.StfalconImageViewer
-
-@BindingAdapter("app:imageUrl")
-fun ImageView.setImage(imageUrl: String?) {
-    Glide.with(this)
-        .load(imageUrl)
-        .placeholder(R.drawable.img_all_loading)
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
-        .into(this)
-}
+import java.security.MessageDigest
 
 @BindingAdapter(
     "app:imageUrl",
-    "app:roundedImageRadius",
-    requireAll = true,
-)
-fun ImageView.setRoundedImageUrl(
-    imageUrl: String?,
-    radius: Int,
-) {
-    Glide.with(this)
-        .load(imageUrl)
-        .placeholder(R.drawable.img_all_loading)
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
-        .transform(CenterCrop(), RoundedCorners(radius.dp))
-        .into(this)
-}
-
-@BindingAdapter(
-    "app:imageUrl",
-    "app:isCircle",
     "app:loadingImage",
     "app:defaultImage",
-    requireAll = false,
-)
-fun ImageView.setCircleImage(
-    imageUrl: String?,
-    isCircle: Boolean,
-    loadingImageRes: Drawable? = ContextCompat.getDrawable(context, R.drawable.img_all_loading),
-    defaultImageRes: Drawable? = ContextCompat.getDrawable(context, R.mipmap.ic_launcher),
-) {
-    if (!isCircle) {
-        setImage(imageUrl)
-        return
-    }
-
-    Glide.with(this)
-        .load(imageUrl)
-        .placeholder(loadingImageRes)
-        .error(defaultImageRes)
-        .fallback(defaultImageRes)
-        .transform(CenterCrop(), CircleCrop())
-        .into(this)
-}
-
-@BindingAdapter(
-    "app:imageUrl",
+    "app:mask",
+    "app:isCircle",
     "app:roundedImageRadius",
     "app:canZoomIn",
-    requireAll = true,
+    requireAll = false,
 )
-fun ImageView.setCanZoomInRoundedImageUrl(
+fun ImageView.setImage(
     imageUrl: String?,
-    radius: Int,
-    canZoomIn: Boolean,
+    loadingImage: Drawable?,
+    defaultImage: Drawable?,
+    mask: Drawable?,
+    isCircle: Boolean?,
+    radius: Int?,
+    canZoomIn: Boolean?,
 ) {
+    val selectedLoadingImage =
+        loadingImage ?: AppCompatResources.getDrawable(context, R.drawable.img_all_loading)
+    val selectedDefaultImage =
+        defaultImage ?: AppCompatResources.getDrawable(context, R.mipmap.ic_launcher)
+
     Glide.with(this)
         .load(imageUrl)
-        .placeholder(R.drawable.img_all_loading)
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
-        .transform(CenterCrop(), RoundedCorners(radius.dp))
+        .placeholder(selectedLoadingImage)
+        .error(selectedDefaultImage)
+        .customTransform(mask = mask, isCircle = isCircle, radius = radius)
         .into(this)
 
-    if (!canZoomIn) return
+    if (canZoomIn == true) {
+        makeItPossibleToZoomInOnClick(
+            imageUrl = imageUrl,
+            loadingImage = selectedLoadingImage,
+            defaultImage = defaultImage,
+        )
+    }
+}
 
+// 순서는 변화될 사진 모양의 구체적인 수준에 따라 설정했습니다.
+private fun RequestBuilder<Drawable>.customTransform(
+    mask: Drawable?,
+    isCircle: Boolean?,
+    radius: Int?,
+): RequestBuilder<Drawable> = when {
+    mask != null -> transform(CenterCrop(), MaskTransformation(mask))
+    radius != null -> transform(CenterCrop(), RoundedCorners(radius.dp))
+    isCircle == true -> transform(CenterCrop(), CircleCrop())
+    else -> this
+}
+
+private fun ImageView.makeItPossibleToZoomInOnClick(
+    imageUrl: String?,
+    loadingImage: Drawable?,
+    defaultImage: Drawable?,
+) {
     setOnClickListener {
         StfalconImageViewer.Builder(this.context, listOf(imageUrl)) { view, image ->
             Glide.with(this.context)
                 .load(image)
-                .placeholder(R.drawable.img_all_loading)
-                .error(R.mipmap.ic_launcher)
+                .placeholder(loadingImage)
+                .error(defaultImage)
                 .into(view)
         }.show()
     }
 }
 
-@BindingAdapter(
-    "app:imageUrl",
-    "app:canZoomIn",
-    requireAll = true,
-)
-fun ImageView.setCanZoomInImageUrl(
-    imageUrl: String?,
-    canZoomIn: Boolean = false,
-) {
-    Glide.with(this)
-        .load(imageUrl)
-        .placeholder(R.drawable.img_all_loading)
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
-        .into(this)
+private class MaskTransformation(
+    private val mask: Drawable,
+) : BitmapTransformation() {
 
-    if (!canZoomIn) return
+    private val paint = Paint().apply {
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+    }
 
-    setOnClickListener {
-        StfalconImageViewer.Builder(this.context, listOf(imageUrl)) { view, image ->
-            Glide.with(this.context)
-                .load(image)
-                .placeholder(R.drawable.img_all_loading)
-                .error(R.mipmap.ic_launcher)
-                .into(view)
-        }.show()
+    override fun updateDiskCacheKey(messageDigest: MessageDigest) {
+        messageDigest.update(mask.hashCode().toByte())
+    }
+
+    override fun transform(
+        pool: BitmapPool,
+        toTransform: Bitmap,
+        outWidth: Int,
+        outHeight: Int,
+    ): Bitmap {
+        val width = toTransform.width
+        val height = toTransform.height
+
+        val bitmap = pool.get(width, height, Bitmap.Config.ARGB_8888)
+        bitmap.setHasAlpha(true)
+
+        val canvas = Canvas(bitmap)
+        mask.setBounds(0, 0, outWidth, outHeight)
+        mask.draw(canvas)
+        canvas.drawBitmap(toTransform, 0f, 0f, paint)
+        return bitmap
     }
 }
