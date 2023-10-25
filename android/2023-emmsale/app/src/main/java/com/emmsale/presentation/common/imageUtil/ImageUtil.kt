@@ -3,12 +3,10 @@ package com.emmsale.presentation.common.imageUtil
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import java.io.File
@@ -33,22 +31,6 @@ private fun Bitmap.convertToFile(context: Context): File {
         this.compress(Bitmap.CompressFormat.JPEG, HIGHEST_COMPRESS_QUALITY, fileOutputStream)
     }
     return tempFile
-}
-
-fun Uri.convertToAbsolutePath(context: Context): String? {
-    val projection = arrayOf(MediaStore.Images.Media.DATA)
-    val cursor: Cursor? = context.contentResolver.query(
-        this,
-        projection,
-        null,
-        null,
-        null,
-    )
-    return cursor?.use {
-        val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        it.moveToFirst()
-        it.getString(columnIndex)
-    }
 }
 
 fun AppCompatActivity.checkImagePermission(
@@ -102,8 +84,5 @@ fun Context.isImageAccessPermissionGranted(): Boolean {
         ) == PackageManager.PERMISSION_GRANTED
     }
 }
-
-fun isPhotoPickerAvailable(): Boolean =
-    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
 private const val HIGHEST_COMPRESS_QUALITY = 100
