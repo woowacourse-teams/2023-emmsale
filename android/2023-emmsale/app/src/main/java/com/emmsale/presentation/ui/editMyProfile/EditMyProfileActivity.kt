@@ -76,7 +76,6 @@ class EditMyProfileActivity : AppCompatActivity() {
         binding.showEducations = ::showEducations
         binding.showClubs = ::showClubs
         binding.editProfileImage = ::editProfileImage
-        binding.onPhotoButtonClick = ::editProfileImage
     }
 
     private fun navigateToGallery() {
