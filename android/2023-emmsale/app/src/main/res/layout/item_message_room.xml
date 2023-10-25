@@ -80,7 +80,7 @@
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:dateText="@{messageRoom.recentMessage.createdAt}"
-            app:dateTimeFormatter="@{DateTimePattern.AM_PM_HOUR_MINUTE}"
+            app:dateTimeFormatter="@{DateTimePattern.RELATIVE_DATE_TIME}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_message_room_title"
             tools:text="오후 12:03" />

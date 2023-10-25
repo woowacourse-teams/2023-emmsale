@@ -1,5 +1,6 @@
 package com.emmsale.presentation.ui.messageList
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -29,8 +30,9 @@ import kotlinx.coroutines.launch
 class MessageListActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
     private val viewModel: MessageListViewModel by viewModels()
+    private val keyboardHider by lazy { KeyboardHider(binding.etMessageInput) }
 
-    private lateinit var messageListAdapter: MessageListAdapter
+    private val messageListAdapter by lazy { MessageListAdapter(onProfileClick = ::navigateToProfile) }
 
     private var job: Job? = null
 
@@ -55,11 +57,14 @@ class MessageListActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupMessageRecyclerView() {
-        messageListAdapter = MessageListAdapter(::navigateToProfile)
         binding.rvMessageList.setHasFixedSize(true)
         binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
+        binding.rvMessageList.setOnTouchListener { _, event ->
+            keyboardHider.handleHideness(event)
+        }
     }
 
     private fun navigateToProfile(uid: Long) {
