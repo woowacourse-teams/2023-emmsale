@@ -25,7 +25,7 @@
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="editProfileImage"
+            name="onPhotoButtonClick"
             type="kotlin.jvm.functions.Function0" />
     </data>
 
@@ -171,7 +171,7 @@
                     app:layout_constraintEnd_toEndOf="@id/iv_editmyprofile_member_image"
                     app:layout_constraintBottom_toBottomOf="@id/iv_editmyprofile_member_image"
                     android:elevation="3dp"
-                    android:onClick="@{() -> editProfileImage.invoke()}"
+                    android:onClick="@{() -> onPhotoButtonClick.invoke()}"
                     android:contentDescription="@string/editmyprofile_profile_image_edit_button_image_description" />
 
                 <ImageView

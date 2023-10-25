@@ -86,7 +86,7 @@ class EditMyProfileActivity : AppCompatActivity() {
         binding.showFieldTags = ::showFieldTags
         binding.showEducations = ::showEducations
         binding.showClubs = ::showClubs
-        binding.editProfileImage = ::showAlbum
+        binding.onPhotoButtonClick = ::showAlbum
     }
 
     private fun getImageUrlFromActivityResult(result: ActivityResult): String? {
