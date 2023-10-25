@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -28,7 +29,7 @@ import java.security.MessageDigest
     "app:isCircle",
     "app:roundedImageRadius",
     "app:canZoomIn",
-    requireAll = false
+    requireAll = false,
 )
 fun ImageView.setImage(
     imageUrl: String?,
@@ -39,37 +40,56 @@ fun ImageView.setImage(
     radius: Int?,
     canZoomIn: Boolean?,
 ) {
+    val selectedLoadingImage =
+        loadingImage ?: AppCompatResources.getDrawable(context, R.drawable.img_all_loading)
+    val selectedDefaultImage =
+        defaultImage ?: AppCompatResources.getDrawable(context, R.mipmap.ic_launcher)
+
     Glide.with(this)
         .load(imageUrl)
-        .placeholder(
-            loadingImage
-                ?: AppCompatResources.getDrawable(context, R.drawable.img_all_loading)
-        )
-        .error(defaultImage ?: AppCompatResources.getDrawable(context, R.mipmap.ic_launcher))
-        .let {
-            when {
-                mask != null -> it.transform(CenterCrop(), MaskTransformation(mask))
-                isCircle == true -> it.transform(CenterCrop(), CircleCrop())
-                radius != null -> it.transform(CenterCrop(), RoundedCorners(radius.dp))
-                else -> it
-            }
-        }
+        .placeholder(selectedLoadingImage)
+        .error(selectedDefaultImage)
+        .customTransform(mask = mask, isCircle = isCircle, radius = radius)
         .into(this)
 
     if (canZoomIn == true) {
-        setOnClickListener {
-            StfalconImageViewer.Builder(this.context, listOf(imageUrl)) { view, image ->
-                Glide.with(this.context)
-                    .load(image)
-                    .placeholder(R.drawable.img_all_loading)
-                    .error(R.mipmap.ic_launcher)
-                    .into(view)
-            }.show()
-        }
+        makeItPossibleToZoomInOnClick(
+            imageUrl = imageUrl,
+            loadingImage = selectedLoadingImage,
+            defaultImage = defaultImage,
+        )
     }
 }
 
-class MaskTransformation(
+// 순서는 변화될 사진 모양의 구체적인 수준에 따라 설정했습니다.
+private fun RequestBuilder<Drawable>.customTransform(
+    mask: Drawable?,
+    isCircle: Boolean?,
+    radius: Int?,
+): RequestBuilder<Drawable> = when {
+    mask != null -> transform(CenterCrop(), MaskTransformation(mask))
+    radius != null -> transform(CenterCrop(), RoundedCorners(radius.dp))
+    isCircle == true -> transform(CenterCrop(), CircleCrop())
+    else -> this
+}
+
+private fun ImageView.makeItPossibleToZoomInOnClick(
+    imageUrl: String?,
+    loadingImage: Drawable?,
+    defaultImage: Drawable?,
+) {
+    setOnClickListener {
+        StfalconImageViewer.Builder(this.context, listOf(imageUrl)) { view, image ->
+            Glide.with(this.context)
+                .load(image)
+                .placeholder(loadingImage)
+                .error(defaultImage)
+                .into(view)
+        }.show()
+    }
+}
+
+private class MaskTransformation(
     private val mask: Drawable,
 ) : BitmapTransformation() {
 
@@ -85,7 +105,7 @@ class MaskTransformation(
         pool: BitmapPool,
         toTransform: Bitmap,
         outWidth: Int,
-        outHeight: Int
+        outHeight: Int,
     ): Bitmap {
         val width = toTransform.width
         val height = toTransform.height
