@@ -62,6 +62,11 @@ class MessageListActivity : AppCompatActivity() {
         binding.rvMessageList.setHasFixedSize(true)
         binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
+        binding.rvMessageList.setOnScrollChangeListener { v, _, _, _, _ ->
+            if (!v.canScrollVertically(BOTTOM_SCROLL_DIRECTION)) {
+                hideBottomMessage()
+            }
+        }
         binding.rvMessageList.setOnTouchListener { _, event ->
             keyboardHider.handleHideness(event)
         }
@@ -124,7 +129,9 @@ class MessageListActivity : AppCompatActivity() {
         val layoutManager = binding.rvMessageList.layoutManager as LinearLayoutManager
         val lastVisiblePos = layoutManager.findLastVisibleItemPosition()
         val itemCount = viewModel.messages.value.messages.size
-        if (lastVisiblePos <= itemCount - 3) {
+        val lastPosition = itemCount - 1
+
+        if (lastVisiblePos != lastPosition) {
             job?.cancel()
             job = lifecycleScope.launch {
                 showBottomMessage(profileUrl, otherName, messageContent)
@@ -153,6 +160,7 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val BOTTOM_SCROLL_DIRECTION = 1
         private const val KEY_PROFILE_URL = "KEY_PROFILE_URL"
         private const val KEY_OTHER_NAME = "KEY_OTHER_NAME"
         private const val KEY_MESSAGE_CONTENT = "KEY_MESSAGE_CONTENT"
