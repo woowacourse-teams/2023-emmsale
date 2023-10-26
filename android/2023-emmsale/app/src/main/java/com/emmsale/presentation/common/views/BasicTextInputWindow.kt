@@ -26,10 +26,7 @@ class BasicTextInputWindow : ConstraintLayout {
     }
 
     var onSubmitListener: OnSubmitListener by Delegates.observable(OnSubmitListener { }) { _, _, newValue ->
-        binding.tvSubmitButton.setOnClickListener {
-            newValue.onSubmit(binding.etBasicInput.text.toString())
-            binding.etBasicInput.text.clear()
-        }
+        binding.onSubmitButtonClick = { newValue.onSubmit(it) }
     }
 
     init {
@@ -54,6 +51,10 @@ class BasicTextInputWindow : ConstraintLayout {
             binding.tvSubmitButton.text =
                 it.getString(R.styleable.BasicTextInputWindow_submitButtonLabel)
         }
+    }
+
+    fun clearText() {
+        binding.etBasicInput.text.clear()
     }
 
     fun interface OnSubmitListener {

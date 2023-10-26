@@ -213,13 +213,18 @@ class ChildCommentActivity : AppCompatActivity() {
             ChildCommentsUiEvent.CommentDeleteFail -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))
             ChildCommentsUiEvent.None -> {}
             is ChildCommentsUiEvent.UnexpectedError -> showToast(content.errorMessage)
-            ChildCommentsUiEvent.CommentPostComplete -> scrollToLastPosition()
+            ChildCommentsUiEvent.CommentPostComplete -> handleCommentPostComplete()
         }
     }
 
     private fun saveChildComment(content: String) {
         viewModel.saveChildComment(content)
         hideKeyboard()
+    }
+
+    private fun handleCommentPostComplete() {
+        scrollToLastPosition()
+        binding.btiwCommentPost.clearText()
     }
 
     private fun scrollToLastPosition() {
