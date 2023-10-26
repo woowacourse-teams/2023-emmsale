@@ -21,4 +21,9 @@
         <attr name="title" format="string" />
         <attr name="description" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="BasicTextInputWindow">
+        <attr name="submitButtonLabel" format="string" />
+        <attr name="hint" format="string" />
+    </declare-styleable>
 </resources>
