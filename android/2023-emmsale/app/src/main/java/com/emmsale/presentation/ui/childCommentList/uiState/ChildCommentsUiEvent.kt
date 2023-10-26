@@ -10,4 +10,5 @@ sealed interface ChildCommentsUiEvent {
     object CommentReportFail : ChildCommentsUiEvent
     object CommentReportComplete : ChildCommentsUiEvent
     object CommentPostComplete : ChildCommentsUiEvent
+    object CommentUpdateComplete : ChildCommentsUiEvent
 }
