@@ -1,18 +1,18 @@
 package com.emmsale.presentation.common.imageUtil
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import java.io.File
 import java.io.FileOutputStream
 
-fun getFileFromUri(context: Context, uri: Uri): File {
+fun getImageFileFromUri(context: Context, uri: Uri): File {
     val bitmap = uri.getBitmapFromUri(context)
     val file = bitmap?.convertToFile(context)
     return file ?: File("")
@@ -33,56 +33,47 @@ private fun Bitmap.convertToFile(context: Context): File {
     return tempFile
 }
 
-fun AppCompatActivity.checkImagePermission(
+fun Activity.onImagePermissionCompat(
     onGranted: () -> Unit,
-    onFirstDenied: (String) -> Unit,
-    onDenied: () -> Unit,
+    onShouldShowRequestPermissionRationale: () -> Unit,
+    onDenied: (String) -> Unit,
 ) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        checkImagePermission(
-            Manifest.permission.READ_MEDIA_IMAGES,
-            onGranted,
-            onFirstDenied,
-            onDenied,
-        )
+    onImagePermissionCompat(
+        getImagePermissionCompat(),
+        onGranted,
+        onShouldShowRequestPermissionRationale,
+        onDenied,
+    )
+}
+
+private fun getImagePermissionCompat(): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        Manifest.permission.READ_MEDIA_IMAGES
     } else {
-        checkImagePermission(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            onGranted,
-            onFirstDenied,
-            onDenied,
-        )
+        Manifest.permission.READ_EXTERNAL_STORAGE
     }
 }
 
-fun AppCompatActivity.checkImagePermission(
+fun Activity.onImagePermissionCompat(
     permission: String,
     onGranted: () -> Unit,
-    onFirstDenied: (String) -> Unit,
-    onDenied: () -> Unit,
+    onShouldShowRequestPermissionRationale: () -> Unit,
+    onDenied: (String) -> Unit,
 ) {
     when {
-        isImageAccessPermissionGranted() -> onGranted()
+        isImagePermissionGrantedCompat() -> onGranted()
 
-        !isImageAccessPermissionGranted() &&
-            shouldShowRequestPermissionRationale(permission) -> onFirstDenied(permission)
+        shouldShowRequestPermissionRationale(permission) -> onShouldShowRequestPermissionRationale()
 
-        else -> onDenied()
+        else -> onDenied(permission)
     }
 }
 
-fun Context.isImageAccessPermissionGranted(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_MEDIA_IMAGES,
-        ) == PackageManager.PERMISSION_GRANTED
-    } else {
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-        ) == PackageManager.PERMISSION_GRANTED
-    }
+fun Context.isImagePermissionGrantedCompat(): Boolean {
+    return ContextCompat.checkSelfPermission(
+        this,
+        getImagePermissionCompat(),
+    ) == PackageManager.PERMISSION_GRANTED
 }
 
 private const val HIGHEST_COMPRESS_QUALITY = 100

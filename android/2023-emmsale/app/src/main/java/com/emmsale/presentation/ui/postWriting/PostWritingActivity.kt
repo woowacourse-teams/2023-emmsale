@@ -16,9 +16,9 @@ import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.common.imageUtil.checkImagePermission
-import com.emmsale.presentation.common.imageUtil.getFileFromUri
-import com.emmsale.presentation.common.imageUtil.isImageAccessPermissionGranted
+import com.emmsale.presentation.common.imageUtil.getImageFileFromUri
+import com.emmsale.presentation.common.imageUtil.isImagePermissionGrantedCompat
+import com.emmsale.presentation.common.imageUtil.onImagePermissionCompat
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.postWriting.PostWritingViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.postWriting.recyclerView.PostWritingImageAdapter
@@ -42,7 +42,7 @@ class PostWritingActivity : AppCompatActivity() {
 
     private val requestImagePermissionSettingLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (isImageAccessPermissionGranted()) showAlbum()
+            if (isImagePermissionGrantedCompat()) showAlbum()
         }
 
     private val albumLauncher =
@@ -121,17 +121,17 @@ class PostWritingActivity : AppCompatActivity() {
 
             else -> {
                 val imageUris = viewModel.imageUris.value
-                val imageFiles = imageUris.map { getFileFromUri(this, Uri.parse(it)) }
+                val imageFiles = imageUris.map { getImageFileFromUri(this, Uri.parse(it)) }
                 viewModel.uploadPost(imageFiles)
             }
         }
     }
 
     private fun showAlbum() {
-        checkImagePermission(
+        onImagePermissionCompat(
             onGranted = ::navigateToAlbum,
-            onFirstDenied = { imagePermissionLauncher.launch(it) },
-            onDenied = { showImagePermissionRequestDialog() },
+            onShouldShowRequestPermissionRationale = { showImagePermissionRequestDialog() },
+            onDenied = { imagePermissionLauncher.launch(it) },
         )
     }
 
@@ -139,7 +139,12 @@ class PostWritingActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-        albumLauncher.launch(Intent.createChooser(intent, "Get Picture"))
+        albumLauncher.launch(
+            Intent.createChooser(
+                intent,
+                getString(R.string.all_choose_image_picker_type),
+            ),
+        )
     }
 
     private fun showImagePermissionRequestDialog() {

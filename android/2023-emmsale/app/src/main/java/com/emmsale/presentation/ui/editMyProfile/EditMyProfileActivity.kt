@@ -16,9 +16,9 @@ import com.emmsale.databinding.ActivityEditMyProfileBinding
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.imageUtil.checkImagePermission
-import com.emmsale.presentation.common.imageUtil.getFileFromUri
-import com.emmsale.presentation.common.imageUtil.isImageAccessPermissionGranted
+import com.emmsale.presentation.common.imageUtil.getImageFileFromUri
+import com.emmsale.presentation.common.imageUtil.isImagePermissionGrantedCompat
+import com.emmsale.presentation.common.imageUtil.onImagePermissionCompat
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapterDecoration
@@ -45,14 +45,14 @@ class EditMyProfileActivity : AppCompatActivity() {
 
     private val permissionSettingLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (isImageAccessPermissionGranted()) navigateToGallery()
+            if (isImagePermissionGrantedCompat()) navigateToGallery()
         }
 
     private val albumLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
                 val imageUri = it.data?.data ?: return@registerForActivityResult
-                val imageFile = getFileFromUri(context = this, uri = imageUri)
+                val imageFile = getImageFileFromUri(context = this, uri = imageUri)
                 viewModel.updateProfileImage(profileImageFile = imageFile)
             }
         }
@@ -82,14 +82,19 @@ class EditMyProfileActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
         }
-        albumLauncher.launch(intent)
+        albumLauncher.launch(
+            Intent.createChooser(
+                intent,
+                getString(R.string.all_choose_image_picker_type),
+            ),
+        )
     }
 
     private fun editProfileImage() {
-        checkImagePermission(
+        onImagePermissionCompat(
             onGranted = ::navigateToGallery,
-            onFirstDenied = { imagePermissionLauncher.launch(it) },
-            onDenied = { showNavigateToDetailSettingDialog() },
+            onShouldShowRequestPermissionRationale = { showNavigateToDetailSettingDialog() },
+            onDenied = { imagePermissionLauncher.launch(it) },
         )
     }
 
