@@ -26,10 +26,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_sub_text_input_window"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:paddingTop="8dp"
         app:visible="@{isVisible}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="17dp"
-            android:layout_marginBottom="5dp"
+            android:paddingBottom="5dp"
             android:background="@android:color/transparent"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
@@ -48,10 +47,12 @@
             android:maxLength="255"
             android:maxLines="5"
             android:textSize="13sp"
+            android:paddingTop="8dp"
             app:layout_constraintBottom_toTopOf="@id/tv_submit_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="LabelFor" />
+            tools:ignore="LabelFor"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_cancel_button"
