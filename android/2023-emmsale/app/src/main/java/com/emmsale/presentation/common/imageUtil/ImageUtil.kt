@@ -28,7 +28,7 @@ private fun Bitmap.convertToFile(context: Context): File {
     val tempFile = File.createTempFile("imageFile", ".jpg", context.cacheDir)
 
     FileOutputStream(tempFile).use { fileOutputStream ->
-        this.compress(Bitmap.CompressFormat.JPEG, HIGHEST_COMPRESS_QUALITY, fileOutputStream)
+        compress(Bitmap.CompressFormat.JPEG, HIGHEST_COMPRESS_QUALITY, fileOutputStream)
     }
     return tempFile
 }
