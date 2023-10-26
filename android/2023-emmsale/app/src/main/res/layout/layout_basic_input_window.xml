@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="kotlin.Unit" />
-
         <variable
             name="isVisible"
             type="Boolean" />
@@ -16,8 +14,8 @@
             type="Boolean" />
 
         <variable
-            name="onSubmitButtonClick"
-            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+            name="onSubmitListener"
+            type="com.emmsale.presentation.common.views.BasicTextInputWindow.OnSubmitListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="1dp"
                 android:padding="18dp"
-                android:onClick="@{() -> onSubmitButtonClick.invoke(etBasicInput.getText().toString())}"
+                android:onClick="@{() -> onSubmitListener.onSubmit(etBasicInput.getText().toString())}"
                 android:enabled="@{!etBasicInput.text.toString().isBlank() &amp;&amp; isSubmitEnabled}"
                 android:textColor="@color/all_enable_primary"
                 android:textStyle="bold"

@@ -16,12 +16,12 @@
             type="Boolean" />
 
         <variable
-            name="onCancelButtonClick"
-            type="kotlin.jvm.functions.Function0" />
+            name="onCancelListener"
+            type="com.emmsale.presentation.common.views.SubTextInputWindow.OnCancelListener" />
 
         <variable
-            name="onSubmitButtonClick"
-            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+            name="onSubmitListener"
+            type="com.emmsale.presentation.common.views.SubTextInputWindow.OnSubmitListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="17dp"
             android:paddingVertical="13dp"
-            android:onClick="@{() -> onCancelButtonClick.invoke()}"
+            android:onClick="@{() -> onCancelListener.onCancel()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_submit_button" />
 
@@ -71,7 +71,7 @@
             android:paddingHorizontal="17dp"
             android:paddingVertical="13dp"
             android:enabled="@{!etSubTextInput.text.toString().isBlank() &amp;&amp; isSubmitEnabled}"
-            android:onClick="@{() -> onSubmitButtonClick.invoke(etSubTextInput.getText().toString())}"
+            android:onClick="@{() -> onSubmitListener.onSubmit(etSubTextInput.getText().toString())}"
             android:textColor="@color/all_enable_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

@@ -34,11 +34,11 @@ class SubTextInputWindow : ConstraintLayout {
     }
 
     var onSubmitListener: OnSubmitListener by Delegates.observable(OnSubmitListener { }) { _, _, newValue ->
-        binding.onSubmitButtonClick = { newValue.onSubmit(it) }
+        binding.onSubmitListener = newValue
     }
 
     var onCancelListener: OnCancelListener by Delegates.observable(OnCancelListener { }) { _, _, newValue ->
-        binding.onCancelButtonClick = { newValue.onCancel() }
+        binding.onCancelListener = newValue
     }
 
     init {

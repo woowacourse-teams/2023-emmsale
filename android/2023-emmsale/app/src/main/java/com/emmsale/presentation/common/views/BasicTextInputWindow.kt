@@ -26,7 +26,7 @@ class BasicTextInputWindow : ConstraintLayout {
     }
 
     var onSubmitListener: OnSubmitListener by Delegates.observable(OnSubmitListener { }) { _, _, newValue ->
-        binding.onSubmitButtonClick = { newValue.onSubmit(it) }
+        binding.onSubmitListener = newValue
     }
 
     init {
@@ -60,11 +60,6 @@ class BasicTextInputWindow : ConstraintLayout {
     fun interface OnSubmitListener {
         fun onSubmit(text: String)
     }
-}
-
-@BindingAdapter("app:visible")
-fun BasicTextInputWindow.setIsVisible(isVisible: Boolean) {
-    this.isVisible = isVisible
 }
 
 @BindingAdapter("app:onSubmit")
