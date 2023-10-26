@@ -1,16 +1,14 @@
 package com.emmsale.presentation.common.views
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
-import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.emmsale.R
 import com.emmsale.databinding.LayoutBasicInputWindowBinding
+import com.emmsale.presentation.common.views.BasicTextInputWindow.OnSubmitListener
 import kotlin.properties.Delegates
 
 class BasicTextInputWindow : ConstraintLayout {
@@ -19,13 +17,24 @@ class BasicTextInputWindow : ConstraintLayout {
         LayoutBasicInputWindowBinding.inflate(LayoutInflater.from(context), this, false)
     }
 
-    var isVisible: Boolean by Delegates.observable(false) { _, _, newValue ->
-        binding.layoutTextInputWindow.isVisible = newValue
+    var isVisible: Boolean by Delegates.observable(true) { _, _, newValue ->
+        binding.isVisible = newValue
+    }
+
+    var isSubmitEnabled: Boolean by Delegates.observable(false) { _, _, newValue ->
+        binding.isSubmitEnabled = newValue
+    }
+
+    var onSubmitListener: OnSubmitListener by Delegates.observable(OnSubmitListener { }) { _, _, newValue ->
+        binding.tvSubmitButton.setOnClickListener {
+            newValue.onSubmit(binding.etBasicInput.text.toString())
+            binding.etBasicInput.text.clear()
+        }
     }
 
     init {
         addView(binding.root)
-        setupSubmitButton()
+        binding.isVisible = isVisible
     }
 
     constructor(context: Context) : super(context)
@@ -41,44 +50,28 @@ class BasicTextInputWindow : ConstraintLayout {
             0,
             0,
         ).use {
-            binding.et.hint = it.getString(R.styleable.BasicTextInputWindow_hint)
+            binding.etBasicInput.hint = it.getString(R.styleable.BasicTextInputWindow_hint)
             binding.tvSubmitButton.text =
                 it.getString(R.styleable.BasicTextInputWindow_submitButtonLabel)
         }
     }
 
-    private fun setupSubmitButton() {
-        binding.et.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.tvSubmitButton.isEnabled = s?.isNotBlank() == true
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-    }
-
-    fun setOnSubmitListener(onSubmitListener: OnSubmitListener) {
-        binding.tvSubmitButton.setOnClickListener {
-            onSubmitListener.onSubmit(binding.et.text.toString())
-            binding.et.text.clear()
-        }
-    }
-
-    interface OnSubmitListener {
+    fun interface OnSubmitListener {
         fun onSubmit(text: String)
     }
 }
 
-@BindingAdapter("app:isVisible")
+@BindingAdapter("app:visible")
 fun BasicTextInputWindow.setIsVisible(isVisible: Boolean) {
     this.isVisible = isVisible
 }
 
 @BindingAdapter("app:onSubmit")
-fun BasicTextInputWindow.setOnSubmitListenerBA(onSubmitListener: BasicTextInputWindow.OnSubmitListener) {
-    setOnSubmitListener(onSubmitListener)
+fun BasicTextInputWindow.setOnSubmitListenerBA(onSubmitListener: OnSubmitListener) {
+    this.onSubmitListener = onSubmitListener
+}
+
+@BindingAdapter("app:isSubmitEnabled")
+fun BasicTextInputWindow.setIsSubmitEnabled(isSubmitEnabled: Boolean) {
+    this.isSubmitEnabled = isSubmitEnabled
 }

@@ -81,8 +81,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:hint="@string/comments_edit_comment_hint"
                     app:onSubmit="@{(text) -> onCommentSubmitButtonClick.invoke(text)}"
+                    app:isSubmitEnabled="@{viewModel.comments.fetchResult == FetchResult.LOADING ? false : true}"
                     app:submitButtonLabel="@string/comments_comment_submit_button_label"
-                    app:isVisible="@{viewModel.editingCommentId == null ? true : false}" />
+                    app:visible="@{viewModel.editingCommentId == null ? true : false}" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_childcomments_comment_update"

@@ -5,10 +5,16 @@
 
     <data>
 
+        <variable
+            name="isVisible"
+            type="Boolean" />
+
+        <variable
+            name="isSubmitEnabled"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_text_input_window"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="17dp"
@@ -16,6 +22,7 @@
         android:paddingEnd="17dp"
         android:paddingBottom="8dp"
         android:clickable="true"
+        app:visible="@{isVisible}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -31,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/et"
+                android:id="@+id/et_basic_input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="1dp"
@@ -57,6 +64,7 @@
                 android:layout_marginEnd="1dp"
                 android:padding="18dp"
                 android:text="@string/comments_comment_submit_button_label"
+                android:enabled="@{!etBasicInput.text.toString().isBlank() &amp;&amp; isSubmitEnabled}"
                 android:textColor="@color/all_enable_primary"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
