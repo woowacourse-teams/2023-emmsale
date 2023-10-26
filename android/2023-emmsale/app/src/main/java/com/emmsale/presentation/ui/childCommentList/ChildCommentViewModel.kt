@@ -47,6 +47,17 @@ class ChildCommentViewModel @Inject constructor(
         NotNullMutableLiveData(Event(ChildCommentsUiEvent.None))
     val uiEvent: NotNullLiveData<Event<ChildCommentsUiEvent>> = _uiEvent
 
+    init {
+        handleResponse(
+            getResult = { commentRepository.getComment(parentCommentId) },
+            onSuccess = {
+                _comments.value = ChildCommentsUiState.create(uid, parentComment = it)
+                _uiEvent.value = Event(ChildCommentsUiEvent.CommentFirstFetchComplete)
+            },
+            onFailure = { _, _ -> },
+        )
+    }
+
     override fun refresh() {
         handleResponse(
             getResult = { commentRepository.getComment(parentCommentId) },
@@ -61,14 +72,26 @@ class ChildCommentViewModel @Inject constructor(
         )
     }
 
-    fun saveChildComment(content: String) {
+    fun postChildComment(content: String) {
         handleResponse(
             getResult = { commentRepository.saveComment(content, feedId, parentCommentId) },
-            onSuccess = {
-                refresh()
-                _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostComplete)
-            },
+            onSuccess = { refresh(ChildCommentsUiEvent.CommentPostComplete) },
             onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostFail) },
+        )
+    }
+
+    private fun refresh(pendingEventOnSuccess: ChildCommentsUiEvent) {
+        handleResponse(
+            getResult = { commentRepository.getComment(parentCommentId) },
+            onSuccess = {
+                val comments = listOf(CommentUiState.create(uid, it)) +
+                    it.childComments.map { childComment ->
+                        CommentUiState.create(uid, childComment)
+                    }
+                _comments.value = _comments.value.copy(comments = comments)
+                _uiEvent.value = Event(pendingEventOnSuccess)
+            },
+            onFailure = { _, _ -> },
         )
     }
 

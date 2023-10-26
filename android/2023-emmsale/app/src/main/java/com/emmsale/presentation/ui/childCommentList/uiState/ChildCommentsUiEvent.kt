@@ -11,4 +11,5 @@ sealed interface ChildCommentsUiEvent {
     object CommentReportComplete : ChildCommentsUiEvent
     object CommentPostComplete : ChildCommentsUiEvent
     object CommentUpdateComplete : ChildCommentsUiEvent
+    object CommentFirstFetchComplete : ChildCommentsUiEvent
 }

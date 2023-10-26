@@ -45,6 +45,14 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private val keyboardHider: KeyboardHider by lazy { KeyboardHider(this) }
 
+    private val fromNotification: Boolean by lazy {
+        intent.getBooleanExtra(KEY_FROM_NOTIFICATION, false)
+    }
+
+    private val newChildCommentId: Long by lazy {
+        intent.getLongExtra(KEY_NEW_CHILD_COMMENT_ID, INVALID_COMMENT_ID)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -56,8 +64,8 @@ class ChildCommentActivity : AppCompatActivity() {
         observeUiEvent()
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onRestart() {
+        super.onRestart()
         viewModel.refresh()
     }
 
@@ -137,7 +145,7 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private fun saveChildComment(content: String) {
-        viewModel.saveChildComment(content)
+        viewModel.postChildComment(content)
         hideKeyboard()
     }
 
@@ -222,18 +230,20 @@ class ChildCommentActivity : AppCompatActivity() {
             ChildCommentsUiEvent.CommentDeleteFail -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))
             ChildCommentsUiEvent.None -> {}
             is ChildCommentsUiEvent.UnexpectedError -> showToast(content.errorMessage)
-            ChildCommentsUiEvent.CommentPostComplete -> handleCommentPostComplete()
-            ChildCommentsUiEvent.CommentUpdateComplete -> handleCommentUpdateComplete()
+            ChildCommentsUiEvent.CommentPostComplete -> {
+                scrollToLastPosition()
+                binding.btiwCommentPost.clearText()
+            }
+
+            ChildCommentsUiEvent.CommentUpdateComplete ->
+                binding.stiwCommentUpdate.isVisible = false
+
+            ChildCommentsUiEvent.CommentFirstFetchComplete -> if (fromNotification) {
+                val position =
+                    viewModel.comments.value.comments.indexOfFirst { it.comment.id == newChildCommentId }
+                binding.rvChildcommentsChildcomments.smoothScrollToPosition(position)
+            }
         }
-    }
-
-    private fun handleCommentPostComplete() {
-        scrollToLastPosition()
-        binding.btiwCommentPost.clearText()
-    }
-
-    private fun handleCommentUpdateComplete() {
-        binding.stiwCommentUpdate.isVisible = false
     }
 
     private fun scrollToLastPosition() {
@@ -242,6 +252,8 @@ class ChildCommentActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY_FROM_NOTIFICATION = "KEY_FROM_NOTIFICATION"
+        private const val KEY_NEW_CHILD_COMMENT_ID = "KEY_CHILD_COMMENT_ID"
+        private const val INVALID_COMMENT_ID: Long = -1
 
         fun startActivity(context: Context, feedId: Long, parentCommentId: Long) {
             val intent = Intent(context, ChildCommentActivity::class.java).apply {
@@ -256,11 +268,13 @@ class ChildCommentActivity : AppCompatActivity() {
             context: Context,
             feedId: Long,
             parentCommentId: Long,
+            newChildCommentId: Long,
             fromNotification: Boolean = false,
         ): Intent =
             Intent(context, ChildCommentActivity::class.java).apply {
                 putExtra(KEY_FEED_ID, feedId)
                 putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
+                putExtra(KEY_NEW_CHILD_COMMENT_ID, newChildCommentId)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 if (fromNotification) putExtra(KEY_FROM_NOTIFICATION, true)
             }
