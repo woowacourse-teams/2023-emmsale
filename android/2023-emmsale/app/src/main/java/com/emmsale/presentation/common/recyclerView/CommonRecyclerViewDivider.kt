@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.childCommentList.recyclerView
+package com.emmsale.presentation.common.recyclerView
 
 import android.content.Context
 import android.graphics.Canvas
@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 
-class ChildCommentRecyclerViewDivider(context: Context) : RecyclerView.ItemDecoration() {
+class CommonRecyclerViewDivider(context: Context) : RecyclerView.ItemDecoration() {
     private val divider: Drawable by lazy {
         ContextCompat.getDrawable(context, R.drawable.bg_all_vertical_divider)
             ?: throw IllegalStateException("bg_all_vertical_divider 리소스를 찾을 수 없습니다. drawable 리소스를 확인해주세요.")

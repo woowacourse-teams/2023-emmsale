@@ -1,52 +1,17 @@
 package com.emmsale.presentation.ui.childCommentList.uiState
 
-import com.emmsale.data.model.Comment
+import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.common.FetchResultUiState
+import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
 data class ChildCommentsUiState(
-    val isLoading: Boolean,
-    val isError: Boolean,
-    val parentComment: CommentUiState,
-    val childComments: List<CommentUiState>,
-) {
-
-    fun changeToLoadingState(): ChildCommentsUiState = copy(
-        isLoading = true,
-        isError = false,
-    )
-
-    fun changeToErrorState(): ChildCommentsUiState = copy(
-        isLoading = false,
-        isError = true,
-    )
-
-    fun changeChildCommentsState(
-        comment: Comment,
-        loginMemberId: Long,
-    ): ChildCommentsUiState = copy(
-        isLoading = false,
-        isError = false,
-        parentComment = CommentUiState.create(comment, loginMemberId),
-        childComments = comment.childComments.map { CommentUiState.create(it, loginMemberId) },
-    )
-
+    override val fetchResult: FetchResult,
+    val comments: List<CommentUiState>,
+) : FetchResultUiState() {
     companion object {
-        val FIRST_LOADING = ChildCommentsUiState(
-            isLoading = true,
-            isError = false,
-            parentComment = CommentUiState(
-                authorId = -1,
-                authorName = "",
-                authorImageUrl = "",
-                lastModifiedDate = "",
-                isUpdated = false,
-                id = -1,
-                content = "",
-                isUpdatable = false,
-                isDeletable = false,
-                isReportable = false,
-                isDeleted = false,
-            ),
-            childComments = listOf(),
+        val Loading: ChildCommentsUiState = ChildCommentsUiState(
+            fetchResult = FetchResult.LOADING,
+            comments = emptyList(),
         )
     }
 }

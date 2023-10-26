@@ -18,7 +18,7 @@ import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
-import com.emmsale.presentation.ui.childCommentList.uiState.CommentsUiState
+import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -34,8 +34,8 @@ class ChildCommentViewModel @Inject constructor(
     val feedId = stateHandle.get<Long>(KEY_FEED_ID)!!
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _comments = NotNullMutableLiveData(CommentsUiState.Loading)
-    val comments: NotNullLiveData<CommentsUiState> = _comments
+    private val _comments = NotNullMutableLiveData(ChildCommentsUiState.Loading)
+    val comments: NotNullLiveData<ChildCommentsUiState> = _comments
 
     private val _editingCommentId = MutableLiveData<Long?>()
     val editingCommentId: LiveData<Long?> = _editingCommentId

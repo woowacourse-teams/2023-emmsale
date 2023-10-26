@@ -12,12 +12,12 @@ import com.emmsale.databinding.ActivityFeedDetailBinding
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.recyclerView.CommonRecyclerViewDivider
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
-import com.emmsale.presentation.ui.commentList.recyclerView.CommentRecyclerViewDivider
 import com.emmsale.presentation.ui.feedDetail.FeedDetailViewModel.Companion.KEY_FEED_ID
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailAdapter
@@ -155,7 +155,7 @@ class FeedDetailActivity : AppCompatActivity() {
                 commentsAdapter,
             )
             itemAnimator = null
-            addItemDecoration(CommentRecyclerViewDivider(this@FeedDetailActivity))
+            addItemDecoration(CommonRecyclerViewDivider(this@FeedDetailActivity))
         }
     }
 

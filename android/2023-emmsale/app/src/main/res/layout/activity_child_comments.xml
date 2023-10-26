@@ -64,7 +64,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:itemCount="10"
-                    tools:listitem="@layout/item_childcomments_childcomment" />
+                    tools:listitem="@layout/item_all_child_comment" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_childcomments_postchildcomment"
@@ -148,6 +148,7 @@
                         android:background="@android:color/transparent"
                         android:importantForAutofill="no"
                         android:inputType="textMultiLine"
+                        android:lineSpacingExtra="2dp"
                         android:maxLength="255"
                         android:maxLines="5"
                         android:textSize="13sp"

@@ -12,15 +12,15 @@ import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.recyclerView.CommonRecyclerViewDivider
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_FEED_ID
 import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_PARENT_COMMENT_ID
-import com.emmsale.presentation.ui.childCommentList.recyclerView.ChildCommentRecyclerViewDivider
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
-import com.emmsale.presentation.ui.childCommentList.uiState.CommentsUiState
+import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.profile.ProfileActivity
@@ -157,7 +157,7 @@ class ChildCommentActivity : AppCompatActivity() {
         binding.rvChildcommentsChildcomments.apply {
             adapter = commentsAdapter
             itemAnimator = null
-            addItemDecoration(ChildCommentRecyclerViewDivider(this@ChildCommentActivity))
+            addItemDecoration(CommonRecyclerViewDivider(this@ChildCommentActivity))
         }
     }
 
@@ -180,7 +180,7 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleChildComments(comments: CommentsUiState) {
+    private fun handleChildComments(comments: ChildCommentsUiState) {
         commentsAdapter.submitList(comments.comments)
     }
 
