@@ -82,7 +82,9 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun BottomMenuDialog.addCommentUpdateButton(commentId: Long) {
         addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
-            changeToCommentEditMode(commentId)
+            viewModel.setEditMode(true, commentId)
+            binding.stiwCommentUpdate.requestFocusOnEditText()
+            showKeyboard()
         }
     }
 
@@ -100,7 +102,7 @@ class ChildCommentActivity : AppCompatActivity() {
             message = context.getString(R.string.commentdeletedialog_message),
             positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
             negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
-            onPositiveButtonClick = { deleteComment(commentId) },
+            onPositiveButtonClick = { viewModel.deleteComment(commentId) },
         ).show()
     }
 
@@ -113,16 +115,6 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun showProfile(authorId: Long) {
         ProfileActivity.startActivity(this, authorId)
-    }
-
-    private fun changeToCommentEditMode(commentId: Long) {
-        viewModel.setEditMode(true, commentId)
-        binding.stiwCommentUpdate.requestFocusOnEditText()
-        showKeyboard()
-    }
-
-    private fun deleteComment(commentId: Long) {
-        viewModel.deleteComment(commentId)
     }
 
     private fun reportComment(commentId: Long) {
@@ -139,12 +131,12 @@ class ChildCommentActivity : AppCompatActivity() {
     private fun setupDataBinding() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        binding.onCommentSubmitButtonClick = ::saveChildComment
+        binding.onCommentSubmitButtonClick = ::postChildComment
         binding.onCommentUpdateCancelButtonClick = ::cancelUpdateComment
         binding.onUpdatedCommentSubmitButtonClick = ::updateComment
     }
 
-    private fun saveChildComment(content: String) {
+    private fun postChildComment(content: String) {
         viewModel.postChildComment(content)
         hideKeyboard()
     }

@@ -82,8 +82,7 @@
                     app:hint="@string/comments_edit_comment_hint"
                     app:onSubmit="@{(content) -> onCommentSubmitButtonClick.invoke(content)}"
                     app:isSubmitEnabled="@{viewModel.comments.fetchResult != FetchResult.LOADING}"
-                    app:submitButtonLabel="@string/comments_comment_submit_button_label"
-                    app:visible="@{viewModel.editingCommentId == null ? true : false}" />
+                    app:submitButtonLabel="@string/comments_comment_submit_button_label" />
 
                 <com.emmsale.presentation.common.views.SubTextInputWindow
                     android:id="@+id/stiw_comment_update"
