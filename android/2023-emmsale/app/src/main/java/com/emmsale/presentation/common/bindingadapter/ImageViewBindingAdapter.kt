@@ -97,8 +97,17 @@ private class MaskTransformation(
         xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
     }
 
+    override fun equals(other: Any?): Boolean {
+        return other is MaskTransformation &&
+            other.mask == mask
+    }
+
+    override fun hashCode(): Int {
+        return ID.hashCode() + mask.hashCode()
+    }
+
     override fun updateDiskCacheKey(messageDigest: MessageDigest) {
-        messageDigest.update(mask.hashCode().toByte())
+        messageDigest.update((ID + mask.toString()).toByteArray(CHARSET))
     }
 
     override fun transform(
@@ -118,5 +127,10 @@ private class MaskTransformation(
         mask.draw(canvas)
         canvas.drawBitmap(toTransform, 0f, 0f, paint)
         return bitmap
+    }
+
+    companion object {
+        private const val ID =
+            "com.emmsale.presentation.common.bindingadapter.ImageViewBindingAdapter"
     }
 }

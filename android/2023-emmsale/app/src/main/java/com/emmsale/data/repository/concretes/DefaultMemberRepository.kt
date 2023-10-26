@@ -88,16 +88,16 @@ class DefaultMemberRepository @Inject constructor(
         memberId: Long,
         profileImageFile: File,
     ): ApiResponse<String> = withContext(dispatcher) {
-        val requestFile = profileImageFile.asRequestBody("image/*".toMediaTypeOrNull())
-        val formDataFile = MultipartBody.Part.createFormData(
+        val requestBody = profileImageFile.asRequestBody("image/*".toMediaTypeOrNull())
+        val formData = MultipartBody.Part.createFormData(
             IMAGE_KEY,
             profileImageFile.name,
-            requestFile,
+            requestBody,
         )
 
         memberService.updateMemberProfileImage(
             memberId = memberId,
-            profileImageFile = formDataFile,
+            formDatas = formData,
         ).map { it.profileImageUrl }
     }
 
