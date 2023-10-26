@@ -1,5 +1,6 @@
 package com.emmsale.presentation.ui.childCommentList
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.KeyboardHider
 import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
@@ -40,6 +42,8 @@ class ChildCommentActivity : AppCompatActivity() {
     )
 
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
+
+    private val keyboardHider: KeyboardHider by lazy { KeyboardHider(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -154,7 +158,10 @@ class ChildCommentActivity : AppCompatActivity() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (intent.getBooleanExtra(KEY_FROM_NOTIFICATION, false)) {
-                        FeedDetailActivity.startActivity(this@ChildCommentActivity, viewModel.feedId)
+                        FeedDetailActivity.startActivity(
+                            this@ChildCommentActivity,
+                            viewModel.feedId,
+                        )
                     }
                     finish()
                 }
@@ -166,11 +173,13 @@ class ChildCommentActivity : AppCompatActivity() {
         binding.tbChildcommentsToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupChildCommentsRecyclerView() {
         binding.rvChildcommentsChildcomments.apply {
             adapter = commentsAdapter
             itemAnimator = null
             addItemDecoration(CommonRecyclerViewDivider(this@ChildCommentActivity))
+            setOnTouchListener { _, event -> keyboardHider.handleHideness(event) }
         }
     }
 
