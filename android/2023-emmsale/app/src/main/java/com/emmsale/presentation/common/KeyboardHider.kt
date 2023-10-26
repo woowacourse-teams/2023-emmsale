@@ -1,19 +1,15 @@
-package com.emmsale.presentation.ui.messageList
+package com.emmsale.presentation.common
 
-import android.content.Context
+import android.app.Activity
 import android.view.MotionEvent
-import android.view.View
-import android.view.inputmethod.InputMethodManager
+import com.emmsale.presentation.common.extension.hideKeyboard
 import kotlin.math.abs
 
 class KeyboardHider(
-    private val targetView: View,
+    private val activity: Activity,
     private val sensitivity: Float = DEFAULT_SENSITIVITY,
     private val willConsumeTouchEvent: Boolean = CONSUMED_TOUCH_EVENT,
 ) {
-    private val imm by lazy {
-        targetView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    }
 
     private var startY: Float = -1F
     private var movedY: Float = 0F
@@ -22,19 +18,13 @@ class KeyboardHider(
         when (event.action) {
             MotionEvent.ACTION_DOWN -> startY = event.y
             MotionEvent.ACTION_MOVE -> movedY = abs(event.y - startY)
-            MotionEvent.ACTION_UP -> if (canHideKeyboard()) hideKeyboard()
+            MotionEvent.ACTION_UP -> if (canHideKeyboard()) activity.hideKeyboard()
         }
         return willConsumeTouchEvent
     }
 
     private fun canHideKeyboard(): Boolean {
         return movedY < sensitivity
-    }
-
-    private fun hideKeyboard() {
-        if (targetView.onCheckIsTextEditor()) {
-            imm.hideSoftInputFromWindow(targetView.windowToken, 0)
-        }
     }
 
     companion object {
