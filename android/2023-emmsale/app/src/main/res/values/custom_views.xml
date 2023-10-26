@@ -26,4 +26,9 @@
         <attr name="submitButtonLabel" format="string" />
         <attr name="hint" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="SubTextInputWindow">
+        <attr name="submitButtonLabel" />
+        <attr name="cancelButtonLabel" format="string" />
+    </declare-styleable>
 </resources>

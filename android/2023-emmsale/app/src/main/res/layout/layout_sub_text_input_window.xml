@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="isSubmitEnabled"
+            type="Boolean" />
+
+        <variable
+            name="isVisible"
+            type="Boolean" />
+
+        <variable
+            name="onCancelButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onSubmitButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_sub_text_input_window"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:paddingTop="8dp"
+        app:visible="@{isVisible}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/et_sub_text_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="17dp"
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/transparent"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:lineSpacingExtra="2dp"
+            android:maxLength="255"
+            android:maxLines="5"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_submit_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:id="@+id/tv_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="17dp"
+            android:paddingVertical="13dp"
+            android:onClick="@{() -> onCancelButtonClick.invoke()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_submit_button" />
+
+        <TextView
+            android:id="@+id/tv_submit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="17dp"
+            android:paddingVertical="13dp"
+            android:enabled="@{!etSubTextInput.text.toString().isBlank() &amp;&amp; isSubmitEnabled}"
+            android:onClick="@{() -> onSubmitButtonClick.invoke(etSubTextInput.getText().toString())}"
+            android:textColor="@color/all_enable_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
