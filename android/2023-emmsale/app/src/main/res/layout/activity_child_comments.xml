@@ -10,9 +10,15 @@
 
         <import type="com.emmsale.presentation.common.FetchResult" />
 
+        <import type="kotlin.Unit" />
+
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel" />
+
+        <variable
+            name="onCommentSubmitButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
 
         <variable
             name="cancelUpdateComment"
@@ -59,85 +65,38 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toTopOf="@id/layout_childcomments_postchildcomment"
+                    app:layout_constraintBottom_toTopOf="@id/btiw_comment_post"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:itemCount="10"
                     tools:listitem="@layout/item_all_child_comment" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_childcomments_postchildcomment"
+                <com.emmsale.presentation.common.views.BasicTextInputWindow
+                    android:id="@+id/btiw_comment_post"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingStart="17dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="17dp"
-                    android:paddingBottom="8dp"
-                    android:visibility="@{viewModel.editingCommentId == null ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_childcomments_innerpostchildcomment"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_comments_commenteditview"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <EditText
-                            android:id="@+id/et_childcomments_editchildcommentcontent"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="1dp"
-                            android:background="@null"
-                            android:fontFamily="@font/nanum_square_regular"
-                            android:hint="@string/childcomments_edit_child_comment_hint"
-                            android:importantForAutofill="no"
-                            android:inputType="text|textMultiLine"
-                            android:maxLength="255"
-                            android:maxLines="5"
-                            android:padding="18dp"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/tv_childcomments_postchildcommentbutton"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tv_childcomments_postchildcommentbutton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="1dp"
-                            android:enabled="@{viewModel.comments.fetchResult == FetchResult.LOADING || etChildcommentsEditchildcommentcontent.text.toString().isBlank() ? false : true}"
-                            android:padding="18dp"
-                            android:text="@string/comments_comment_submit_button_label"
-                            android:textColor="@color/all_enable_primary"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:hint="@string/comments_edit_comment_hint"
+                    app:onSubmit="@{(text) -> onCommentSubmitButtonClick.invoke(text)}"
+                    app:submitButtonLabel="@string/comments_comment_submit_button_label"
+                    app:isVisible="@{viewModel.editingCommentId == null ? true : false}" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_childcomments_comment_update"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:clickable="@{layoutChildcommentsCommentUpdate.visibility == View.VISIBLE}"
                     android:elevation="5dp"
                     android:paddingTop="8dp"
                     android:visibility="@{viewModel.editingCommentId == null ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:visibility="gone">
 
                     <EditText
                         android:id="@+id/et_childcomments_comment_update"
@@ -154,7 +113,8 @@
                         android:textSize="13sp"
                         app:layout_constraintBottom_toTopOf="@id/tv_childcomments_comment_update_button"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:ignore="LabelFor" />
 
                     <TextView
                         android:id="@+id/tv_childcomments_update_cancel_button"

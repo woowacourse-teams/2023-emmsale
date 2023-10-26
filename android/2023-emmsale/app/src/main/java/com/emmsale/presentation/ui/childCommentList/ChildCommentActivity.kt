@@ -50,7 +50,6 @@ class ChildCommentActivity : AppCompatActivity() {
         initBackPressedDispatcher()
         initToolbar()
         initChildCommentsRecyclerView()
-        initEditComment()
         setupUiLogic()
     }
 
@@ -129,6 +128,7 @@ class ChildCommentActivity : AppCompatActivity() {
     private fun initDataBinding() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+        binding.onCommentSubmitButtonClick = ::saveChildComment
         binding.cancelUpdateComment = ::cancelUpdateComment
         binding.updateComment = ::updateComment
     }
@@ -184,12 +184,6 @@ class ChildCommentActivity : AppCompatActivity() {
         commentsAdapter.submitList(comments.comments)
     }
 
-    private fun initEditComment() {
-        binding.tvChildcommentsPostchildcommentbutton.setOnClickListener {
-            onChildCommentSave()
-        }
-    }
-
     private fun setUpUiEvent() {
         viewModel.uiEvent.observe(this) {
             handleUiEvent(it)
@@ -223,9 +217,8 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun onChildCommentSave() {
-        viewModel.saveChildComment(binding.etChildcommentsEditchildcommentcontent.text.toString())
-        binding.etChildcommentsEditchildcommentcontent.text.clear()
+    private fun saveChildComment(content: String) {
+        viewModel.saveChildComment(content)
         hideKeyboard()
     }
 
