@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -48,7 +47,7 @@
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            onRefresh="@{() -> viewModel.refresh()}"
+            app:onRefresh="@{() -> viewModel.refresh()}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -97,7 +96,7 @@
                     app:submitButtonLabel="@string/all_update_button_label"
                     app:cancelButtonLabel="@string/all_cancel"
                     app:onCancel="@{() -> onCommentUpdateCancelButtonClick.invoke()}"
-                    app:onSubmit="@{(content) -> onUpdatedCommentSubmitButtonClick.invoke(content)}"/>
+                    app:onSubmit="@{(content) -> onUpdatedCommentSubmitButtonClick.invoke(content)}" />
 
                 <ProgressBar
                     android:id="@+id/progressBar"
@@ -114,18 +113,15 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <include
-            layout="@layout/layout_all_error_screen"
+        <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:clickable="true"
-            android:visibility="@{viewModel.comments.fetchResult == FetchResult.ERROR ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_childcomments_toolbar"
-            bind:viewModel="@{viewModel}"
-            tools:visibility="gone" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:visible="@{viewModel.comments.fetchResult == FetchResult.ERROR}"
+            app:onRefresh="@{() -> viewModel.refresh()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
