@@ -93,6 +93,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
             is ChildCommentNotificationUiState -> navigateToCommentScreen(
                 feedId = notification.feedId,
                 parentCommentId = notification.parentCommentId,
+                commentId = notification.commentId,
             )
         }
     }
@@ -101,8 +102,14 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         EventDetailActivity.startActivity(requireContext(), eventId)
     }
 
-    private fun navigateToCommentScreen(feedId: Long, parentCommentId: Long) {
-        ChildCommentActivity.startActivity(requireContext(), feedId, parentCommentId)
+    private fun navigateToCommentScreen(feedId: Long, parentCommentId: Long, commentId: Long) {
+        ChildCommentActivity.startActivity(
+            context = requireContext(),
+            feedId = feedId,
+            parentCommentId = parentCommentId,
+            scrollToCommentId = commentId,
+            fromPostDetail = false,
+        )
     }
 
     private fun deleteNotification(notificationId: Long) {

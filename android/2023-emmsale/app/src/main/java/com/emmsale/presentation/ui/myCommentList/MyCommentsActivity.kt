@@ -42,17 +42,23 @@ class MyCommentsActivity : AppCompatActivity() {
 
     private fun initMyCommentsRecyclerView() {
         binding.rvMycommentsMycomments.apply {
-            adapter = MyCommentsAdapter(::showChildComments)
+            adapter = MyCommentsAdapter(::navigateToChildComments)
             itemAnimator = null
             addItemDecoration(CommonRecyclerViewDivider(this@MyCommentsActivity))
         }
     }
 
-    private fun showChildComments(eventId: Long, commentId: Long) {
-        ChildCommentActivity.startActivity(this, eventId, commentId)
+    private fun navigateToChildComments(eventId: Long, parentCommentId: Long, commentId: Long) {
+        ChildCommentActivity.startActivity(
+            context = this,
+            feedId = eventId,
+            parentCommentId = parentCommentId,
+            scrollToCommentId = commentId,
+            fromPostDetail = false,
+        )
     }
 
-    fun setupUiLogic() {
+    private fun setupUiLogic() {
         setupLoginUiLogic()
         setupCommentsUiLogic()
     }

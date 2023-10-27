@@ -7,14 +7,21 @@
 
         <import type="android.view.View" />
 
+        <import type="kotlin.Unit" />
+
         <variable
             name="comment"
             type="com.emmsale.presentation.ui.myCommentList.uiState.MyCommentUiState" />
+
+        <variable
+            name="onClick"
+            type="kotlin.jvm.functions.Function3&lt;Long, Long, Long, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> onClick.invoke(comment.feedId, comment.parentId == null ? comment.id : comment.parentId, comment.id)}"
         android:background="?attr/selectableItemBackground">
 
         <TextView
@@ -23,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginTop="17dp"
-            android:text="@{comment.eventName}"
+            android:text="@{comment.feedTitle}"
             android:textSize="13sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
