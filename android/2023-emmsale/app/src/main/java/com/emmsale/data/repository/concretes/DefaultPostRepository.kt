@@ -27,10 +27,9 @@ class DefaultPostRepository @Inject constructor(
         eventId: Long,
         title: String,
         content: String,
-        imageUrls: List<String>,
+        imageFiles: List<File>,
     ): ApiResponse<Long> {
-        val imageFiles = imageUrls.map { imageUrl ->
-            val file = File(imageUrl)
+        val imageRequestBodies = imageFiles.map { file ->
             val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(
                 IMAGES_KEY,
@@ -39,12 +38,12 @@ class DefaultPostRepository @Inject constructor(
             )
         }
 
-        val postDataFiles = HashMap<String, RequestBody>()
-        postDataFiles[EVENT_ID_KEY] =
+        val contentRequestBodies = HashMap<String, RequestBody>()
+        contentRequestBodies[EVENT_ID_KEY] =
             eventId.toString().toRequestBody("application/json".toMediaTypeOrNull())
-        postDataFiles[TITLE_KEY] = title.toRequestBody("application/json".toMediaTypeOrNull())
-        postDataFiles[CONTENT_KEY] = content.toRequestBody("application/json".toMediaTypeOrNull())
-        return postService.uploadPost(postDataFiles, imageFiles)
+        contentRequestBodies[TITLE_KEY] = title.toRequestBody("application/json".toMediaTypeOrNull())
+        contentRequestBodies[CONTENT_KEY] = content.toRequestBody("application/json".toMediaTypeOrNull())
+        return postService.uploadPost(contentRequestBodies, imageRequestBodies)
     }
 
     companion object {

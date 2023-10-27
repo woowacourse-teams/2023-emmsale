@@ -86,19 +86,18 @@ class DefaultMemberRepository @Inject constructor(
 
     override suspend fun updateMemberProfileImage(
         memberId: Long,
-        profileImageUrl: String,
+        profileImageFile: File,
     ): ApiResponse<String> = withContext(dispatcher) {
-        val file = File(profileImageUrl)
-        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        val formDataFile = MultipartBody.Part.createFormData(
+        val requestBody = profileImageFile.asRequestBody("image/*".toMediaTypeOrNull())
+        val formData = MultipartBody.Part.createFormData(
             IMAGE_KEY,
-            file.name,
-            requestFile,
+            profileImageFile.name,
+            requestBody,
         )
 
         memberService.updateMemberProfileImage(
             memberId = memberId,
-            profileImageFile = formDataFile,
+            formDatas = formData,
         ).map { it.profileImageUrl }
     }
 
