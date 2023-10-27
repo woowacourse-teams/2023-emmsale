@@ -130,7 +130,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val intent = if (isUpdateNeeded) {
             SplashActivity.getIntent(this)
         } else {
-            ChildCommentActivity.getIntent(this, feedId, parentCommentId, childCommentId, true)
+            ChildCommentActivity.getIntent(this, feedId, parentCommentId, childCommentId, false)
         }
 
         baseContext.showNotification(

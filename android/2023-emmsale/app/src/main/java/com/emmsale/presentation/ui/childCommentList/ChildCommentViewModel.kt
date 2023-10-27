@@ -52,7 +52,6 @@ class ChildCommentViewModel @Inject constructor(
             getResult = { commentRepository.getComment(parentCommentId) },
             onSuccess = {
                 _comments.value = ChildCommentsUiState.create(uid, parentComment = it)
-                _uiEvent.value = Event(ChildCommentsUiEvent.CommentFirstFetchComplete)
             },
             onFailure = { _, _ -> },
         )

@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.Event
@@ -27,6 +28,7 @@ import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class ChildCommentActivity : AppCompatActivity() {
@@ -38,7 +40,17 @@ class ChildCommentActivity : AppCompatActivity() {
         onParentCommentClick = {},
         onProfileImageClick = ::showProfile,
         onCommentMenuClick = ::showCommentMenuDialog,
-    )
+    ).apply {
+        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (fromPostDetail || !justEntered || itemCount == 0) return
+                val position =
+                    viewModel.comments.value.comments.indexOfFirst { it.comment.id == scrollToCommentId }
+                binding.rvChildcommentsChildcomments.scrollToPosition(position)
+                justEntered = false
+            }
+        })
+    }
 
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
@@ -50,6 +62,10 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private val fromPostDetail: Boolean by lazy {
         intent.getBooleanExtra(KEY_FROM_POST_DETAIL, true)
+    }
+
+    private var justEntered: Boolean by Delegates.vetoable(true) { _, oldValue, newValue ->
+        oldValue && !newValue
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -212,22 +228,16 @@ class ChildCommentActivity : AppCompatActivity() {
             ChildCommentsUiEvent.None -> {}
             is ChildCommentsUiEvent.UnexpectedError -> showToast(content.errorMessage)
             ChildCommentsUiEvent.CommentPostComplete -> {
-                scrollToLastPosition()
+                smoothScrollToLastPosition()
                 binding.btiwCommentPost.clearText()
             }
 
             ChildCommentsUiEvent.CommentUpdateComplete ->
                 binding.stiwCommentUpdate.isVisible = false
-
-            ChildCommentsUiEvent.CommentFirstFetchComplete -> if (scrollToCommentId != INVALID_COMMENT_ID) {
-                val position =
-                    viewModel.comments.value.comments.indexOfFirst { it.comment.id == scrollToCommentId }
-                binding.rvChildcommentsChildcomments.smoothScrollToPosition(position)
-            }
         }
     }
 
-    private fun scrollToLastPosition() {
+    private fun smoothScrollToLastPosition() {
         binding.rvChildcommentsChildcomments.smoothScrollToPosition(viewModel.comments.value.comments.size)
     }
 
