@@ -47,7 +47,7 @@ interface MemberService {
     @PATCH("/members/{memberId}/profile")
     suspend fun updateMemberProfileImage(
         @Path("memberId") memberId: Long,
-        @Part profileImageFile: MultipartBody.Part,
+        @Part formDatas: MultipartBody.Part,
     ): ApiResponse<ProfileImageUrlResponse>
 
     @POST("/members/activities")

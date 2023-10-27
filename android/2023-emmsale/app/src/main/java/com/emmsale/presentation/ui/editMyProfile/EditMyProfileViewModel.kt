@@ -19,6 +19,7 @@ import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileErrorEvent
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,7 +78,8 @@ class EditMyProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateProfileImage(profileImageUrl: String) {
+    fun updateProfileImage(profileImageFile: File) {
+        _profile.value = _profile.value.copy(isLoading = true)
         viewModelScope.launch {
             val token = tokenRepository.getToken()
             if (token == null) {
@@ -86,7 +88,7 @@ class EditMyProfileViewModel @Inject constructor(
             }
             when (
                 val result =
-                    memberRepository.updateMemberProfileImage(token.uid, profileImageUrl)
+                    memberRepository.updateMemberProfileImage(token.uid, profileImageFile)
             ) {
                 is Success -> _profile.value = _profile.value.updateProfileImageUrl(result.data)
 
@@ -95,6 +97,7 @@ class EditMyProfileViewModel @Inject constructor(
 
                 is Unexpected -> throw Throwable(result.error)
             }
+            _profile.value = _profile.value.copy(isLoading = false)
         }
     }
 

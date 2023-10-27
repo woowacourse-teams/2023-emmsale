@@ -2,6 +2,7 @@ package com.emmsale.data.repository.interfaces
 
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.model.Member
+import java.io.File
 
 interface MemberRepository {
 
@@ -13,7 +14,7 @@ interface MemberRepository {
 
     suspend fun updateMemberProfileImage(
         memberId: Long,
-        profileImageUrl: String,
+        profileImageFile: File,
     ): ApiResponse<String>
 
     suspend fun addMemberActivities(activityIds: List<Long>): ApiResponse<Unit>

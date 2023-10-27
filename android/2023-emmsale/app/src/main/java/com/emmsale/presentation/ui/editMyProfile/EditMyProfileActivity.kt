@@ -1,29 +1,24 @@
 package com.emmsale.presentation.ui.editMyProfile
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.imageUtil.convertToAbsolutePath
-import com.emmsale.presentation.common.imageUtil.isPhotoPickerAvailable
+import com.emmsale.presentation.common.imageUtil.getImageFileFromUri
+import com.emmsale.presentation.common.imageUtil.isImagePermissionGrantedCompat
+import com.emmsale.presentation.common.imageUtil.onImagePermissionCompat
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapterDecoration
@@ -42,31 +37,25 @@ class EditMyProfileActivity : AppCompatActivity() {
     private val educationsDialog by lazy { EducationsAddBottomDialogFragment() }
     private val clubsDialog by lazy { ClubsAddBottomDialogFragment() }
 
-    private val requestImagePermissionDialogLauncher = registerForActivityResult(
+    private val imagePermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
-        if (isGranted) showAlbum()
+        if (isGranted) navigateToGallery()
     }
 
-    private val requestImagePermissionSettingLauncher =
+    private val permissionSettingLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (isImageAccessPermissionGranted()) showAlbum()
+            if (isImagePermissionGrantedCompat()) navigateToGallery()
         }
 
-    private val underTiramisuAlbumLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            val imageUrl = getImageUrlFromActivityResult(result) ?: return@registerForActivityResult
-            viewModel.updateProfileImage(profileImageUrl = imageUrl)
+    private val albumLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val imageUri = it.data?.data ?: return@registerForActivityResult
+                val imageFile = getImageFileFromUri(context = this, uri = imageUri)
+                viewModel.updateProfileImage(profileImageFile = imageFile)
+            }
         }
-
-    private val overTiramisuAlbumLauncher = registerForActivityResult(
-        PickVisualMedia(),
-    ) { uri ->
-        if (uri == null) return@registerForActivityResult
-        viewModel.updateProfileImage(
-            uri.convertToAbsolutePath(this) ?: return@registerForActivityResult,
-        )
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,14 +75,36 @@ class EditMyProfileActivity : AppCompatActivity() {
         binding.showFieldTags = ::showFieldTags
         binding.showEducations = ::showEducations
         binding.showClubs = ::showClubs
-        binding.onPhotoButtonClick = ::showAlbum
+        binding.editProfileImage = ::editProfileImage
     }
 
-    private fun getImageUrlFromActivityResult(result: ActivityResult): String? {
-        val clipData = result.data?.clipData
+    private fun navigateToGallery() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+        }
+        albumLauncher.launch(
+            Intent.createChooser(
+                intent,
+                getString(R.string.all_choose_image_picker_type),
+            ),
+        )
+    }
 
-        val uri = clipData?.getItemAt(0)?.uri ?: return null
-        return uri.convertToAbsolutePath(this)
+    private fun editProfileImage() {
+        onImagePermissionCompat(
+            onGranted = ::navigateToGallery,
+            onShouldShowRequestPermissionRationale = { showNavigateToDetailSettingDialog() },
+            onDenied = { imagePermissionLauncher.launch(it) },
+        )
+    }
+
+    private fun showNavigateToDetailSettingDialog() {
+        showPermissionRequestDialog(
+            message = getString(R.string.all_image_permission_request_dialog_message),
+            title = getString(R.string.all_image_permission_request_dialog_title),
+            onConfirm = { navigateToApplicationDetailSetting(permissionSettingLauncher) },
+            onDenied = {},
+        )
     }
 
     private fun showFieldTags() {
@@ -236,41 +247,6 @@ class EditMyProfileActivity : AppCompatActivity() {
             else -> return
         }
         viewModel.removeError()
-    }
-
-    private fun showAlbum() {
-        if (isPhotoPickerAvailable()) {
-            overTiramisuAlbumLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
-        } else {
-            if (!isImageAccessPermissionGranted()) {
-                if (shouldShowRequestPermissionRationale(READ_EXTERNAL_STORAGE)) {
-                    showImagePermissionRequestDialog()
-                } else {
-                    requestImagePermissionDialogLauncher.launch(READ_EXTERNAL_STORAGE)
-                }
-            } else {
-                val intent = Intent(Intent.ACTION_PICK).apply {
-                    type = "image/*"
-                }
-                underTiramisuAlbumLauncher.launch(intent)
-            }
-        }
-    }
-
-    private fun showImagePermissionRequestDialog() {
-        showPermissionRequestDialog(
-            message = getString(R.string.all_image_permission_request_dialog_message),
-            title = getString(R.string.all_image_permission_request_dialog_title),
-            onConfirm = { navigateToApplicationDetailSetting(requestImagePermissionSettingLauncher) },
-            onDenied = {},
-        )
-    }
-
-    private fun isImageAccessPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            READ_EXTERNAL_STORAGE,
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     companion object {

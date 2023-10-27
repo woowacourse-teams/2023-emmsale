@@ -14,6 +14,7 @@ import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.postWriting.uiState.PostUploadResultUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,9 +24,9 @@ class PostWritingViewModel @Inject constructor(
 ) : ViewModel() {
     private val eventId = savedStateHandle[EVENT_ID_KEY] ?: DEFAULT_ID
 
-    private val _imageUrls: NotNullMutableLiveData<List<String>> =
+    private val _imageUris: NotNullMutableLiveData<List<String>> =
         NotNullMutableLiveData(emptyList())
-    val imageUrls: NotNullLiveData<List<String>> = _imageUrls
+    val imageUris: NotNullLiveData<List<String>> = _imageUris
 
     private val _postUploadResult: MutableLiveData<Event<PostUploadResultUiState>> =
         MutableLiveData()
@@ -34,7 +35,7 @@ class PostWritingViewModel @Inject constructor(
     val title = MutableLiveData<String>()
     val content = MutableLiveData<String>()
 
-    fun uploadPost() {
+    fun uploadPost(imageFiles: List<File>) {
         _postUploadResult.value = Event(PostUploadResultUiState(FetchResult.LOADING))
         viewModelScope.launch {
             when (
@@ -43,7 +44,7 @@ class PostWritingViewModel @Inject constructor(
                         eventId,
                         title.value ?: DEFAULT_TITLE,
                         content.value ?: DEFAULT_CONTENT,
-                        imageUrls.value,
+                        imageFiles,
                     )
             ) {
                 is Success ->
@@ -63,13 +64,13 @@ class PostWritingViewModel @Inject constructor(
         return (content.value?.length ?: 0) >= MINIMUM_CONTENT_LENGTH
     }
 
-    fun fetchImageUrls(imageUrls: List<String>) {
-        _imageUrls.value = imageUrls
+    fun fetchImageUris(imageUrls: List<String>) {
+        _imageUris.value = imageUrls
     }
 
     fun deleteImageUrl(imageUrl: String) {
-        val newUrls = _imageUrls.value.toMutableList().apply { remove(imageUrl) }
-        _imageUrls.value = newUrls
+        val newUrls = _imageUris.value.toMutableList().apply { remove(imageUrl) }
+        _imageUris.value = newUrls
     }
 
     companion object {

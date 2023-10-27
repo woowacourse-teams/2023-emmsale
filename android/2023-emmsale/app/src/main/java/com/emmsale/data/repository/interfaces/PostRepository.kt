@@ -2,6 +2,7 @@ package com.emmsale.data.repository.interfaces
 
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.model.Post
+import java.io.File
 
 interface PostRepository {
     suspend fun getPosts(eventId: Long): ApiResponse<List<Post>>
@@ -10,6 +11,6 @@ interface PostRepository {
         eventId: Long,
         title: String,
         content: String,
-        imageUrls: List<String>,
+        imageFiles: List<File>,
     ): ApiResponse<Long>
 }

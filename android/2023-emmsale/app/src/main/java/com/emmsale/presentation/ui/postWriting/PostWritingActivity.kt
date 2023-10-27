@@ -1,16 +1,14 @@
 package com.emmsale.presentation.ui.postWriting
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.emmsale.R
 import com.emmsale.databinding.ActivityPostWritingBinding
 import com.emmsale.presentation.common.Event
@@ -18,8 +16,9 @@ import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.common.imageUtil.convertToAbsolutePath
-import com.emmsale.presentation.common.imageUtil.isPhotoPickerAvailable
+import com.emmsale.presentation.common.imageUtil.getImageFileFromUri
+import com.emmsale.presentation.common.imageUtil.isImagePermissionGrantedCompat
+import com.emmsale.presentation.common.imageUtil.onImagePermissionCompat
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.postWriting.PostWritingViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.postWriting.recyclerView.PostWritingImageAdapter
@@ -35,7 +34,7 @@ class PostWritingActivity : AppCompatActivity() {
         PostWritingImageAdapter(deleteImage = viewModel::deleteImageUrl)
     }
 
-    private val requestImagePermissionDialogLauncher = registerForActivityResult(
+    private val imagePermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
         if (isGranted) showAlbum()
@@ -43,28 +42,23 @@ class PostWritingActivity : AppCompatActivity() {
 
     private val requestImagePermissionSettingLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (isImageAccessPermissionGranted()) showAlbum()
+            if (isImagePermissionGrantedCompat()) showAlbum()
         }
 
-    private val underTiramisuAlbumLauncher =
+    private val albumLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            val imageUrls = getImageUrlsFromActivityResult(result)
+            val imageUris = getImageUriPaths(result.data ?: return@registerForActivityResult)
             when {
-                imageUrls.size > MAX_IMAGE_COUNT -> {
+                imageUris.size > MAX_IMAGE_COUNT -> {
                     showAlbum()
                     showToast(R.string.post_writing_max_image_count_warning_message)
                 }
 
-                imageUrls.isEmpty() -> Unit
-                else -> viewModel.fetchImageUrls(imageUrls = imageUrls)
+                imageUris.isEmpty() -> Unit
+
+                else -> viewModel.fetchImageUris(imageUrls = imageUris)
             }
         }
-
-    private val overTiramisuAlbumLauncher = registerForActivityResult(
-        ActivityResultContracts.PickMultipleVisualMedia(MAX_IMAGE_COUNT),
-    ) { uris ->
-        viewModel.fetchImageUrls(uris.map { it.convertToAbsolutePath(this) ?: "" })
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,17 +69,9 @@ class PostWritingActivity : AppCompatActivity() {
         setUpBackButtonClick()
     }
 
-    private fun getImageUrlsFromActivityResult(result: ActivityResult): List<String> {
-        val clipData = result.data?.clipData
-
-        if (clipData != null) {
-            val count = clipData.itemCount
-            return (0 until count).mapNotNull { i ->
-                val uri = clipData.getItemAt(i).uri
-                uri.convertToAbsolutePath(this)
-            }
-        }
-        return emptyList()
+    private fun getImageUriPaths(intent: Intent): List<String> {
+        val clipData = intent.clipData ?: return listOf(intent.data.toString())
+        return (0 until clipData.itemCount).mapNotNull { clipData.getItemAt(it).uri.toString() }
     }
 
     private fun setUpBinding() {
@@ -115,7 +101,7 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     private fun setUpImageUrls() {
-        viewModel.imageUrls.observe(this) { imageUrls ->
+        viewModel.imageUris.observe(this) { imageUrls ->
             adapter.submitList(imageUrls)
         }
     }
@@ -130,36 +116,35 @@ class PostWritingActivity : AppCompatActivity() {
     private fun uploadPost() {
         when {
             !viewModel.isTitleValid() -> showToast(getString(R.string.post_writing_title_warning))
-            !viewModel.isContentValid() -> showToast(getString(R.string.post_writing_content_warning))
-            else -> viewModel.uploadPost()
-        }
-    }
 
-    private fun showAlbum() {
-        if (isPhotoPickerAvailable()) {
-            overTiramisuAlbumLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        } else {
-            if (!isImageAccessPermissionGranted()) {
-                if (shouldShowRequestPermissionRationale(READ_EXTERNAL_STORAGE)) {
-                    showImagePermissionRequestDialog()
-                } else {
-                    requestImagePermissionDialogLauncher.launch(READ_EXTERNAL_STORAGE)
-                }
-            } else {
-                val intent = Intent(Intent.ACTION_PICK).apply {
-                    type = "image/*"
-                    putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                }
-                underTiramisuAlbumLauncher.launch(intent)
+            !viewModel.isContentValid() -> showToast(getString(R.string.post_writing_content_warning))
+
+            else -> {
+                val imageUris = viewModel.imageUris.value
+                val imageFiles = imageUris.map { getImageFileFromUri(this, Uri.parse(it)) }
+                viewModel.uploadPost(imageFiles)
             }
         }
     }
 
-    private fun isImageAccessPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            READ_EXTERNAL_STORAGE,
-        ) == PackageManager.PERMISSION_GRANTED
+    private fun showAlbum() {
+        onImagePermissionCompat(
+            onGranted = ::navigateToAlbum,
+            onShouldShowRequestPermissionRationale = { showImagePermissionRequestDialog() },
+            onDenied = { imagePermissionLauncher.launch(it) },
+        )
+    }
+
+    private fun navigateToAlbum() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        albumLauncher.launch(
+            Intent.createChooser(
+                intent,
+                getString(R.string.all_choose_image_picker_type),
+            ),
+        )
     }
 
     private fun showImagePermissionRequestDialog() {
