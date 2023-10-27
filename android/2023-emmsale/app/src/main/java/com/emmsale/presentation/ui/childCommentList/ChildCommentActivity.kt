@@ -45,12 +45,12 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private val keyboardHider: KeyboardHider by lazy { KeyboardHider(this) }
 
-    private val fromNotification: Boolean by lazy {
-        intent.getBooleanExtra(KEY_FROM_NOTIFICATION, false)
+    private val scrollToCommentId: Long by lazy {
+        intent.getLongExtra(KEY_SCROLL_TO_COMMENT_ID, INVALID_COMMENT_ID)
     }
 
-    private val newChildCommentId: Long by lazy {
-        intent.getLongExtra(KEY_NEW_CHILD_COMMENT_ID, INVALID_COMMENT_ID)
+    private val fromPostDetail: Boolean by lazy {
+        intent.getBooleanExtra(KEY_FROM_POST_DETAIL, true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -157,7 +157,7 @@ class ChildCommentActivity : AppCompatActivity() {
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (intent.getBooleanExtra(KEY_FROM_NOTIFICATION, false)) {
+                    if (fromPostDetail) {
                         FeedDetailActivity.startActivity(
                             this@ChildCommentActivity,
                             viewModel.feedId,
@@ -230,9 +230,9 @@ class ChildCommentActivity : AppCompatActivity() {
             ChildCommentsUiEvent.CommentUpdateComplete ->
                 binding.stiwCommentUpdate.isVisible = false
 
-            ChildCommentsUiEvent.CommentFirstFetchComplete -> if (fromNotification) {
+            ChildCommentsUiEvent.CommentFirstFetchComplete -> if (scrollToCommentId != INVALID_COMMENT_ID) {
                 val position =
-                    viewModel.comments.value.comments.indexOfFirst { it.comment.id == newChildCommentId }
+                    viewModel.comments.value.comments.indexOfFirst { it.comment.id == scrollToCommentId }
                 binding.rvChildcommentsChildcomments.smoothScrollToPosition(position)
             }
         }
@@ -243,16 +243,19 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KEY_FROM_NOTIFICATION = "KEY_FROM_NOTIFICATION"
-        private const val KEY_NEW_CHILD_COMMENT_ID = "KEY_CHILD_COMMENT_ID"
+        private const val KEY_SCROLL_TO_COMMENT_ID = "KEY_CHILD_COMMENT_ID"
+        private const val KEY_FROM_POST_DETAIL = "KEY_FROM_POST_DETAIL"
         private const val INVALID_COMMENT_ID: Long = -1
 
-        fun startActivity(context: Context, feedId: Long, parentCommentId: Long) {
-            val intent = Intent(context, ChildCommentActivity::class.java).apply {
-                putExtra(KEY_FEED_ID, feedId)
-                putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            }
+        fun startActivity(
+            context: Context,
+            feedId: Long,
+            parentCommentId: Long,
+            scrollToCommentId: Long = INVALID_COMMENT_ID,
+            fromPostDetail: Boolean = true,
+        ) {
+            val intent =
+                getIntent(context, feedId, parentCommentId, scrollToCommentId, fromPostDetail)
             context.startActivity(intent)
         }
 
@@ -260,15 +263,15 @@ class ChildCommentActivity : AppCompatActivity() {
             context: Context,
             feedId: Long,
             parentCommentId: Long,
-            newChildCommentId: Long,
-            fromNotification: Boolean = false,
+            scrollToCommentId: Long = INVALID_COMMENT_ID,
+            fromPostDetail: Boolean = true,
         ): Intent =
             Intent(context, ChildCommentActivity::class.java).apply {
                 putExtra(KEY_FEED_ID, feedId)
                 putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
-                putExtra(KEY_NEW_CHILD_COMMENT_ID, newChildCommentId)
+                putExtra(KEY_SCROLL_TO_COMMENT_ID, scrollToCommentId)
+                putExtra(KEY_FROM_POST_DETAIL, fromPostDetail)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                if (fromNotification) putExtra(KEY_FROM_NOTIFICATION, true)
             }
     }
 }
