@@ -4,7 +4,7 @@ import androidx.annotation.ColorInt
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
-@BindingAdapter("onRefresh")
+@BindingAdapter("app:onRefresh")
 fun SwipeRefreshLayout.setOnRefresh(onRefresh: () -> Unit) {
     setOnRefreshListener {
         onRefresh()
