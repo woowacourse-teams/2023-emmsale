@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +16,6 @@ import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.KeyboardHider
 import com.emmsale.presentation.common.extension.hideKeyboard
-import com.emmsale.presentation.common.extension.highlight
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
@@ -84,6 +85,8 @@ class ChildCommentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        if (savedInstanceState != null) justEntered = false
+
         setupDataBinding()
         setupBackPressedDispatcher()
         setupToolbar()
@@ -95,6 +98,14 @@ class ChildCommentActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         viewModel.refresh()
+    }
+
+    suspend fun View.highlight() {
+        val typedValue = TypedValue()
+        context.theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
+        setBackgroundResource(typedValue.resourceId)
+        delay(BACKGROUND_SETTING_DELAY)
+        isPressed = true
     }
 
     private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, commentId: Long) {
@@ -259,6 +270,7 @@ class ChildCommentActivity : AppCompatActivity() {
         private const val KEY_FROM_POST_DETAIL = "KEY_FROM_POST_DETAIL"
         private const val INVALID_COMMENT_ID: Long = -1
         private const val VIEW_SETTING_DELAY: Long = 100
+        private const val BACKGROUND_SETTING_DELAY: Long = 300
 
         fun startActivity(
             context: Context,
