@@ -7,12 +7,14 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.KeyboardHider
 import com.emmsale.presentation.common.extension.hideKeyboard
+import com.emmsale.presentation.common.extension.highlight
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
@@ -28,6 +30,8 @@ import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
@@ -38,7 +42,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
         onParentCommentClick = {},
-        onProfileImageClick = ::showProfile,
+        onProfileImageClick = ::navigateToProfile,
         onCommentMenuClick = ::showCommentMenuDialog,
     ).apply {
         registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
@@ -47,6 +51,15 @@ class ChildCommentActivity : AppCompatActivity() {
                 val position =
                     viewModel.comments.value.comments.indexOfFirst { it.comment.id == scrollToCommentId }
                 binding.rvChildcommentsChildcomments.scrollToPosition(position)
+
+                lifecycleScope.launch {
+                    delay(VIEW_SETTING_DELAY)
+                    val view = binding.rvChildcommentsChildcomments
+                        .findViewHolderForAdapterPosition(position)
+                        ?.itemView
+                        ?: return@launch
+                    view.highlight()
+                }
                 justEntered = false
             }
         })
@@ -128,7 +141,7 @@ class ChildCommentActivity : AppCompatActivity() {
         ) { showReportConfirmDialog(commentId) }
     }
 
-    private fun showProfile(authorId: Long) {
+    private fun navigateToProfile(authorId: Long) {
         ProfileActivity.startActivity(this, authorId)
     }
 
@@ -166,7 +179,7 @@ class ChildCommentActivity : AppCompatActivity() {
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (fromPostDetail) {
+                    if (!fromPostDetail) {
                         FeedDetailActivity.startActivity(
                             this@ChildCommentActivity,
                             viewModel.feedId,
@@ -245,6 +258,7 @@ class ChildCommentActivity : AppCompatActivity() {
         private const val KEY_SCROLL_TO_COMMENT_ID = "KEY_CHILD_COMMENT_ID"
         private const val KEY_FROM_POST_DETAIL = "KEY_FROM_POST_DETAIL"
         private const val INVALID_COMMENT_ID: Long = -1
+        private const val VIEW_SETTING_DELAY: Long = 100
 
         fun startActivity(
             context: Context,
