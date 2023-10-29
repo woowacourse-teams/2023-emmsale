@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ActivityFeedDetailBinding
 import com.emmsale.presentation.common.Event
@@ -24,11 +25,21 @@ import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailAdapter
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class FeedDetailActivity : AppCompatActivity() {
     private val binding by lazy { ActivityFeedDetailBinding.inflate(layoutInflater) }
+
     private val viewModel: FeedDetailViewModel by viewModels()
+
+    private val highlightCommentId: Long by lazy {
+        intent.getLongExtra(KEY_HIGHLIGHT_COMMENT_ID, INVALID_COMMENT_ID)
+    }
+
+    private var justEntered: Boolean by Delegates.vetoable(true) { _, oldValue, newValue ->
+        oldValue && !newValue
+    }
 
     private val inputMethodManager: InputMethodManager by lazy {
         getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -44,14 +55,29 @@ class FeedDetailActivity : AppCompatActivity() {
                 parentCommentId = comment.parentId ?: comment.id,
                 highlightCommentId = comment.id,
             )
+            viewModel.unhighlightComment(comment.id)
         },
         onAuthorImageClick = ::showProfile,
         onCommentMenuClick = ::showCommentMenuDialog,
-    )
+    ).apply {
+        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (highlightCommentId == INVALID_COMMENT_ID || !justEntered || itemCount == 0) return
+                val position = viewModel.feedDetail.value.comments
+                    .indexOfFirst { it.comment.id == highlightCommentId } + FEED_DETAIL_COUNT
+                binding.rvFeeddetailFeedAndComments.scrollToPosition(position)
+
+                viewModel.highlightComment(highlightCommentId)
+
+                justEntered = false
+            }
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        if (savedInstanceState != null) justEntered = false
 
         setUpDataBinding()
         setUpToolbar()
@@ -306,10 +332,29 @@ class FeedDetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun startActivity(context: Context, feedId: Long) {
-            val intent = Intent(context, FeedDetailActivity::class.java)
-                .putExtra(KEY_FEED_ID, feedId)
+        private const val KEY_HIGHLIGHT_COMMENT_ID = "KEY_HIGHLIGHT_COMMENT_ID"
+        private const val INVALID_COMMENT_ID: Long = -1
+        private const val FEED_DETAIL_COUNT: Int = 1
+
+        fun startActivity(
+            context: Context,
+            feedId: Long,
+            highlightCommentId: Long = INVALID_COMMENT_ID,
+        ) {
+            val intent =
+                getIntent(context, feedId, highlightCommentId)
             context.startActivity(intent)
         }
+
+        fun getIntent(
+            context: Context,
+            feedId: Long,
+            highlightCommentId: Long = INVALID_COMMENT_ID,
+        ): Intent =
+            Intent(context, FeedDetailActivity::class.java).apply {
+                putExtra(KEY_FEED_ID, feedId)
+                putExtra(KEY_HIGHLIGHT_COMMENT_ID, highlightCommentId)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            }
     }
 }

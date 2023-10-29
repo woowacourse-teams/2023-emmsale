@@ -238,7 +238,7 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KEY_HIGHLIGHT_COMMENT_ID = "KEY_CHILD_COMMENT_ID"
+        private const val KEY_HIGHLIGHT_COMMENT_ID = "KEY_HIGHLIGHT_COMMENT_ID"
         private const val KEY_FROM_POST_DETAIL = "KEY_FROM_POST_DETAIL"
         private const val INVALID_COMMENT_ID: Long = -1
 
