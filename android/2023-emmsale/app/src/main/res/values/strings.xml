@@ -143,7 +143,7 @@
     <string name="comment_menu_button">댓글의 메뉴 버튼</string>
     <string name="comment_deleted_comment_author_name">삭제</string>
     <string name="comment_deleted_comment_content">삭제된 댓글입니다.</string>
-    <string name="comment_author_image">댓글 작성자의 사진</string>
+    <string name="comment_author_image_description">댓글 작성자의 사진</string>
 
     <string name="comments_child_comments_count_format">답글 %d</string>
     <string name="comments_edit_comment_hint">댓글을 입력하세요.</string>

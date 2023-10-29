@@ -39,7 +39,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="17dp"
             android:layout_marginTop="15dp"
-            android:contentDescription="@string/comment_author_image"
+            android:contentDescription="@string/comment_author_image_description"
             android:onClick="@{() -> onProfileImageClick.invoke(uiState.comment.authorId)}"
             app:imageUrl="@{uiState.comment.authorImageUrl}"
             app:isCircle="@{true}"
