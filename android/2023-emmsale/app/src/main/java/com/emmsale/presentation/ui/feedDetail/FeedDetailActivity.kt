@@ -55,7 +55,6 @@ class FeedDetailActivity : AppCompatActivity() {
                 parentCommentId = comment.parentId ?: comment.id,
                 highlightCommentId = comment.id,
             )
-            viewModel.unhighlightComment(comment.id)
         },
         onAuthorImageClick = ::showProfile,
         onCommentMenuClick = ::showCommentMenuDialog,

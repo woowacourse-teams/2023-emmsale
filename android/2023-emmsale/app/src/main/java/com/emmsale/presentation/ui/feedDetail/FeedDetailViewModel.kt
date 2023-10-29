@@ -240,10 +240,6 @@ class FeedDetailViewModel @Inject constructor(
         _feedDetail.value = _feedDetail.value.highlightComment(commentId)
     }
 
-    fun unhighlightComment(commentId: Long) {
-        _feedDetail.value = _feedDetail.value.unhighlightComment(commentId)
-    }
-
     companion object {
         const val KEY_FEED_ID: String = "KEY_FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
