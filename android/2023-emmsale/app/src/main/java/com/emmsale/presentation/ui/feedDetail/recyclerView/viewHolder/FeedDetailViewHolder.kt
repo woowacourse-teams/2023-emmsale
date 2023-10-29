@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.ItemFeeddetailFeedDetailBinding
-import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailImageItemDecoration
+import com.emmsale.presentation.common.extension.dp
+import com.emmsale.presentation.common.recyclerView.IntervalDecoration
 import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailImagesAdapter
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
 
@@ -20,7 +21,7 @@ class FeedDetailViewHolder(
         binding.rvFeeddetailFeedDetailImages.apply {
             adapter = imageUrlsAdapter
             itemAnimator = null
-            addItemDecoration(FeedDetailImageItemDecoration())
+            addItemDecoration(IntervalDecoration(width = IMAGE_INTERVAL))
         }
     }
 
@@ -30,6 +31,8 @@ class FeedDetailViewHolder(
     }
 
     companion object {
+        private val IMAGE_INTERVAL: Int = 10.dp
+
         fun from(
             parent: ViewGroup,
             onProfileImageClick: (authorId: Long) -> Unit,
