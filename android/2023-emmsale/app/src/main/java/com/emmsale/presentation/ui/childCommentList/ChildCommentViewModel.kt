@@ -138,6 +138,14 @@ class ChildCommentViewModel @Inject constructor(
         )
     }
 
+    fun highlight(commentId: Long) {
+        _comments.value = _comments.value.highlight(commentId)
+    }
+
+    fun unhighlight(commentId: Long) {
+        _comments.value = _comments.value.unhighlight(commentId)
+    }
+
     override fun changeToLoadingState() {
         _comments.value = _comments.value.copy(fetchResult = FetchResult.LOADING)
     }

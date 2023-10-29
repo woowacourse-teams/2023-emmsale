@@ -1,15 +1,18 @@
 package com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
+import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ItemAllComment1Binding
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
+@SuppressLint("ClickableViewAccessibility")
 class CommentViewHolder1(
     parent: ViewGroup,
-    onClick: (commentId: Long) -> Unit,
+    onClick: (comment: Comment) -> Unit,
     onAuthorImageClick: (authorId: Long) -> Unit,
     onCommentMenuClick: (isWrittenByLoginUser: Boolean, commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(

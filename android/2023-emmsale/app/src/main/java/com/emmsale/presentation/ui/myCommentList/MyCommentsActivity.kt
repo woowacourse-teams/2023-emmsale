@@ -53,7 +53,7 @@ class MyCommentsActivity : AppCompatActivity() {
             context = this,
             feedId = eventId,
             parentCommentId = parentCommentId,
-            scrollToCommentId = commentId,
+            highlightCommentId = commentId,
             fromPostDetail = false,
         )
     }

@@ -9,6 +9,15 @@ data class ChildCommentsUiState(
     override val fetchResult: FetchResult,
     val comments: List<CommentUiState>,
 ) : FetchResultUiState() {
+
+    fun highlight(commentId: Long) = copy(
+        comments = comments.map { if (it.comment.id == commentId) it.highlight() else it },
+    )
+
+    fun unhighlight(commentId: Long) = copy(
+        comments = comments.map { if (it.comment.id == commentId) it.unhighlight() else it },
+    )
+
     companion object {
         val Loading: ChildCommentsUiState = ChildCommentsUiState(
             fetchResult = FetchResult.LOADING,

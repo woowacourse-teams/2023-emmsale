@@ -107,7 +107,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
             context = requireContext(),
             feedId = feedId,
             parentCommentId = parentCommentId,
-            scrollToCommentId = commentId,
+            highlightCommentId = commentId,
             fromPostDetail = false,
         )
     }

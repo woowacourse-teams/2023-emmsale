@@ -11,6 +11,8 @@
 
         <import type="kotlin.Unit" />
 
+        <import type="com.emmsale.data.model.Comment" />
+
         <variable
             name="uiState"
             type="com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState" />
@@ -25,14 +27,15 @@
 
         <variable
             name="onClick"
-            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
+            type="kotlin.jvm.functions.Function1&lt;Comment, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="17dp"
-        android:onClick="@{() -> onClick.invoke(uiState.comment.id)}">
+        android:background="@{uiState.highlight ? @color/comment_highlight_color : @color/transparent}"
+        android:onClick="@{() -> onClick.invoke(uiState.comment)}">
 
         <androidx.constraintlayout.widget.Group
             android:layout_width="wrap_content"

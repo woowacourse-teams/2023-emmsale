@@ -4,17 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.Event
-import com.emmsale.presentation.common.KeyboardHider
 import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
@@ -28,11 +24,9 @@ import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Compan
 import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_PARENT_COMMENT_ID
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
-import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
+import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter1
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
@@ -41,26 +35,19 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private val viewModel: ChildCommentViewModel by viewModels()
 
-    private val commentsAdapter: CommentsAdapter = CommentsAdapter(
-        onParentCommentClick = {},
-        onProfileImageClick = ::navigateToProfile,
+    private val commentsAdapter: CommentsAdapter1 = CommentsAdapter1(
+        onClick = { comment -> viewModel.unhighlight(comment.id) },
+        onAuthorImageClick = { authorId -> ProfileActivity.startActivity(this, authorId) },
         onCommentMenuClick = ::showCommentMenuDialog,
     ).apply {
         registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (fromPostDetail || !justEntered || itemCount == 0) return
+                if (highlightCommentId == INVALID_COMMENT_ID || !justEntered || itemCount == 0) return
                 val position =
-                    viewModel.comments.value.comments.indexOfFirst { it.comment.id == scrollToCommentId }
+                    viewModel.comments.value.comments.indexOfFirst { it.comment.id == highlightCommentId }
                 binding.rvChildcommentsChildcomments.scrollToPosition(position)
 
-                lifecycleScope.launch {
-                    delay(VIEW_SETTING_DELAY)
-                    val view = binding.rvChildcommentsChildcomments
-                        .findViewHolderForAdapterPosition(position)
-                        ?.itemView
-                        ?: return@launch
-                    view.highlight()
-                }
+                viewModel.highlight(highlightCommentId)
                 justEntered = false
             }
         })
@@ -68,10 +55,8 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
-    private val keyboardHider: KeyboardHider by lazy { KeyboardHider(this) }
-
-    private val scrollToCommentId: Long by lazy {
-        intent.getLongExtra(KEY_SCROLL_TO_COMMENT_ID, INVALID_COMMENT_ID)
+    private val highlightCommentId: Long by lazy {
+        intent.getLongExtra(KEY_HIGHLIGHT_COMMENT_ID, INVALID_COMMENT_ID)
     }
 
     private val fromPostDetail: Boolean by lazy {
@@ -98,14 +83,6 @@ class ChildCommentActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         viewModel.refresh()
-    }
-
-    suspend fun View.highlight() {
-        val typedValue = TypedValue()
-        context.theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
-        setBackgroundResource(typedValue.resourceId)
-        delay(BACKGROUND_SETTING_DELAY)
-        isPressed = true
     }
 
     private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, commentId: Long) {
@@ -150,10 +127,6 @@ class ChildCommentActivity : AppCompatActivity() {
             context.getString(R.string.all_report_button_label),
             MenuItemType.IMPORTANT,
         ) { showReportConfirmDialog(commentId) }
-    }
-
-    private fun navigateToProfile(authorId: Long) {
-        ProfileActivity.startActivity(this, authorId)
     }
 
     private fun showReportConfirmDialog(commentId: Long) {
@@ -212,7 +185,6 @@ class ChildCommentActivity : AppCompatActivity() {
             adapter = commentsAdapter
             itemAnimator = null
             addItemDecoration(CommonRecyclerViewDivider(this@ChildCommentActivity))
-            setOnTouchListener { _, event -> keyboardHider.handleHideness(event) }
         }
     }
 
@@ -266,21 +238,19 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KEY_SCROLL_TO_COMMENT_ID = "KEY_CHILD_COMMENT_ID"
+        private const val KEY_HIGHLIGHT_COMMENT_ID = "KEY_CHILD_COMMENT_ID"
         private const val KEY_FROM_POST_DETAIL = "KEY_FROM_POST_DETAIL"
         private const val INVALID_COMMENT_ID: Long = -1
-        private const val VIEW_SETTING_DELAY: Long = 100
-        private const val BACKGROUND_SETTING_DELAY: Long = 300
 
         fun startActivity(
             context: Context,
             feedId: Long,
             parentCommentId: Long,
-            scrollToCommentId: Long = INVALID_COMMENT_ID,
+            highlightCommentId: Long = INVALID_COMMENT_ID,
             fromPostDetail: Boolean = true,
         ) {
             val intent =
-                getIntent(context, feedId, parentCommentId, scrollToCommentId, fromPostDetail)
+                getIntent(context, feedId, parentCommentId, highlightCommentId, fromPostDetail)
             context.startActivity(intent)
         }
 
@@ -288,13 +258,13 @@ class ChildCommentActivity : AppCompatActivity() {
             context: Context,
             feedId: Long,
             parentCommentId: Long,
-            scrollToCommentId: Long = INVALID_COMMENT_ID,
+            highlightCommentId: Long = INVALID_COMMENT_ID,
             fromPostDetail: Boolean = true,
         ): Intent =
             Intent(context, ChildCommentActivity::class.java).apply {
                 putExtra(KEY_FEED_ID, feedId)
                 putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
-                putExtra(KEY_SCROLL_TO_COMMENT_ID, scrollToCommentId)
+                putExtra(KEY_HIGHLIGHT_COMMENT_ID, highlightCommentId)
                 putExtra(KEY_FROM_POST_DETAIL, fromPostDetail)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
