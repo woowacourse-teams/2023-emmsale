@@ -15,13 +15,13 @@
 
         <variable
             name="onClick"
-            type="kotlin.jvm.functions.Function3&lt;Long, Long, Long, Unit>" />
+            type="kotlin.jvm.functions.Function2&lt;Long, Long, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> onClick.invoke(comment.feedId, comment.parentId == null ? comment.id : comment.parentId, comment.id)}"
+        android:onClick="@{() -> onClick.invoke(comment.feedId, comment.id)}"
         android:background="?attr/selectableItemBackground">
 
         <TextView

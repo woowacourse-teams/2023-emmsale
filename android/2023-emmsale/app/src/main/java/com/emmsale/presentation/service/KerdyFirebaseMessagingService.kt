@@ -7,6 +7,7 @@ import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
+import com.emmsale.data.model.Comment
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
@@ -15,8 +16,8 @@ import com.emmsale.presentation.common.extension.isUpdateNeeded
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.extension.topActivityName
-import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
+import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.splash.SplashActivity
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -109,11 +110,11 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun showChildCommentNotification(message: RemoteMessage, isUpdateNeeded: Boolean) {
-        fun getFeedIdAndParentCommentId(commentId: Long): Pair<Long, Long> {
+        fun getComment(commentId: Long): Comment? {
             return runBlocking {
                 when (val result = commentRepository.getComment(commentId)) {
-                    is Failure, NetworkError -> ERROR_FEED_ID to ERROR_FEED_ID
-                    is Success -> result.data.feedId to result.data.id
+                    is Failure, NetworkError -> null
+                    is Success -> result.data
                     is Unexpected -> throw Throwable(result.error)
                 }
             }
@@ -124,13 +125,16 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val writerName = message.data["writer"] ?: return
         val writerImageUrl = message.data["writerImageUrl"] ?: return
 
-        val (feedId, parentCommentId) = getFeedIdAndParentCommentId(childCommentId)
-        if (feedId == ERROR_FEED_ID) return
+        val comment = getComment(childCommentId) ?: return
 
         val intent = if (isUpdateNeeded) {
             SplashActivity.getIntent(this)
         } else {
-            ChildCommentActivity.getIntent(this, feedId, parentCommentId, childCommentId, false)
+            FeedDetailActivity.getIntent(
+                context = this,
+                feedId = comment.feedId,
+                highlightCommentId = childCommentId,
+            )
         }
 
         baseContext.showNotification(
@@ -204,8 +208,6 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
-        private const val ERROR_FEED_ID = -1L
-
         private const val CHILD_COMMENT_NOTIFICATION_TYPE = "COMMENT"
         private const val EVENT_NOTIFICATION_TYPE = "EVENT"
         private const val MESSAGE_NOTIFICATION_TYPE = "MESSAGE"

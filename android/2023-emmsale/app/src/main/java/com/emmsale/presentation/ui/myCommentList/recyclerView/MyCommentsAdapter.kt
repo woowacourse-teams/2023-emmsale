@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.emmsale.presentation.ui.myCommentList.uiState.MyCommentUiState
 
 class MyCommentsAdapter(
-    private val onClick: (eventId: Long, parentCommentId: Long, commentId: Long) -> Unit,
+    private val onClick: (eventId: Long, commentId: Long) -> Unit,
 ) : ListAdapter<MyCommentUiState, MyCommentViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyCommentViewHolder {
