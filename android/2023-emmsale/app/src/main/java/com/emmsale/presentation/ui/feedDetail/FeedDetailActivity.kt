@@ -19,7 +19,7 @@ import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
 import com.emmsale.presentation.ui.feedDetail.FeedDetailViewModel.Companion.KEY_FEED_ID
-import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter1
+import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailAdapter
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
 import com.emmsale.presentation.ui.profile.ProfileActivity
@@ -36,7 +36,7 @@ class FeedDetailActivity : AppCompatActivity() {
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
     private val feedDetailAdapter: FeedDetailAdapter = FeedDetailAdapter(::showProfile)
-    private val commentsAdapter: CommentsAdapter1 = CommentsAdapter1(
+    private val commentsAdapter: CommentsAdapter = CommentsAdapter(
         onClick = { comment ->
             ChildCommentActivity.startActivity(
                 context = this,

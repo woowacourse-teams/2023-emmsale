@@ -10,7 +10,7 @@ import com.emmsale.databinding.ItemAllComment1Binding
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
 @SuppressLint("ClickableViewAccessibility")
-class CommentViewHolder1(
+class CommentViewHolder(
     parent: ViewGroup,
     onClick: (comment: Comment) -> Unit,
     onAuthorImageClick: (authorId: Long) -> Unit,

@@ -24,7 +24,7 @@ import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Compan
 import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_PARENT_COMMENT_ID
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
-import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter1
+import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
@@ -35,7 +35,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private val viewModel: ChildCommentViewModel by viewModels()
 
-    private val commentsAdapter: CommentsAdapter1 = CommentsAdapter1(
+    private val commentsAdapter: CommentsAdapter = CommentsAdapter(
         onClick = { comment -> viewModel.unhighlight(comment.id) },
         onAuthorImageClick = { authorId -> ProfileActivity.startActivity(this, authorId) },
         onCommentMenuClick = ::showCommentMenuDialog,
