@@ -63,6 +63,7 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+    cloudfront-prefix: empty-url
 
 ---
 
@@ -79,4 +80,3 @@ spring:
     import: classpath:kerdy-submodule/application-prod.yml
     activate:
       on-profile: prod
-

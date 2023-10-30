@@ -25,15 +25,20 @@ class ActivityCommandServiceTest extends ServiceIntegrationTestHelper {
     //given
     final String activityName = "DDD";
     final ActivityAddRequest request = new ActivityAddRequest(ActivityType.CLUB, activityName);
-    final ActivityResponse expected = new ActivityResponse(7L, activityName);
+    final ActivityResponse expected = new ActivityResponse(
+      7L,
+      ActivityType.CLUB.getValue(),
+      activityName
+    );
 
     //when
-    final ActivityResponse actual = activityCommandService.addActivity(request);
+    final ActivityResponse actual
+      = activityCommandService.addActivity(request);
 
     //then
     assertThat(actual)
-        .usingRecursiveComparison()
-        .isEqualTo(expected);
+      .usingRecursiveComparison()
+      .isEqualTo(expected);
   }
 
   @Test
@@ -49,7 +54,7 @@ class ActivityCommandServiceTest extends ServiceIntegrationTestHelper {
 
     //then
     assertThatThrownBy(actual)
-        .isInstanceOf(ActivityException.class)
-        .hasMessage(ActivityExceptionType.ALEADY_EXIST_ACTIVITY.errorMessage());
+      .isInstanceOf(ActivityException.class)
+      .hasMessage(ActivityExceptionType.ALEADY_EXIST_ACTIVITY.errorMessage());
   }
 }
