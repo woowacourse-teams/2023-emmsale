@@ -20,10 +20,12 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <!-- Toolbar Menu 글자 색 바꾸기-->
     <style name="PostWritingToolbarStyle" parent="@style/Widget.Material3.Toolbar">
         <item name="materialThemeOverlay">@style/ToolbarThemeOverlay</item>
     </style>
 
+    <!-- Toolbar Menu 글자 색 바꾸기-->
     <style name="ToolbarThemeOverlay" parent="">
         <item name="actionMenuTextColor">@color/primary_color</item>
     </style>
