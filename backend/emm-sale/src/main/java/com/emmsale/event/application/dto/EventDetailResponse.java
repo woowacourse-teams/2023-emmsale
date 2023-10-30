@@ -3,11 +3,16 @@ package com.emmsale.event.application.dto;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 import com.emmsale.event.domain.Event;
+import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
+import com.emmsale.image.domain.AllImagesOfContent;
 import com.emmsale.tag.domain.Tag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -64,5 +69,29 @@ public class EventDetailResponse {
         event.getPaymentType().getValue(),
         event.getEventMode().getValue()
     );
+  }
+
+  public static List<EventDetailResponse> makeEventResponsesByStatus(final List<Event> events,
+      final Map<Long, AllImagesOfContent> imagesPerEventId) {
+    return events.stream()
+        .map(event -> {
+          final AllImagesOfContent allImageUrls = imagesPerEventId.get(event.getId());
+          final String thumbnailImageUrl = allImageUrls.extractThumbnailImage();
+          final List<String> informationImageUrls = allImageUrls.extractInformationImages();
+          return EventDetailResponse.from(event, thumbnailImageUrl, informationImageUrls);
+        })
+        .collect(Collectors.toList());
+  }
+
+  public static List<EventDetailResponse> mergeEventResponses(
+      final Map<EventStatus, List<Event>> groupByEventStatus,
+      final Map<Long, AllImagesOfContent> imagesPerEventId
+  ) {
+    return groupByEventStatus.values().stream()
+        .map(events -> makeEventResponsesByStatus(events, imagesPerEventId))
+        .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
+          combinedEvents.addAll(eventsToAdd);
+          return combinedEvents;
+        });
   }
 }

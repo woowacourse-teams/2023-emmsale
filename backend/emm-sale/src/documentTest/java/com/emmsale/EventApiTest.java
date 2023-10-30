@@ -118,7 +118,7 @@ class EventApiTest extends MockMvcTestHelper {
         "https://www.image.com", EventType.COMPETITION.toString(),
         List.of("imageUrl1", "imageUrl2"), "인프런", "유료", "온라인");
 
-    Mockito.when(eventService.findEvent(ArgumentMatchers.anyLong(), any()))
+    Mockito.when(eventQueryService.findEvent(ArgumentMatchers.anyLong(), any()))
         .thenReturn(eventDetailResponse);
 
     //when
@@ -176,7 +176,7 @@ class EventApiTest extends MockMvcTestHelper {
             EventMode.ONLINE.getValue())
     );
 
-    Mockito.when(eventService.findEvents(any(EventType.class),
+    Mockito.when(eventQueryService.findEvents(any(EventType.class),
         any(LocalDateTime.class), eq("2023-07-01"),
         eq("2023-07-31"),
         eq(null), any(), eq("컨퍼"))).thenReturn(eventResponses);
@@ -232,7 +232,7 @@ class EventApiTest extends MockMvcTestHelper {
         "image1.jpg", request.getType().toString(),
         List.of("imageUrl1", "imageUrl2"), "행사기관", "유료", "온라인");
 
-    Mockito.when(eventService.updateEvent(eq(eventId), any(EventDetailRequest.class), any()))
+    Mockito.when(eventCommandService.updateEvent(eq(eventId), any(EventDetailRequest.class), any()))
         .thenReturn(response);
 
     final String contents = objectMapper.writeValueAsString(request);
@@ -282,7 +282,7 @@ class EventApiTest extends MockMvcTestHelper {
     //given
     final long eventId = 1L;
 
-    Mockito.doNothing().when(eventService).deleteEvent(eventId);
+    Mockito.doNothing().when(eventCommandService).deleteEvent(eventId);
     //when
     final ResultActions result = mockMvc.perform(
         delete("/events/" + eventId));
@@ -334,7 +334,7 @@ class EventApiTest extends MockMvcTestHelper {
           "image1.jpg", request.getType().toString(),
           List.of("imageUrl1", "imageUrl2"), "행사기관", "무료", "오프라인");
 
-      Mockito.when(eventService.addEvent(any(EventDetailRequest.class), any()))
+      Mockito.when(eventCommandService.addEvent(any(EventDetailRequest.class), any()))
           .thenReturn(response);
 
       final String contents = objectMapper.writeValueAsString(request);
