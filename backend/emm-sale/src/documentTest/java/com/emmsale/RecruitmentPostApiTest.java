@@ -20,6 +20,8 @@ import com.emmsale.event.application.dto.RecruitmentPostQueryResponse;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
 import com.emmsale.event.application.dto.RecruitmentPostResponse;
 import com.emmsale.event.application.dto.RecruitmentPostUpdateRequest;
+import com.emmsale.member.application.dto.MemberReferenceResponse;
+import com.emmsale.member.domain.Member;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -187,20 +189,28 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
   void findRecruitmentPostsByMemberIdTest() throws Exception {
     //given
     final Long memberId = 1L;
+    final Member member = new Member(1L, 3L, "https://github.image", "아마란스", "amaran-th");
     final LocalDate postedAt = LocalDate.of(2023, 7, 15);
-
     final List<RecruitmentPostQueryResponse> response = List.of(
-        new RecruitmentPostQueryResponse(1L, memberId, 21L, "인프콘 2023", "함께해요~", postedAt),
-        new RecruitmentPostQueryResponse(2L, memberId, 43L, "구름톤", "같이 가요~", postedAt)
+        new RecruitmentPostQueryResponse(1L, "함께해요~", postedAt,
+            MemberReferenceResponse.from(member), 21L),
+        new RecruitmentPostQueryResponse(2L, "같이 가요~", postedAt,
+            MemberReferenceResponse.from(member), 43L)
     );
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].postId").type(JsonFieldType.NUMBER).description("함께해요 게시글 식별자"),
-        fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("member의 식별자"),
-        fieldWithPath("[].eventId").type(JsonFieldType.NUMBER).description("행사의 식별자"),
-        fieldWithPath("[].eventName").type(JsonFieldType.STRING).description("행사 제목"),
         fieldWithPath("[].content").type(JsonFieldType.STRING).description("함께해요 게시글 내용"),
-        fieldWithPath("[].updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜")
+        fieldWithPath("[].updatedAt").type(JsonFieldType.STRING).description("함께해요 게시글 수정 날짜"),
+        fieldWithPath("[].member.id").type(JsonFieldType.NUMBER).description("member의 식별자"),
+        fieldWithPath("[].member.name").type(JsonFieldType.STRING).description("member의 이름"),
+        fieldWithPath("[].member.description").type(JsonFieldType.STRING)
+            .description("member의 한줄 자기소개"),
+        fieldWithPath("[].member.imageUrl").type(JsonFieldType.STRING)
+            .description("member의 이미지 url"),
+        fieldWithPath("[].member.githubUrl").type(JsonFieldType.STRING)
+            .description("member의 github Url"),
+        fieldWithPath("[].eventId").type(JsonFieldType.NUMBER).description("행사의 식별자")
     );
 
     //when
