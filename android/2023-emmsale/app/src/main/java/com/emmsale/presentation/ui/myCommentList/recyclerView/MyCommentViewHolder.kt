@@ -8,7 +8,7 @@ import com.emmsale.presentation.ui.myCommentList.uiState.MyCommentUiState
 
 class MyCommentViewHolder(
     private val binding: ItemMycommentsCommentBinding,
-    onClick: (eventId: Long, commentId: Long) -> Unit,
+    onClick: (eventId: Long, parentCommentId: Long, commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
@@ -22,7 +22,7 @@ class MyCommentViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
-            onClick: (eventId: Long, commentId: Long) -> Unit,
+            onClick: (eventId: Long, parentCommentId: Long, commentId: Long) -> Unit,
         ): MyCommentViewHolder {
             val binding = ItemMycommentsCommentBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)

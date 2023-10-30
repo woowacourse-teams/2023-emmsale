@@ -10,8 +10,8 @@ import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
+import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
-import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.primaryNotificationList.recyclerView.adapter.PastNotificationHeaderAdapter
 import com.emmsale.presentation.ui.primaryNotificationList.recyclerView.adapter.PrimaryNotificationAdapter
 import com.emmsale.presentation.ui.primaryNotificationList.recyclerView.adapter.RecentNotificationHeaderAdapter
@@ -92,6 +92,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
             is InterestEventNotificationUiState -> navigateToEventScreen(notification.eventId)
             is ChildCommentNotificationUiState -> navigateToCommentScreen(
                 feedId = notification.feedId,
+                parentCommentId = notification.parentCommentId,
                 commentId = notification.commentId,
             )
         }
@@ -101,11 +102,13 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         EventDetailActivity.startActivity(requireContext(), eventId)
     }
 
-    private fun navigateToCommentScreen(feedId: Long, commentId: Long) {
-        FeedDetailActivity.startActivity(
+    private fun navigateToCommentScreen(feedId: Long, parentCommentId: Long, commentId: Long) {
+        ChildCommentActivity.startActivity(
             context = requireContext(),
             feedId = feedId,
+            parentCommentId = parentCommentId,
             highlightCommentId = commentId,
+            fromPostDetail = false,
         )
     }
 
