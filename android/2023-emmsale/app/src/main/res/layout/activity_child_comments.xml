@@ -48,7 +48,7 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_comments"
-            app:onRefresh1="@{() -> viewModel.refresh()}"
+            app:onRefresh1="@{viewModel::refresh}"
             app:swipeRefreshColor="@{@color/primary_color}"
             android:layout_width="0dp"
             android:layout_height="0dp"

@@ -230,8 +230,6 @@ class ChildCommentActivity : AppCompatActivity() {
 
             ChildCommentsUiEvent.CommentUpdateComplete ->
                 binding.stiwCommentUpdate.isVisible = false
-
-            ChildCommentsUiEvent.CommentsRefreshFinish -> binding.srlComments.isRefreshing = false
         }
     }
 

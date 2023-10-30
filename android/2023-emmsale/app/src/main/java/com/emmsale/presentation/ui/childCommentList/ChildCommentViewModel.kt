@@ -71,29 +71,26 @@ class ChildCommentViewModel @Inject constructor(
     }
 
     @JvmOverloads
-    fun refresh(pendingEventOnSuccess: ChildCommentsUiEvent? = null) {
-        viewModelScope.launch {
-            when (val result = commentRepository.getComment(parentCommentId)) {
-                is Failure -> {}
-                NetworkError -> {
-                    changeToNetworkErrorState()
-                    return@launch
-                }
-
-                is Success -> {
-                    val comments = listOf(CommentUiState.create(uid, result.data)) +
-                        result.data.childComments.map { childComment ->
-                            CommentUiState.create(uid, childComment)
-                        }
-                    _comments.value = _comments.value.copy(comments = comments)
-                    if (pendingEventOnSuccess != null) _uiEvent.value = Event(pendingEventOnSuccess)
-                }
-
-                is Unexpected -> onUnexpected(result.error)
+    fun refresh(pendingEventOnSuccess: ChildCommentsUiEvent? = null) = viewModelScope.launch {
+        when (val result = commentRepository.getComment(parentCommentId)) {
+            is Failure -> {}
+            NetworkError -> {
+                changeToNetworkErrorState()
+                return@launch
             }
-            changeToSuccessState()
-            _uiEvent.value = Event(ChildCommentsUiEvent.CommentsRefreshFinish)
+
+            is Success -> {
+                val comments = listOf(CommentUiState.create(uid, result.data)) +
+                    result.data.childComments.map { childComment ->
+                        CommentUiState.create(uid, childComment)
+                    }
+                _comments.value = _comments.value.copy(comments = comments)
+                if (pendingEventOnSuccess != null) _uiEvent.value = Event(pendingEventOnSuccess)
+            }
+
+            is Unexpected -> onUnexpected(result.error)
         }
+        changeToSuccessState()
     }
 
     fun updateComment(commentId: Long, content: String) {
