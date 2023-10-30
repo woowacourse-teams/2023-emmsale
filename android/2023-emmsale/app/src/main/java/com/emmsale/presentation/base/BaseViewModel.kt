@@ -40,4 +40,25 @@ abstract class BaseViewModel : ViewModel() {
         }
         changeToSuccessState()
     }
+
+    protected fun <T : Any> refresh(
+        getResult: suspend () -> ApiResponse<T>,
+        onSuccess: (T) -> Unit,
+        onFailure: (code: Int, message: String?) -> Unit,
+    ) = viewModelScope.launch {
+        when (val result = getResult()) {
+            is Failure -> onFailure(result.code, result.message)
+            NetworkError -> {
+                changeToNetworkErrorState()
+                return@launch
+            }
+
+            is Success -> {
+                onSuccess(result.data)
+            }
+
+            is Unexpected -> onUnexpected(result.error)
+        }
+        changeToSuccessState()
+    }
 }

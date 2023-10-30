@@ -4,11 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.BaseViewModel
@@ -20,7 +15,6 @@ import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -71,27 +65,18 @@ class ChildCommentViewModel @Inject constructor(
     }
 
     @JvmOverloads
-    fun refresh(pendingEventOnSuccess: ChildCommentsUiEvent? = null) = viewModelScope.launch {
-        when (val result = commentRepository.getComment(parentCommentId)) {
-            is Failure -> {}
-            NetworkError -> {
-                changeToNetworkErrorState()
-                return@launch
-            }
-
-            is Success -> {
-                val comments = listOf(CommentUiState.create(uid, result.data)) +
-                    result.data.childComments.map { childComment ->
-                        CommentUiState.create(uid, childComment)
-                    }
-                _comments.value = _comments.value.copy(comments = comments)
-                if (pendingEventOnSuccess != null) _uiEvent.value = Event(pendingEventOnSuccess)
-            }
-
-            is Unexpected -> onUnexpected(result.error)
-        }
-        changeToSuccessState()
-    }
+    fun refresh(pendingEventOnSuccess: ChildCommentsUiEvent? = null) = super.refresh(
+        getResult = { commentRepository.getComment(parentCommentId) },
+        onSuccess = {
+            val comments = listOf(CommentUiState.create(uid, it)) +
+                it.childComments.map { childComment ->
+                    CommentUiState.create(uid, childComment)
+                }
+            _comments.value = _comments.value.copy(comments = comments)
+            if (pendingEventOnSuccess != null) _uiEvent.value = Event(pendingEventOnSuccess)
+        },
+        onFailure = { _, _ -> },
+    )
 
     fun updateComment(commentId: Long, content: String) {
         handleResponse(
