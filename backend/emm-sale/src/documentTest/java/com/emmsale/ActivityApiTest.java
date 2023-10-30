@@ -12,8 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.emmsale.activity.api.ActivityApi;
 import com.emmsale.activity.application.dto.ActivityAddRequest;
 import com.emmsale.activity.application.dto.ActivityResponse;
-import com.emmsale.activity.application.dto.ActivityResponseRefactor;
-import com.emmsale.activity.application.dto.ActivityResponses;
 import com.emmsale.activity.domain.ActivityType;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -37,39 +35,23 @@ class ActivityApiTest extends MockMvcTestHelper {
   void findAll() throws Exception {
     // given
     final ResponseFieldsSnippet responseFields = PayloadDocumentation.responseFields(
-      PayloadDocumentation.fieldWithPath("[].activityType").type(JsonFieldType.STRING)
-        .description("activity 분류"),
-      PayloadDocumentation.fieldWithPath("[].activityResponses[].id").type(JsonFieldType.NUMBER)
-        .description("activity id"),
-      PayloadDocumentation.fieldWithPath("[].activityResponses[].name").type(JsonFieldType.STRING)
-        .description("activity 이름")
+      fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("activity id"),
+      fieldWithPath("[].activityType").type(JsonFieldType.STRING).description("activity 분류"),
+      fieldWithPath("[].name").type(JsonFieldType.STRING).description("activity 이름")
     );
 
-    final List<ActivityResponses> activityResponses = List.of(
-      new ActivityResponses("동아리",
-        List.of(
-          new ActivityResponse(1L, "YAPP"),
-          new ActivityResponse(2L, "DND"),
-          new ActivityResponse(3L, "nexters")
-        )),
-      new ActivityResponses("컨퍼런스",
-        List.of(
-          new ActivityResponse(4L, "인프콘")
-        )),
-      new ActivityResponses("교육",
-        List.of(
-          new ActivityResponse(5L, "우아한테크코스")
-        )),
-      new ActivityResponses("직무",
-        List.of(
-          new ActivityResponse(6L, "Backend")
-        ))
+    final List<ActivityResponse> expected = List.of(
+      new ActivityResponse(1L, "동아리", "YAPP"),
+      new ActivityResponse(2L, "동아리", "DND"),
+      new ActivityResponse(3L, "동아리", "nexters"),
+      new ActivityResponse(4L, "컨퍼런스", "인프콘"),
+      new ActivityResponse(5L, "교육", "우아한테크코스"),
+      new ActivityResponse(6L, "직무", "Backend")
     );
 
-    Mockito.when(activityQueryService.findAll()).thenReturn(activityResponses);
+    Mockito.when(activityQueryService.findAll()).thenReturn(expected);
 
     // when & then
-
     mockMvc.perform(MockMvcRequestBuilders.get("/activities"))
       .andExpect(MockMvcResultMatchers.status().isOk())
       .andDo(MockMvcRestDocumentation.document("find-all-activities", responseFields));
@@ -85,7 +67,7 @@ class ActivityApiTest extends MockMvcTestHelper {
     );
 
     final ActivityAddRequest request = new ActivityAddRequest(ActivityType.CLUB, "DND");
-    final ActivityResponseRefactor response = new ActivityResponseRefactor(3L,
+    final ActivityResponse response = new ActivityResponse(3L,
       ActivityType.CLUB.getValue(),
       "DND"
     );

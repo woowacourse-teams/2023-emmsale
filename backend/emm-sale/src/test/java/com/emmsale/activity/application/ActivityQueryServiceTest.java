@@ -1,14 +1,10 @@
 package com.emmsale.activity.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.emmsale.activity.application.dto.ActivityResponse;
-import com.emmsale.activity.application.dto.ActivityResponses;
-import com.emmsale.activity.domain.ActivityType;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,40 +14,25 @@ class ActivityQueryServiceTest extends ServiceIntegrationTestHelper {
   @Autowired
   private ActivityQueryService activityQueryService;
 
-
   @Test
   @DisplayName("존재하고 있는 Activity를 전체 조회할 수 있다.")
-  void findAll() throws Exception {
+  void findAll() {
     //given
-    final List<String> expectedActivities = List.of(
-        ActivityType.CLUB.getValue(),
-        ActivityType.CONFERENCE.getValue(),
-        ActivityType.JOB.getValue(),
-        ActivityType.EDUCATION.getValue()
-    );
-
-    final List<String> expectedActivityNames = List.of(
-        "YAPP", "DND",
-        "nexters", "인프콘",
-        "우아한테크코스", "Backend"
+    final List<ActivityResponse> expected = List.of(
+      new ActivityResponse(1L, "동아리", "YAPP"),
+      new ActivityResponse(2L, "동아리", "DND"),
+      new ActivityResponse(3L, "동아리", "nexters"),
+      new ActivityResponse(4L, "컨퍼런스", "인프콘"),
+      new ActivityResponse(5L, "교육", "우아한테크코스"),
+      new ActivityResponse(6L, "직무", "Backend")
     );
 
     //when
-    List<ActivityResponses> activityResponses = activityQueryService.findAll();
+    final List<ActivityResponse> actual = activityQueryService.findAll();
 
     //then
-    final List<String> actualActivityNames = activityResponses.stream()
-        .flatMap(it -> it.getActivityResponses().stream())
-        .map(ActivityResponse::getName)
-        .collect(Collectors.toList());
-
-    assertAll(
-        () -> assertThat(activityResponses).hasSize(4),
-        () -> assertThat(activityResponses)
-            .extracting("activityType")
-            .containsExactlyInAnyOrderElementsOf(expectedActivities),
-        () -> assertThat(expectedActivityNames)
-            .containsExactlyInAnyOrderElementsOf(actualActivityNames)
-    );
+    assertThat(actual)
+      .usingRecursiveComparison()
+      .isEqualTo(expected);
   }
 }

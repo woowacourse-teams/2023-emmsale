@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.emmsale.activity.application.dto.ActivityAddRequest;
-import com.emmsale.activity.application.dto.ActivityResponseRefactor;
+import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.domain.ActivityType;
 import com.emmsale.activity.exception.ActivityException;
 import com.emmsale.activity.exception.ActivityExceptionType;
@@ -25,14 +25,14 @@ class ActivityCommandServiceTest extends ServiceIntegrationTestHelper {
     //given
     final String activityName = "DDD";
     final ActivityAddRequest request = new ActivityAddRequest(ActivityType.CLUB, activityName);
-    final ActivityResponseRefactor expected = new ActivityResponseRefactor(
+    final ActivityResponse expected = new ActivityResponse(
       7L,
       ActivityType.CLUB.getValue(),
       activityName
     );
 
     //when
-    final ActivityResponseRefactor actual
+    final ActivityResponse actual
       = activityCommandService.addActivity(request);
 
     //then

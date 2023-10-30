@@ -3,8 +3,7 @@ package com.emmsale.activity.api;
 import com.emmsale.activity.application.ActivityCommandService;
 import com.emmsale.activity.application.ActivityQueryService;
 import com.emmsale.activity.application.dto.ActivityAddRequest;
-import com.emmsale.activity.application.dto.ActivityResponseRefactor;
-import com.emmsale.activity.application.dto.ActivityResponses;
+import com.emmsale.activity.application.dto.ActivityResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,12 +23,12 @@ public class ActivityApi {
   private final ActivityCommandService activityCommandService;
 
   @GetMapping
-  public ResponseEntity<List<ActivityResponses>> findAll() {
+  public ResponseEntity<List<ActivityResponse>> findAll() {
     return ResponseEntity.ok(activityQueryService.findAll());
   }
 
   @PostMapping
-  public ResponseEntity<ActivityResponseRefactor> create(
+  public ResponseEntity<ActivityResponse> create(
     @RequestBody final ActivityAddRequest request
   ) {
     return ResponseEntity.status(HttpStatus.CREATED)

@@ -1,7 +1,7 @@
 package com.emmsale.activity.application;
 
 import com.emmsale.activity.application.dto.ActivityAddRequest;
-import com.emmsale.activity.application.dto.ActivityResponseRefactor;
+import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.domain.Activity;
 import com.emmsale.activity.domain.ActivityRepository;
 import com.emmsale.activity.exception.ActivityException;
@@ -17,11 +17,11 @@ public class ActivityCommandService {
 
   private final ActivityRepository activityRepository;
 
-  public ActivityResponseRefactor addActivity(final ActivityAddRequest request) {
+  public ActivityResponse addActivity(final ActivityAddRequest request) {
     final String name = request.getName();
     validateAlreadyExist(name);
     final Activity activity = new Activity(request.getActivityType(), name);
-    return ActivityResponseRefactor.from(activityRepository.save(activity));
+    return ActivityResponse.from(activityRepository.save(activity));
   }
 
   private void validateAlreadyExist(final String name) {
