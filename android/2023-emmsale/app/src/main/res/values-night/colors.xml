@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--common color-->
-    <color name="primary_color">#3EE088</color>
+    <color name="primary_color">#67EFA5</color>
     <color name="secondary_color">#FFEA9F</color>
     <color name="light_gray">#4DE6E6E6</color>
     <color name="gray">#ECECEC</color>
