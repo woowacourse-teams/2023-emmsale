@@ -3,7 +3,6 @@ package com.emmsale.event.api;
 import com.emmsale.event.application.EventService;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
-import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
 import java.time.LocalDate;
@@ -39,7 +38,7 @@ public class EventApi {
   }
 
   @GetMapping
-  public ResponseEntity<List<EventResponse>> findEvents(
+  public ResponseEntity<List<EventDetailResponse>> findEvents(
       @RequestParam(required = false) final EventType category,
       @RequestParam(name = "start_date", required = false) final String startDate,
       @RequestParam(name = "end_date", required = false) final String endDate,

@@ -12,7 +12,6 @@ import static java.util.stream.Collectors.toList;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
-import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
@@ -91,7 +90,7 @@ public class EventService {
   }
 
   @Transactional(readOnly = true)
-  public List<EventResponse> findEvents(final EventType category,
+  public List<EventDetailResponse> findEvents(final EventType category,
       final LocalDateTime nowDateTime, final String startDate, final String endDate,
       final List<String> tagNames, final List<EventStatus> statuses, final String keyword) {
     Specification<Event> spec = (root, query, criteriaBuilder) -> null;
@@ -105,7 +104,7 @@ public class EventService {
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDateTime, events);
 
-    return filterByStatuses(statuses, eventsForEventStatus, makeImageUrlPerEventId(events));
+    return filterByStatuses(statuses, eventsForEventStatus, makeImageUrlsPerEventId(events));
   }
 
   private Specification<Event> filterByCategoryIfExist(final EventType category,
@@ -185,16 +184,22 @@ public class EventService {
   }
 
   // TODO: 2023/09/27 코드 중복 제거(ScrapService)
-  private Map<Long, String> makeImageUrlPerEventId(final List<Event> events) {
-    final List<Long> scrappedEventIds = events.stream()
+  private Map<Long, List<String>> makeImageUrlsPerEventId(final List<Event> events) {
+    final List<Long> eventIds = events.stream()
         .map(Event::getId)
         .collect(Collectors.toList());
-    final List<Image> images = imageRepository.findAllThumbnailByEventIdIn(scrappedEventIds);
-    Map<Long, String> imageUrlPerEventId = new HashMap<>();
-    for (Image image : images) {
-      imageUrlPerEventId.put(image.getContentId(), image.getName());
+
+    Map<Long, List<String>> imageUrlsPerEventId = new HashMap<>();
+    for (Long eventId : eventIds) {
+      final List<String> images = imageRepository.findAllByTypeAndContentId(ImageType.EVENT,
+              eventId)
+          .stream()
+          .sorted(comparing(Image::getOrder))
+          .map(Image::getName)
+          .collect(toList());
+      imageUrlsPerEventId.put(eventId, images);
     }
-    return imageUrlPerEventId;
+    return imageUrlsPerEventId;
   }
 
   private Specification<Event> filterByKeywordIfExist(final String keyword,
@@ -220,31 +225,56 @@ public class EventService {
         );
   }
 
-  private List<EventResponse> filterByStatuses(
+  private List<EventDetailResponse> filterByStatuses(
       final List<EventStatus> statuses,
       final EnumMap<EventStatus, List<Event>> eventsForEventStatus,
-      final Map<Long, String> imageUrlPerEventId
+      final Map<Long, List<String>> imageUrlsPerEventId
   ) {
     if (isExistStatusName(statuses)) {
-      return filterEventResponseByStatuses(statuses, eventsForEventStatus, imageUrlPerEventId);
+      return filterEventResponseByStatuses(statuses, eventsForEventStatus, imageUrlsPerEventId);
     }
-    return EventResponse.mergeEventResponses(eventsForEventStatus, imageUrlPerEventId);
+    return mergeEventResponses(eventsForEventStatus, imageUrlsPerEventId);
   }
 
   private boolean isExistStatusName(final List<EventStatus> statuses) {
     return statuses != null;
   }
 
-  private List<EventResponse> filterEventResponseByStatuses(
+  private List<EventDetailResponse> filterEventResponseByStatuses(
       final List<EventStatus> statuses,
       final EnumMap<EventStatus, List<Event>> eventsForEventStatus,
-      final Map<Long, String> imageUrlPerEventId
+      final Map<Long, List<String>> imageUrlsPerEventId
   ) {
     return eventsForEventStatus.entrySet()
         .stream()
         .filter(entry -> statuses.contains(entry.getKey()))
         .map(
-            entry -> EventResponse.makeEventResponsesByStatus(entry.getValue(), imageUrlPerEventId))
+            entry -> makeEventResponsesByStatus(entry.getValue(),
+                imageUrlsPerEventId))
+        .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
+          combinedEvents.addAll(eventsToAdd);
+          return combinedEvents;
+        });
+  }
+
+  private List<EventDetailResponse> makeEventResponsesByStatus(final List<Event> events,
+      final Map<Long, List<String>> imageUrlsPerEventId) {
+    return events.stream()
+        .map(event -> {
+          final List<String> allImageUrls = imageUrlsPerEventId.get(event.getId());
+          final String thumbnailImageUrl = extractThumbnailImage(allImageUrls);
+          final List<String> informationImageUrls = extractInformationImages(allImageUrls);
+          return EventDetailResponse.from(event, thumbnailImageUrl, informationImageUrls);
+        })
+        .collect(Collectors.toList());
+  }
+
+  private List<EventDetailResponse> mergeEventResponses(
+      final Map<EventStatus, List<Event>> groupByEventStatus,
+      final Map<Long, List<String>> imageUrlsPerEventId
+  ) {
+    return groupByEventStatus.values().stream()
+        .map(events -> makeEventResponsesByStatus(events, imageUrlsPerEventId))
         .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
           combinedEvents.addAll(eventsToAdd);
           return combinedEvents;

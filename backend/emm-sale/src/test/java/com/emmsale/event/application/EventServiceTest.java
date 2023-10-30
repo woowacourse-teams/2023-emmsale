@@ -35,7 +35,6 @@ import static org.mockito.Mockito.doNothing;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
-import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventStatus;
@@ -74,21 +73,34 @@ import org.springframework.web.multipart.MultipartFile;
 
 class EventServiceTest extends ServiceIntegrationTestHelper {
 
-  private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023", null, null,
-      null, null, List.of(), "이미지1", EventMode.OFFLINE.getValue(),
-      PaymentType.PAID.getValue());
-  private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null, null, null,
-      null, List.of(), "이미지1", EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
-  private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스", null, null,
-      null, null, List.of(), "이미지1", EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
-  private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스", null, null, null,
-      null, List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
-  private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스", null, null,
-      null, null, List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
-  private static final EventResponse AI_아이디어_공모전 = new EventResponse(null, "AI 아이디어 공모전", null,
-      null, null, null, List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
-  private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null, null, null, null,
-      List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
+  private static final EventDetailResponse 인프콘_2023 = new EventDetailResponse(null, "인프콘 2023",
+      null, null, null, null, null, "코엑스", List.of("백엔드"),
+      "이미지1", EventType.CONFERENCE.name(), List.of(), "인프런", PaymentType.PAID.getValue(),
+      EventMode.OFFLINE.getValue());
+  private static final EventDetailResponse 웹_컨퍼런스 = new EventDetailResponse(null, "웹 컨퍼런스", null,
+      null, null,
+      null, null, "코엑스", List.of("백엔드"), "이미지1", EventType.CONFERENCE.name(),
+      List.of(), "주최기관", PaymentType.PAID.getValue(), EventMode.ONLINE.getValue());
+  private static final EventDetailResponse 안드로이드_컨퍼런스 = new EventDetailResponse(null, "안드로이드 컨퍼런스",
+      null, null, null, null, null, "코엑스", List.of("백엔드"),
+      "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
+      EventMode.ONLINE.getValue());
+  private static final EventDetailResponse AI_컨퍼런스 = new EventDetailResponse(null, "AI 컨퍼런스",
+      null, null, null, null, null, "코엑스", List.of("백엔드"),
+      "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
+      EventMode.ONLINE.getValue());
+  private static final EventDetailResponse 모바일_컨퍼런스 = new EventDetailResponse(null, "모바일 컨퍼런스",
+      null, null, null, null, null, "코엑스", List.of("백엔드"),
+      "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
+      EventMode.ONLINE.getValue());
+  private static final EventDetailResponse AI_아이디어_공모전 = new EventDetailResponse(null,
+      "AI 아이디어 공모전", null, null, null, null, null, "코엑스",
+      List.of("백엔드"), "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관",
+      PaymentType.PAID.getValue(), EventMode.ONLINE.getValue());
+  private static final EventDetailResponse 구름톤 = new EventDetailResponse(null, "구름톤", null,
+      null, null, null, null, "코엑스", List.of("백엔드"),
+      "이미지1", EventType.COMPETITION.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
+      EventMode.ONLINE.getValue());
 
   private static final LocalDateTime TODAY = LocalDateTime.of(2023, 7, 21, 0, 0);
   @Autowired
@@ -245,17 +257,18 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("2023년 7월 21일에 행사를 조회하면, 모든 행사 목록을 조회할 수 있다.")
     void findEvents_all() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 구름톤, AI_컨퍼런스, 모바일_컨퍼런스,
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 구름톤, AI_컨퍼런스,
+          모바일_컨퍼런스,
           안드로이드_컨퍼런스, AI_아이디어_공모전);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(null, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(null, TODAY,
           null, null, null, null, null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -263,17 +276,18 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("2023년 7월 21일에 컨퍼런스 행사를 조회하면, 해당 카테고리에 해당하는 모든 행사 목록을 조회할 수 있다.")
     void findEvents_CONFERENCE() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스,
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스,
           안드로이드_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           null, null, null, null, null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -281,16 +295,17 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("2023년 7월 21일에 대회 행사를 조회하면, 해당 카테고리에 해당하는 모든 행사 목록을 조회할 수 있다.")
     void findEvents_COMPETITION() {
       // given
-      final List<EventResponse> expectedEvents = List.of(구름톤, AI_아이디어_공모전);
+      final List<EventDetailResponse> expectedEvents = List.of(구름톤, AI_아이디어_공모전);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.COMPETITION, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.COMPETITION,
+          TODAY,
           null, null, null, null, null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -298,16 +313,18 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("2023년 7월 21일에 2023년 7월 행사를 조회하면, 해당 기간에 걸쳐있는 모든 행사 목록을 조회할 수 있다.")
     void findEvents_2023_7() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 안드로이드_컨퍼런스);
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스,
+          안드로이드_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           "2023-07-01", "2023-07-31", null, null, null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -315,16 +332,17 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("2023년 7월 21일에 2023년 8월 행사를 조회하면, 해당 기간에 걸쳐있는 모든 행사 목록을 조회할 수 있다.")
     void findEvents_2023_8() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 모바일_컨퍼런스);
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 모바일_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           "2023-08-01", "2023-08-31", null, null, null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -332,16 +350,17 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("2023년 7월 21일에 2023년 6월 행사를 조회하면, 해당 기간에 걸쳐있는 모든 행사 목록을 조회할 수 있다.")
     void findEvents_2023_6() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 안드로이드_컨퍼런스);
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 안드로이드_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           "2023-06-01", "2023-06-30", null, null, null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -349,16 +368,17 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("2023년 7월 21일에 2023년 7월 17일 이후에 있는 행사를 조회하면, 해당 기간에 걸쳐있는 모든 행사 목록을 조회할 수 있다.")
     void findEvents_after_2023_7_17() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스);
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           "2023-07-17", null, null, null, null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -366,16 +386,18 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("2023년 7월 21일에 2023년 7월 31일 이전에 있는 행사를 조회하면, 해당 기간에 걸쳐있는 모든 행사 목록을 조회할 수 있다.")
     void findEvents_before_2023_7_31() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 안드로이드_컨퍼런스);
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스,
+          안드로이드_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           null, "2023-07-31", null, null, null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -383,7 +405,8 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("아무 행사도 없는 2023년 12월 행사를 조회하면, 빈 목록을 반환한다.")
     void findEvents_2023_12() {
       // given, when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           "2023-12-01", "2023-12-31", null, null, null);
 
       // then
@@ -435,16 +458,17 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("'안드로이드' 태그를 포함하는 행사 목록을 조회할 수 있다.")
     void findEvents_tag_filter() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 모바일_컨퍼런스, 안드로이드_컨퍼런스);
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 모바일_컨퍼런스, 안드로이드_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           null, null, List.of("안드로이드"), null, null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -452,16 +476,18 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("'안드로이드', '백엔드' 태그를 포함하는 행사 목록을 조회할 수 있다.")
     void findEvents_tags_filter() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 모바일_컨퍼런스, 안드로이드_컨퍼런스);
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 모바일_컨퍼런스,
+          안드로이드_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           null, null, List.of("안드로이드", "백엔드"), null, null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -482,16 +508,17 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("'진행 중' 상태의 행사 목록을 조회할 수 있다.")
     void findEvents_status_filter() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스);
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           null, null, null, List.of(IN_PROGRESS), null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -499,16 +526,17 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("'진행 중' 및 '진행 예정' 상태의 행사 목록을 조회할 수 있다.")
     void findEvents_statuses_filter() {
       // given
-      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스);
+      final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           null, null, null, List.of(EventStatus.UPCOMING, IN_PROGRESS), null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -516,16 +544,17 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("9월에 존재하는 진행 예정인 '안드로이드', '백엔드' 태그를 포함하는 행사 목록을 조회할 수 있다.")
     void findEvents_period_tags_filter() {
       // given
-      final List<EventResponse> expectedEvents = List.of(모바일_컨퍼런스);
+      final List<EventDetailResponse> expectedEvents = List.of(모바일_컨퍼런스);
 
       // when
-      final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE, TODAY,
+      final List<EventDetailResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+          TODAY,
           "2023-09-01", "2023-09-30", List.of("안드로이드", "백엔드"), List.of(EventStatus.UPCOMING), null);
 
       // then
       assertThat(actualEvents)
           .usingRecursiveComparison()
-          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .comparingOnlyFields("name", "status", "applyStatus")
           .isEqualTo(expectedEvents);
     }
 
@@ -538,11 +567,12 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       @DisplayName("2023년 7월 21일에 컨퍼런스 행사를 조회할 때, 검색어가 공백인 경우 해당 카테고리에 해당하는 모든 행사 목록을 조회할 수 있다.")
       void findEvents_blank_search(final String keyword) {
         // given
-        final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 구름톤, AI_컨퍼런스, 모바일_컨퍼런스,
+        final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 구름톤, AI_컨퍼런스,
+            모바일_컨퍼런스,
             안드로이드_컨퍼런스, AI_아이디어_공모전);
 
         // when
-        final List<EventResponse> actualEvents = eventService.findEvents(null,
+        final List<EventDetailResponse> actualEvents = eventService.findEvents(null,
             TODAY,
             null, null, null, null, keyword);
 
@@ -558,11 +588,11 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       void findEvents_search() {
         // given
         final String keyword = " 컨퍼런스";
-        final List<EventResponse> expectedEvents = List.of(웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스,
+        final List<EventDetailResponse> expectedEvents = List.of(웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스,
             안드로이드_컨퍼런스);
 
         // when
-        final List<EventResponse> actualEvents = eventService.findEvents(null,
+        final List<EventDetailResponse> actualEvents = eventService.findEvents(null,
             TODAY, null, null, null, null, keyword);
 
         // then
@@ -577,10 +607,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       void findEvents_multiple_tokens_search() {
         // given
         final String keyword = " 모 컨퍼";
-        final List<EventResponse> expectedEvents = List.of(모바일_컨퍼런스);
+        final List<EventDetailResponse> expectedEvents = List.of(모바일_컨퍼런스);
 
         // when
-        final List<EventResponse> actualEvents = eventService.findEvents(null,
+        final List<EventDetailResponse> actualEvents = eventService.findEvents(null,
             TODAY, null, null, null, null, keyword);
 
         // then
@@ -595,10 +625,10 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       void findEvents_status_filter_and_search() {
         // given
         final String keyword = "프콘 ";
-        final List<EventResponse> expectedEvents = List.of(인프콘_2023);
+        final List<EventDetailResponse> expectedEvents = List.of(인프콘_2023);
 
         // when
-        final List<EventResponse> actualEvents = eventService.findEvents(null,
+        final List<EventDetailResponse> actualEvents = eventService.findEvents(null,
             TODAY,
             null, null, null, List.of(IN_PROGRESS), keyword);
 

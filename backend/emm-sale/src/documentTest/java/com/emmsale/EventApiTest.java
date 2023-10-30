@@ -15,7 +15,6 @@ import com.emmsale.event.EventFixture;
 import com.emmsale.event.api.EventApi;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventDetailResponse;
-import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventType;
@@ -81,6 +80,31 @@ class EventApiTest extends MockMvcTestHelper {
       fieldWithPath("eventMode").description("온/오프라인 여부(온라인,오프라인,온오프라인)")
   );
 
+  private static final ResponseFieldsSnippet EVENT_RESPONSE_FILED = PayloadDocumentation.responseFields(
+      fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 식별자"),
+      fieldWithPath("[].name").type(JsonFieldType.STRING)
+          .description("행사 이름"),
+      fieldWithPath("[].informationUrl").type(JsonFieldType.STRING)
+          .description("행사 상세정보 url"),
+      fieldWithPath("[].startDate").type(JsonFieldType.STRING)
+          .description("행사 시작 일자"),
+      fieldWithPath("[].endDate").type(JsonFieldType.STRING).description("행사 종료 일자"),
+      fieldWithPath("[].applyStartDate").type(JsonFieldType.STRING)
+          .description("행사 신청 시작 일자(nullable)"),
+      fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
+          .description("행사 신청 종료 일자(nullable)"),
+      fieldWithPath("[].location").type(JsonFieldType.STRING).description("행사 장소"),
+      fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY).description("행사 태그들"),
+      fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING)
+          .description("행사 섬네일 이미지 Url(포스터)"),
+      fieldWithPath("[].type").type(JsonFieldType.STRING)
+          .description("행사의 분류"),
+      fieldWithPath("[].imageUrls[]").description("행사의 상세 정보 이미지 URL들").optional(),
+      fieldWithPath("[].organization").description("행사 주최기관"),
+      fieldWithPath("[].paymentType").description("행사의 유무료 여부(유료,무료,유무료)"),
+      fieldWithPath("[].eventMode").description("행사의 온/오프라인 여부(온라인,오프라인,온오프라인)")
+  );
+
   @Test
   @DisplayName("컨퍼런스의 상세정보를 조회할 수 있다.")
   void findEvent() throws Exception {
@@ -124,49 +148,32 @@ class EventApiTest extends MockMvcTestHelper {
             .optional()
     );
 
-    final ResponseFieldsSnippet responseFields = PayloadDocumentation.responseFields(
-        PayloadDocumentation.fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
-        PayloadDocumentation.fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
-        PayloadDocumentation.fieldWithPath("[].eventStartDate").type(JsonFieldType.STRING)
-            .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
-        PayloadDocumentation.fieldWithPath("[].eventEndDate").type(JsonFieldType.STRING)
-            .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
-        PayloadDocumentation.fieldWithPath("[].applyStartDate").type(JsonFieldType.STRING)
-            .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
-        PayloadDocumentation.fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
-            .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
-        PayloadDocumentation.fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
-            .description("행사 태그 목록"),
-        PayloadDocumentation.fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING)
-            .description("행사 섬네일 이미지 URL"),
-        PayloadDocumentation.fieldWithPath("[].eventMode").type(JsonFieldType.STRING)
-            .description("행사 온라인 여부(온라인, 오프라인, 온오프라인)"),
-        PayloadDocumentation.fieldWithPath("[].paymentType").type(JsonFieldType.STRING)
-            .description("행사 유료 여부(유료, 무료, 유무료)")
-    );
-
-    final List<EventResponse> eventResponses = List.of(
-        new EventResponse(
+    final List<EventDetailResponse> eventResponses = List.of(
+        new EventDetailResponse(
             5L,
             "웹 컨퍼런스",
+            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
             LocalDateTime.parse("2023-07-03T12:00:00"),
             LocalDateTime.parse("2023-08-03T12:00:00"),
             LocalDateTime.parse("2023-06-23T10:00:00"),
             LocalDateTime.parse("2023-07-03T12:00:00"),
-            List.of("백엔드", "프론트엔드"),
-            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            EventMode.ONLINE.getValue(),
-            PaymentType.PAID.getValue()),
-        new EventResponse(2L,
+            "코엑스", List.of("백엔드", "프론트엔드"),
+            "imageUrl0", EventType.CONFERENCE.name(),
+            List.of("imageUrl1", "imageUrl2"), "인프런",
+            PaymentType.PAID.getValue(),
+            EventMode.ONLINE.getValue()),
+        new EventDetailResponse(2L,
             "AI 컨퍼런스",
+            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
             LocalDateTime.parse("2023-07-22T12:00:00"),
             LocalDateTime.parse("2023-07-30T12:00:00"),
             LocalDateTime.parse("2023-07-01T00:00:00"),
             LocalDateTime.parse("2023-07-21T23:59:59"),
-            List.of("AI"),
-            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            EventMode.ONLINE.getValue(),
-            PaymentType.PAID.getValue())
+            "코엑스", List.of("AI"),
+            "imageUrl0", EventType.CONFERENCE.name(),
+            List.of("imageUrl1", "imageUrl2"), "인프런",
+            PaymentType.PAID.getValue(),
+            EventMode.ONLINE.getValue())
     );
 
     Mockito.when(eventService.findEvents(any(EventType.class),
@@ -183,7 +190,8 @@ class EventApiTest extends MockMvcTestHelper {
             .param("keyword", "컨퍼")
         )
         .andExpect(status().isOk())
-        .andDo(MockMvcRestDocumentation.document("find-events", requestParameters, responseFields));
+        .andDo(MockMvcRestDocumentation.document("find-events", requestParameters,
+            EVENT_RESPONSE_FILED));
   }
 
   @Test

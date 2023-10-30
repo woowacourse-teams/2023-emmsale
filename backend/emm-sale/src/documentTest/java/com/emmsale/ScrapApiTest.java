@@ -11,8 +11,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.event.domain.EventMode;
+import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.PaymentType;
 import com.emmsale.scrap.api.ScrapApi;
 import com.emmsale.scrap.application.dto.ScrapRequest;
@@ -35,61 +36,80 @@ class ScrapApiTest extends MockMvcTestHelper {
   @DisplayName("스크랩 목록을 성공적으로 조회하면 200 OK를 반환한다.")
   void findAllScraps() throws Exception {
     //given
-    final List<EventResponse> expectedScrapResponse = List.of(
-        new EventResponse(
+    final List<EventDetailResponse> expectedScrapResponse = List.of(
+        new EventDetailResponse(
             1L,
             "인프콘 2023",
+            "https://aaa",
             LocalDateTime.parse("2023-06-03T12:00:00"),
             LocalDateTime.parse("2023-09-03T12:00:00"),
             LocalDateTime.parse("2023-09-01T00:00:00"),
             LocalDateTime.parse("2023-09-02T23:59:59"),
+            "코엑스",
             List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"),
-            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            EventMode.ONLINE.getValue(),
-            PaymentType.PAID.getValue()
+            "image0.jpg",
+            EventType.CONFERENCE.name(),
+            List.of("image1.jpg", "image2.jpg", "image3.jpg"),
+            "인프런",
+            PaymentType.PAID.getValue(),
+            EventMode.ONLINE.getValue()
         ),
-        new EventResponse(
+        new EventDetailResponse(
             5L,
             "웹 컨퍼런스",
-            LocalDateTime.parse("2023-07-03T12:00:00"),
-            LocalDateTime.parse("2023-08-03T12:00:00"),
-            LocalDateTime.parse("2023-06-23T10:00:00"),
-            LocalDateTime.parse("2023-07-03T12:00:00"),
-            List.of("백엔드", "프론트엔드"),
-            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            EventMode.ONLINE.getValue(),
-            PaymentType.PAID.getValue()),
-        new EventResponse(2L,
+            "https://aaa",
+            LocalDateTime.parse("2023-06-03T12:00:00"),
+            LocalDateTime.parse("2023-09-03T12:00:00"),
+            LocalDateTime.parse("2023-09-01T00:00:00"),
+            LocalDateTime.parse("2023-09-02T23:59:59"),
+            "코엑스",
+            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"),
+            "image0.jpg",
+            EventType.CONFERENCE.name(),
+            List.of("image1.jpg", "image2.jpg", "image3.jpg"),
+            "인프런",
+            PaymentType.PAID.getValue(),
+            EventMode.ONLINE.getValue()),
+        new EventDetailResponse(2L,
             "AI 컨퍼런스",
-            LocalDateTime.parse("2023-07-22T12:00:00"),
-            LocalDateTime.parse("2023-07-30T12:00:00"),
-            LocalDateTime.parse("2023-07-01T00:00:00"),
-            LocalDateTime.parse("2023-07-21T23:59:59"),
-            List.of("AI"),
-            "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
-            EventMode.ONLINE.getValue(),
-            PaymentType.PAID.getValue())
+            "https://aaa",
+            LocalDateTime.parse("2023-06-03T12:00:00"),
+            LocalDateTime.parse("2023-09-03T12:00:00"),
+            LocalDateTime.parse("2023-09-01T00:00:00"),
+            LocalDateTime.parse("2023-09-02T23:59:59"),
+            "코엑스",
+            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"),
+            "image0.jpg",
+            EventType.CONFERENCE.name(),
+            List.of("image1.jpg", "image2.jpg", "image3.jpg"),
+            "인프런",
+            PaymentType.PAID.getValue(),
+            EventMode.ONLINE.getValue())
     );
 
     final ResponseFieldsSnippet responseFields = PayloadDocumentation.responseFields(
-        PayloadDocumentation.fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 id"),
-        PayloadDocumentation.fieldWithPath("[].name").type(JsonFieldType.STRING).description("행사명"),
-        PayloadDocumentation.fieldWithPath("[].eventStartDate").type(JsonFieldType.STRING)
-            .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
-        PayloadDocumentation.fieldWithPath("[].eventEndDate").type(JsonFieldType.STRING)
-            .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
-        PayloadDocumentation.fieldWithPath("[].applyStartDate").type(JsonFieldType.STRING)
-            .description("행사 시작일(yyyy:MM:dd:HH:mm:ss)"),
-        PayloadDocumentation.fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
-            .description("행사 마감일(yyyy:MM:dd:HH:mm:ss)"),
-        PayloadDocumentation.fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY)
-            .description("행사 태그 목록"),
-        PayloadDocumentation.fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING)
-            .description("행사 섬네일 이미지 URL"),
-        PayloadDocumentation.fieldWithPath("[].eventMode").type(JsonFieldType.STRING)
-            .description("행사 온라인 여부(온라인, 오프라인, 온오프라인)"),
-        PayloadDocumentation.fieldWithPath("[].paymentType").type(JsonFieldType.STRING)
-            .description("행사 유료 여부(유료, 무료, 유무료)")
+        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("행사 식별자"),
+        fieldWithPath("[].name").type(JsonFieldType.STRING)
+            .description("행사 이름"),
+        fieldWithPath("[].informationUrl").type(JsonFieldType.STRING)
+            .description("행사 상세정보 url"),
+        fieldWithPath("[].startDate").type(JsonFieldType.STRING)
+            .description("행사 시작 일자"),
+        fieldWithPath("[].endDate").type(JsonFieldType.STRING).description("행사 종료 일자"),
+        fieldWithPath("[].applyStartDate").type(JsonFieldType.STRING)
+            .description("행사 신청 시작 일자(nullable)"),
+        fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
+            .description("행사 신청 종료 일자(nullable)"),
+        fieldWithPath("[].location").type(JsonFieldType.STRING).description("행사 장소"),
+        fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY).description("행사 태그들"),
+        fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING)
+            .description("행사 섬네일 이미지 Url(포스터)"),
+        fieldWithPath("[].type").type(JsonFieldType.STRING)
+            .description("행사의 분류"),
+        fieldWithPath("[].imageUrls[]").description("행사의 상세 정보 이미지 URL들").optional(),
+        fieldWithPath("[].organization").description("행사 주최기관"),
+        fieldWithPath("[].paymentType").description("행사의 유무료 여부(유료,무료,유무료)"),
+        fieldWithPath("[].eventMode").description("행사의 온/오프라인 여부(온라인,오프라인,온오프라인)")
     );
 
     //when

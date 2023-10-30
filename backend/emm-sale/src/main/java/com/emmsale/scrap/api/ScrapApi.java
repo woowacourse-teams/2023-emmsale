@@ -1,6 +1,6 @@
 package com.emmsale.scrap.api;
 
-import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.EventDetailResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.scrap.application.ScrapCommandService;
 import com.emmsale.scrap.application.ScrapQueryService;
@@ -27,7 +27,7 @@ public class ScrapApi {
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public List<EventResponse> findAllScraps(final Member member) {
+  public List<EventDetailResponse> findAllScraps(final Member member) {
     return scrapQueryService.findAllScraps(member);
   }
 
