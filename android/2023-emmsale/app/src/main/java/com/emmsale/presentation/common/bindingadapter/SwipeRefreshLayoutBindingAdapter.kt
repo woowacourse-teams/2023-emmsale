@@ -12,6 +12,13 @@ fun SwipeRefreshLayout.setOnRefresh(onRefresh: () -> Unit) {
     }
 }
 
+@BindingAdapter("app:onRefresh1")
+fun SwipeRefreshLayout.setOnRefresh1(onRefresh: () -> Unit) {
+    setOnRefreshListener {
+        onRefresh()
+    }
+}
+
 @BindingAdapter("app:swipeRefreshColor")
 fun SwipeRefreshLayout.setSwipeRefreshColor(@ColorInt color: Int) {
     setColorSchemeColors(color)
