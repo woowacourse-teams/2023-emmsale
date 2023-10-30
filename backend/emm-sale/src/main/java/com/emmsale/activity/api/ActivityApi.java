@@ -3,7 +3,7 @@ package com.emmsale.activity.api;
 import com.emmsale.activity.application.ActivityCommandService;
 import com.emmsale.activity.application.ActivityQueryService;
 import com.emmsale.activity.application.dto.ActivityAddRequest;
-import com.emmsale.activity.application.dto.ActivityResponse;
+import com.emmsale.activity.application.dto.ActivityResponseRefactor;
 import com.emmsale.activity.application.dto.ActivityResponses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +29,10 @@ public class ActivityApi {
   }
 
   @PostMapping
-  public ResponseEntity<ActivityResponse> create(
-      @RequestBody final ActivityAddRequest request) {
+  public ResponseEntity<ActivityResponseRefactor> create(
+    @RequestBody final ActivityAddRequest request
+  ) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(activityCommandService.addActivity(request));
+      .body(activityCommandService.addActivity(request));
   }
 }
