@@ -47,11 +47,13 @@ class ChildCommentViewModel @Inject constructor(
     val uiEvent: NotNullLiveData<Event<ChildCommentsUiEvent>> = _uiEvent
 
     init {
+        fetchComments()
+    }
+
+    private fun fetchComments() {
         requestToNetwork(
             getResult = { commentRepository.getComment(parentCommentId) },
-            onSuccess = {
-                _comments.value = ChildCommentsUiState.create(uid, parentComment = it)
-            },
+            onSuccess = { _comments.value = ChildCommentsUiState.create(uid, parentComment = it) },
             onFailure = { _, _ -> },
         )
     }
