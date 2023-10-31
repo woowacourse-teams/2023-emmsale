@@ -47,7 +47,7 @@ class ChildCommentViewModel @Inject constructor(
     val uiEvent: NotNullLiveData<Event<ChildCommentsUiEvent>> = _uiEvent
 
     init {
-        handleResponse(
+        requestToNetwork(
             getResult = { commentRepository.getComment(parentCommentId) },
             onSuccess = {
                 _comments.value = ChildCommentsUiState.create(uid, parentComment = it)
@@ -57,13 +57,14 @@ class ChildCommentViewModel @Inject constructor(
     }
 
     fun postChildComment(content: String) {
-        handleResponse(
+        requestToNetwork(
             getResult = { commentRepository.saveComment(content, feedId, parentCommentId) },
             onSuccess = { refresh(ChildCommentsUiEvent.CommentPostComplete) },
             onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostFail) },
         )
     }
 
+    // xml에서 사용하려면 @JvmOverloads를 붙여야 합니다.
     @JvmOverloads
     fun refresh(pendingEventOnSuccess: ChildCommentsUiEvent? = null) = super.refresh(
         getResult = { commentRepository.getComment(parentCommentId) },
@@ -79,7 +80,7 @@ class ChildCommentViewModel @Inject constructor(
     )
 
     fun updateComment(commentId: Long, content: String) {
-        handleResponse(
+        requestToNetwork(
             getResult = { commentRepository.updateComment(commentId, content) },
             onSuccess = {
                 _editingCommentId.value = null
@@ -90,7 +91,7 @@ class ChildCommentViewModel @Inject constructor(
     }
 
     fun deleteComment(commentId: Long) {
-        handleResponse(
+        requestToNetwork(
             getResult = { commentRepository.deleteComment(commentId) },
             onSuccess = { refresh() },
             onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentDeleteFail) },
@@ -109,7 +110,7 @@ class ChildCommentViewModel @Inject constructor(
         val authorId =
             _comments.value.comments.find { it.comment.id == commentId }!!.comment.authorId
 
-        handleResponse(
+        requestToNetwork(
             getResult = { commentRepository.reportComment(commentId, authorId, uid) },
             onSuccess = { _uiEvent.value = Event(ChildCommentsUiEvent.CommentReportComplete) },
             onFailure = { code, _ ->

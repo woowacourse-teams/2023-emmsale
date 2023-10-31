@@ -20,37 +20,33 @@ abstract class BaseViewModel : ViewModel() {
 
     protected abstract fun onUnexpected(throwable: Throwable?)
 
-    protected fun <T : Any> handleResponse(
+    protected fun <T : Any> requestToNetwork(
         getResult: suspend () -> ApiResponse<T>,
         onSuccess: (T) -> Unit,
         onFailure: (code: Int, message: String?) -> Unit,
     ): Job = viewModelScope.launch {
         changeToLoadingState()
-        when (val result = getResult()) {
-            is Failure -> onFailure(result.code, result.message)
-
-            NetworkError -> {
-                changeToNetworkErrorState()
-                return@launch
-            }
-
-            is Success -> onSuccess(result.data)
-
-            is Unexpected -> onUnexpected(result.error)
-        }
-        changeToSuccessState()
+        handleResponse(getResult, onSuccess, onFailure)
     }
 
     protected fun <T : Any> refresh(
         getResult: suspend () -> ApiResponse<T>,
         onSuccess: (T) -> Unit,
         onFailure: (code: Int, message: String?) -> Unit,
-    ) = viewModelScope.launch {
+    ): Job = viewModelScope.launch {
+        handleResponse(getResult, onSuccess, onFailure)
+    }
+
+    private suspend fun <T : Any> handleResponse(
+        getResult: suspend () -> ApiResponse<T>,
+        onSuccess: (T) -> Unit,
+        onFailure: (code: Int, message: String?) -> Unit,
+    ) {
         when (val result = getResult()) {
             is Failure -> onFailure(result.code, result.message)
             NetworkError -> {
                 changeToNetworkErrorState()
-                return@launch
+                return
             }
 
             is Success -> {
