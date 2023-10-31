@@ -14,7 +14,10 @@ import com.emmsale.presentation.common.views.SubTextInputWindow.OnCancelListener
 import com.emmsale.presentation.common.views.SubTextInputWindow.OnSubmitListener
 import kotlin.properties.Delegates
 
-class SubTextInputWindow : ConstraintLayout {
+class SubTextInputWindow @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+) : ConstraintLayout(context, attrs) {
 
     private val binding: LayoutSubTextInputWindowBinding by lazy {
         LayoutSubTextInputWindowBinding.inflate(LayoutInflater.from(context), this, false)
@@ -42,16 +45,11 @@ class SubTextInputWindow : ConstraintLayout {
     }
 
     init {
+        applyStyledAttributes(attrs)
         addView(binding.root)
         binding.isVisible = isVisible
         background = context.getColor(R.color.white).toDrawable()
         elevation = 5.dp.toFloat()
-    }
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        applyStyledAttributes(attrs)
     }
 
     private fun applyStyledAttributes(attrs: AttributeSet?) {
