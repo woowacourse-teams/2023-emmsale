@@ -2,7 +2,7 @@ package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.response.MyPostResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
-import com.emmsale.data.mapper.toData
+import com.emmsale.data.mapper.toMyPosts
 import com.emmsale.data.model.MyPost
 import com.emmsale.data.repository.interfaces.MyPostRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
@@ -20,6 +20,6 @@ class DefaultMyPostRepository @Inject constructor(
     override suspend fun getMyPosts(): ApiResponse<List<MyPost>> {
         return myPostService
             .getMyPosts(myUid)
-            .map(List<MyPostResponse>::toData)
+            .map(List<MyPostResponse>::toMyPosts)
     }
 }

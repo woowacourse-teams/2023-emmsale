@@ -9,6 +9,8 @@ interface RecruitmentRepository {
         eventId: Long,
     ): ApiResponse<List<Recruitment>>
 
+    suspend fun getMemberRecruitments(memberId: Long): ApiResponse<List<Recruitment>>
+
     suspend fun getEventRecruitment(
         eventId: Long,
         recruitmentId: Long,

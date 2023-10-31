@@ -39,6 +39,13 @@ class DefaultRecruitmentRepository @Inject constructor(
         .getRecruitment(eventId, recruitmentId)
         .map(RecruitmentResponse::toData)
 
+    override suspend fun getMemberRecruitments(
+        memberId: Long,
+    ): ApiResponse<List<Recruitment>> = withContext(Dispatchers.IO) {
+        recruitmentService.getMemberRecruitments(memberId)
+            .map { it.toData() }
+    }
+
     override suspend fun postRecruitment(
         eventId: Long,
         content: String,
