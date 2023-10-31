@@ -44,8 +44,7 @@ public class EventResponse {
 
   public static EventResponse from(
       final Event event,
-      final String thumbnailUrl,
-      final List<String> imageUrls
+      final AllImagesOfContent images
   ) {
     final List<String> tagNames = event.getTags().stream()
         .map(EventTag::getTag)
@@ -62,9 +61,9 @@ public class EventResponse {
         event.getEventPeriod().getApplyEndDate(),
         event.getLocation(),
         tagNames,
-        thumbnailUrl,
+        images.extractThumbnailImage(),
         event.getType().toString(),
-        imageUrls,
+        images.extractInformationImages(),
         event.getOrganization(),
         event.getPaymentType().getValue(),
         event.getEventMode().getValue()
@@ -74,13 +73,14 @@ public class EventResponse {
   public static List<EventResponse> makeEventResponsesByStatus(final List<Event> events,
       final Map<Long, AllImagesOfContent> imagesPerEventId) {
     return events.stream()
-        .map(event -> {
-          final AllImagesOfContent allImageUrls = imagesPerEventId.get(event.getId());
-          final String thumbnailImageUrl = allImageUrls.extractThumbnailImage();
-          final List<String> informationImageUrls = allImageUrls.extractInformationImages();
-          return EventResponse.from(event, thumbnailImageUrl, informationImageUrls);
-        })
-        .collect(Collectors.toList());
+        .map(event -> toEventResponse(imagesPerEventId, event))
+        .collect(Collectors.toUnmodifiableList());
+  }
+
+  private static EventResponse toEventResponse(
+      final Map<Long, AllImagesOfContent> imagesPerEventId, final Event event) {
+    final AllImagesOfContent allImageUrls = imagesPerEventId.get(event.getId());
+    return EventResponse.from(event, allImageUrls);
   }
 
   public static List<EventResponse> mergeEventResponses(

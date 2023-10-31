@@ -45,9 +45,7 @@ public class EventCommandService {
         .saveImages(ImageType.EVENT, event.getId(), images));
 
     eventPublisher.publish(event);
-    final String thumbnailImageUrl = savedImages.extractThumbnailImage();
-    final List<String> informationImageUrls = savedImages.extractInformationImages();
-    return EventResponse.from(event, thumbnailImageUrl, informationImageUrls);
+    return EventResponse.from(event, savedImages);
   }
 
   public EventResponse updateEvent(final Long eventId, final EventDetailRequest request,
@@ -76,9 +74,7 @@ public class EventCommandService {
     imageCommandService.deleteImages(ImageType.EVENT, eventId);
     final AllImagesOfContent savedImages = new AllImagesOfContent(imageCommandService
         .saveImages(ImageType.EVENT, event.getId(), images));
-    final String thumbnailImageUrl = savedImages.extractThumbnailImage();
-    final List<String> informationImageUrls = savedImages.extractInformationImages();
-    return EventResponse.from(updatedEvent, thumbnailImageUrl, informationImageUrls);
+    return EventResponse.from(updatedEvent, savedImages);
   }
 
   public void deleteEvent(final Long eventId) {

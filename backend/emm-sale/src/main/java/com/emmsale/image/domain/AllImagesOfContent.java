@@ -1,7 +1,9 @@
 package com.emmsale.image.domain;
 
+import static com.emmsale.image.exception.ImageExceptionType.NOT_FOUND_THUMBNAIL;
 import static java.util.Comparator.comparing;
 
+import com.emmsale.image.exception.ImageException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -20,7 +22,7 @@ public class AllImagesOfContent {
     return images.stream()
         .filter(Image::isThumbnail)
         .findFirst()
-        .orElseThrow()
+        .orElseThrow(() -> new ImageException(NOT_FOUND_THUMBNAIL))
         .getName();
   }
 
@@ -29,6 +31,6 @@ public class AllImagesOfContent {
         .sorted(comparing(Image::getOrder))
         .filter(Image::isNotThumbnail)
         .map(Image::getName)
-        .collect(Collectors.toList());
+        .collect(Collectors.toUnmodifiableList());
   }
 }

@@ -6,6 +6,9 @@ import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.PaymentType;
+import com.emmsale.image.domain.AllImagesOfContent;
+import com.emmsale.image.domain.Image;
+import com.emmsale.image.domain.ImageType;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +22,16 @@ class EventResponseTest {
     //given
     final Event 구름톤 = EventFixture.구름톤();
     final String thumbnailUrl = "thumbnail";
-    final List<String> imageUrls = List.of("imageUrl1", "imageUrl2");
+    final String imageUrl1 = "imageUrl1";
+    final String imageUrl2 = "imageUrl2";
+    final List<String> imageUrls = List.of(imageUrl1, imageUrl2);
+    final AllImagesOfContent images = new AllImagesOfContent(
+        List.of(
+            new Image(thumbnailUrl, ImageType.EVENT, 구름톤.getId(), 0, null),
+            new Image(imageUrl1, ImageType.EVENT, 구름톤.getId(), 1, null),
+            new Image(imageUrl2, ImageType.EVENT, 구름톤.getId(), 2, null)
+        )
+    );
 
     final EventResponse expected = new EventResponse(
         구름톤.getId(),
@@ -40,7 +52,7 @@ class EventResponseTest {
     );
 
     //when
-    final EventResponse actual = EventResponse.from(구름톤, thumbnailUrl, imageUrls);
+    final EventResponse actual = EventResponse.from(구름톤, images);
 
     //then
     assertThat(actual)

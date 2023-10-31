@@ -99,7 +99,7 @@ public class Event extends BaseEntity {
   public void addAllEventTags(final List<Tag> tags) {
     final List<EventTag> eventTags = tags.stream()
         .map(tag -> new EventTag(this, tag))
-        .collect(Collectors.toList());
+        .collect(Collectors.toUnmodifiableList());
     this.tags.addAll(eventTags);
   }
 
@@ -150,6 +150,6 @@ public class Event extends BaseEntity {
   public List<String> extractTags() {
     return tags.stream()
         .map(tag -> tag.getTag().getName())
-        .collect(Collectors.toList());
+        .collect(Collectors.toUnmodifiableList());
   }
 }

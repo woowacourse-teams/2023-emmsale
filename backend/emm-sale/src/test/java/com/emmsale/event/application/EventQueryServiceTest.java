@@ -35,6 +35,7 @@ import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.image.domain.AllImagesOfContent;
 import com.emmsale.image.domain.Image;
 import com.emmsale.image.domain.ImageType;
 import com.emmsale.image.domain.repository.ImageRepository;
@@ -143,21 +144,21 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
     void success() {
       //given
       final Event event = eventRepository.save(eventFixture());
-      imageRepository.save(
-          new Image("imageUrl1", ImageType.EVENT, event.getId(), 1, LocalDateTime.now())
-      );
-      imageRepository.save(
-          new Image("imageUrl2", ImageType.EVENT, event.getId(), 0, LocalDateTime.now())
-      );
-      imageRepository.save(
-          new Image("imageUrl3", ImageType.EVENT, event.getId(), 2, LocalDateTime.now())
-      );
-
       final String thumbnailUrl = "imageUrl2";
-      final List<String> imageUrls = List.of("imageUrl1", "imageUrl3");
+      final String imageUrl1 = "imageUrl1";
+      final String imageUrl2 = "imageUrl3";
+      final Image image1 = imageRepository.save(
+          new Image(imageUrl1, ImageType.EVENT, event.getId(), 1, LocalDateTime.now())
+      );
+      final Image image2 = imageRepository.save(
+          new Image(thumbnailUrl, ImageType.EVENT, event.getId(), 0, LocalDateTime.now())
+      );
+      final Image image3 = imageRepository.save(
+          new Image(imageUrl2, ImageType.EVENT, event.getId(), 2, LocalDateTime.now())
+      );
 
-      final EventResponse expected = EventResponse.from(event, thumbnailUrl,
-          imageUrls);
+      final EventResponse expected = EventResponse.from(event,
+          new AllImagesOfContent(List.of(image2, image1, image3)));
 
       //when
       final EventResponse actual = eventQueryService.findEvent(event.getId(), 날짜_8월_10일());
@@ -174,8 +175,8 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       //given
       final Event event = eventRepository.save(eventFixture());
 
-      final EventResponse expected = EventResponse.from(event, null,
-          Collections.emptyList());
+      final EventResponse expected = EventResponse.from(event,
+          new AllImagesOfContent(Collections.emptyList()));
 
       //when
       final EventResponse actual = eventQueryService.findEvent(event.getId(), 날짜_8월_10일());
@@ -191,13 +192,12 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
     void success_imageUrls_empty() {
       //given
       final Event event = eventRepository.save(eventFixture());
-      imageRepository.save(
+      final Image image = imageRepository.save(
           new Image("imageUrl2", ImageType.EVENT, event.getId(), 0, LocalDateTime.now())
       );
 
-      final String thumbnailUrl = "imageUrl2";
-      final EventResponse expected = EventResponse.from(event, thumbnailUrl,
-          Collections.emptyList());
+      final EventResponse expected = EventResponse.from(event,
+          new AllImagesOfContent(List.of(image)));
 
       //when
       final EventResponse actual = eventQueryService.findEvent(event.getId(), 날짜_8월_10일());

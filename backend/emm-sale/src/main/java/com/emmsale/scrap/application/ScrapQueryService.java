@@ -33,7 +33,7 @@ public class ScrapQueryService {
     final List<Event> scrappedEvents = scrapRepository.findAllByMemberId(member.getId())
         .stream()
         .map(Scrap::getEvent)
-        .collect(Collectors.toList());
+        .collect(Collectors.toUnmodifiableList());
 
     final Map<EventStatus, List<Event>> eventGroupByStatus = scrappedEvents.stream()
         .collect(
@@ -46,9 +46,9 @@ public class ScrapQueryService {
   private Map<Long, AllImagesOfContent> makeImageUrlsPerEventId(final List<Event> events) {
     final List<Long> eventIds = events.stream()
         .map(Event::getId)
-        .collect(Collectors.toList());
+        .collect(Collectors.toUnmodifiableList());
 
-    Map<Long, AllImagesOfContent> imageUrlsPerEventId = new HashMap<>();
+    final Map<Long, AllImagesOfContent> imageUrlsPerEventId = new HashMap<>();
     for (Long eventId : eventIds) {
       final AllImagesOfContent images = new AllImagesOfContent(
           imageRepository.findAllByTypeAndContentId(ImageType.EVENT, eventId));

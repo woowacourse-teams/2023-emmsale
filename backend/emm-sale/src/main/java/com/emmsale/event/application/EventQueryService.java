@@ -59,9 +59,7 @@ public class EventQueryService {
         .stream()
         .sorted(comparing(Image::getOrder))
         .collect(toList()));
-    final String thumbnailImageUrl = images.extractThumbnailImage();
-    final List<String> informationImageUrls = images.extractInformationImages();
-    return EventResponse.from(event, thumbnailImageUrl, informationImageUrls);
+    return EventResponse.from(event, images);
   }
 
   public List<EventResponse> findEvents(final EventType category,
@@ -215,7 +213,7 @@ public class EventQueryService {
   private Map<Long, AllImagesOfContent> makeImagesPerEventId(final List<Event> events) {
     final List<Long> eventIds = events.stream()
         .map(Event::getId)
-        .collect(Collectors.toList());
+        .collect(Collectors.toUnmodifiableList());
 
     Map<Long, AllImagesOfContent> imagesPerEventId = new HashMap<>();
     for (Long eventId : eventIds) {

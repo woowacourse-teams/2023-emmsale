@@ -59,7 +59,7 @@ public class RecruitmentPostQueryService {
 
     return posts.stream()
         .map(RecruitmentPostQueryResponse::from)
-        .collect(Collectors.toList());
+        .collect(Collectors.toUnmodifiableList());
   }
 
   private void validateOwner(final Member member, final Long memberId) {
