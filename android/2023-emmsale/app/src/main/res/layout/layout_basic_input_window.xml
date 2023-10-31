@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="isVisible"
-            type="Boolean" />
-
-        <variable
             name="isSubmitEnabled"
             type="Boolean" />
 
@@ -19,64 +15,49 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:id="@+id/layout_inner_text_input_window"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingStart="17dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="17dp"
-        android:paddingBottom="8dp"
-        android:clickable="true"
-        app:visible="@{isVisible}"
+        android:background="@drawable/bg_basic_text_input_window"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_inner_text_input_window"
+        <EditText
+            android:id="@+id/et_basic_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_basic_text_input_window"
+            android:layout_marginStart="1dp"
+            android:background="@null"
+            android:importantForAutofill="no"
+            android:inputType="text|textMultiLine"
+            android:maxLength="255"
+            android:maxLines="5"
+            android:padding="18dp"
+            android:lineSpacingExtra="2dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_submit_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:id="@+id/tv_submit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
+            android:padding="18dp"
+            android:onClick="@{() -> onSubmitListener.onSubmit(etBasicInput.getText().toString())}"
+            android:enabled="@{!etBasicInput.text.toString().isBlank() &amp;&amp; isSubmitEnabled}"
+            android:textColor="@color/all_enable_primary"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <EditText
-                android:id="@+id/et_basic_input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="1dp"
-                android:background="@null"
-                android:importantForAutofill="no"
-                android:inputType="text|textMultiLine"
-                android:maxLength="255"
-                android:maxLines="5"
-                android:padding="18dp"
-                android:lineSpacingExtra="2dp"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tv_submit_button"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor" />
-
-            <TextView
-                android:id="@+id/tv_submit_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="1dp"
-                android:padding="18dp"
-                android:onClick="@{() -> onSubmitListener.onSubmit(etBasicInput.getText().toString())}"
-                android:enabled="@{!etBasicInput.text.toString().isBlank() &amp;&amp; isSubmitEnabled}"
-                android:textColor="@color/all_enable_primary"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="입력" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="입력" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

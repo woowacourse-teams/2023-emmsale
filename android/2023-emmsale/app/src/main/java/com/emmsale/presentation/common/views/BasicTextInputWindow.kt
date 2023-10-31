@@ -8,17 +8,17 @@ import androidx.core.content.res.use
 import androidx.databinding.BindingAdapter
 import com.emmsale.R
 import com.emmsale.databinding.LayoutBasicInputWindowBinding
+import com.emmsale.presentation.common.extension.dp
 import com.emmsale.presentation.common.views.BasicTextInputWindow.OnSubmitListener
 import kotlin.properties.Delegates
 
-class BasicTextInputWindow : ConstraintLayout {
+class BasicTextInputWindow @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+) : ConstraintLayout(context, attrs) {
 
     private val binding: LayoutBasicInputWindowBinding by lazy {
         LayoutBasicInputWindowBinding.inflate(LayoutInflater.from(context), this, false)
-    }
-
-    var isVisible: Boolean by Delegates.observable(true) { _, _, newValue ->
-        binding.isVisible = newValue
     }
 
     var isSubmitEnabled: Boolean by Delegates.observable(false) { _, _, newValue ->
@@ -30,14 +30,15 @@ class BasicTextInputWindow : ConstraintLayout {
     }
 
     init {
-        addView(binding.root)
-        binding.isVisible = isVisible
-    }
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         applyStyledAttributes(attrs)
+        setPadding(
+            BASIC_TEXT_INPUT_WINDOW_HORIZONTAL_PADDING,
+            BASIC_TEXT_INPUT_WINDOW_VERTICAL_PADDING,
+            BASIC_TEXT_INPUT_WINDOW_HORIZONTAL_PADDING,
+            BASIC_TEXT_INPUT_WINDOW_VERTICAL_PADDING,
+        )
+        isClickable = true
+        addView(binding.root)
     }
 
     private fun applyStyledAttributes(attrs: AttributeSet?) {
@@ -59,6 +60,11 @@ class BasicTextInputWindow : ConstraintLayout {
 
     fun interface OnSubmitListener {
         fun onSubmit(text: String)
+    }
+
+    companion object {
+        private val BASIC_TEXT_INPUT_WINDOW_HORIZONTAL_PADDING = 17.dp
+        private val BASIC_TEXT_INPUT_WINDOW_VERTICAL_PADDING = 8.dp
     }
 }
 
