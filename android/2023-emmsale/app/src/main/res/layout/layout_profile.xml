@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="member"
+            type="com.emmsale.data.model.Member" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_profile_hello"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="22dp"
+                android:text="@string/profile_greeting"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_profile_member_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:text="@{member.name}"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_profile_hello"
+                app:layout_constraintTop_toBottomOf="@+id/tv_profile_hello"
+                tools:text="홍길동" />
+
+            <TextView
+                android:id="@+id/tv_profile_one_line_introduce"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginVertical="9dp"
+                android:layout_marginEnd="19dp"
+                android:text="@{member.description.isBlank() ? @string/profile_no_description : member.description}"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toStartOf="@+id/iv_profile_member_image"
+                app:layout_constraintStart_toStartOf="@+id/tv_profile_member_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_profile_member_name"
+                tools:text="안녕하세요 커디입니다."
+                app:layout_constraintBottom_toTopOf="@+id/cg_profile_fields" />
+
+            <ImageView
+                android:id="@+id/iv_profile_image_decoration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="17dp"
+                android:src="@drawable/img_profile_image_decoration"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:importantForAccessibility="no" />
+
+            <ImageView
+                android:id="@+id/iv_profile_member_image"
+                android:layout_width="120dp"
+                android:layout_height="106dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="22dp"
+                android:contentDescription="@string/profile_memberimagedescription"
+                android:importantForAccessibility="no"
+                app:imageUrl="@{member.profileImageUrl}"
+                app:mask="@{@drawable/img_profile_image_masking}"
+                app:canZoomIn="@{true}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <View
+                android:id="@+id/view_profile_divider"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/light_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cg_profile_fields" />
+
+            <View
+                android:id="@+id/view_profile_education_icon_to_club_icon"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/light_gray"
+                app:layout_constraintBottom_toTopOf="@+id/iv_profile_club_icon"
+                app:layout_constraintEnd_toEndOf="@+id/iv_profile_education_icon"
+                app:layout_constraintStart_toStartOf="@+id/iv_profile_education_icon"
+                app:layout_constraintTop_toBottomOf="@+id/iv_profile_education_icon" />
+
+            <ImageView
+                android:id="@+id/iv_profile_education_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="29dp"
+                android:elevation="2dp"
+                android:background="@drawable/bg_profile_activityicon"
+                android:importantForAccessibility="no"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_profile_divider" />
+
+            <TextView
+                android:id="@+id/tv_profile_education_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/profile_educationslabel"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_profile_education_icon"
+                app:layout_constraintStart_toEndOf="@+id/iv_profile_education_icon"
+                app:layout_constraintTop_toTopOf="@+id/iv_profile_education_icon"
+                tools:text="교육 활동" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_profile_educations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                android:overScrollMode="never"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintStart_toEndOf="@+id/iv_profile_education_icon"
+                app:layout_constraintTop_toBottomOf="@+id/iv_profile_education_icon"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_profile_activities" />
+
+            <ImageView
+                android:id="@+id/iv_profile_club_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="32dp"
+                android:elevation="2dp"
+                android:background="@drawable/bg_profile_activityicon"
+                android:importantForAccessibility="no"
+                app:layout_constraintStart_toStartOf="@+id/iv_profile_education_icon"
+                app:layout_constraintTop_toBottomOf="@+id/rv_profile_educations" />
+
+            <TextView
+                android:id="@+id/tv_profile_club_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/profile_clubslabel"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_profile_club_icon"
+                app:layout_constraintStart_toEndOf="@+id/iv_profile_club_icon"
+                app:layout_constraintTop_toTopOf="@+id/iv_profile_club_icon"
+                tools:text="동아리 활동" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_profile_clubs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="39dp"
+                android:overScrollMode="never"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_profile_club_icon"
+                app:layout_constraintTop_toBottomOf="@+id/iv_profile_club_icon"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_profile_activities" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_profile_fields"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_profile_image_decoration"
+                app:layout_constraintStart_toStartOf="@+id/tv_profile_hello"
+                app:layout_constraintTop_toBottomOf="@+id/iv_profile_image_decoration">
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+</layout>
