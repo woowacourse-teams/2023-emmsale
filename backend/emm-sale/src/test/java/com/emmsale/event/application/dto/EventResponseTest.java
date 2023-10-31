@@ -5,14 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventMode;
-import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.PaymentType;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class EventDetailResponseTest {
+class EventResponseTest {
 
   @Test
   @DisplayName("이벤트를 상세 조회할 값을 변환할 수 있다.")
@@ -22,7 +21,7 @@ class EventDetailResponseTest {
     final String thumbnailUrl = "thumbnail";
     final List<String> imageUrls = List.of("imageUrl1", "imageUrl2");
 
-    final EventDetailResponse expected = new EventDetailResponse(
+    final EventResponse expected = new EventResponse(
         구름톤.getId(),
         구름톤.getName(),
         구름톤.getInformationUrl(),
@@ -41,7 +40,7 @@ class EventDetailResponseTest {
     );
 
     //when
-    final EventDetailResponse actual = EventDetailResponse.from(구름톤, thumbnailUrl, imageUrls);
+    final EventResponse actual = EventResponse.from(구름톤, thumbnailUrl, imageUrls);
 
     //then
     assertThat(actual)

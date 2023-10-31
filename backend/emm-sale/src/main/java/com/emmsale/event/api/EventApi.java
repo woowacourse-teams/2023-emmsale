@@ -3,7 +3,7 @@ package com.emmsale.event.api;
 import com.emmsale.event.application.EventCommandService;
 import com.emmsale.event.application.EventQueryService;
 import com.emmsale.event.application.dto.EventDetailRequest;
-import com.emmsale.event.application.dto.EventDetailResponse;
+import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
 import java.time.LocalDate;
@@ -35,12 +35,12 @@ public class EventApi {
   private final EventCommandService eventCommandService;
 
   @GetMapping("/{id}")
-  public ResponseEntity<EventDetailResponse> findEventById(@PathVariable final Long id) {
+  public ResponseEntity<EventResponse> findEventById(@PathVariable final Long id) {
     return ResponseEntity.ok(eventQueryService.findEvent(id, LocalDate.now()));
   }
 
   @GetMapping
-  public ResponseEntity<List<EventDetailResponse>> findEvents(
+  public ResponseEntity<List<EventResponse>> findEvents(
       @RequestParam(required = false) final EventType category,
       @RequestParam(name = "start_date", required = false) final String startDate,
       @RequestParam(name = "end_date", required = false) final String endDate,
@@ -55,14 +55,14 @@ public class EventApi {
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public EventDetailResponse addEvent(@RequestPart @Valid final EventDetailRequest request,
+  public EventResponse addEvent(@RequestPart @Valid final EventDetailRequest request,
       @RequestPart final List<MultipartFile> images) {
     return eventCommandService.addEvent(request, images);
   }
 
   @PutMapping(path = "/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public EventDetailResponse updateEvent(@PathVariable final Long eventId,
+  public EventResponse updateEvent(@PathVariable final Long eventId,
       @RequestPart @Valid final EventDetailRequest request,
       @RequestPart final List<MultipartFile> images) {
     return eventCommandService.updateEvent(eventId, request, images);

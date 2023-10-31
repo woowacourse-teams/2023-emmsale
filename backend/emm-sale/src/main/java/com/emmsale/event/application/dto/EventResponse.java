@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class EventDetailResponse {
+public class EventResponse {
 
   public static final String DATE_TIME_FORMAT = "yyyy:MM:dd:HH:mm:ss";
 
@@ -42,7 +42,7 @@ public class EventDetailResponse {
   private final String paymentType;
   private final String eventMode;
 
-  public static EventDetailResponse from(
+  public static EventResponse from(
       final Event event,
       final String thumbnailUrl,
       final List<String> imageUrls
@@ -52,7 +52,7 @@ public class EventDetailResponse {
         .map(Tag::getName)
         .collect(toUnmodifiableList());
 
-    return new EventDetailResponse(
+    return new EventResponse(
         event.getId(),
         event.getName(),
         event.getInformationUrl(),
@@ -71,19 +71,19 @@ public class EventDetailResponse {
     );
   }
 
-  public static List<EventDetailResponse> makeEventResponsesByStatus(final List<Event> events,
+  public static List<EventResponse> makeEventResponsesByStatus(final List<Event> events,
       final Map<Long, AllImagesOfContent> imagesPerEventId) {
     return events.stream()
         .map(event -> {
           final AllImagesOfContent allImageUrls = imagesPerEventId.get(event.getId());
           final String thumbnailImageUrl = allImageUrls.extractThumbnailImage();
           final List<String> informationImageUrls = allImageUrls.extractInformationImages();
-          return EventDetailResponse.from(event, thumbnailImageUrl, informationImageUrls);
+          return EventResponse.from(event, thumbnailImageUrl, informationImageUrls);
         })
         .collect(Collectors.toList());
   }
 
-  public static List<EventDetailResponse> mergeEventResponses(
+  public static List<EventResponse> mergeEventResponses(
       final Map<EventStatus, List<Event>> groupByEventStatus,
       final Map<Long, AllImagesOfContent> imagesPerEventId
   ) {

@@ -2,7 +2,7 @@ package com.emmsale.scrap.application;
 
 import static java.util.stream.Collectors.groupingBy;
 
-import com.emmsale.event.application.dto.EventDetailResponse;
+import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.image.domain.AllImagesOfContent;
@@ -28,7 +28,7 @@ public class ScrapQueryService {
   private final ScrapRepository scrapRepository;
   private final ImageRepository imageRepository;
 
-  public List<EventDetailResponse> findAllScraps(final Member member) {
+  public List<EventResponse> findAllScraps(final Member member) {
     //TODO : Scrap에서 event 사용해서 N+1 발생
     final List<Event> scrappedEvents = scrapRepository.findAllByMemberId(member.getId())
         .stream()
@@ -39,7 +39,7 @@ public class ScrapQueryService {
         .collect(
             groupingBy(event -> event.getEventPeriod().calculateEventStatus(LocalDateTime.now())));
 
-    return EventDetailResponse.mergeEventResponses(eventGroupByStatus,
+    return EventResponse.mergeEventResponses(eventGroupByStatus,
         makeImageUrlsPerEventId(scrappedEvents));
   }
 

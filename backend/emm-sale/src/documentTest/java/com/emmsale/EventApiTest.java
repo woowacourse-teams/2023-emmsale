@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.api.EventApi;
 import com.emmsale.event.application.dto.EventDetailRequest;
-import com.emmsale.event.application.dto.EventDetailResponse;
+import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventType;
@@ -110,7 +110,7 @@ class EventApiTest extends MockMvcTestHelper {
   void findEvent() throws Exception {
     //given
     final Long eventId = 1L;
-    final EventDetailResponse eventDetailResponse = new EventDetailResponse(eventId, "인프콘 2023",
+    final EventResponse eventResponse = new EventResponse(eventId, "인프콘 2023",
         "http://infcon.com", LocalDateTime.of(2023, 8, 15, 12, 0),
         LocalDateTime.of(2023, 8, 15, 12, 0), LocalDateTime.of(2023, 8, 1, 12, 0),
         LocalDateTime.of(2023, 8, 15, 12, 0), "코엑스",
@@ -119,7 +119,7 @@ class EventApiTest extends MockMvcTestHelper {
         List.of("imageUrl1", "imageUrl2"), "인프런", "유료", "온라인");
 
     Mockito.when(eventQueryService.findEvent(ArgumentMatchers.anyLong(), any()))
-        .thenReturn(eventDetailResponse);
+        .thenReturn(eventResponse);
 
     //when
     mockMvc.perform(get("/events/" + eventId)).andExpect(
@@ -148,8 +148,8 @@ class EventApiTest extends MockMvcTestHelper {
             .optional()
     );
 
-    final List<EventDetailResponse> eventResponses = List.of(
-        new EventDetailResponse(
+    final List<EventResponse> eventResponses = List.of(
+        new EventResponse(
             5L,
             "웹 컨퍼런스",
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
@@ -162,7 +162,7 @@ class EventApiTest extends MockMvcTestHelper {
             List.of("imageUrl1", "imageUrl2"), "인프런",
             PaymentType.PAID.getValue(),
             EventMode.ONLINE.getValue()),
-        new EventDetailResponse(2L,
+        new EventResponse(2L,
             "AI 컨퍼런스",
             "https://biz.pusan.ac.kr/dext5editordata/2022/08/20220810_160546511_10103.jpg",
             LocalDateTime.parse("2023-07-22T12:00:00"),
@@ -224,7 +224,7 @@ class EventApiTest extends MockMvcTestHelper {
         tags, event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE,
         "행사기관");
 
-    final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
+    final EventResponse response = new EventResponse(1L, request.getName(),
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
         request.getApplyStartDateTime(), request.getApplyEndDateTime(),
         request.getLocation(),
@@ -326,7 +326,7 @@ class EventApiTest extends MockMvcTestHelper {
           tags, event.getType(), EventMode.ON_OFFLINE, PaymentType.FREE,
           "행사기관");
 
-      final EventDetailResponse response = new EventDetailResponse(1L, request.getName(),
+      final EventResponse response = new EventResponse(1L, request.getName(),
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
           request.getApplyStartDateTime(), request.getApplyEndDateTime(),
           request.getLocation(),

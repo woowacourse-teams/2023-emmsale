@@ -4,7 +4,7 @@ import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static java.util.stream.Collectors.toList;
 
 import com.emmsale.event.application.dto.EventDetailRequest;
-import com.emmsale.event.application.dto.EventDetailResponse;
+import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventTagRepository;
@@ -35,7 +35,7 @@ public class EventCommandService {
   private final EventPublisher eventPublisher;
   private final ImageCommandService imageCommandService;
 
-  public EventDetailResponse addEvent(final EventDetailRequest request,
+  public EventResponse addEvent(final EventDetailRequest request,
       final List<MultipartFile> images) {
     final Event event = eventRepository.save(request.toEvent());
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
@@ -47,10 +47,10 @@ public class EventCommandService {
     eventPublisher.publish(event);
     final String thumbnailImageUrl = savedImages.extractThumbnailImage();
     final List<String> informationImageUrls = savedImages.extractInformationImages();
-    return EventDetailResponse.from(event, thumbnailImageUrl, informationImageUrls);
+    return EventResponse.from(event, thumbnailImageUrl, informationImageUrls);
   }
 
-  public EventDetailResponse updateEvent(final Long eventId, final EventDetailRequest request,
+  public EventResponse updateEvent(final Long eventId, final EventDetailRequest request,
       final List<MultipartFile> images) {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
@@ -78,7 +78,7 @@ public class EventCommandService {
         .saveImages(ImageType.EVENT, event.getId(), images));
     final String thumbnailImageUrl = savedImages.extractThumbnailImage();
     final List<String> informationImageUrls = savedImages.extractInformationImages();
-    return EventDetailResponse.from(updatedEvent, thumbnailImageUrl, informationImageUrls);
+    return EventResponse.from(updatedEvent, thumbnailImageUrl, informationImageUrls);
   }
 
   public void deleteEvent(final Long eventId) {

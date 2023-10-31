@@ -10,7 +10,7 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-import com.emmsale.event.application.dto.EventDetailResponse;
+import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventType;
@@ -50,7 +50,7 @@ public class EventQueryService {
   private final TagRepository tagRepository;
   private final ImageRepository imageRepository;
 
-  public EventDetailResponse findEvent(final Long id, final LocalDate today) {
+  public EventResponse findEvent(final Long id, final LocalDate today) {
     final Event event = eventRepository.findById(id)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
@@ -61,10 +61,10 @@ public class EventQueryService {
         .collect(toList()));
     final String thumbnailImageUrl = images.extractThumbnailImage();
     final List<String> informationImageUrls = images.extractInformationImages();
-    return EventDetailResponse.from(event, thumbnailImageUrl, informationImageUrls);
+    return EventResponse.from(event, thumbnailImageUrl, informationImageUrls);
   }
 
-  public List<EventDetailResponse> findEvents(final EventType category,
+  public List<EventResponse> findEvents(final EventType category,
       final LocalDateTime nowDateTime, final String startDate, final String endDate,
       final List<String> tagNames, final List<EventStatus> statuses, final String keyword) {
     Specification<Event> spec = (root, query, criteriaBuilder) -> null;
@@ -180,7 +180,7 @@ public class EventQueryService {
         );
   }
 
-  private List<EventDetailResponse> filterByStatuses(
+  private List<EventResponse> filterByStatuses(
       final List<EventStatus> statuses,
       final EnumMap<EventStatus, List<Event>> eventsForEventStatus,
       final Map<Long, AllImagesOfContent> imagesPerEventId
@@ -188,14 +188,14 @@ public class EventQueryService {
     if (isExistStatusName(statuses)) {
       return filterEventResponseByStatuses(statuses, eventsForEventStatus, imagesPerEventId);
     }
-    return EventDetailResponse.mergeEventResponses(eventsForEventStatus, imagesPerEventId);
+    return EventResponse.mergeEventResponses(eventsForEventStatus, imagesPerEventId);
   }
 
   private boolean isExistStatusName(final List<EventStatus> statuses) {
     return statuses != null;
   }
 
-  private List<EventDetailResponse> filterEventResponseByStatuses(
+  private List<EventResponse> filterEventResponseByStatuses(
       final List<EventStatus> statuses,
       final EnumMap<EventStatus, List<Event>> eventsForEventStatus,
       final Map<Long, AllImagesOfContent> imagesPerEventId
@@ -203,7 +203,7 @@ public class EventQueryService {
     return eventsForEventStatus.entrySet()
         .stream()
         .filter(entry -> statuses.contains(entry.getKey()))
-        .map(entry -> EventDetailResponse.makeEventResponsesByStatus(entry.getValue(),
+        .map(entry -> EventResponse.makeEventResponsesByStatus(entry.getValue(),
             imagesPerEventId))
         .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
           combinedEvents.addAll(eventsToAdd);

@@ -7,7 +7,7 @@ import static com.emmsale.image.ImageFixture.행사_이미지4;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.emmsale.event.EventFixture;
-import com.emmsale.event.application.dto.EventDetailResponse;
+import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.event.domain.repository.EventRepository;
@@ -52,10 +52,10 @@ class ScrapQueryServiceTest extends ServiceIntegrationTestHelper {
     scrapRepository.save(new Scrap(member.getId(), event2));
 
     //when
-    final List<EventDetailResponse> actual = scrapQueryService.findAllScraps(member);
+    final List<EventResponse> actual = scrapQueryService.findAllScraps(member);
 
-    final List<EventDetailResponse> expected = List.of(
-        new EventDetailResponse(
+    final List<EventResponse> expected = List.of(
+        new EventResponse(
             event1.getId(), event1.getName(), event1.getInformationUrl(),
             event1.getEventPeriod().getStartDate(), event1.getEventPeriod().getEndDate(),
             event1.getEventPeriod().getApplyStartDate(), event1.getEventPeriod().getApplyEndDate(),
@@ -70,7 +70,7 @@ class ScrapQueryServiceTest extends ServiceIntegrationTestHelper {
                 행사_이미지4(event1.getId()).getName()),
             event1.getOrganization(), event1.getPaymentType().getValue(),
             event1.getEventMode().getValue()),
-        new EventDetailResponse(event2.getId(), event2.getName(), event2.getInformationUrl(),
+        new EventResponse(event2.getId(), event2.getName(), event2.getInformationUrl(),
             event2.getEventPeriod().getStartDate(), event2.getEventPeriod().getEndDate(),
             event2.getEventPeriod().getApplyStartDate(), event2.getEventPeriod().getApplyEndDate(),
             event2.getLocation(),

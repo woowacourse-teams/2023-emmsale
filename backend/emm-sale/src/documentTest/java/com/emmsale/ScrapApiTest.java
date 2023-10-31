@@ -11,7 +11,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.event.application.dto.EventDetailResponse;
+import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.PaymentType;
@@ -36,8 +36,8 @@ class ScrapApiTest extends MockMvcTestHelper {
   @DisplayName("스크랩 목록을 성공적으로 조회하면 200 OK를 반환한다.")
   void findAllScraps() throws Exception {
     //given
-    final List<EventDetailResponse> expectedScrapResponse = List.of(
-        new EventDetailResponse(
+    final List<EventResponse> expectedScrapResponse = List.of(
+        new EventResponse(
             1L,
             "인프콘 2023",
             "https://aaa",
@@ -54,7 +54,7 @@ class ScrapApiTest extends MockMvcTestHelper {
             PaymentType.PAID.getValue(),
             EventMode.ONLINE.getValue()
         ),
-        new EventDetailResponse(
+        new EventResponse(
             5L,
             "웹 컨퍼런스",
             "https://aaa",
@@ -70,7 +70,7 @@ class ScrapApiTest extends MockMvcTestHelper {
             "인프런",
             PaymentType.PAID.getValue(),
             EventMode.ONLINE.getValue()),
-        new EventDetailResponse(2L,
+        new EventResponse(2L,
             "AI 컨퍼런스",
             "https://aaa",
             LocalDateTime.parse("2023-06-03T12:00:00"),
