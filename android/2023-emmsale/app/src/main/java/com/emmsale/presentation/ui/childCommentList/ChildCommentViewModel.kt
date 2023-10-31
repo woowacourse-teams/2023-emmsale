@@ -16,6 +16,7 @@ import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @HiltViewModel
 class ChildCommentViewModel @Inject constructor(
@@ -23,6 +24,10 @@ class ChildCommentViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
 ) : BaseViewModel() {
+
+    var isAlreadyFirstFetched: Boolean by Delegates.vetoable(false) { _, _, newValue ->
+        newValue
+    }
 
     private val parentCommentId = stateHandle.get<Long>(KEY_PARENT_COMMENT_ID)!!
 

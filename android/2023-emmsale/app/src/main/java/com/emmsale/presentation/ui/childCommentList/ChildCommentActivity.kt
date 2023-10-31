@@ -27,7 +27,6 @@ import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class ChildCommentActivity : AppCompatActivity() {
@@ -42,13 +41,13 @@ class ChildCommentActivity : AppCompatActivity() {
     ).apply {
         registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (highlightCommentId == INVALID_COMMENT_ID || !justEntered || itemCount == 0) return
+                if (highlightCommentId == INVALID_COMMENT_ID || viewModel.isAlreadyFirstFetched || itemCount == 0) return
                 val position =
                     viewModel.comments.value.comments.indexOfFirst { it.comment.id == highlightCommentId }
                 binding.rvChildcommentsChildcomments.scrollToPosition(position)
 
                 viewModel.highlight(highlightCommentId)
-                justEntered = false
+                viewModel.isAlreadyFirstFetched = true
             }
         })
     }
@@ -63,14 +62,9 @@ class ChildCommentActivity : AppCompatActivity() {
         intent.getBooleanExtra(KEY_FROM_POST_DETAIL, true)
     }
 
-    private var justEntered: Boolean by Delegates.vetoable(true) { _, oldValue, newValue ->
-        oldValue && !newValue
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        if (savedInstanceState != null) justEntered = false
 
         setupDataBinding()
         setupBackPressedDispatcher()
