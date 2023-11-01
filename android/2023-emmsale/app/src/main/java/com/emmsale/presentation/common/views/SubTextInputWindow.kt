@@ -28,10 +28,6 @@ class SubTextInputWindow @JvmOverloads constructor(
         binding.etSubTextInput.setText(newValue)
     }
 
-    var isVisible: Boolean by Delegates.observable(true) { _, _, newValue ->
-        binding.isVisible = newValue
-    }
-
     var isSubmitEnabled: Boolean by Delegates.observable(false) { _, _, newValue ->
         binding.isSubmitEnabled = newValue
     }
@@ -47,7 +43,6 @@ class SubTextInputWindow @JvmOverloads constructor(
     init {
         applyStyledAttributes(attrs)
         addView(binding.root)
-        binding.isVisible = isVisible
         background = context.getColor(R.color.white).toDrawable()
         elevation = 5f.dp
     }
