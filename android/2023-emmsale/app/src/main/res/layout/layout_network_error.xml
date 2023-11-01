@@ -39,7 +39,7 @@
             app:srcCompat="@drawable/bg_errorscreen_network_error_icon" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tv_error_screen_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -50,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@+id/iv_errorscreen_error_icon_background" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv_error_screen_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="11dp"
@@ -58,12 +58,12 @@
             android:lineSpacingExtra="4.2sp"
             android:text="@string/all_network_error_message"
             android:textColor="@color/gray"
-            app:layout_constraintEnd_toEndOf="@+id/textView"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintEnd_toEndOf="@+id/tv_error_screen_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_error_screen_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_error_screen_title" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tv_retry_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="21dp"
@@ -74,9 +74,9 @@
             android:text="@string/all_retry"
             android:textColor="@color/white"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="@+id/textView2"
-            app:layout_constraintStart_toStartOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintEnd_toEndOf="@+id/tv_error_screen_description"
+            app:layout_constraintStart_toStartOf="@+id/tv_error_screen_description"
+            app:layout_constraintTop_toBottomOf="@+id/tv_error_screen_description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
