@@ -25,7 +25,6 @@ import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailAdapter
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class FeedDetailActivity : AppCompatActivity() {
@@ -35,10 +34,6 @@ class FeedDetailActivity : AppCompatActivity() {
 
     private val highlightCommentId: Long by lazy {
         intent.getLongExtra(KEY_HIGHLIGHT_COMMENT_ID, INVALID_COMMENT_ID)
-    }
-
-    private var justEntered: Boolean by Delegates.vetoable(true) { _, oldValue, newValue ->
-        oldValue && !newValue
     }
 
     private val inputMethodManager: InputMethodManager by lazy {
@@ -61,14 +56,14 @@ class FeedDetailActivity : AppCompatActivity() {
     ).apply {
         registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (highlightCommentId == INVALID_COMMENT_ID || !justEntered || itemCount == 0) return
+                if (highlightCommentId == INVALID_COMMENT_ID || viewModel.isAlreadyFirstFetched || itemCount == 0) return
                 val position = viewModel.feedDetail.value.comments
                     .indexOfFirst { it.comment.id == highlightCommentId } + FEED_DETAIL_COUNT
                 binding.rvFeeddetailFeedAndComments.scrollToPosition(position)
 
                 viewModel.highlightComment(highlightCommentId)
 
-                justEntered = false
+                viewModel.isAlreadyFirstFetched = true
             }
         })
     }
@@ -76,7 +71,6 @@ class FeedDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        if (savedInstanceState != null) justEntered = false
 
         setUpDataBinding()
         setUpToolbar()
