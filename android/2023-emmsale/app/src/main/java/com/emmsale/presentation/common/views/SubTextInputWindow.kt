@@ -49,7 +49,7 @@ class SubTextInputWindow @JvmOverloads constructor(
         addView(binding.root)
         binding.isVisible = isVisible
         background = context.getColor(R.color.white).toDrawable()
-        elevation = 5.dp.toFloat()
+        elevation = 5f.dp
     }
 
     private fun applyStyledAttributes(attrs: AttributeSet?) {
