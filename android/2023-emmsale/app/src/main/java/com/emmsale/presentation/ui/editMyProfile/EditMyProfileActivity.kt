@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
 import com.emmsale.presentation.base.NetworkActivity
@@ -88,10 +87,10 @@ class EditMyProfileActivity :
 
     private fun setupDataBinding() {
         binding.viewModel = viewModel
-        binding.onFieldTagsAddButtonClick = ::showFieldTags
+        binding.onFieldAddButtonClick = ::showFieldTags
         binding.onEducationAddButtonClick = ::showEducations
         binding.onClubAddButtonClick = ::showClubs
-        binding.onProfileImageUpdateUiClick = ::startToEditProfileImage
+        binding.onProfileImageUiClick = ::startToEditProfileImage
     }
 
     private fun showFieldTags() {
@@ -159,9 +158,6 @@ class EditMyProfileActivity :
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    binding.ivEditmyprofileDescriptionPlaceholderIcon.isVisible =
-                        s?.length == 0 || s == null
-
                     if (s.toString().contains('\n')) {
                         binding.etEditmyprofileDescription.setText(
                             s.toString().filterNot { it == '\n' },
