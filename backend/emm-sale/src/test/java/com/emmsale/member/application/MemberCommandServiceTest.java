@@ -13,7 +13,6 @@ import static org.mockito.Mockito.when;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.DescriptionRequest;
-import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
@@ -32,30 +31,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
+class MemberCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
-  private MemberUpdateService memberUpdateService;
+  private MemberCommandService memberCommandService;
   @Autowired
   private MemberRepository memberRepository;
-
-  @Test
-  @DisplayName("오픈 프로필 URL을 업데이트한다.")
-  void updateOpenProfileUrlTest() {
-    // given
-    final Member member = memberRepository.save(memberFixture());
-
-    final String expectOpenProfileUrl = "https://open.kakao.com/new/profile/url";
-    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(expectOpenProfileUrl);
-
-    // when
-    memberUpdateService.updateOpenProfileUrl(member, request);
-
-    final Member actualMember = memberRepository.findById(member.getId()).get();
-
-    // then
-    assertThat(actualMember.getOptionalOpenProfileUrl().get()).isEqualTo(expectOpenProfileUrl);
-  }
 
   @Nested
   @DisplayName("한줄 자기소개를 업데이트한다.")
@@ -72,7 +53,7 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
       final DescriptionRequest request = new DescriptionRequest(expectDescription);
 
       // when
-      memberUpdateService.updateDescription(member, request);
+      memberCommandService.updateDescription(member, request);
 
       final Member actualMember = memberRepository.findById(member.getId()).get();
 
@@ -90,7 +71,7 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
       final DescriptionRequest request = new DescriptionRequest(invalidDescription);
 
       // when
-      final ThrowingCallable actual = () -> memberUpdateService.updateDescription(member, request);
+      final ThrowingCallable actual = () -> memberCommandService.updateDescription(member, request);
 
       // then
       assertThatThrownBy(actual)
@@ -110,7 +91,7 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
       final DescriptionRequest request = new DescriptionRequest(inputDescription);
 
       // when
-      memberUpdateService.updateDescription(member, request);
+      memberCommandService.updateDescription(member, request);
 
       final Member actualMember = memberRepository.findById(member.getId()).get();
 
@@ -131,7 +112,7 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
       final Member member = memberRepository.findById(memberId).get();
 
       //when
-      memberUpdateService.deleteMember(member, memberId);
+      memberCommandService.deleteMember(member, memberId);
 
       //then
       assertThat(memberRepository.findById(memberId))
@@ -146,7 +127,7 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
       final Member member = memberRepository.findById(memberId).get();
 
       //when && then
-      assertThatThrownBy(() -> memberUpdateService.deleteMember(member, otherMemberId))
+      assertThatThrownBy(() -> memberCommandService.deleteMember(member, otherMemberId))
           .isInstanceOf(MemberException.class)
           .hasMessage(MemberExceptionType.FORBIDDEN_DELETE_MEMBER.errorMessage());
     }
@@ -178,7 +159,7 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
       final Member member = memberRepository.save(fixture);
 
       //when
-      memberUpdateService.updateMemberProfile(image, member.getId(), member);
+      memberCommandService.updateMemberProfile(image, member.getId(), member);
 
       //then
       assertAll(
@@ -198,7 +179,7 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
       final Member member = memberRepository.save(fixture);
 
       //when
-      memberUpdateService.updateMemberProfile(image, member.getId(), member);
+      memberCommandService.updateMemberProfile(image, member.getId(), member);
 
       //then
       assertAll(
@@ -219,7 +200,7 @@ class MemberUpdateServiceTest extends ServiceIntegrationTestHelper {
 
       //when && then
       final ThrowingCallable testTarget = () ->
-          memberUpdateService.updateMemberProfile(image, member.getId() + 1, member);
+          memberCommandService.updateMemberProfile(image, member.getId() + 1, member);
 
       assertThatThrownBy(testTarget)
           .isInstanceOf(MemberException.class)

@@ -252,7 +252,7 @@ class MemberApiTest extends MockMvcTestHelper {
   void deleteMemberTest() throws Exception {
     //given
     final long memberId = 1L;
-    doNothing().when(memberUpdateService).deleteMember(any(), anyLong());
+    doNothing().when(memberCommandService).deleteMember(any(), anyLong());
     final String accessToken = "access_token";
 
     //when
@@ -272,7 +272,7 @@ class MemberApiTest extends MockMvcTestHelper {
     final String accessToken = "access_token";
     final MockMultipartHttpServletRequestBuilder builder = createUpdateProfileBuilder(memberId);
 
-    when(memberUpdateService.updateMemberProfile
+    when(memberCommandService.updateMemberProfile
         (any(MultipartFile.class), anyLong(), any(Member.class)))
         .thenReturn(memberImageResponse);
 
