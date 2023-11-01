@@ -183,9 +183,9 @@
                     android:layout_marginStart="5dp"
                     android:importantForAccessibility="no"
                     app:layout_constraintBottom_toBottomOf="@+id/et_editmyprofile_description"
+                    app:srcCompat="@drawable/ic_editmyprofile_description_edit"
                     app:layout_constraintStart_toEndOf="@+id/et_editmyprofile_description"
-                    app:layout_constraintTop_toTopOf="@+id/et_editmyprofile_description"
-                    app:srcCompat="@drawable/ic_editmyprofile_description_placeholder" />
+                    app:layout_constraintTop_toTopOf="@+id/et_editmyprofile_description" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_editmyprofile_fields"
