@@ -18,10 +18,21 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="PrimaryToolbarStyle" parent="@style/Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/ToolbarTitleFontStyle</item>
+        <item name="titleCentered">true</item>
+    </style>
+
     <style name="ToolbarTitleFontStyle">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/nanum_square</item>
+    </style>
+
+    <style name="PrimaryActionMenuTextAppearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primary_color</item>
+        <item name="android:fontFamily">@font/nanum_square</item>
     </style>
 
     <style name="IconTextButtonStyle" parent="Widget.AppCompat.Button">
