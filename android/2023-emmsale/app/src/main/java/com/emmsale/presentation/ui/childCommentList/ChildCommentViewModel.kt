@@ -56,51 +56,43 @@ class ChildCommentViewModel @Inject constructor(
         fetchComments()
     }
 
-    private fun fetchComments() {
-        requestToNetwork(
-            getResult = { commentRepository.getComment(parentCommentId) },
-            onSuccess = { _comments.value = ChildCommentsUiState.create(uid, parentComment = it) },
-            onFailure = { _, _ ->
-                _uiEvent.value = Event(ChildCommentsUiEvent.IllegalCommentFetch)
-            },
-        )
-    }
+    private fun fetchComments(): Job = requestToNetwork(
+        getResult = { commentRepository.getComment(parentCommentId) },
+        onSuccess = { _comments.value = ChildCommentsUiState.create(uid, parentComment = it) },
+        onFailure = { _, _ ->
+            _uiEvent.value = Event(ChildCommentsUiEvent.IllegalCommentFetch)
+        },
+    )
 
-    fun postChildComment(content: String) {
-        commandAndRefresh(
-            command = { commentRepository.saveComment(content, feedId, parentCommentId) },
-            onSuccess = { _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostComplete) },
-            onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostFail) },
-            onLoading = { delayLoading() },
-        )
-    }
+    fun postChildComment(content: String): Job = commandAndRefresh(
+        command = { commentRepository.saveComment(content, feedId, parentCommentId) },
+        onSuccess = { _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostComplete) },
+        onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostFail) },
+        onLoading = { delayLoading() },
+    )
 
-    fun updateComment(commentId: Long, content: String) {
-        commandAndRefresh(
-            command = { commentRepository.updateComment(commentId, content) },
-            onSuccess = { _editingCommentId.value = null },
-            onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentUpdateFail) },
-            onLoading = { delayLoading() },
-        )
-    }
+    fun updateComment(commentId: Long, content: String): Job = commandAndRefresh(
+        command = { commentRepository.updateComment(commentId, content) },
+        onSuccess = { _editingCommentId.value = null },
+        onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentUpdateFail) },
+        onLoading = { delayLoading() },
+    )
 
-    fun deleteComment(commentId: Long) {
-        commandAndRefresh(
-            command = { commentRepository.deleteComment(commentId) },
-            onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentDeleteFail) },
-            onLoading = { delayLoading() },
-        )
-    }
+    fun deleteComment(commentId: Long): Job = commandAndRefresh(
+        command = { commentRepository.deleteComment(commentId) },
+        onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentDeleteFail) },
+        onLoading = { delayLoading() },
+    )
 
     fun setEditMode(isEditMode: Boolean, commentId: Long = -1) {
         _editingCommentId.value = if (isEditMode) commentId else null
     }
 
-    fun reportComment(commentId: Long) {
+    fun reportComment(commentId: Long): Job {
         val authorId =
             _comments.value.comments.find { it.comment.id == commentId }!!.comment.authorId
 
-        requestToNetwork(
+        return requestToNetwork(
             getResult = { commentRepository.reportComment(commentId, authorId, uid) },
             onSuccess = { _uiEvent.value = Event(ChildCommentsUiEvent.CommentReportComplete) },
             onFailure = { code, _ ->
