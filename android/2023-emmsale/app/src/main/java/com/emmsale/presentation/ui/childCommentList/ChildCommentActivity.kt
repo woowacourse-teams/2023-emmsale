@@ -12,7 +12,6 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.hideKeyboard
-import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
@@ -94,7 +93,6 @@ class ChildCommentActivity : AppCompatActivity() {
         addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
             viewModel.setEditMode(true, commentId)
             binding.stiwCommentUpdate.requestFocusOnEditText()
-            showKeyboard()
         }
     }
 

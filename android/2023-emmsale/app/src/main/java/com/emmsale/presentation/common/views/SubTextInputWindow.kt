@@ -10,6 +10,7 @@ import androidx.databinding.BindingAdapter
 import com.emmsale.R
 import com.emmsale.databinding.LayoutSubTextInputWindowBinding
 import com.emmsale.presentation.common.extension.dp
+import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.views.SubTextInputWindow.OnCancelListener
 import com.emmsale.presentation.common.views.SubTextInputWindow.OnSubmitListener
 import kotlin.properties.Delegates
@@ -25,7 +26,6 @@ class SubTextInputWindow @JvmOverloads constructor(
 
     var text: String by Delegates.observable("") { _, _, newValue ->
         binding.etSubTextInput.setText(newValue)
-        binding.etSubTextInput.setSelection(newValue.length)
     }
 
     var isVisible: Boolean by Delegates.observable(true) { _, _, newValue ->
@@ -68,6 +68,7 @@ class SubTextInputWindow @JvmOverloads constructor(
 
     fun requestFocusOnEditText() {
         binding.etSubTextInput.requestFocus()
+        binding.etSubTextInput.showKeyboard()
     }
 
     fun interface OnSubmitListener {
