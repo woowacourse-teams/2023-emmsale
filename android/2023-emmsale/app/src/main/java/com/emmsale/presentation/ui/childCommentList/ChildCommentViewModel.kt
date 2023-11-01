@@ -123,6 +123,7 @@ class ChildCommentViewModel @Inject constructor(
         onSuccess = { _comments.value = ChildCommentsUiState.create(uid, parentComment = it) },
         onFailure = { _, _ -> },
         onLoading = {},
+        onNetworkError = ::onRequestFailByNetworkError,
     )
 
     override fun changeToLoadingState() {

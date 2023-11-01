@@ -29,12 +29,13 @@ abstract class BaseViewModel : ViewModel() {
         onSuccess: ((T) -> Unit)? = null,
         onFailure: ((code: Int, message: String?) -> Unit)? = null,
         onLoading: (suspend () -> Unit)? = null,
+        onNetworkError: (() -> Unit)? = null,
     ): Job = viewModelScope.launch {
         val loadingJob = launch { onLoading?.invoke() ?: changeToLoadingState() }
         when (val result = getResult()) {
             is Failure -> onFailure?.invoke(result.code, result.message)
             NetworkError -> {
-                changeToNetworkErrorState()
+                onNetworkError?.invoke() ?: changeToNetworkErrorState()
                 return@launch
             }
 
@@ -50,11 +51,12 @@ abstract class BaseViewModel : ViewModel() {
         onSuccess: ((T) -> Unit)? = null,
         onFailure: ((code: Int, message: String?) -> Unit)? = null,
         onLoading: (suspend () -> Unit)? = null,
+        onNetworkError: (() -> Unit)? = null,
     ): Job = viewModelScope.launch {
         val loadingJob = launch { onLoading?.invoke() ?: changeToLoadingState() }
         when (val result = command()) {
             is Failure -> onFailure?.invoke(result.code, result.message)
-            NetworkError -> onRequestFailByNetworkError()
+            NetworkError -> onNetworkError?.invoke() ?: onRequestFailByNetworkError()
             is Success -> {
                 refresh().join()
                 onSuccess?.invoke(result.data)
