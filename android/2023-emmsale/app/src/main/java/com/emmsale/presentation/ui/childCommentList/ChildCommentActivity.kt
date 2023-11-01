@@ -262,13 +262,11 @@ class ChildCommentActivity : AppCompatActivity() {
             parentCommentId: Long,
             highlightCommentId: Long = INVALID_COMMENT_ID,
             fromPostDetail: Boolean = true,
-        ): Intent =
-            Intent(context, ChildCommentActivity::class.java).apply {
-                putExtra(KEY_FEED_ID, feedId)
-                putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
-                putExtra(KEY_HIGHLIGHT_COMMENT_ID, highlightCommentId)
-                putExtra(KEY_FROM_POST_DETAIL, fromPostDetail)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            }
+        ) = Intent(context, ChildCommentActivity::class.java)
+            .putExtra(KEY_FEED_ID, feedId)
+            .putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
+            .putExtra(KEY_HIGHLIGHT_COMMENT_ID, highlightCommentId)
+            .putExtra(KEY_FROM_POST_DETAIL, fromPostDetail)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     }
 }
