@@ -16,7 +16,7 @@ class CommentViewHolder(
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_all_comment, parent, false),
 ) {
-    private val binding: ItemAllCommentBinding = ItemAllCommentBinding.bind(itemView)
+    private val binding = ItemAllCommentBinding.bind(itemView)
 
     init {
         binding.onClick = onClick
