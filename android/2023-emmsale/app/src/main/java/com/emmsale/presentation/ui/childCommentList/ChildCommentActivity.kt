@@ -15,7 +15,7 @@ import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.common.recyclerView.CommonRecyclerViewDivider
+import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
@@ -178,7 +178,7 @@ class ChildCommentActivity : AppCompatActivity() {
         binding.rvChildcommentsChildcomments.apply {
             adapter = commentsAdapter
             itemAnimator = null
-            addItemDecoration(CommonRecyclerViewDivider(this@ChildCommentActivity))
+            addItemDecoration(DividerItemDecoration(this@ChildCommentActivity))
         }
     }
 

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMyCommentsBinding
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.recyclerView.CommonRecyclerViewDivider
+import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.myCommentList.recyclerView.MyCommentsAdapter
@@ -44,7 +44,7 @@ class MyCommentsActivity : AppCompatActivity() {
         binding.rvMycommentsMycomments.apply {
             adapter = MyCommentsAdapter(::navigateToChildComments)
             itemAnimator = null
-            addItemDecoration(CommonRecyclerViewDivider(this@MyCommentsActivity))
+            addItemDecoration(DividerItemDecoration(this@MyCommentsActivity))
         }
     }
 

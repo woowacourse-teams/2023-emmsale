@@ -13,7 +13,7 @@ import com.emmsale.databinding.ActivityFeedDetailBinding
 import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.common.recyclerView.CommonRecyclerViewDivider
+import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
@@ -187,7 +187,7 @@ class FeedDetailActivity : AppCompatActivity() {
                 commentsAdapter,
             )
             itemAnimator = null
-            addItemDecoration(CommonRecyclerViewDivider(this@FeedDetailActivity))
+            addItemDecoration(DividerItemDecoration(this@FeedDetailActivity))
         }
     }
 
