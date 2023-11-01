@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="49dp"
-            android:text="@string/editmyprofile_clubs_label"
+            android:text="@string/editmyprofile_club_label"
             android:textColor="@color/black"
             android:textSize="17sp"
             android:textStyle="bold"
