@@ -340,20 +340,16 @@ class FeedDetailActivity : AppCompatActivity() {
             feedId: Long,
             highlightCommentId: Long = INVALID_COMMENT_ID,
         ) {
-            val intent =
-                getIntent(context, feedId, highlightCommentId)
-            context.startActivity(intent)
+            context.startActivity(getIntent(context, feedId, highlightCommentId))
         }
 
         fun getIntent(
             context: Context,
             feedId: Long,
             highlightCommentId: Long = INVALID_COMMENT_ID,
-        ): Intent =
-            Intent(context, FeedDetailActivity::class.java).apply {
-                putExtra(KEY_FEED_ID, feedId)
-                putExtra(KEY_HIGHLIGHT_COMMENT_ID, highlightCommentId)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            }
+        ) = Intent(context, FeedDetailActivity::class.java)
+            .putExtra(KEY_FEED_ID, feedId)
+            .putExtra(KEY_HIGHLIGHT_COMMENT_ID, highlightCommentId)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     }
 }
