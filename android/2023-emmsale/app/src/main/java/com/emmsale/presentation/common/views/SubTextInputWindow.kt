@@ -84,11 +84,6 @@ fun SubTextInputWindow.setText(text: String?) {
     if (text != null) this.text = text
 }
 
-@BindingAdapter("app:visible")
-fun SubTextInputWindow.setVisible(visible: Boolean) {
-    this.isVisible = visible
-}
-
 @BindingAdapter("app:isSubmitEnabled")
 fun SubTextInputWindow.setIsSubmitEnabled(isSubmitEnabled: Boolean) {
     this.isSubmitEnabled = isSubmitEnabled
