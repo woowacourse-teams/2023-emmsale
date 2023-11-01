@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="17dp"
-        android:background="@{uiState.highlight ? @color/comment_highlight_color : @color/transparent}"
+        android:background="@{uiState.highlight ? @color/comment_highlight_color : @android:color/transparent}"
         android:onClick="@{() -> onClick.invoke(uiState.comment)}">
 
         <androidx.constraintlayout.widget.Group
