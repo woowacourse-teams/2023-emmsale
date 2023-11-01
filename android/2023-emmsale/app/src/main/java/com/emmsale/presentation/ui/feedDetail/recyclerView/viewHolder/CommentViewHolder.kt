@@ -1,6 +1,5 @@
 package com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +8,6 @@ import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ItemAllCommentBinding
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
-@SuppressLint("ClickableViewAccessibility")
 class CommentViewHolder(
     parent: ViewGroup,
     onClick: (comment: Comment) -> Unit,
