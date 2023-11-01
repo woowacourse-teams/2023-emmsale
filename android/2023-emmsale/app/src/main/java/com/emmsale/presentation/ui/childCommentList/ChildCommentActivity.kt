@@ -224,6 +224,16 @@ class ChildCommentActivity : AppCompatActivity() {
 
             ChildCommentsUiEvent.CommentUpdateComplete ->
                 binding.stiwCommentUpdate.isVisible = false
+
+            ChildCommentsUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_error_title))
+            ChildCommentsUiEvent.IllegalCommentFetch -> InfoDialog(
+                context = this,
+                title = getString(R.string.all_fetch_fail_title),
+                message = getString(R.string.comments_not_exist_comment_message),
+                buttonLabel = getString(R.string.all_okay),
+                onButtonClick = { finish() },
+                cancelable = false,
+            ).show()
         }
     }
 

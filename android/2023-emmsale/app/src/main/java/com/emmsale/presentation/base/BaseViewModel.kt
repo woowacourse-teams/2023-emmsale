@@ -20,41 +20,49 @@ abstract class BaseViewModel : ViewModel() {
 
     protected abstract fun onUnexpected(throwable: Throwable?)
 
+    protected abstract fun onRequestFailByNetworkError()
+
+    abstract fun refresh(): Job
+
     protected fun <T : Any> requestToNetwork(
         getResult: suspend () -> ApiResponse<T>,
-        onSuccess: (T) -> Unit,
-        onFailure: (code: Int, message: String?) -> Unit,
+        onSuccess: ((T) -> Unit)? = null,
+        onFailure: ((code: Int, message: String?) -> Unit)? = null,
+        onLoading: (suspend () -> Unit)? = null,
     ): Job = viewModelScope.launch {
-        changeToLoadingState()
-        handleResponse(getResult, onSuccess, onFailure)
-    }
-
-    protected fun <T : Any> refresh(
-        getResult: suspend () -> ApiResponse<T>,
-        onSuccess: (T) -> Unit,
-        onFailure: (code: Int, message: String?) -> Unit,
-    ): Job = viewModelScope.launch {
-        handleResponse(getResult, onSuccess, onFailure)
-    }
-
-    private suspend fun <T : Any> handleResponse(
-        getResult: suspend () -> ApiResponse<T>,
-        onSuccess: (T) -> Unit,
-        onFailure: (code: Int, message: String?) -> Unit,
-    ) {
+        val loadingJob = launch { onLoading?.invoke() ?: changeToLoadingState() }
         when (val result = getResult()) {
-            is Failure -> onFailure(result.code, result.message)
+            is Failure -> onFailure?.invoke(result.code, result.message)
             NetworkError -> {
                 changeToNetworkErrorState()
-                return
+                return@launch
             }
 
+            is Success -> onSuccess?.invoke(result.data)
+            is Unexpected -> onUnexpected(result.error)
+        }
+        loadingJob.cancel()
+        changeToSuccessState()
+    }
+
+    protected fun <T : Any> commandAndRefresh(
+        command: suspend () -> ApiResponse<T>,
+        onSuccess: ((T) -> Unit)? = null,
+        onFailure: ((code: Int, message: String?) -> Unit)? = null,
+        onLoading: (suspend () -> Unit)? = null,
+    ): Job = viewModelScope.launch {
+        val loadingJob = launch { onLoading?.invoke() ?: changeToLoadingState() }
+        when (val result = command()) {
+            is Failure -> onFailure?.invoke(result.code, result.message)
+            NetworkError -> onRequestFailByNetworkError()
             is Success -> {
-                onSuccess(result.data)
+                refresh().join()
+                onSuccess?.invoke(result.data)
             }
 
             is Unexpected -> onUnexpected(result.error)
         }
+        loadingJob.cancel()
         changeToSuccessState()
     }
 }

@@ -25,6 +25,7 @@
     <string name="all_report_duplicate_dialog_title">중복 신고</string>
     <string name="all_report_duplicate_dialog_message">이미 신고하셨습니다.</string>
     <string name="all_network_error_icon_description">네트워크 에러 아이콘</string>
+    <string name="all_fetch_fail_title">조회 실패</string>
     <string name="all_network_error_title">인터넷 연결이 불안정합니다.</string>
     <string name="all_network_error_message">인터넷 연결이 불안정하여\n데이터를 불러올 수 없습니다.</string>
     <string name="all_retry">재시도</string>
@@ -156,6 +157,7 @@
     <string name="comments_comments_update_error_message">댓글을 수정하는 데 실패했어요 😥</string>
     <string name="comments_comments_delete_error_message">댓글을 삭제하는 데 실패했어요 😥</string>.
     <string name="comments_comment_report_dialog_message">해당 댓글을 신고 하시겠습니까?</string>
+    <string name="comments_not_exist_comment_message">존재하지 않는 댓글입니다.</string>
 
     <string name="commentsmenudialog_edit_button_label">수정</string>
     <string name="commentsmenudialog_delete_button_label">삭제</string>

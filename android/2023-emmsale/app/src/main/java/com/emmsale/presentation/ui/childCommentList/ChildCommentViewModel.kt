@@ -13,8 +13,9 @@ import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
-import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
@@ -59,58 +60,40 @@ class ChildCommentViewModel @Inject constructor(
         requestToNetwork(
             getResult = { commentRepository.getComment(parentCommentId) },
             onSuccess = { _comments.value = ChildCommentsUiState.create(uid, parentComment = it) },
-            onFailure = { _, _ -> },
+            onFailure = { _, _ ->
+                _uiEvent.value = Event(ChildCommentsUiEvent.IllegalCommentFetch)
+            },
         )
     }
 
     fun postChildComment(content: String) {
-        requestToNetwork(
-            getResult = { commentRepository.saveComment(content, feedId, parentCommentId) },
-            onSuccess = { refresh(ChildCommentsUiEvent.CommentPostComplete) },
+        commandAndRefresh(
+            command = { commentRepository.saveComment(content, feedId, parentCommentId) },
+            onSuccess = { _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostComplete) },
             onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentPostFail) },
+            onLoading = { delayLoading() },
         )
     }
 
-    // xml에서 사용하려면 @JvmOverloads를 붙여야 합니다.
-    @JvmOverloads
-    fun refresh(pendingEventOnSuccess: ChildCommentsUiEvent? = null) = super.refresh(
-        getResult = { commentRepository.getComment(parentCommentId) },
-        onSuccess = {
-            val comments = listOf(CommentUiState.create(uid, it)) +
-                it.childComments.map { childComment ->
-                    CommentUiState.create(uid, childComment)
-                }
-            _comments.value = _comments.value.copy(comments = comments)
-            if (pendingEventOnSuccess != null) _uiEvent.value = Event(pendingEventOnSuccess)
-        },
-        onFailure = { _, _ -> },
-    )
-
     fun updateComment(commentId: Long, content: String) {
-        requestToNetwork(
-            getResult = { commentRepository.updateComment(commentId, content) },
-            onSuccess = {
-                _editingCommentId.value = null
-                refresh()
-            },
+        commandAndRefresh(
+            command = { commentRepository.updateComment(commentId, content) },
+            onSuccess = { _editingCommentId.value = null },
             onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentUpdateFail) },
+            onLoading = { delayLoading() },
         )
     }
 
     fun deleteComment(commentId: Long) {
-        requestToNetwork(
-            getResult = { commentRepository.deleteComment(commentId) },
-            onSuccess = { refresh() },
+        commandAndRefresh(
+            command = { commentRepository.deleteComment(commentId) },
             onFailure = { _, _ -> _uiEvent.value = Event(ChildCommentsUiEvent.CommentDeleteFail) },
+            onLoading = { delayLoading() },
         )
     }
 
     fun setEditMode(isEditMode: Boolean, commentId: Long = -1) {
-        if (!isEditMode) {
-            _editingCommentId.value = null
-            return
-        }
-        _editingCommentId.value = commentId
+        _editingCommentId.value = if (isEditMode) commentId else null
     }
 
     fun reportComment(commentId: Long) {
@@ -130,6 +113,11 @@ class ChildCommentViewModel @Inject constructor(
         )
     }
 
+    private suspend fun delayLoading() {
+        delay(LOADING_DELAY)
+        changeToLoadingState()
+    }
+
     fun highlight(commentId: Long) {
         _comments.value = _comments.value.highlight(commentId)
     }
@@ -137,6 +125,13 @@ class ChildCommentViewModel @Inject constructor(
     fun unhighlight(commentId: Long) {
         _comments.value = _comments.value.unhighlight(commentId)
     }
+
+    override fun refresh(): Job = requestToNetwork(
+        getResult = { commentRepository.getComment(parentCommentId) },
+        onSuccess = { _comments.value = ChildCommentsUiState.create(uid, parentComment = it) },
+        onFailure = { _, _ -> },
+        onLoading = {},
+    )
 
     override fun changeToLoadingState() {
         _comments.value = _comments.value.copy(fetchResult = FetchResult.LOADING)
@@ -154,10 +149,16 @@ class ChildCommentViewModel @Inject constructor(
         _uiEvent.value = Event(ChildCommentsUiEvent.UnexpectedError(throwable.toString()))
     }
 
+    override fun onRequestFailByNetworkError() {
+        _uiEvent.value = Event(ChildCommentsUiEvent.RequestFailByNetworkError)
+    }
+
     companion object {
         const val KEY_FEED_ID = "KEY_FEED_ID"
         const val KEY_PARENT_COMMENT_ID = "KEY_PARENT_COMMENT_ID"
 
         private const val REPORT_DUPLICATE_ERROR_CODE = 400
+
+        private const val LOADING_DELAY: Long = 500
     }
 }
