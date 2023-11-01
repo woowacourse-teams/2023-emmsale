@@ -7,7 +7,6 @@ import com.emmsale.event.application.RecruitmentPostCommandService;
 import com.emmsale.event.application.RecruitmentPostQueryService;
 import com.emmsale.event.application.dto.RecruitmentPostQueryResponse;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
-import com.emmsale.event.application.dto.RecruitmentPostResponse;
 import com.emmsale.event.application.dto.RecruitmentPostUpdateRequest;
 import com.emmsale.member.domain.Member;
 import java.util.List;
@@ -71,18 +70,18 @@ public class RecruitmentPostApi {
   }
 
   @GetMapping("/{id}/recruitment-posts")
-  public ResponseEntity<List<RecruitmentPostResponse>> findRecruitmentPosts(
+  public ResponseEntity<List<RecruitmentPostQueryResponse>> findRecruitmentPosts(
       @PathVariable final Long id) {
-    final List<RecruitmentPostResponse> responses = postQueryService.findRecruitmentPosts(id);
+    final List<RecruitmentPostQueryResponse> responses = postQueryService.findRecruitmentPosts(id);
     return ResponseEntity.ok(responses);
   }
 
   @GetMapping("/{event-id}/recruitment-posts/{recruitment-post-id}")
-  public ResponseEntity<RecruitmentPostResponse> findRecruitmentPost(
+  public ResponseEntity<RecruitmentPostQueryResponse> findRecruitmentPost(
       @PathVariable("event-id") final Long eventId,
       @PathVariable("recruitment-post-id") final Long postId
   ) {
-    final RecruitmentPostResponse response
+    final RecruitmentPostQueryResponse response
         = postQueryService.findRecruitmentPost(eventId, postId);
     return ResponseEntity.ok(response);
   }

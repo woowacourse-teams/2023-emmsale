@@ -18,7 +18,6 @@ import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.image.domain.AllImagesOfContent;
-import com.emmsale.image.domain.Image;
 import com.emmsale.image.domain.ImageType;
 import com.emmsale.image.domain.repository.ImageRepository;
 import com.emmsale.tag.domain.Tag;
@@ -54,11 +53,9 @@ public class EventQueryService {
     final Event event = eventRepository.findById(id)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
-    final AllImagesOfContent images = new AllImagesOfContent(imageRepository
-        .findAllByTypeAndContentId(ImageType.EVENT, event.getId())
-        .stream()
-        .sorted(comparing(Image::getOrder))
-        .collect(toList()));
+    final AllImagesOfContent images = new AllImagesOfContent(
+        imageRepository.findAllByTypeAndContentId(ImageType.EVENT, event.getId())
+    );
     return EventResponse.from(event, images);
   }
 
