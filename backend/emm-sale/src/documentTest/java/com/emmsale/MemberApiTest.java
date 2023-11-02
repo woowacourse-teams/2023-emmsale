@@ -23,7 +23,6 @@ import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberImageResponse;
 import com.emmsale.member.application.dto.MemberProfileResponse;
-import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
 import java.io.IOException;
 import java.util.List;
@@ -45,17 +44,14 @@ class MemberApiTest extends MockMvcTestHelper {
 
   private static final ResponseFieldsSnippet MEMBER_ACTIVITY_RESPONSE_FIELDS = responseFields(
       fieldWithPath("[].activityType").type(JsonFieldType.STRING).description("activity 분류"),
-      fieldWithPath("[].memberActivityResponses[].id").type(JsonFieldType.NUMBER)
-          .description("activity id"),
-      fieldWithPath("[].memberActivityResponses[].name").type(JsonFieldType.STRING)
-          .description("activity 이름")
+      fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("activity id"),
+      fieldWithPath("[].name").type(JsonFieldType.STRING).description("activity 이름")
   );
   private static final ResponseFieldsSnippet MEMBER_PROFILE_RESPONSE_FIELDS = responseFields(
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
       fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
       fieldWithPath("description").type(JsonFieldType.STRING).description("사용자 한 줄 자기소개"),
       fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url"),
-      fieldWithPath("openProfileUrl").type(JsonFieldType.STRING).description("오픈 프로필 url"),
       fieldWithPath("githubUrl").type(JsonFieldType.STRING).description("깃허브 URL")
   );
   private static final RequestFieldsSnippet MEMBER_ACTIVITY_REQUEST_FIELDS = requestFields(
@@ -160,29 +156,6 @@ class MemberApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-activity", MEMBER_ACTIVITY_RESPONSE_FIELDS));
-  }
-
-  @Test
-  @DisplayName("사용자의 openProfileUrl을 성공적으로 업데이트하면, 200 OK가 반환된다.")
-  void test_updateOpenProfileUrl() throws Exception {
-    // given
-    final String openProfileUrl = "https://open.kakao.com/o/openprofileurl";
-    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(openProfileUrl);
-
-    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
-        fieldWithPath("openProfileUrl").description("오픈 채팅 url")
-    );
-
-    // when
-    final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
-        .header(HttpHeaders.AUTHORIZATION, FAKE_BEARER_ACCESS_TOKEN)
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(request)));
-
-    // then
-    result.andExpect(status().isNoContent())
-        .andDo(print())
-        .andDo(document("update-open-profile-url", REQUEST_FIELDS));
   }
 
   @Test
