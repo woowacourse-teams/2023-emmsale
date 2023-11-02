@@ -176,15 +176,14 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private fun scrollToIfFirstFetch(childCommentUiState: ChildCommentsUiState) {
-        fun canScroll(): Boolean =
-            !viewModel.isAlreadyFirstFetched && childCommentUiState.comments.isNotEmpty()
+        fun cantScroll(): Boolean =
+            viewModel.isAlreadyFirstFetched || childCommentUiState.comments.isEmpty()
 
-        if (highlightCommentId == INVALID_COMMENT_ID || !canScroll()) return
-        val position =
-            viewModel.comments.value.comments
-                .indexOfFirst { commentUiState ->
-                    commentUiState.comment.id == highlightCommentId
-                }
+        if (highlightCommentId == INVALID_COMMENT_ID || cantScroll()) return
+        val position = viewModel.comments.value.comments
+            .indexOfFirst { commentUiState ->
+                commentUiState.comment.id == highlightCommentId
+            }
         binding.rvChildcommentsChildcomments.scrollToPosition(position)
 
         viewModel.highlight(highlightCommentId)
@@ -256,8 +255,13 @@ class ChildCommentActivity : AppCompatActivity() {
             highlightCommentId: Long = INVALID_COMMENT_ID,
             fromPostDetail: Boolean = true,
         ) {
-            val intent =
-                getIntent(context, feedId, parentCommentId, highlightCommentId, fromPostDetail)
+            val intent = getIntent(
+                context = context,
+                feedId = feedId,
+                parentCommentId = parentCommentId,
+                highlightCommentId = highlightCommentId,
+                fromPostDetail = fromPostDetail,
+            )
             context.startActivity(intent)
         }
 
