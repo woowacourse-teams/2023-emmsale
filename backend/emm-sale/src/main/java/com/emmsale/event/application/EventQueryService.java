@@ -17,9 +17,9 @@ import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
+import com.emmsale.image.application.ImageQueryService;
 import com.emmsale.image.domain.AllImagesOfContent;
 import com.emmsale.image.domain.ImageType;
-import com.emmsale.image.domain.repository.ImageRepository;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
@@ -28,7 +28,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,15 +46,14 @@ public class EventQueryService {
 
   private final EventRepository eventRepository;
   private final TagRepository tagRepository;
-  private final ImageRepository imageRepository;
+  private final ImageQueryService imageQueryService;
 
   public EventResponse findEvent(final Long id, final LocalDate today) {
     final Event event = eventRepository.findById(id)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
-    final AllImagesOfContent images = new AllImagesOfContent(
-        imageRepository.findAllByTypeAndContentId(ImageType.EVENT, event.getId())
-    );
+    final AllImagesOfContent images = imageQueryService.findImagesOfContent(ImageType.EVENT,
+        event.getId());
     return EventResponse.from(event, images);
   }
 
@@ -73,7 +71,12 @@ public class EventQueryService {
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
         = groupByEventStatus(nowDateTime, events);
 
-    return filterByStatuses(statuses, eventsForEventStatus, makeImagesPerEventId(events));
+    final List<Long> eventIds = events.stream()
+        .map(Event::getId)
+        .collect(Collectors.toUnmodifiableList());
+
+    return filterByStatuses(statuses, eventsForEventStatus,
+        imageQueryService.findImagesPerContentId(ImageType.EVENT, eventIds));
   }
 
   private Specification<Event> filterByCategoryIfExist(final EventType category,
@@ -204,20 +207,5 @@ public class EventQueryService {
           combinedEvents.addAll(eventsToAdd);
           return combinedEvents;
         });
-  }
-
-  // TODO: 2023/09/27 코드 중복 제거(ScrapService)
-  private Map<Long, AllImagesOfContent> makeImagesPerEventId(final List<Event> events) {
-    final List<Long> eventIds = events.stream()
-        .map(Event::getId)
-        .collect(Collectors.toUnmodifiableList());
-
-    Map<Long, AllImagesOfContent> imagesPerEventId = new HashMap<>();
-    for (Long eventId : eventIds) {
-      final AllImagesOfContent images = new AllImagesOfContent(
-          imageRepository.findAllByTypeAndContentId(ImageType.EVENT, eventId));
-      imagesPerEventId.put(eventId, images);
-    }
-    return imagesPerEventId;
   }
 }
