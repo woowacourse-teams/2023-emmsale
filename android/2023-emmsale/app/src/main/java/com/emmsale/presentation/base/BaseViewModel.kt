@@ -1,5 +1,6 @@
 package com.emmsale.presentation.base
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
@@ -7,20 +8,31 @@ import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
+import com.emmsale.presentation.common.livedata.NotNullLiveData
+import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
 
-    protected abstract fun changeToLoadingState()
+    private val _screenUiState = NotNullMutableLiveData(ScreenUiState.NONE)
+    val screenUiState: NotNullLiveData<ScreenUiState> = _screenUiState
 
-    protected abstract fun changeToNetworkErrorState()
+    private val _baseUiEvent = SingleLiveEvent<BaseUiEvent>()
+    val baseUiEvent: LiveData<BaseUiEvent> = _baseUiEvent
 
-    protected abstract fun changeToSuccessState()
+    protected fun changeToLoadingState() {
+        _screenUiState.value = ScreenUiState.LOADING
+    }
 
-    protected abstract fun onUnexpected(throwable: Throwable?)
+    private fun changeToNetworkErrorState() {
+        _screenUiState.value = ScreenUiState.NETWORK_ERROR
+    }
 
-    protected abstract fun onRequestFailByNetworkError()
+    protected fun onRequestFailByNetworkError() {
+        _baseUiEvent.value = BaseUiEvent.RequestFailByNetworkError
+    }
 
     abstract fun refresh(): Job
 
@@ -40,10 +52,10 @@ abstract class BaseViewModel : ViewModel() {
             }
 
             is Success -> onSuccess?.invoke(result.data)
-            is Unexpected -> onUnexpected(result.error)
+            is Unexpected -> _baseUiEvent.value = BaseUiEvent.Unexpected(result.error.toString())
         }
         loadingJob.cancel()
-        changeToSuccessState()
+        _screenUiState.value = ScreenUiState.NONE
     }
 
     protected fun <T : Any> commandAndRefresh(
@@ -62,9 +74,18 @@ abstract class BaseViewModel : ViewModel() {
                 onSuccess?.invoke(result.data)
             }
 
-            is Unexpected -> onUnexpected(result.error)
+            is Unexpected -> _baseUiEvent.value = BaseUiEvent.Unexpected(result.error.toString())
         }
         loadingJob.cancel()
-        changeToSuccessState()
+        _screenUiState.value = ScreenUiState.NONE
     }
+}
+
+enum class ScreenUiState {
+    NONE, LOADING, NETWORK_ERROR
+}
+
+sealed interface BaseUiEvent {
+    data class Unexpected(val errorMessage: String) : BaseUiEvent
+    object RequestFailByNetworkError : BaseUiEvent
 }

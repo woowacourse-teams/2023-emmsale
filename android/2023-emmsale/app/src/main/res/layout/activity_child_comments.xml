@@ -7,7 +7,7 @@
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.common.FetchResult" />
+        <import type="com.emmsale.presentation.base.ScreenUiState" />
 
         <import type="kotlin.Unit" />
 
@@ -82,7 +82,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:hint="@string/comments_edit_comment_hint"
                     app:onSubmit="@{(content) -> onCommentSubmitButtonClick.invoke(content)}"
-                    app:isSubmitEnabled="@{viewModel.comments.fetchResult != FetchResult.LOADING}"
+                    app:isSubmitEnabled="@{viewModel.screenUiState != ScreenUiState.LOADING}"
                     app:submitButtonLabel="@string/comments_comment_submit_button_label" />
 
                 <com.emmsale.presentation.common.views.SubTextInputWindow
@@ -94,7 +94,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:text="@{viewModel.editingCommentContent}"
                     app:visible="@{viewModel.editingCommentId != null}"
-                    app:isSubmitEnabled="@{viewModel.comments.fetchResult != FetchResult.LOADING}"
+                    app:isSubmitEnabled="@{viewModel.screenUiState != ScreenUiState.LOADING}"
                     app:submitButtonLabel="@string/all_update_button_label"
                     app:cancelButtonLabel="@string/all_cancel"
                     app:onCancel="@{() -> onCommentUpdateCancelButtonClick.invoke()}"
@@ -105,7 +105,7 @@
                     style="?android:attr/progressBarStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.comments.fetchResult == FetchResult.LOADING ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{viewModel.screenUiState == ScreenUiState.LOADING ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="@+id/rv_childcomments_childcomments"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -122,7 +122,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:visible="@{viewModel.comments.fetchResult == FetchResult.ERROR}"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.NETWORK_ERROR}"
             app:onRefresh="@{() -> viewModel.refresh()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

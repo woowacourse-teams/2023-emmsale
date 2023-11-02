@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.base.BaseUiEvent
 import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
@@ -191,14 +191,12 @@ class ChildCommentActivity : AppCompatActivity() {
     }
 
     private fun observeUiEvent() {
-        viewModel.uiEvent.observe(this) {
-            handleUiEvent(it)
-        }
+        viewModel.uiEvent.observe(this) { handleUiEvent(it) }
+        viewModel.baseUiEvent.observe(this) { handleBaseUiEvent(it) }
     }
 
-    private fun handleUiEvent(event: Event<ChildCommentsUiEvent>) {
-        val content = event.getContentIfNotHandled() ?: return
-        when (content) {
+    private fun handleUiEvent(event: ChildCommentsUiEvent) {
+        when (event) {
             ChildCommentsUiEvent.CommentReportFail -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
             ChildCommentsUiEvent.CommentReportComplete -> InfoDialog(
                 context = this,
@@ -217,8 +215,6 @@ class ChildCommentActivity : AppCompatActivity() {
             ChildCommentsUiEvent.CommentPostFail -> binding.root.showSnackBar(getString(R.string.comments_comments_posting_error_message))
             ChildCommentsUiEvent.CommentUpdateFail -> binding.root.showSnackBar(getString(R.string.comments_comments_update_error_message))
             ChildCommentsUiEvent.CommentDeleteFail -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))
-            ChildCommentsUiEvent.None -> {}
-            is ChildCommentsUiEvent.UnexpectedError -> showToast(content.errorMessage)
             ChildCommentsUiEvent.CommentPostComplete -> {
                 smoothScrollToLastPosition()
                 binding.btiwCommentPost.clearText()
@@ -227,7 +223,6 @@ class ChildCommentActivity : AppCompatActivity() {
             ChildCommentsUiEvent.CommentUpdateComplete ->
                 binding.stiwCommentUpdate.isVisible = false
 
-            ChildCommentsUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_error_title))
             ChildCommentsUiEvent.IllegalCommentFetch -> InfoDialog(
                 context = this,
                 title = getString(R.string.all_fetch_fail_title),
@@ -236,6 +231,13 @@ class ChildCommentActivity : AppCompatActivity() {
                 onButtonClick = { finish() },
                 cancelable = false,
             ).show()
+        }
+    }
+
+    private fun handleBaseUiEvent(event: BaseUiEvent) {
+        when (event) {
+            BaseUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_error_title))
+            is BaseUiEvent.Unexpected -> showToast(event.errorMessage)
         }
     }
 

@@ -1,14 +1,9 @@
 package com.emmsale.presentation.ui.childCommentList.uiState
 
 import com.emmsale.data.model.Comment
-import com.emmsale.presentation.common.FetchResult
-import com.emmsale.presentation.common.FetchResultUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
-data class ChildCommentsUiState(
-    override val fetchResult: FetchResult,
-    val comments: List<CommentUiState>,
-) : FetchResultUiState() {
+data class ChildCommentsUiState(val comments: List<CommentUiState>) {
 
     fun highlight(commentId: Long) = copy(
         comments = comments.map { if (it.comment.id == commentId) it.highlight() else it },
@@ -20,7 +15,6 @@ data class ChildCommentsUiState(
 
     companion object {
         val Loading: ChildCommentsUiState = ChildCommentsUiState(
-            fetchResult = FetchResult.LOADING,
             comments = emptyList(),
         )
 
@@ -28,7 +22,6 @@ data class ChildCommentsUiState(
             uid: Long,
             parentComment: Comment,
         ) = ChildCommentsUiState(
-            fetchResult = FetchResult.SUCCESS,
             comments = listOf(CommentUiState.create(uid, parentComment)) +
                 parentComment.childComments.map { CommentUiState.create(uid, it) },
         )
