@@ -7,7 +7,7 @@ import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
-import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberImageResponse;
 import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.domain.Member;
@@ -46,7 +46,7 @@ public class MemberApi {
   }
 
   @PostMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> addActivity(
+  public ResponseEntity<List<MemberActivityResponse>> addActivity(
       final Member member,
       @RequestBody final MemberActivityAddRequest memberActivityAddRequest
   ) {
@@ -55,14 +55,14 @@ public class MemberApi {
   }
 
   @DeleteMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> deleteActivity(final Member member,
+  public ResponseEntity<List<MemberActivityResponse>> deleteActivity(final Member member,
       @RequestParam("activity-ids") final List<Long> deleteActivityIds) {
     return ResponseEntity.ok(
         memberActivityCommandService.deleteActivity(member, deleteActivityIds));
   }
 
   @GetMapping("/members/{member-id}/activities")
-  public ResponseEntity<List<MemberActivityResponses>> findActivity(
+  public ResponseEntity<List<MemberActivityResponse>> findActivity(
       @PathVariable("member-id") final Long memberId) {
     return ResponseEntity.ok(memberActivityQueryService.findActivities(memberId));
   }

@@ -72,7 +72,6 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
           null,
           "",
           "https://imageurl.com",
-          "https://openprofileurl.com",
           "https://github.com/amaran-th"
       );
 

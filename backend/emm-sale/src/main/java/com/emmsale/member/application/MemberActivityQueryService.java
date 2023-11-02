@@ -1,6 +1,8 @@
 package com.emmsale.member.application;
 
-import com.emmsale.member.application.dto.MemberActivityResponses;
+import static java.util.stream.Collectors.toUnmodifiableList;
+
+import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberActivityRepository;
 import com.emmsale.member.domain.MemberRepository;
@@ -17,8 +19,12 @@ public class MemberActivityQueryService {
   private final MemberRepository memberRepository;
   private final MemberActivityRepository memberActivityRepository;
 
-  public List<MemberActivityResponses> findActivities(final Long memberId) {
+  public List<MemberActivityResponse> findActivities(final Long memberId) {
     final Member member = memberRepository.getByIdOrElseThrow(memberId);
-    return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
+
+    return memberActivityRepository.findAllByMember(member)
+        .stream()
+        .map(MemberActivityResponse::from)
+        .collect(toUnmodifiableList());
   }
 }

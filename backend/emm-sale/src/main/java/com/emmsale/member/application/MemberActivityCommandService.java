@@ -5,7 +5,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 import com.emmsale.activity.domain.ActivityRepository;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
-import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberActivity;
 import com.emmsale.member.domain.MemberActivityRepository;
@@ -58,7 +58,7 @@ public class MemberActivityCommandService {
     }
   }
 
-  public List<MemberActivityResponses> addActivity(
+  public List<MemberActivityResponse> addActivity(
       final Member member,
       final MemberActivityAddRequest memberActivityAddRequest
   ) {
@@ -72,7 +72,10 @@ public class MemberActivityCommandService {
     }
     saveMemberActivities(member, activityIds);
 
-    return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
+    return memberActivityRepository.findAllByMember(member)
+        .stream()
+        .map(MemberActivityResponse::from)
+        .collect(toUnmodifiableList());
   }
 
   private boolean isAlreadyExistActivity(final List<MemberActivity> memberActivities,
@@ -88,7 +91,7 @@ public class MemberActivityCommandService {
     return new HashSet<>(activityIds).size() != activityIds.size();
   }
 
-  public List<MemberActivityResponses> deleteActivity(
+  public List<MemberActivityResponse> deleteActivity(
       final Member member,
       final List<Long> deleteActivityIds
   ) {
@@ -100,6 +103,9 @@ public class MemberActivityCommandService {
 
     memberActivityRepository.deleteAllByIdInBatch(savedMemberActivityIds);
 
-    return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
+    return memberActivityRepository.findAllByMember(member)
+        .stream()
+        .map(MemberActivityResponse::from)
+        .collect(toUnmodifiableList());
   }
 }
