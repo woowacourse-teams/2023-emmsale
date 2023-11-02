@@ -4,7 +4,11 @@ import com.emmsale.base.BaseExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum ImageExceptionType implements BaseExceptionType {
-  
+
+  NOT_FOUND_THUMBNAIL(
+      HttpStatus.NOT_FOUND,
+      "주어진 이미지들 중 섬네일 이미지가 존재하지 않습니다."
+  ),
   INVALID_FILE_FORMAT(
       HttpStatus.BAD_REQUEST,
       "잘못된 형식의 파일입니다."
@@ -29,20 +33,20 @@ public enum ImageExceptionType implements BaseExceptionType {
       HttpStatus.INTERNAL_SERVER_ERROR,
       "이미지를 DB서 삭제하지 못했습니다."
   );
-  
+
   private final HttpStatus httpStatus;
   private final String errorMessage;
-  
+
   ImageExceptionType(final HttpStatus httpStatus, final String errorMessage) {
     this.httpStatus = httpStatus;
     this.errorMessage = errorMessage;
   }
-  
+
   @Override
   public HttpStatus httpStatus() {
     return httpStatus;
   }
-  
+
   @Override
   public String errorMessage() {
     return errorMessage;

@@ -16,26 +16,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Image {
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  
+
   @Column(nullable = false)
   private String name;
-  
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private ImageType type;
-  
+
   @Column(nullable = false)
   private Long contentId;
-  
+
   @Column(name = "order_number", nullable = false)
   private int order;
-  
+
   private LocalDateTime createdAt;
-  
+
   public Image(final String name, final ImageType type, final Long contentId, final int order,
       final LocalDateTime createdAt) {
     this.name = name;
@@ -43,5 +43,13 @@ public class Image {
     this.contentId = contentId;
     this.order = order;
     this.createdAt = createdAt;
+  }
+
+  public boolean isThumbnail() {
+    return order == 0;
+  }
+
+  public boolean isNotThumbnail() {
+    return order != 0;
   }
 }

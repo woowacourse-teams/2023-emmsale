@@ -9,7 +9,8 @@ import com.emmsale.block.application.BlockCommandService;
 import com.emmsale.block.application.BlockQueryService;
 import com.emmsale.comment.application.CommentCommandService;
 import com.emmsale.comment.application.CommentQueryService;
-import com.emmsale.event.application.EventService;
+import com.emmsale.event.application.EventCommandService;
+import com.emmsale.event.application.EventQueryService;
 import com.emmsale.event.application.RecruitmentPostCommandService;
 import com.emmsale.event.application.RecruitmentPostQueryService;
 import com.emmsale.feed.application.FeedCommandService;
@@ -80,7 +81,9 @@ abstract class MockMvcTestHelper {
   @MockBean
   protected LoginService loginService;
   @MockBean
-  protected EventService eventService;
+  protected EventQueryService eventQueryService;
+  @MockBean
+  protected EventCommandService eventCommandService;
   @MockBean
   protected CommentCommandService commentCommandService;
   @MockBean

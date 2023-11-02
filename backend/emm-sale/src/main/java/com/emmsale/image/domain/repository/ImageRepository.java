@@ -10,6 +10,8 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
   List<Image> findAllByTypeAndContentId(final ImageType type, final Long contentId);
 
+  List<Image> findAllByTypeAndContentIdIn(final ImageType type, final List<Long> contentIds);
+
   @Query("select i from Image i where i.type='EVENT' and i.order=0 and i.contentId in :eventIds")
   List<Image> findAllThumbnailByEventIdIn(final List<Long> eventIds);
 

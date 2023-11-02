@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.application.dto.RecruitmentPostQueryResponse;
 import com.emmsale.event.application.dto.RecruitmentPostRequest;
-import com.emmsale.event.application.dto.RecruitmentPostResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.RecruitmentPost;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.RecruitmentPostRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.member.application.dto.MemberReferenceResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
@@ -65,15 +65,16 @@ class RecruitmentPostQueryServiceTest extends ServiceIntegrationTestHelper {
     final Long 멤버2_참가글_ID = postCommandService
         .createRecruitmentPost(인프콘.getId(), requestMember2, 사용자2);
 
-    final List<RecruitmentPostResponse> expected = List.of(
-        new RecruitmentPostResponse(멤버1_참가글_ID, 사용자1.getId(), 사용자1.getName(), 사용자1.getImageUrl(),
-            requestMember1.getContent(), LocalDate.now()),
-        new RecruitmentPostResponse(멤버2_참가글_ID, 사용자2.getId(), 사용자2.getName(), 사용자2.getImageUrl(),
-            requestMember2.getContent(), LocalDate.now())
+    final List<RecruitmentPostQueryResponse> expected = List.of(
+        new RecruitmentPostQueryResponse(멤버1_참가글_ID, requestMember1.getContent(), LocalDate.now(),
+            MemberReferenceResponse.from(사용자1), 인프콘.getId()),
+        new RecruitmentPostQueryResponse(멤버2_참가글_ID, requestMember2.getContent(), LocalDate.now(),
+            MemberReferenceResponse.from(사용자2), 인프콘.getId())
     );
 
     //when
-    final List<RecruitmentPostResponse> actual = postQueryService.findRecruitmentPosts(인프콘.getId());
+    final List<RecruitmentPostQueryResponse> actual = postQueryService.findRecruitmentPosts(
+        인프콘.getId());
 
     //then
     assertThat(actual)
@@ -90,12 +91,12 @@ class RecruitmentPostQueryServiceTest extends ServiceIntegrationTestHelper {
     final Long 멤버1_참가글_ID = postCommandService
         .createRecruitmentPost(인프콘.getId(), requestMember1, 사용자1);
 
-    final RecruitmentPostResponse expected =
-        new RecruitmentPostResponse(멤버1_참가글_ID, 사용자1.getId(), 사용자1.getName(), 사용자1.getImageUrl(),
-            requestMember1.getContent(), LocalDate.now());
+    final RecruitmentPostQueryResponse expected = new RecruitmentPostQueryResponse(멤버1_참가글_ID,
+        requestMember1.getContent(), LocalDate.now(), MemberReferenceResponse.from(사용자1),
+        인프콘.getId());
 
     //when
-    final RecruitmentPostResponse actual = postQueryService.findRecruitmentPost(
+    final RecruitmentPostQueryResponse actual = postQueryService.findRecruitmentPost(
         인프콘.getId(), 멤버1_참가글_ID);
 
     //then
