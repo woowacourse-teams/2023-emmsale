@@ -111,10 +111,14 @@ class ChildCommentViewModel @Inject constructor(
     }
 
     fun highlight(commentId: Long) {
+        val comment = _comments.value.comments.find { it.comment.id == commentId } ?: return
+        if (comment.isHighlight) return
         _comments.value = _comments.value.highlight(commentId)
     }
 
     fun unhighlight(commentId: Long) {
+        val comment = _comments.value.comments.find { it.comment.id == commentId } ?: return
+        if (!comment.isHighlight) return
         _comments.value = _comments.value.unhighlight(commentId)
     }
 

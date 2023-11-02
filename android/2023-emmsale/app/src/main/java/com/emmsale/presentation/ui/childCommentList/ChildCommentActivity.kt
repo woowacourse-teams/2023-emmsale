@@ -8,7 +8,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.common.Event
@@ -23,6 +22,7 @@ import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_FEED_ID
 import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_PARENT_COMMENT_ID
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
+import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.profile.ProfileActivity
@@ -38,19 +38,7 @@ class ChildCommentActivity : AppCompatActivity() {
         onClick = { comment -> viewModel.unhighlight(comment.id) },
         onAuthorImageClick = { authorId -> ProfileActivity.startActivity(this, authorId) },
         onCommentMenuClick = ::showCommentMenuDialog,
-    ).apply {
-        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (highlightCommentId == INVALID_COMMENT_ID || viewModel.isAlreadyFirstFetched || itemCount == 0) return
-                val position =
-                    viewModel.comments.value.comments.indexOfFirst { it.comment.id == highlightCommentId }
-                binding.rvChildcommentsChildcomments.scrollToPosition(position)
-
-                viewModel.highlight(highlightCommentId)
-                viewModel.isAlreadyFirstFetched = true
-            }
-        })
-    }
+    )
 
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
@@ -183,8 +171,24 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun observeComments() {
         viewModel.comments.observe(this) {
-            commentsAdapter.submitList(it.comments)
+            commentsAdapter.submitList(it.comments) { scrollToIfFirstFetch(it) }
         }
+    }
+
+    private fun scrollToIfFirstFetch(childCommentUiState: ChildCommentsUiState) {
+        fun canScroll(): Boolean =
+            !viewModel.isAlreadyFirstFetched && childCommentUiState.comments.isNotEmpty()
+
+        if (highlightCommentId == INVALID_COMMENT_ID || !canScroll()) return
+        val position =
+            viewModel.comments.value.comments
+                .indexOfFirst { commentUiState ->
+                    commentUiState.comment.id == highlightCommentId
+                }
+        binding.rvChildcommentsChildcomments.scrollToPosition(position)
+
+        viewModel.highlight(highlightCommentId)
+        viewModel.isAlreadyFirstFetched = true
     }
 
     private fun observeUiEvent() {
