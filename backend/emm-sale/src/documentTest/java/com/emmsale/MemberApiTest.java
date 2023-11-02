@@ -21,7 +21,6 @@ import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
-import com.emmsale.member.application.dto.MemberActivityResponses;
 import com.emmsale.member.application.dto.MemberImageResponse;
 import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.application.dto.OpenProfileUrlRequest;
@@ -95,9 +94,9 @@ class MemberApiTest extends MockMvcTestHelper {
     final List<Long> activityIds = List.of(4L, 5L, 6L);
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
-    final List<MemberActivityResponses> memberActivityResponses = createMemberActivityResponses();
+    final List<MemberActivityResponse> memberActivityResponses = createMemberActivityResponses();
 
-    when(memberActivityService.addActivity(any(), any()))
+    when(memberActivityCommandService.addActivity(any(), any()))
         .thenReturn(memberActivityResponses);
 
     //when & then
@@ -111,26 +110,14 @@ class MemberApiTest extends MockMvcTestHelper {
             MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
-  private List<MemberActivityResponses> createMemberActivityResponses() {
+  private List<MemberActivityResponse> createMemberActivityResponses() {
     return List.of(
-        new MemberActivityResponses("동아리",
-            List.of(
-                new MemberActivityResponse(1L, "YAPP"),
-                new MemberActivityResponse(2L, "DND"),
-                new MemberActivityResponse(3L, "nexters")
-            )),
-        new MemberActivityResponses("컨퍼런스",
-            List.of(
-                new MemberActivityResponse(4L, "인프콘")
-            )),
-        new MemberActivityResponses("교육",
-            List.of(
-                new MemberActivityResponse(5L, "우아한테크코스")
-            )),
-        new MemberActivityResponses("직무",
-            List.of(
-                new MemberActivityResponse(6L, "Backend")
-            ))
+        new MemberActivityResponse(1L, "YAPP", "동아리"),
+        new MemberActivityResponse(2L, "DND", "동아리"),
+        new MemberActivityResponse(3L, "nexters", "동아리"),
+        new MemberActivityResponse(4L, "인프콘", "컨퍼런스"),
+        new MemberActivityResponse(5L, "우아한테크코스", "교육"),
+        new MemberActivityResponse(6L, "Backend", "직무")
     );
   }
 
@@ -140,14 +127,11 @@ class MemberApiTest extends MockMvcTestHelper {
     //given
     final String activityIds = "1,2";
 
-    final List<MemberActivityResponses> memberActivityResponses = List.of(
-        new MemberActivityResponses("동아리",
-            List.of(
-                new MemberActivityResponse(3L, "nexters")
-            ))
+    final List<MemberActivityResponse> memberActivityResponses = List.of(
+        new MemberActivityResponse(3L, "nexters", "동아리")
     );
 
-    when(memberActivityService.deleteActivity(any(), any()))
+    when(memberActivityCommandService.deleteActivity(any(), any()))
         .thenReturn(memberActivityResponses);
 
     //when & then
@@ -164,10 +148,10 @@ class MemberApiTest extends MockMvcTestHelper {
   @DisplayName("내 활동들을 조회할 수 있다.")
   void test_findActivity() throws Exception {
     //given
-    final List<MemberActivityResponses> memberActivityResponse = createMemberActivityResponses();
+    final List<MemberActivityResponse> memberActivityResponse = createMemberActivityResponses();
 
     //when
-    when(memberActivityService.findActivities(any()))
+    when(memberActivityQueryService.findActivities(any()))
         .thenReturn(memberActivityResponse);
 
     //then
@@ -233,7 +217,6 @@ class MemberApiTest extends MockMvcTestHelper {
         "김길동",
         "안녕하세요, 김길동입니다.",
         "https://image",
-        "https://open.profile.url",
         "https://github.com/amaran-th"
     );
     when(memberQueryService.findProfile(any()))
