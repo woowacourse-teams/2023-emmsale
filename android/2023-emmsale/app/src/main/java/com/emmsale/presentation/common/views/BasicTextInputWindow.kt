@@ -31,12 +31,7 @@ class BasicTextInputWindow @JvmOverloads constructor(
 
     init {
         applyStyledAttributes(attrs)
-        setPadding(
-            BASIC_TEXT_INPUT_WINDOW_HORIZONTAL_PADDING,
-            BASIC_TEXT_INPUT_WINDOW_VERTICAL_PADDING,
-            BASIC_TEXT_INPUT_WINDOW_HORIZONTAL_PADDING,
-            BASIC_TEXT_INPUT_WINDOW_VERTICAL_PADDING,
-        )
+        setPadding(17.dp, 8.dp, 17.dp, 8.dp)
         isClickable = true
         addView(binding.root)
     }
@@ -61,15 +56,10 @@ class BasicTextInputWindow @JvmOverloads constructor(
     fun interface OnSubmitListener {
         fun onSubmit(text: String)
     }
-
-    companion object {
-        private val BASIC_TEXT_INPUT_WINDOW_HORIZONTAL_PADDING = 17.dp
-        private val BASIC_TEXT_INPUT_WINDOW_VERTICAL_PADDING = 8.dp
-    }
 }
 
 @BindingAdapter("app:onSubmit")
-fun BasicTextInputWindow.setOnSubmitListenerBA(onSubmitListener: OnSubmitListener) {
+fun BasicTextInputWindow.setOnSubmitListener(onSubmitListener: OnSubmitListener) {
     this.onSubmitListener = onSubmitListener
 }
 
