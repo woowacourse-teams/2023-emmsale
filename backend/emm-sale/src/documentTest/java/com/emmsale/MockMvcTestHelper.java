@@ -16,9 +16,10 @@ import com.emmsale.feed.application.FeedCommandService;
 import com.emmsale.feed.application.FeedQueryService;
 import com.emmsale.login.application.LoginService;
 import com.emmsale.member.application.InterestTagService;
-import com.emmsale.member.application.MemberActivityService;
+import com.emmsale.member.application.MemberActivityCommandService;
+import com.emmsale.member.application.MemberActivityQueryService;
+import com.emmsale.member.application.MemberCommandService;
 import com.emmsale.member.application.MemberQueryService;
-import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.message_room.application.MessageCommandService;
 import com.emmsale.message_room.application.RoomQueryService;
 import com.emmsale.notification.application.FcmTokenRegisterService;
@@ -67,9 +68,11 @@ abstract class MockMvcTestHelper {
   @MockBean
   protected FcmTokenRegisterService fcmTokenRegisterService;
   @MockBean
-  protected MemberActivityService memberActivityService;
+  protected MemberActivityQueryService memberActivityQueryService;
   @MockBean
-  protected MemberUpdateService memberUpdateService;
+  protected MemberActivityCommandService memberActivityCommandService;
+  @MockBean
+  protected MemberCommandService memberCommandService;
   @MockBean
   protected MemberQueryService memberQueryService;
   @MockBean

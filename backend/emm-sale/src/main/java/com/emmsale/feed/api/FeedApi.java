@@ -34,8 +34,10 @@ public class FeedApi {
   private final FeedCommandService feedCommandService;
 
   @GetMapping
-  public FeedListResponse findAllFeeds(final Member member,
-      @RequestParam("event-id") final Long eventId) {
+  public FeedListResponse findAllFeeds(
+      final Member member,
+      @RequestParam("event-id") final Long eventId
+  ) {
     return feedQueryService.findAllFeeds(member, eventId);
   }
 

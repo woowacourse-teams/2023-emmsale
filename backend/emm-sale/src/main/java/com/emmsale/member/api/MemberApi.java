@@ -1,18 +1,17 @@
 package com.emmsale.member.api;
 
-import com.emmsale.member.application.MemberActivityService;
+import com.emmsale.member.application.MemberActivityCommandService;
+import com.emmsale.member.application.MemberActivityQueryService;
+import com.emmsale.member.application.MemberCommandService;
 import com.emmsale.member.application.MemberQueryService;
-import com.emmsale.member.application.MemberUpdateService;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
-import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberImageResponse;
 import com.emmsale.member.application.dto.MemberProfileResponse;
-import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
 import java.util.List;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class MemberApi {
 
-  private final MemberActivityService memberActivityService;
-  private final MemberUpdateService memberUpdateService;
+  private final MemberActivityQueryService memberActivityQueryService;
+  private final MemberActivityCommandService memberActivityCommandService;
+  private final MemberCommandService memberCommandService;
   private final MemberQueryService memberQueryService;
 
   @PostMapping("/members")
@@ -41,39 +41,30 @@ public class MemberApi {
       final Member member,
       @RequestBody final MemberActivityInitialRequest memberActivityInitialRequest
   ) {
-    memberActivityService.registerActivities(member, memberActivityInitialRequest);
+    memberActivityCommandService.registerActivities(member, memberActivityInitialRequest);
     return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> addActivity(
+  public ResponseEntity<List<MemberActivityResponse>> addActivity(
       final Member member,
       @RequestBody final MemberActivityAddRequest memberActivityAddRequest
   ) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(memberActivityService.addActivity(member, memberActivityAddRequest));
+        .body(memberActivityCommandService.addActivity(member, memberActivityAddRequest));
   }
 
   @DeleteMapping("/members/activities")
-  public ResponseEntity<List<MemberActivityResponses>> deleteActivity(final Member member,
+  public ResponseEntity<List<MemberActivityResponse>> deleteActivity(final Member member,
       @RequestParam("activity-ids") final List<Long> deleteActivityIds) {
     return ResponseEntity.ok(
-        memberActivityService.deleteActivity(member, deleteActivityIds));
+        memberActivityCommandService.deleteActivity(member, deleteActivityIds));
   }
 
   @GetMapping("/members/{member-id}/activities")
-  public ResponseEntity<List<MemberActivityResponses>> findActivity(
+  public ResponseEntity<List<MemberActivityResponse>> findActivity(
       @PathVariable("member-id") final Long memberId) {
-    return ResponseEntity.ok(memberActivityService.findActivities(memberId));
-  }
-
-  @PutMapping("/members/open-profile-url")
-  public ResponseEntity<Void> updateOpenProfileUrl(
-      final Member member,
-      @RequestBody @Valid final OpenProfileUrlRequest openProfileUrlRequest
-  ) {
-    memberUpdateService.updateOpenProfileUrl(member, openProfileUrlRequest);
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(memberActivityQueryService.findActivities(memberId));
   }
 
   @PutMapping("/members/description")
@@ -81,7 +72,7 @@ public class MemberApi {
       final Member member,
       @RequestBody final DescriptionRequest descriptionRequest
   ) {
-    memberUpdateService.updateDescription(member, descriptionRequest);
+    memberCommandService.updateDescription(member, descriptionRequest);
     return ResponseEntity.noContent().build();
   }
 
@@ -96,7 +87,7 @@ public class MemberApi {
       @PathVariable final Long memberId,
       final Member member
   ) {
-    memberUpdateService.deleteMember(member, memberId);
+    memberCommandService.deleteMember(member, memberId);
     return ResponseEntity.noContent().build();
   }
 
@@ -107,7 +98,7 @@ public class MemberApi {
       final Member member
   ) {
     final MemberImageResponse memberImageResponse
-        = memberUpdateService.updateMemberProfile(image, memberId, member);
+        = memberCommandService.updateMemberProfile(image, memberId, member);
     return ResponseEntity.ok(memberImageResponse);
   }
 }

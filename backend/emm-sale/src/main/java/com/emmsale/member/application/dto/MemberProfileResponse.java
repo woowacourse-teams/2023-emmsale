@@ -14,16 +14,14 @@ public class MemberProfileResponse {
   private final String name;
   private final String description;
   private final String imageUrl;
-  private final String openProfileUrl;
   private final String githubUrl;
 
-  public static MemberProfileResponse from(Member member) {
+  public static MemberProfileResponse from(final Member member) {
     return new MemberProfileResponse(
         member.getId(),
         member.getName(),
         member.getDescription(),
         member.getImageUrl(),
-        member.getOptionalOpenProfileUrl().orElse(""),
         GITHUB_URL_PREFIX + member.getGithubUsername()
     );
   }

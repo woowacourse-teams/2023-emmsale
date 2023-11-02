@@ -21,10 +21,8 @@ import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
-import com.emmsale.member.application.dto.MemberActivityResponses;
 import com.emmsale.member.application.dto.MemberImageResponse;
 import com.emmsale.member.application.dto.MemberProfileResponse;
-import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
 import java.io.IOException;
 import java.util.List;
@@ -46,17 +44,14 @@ class MemberApiTest extends MockMvcTestHelper {
 
   private static final ResponseFieldsSnippet MEMBER_ACTIVITY_RESPONSE_FIELDS = responseFields(
       fieldWithPath("[].activityType").type(JsonFieldType.STRING).description("activity 분류"),
-      fieldWithPath("[].memberActivityResponses[].id").type(JsonFieldType.NUMBER)
-          .description("activity id"),
-      fieldWithPath("[].memberActivityResponses[].name").type(JsonFieldType.STRING)
-          .description("activity 이름")
+      fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("activity id"),
+      fieldWithPath("[].name").type(JsonFieldType.STRING).description("activity 이름")
   );
   private static final ResponseFieldsSnippet MEMBER_PROFILE_RESPONSE_FIELDS = responseFields(
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
       fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
       fieldWithPath("description").type(JsonFieldType.STRING).description("사용자 한 줄 자기소개"),
       fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url"),
-      fieldWithPath("openProfileUrl").type(JsonFieldType.STRING).description("오픈 프로필 url"),
       fieldWithPath("githubUrl").type(JsonFieldType.STRING).description("깃허브 URL")
   );
   private static final RequestFieldsSnippet MEMBER_ACTIVITY_REQUEST_FIELDS = requestFields(
@@ -95,9 +90,9 @@ class MemberApiTest extends MockMvcTestHelper {
     final List<Long> activityIds = List.of(4L, 5L, 6L);
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
-    final List<MemberActivityResponses> memberActivityResponses = createMemberActivityResponses();
+    final List<MemberActivityResponse> memberActivityResponses = createMemberActivityResponses();
 
-    when(memberActivityService.addActivity(any(), any()))
+    when(memberActivityCommandService.addActivity(any(), any()))
         .thenReturn(memberActivityResponses);
 
     //when & then
@@ -111,26 +106,14 @@ class MemberApiTest extends MockMvcTestHelper {
             MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
-  private List<MemberActivityResponses> createMemberActivityResponses() {
+  private List<MemberActivityResponse> createMemberActivityResponses() {
     return List.of(
-        new MemberActivityResponses("동아리",
-            List.of(
-                new MemberActivityResponse(1L, "YAPP"),
-                new MemberActivityResponse(2L, "DND"),
-                new MemberActivityResponse(3L, "nexters")
-            )),
-        new MemberActivityResponses("컨퍼런스",
-            List.of(
-                new MemberActivityResponse(4L, "인프콘")
-            )),
-        new MemberActivityResponses("교육",
-            List.of(
-                new MemberActivityResponse(5L, "우아한테크코스")
-            )),
-        new MemberActivityResponses("직무",
-            List.of(
-                new MemberActivityResponse(6L, "Backend")
-            ))
+        new MemberActivityResponse(1L, "YAPP", "동아리"),
+        new MemberActivityResponse(2L, "DND", "동아리"),
+        new MemberActivityResponse(3L, "nexters", "동아리"),
+        new MemberActivityResponse(4L, "인프콘", "컨퍼런스"),
+        new MemberActivityResponse(5L, "우아한테크코스", "교육"),
+        new MemberActivityResponse(6L, "Backend", "직무")
     );
   }
 
@@ -140,14 +123,11 @@ class MemberApiTest extends MockMvcTestHelper {
     //given
     final String activityIds = "1,2";
 
-    final List<MemberActivityResponses> memberActivityResponses = List.of(
-        new MemberActivityResponses("동아리",
-            List.of(
-                new MemberActivityResponse(3L, "nexters")
-            ))
+    final List<MemberActivityResponse> memberActivityResponses = List.of(
+        new MemberActivityResponse(3L, "nexters", "동아리")
     );
 
-    when(memberActivityService.deleteActivity(any(), any()))
+    when(memberActivityCommandService.deleteActivity(any(), any()))
         .thenReturn(memberActivityResponses);
 
     //when & then
@@ -164,10 +144,10 @@ class MemberApiTest extends MockMvcTestHelper {
   @DisplayName("내 활동들을 조회할 수 있다.")
   void test_findActivity() throws Exception {
     //given
-    final List<MemberActivityResponses> memberActivityResponse = createMemberActivityResponses();
+    final List<MemberActivityResponse> memberActivityResponse = createMemberActivityResponses();
 
     //when
-    when(memberActivityService.findActivities(any()))
+    when(memberActivityQueryService.findActivities(any()))
         .thenReturn(memberActivityResponse);
 
     //then
@@ -176,29 +156,6 @@ class MemberApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-activity", MEMBER_ACTIVITY_RESPONSE_FIELDS));
-  }
-
-  @Test
-  @DisplayName("사용자의 openProfileUrl을 성공적으로 업데이트하면, 200 OK가 반환된다.")
-  void test_updateOpenProfileUrl() throws Exception {
-    // given
-    final String openProfileUrl = "https://open.kakao.com/o/openprofileurl";
-    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(openProfileUrl);
-
-    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
-        fieldWithPath("openProfileUrl").description("오픈 채팅 url")
-    );
-
-    // when
-    final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
-        .header(HttpHeaders.AUTHORIZATION, FAKE_BEARER_ACCESS_TOKEN)
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(request)));
-
-    // then
-    result.andExpect(status().isNoContent())
-        .andDo(print())
-        .andDo(document("update-open-profile-url", REQUEST_FIELDS));
   }
 
   @Test
@@ -233,7 +190,6 @@ class MemberApiTest extends MockMvcTestHelper {
         "김길동",
         "안녕하세요, 김길동입니다.",
         "https://image",
-        "https://open.profile.url",
         "https://github.com/amaran-th"
     );
     when(memberQueryService.findProfile(any()))
@@ -252,7 +208,7 @@ class MemberApiTest extends MockMvcTestHelper {
   void deleteMemberTest() throws Exception {
     //given
     final long memberId = 1L;
-    doNothing().when(memberUpdateService).deleteMember(any(), anyLong());
+    doNothing().when(memberCommandService).deleteMember(any(), anyLong());
     final String accessToken = "access_token";
 
     //when
@@ -272,7 +228,7 @@ class MemberApiTest extends MockMvcTestHelper {
     final String accessToken = "access_token";
     final MockMultipartHttpServletRequestBuilder builder = createUpdateProfileBuilder(memberId);
 
-    when(memberUpdateService.updateMemberProfile
+    when(memberCommandService.updateMemberProfile
         (any(MultipartFile.class), anyLong(), any(Member.class)))
         .thenReturn(memberImageResponse);
 

@@ -17,7 +17,6 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -61,7 +60,7 @@ public class Event extends BaseEntity {
   @Column(nullable = false)
   private String organization;
 
-  @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
   private List<EventTag> tags = new ArrayList<>();
 
   @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)

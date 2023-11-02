@@ -10,7 +10,6 @@ import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
-import com.emmsale.member.application.dto.MemberActivityResponses;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
@@ -21,10 +20,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class MemberActivityQueryServiceTest extends ServiceIntegrationTestHelper {
+class MemberActivityCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
-  private MemberActivityService memberActivityService;
+  private MemberActivityCommandService memberActivityCommandService;
 
   @Autowired
   private MemberRepository memberRepository;
@@ -44,7 +43,8 @@ class MemberActivityQueryServiceTest extends ServiceIntegrationTestHelper {
 
     //when & then
     assertAll(
-        () -> assertDoesNotThrow(() -> memberActivityService.registerActivities(member, request)),
+        () -> assertDoesNotThrow(
+            () -> memberActivityCommandService.registerActivities(member, request)),
         () -> assertEquals(updateName, member.getName())
     );
   }
@@ -63,8 +63,8 @@ class MemberActivityQueryServiceTest extends ServiceIntegrationTestHelper {
         activityIds);
 
     // when
-    memberActivityService.registerActivities(member, request);
-    final ThrowingCallable actual = () -> memberActivityService.registerActivities(member,
+    memberActivityCommandService.registerActivities(member, request);
+    final ThrowingCallable actual = () -> memberActivityCommandService.registerActivities(member,
         request);
 
     // then
@@ -76,7 +76,7 @@ class MemberActivityQueryServiceTest extends ServiceIntegrationTestHelper {
 
   @Test
   @DisplayName("Activity의 id를 통해서, 사용자의 Activity에 추가할 수 있다.")
-  void addActivity() throws Exception {
+  void addActivity() {
     //given
     final List<Long> activityIds = List.of(4L, 5L, 6L);
     final long savedMemberId = 1L;
@@ -84,29 +84,18 @@ class MemberActivityQueryServiceTest extends ServiceIntegrationTestHelper {
     final Member member = memberRepository.findById(savedMemberId).get();
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
-    final List<MemberActivityResponses> expected = List.of(
-        new MemberActivityResponses("동아리",
-            List.of(
-                new MemberActivityResponse(1L, "YAPP"),
-                new MemberActivityResponse(2L, "DND"),
-                new MemberActivityResponse(3L, "nexters")
-            )),
-        new MemberActivityResponses("컨퍼런스",
-            List.of(
-                new MemberActivityResponse(4L, "인프콘")
-            )),
-        new MemberActivityResponses("교육",
-            List.of(
-                new MemberActivityResponse(5L, "우아한테크코스")
-            )),
-        new MemberActivityResponses("직무",
-            List.of(
-                new MemberActivityResponse(6L, "Backend")
-            ))
+    final List<MemberActivityResponse> expected = List.of(
+        new MemberActivityResponse(1L, "YAPP", "동아리"),
+        new MemberActivityResponse(2L, "DND", "동아리"),
+        new MemberActivityResponse(3L, "nexters", "동아리"),
+        new MemberActivityResponse(5L, "인프콘", "컨퍼런스"),
+        new MemberActivityResponse(6L, "우아한테크코스", "교육"),
+        new MemberActivityResponse(7L, "Backend", "직무")
     );
 
     //when
-    final List<MemberActivityResponses> actual = memberActivityService.addActivity(member, request);
+    final List<MemberActivityResponse> actual = memberActivityCommandService.addActivity(member,
+        request);
     //then
     assertThat(expected)
         .usingRecursiveComparison()
@@ -123,7 +112,7 @@ class MemberActivityQueryServiceTest extends ServiceIntegrationTestHelper {
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
     //when & then
-    assertThatThrownBy(() -> memberActivityService.addActivity(savedMember, request))
+    assertThatThrownBy(() -> memberActivityCommandService.addActivity(savedMember, request))
         .isInstanceOf(MemberException.class)
         .hasMessage(MemberExceptionType.INVALID_ACTIVITY_IDS.errorMessage());
   }
@@ -137,7 +126,7 @@ class MemberActivityQueryServiceTest extends ServiceIntegrationTestHelper {
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
     // when, then
-    assertThatThrownBy(() -> memberActivityService.addActivity(savedMember, request))
+    assertThatThrownBy(() -> memberActivityCommandService.addActivity(savedMember, request))
         .isInstanceOf(MemberException.class)
         .hasMessage(MemberExceptionType.ALREADY_EXIST_ACTIVITY.errorMessage());
   }
@@ -151,7 +140,7 @@ class MemberActivityQueryServiceTest extends ServiceIntegrationTestHelper {
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
     // when, then
-    assertThatThrownBy(() -> memberActivityService.addActivity(savedMember, request))
+    assertThatThrownBy(() -> memberActivityCommandService.addActivity(savedMember, request))
         .isInstanceOf(MemberException.class)
         .hasMessage(MemberExceptionType.DUPLICATE_ACTIVITY.errorMessage());
   }
@@ -165,15 +154,12 @@ class MemberActivityQueryServiceTest extends ServiceIntegrationTestHelper {
 
     final Member member = memberRepository.findById(savedMemberId).get();
 
-    final List<MemberActivityResponses> expected = List.of(
-        new MemberActivityResponses("동아리",
-            List.of(
-                new MemberActivityResponse(3L, "nexters")
-            ))
+    final List<MemberActivityResponse> expected = List.of(
+        new MemberActivityResponse(3L, "nexters", "동아리")
     );
 
     //when
-    final List<MemberActivityResponses> actual = memberActivityService.deleteActivity(member,
+    final List<MemberActivityResponse> actual = memberActivityCommandService.deleteActivity(member,
         deleteActivityIds);
 
     //then
