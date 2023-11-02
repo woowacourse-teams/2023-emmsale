@@ -89,10 +89,17 @@ public class EventCommandService {
     if (tags == null || tags.isEmpty()) {
       return new ArrayList<>();
     }
-
-    return tags.stream()
-        .map(tag -> tagRepository.findByName(tag.getName())
-            .orElseThrow(() -> new EventException(EventExceptionType.NOT_FOUND_TAG)))
+    final List<String> tagNames = tags.stream()
+        .map(TagRequest::getName)
         .collect(toList());
+    final List<Tag> result = tagRepository.findByNameIn(tagNames);
+    validateAllTagsExist(tags, result);
+    return result;
+  }
+
+  private void validateAllTagsExist(final List<TagRequest> tags, final List<Tag> result) {
+    if (tags.size() != result.size()) {
+      throw new EventException(EventExceptionType.NOT_FOUND_TAG);
+    }
   }
 }
