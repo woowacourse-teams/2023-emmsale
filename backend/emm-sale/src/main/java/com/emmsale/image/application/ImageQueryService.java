@@ -27,7 +27,7 @@ public class ImageQueryService {
             imageType, eventIds)
         .stream()
         .collect(groupingBy(Image::getContentId));
-    Map<Long, AllImagesOfContent> result = new HashMap<>();
+    final Map<Long, AllImagesOfContent> result = new HashMap<>();
     eventIds.forEach(key ->
         result.put(key,
             new AllImagesOfContent(imagesPerEventId.getOrDefault(key, new ArrayList<>())))
