@@ -76,7 +76,7 @@ class MemberActivityCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Test
   @DisplayName("Activity의 id를 통해서, 사용자의 Activity에 추가할 수 있다.")
-  void addActivity() throws Exception {
+  void addActivity() {
     //given
     final List<Long> activityIds = List.of(4L, 5L, 6L);
     final long savedMemberId = 1L;
@@ -88,9 +88,9 @@ class MemberActivityCommandServiceTest extends ServiceIntegrationTestHelper {
         new MemberActivityResponse(1L, "YAPP", "동아리"),
         new MemberActivityResponse(2L, "DND", "동아리"),
         new MemberActivityResponse(3L, "nexters", "동아리"),
-        new MemberActivityResponse(4L, "인프콘", "컨퍼런스"),
-        new MemberActivityResponse(5L, "우아한테크코스", "교육"),
-        new MemberActivityResponse(6L, "Backend", "직무")
+        new MemberActivityResponse(5L, "인프콘", "컨퍼런스"),
+        new MemberActivityResponse(6L, "우아한테크코스", "교육"),
+        new MemberActivityResponse(7L, "Backend", "직무")
     );
 
     //when
