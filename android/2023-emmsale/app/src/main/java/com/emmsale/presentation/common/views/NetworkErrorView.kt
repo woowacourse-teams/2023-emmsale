@@ -9,15 +9,18 @@ import androidx.databinding.BindingAdapter
 import com.emmsale.R
 import com.emmsale.databinding.LayoutNetworkErrorBinding
 import com.emmsale.presentation.common.views.NetworkErrorView.OnRefreshListener
-import kotlin.properties.Delegates
+import kotlin.properties.Delegates.observable
 
-class NetworkErrorView : ConstraintLayout {
+class NetworkErrorView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+) : ConstraintLayout(context, attrs) {
 
     private val binding: LayoutNetworkErrorBinding by lazy {
         LayoutNetworkErrorBinding.inflate(LayoutInflater.from(context), this, false)
     }
 
-    var onRefreshListener: OnRefreshListener by Delegates.observable(OnRefreshListener { }) { _, _, newValue ->
+    var onRefreshListener: OnRefreshListener by observable(OnRefreshListener { }) { _, _, newValue ->
         binding.onRefreshListener = newValue
     }
 
@@ -26,10 +29,6 @@ class NetworkErrorView : ConstraintLayout {
         background = context.getColor(R.color.white).toDrawable()
         isClickable = true
     }
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     fun interface OnRefreshListener {
         fun onRefresh()
