@@ -79,8 +79,7 @@ class ChildCommentViewModel @Inject constructor(
 
             is Success -> _comments.value = ChildCommentsUiState.create(uid, result.data)
             is Unexpected ->
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(result.error.toString())
+                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
         }
         _screenUiState.value = ScreenUiState.NONE
     }
@@ -99,8 +98,7 @@ class ChildCommentViewModel @Inject constructor(
             }
 
             is Unexpected ->
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(result.error.toString())
+                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
         }
         loadingJob.cancel()
         _screenUiState.value = ScreenUiState.NONE
@@ -121,8 +119,7 @@ class ChildCommentViewModel @Inject constructor(
             }
 
             is Unexpected ->
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(result.error.toString())
+                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
         }
         loadingJob.cancel()
         _screenUiState.value = ScreenUiState.NONE
@@ -138,8 +135,7 @@ class ChildCommentViewModel @Inject constructor(
             NetworkError -> _commonUiEvent.value = CommonUiEvent.RequestFailByNetworkError
             is Success -> refresh().join()
             is Unexpected ->
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(result.error.toString())
+                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
         }
         loadingJob.cancel()
         _screenUiState.value = ScreenUiState.NONE
@@ -184,8 +180,7 @@ class ChildCommentViewModel @Inject constructor(
 
             is Success -> _comments.value = ChildCommentsUiState.create(uid, result.data)
             is Unexpected ->
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(result.error.toString())
+                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
         }
         _screenUiState.value = ScreenUiState.NONE
     }
