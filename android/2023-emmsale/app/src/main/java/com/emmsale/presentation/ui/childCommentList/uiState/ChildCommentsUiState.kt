@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.childCommentList.uiState
 import com.emmsale.data.model.Comment
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
-data class ChildCommentsUiState(val comments: List<CommentUiState>) {
+data class ChildCommentsUiState(val comments: List<CommentUiState> = emptyList()) {
 
     fun highlight(commentId: Long) = copy(
         comments = comments.map { if (it.comment.id == commentId) it.highlight() else it },
@@ -14,10 +14,6 @@ data class ChildCommentsUiState(val comments: List<CommentUiState>) {
     )
 
     companion object {
-        val Loading: ChildCommentsUiState = ChildCommentsUiState(
-            comments = emptyList(),
-        )
-
         fun create(
             uid: Long,
             parentComment: Comment,

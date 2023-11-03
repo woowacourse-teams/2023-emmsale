@@ -45,7 +45,7 @@ class ChildCommentViewModel @Inject constructor(
     private val _screenUiState = NotNullMutableLiveData(ScreenUiState.LOADING)
     val screenUiState: NotNullLiveData<ScreenUiState> = _screenUiState
 
-    private val _comments = NotNullMutableLiveData(ChildCommentsUiState.Loading)
+    private val _comments = NotNullMutableLiveData(ChildCommentsUiState())
     val comments: NotNullLiveData<ChildCommentsUiState> = _comments
 
     private val _editingCommentId = MutableLiveData<Long?>()
