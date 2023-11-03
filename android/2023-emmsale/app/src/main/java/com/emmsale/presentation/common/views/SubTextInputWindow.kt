@@ -10,7 +10,6 @@ import androidx.databinding.BindingAdapter
 import com.emmsale.R
 import com.emmsale.databinding.LayoutSubTextInputWindowBinding
 import com.emmsale.presentation.common.extension.dp
-import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.views.SubTextInputWindow.OnCancelListener
 import com.emmsale.presentation.common.views.SubTextInputWindow.OnSubmitListener
 import kotlin.properties.Delegates.observable
@@ -63,7 +62,6 @@ class SubTextInputWindow @JvmOverloads constructor(
 
     fun requestFocusOnEditText() {
         binding.etSubTextInput.requestFocus()
-        binding.etSubTextInput.showKeyboard()
     }
 
     fun interface OnSubmitListener {
