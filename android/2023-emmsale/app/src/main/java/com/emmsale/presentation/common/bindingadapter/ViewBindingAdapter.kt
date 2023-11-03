@@ -34,4 +34,8 @@ private fun validateMarginFormat(margin: String) {
     }
 }
 
-private fun String.toDimen(): Int = removeSuffix(DP_UNIT).toInt().dp
+private fun String.toDimen(): Int = if (endsWith(DP_UNIT)) {
+    removeSuffix(DP_UNIT).toInt().dp
+} else {
+    toInt()
+}
