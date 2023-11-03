@@ -25,7 +25,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutMarginTop="@{message.shownProfile ? @dimen/other_message_with_profile_layout_top_margin : @dimen/other_message_without_profile_layout_top_margin}">
+        app:layout_marginTop="@{message.shownProfile ? @dimen/other_message_with_profile_layout_top_margin : @dimen/other_message_without_profile_layout_top_margin}">
 
         <ImageView
             android:id="@+id/iv_member_profile"
@@ -65,7 +65,7 @@
             android:text="@{message.message}"
             android:textColor="@color/other_message_text_color"
             android:textSize="12sp"
-            app:layoutMarginTop="@{message.shownProfile ? @dimen/other_message_with_profile_top_margin : @dimen/other_message_without_profile_top_margin}"
+            app:layout_marginTop="@{message.shownProfile ? @dimen/other_message_with_profile_top_margin : @dimen/other_message_without_profile_top_margin}"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_chat_time"

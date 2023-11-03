@@ -13,7 +13,7 @@ fun View.setVisible(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE
 }
 
-@BindingAdapter("app:layoutMarginTop")
+@BindingAdapter("app:layout_marginTop")
 fun View.setLayoutMarginTop(dimen: Float) {
     updateLayoutParams<ViewGroup.MarginLayoutParams> {
         topMargin = dimen.toInt()

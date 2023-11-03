@@ -41,7 +41,7 @@
             android:text="@{message.message}"
             android:textColor="@color/my_message_text_color"
             android:textSize="12sp"
-            app:layoutMarginTop="@{message.first ? @dimen/my_first_message_top_margin : @dimen/my_not_fisrt_message_top_margin}"
+            app:layout_marginTop="@{message.first ? @dimen/my_first_message_top_margin : @dimen/my_not_fisrt_message_top_margin}"
             tools:text="행사 같이 가시는거 어떠세요?" />
 
     </LinearLayout>
