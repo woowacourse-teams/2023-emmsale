@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.ItemFeeddetailFeedDetailBinding
 import com.emmsale.presentation.common.extension.dp
-import com.emmsale.presentation.common.recyclerView.SpaceItemDecoration
+import com.emmsale.presentation.common.recyclerView.IntervalItemDecoration
 import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailImagesAdapter
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
 
@@ -21,7 +21,7 @@ class FeedDetailViewHolder(
         binding.rvFeeddetailFeedDetailImages.apply {
             adapter = imageUrlsAdapter
             itemAnimator = null
-            addItemDecoration(SpaceItemDecoration(width = IMAGE_INTERVAL))
+            addItemDecoration(IntervalItemDecoration(width = IMAGE_INTERVAL))
         }
     }
 
