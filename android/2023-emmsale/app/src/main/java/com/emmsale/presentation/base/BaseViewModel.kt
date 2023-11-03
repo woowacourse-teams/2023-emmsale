@@ -11,15 +11,18 @@ import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
 
-    private val _screenUiState = NotNullMutableLiveData(ScreenUiState.NONE)
+    protected val _screenUiState = NotNullMutableLiveData(ScreenUiState.NONE)
     val screenUiState: NotNullLiveData<ScreenUiState> = _screenUiState
 
-    private val _baseUiEvent = SingleLiveEvent<BaseUiEvent>()
+    protected val _baseUiEvent = SingleLiveEvent<BaseUiEvent>()
     val baseUiEvent: LiveData<BaseUiEvent> = _baseUiEvent
 
     protected fun changeToLoadingState() {
@@ -34,17 +37,24 @@ abstract class BaseViewModel : ViewModel() {
         _baseUiEvent.value = BaseUiEvent.RequestFailByNetworkError
     }
 
-    abstract fun refresh(): Job
+    protected suspend fun delayLoading(timeMillis: Long = LOADING_DELAY) {
+        delay(timeMillis)
+        changeToLoadingState()
+    }
 
-    protected fun <T : Any> requestToNetwork(
-        getResult: suspend () -> ApiResponse<T>,
+    fun refresh(): Job = refreshAsync()
+
+    protected abstract fun refreshAsync(): Deferred<ApiResponse<*>>
+
+    protected fun <T : Any> fetchData(
+        fetchData: suspend () -> ApiResponse<T>,
         onSuccess: ((T) -> Unit)? = null,
         onFailure: ((code: Int, message: String?) -> Unit)? = null,
         onLoading: (suspend () -> Unit)? = null,
         onNetworkError: (() -> Unit)? = null,
     ): Job = viewModelScope.launch {
         val loadingJob = launch { onLoading?.invoke() ?: changeToLoadingState() }
-        when (val result = getResult()) {
+        when (val result = fetchData()) {
             is Failure -> onFailure?.invoke(result.code, result.message)
             NetworkError -> {
                 onNetworkError?.invoke() ?: changeToNetworkErrorState()
@@ -58,26 +68,68 @@ abstract class BaseViewModel : ViewModel() {
         _screenUiState.value = ScreenUiState.NONE
     }
 
+    protected fun <T : Any> refreshDataAsync(
+        refresh: suspend () -> ApiResponse<T>,
+        onSuccess: ((T) -> Unit)? = null,
+        onFailure: ((code: Int, message: String?) -> Unit)? = null,
+    ): Deferred<ApiResponse<T>> = viewModelScope.async {
+        val result = refresh()
+        when (result) {
+            is Failure -> onFailure?.invoke(result.code, result.message)
+            NetworkError -> onRequestFailByNetworkError()
+            is Success -> onSuccess?.invoke(result.data)
+            is Unexpected -> _baseUiEvent.value = BaseUiEvent.Unexpected(result.error.toString())
+        }
+        _screenUiState.value = ScreenUiState.NONE
+        result
+    }
+
+    protected fun <T : Any> command(
+        command: suspend () -> ApiResponse<T>,
+        onSuccess: ((T) -> Unit)? = null,
+        onFailure: ((code: Int, message: String?) -> Unit)? = null,
+        onLoading: (suspend () -> Unit)? = null,
+    ): Job = viewModelScope.launch {
+        val loadingJob = launch { onLoading?.invoke() ?: delayLoading() }
+        when (val result = command()) {
+            is Failure -> onFailure?.invoke(result.code, result.message)
+            NetworkError -> onRequestFailByNetworkError()
+            is Success -> onSuccess?.invoke(result.data)
+            is Unexpected -> _baseUiEvent.value = BaseUiEvent.Unexpected(result.error.toString())
+        }
+        loadingJob.cancel()
+        _screenUiState.value = ScreenUiState.NONE
+    }
+
     protected fun <T : Any> commandAndRefresh(
         command: suspend () -> ApiResponse<T>,
         onSuccess: ((T) -> Unit)? = null,
         onFailure: ((code: Int, message: String?) -> Unit)? = null,
         onLoading: (suspend () -> Unit)? = null,
-        onNetworkError: (() -> Unit)? = null,
+        getRefreshResult: (() -> Deferred<ApiResponse<*>>)? = null,
     ): Job = viewModelScope.launch {
-        val loadingJob = launch { onLoading?.invoke() ?: changeToLoadingState() }
+        val loadingJob = launch { onLoading?.invoke() ?: delayLoading() }
         when (val result = command()) {
             is Failure -> onFailure?.invoke(result.code, result.message)
-            NetworkError -> onNetworkError?.invoke() ?: onRequestFailByNetworkError()
+            NetworkError -> onRequestFailByNetworkError()
             is Success -> {
-                refresh().join()
-                onSuccess?.invoke(result.data)
+                when (val refreshResult = getRefreshResult?.invoke() ?: refreshAsync().await()) {
+                    is Failure -> onFailure?.invoke(refreshResult.code, refreshResult.message)
+                    NetworkError -> onRequestFailByNetworkError()
+                    is Success<*> -> onSuccess?.invoke(result.data)
+                    is Unexpected ->
+                        _baseUiEvent.value = BaseUiEvent.Unexpected(refreshResult.error.toString())
+                }
             }
 
             is Unexpected -> _baseUiEvent.value = BaseUiEvent.Unexpected(result.error.toString())
         }
         loadingJob.cancel()
         _screenUiState.value = ScreenUiState.NONE
+    }
+
+    companion object {
+        private const val LOADING_DELAY: Long = 1000
     }
 }
 

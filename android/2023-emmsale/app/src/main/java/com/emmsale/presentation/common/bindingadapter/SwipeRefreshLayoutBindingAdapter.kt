@@ -19,10 +19,10 @@ fun SwipeRefreshLayout.setOnRefresh(onRefresh: () -> Unit) {
 @BindingAdapter("app:onRefresh1")
 fun SwipeRefreshLayout.setOnRefresh1(onRefreshListener: OnRefreshListener) {
     setOnRefreshListener {
-        val job = onRefreshListener.onRefresh()
-        if (!job.isCancelled) {
+        val refreshJob = onRefreshListener.onRefresh()
+        if (!refreshJob.isCancelled) {
             CoroutineScope(Dispatchers.Main).launch {
-                job.join()
+                refreshJob.join()
                 isRefreshing = false
             }
         }
