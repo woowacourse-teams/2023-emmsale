@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
-import com.emmsale.presentation.base.BaseUiEvent
+import com.emmsale.presentation.common.CommonUiEvent
 import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
@@ -194,7 +194,7 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun observeUiEvent() {
         viewModel.uiEvent.observe(this) { handleUiEvent(it) }
-        viewModel.baseUiEvent.observe(this) { handleBaseUiEvent(it) }
+        viewModel.commonUiEvent.observe(this) { handleBaseUiEvent(it) }
     }
 
     private fun handleUiEvent(event: ChildCommentsUiEvent) {
@@ -236,10 +236,10 @@ class ChildCommentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleBaseUiEvent(event: BaseUiEvent) {
+    private fun handleBaseUiEvent(event: CommonUiEvent) {
         when (event) {
-            BaseUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_error_title))
-            is BaseUiEvent.Unexpected -> showToast(event.errorMessage)
+            CommonUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_check_message))
+            is CommonUiEvent.Unexpected -> showToast(event.errorMessage)
         }
     }
 

@@ -26,6 +26,7 @@
     <string name="all_report_duplicate_dialog_message">이미 신고하셨습니다.</string>
     <string name="all_network_error_icon_description">네트워크 에러 아이콘</string>
     <string name="all_fetch_fail_title">조회 실패</string>
+    <string name="all_network_check_message">네트워크 연결을 확인해주세요.</string>
     <string name="all_network_error_title">인터넷 연결이 불안정합니다.</string>
     <string name="all_network_error_message">인터넷 연결이 불안정하여\n데이터를 불러올 수 없습니다.</string>
     <string name="all_retry">재시도</string>

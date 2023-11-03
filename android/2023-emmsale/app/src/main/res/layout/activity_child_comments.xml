@@ -7,7 +7,7 @@
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.base.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <import type="kotlin.Unit" />
 
