@@ -3,9 +3,8 @@ package com.emmsale.presentation.common.bindingadapter
 import androidx.annotation.ColorInt
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 @BindingAdapter("app:onRefresh")
@@ -20,11 +19,11 @@ fun SwipeRefreshLayout.setOnRefresh(onRefresh: () -> Unit) {
 fun SwipeRefreshLayout.setOnRefresh1(onRefreshListener: OnRefreshListener) {
     setOnRefreshListener {
         val refreshJob = onRefreshListener.onRefresh()
-        if (!refreshJob.isCancelled) {
-            CoroutineScope(Dispatchers.Main).launch {
-                refreshJob.join()
-                isRefreshing = false
-            }
+        if (refreshJob.isCancelled) return@setOnRefreshListener
+
+        MainScope().launch {
+            refreshJob.join()
+            isRefreshing = false
         }
     }
 }
