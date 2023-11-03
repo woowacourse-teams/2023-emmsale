@@ -13,7 +13,7 @@ import com.emmsale.presentation.common.extension.dp
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.views.SubTextInputWindow.OnCancelListener
 import com.emmsale.presentation.common.views.SubTextInputWindow.OnSubmitListener
-import kotlin.properties.Delegates
+import kotlin.properties.Delegates.observable
 
 class SubTextInputWindow @JvmOverloads constructor(
     context: Context,
@@ -24,19 +24,19 @@ class SubTextInputWindow @JvmOverloads constructor(
         LayoutSubTextInputWindowBinding.inflate(LayoutInflater.from(context), this, false)
     }
 
-    var text: String by Delegates.observable("") { _, _, newValue ->
+    var text: String by observable("") { _, _, newValue ->
         binding.etSubTextInput.setText(newValue)
     }
 
-    var isSubmitEnabled: Boolean by Delegates.observable(false) { _, _, newValue ->
+    var isSubmitEnabled: Boolean by observable(false) { _, _, newValue ->
         binding.isSubmitEnabled = newValue
     }
 
-    var onSubmitListener: OnSubmitListener by Delegates.observable(OnSubmitListener { }) { _, _, newValue ->
+    var onSubmitListener: OnSubmitListener by observable(OnSubmitListener { }) { _, _, newValue ->
         binding.onSubmitListener = newValue
     }
 
-    var onCancelListener: OnCancelListener by Delegates.observable(OnCancelListener { }) { _, _, newValue ->
+    var onCancelListener: OnCancelListener by observable(OnCancelListener { }) { _, _, newValue ->
         binding.onCancelListener = newValue
     }
 

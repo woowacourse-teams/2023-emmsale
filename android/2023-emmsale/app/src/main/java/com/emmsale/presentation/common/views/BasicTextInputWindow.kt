@@ -10,7 +10,7 @@ import com.emmsale.R
 import com.emmsale.databinding.LayoutBasicInputWindowBinding
 import com.emmsale.presentation.common.extension.dp
 import com.emmsale.presentation.common.views.BasicTextInputWindow.OnSubmitListener
-import kotlin.properties.Delegates
+import kotlin.properties.Delegates.observable
 
 class BasicTextInputWindow @JvmOverloads constructor(
     context: Context,
@@ -21,11 +21,11 @@ class BasicTextInputWindow @JvmOverloads constructor(
         LayoutBasicInputWindowBinding.inflate(LayoutInflater.from(context), this, false)
     }
 
-    var isSubmitEnabled: Boolean by Delegates.observable(false) { _, _, newValue ->
+    var isSubmitEnabled: Boolean by observable(false) { _, _, newValue ->
         binding.isSubmitEnabled = newValue
     }
 
-    var onSubmitListener: OnSubmitListener by Delegates.observable(OnSubmitListener { }) { _, _, newValue ->
+    var onSubmitListener: OnSubmitListener by observable(OnSubmitListener { }) { _, _, newValue ->
         binding.onSubmitListener = newValue
     }
 
