@@ -13,20 +13,17 @@
         <item name="bottomSheetDialogTheme">
             @style/ThemeOverlay.MaterialComponents.BottomSheetDialog
         </item>
+        <item name="toolbarStyle">@style/PrimaryToolbarStyle</item>
+        <!-- actionMenu 관련 속성은 메인 테마에 적용해야 함. 툴바 스타일에 적용하면 적용되지 않음 -->
+        <item name="actionMenuTextAppearance">@style/PrimaryActionMenuTextAppearance</item>
+        <item name="actionMenuTextColor">@color/primary_color</item>
+
         <item name="IconTextButtonStyle">@style/IconTextButtonStyle</item>
         <item name="FilterTagStyle">@style/FilterTagStyle</item>
     </style>
 
     <style name="Theme.Emmsale.FullScreen" parent="Theme.Emmsale">
         <item name="android:windowFullscreen">true</item>
-    </style>
-
-    <style name="PostWritingToolbarStyle" parent="@style/Widget.Material3.Toolbar">
-        <item name="materialThemeOverlay">@style/ToolbarThemeOverlay</item>
-    </style>
-
-    <style name="ToolbarThemeOverlay" parent="">
-        <item name="actionMenuTextColor">@color/primary_color</item>
     </style>
 
 </resources>

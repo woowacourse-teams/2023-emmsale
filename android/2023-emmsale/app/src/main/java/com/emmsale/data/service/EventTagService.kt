@@ -2,7 +2,6 @@ package com.emmsale.data.service
 
 import com.emmsale.data.apiModel.request.InterestEventTagUpdateRequest
 import com.emmsale.data.apiModel.response.EventTagResponse
-import com.emmsale.data.apiModel.response.UpdatedMemberInterestEventTagResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -21,5 +20,5 @@ interface EventTagService {
     @PUT("/interest-tags")
     suspend fun updateInterestEventTags(
         @Body requestModel: InterestEventTagUpdateRequest,
-    ): ApiResponse<List<UpdatedMemberInterestEventTagResponse>>
+    ): ApiResponse<Unit>
 }

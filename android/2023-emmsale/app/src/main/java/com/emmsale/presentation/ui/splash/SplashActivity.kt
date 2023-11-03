@@ -34,9 +34,9 @@ class SplashActivity : ComponentActivity() {
     private val binding by lazy { ActivitySplashBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) setContentView(binding.root)
+        installSplashScreen()
         setupSplashObserver()
     }
 
