@@ -7,14 +7,14 @@ import com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder.CommentVie
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
 class CommentsAdapter(
-    private val onClick: (comment: Comment) -> Unit,
+    private val onCommentClick: (comment: Comment) -> Unit,
     private val onAuthorImageClick: (authorId: Long) -> Unit,
     private val onCommentMenuClick: (isWrittenByLoginUser: Boolean, commentId: Long) -> Unit,
 ) : ListAdapter<CommentUiState, CommentViewHolder>(CommentDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder =
         CommentViewHolder(
             parent = parent,
-            onClick = onClick,
+            onCommentClick = onCommentClick,
             onAuthorImageClick = onAuthorImageClick,
             onCommentMenuClick = onCommentMenuClick,
         )

@@ -43,7 +43,7 @@ class FeedDetailActivity : AppCompatActivity() {
 
     private val feedDetailAdapter: FeedDetailAdapter = FeedDetailAdapter(::showProfile)
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
-        onClick = { comment ->
+        onCommentClick = { comment ->
             ChildCommentActivity.startActivity(
                 context = this,
                 feedId = comment.feedId,

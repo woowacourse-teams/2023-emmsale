@@ -26,7 +26,7 @@
             type="kotlin.jvm.functions.Function2&lt;Boolean, Long, Unit>" />
 
         <variable
-            name="onClick"
+            name="onCommentClick"
             type="kotlin.jvm.functions.Function1&lt;Comment, Unit>" />
     </data>
 
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="17dp"
         android:background="@{uiState.highlight ? @color/comment_highlight_color : @android:color/transparent}"
-        android:onClick="@{() -> onClick.invoke(uiState.comment)}">
+        android:onClick="@{() -> onCommentClick.invoke(uiState.comment)}">
 
         <androidx.constraintlayout.widget.Group
             android:layout_width="wrap_content"

@@ -35,7 +35,7 @@ class ChildCommentActivity : AppCompatActivity() {
     private val viewModel: ChildCommentViewModel by viewModels()
 
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
-        onClick = { comment -> viewModel.unhighlight(comment.id) },
+        onCommentClick = { comment -> viewModel.unhighlight(comment.id) },
         onAuthorImageClick = { authorId -> ProfileActivity.startActivity(this, authorId) },
         onCommentMenuClick = ::showCommentMenuDialog,
     )

@@ -10,7 +10,7 @@ import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
 class CommentViewHolder(
     parent: ViewGroup,
-    onClick: (comment: Comment) -> Unit,
+    onCommentClick: (comment: Comment) -> Unit,
     onAuthorImageClick: (authorId: Long) -> Unit,
     onCommentMenuClick: (isWrittenByLoginUser: Boolean, commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(
@@ -19,7 +19,7 @@ class CommentViewHolder(
     private val binding = ItemAllCommentBinding.bind(itemView)
 
     init {
-        binding.onClick = onClick
+        binding.onCommentClick = onCommentClick
         binding.onAuthorImageClick = onAuthorImageClick
         binding.onCommentMenuClick = onCommentMenuClick
     }
