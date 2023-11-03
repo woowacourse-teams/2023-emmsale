@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ActivityFeedDetailBinding
 import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
@@ -96,14 +97,6 @@ class FeedDetailActivity : AppCompatActivity() {
 
     private fun hideKeyboard() {
         inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
-    }
-
-    private fun showKeyboard() {
-        @Suppress("DEPRECATION")
-        inputMethodManager.toggleSoftInput(
-            InputMethodManager.SHOW_FORCED,
-            InputMethodManager.HIDE_IMPLICIT_ONLY,
-        )
     }
 
     private fun cancelUpdateComment() {
