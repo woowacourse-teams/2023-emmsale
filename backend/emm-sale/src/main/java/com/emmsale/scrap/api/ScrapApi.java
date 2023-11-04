@@ -33,14 +33,14 @@ public class ScrapApi {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public void append(final Member member, @RequestBody final ScrapRequest scrapRequest) {
-    scrapCommandService.append(member, scrapRequest);
+  public EventResponse append(final Member member, @RequestBody final ScrapRequest scrapRequest) {
+    return scrapCommandService.append(member, scrapRequest);
   }
 
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(final Member member, @RequestParam("event-id") final Long eventId) {
-    scrapCommandService.deleteScrap(member, eventId);
+  public EventResponse delete(final Member member, @RequestParam("event-id") final Long eventId) {
+    return scrapCommandService.deleteScrap(member, eventId);
   }
 
 }
