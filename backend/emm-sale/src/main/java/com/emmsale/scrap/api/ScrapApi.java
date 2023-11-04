@@ -38,7 +38,7 @@ public class ScrapApi {
   }
 
   @DeleteMapping
-  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ResponseStatus(HttpStatus.OK)
   public EventResponse delete(final Member member, @RequestParam("event-id") final Long eventId) {
     return scrapCommandService.deleteScrap(member, eventId);
   }

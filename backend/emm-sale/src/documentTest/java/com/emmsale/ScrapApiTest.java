@@ -151,7 +151,6 @@ class ScrapApiTest extends MockMvcTestHelper {
   void append() throws Exception {
     //given
     final long eventId = 1L;
-
     final ScrapRequest request = new ScrapRequest(eventId);
     final EventResponse expectedScrapResponse = new EventResponse(
         1L,
