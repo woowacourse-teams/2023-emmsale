@@ -8,8 +8,8 @@ import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
+import com.emmsale.member.application.dto.MemberDetailResponse;
 import com.emmsale.member.application.dto.MemberImageResponse;
-import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.domain.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -77,7 +77,7 @@ public class MemberApi {
   }
 
   @GetMapping("/members/{member-id}")
-  public ResponseEntity<MemberProfileResponse> findProfile(
+  public ResponseEntity<MemberDetailResponse> findProfile(
       @PathVariable("member-id") final Long memberId) {
     return ResponseEntity.ok(memberQueryService.findProfile(memberId));
   }

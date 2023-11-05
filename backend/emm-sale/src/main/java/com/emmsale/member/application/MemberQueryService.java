@@ -4,10 +4,13 @@ import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 
 import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.MemberQueryResponse;
-import com.emmsale.member.application.dto.MemberProfileResponse;
+import com.emmsale.member.application.dto.MemberDetailResponse;
 import com.emmsale.member.domain.Member;
+import com.emmsale.member.domain.MemberActivity;
+import com.emmsale.member.domain.MemberActivityRepository;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberQueryService {
 
   private final MemberRepository memberRepository;
+  private final MemberActivityRepository memberActivityRepository;
 
   public Member findById(final Long memberId) {
     return memberRepository.findById(memberId)
@@ -34,10 +38,10 @@ public class MemberQueryService {
     return new MemberQueryResponse(member.getId(), member.isOnboarded());
   }
 
-  public MemberProfileResponse findProfile(Long memberId) {
-    final Member member = memberRepository.findById(memberId)
-        .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
+  public MemberDetailResponse findProfile(final Long memberId) {
+    final Member member = memberRepository.getByIdOrElseThrow(memberId);
+    final List<MemberActivity> memberActivities = memberActivityRepository.findAllByMember(member);
 
-    return MemberProfileResponse.from(member);
+    return MemberDetailResponse.of(member,memberActivities);
   }
 }
