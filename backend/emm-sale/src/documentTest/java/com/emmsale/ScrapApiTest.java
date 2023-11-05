@@ -214,7 +214,7 @@ class ScrapApiTest extends MockMvcTestHelper {
     //then
     mockMvc.perform(delete("/scraps?event-id={eventId}", eventId)
             .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
-        .andExpect(status().isNoContent())
+        .andExpect(status().isOk())
         .andDo(document("delete-scrap", SCRAPPED_EVENT_RESPONSE_FIELDS));
   }
 }
