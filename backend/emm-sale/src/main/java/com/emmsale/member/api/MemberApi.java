@@ -10,7 +10,6 @@ import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberDetailResponse;
 import com.emmsale.member.application.dto.MemberImageResponse;
-import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.domain.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

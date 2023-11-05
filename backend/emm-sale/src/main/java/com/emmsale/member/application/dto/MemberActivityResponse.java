@@ -20,13 +20,4 @@ public class MemberActivityResponse {
         memberActivity.getActivity().getActivityType().getValue()
     );
   }
-
-  @Override
-  public String toString() {
-    return "MemberActivityResponse{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        ", activityType='" + activityType + '\'' +
-        '}';
-  }
 }
