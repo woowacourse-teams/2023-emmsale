@@ -11,6 +11,7 @@ import com.emmsale.message_room.application.dto.MessageResponse;
 import com.emmsale.message_room.application.dto.RoomResponse;
 import com.emmsale.message_room.domain.MessageRepository;
 import com.emmsale.message_room.domain.Room;
+import com.emmsale.message_room.domain.RoomId;
 import com.emmsale.message_room.domain.RoomRepository;
 import com.emmsale.message_room.exception.MessageRoomException;
 import com.emmsale.message_room.infrastructure.persistence.MessageDao;
@@ -88,12 +89,17 @@ public class RoomQueryService {
 
   public List<MessageResponse> findByRoomId(
       final Member loginMember,
-      final String roomId,
-      final Long memberId
+      final String roomId
   ) {
-    validateSameMember(loginMember, memberId);
+    validateAuthorizedMember(loginMember, roomId);
 
     return findMessageByRoomUUID(roomId);
+  }
+
+  private void validateAuthorizedMember(final Member loginMember, final String roomId) {
+    if (!roomRepository.existsByRoomId(new RoomId(roomId, loginMember.getId()))) {
+      throw new MemberException(NOT_MATCHING_TOKEN_AND_LOGIN_MEMBER);
+    }
   }
 
   private List<MessageResponse> findMessageByRoomUUID(final String roomId) {
@@ -106,12 +112,9 @@ public class RoomQueryService {
 
   public List<MessageResponse> findByInterlocutorIds(
       final Long receiverId,
-      final Long senderId,
       final Member loginMember
   ) {
-    validateSameMember(loginMember, senderId);
-
-    final Room room = roomRepository.findByInterlocutorIds(senderId, receiverId)
+    final Room room = roomRepository.findByInterlocutorIds(loginMember.getId(), receiverId)
         .orElseThrow(() -> new MessageRoomException(NOT_FOUND_MESSAGE_ROOM));
 
     return findMessageByRoomUUID(room.getRoomId().getUuid());

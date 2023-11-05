@@ -115,9 +115,6 @@ class RoomApiTest extends MockMvcTestHelper {
   @DisplayName("findByRoomId() : Room Id로 쪽지방을 성공적으로 조회하면 200 OK를 반환할 수 있다.")
   void test_findByRoomId() throws Exception {
     //given
-    final RequestParametersSnippet requestParam = requestParameters(
-        parameterWithName("member-id").description("로그인 한 사용자 ID")
-    );
 
     final PathParametersSnippet pathParams = pathParameters(
         parameterWithName("room-id").description("조회할 Room UUID")
@@ -130,16 +127,15 @@ class RoomApiTest extends MockMvcTestHelper {
         new MessageResponse(3L, MemberReferenceResponse.from(member1), "내용3", LocalDateTime.now())
     );
 
-    when(roomQueryService.findByRoomId(any(), any(), anyLong()))
+    when(roomQueryService.findByRoomId(any(), any()))
         .thenReturn(messageResponses);
 
     //when & then
     mockMvc.perform(get("/rooms/{room-id}", 1L)
-            .queryParam("member-id", "1")
             .header(HttpHeaders.AUTHORIZATION, accessToken))
         .andExpect(status().isOk())
         .andDo(print())
-        .andDo(document("get-rooms-roomId", requestParam, MESSAGES_RESPONSE_FIELDS, pathParams));
+        .andDo(document("get-rooms-roomId", MESSAGES_RESPONSE_FIELDS, pathParams));
   }
 
   @Test
@@ -147,7 +143,6 @@ class RoomApiTest extends MockMvcTestHelper {
   void test_findByInterlocutorIds() throws Exception {
     //given
     final RequestParametersSnippet requestParam = requestParameters(
-        parameterWithName("member-id").description("로그인 한 사용자 ID"),
         parameterWithName("receiver-id").description("쪽지방 참여 상대방 ID")
     );
 
@@ -160,12 +155,11 @@ class RoomApiTest extends MockMvcTestHelper {
         new MessageResponse(3L, MemberReferenceResponse.from(member1), "내용3", LocalDateTime.now())
     );
 
-    when(roomQueryService.findByInterlocutorIds(anyLong(), anyLong(), any()))
+    when(roomQueryService.findByInterlocutorIds(anyLong(), any()))
         .thenReturn(messageResponses);
 
     //when & then
     mockMvc.perform(get("/rooms")
-            .queryParam("member-id", "1")
             .queryParam("receiver-id", "1")
             .header(HttpHeaders.AUTHORIZATION, accessToken))
         .andExpect(status().isOk())

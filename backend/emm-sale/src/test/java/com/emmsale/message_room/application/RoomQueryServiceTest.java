@@ -166,8 +166,7 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    final List<MessageResponse> actual = roomQueryService.findByRoomId(loginMember, room1UUID,
-        loginMember.getId());
+    final List<MessageResponse> actual = roomQueryService.findByRoomId(loginMember, room1UUID);
 
     //then
     Assertions.assertThat(actual)
@@ -207,7 +206,6 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     //when
     final List<MessageResponse> actual = roomQueryService.findByInterlocutorIds(
         room1Interlocutor.getId(),
-        loginMember.getId(),
         loginMember
     );
 
