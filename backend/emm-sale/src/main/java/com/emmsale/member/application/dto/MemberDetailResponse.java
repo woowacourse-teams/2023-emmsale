@@ -7,9 +7,11 @@ import com.emmsale.member.domain.MemberActivity;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @RequiredArgsConstructor
 @Getter
+@ToString
 public class MemberDetailResponse {
 
   private static final String GITHUB_URL_PREFIX = "https://github.com/";
@@ -21,7 +23,7 @@ public class MemberDetailResponse {
   private final String githubUrl;
   private final List<MemberActivityResponse> activities;
 
-  public static MemberDetailResponse from(
+  public static MemberDetailResponse of(
       final Member member,
       final List<MemberActivity> activities
   ) {

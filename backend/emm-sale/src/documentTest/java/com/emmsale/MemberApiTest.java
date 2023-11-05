@@ -21,8 +21,8 @@ import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
+import com.emmsale.member.application.dto.MemberDetailResponse;
 import com.emmsale.member.application.dto.MemberImageResponse;
-import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.domain.Member;
 import java.io.IOException;
 import java.util.List;
@@ -52,7 +52,12 @@ class MemberApiTest extends MockMvcTestHelper {
       fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
       fieldWithPath("description").type(JsonFieldType.STRING).description("사용자 한 줄 자기소개"),
       fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url"),
-      fieldWithPath("githubUrl").type(JsonFieldType.STRING).description("깃허브 URL")
+      fieldWithPath("githubUrl").type(JsonFieldType.STRING).description("깃허브 URL"),
+      fieldWithPath("activities[].id").type(JsonFieldType.NUMBER).description("MemberActivity Id"),
+      fieldWithPath("activities[].name").type(JsonFieldType.STRING)
+          .description("MemberActivity 이름"),
+      fieldWithPath("activities[].activityType").type(JsonFieldType.STRING)
+          .description("MemberActivity Type")
   );
   private static final RequestFieldsSnippet MEMBER_ACTIVITY_REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
@@ -185,12 +190,15 @@ class MemberApiTest extends MockMvcTestHelper {
   @DisplayName("특정 사용자의 프로필 정보를 조회할 수 있다.")
   void test_findProfile() throws Exception {
     //given
-    final MemberProfileResponse memberProfileResponse = new MemberProfileResponse(
+    final MemberDetailResponse memberProfileResponse = new MemberDetailResponse(
         1L,
         "김길동",
         "안녕하세요, 김길동입니다.",
         "https://image",
-        "https://github.com/amaran-th"
+        "https://github.com/amaran-th",
+        List.of(
+            new MemberActivityResponse(1L, "YAPP", "동아리")
+        )
     );
     when(memberQueryService.findProfile(any()))
         .thenReturn(memberProfileResponse);
