@@ -18,7 +18,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.annotation.Rollback;
 
 class MessageDaoTest extends JpaRepositorySliceTestHelper {
 
@@ -82,26 +81,26 @@ class MessageDaoTest extends JpaRepositorySliceTestHelper {
 
     final Message resultMessage1 = new Message(
         "방1메시지3",
-        loginMember.getId(),
+        loginMember,
         room1UUID,
         LocalDateTime.parse("2023-10-07T16:45:39")
     );
     final Message resultMessage2 = new Message(
         "방2메시지4",
-        room2Interlocutor.getId(),
+        room2Interlocutor,
         room2UUID,
         LocalDateTime.parse("2023-10-07T16:45:39")
     );
 
     messageRepository.saveAll(
         List.of(
-            new Message("방1메시지1", loginMember.getId(), room1UUID,
+            new Message("방1메시지1", loginMember, room1UUID,
                 LocalDateTime.parse("2023-05-07T16:45:39")),
-            new Message("방1메시지2", loginMember.getId(), room1UUID,
+            new Message("방1메시지2", loginMember, room1UUID,
                 LocalDateTime.parse("2023-06-07T16:45:39")),
             resultMessage1,
             resultMessage2,
-            new Message("방3메시지5", loginMember.getId(), room3UUID,
+            new Message("방3메시지5", loginMember, room3UUID,
                 LocalDateTime.parse("2023-08-07T16:45:39"))
         )
     );
@@ -110,12 +109,14 @@ class MessageDaoTest extends JpaRepositorySliceTestHelper {
         new MessageOverview(
             resultMessage1.getId(),
             resultMessage1.getContent(),
+            resultMessage1.getSender().getId(),
             resultMessage1.getCreatedAt(),
             resultMessage1.getRoomId()
         ),
         new MessageOverview(
             resultMessage2.getId(),
             resultMessage2.getContent(),
+            resultMessage2.getSender().getId(),
             resultMessage2.getCreatedAt(),
             resultMessage2.getRoomId()
         )

@@ -38,7 +38,8 @@ public class RoomQueryService {
 
     final Long loginMemberId = loginMember.getId();
 
-    final List<MessageOverview> messageOverviews = messageDao.findRecentlyMessages(loginMemberId);
+    final List<MessageOverview> messageOverviews = messageDao.findRecentlyMessages(
+        loginMemberId);
 
     final Map<String, Long> interlocutorIdPerRoomExceptMe = groupingInterlocutorIdByRoom(
         messageOverviews,
@@ -49,6 +50,9 @@ public class RoomQueryService {
         .map(messageOverview ->
             RoomResponse.from(
                 messageOverview,
+                memberRepository.findById(messageOverview.getSenderId())
+                    .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER)),
+                // TODO: 2023/11/05 N+1 문제
                 findInterlocutor(interlocutorIdPerRoomExceptMe.get(messageOverview.getRoomUUID()))
             ))
         .collect(Collectors.toList());

@@ -312,7 +312,8 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
   @DisplayName("publish() : message를 받아서, Event로 변환 후 publish한다.")
   void publishMessageEvent() {
     //given
-    final Message message = new Message("content", 1L, "roomId", LocalDateTime.now());
+    final Member sender = memberRepository.findById(1L).get();
+    final Message message = new Message("content", sender, "roomId", LocalDateTime.now());
     final Long receiverId = 2L;
 
     //when
@@ -328,7 +329,7 @@ class EventPublisherTest extends ServiceIntegrationTestHelper {
     final MessageNotificationEvent expectedEvent = new MessageNotificationEvent(
         message.getRoomId(),
         message.getContent(),
-        message.getSenderId(),
+        message.getSender().getId(),
         receiverId,
         message.getCreatedAt()
     );

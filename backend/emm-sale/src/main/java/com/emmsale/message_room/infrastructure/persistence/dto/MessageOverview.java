@@ -10,6 +10,7 @@ public class MessageOverview {
 
   private final Long id;
   private final String content;
+  private final Long senderId;
   private final LocalDateTime createdAt;
   private final String roomUUID;
 }

@@ -16,6 +16,7 @@ public class MessageDao {
       new MessageOverview(
           rs.getLong("id"),
           rs.getString("content"),
+          rs.getLong("sender_id"),
           rs.getTimestamp("created_at").toLocalDateTime(),
           rs.getString("room_id")
       );
@@ -26,7 +27,7 @@ public class MessageDao {
     StringBuilder sqlBuilder = new StringBuilder();
 
     sqlBuilder
-        .append("SELECT m2.id, m2.content, m2.created_at, m2.room_id ")
+        .append("SELECT m2.id, m2.content, m2.sender_id, m2.created_at, m2.room_id ")
         .append("FROM room r ")
         .append("JOIN (SELECT room_id, MAX(created_at) as max_created_at ")
         .append("      FROM message ")
