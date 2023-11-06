@@ -13,8 +13,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.emmsale.feed.application.dto.FeedDetailResponse;
-import com.emmsale.feed.application.dto.FeedDetailResponse.WriterProfileResponse;
 import com.emmsale.feed.application.dto.FeedResponseRefactor;
 import com.emmsale.feed.application.dto.FeedSimpleResponse;
 import com.emmsale.feed.application.dto.FeedUpdateRequest;
@@ -36,6 +34,14 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 
 class FeedApiTest extends MockMvcTestHelper {
+
+  private static final MemberReferenceResponse MEMBER_REFERENCE_RESPONSE = new MemberReferenceResponse(
+      2L,
+      "멤버",
+      "멤버 설명",
+      "멤버 이미지url",
+      "멤버 깃허브 url"
+  );
 
   @Test
   @DisplayName("이벤트의 피드 목록을 성공적으로 반환하면 200 OK를 반환한다.")
@@ -61,24 +67,17 @@ class FeedApiTest extends MockMvcTestHelper {
     );
 
     final long eventId = 11L;
-    final MemberReferenceResponse memberReferenceResponse = new MemberReferenceResponse(
-        2L,
-        "멤버",
-        "멤버 설명",
-        "멤버 이미지url",
-        "멤버 깃허브 url"
-    );
     final List<FeedResponseRefactor> response = List.of(
         new FeedResponseRefactor(
             34L, eventId, "피드 1 제목", "피드 1 내용",
-            memberReferenceResponse,
+            MEMBER_REFERENCE_RESPONSE,
             Collections.emptyList(),
             2L,
             LocalDateTime.of(2023, 7, 13, 0, 0), LocalDateTime.of(2023, 7, 13, 0, 0)
         ),
         new FeedResponseRefactor(
             35L, eventId, "피드 2 제목", "피드 2 내용",
-            memberReferenceResponse,
+            MEMBER_REFERENCE_RESPONSE,
             Collections.emptyList(),
             2L,
             LocalDateTime.of(2023, 7, 13, 0, 0), LocalDateTime.of(2023, 7, 13, 0, 0)
@@ -101,26 +100,33 @@ class FeedApiTest extends MockMvcTestHelper {
     //given
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("id").type(JsonFieldType.NUMBER).description("피드 id"),
-        fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("이벤트 id"),
-        fieldWithPath("writer").type(JsonFieldType.OBJECT).description("작성자"),
-        fieldWithPath("writer.memberId").type(JsonFieldType.NUMBER).description("작성자 id"),
-        fieldWithPath("writer.name").type(JsonFieldType.STRING).description("작성자명"),
-        fieldWithPath("writer.imageUrl").type(JsonFieldType.STRING).description("작성자 이미지 url"),
+        fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("피드가 작성된 부모 이벤트 id"),
         fieldWithPath("title").type(JsonFieldType.STRING).description("피드 제목"),
         fieldWithPath("content").type(JsonFieldType.STRING).description("피드 내용"),
         fieldWithPath("images").type(JsonFieldType.ARRAY).description("피드 이미지 url 리스트"),
+        fieldWithPath("writer.id").type(JsonFieldType.NUMBER).description("writer의 식별자"),
+        fieldWithPath("writer.name").type(JsonFieldType.STRING).description("writer의 이름"),
+        fieldWithPath("writer.description").type(JsonFieldType.STRING)
+            .description("writer의 한줄 자기소개"),
+        fieldWithPath("writer.imageUrl").type(JsonFieldType.STRING)
+            .description("writer의 이미지 url"),
+        fieldWithPath("writer.githubUrl").type(JsonFieldType.STRING)
+            .description("writer의 github Url"),
+        fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("피드의 댓글 개수"),
         fieldWithPath("createdAt").type(JsonFieldType.STRING).description("피드 생성 일시"),
         fieldWithPath("updatedAt").type(JsonFieldType.STRING).description("피드 업데이트 일시")
     );
-
     final long eventId = 11L;
     final long feedId = 34L;
-    final WriterProfileResponse writer = new WriterProfileResponse(8L, "작성자명",
-        "https://member-image.com");
-    final FeedDetailResponse response = new FeedDetailResponse(feedId, eventId, writer, "피드 제목",
-        "피드 상세 내용", List.of("https://image1.url", "https://image2.url"),
-        LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)),
-        LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)));
+
+    final FeedResponseRefactor response =
+        new FeedResponseRefactor(
+            34L, eventId, "피드 1 제목", "피드 1 내용",
+            MEMBER_REFERENCE_RESPONSE,
+            Collections.emptyList(),
+            2L,
+            LocalDateTime.of(2023, 7, 13, 0, 0), LocalDateTime.of(2023, 7, 13, 0, 0)
+        );
 
     when(feedQueryService.findFeed(any(), any())).thenReturn(response);
 

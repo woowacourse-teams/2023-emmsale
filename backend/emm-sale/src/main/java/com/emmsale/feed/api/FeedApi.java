@@ -42,7 +42,7 @@ public class FeedApi {
   }
 
   @GetMapping("/{id}")
-  public FeedDetailResponse findFeed(final Member member, @PathVariable final Long id) {
+  public FeedResponseRefactor findFeed(final Member member, @PathVariable final Long id) {
     return feedQueryService.findFeed(member, id);
   }
 
