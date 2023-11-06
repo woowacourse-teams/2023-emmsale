@@ -12,7 +12,6 @@ import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.feed.application.dto.FeedResponseRefactor;
-import com.emmsale.feed.application.dto.FeedSimpleResponse;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
@@ -234,13 +233,13 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
     @DisplayName("자신이 작성한 모든 피드를 조회한다.")
     void findAllFeedsTest() {
       //given
-      final List<FeedSimpleResponse> expect = List.of(
-          FeedSimpleResponse.from(feed1, Collections.emptyList(), 0L),
-          FeedSimpleResponse.from(feed2, Collections.emptyList(), 0L)
+      final List<FeedResponseRefactor> expect = List.of(
+          FeedResponseRefactor.of(feed1, Collections.emptyList(), 0L),
+          FeedResponseRefactor.of(feed2, Collections.emptyList(), 0L)
       );
 
       //when
-      final List<FeedSimpleResponse> actual = feedQueryService.findAllMyFeeds(writer);
+      final List<FeedResponseRefactor> actual = feedQueryService.findAllMyFeeds(writer);
 
       //then
       assertThat(actual)
@@ -255,12 +254,12 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       feed1.delete();
       feedRepository.save(feed1);
 
-      final List<FeedSimpleResponse> expect = List.of(
-          FeedSimpleResponse.from(feed2, Collections.emptyList(), 0L)
+      final List<FeedResponseRefactor> expect = List.of(
+          FeedResponseRefactor.of(feed2, Collections.emptyList(), 0L)
       );
 
       //when
-      final List<FeedSimpleResponse> actual = feedQueryService.findAllMyFeeds(writer);
+      final List<FeedResponseRefactor> actual = feedQueryService.findAllMyFeeds(writer);
 
       //then
       assertThat(actual)
@@ -294,13 +293,13 @@ class FeedQueryServiceTest extends ServiceIntegrationTestHelper {
       //given
       final Long eventId = event.getId();
 
-      final List<FeedSimpleResponse> expect = List.of(
-          FeedSimpleResponse.from(feed1, images, 0L),
-          FeedSimpleResponse.from(feed2, Collections.emptyList(), 0L)
+      final List<FeedResponseRefactor> expect = List.of(
+          FeedResponseRefactor.of(feed1, images, 0L),
+          FeedResponseRefactor.of(feed2, Collections.emptyList(), 0L)
       );
 
       //when
-      final List<FeedSimpleResponse> actual = feedQueryService.findAllMyFeeds(writer);
+      final List<FeedResponseRefactor> actual = feedQueryService.findAllMyFeeds(writer);
 
       //then
       assertThat(actual)

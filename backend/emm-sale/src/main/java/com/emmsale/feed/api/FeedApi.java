@@ -47,7 +47,7 @@ public class FeedApi {
   }
 
   @GetMapping("/my")
-  public List<FeedSimpleResponse> findAllMyFeeds(final Member member) {
+  public List<FeedResponseRefactor> findAllMyFeeds(final Member member) {
     return feedQueryService.findAllMyFeeds(member);
   }
 

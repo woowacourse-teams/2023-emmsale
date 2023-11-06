@@ -10,7 +10,6 @@ import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.feed.application.dto.FeedResponseRefactor;
-import com.emmsale.feed.application.dto.FeedSimpleResponse;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
@@ -46,21 +45,7 @@ public class FeedQueryService {
 
     final List<Feed> feeds = feedRepository.findAllByEventIdAndNotDeleted(eventId);
     final List<Feed> filteredFeeds = excludeBlockedMembersFeed(member, feeds);
-    final List<Long> feedIds = filteredFeeds.stream()
-        .map(Feed::getId)
-        .collect(toUnmodifiableList());
-
-    final Map<Long, Long> feedCommentCounts = getFeedIdCommentCountMap(feedIds);
-    final Map<Long, List<Image>> feedImages = getFeedImagesMap(feedIds);
-
-    return filteredFeeds.stream()
-        .map(feed -> {
-          final List<Image> images = feedImages.getOrDefault(feed.getId(), Collections.emptyList());
-          final Long commentCount = feedCommentCounts.getOrDefault(feed.getId(),
-              DEFAULT_COMMENT_COUNT);
-          return FeedResponseRefactor.of(feed, images, commentCount);
-        })
-        .collect(toUnmodifiableList());
+    return createFeedResponses(filteredFeeds);
   }
 
   private Map<Long, List<Image>> getFeedImagesMap(final List<Long> feedIds) {
@@ -136,9 +121,13 @@ public class FeedQueryService {
     }
   }
 
-  public List<FeedSimpleResponse> findAllMyFeeds(final Member member) {
+  public List<FeedResponseRefactor> findAllMyFeeds(final Member member) {
     final List<Feed> feeds = feedRepository.findByMember(member);
 
+    return createFeedResponses(feeds);
+  }
+
+  private List<FeedResponseRefactor> createFeedResponses(List<Feed> feeds) {
     final List<Long> feedIds = feeds.stream()
         .map(Feed::getId)
         .collect(Collectors.toList());
@@ -151,8 +140,8 @@ public class FeedQueryService {
           final List<Image> images = feedImages.getOrDefault(feed.getId(), Collections.emptyList());
           final Long commentCount = feedCommentCounts.getOrDefault(feed.getId(),
               DEFAULT_COMMENT_COUNT);
-          return FeedSimpleResponse.from(feed, images, commentCount);
+          return FeedResponseRefactor.of(feed, images, commentCount);
         })
-        .collect(Collectors.toList());
+        .collect(toUnmodifiableList());
   }
 }
