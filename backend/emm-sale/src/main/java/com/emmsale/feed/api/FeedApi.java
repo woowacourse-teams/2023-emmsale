@@ -3,8 +3,8 @@ package com.emmsale.feed.api;
 import com.emmsale.feed.application.FeedCommandService;
 import com.emmsale.feed.application.FeedQueryService;
 import com.emmsale.feed.application.dto.FeedDetailResponse;
-import com.emmsale.feed.application.dto.FeedListResponse;
 import com.emmsale.feed.application.dto.FeedPostRequest;
+import com.emmsale.feed.application.dto.FeedResponseRefactor;
 import com.emmsale.feed.application.dto.FeedSimpleResponse;
 import com.emmsale.feed.application.dto.FeedUpdateRequest;
 import com.emmsale.feed.application.dto.FeedUpdateResponse;
@@ -34,7 +34,7 @@ public class FeedApi {
   private final FeedCommandService feedCommandService;
 
   @GetMapping
-  public FeedListResponse findAllFeeds(
+  public List<FeedResponseRefactor> findAllFeeds(
       final Member member,
       @RequestParam("event-id") final Long eventId
   ) {

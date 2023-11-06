@@ -15,10 +15,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.emmsale.feed.application.dto.FeedDetailResponse;
 import com.emmsale.feed.application.dto.FeedDetailResponse.WriterProfileResponse;
-import com.emmsale.feed.application.dto.FeedListResponse;
+import com.emmsale.feed.application.dto.FeedResponseRefactor;
 import com.emmsale.feed.application.dto.FeedSimpleResponse;
 import com.emmsale.feed.application.dto.FeedUpdateRequest;
 import com.emmsale.feed.application.dto.FeedUpdateResponse;
+import com.emmsale.member.application.dto.MemberReferenceResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -41,29 +42,48 @@ class FeedApiTest extends MockMvcTestHelper {
   void findAllFeedsTest() throws Exception {
     //given
     final ResponseFieldsSnippet responseFields = responseFields(
-        fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("피드가 작성된 부모 이벤트 id"),
-        fieldWithPath("feeds").type(JsonFieldType.ARRAY).description("피드 리스트"),
-        fieldWithPath("feeds[].id").type(JsonFieldType.NUMBER).description("피드 id"),
-        fieldWithPath("feeds[].title").type(JsonFieldType.STRING).description("피드 제목"),
-        fieldWithPath("feeds[].content").type(JsonFieldType.STRING).description("피드 내용"),
-        fieldWithPath("feeds[].images").type(JsonFieldType.ARRAY).description("피드 이미지 url 리스트"),
-        fieldWithPath("feeds[].writerId").type(JsonFieldType.NUMBER).description("피드 작성자 id"),
-        fieldWithPath("feeds[].commentCount").type(JsonFieldType.NUMBER).description("피드의 댓글 개수"),
-        fieldWithPath("feeds[].createdAt").type(JsonFieldType.STRING).description("피드 생성 일시"),
-        fieldWithPath("feeds[].updatedAt").type(JsonFieldType.STRING).description("피드 업데이트 일시")
+        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("피드 id"),
+        fieldWithPath("[].eventId").type(JsonFieldType.NUMBER).description("피드가 작성된 부모 이벤트 id"),
+        fieldWithPath("[].title").type(JsonFieldType.STRING).description("피드 제목"),
+        fieldWithPath("[].content").type(JsonFieldType.STRING).description("피드 내용"),
+        fieldWithPath("[].images").type(JsonFieldType.ARRAY).description("피드 이미지 url 리스트"),
+        fieldWithPath("[].writer.id").type(JsonFieldType.NUMBER).description("writer의 식별자"),
+        fieldWithPath("[].writer.name").type(JsonFieldType.STRING).description("writer의 이름"),
+        fieldWithPath("[].writer.description").type(JsonFieldType.STRING)
+            .description("writer의 한줄 자기소개"),
+        fieldWithPath("[].writer.imageUrl").type(JsonFieldType.STRING)
+            .description("writer의 이미지 url"),
+        fieldWithPath("[].writer.githubUrl").type(JsonFieldType.STRING)
+            .description("writer의 github Url"),
+        fieldWithPath("[].commentCount").type(JsonFieldType.NUMBER).description("피드의 댓글 개수"),
+        fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("피드 생성 일시"),
+        fieldWithPath("[].updatedAt").type(JsonFieldType.STRING).description("피드 업데이트 일시")
     );
 
     final long eventId = 11L;
-    final List<FeedSimpleResponse> feeds = List.of(
-        new FeedSimpleResponse(34L, "피드1 제목", "피드 내용", 23L,
-            List.of("https://image1.url", "https://image2.url"), 0L,
-            LocalDateTime.of(LocalDate.of(2023, 7, 13), LocalTime.of(11, 43, 11)),
-            LocalDateTime.of(LocalDate.of(2023, 7, 13), LocalTime.of(11, 43, 11))),
-        new FeedSimpleResponse(35L, "피드2 제목", "피드 내용", 43L, Collections.emptyList(), 3L,
-            LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)),
-            LocalDateTime.of(LocalDate.of(2023, 7, 22), LocalTime.of(23, 54, 49)))
+    final MemberReferenceResponse memberReferenceResponse = new MemberReferenceResponse(
+        2L,
+        "멤버",
+        "멤버 설명",
+        "멤버 이미지url",
+        "멤버 깃허브 url"
     );
-    final FeedListResponse response = new FeedListResponse(eventId, feeds);
+    final List<FeedResponseRefactor> response = List.of(
+        new FeedResponseRefactor(
+            34L, eventId, "피드 1 제목", "피드 1 내용",
+            memberReferenceResponse,
+            Collections.emptyList(),
+            2L,
+            LocalDateTime.of(2023, 7, 13, 0, 0), LocalDateTime.of(2023, 7, 13, 0, 0)
+        ),
+        new FeedResponseRefactor(
+            35L, eventId, "피드 2 제목", "피드 2 내용",
+            memberReferenceResponse,
+            Collections.emptyList(),
+            2L,
+            LocalDateTime.of(2023, 7, 13, 0, 0), LocalDateTime.of(2023, 7, 13, 0, 0)
+        )
+    );
 
     when(feedQueryService.findAllFeeds(any(), any())).thenReturn(response);
 
