@@ -38,10 +38,16 @@ enum class KerdyNotificationChannel(
     }
 
     companion object {
-        fun createChannels(
-            context: Context,
-        ): List<NotificationChannel> = KerdyNotificationChannel
-            .values()
-            .map { channel -> channel.createChannel(context) }
+        private fun getNotificationManager(context: Context): NotificationManager {
+            return context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        }
+
+        fun createChannels(context: Context) {
+            val kerdyNotificationChannels = KerdyNotificationChannel
+                .values()
+                .map { channel -> channel.createChannel(context) }
+
+            getNotificationManager(context).createNotificationChannels(kerdyNotificationChannels)
+        }
     }
 }
