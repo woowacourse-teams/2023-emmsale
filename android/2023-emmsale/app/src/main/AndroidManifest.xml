@@ -27,6 +27,7 @@
         <activity
             android:name=".presentation.ui.messageList.MessageListActivity"
             android:launchMode="singleTask"
+            android:parentActivityName=".presentation.ui.main.MainActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".presentation.ui.postWriting.PostWritingActivity" />
         <activity
