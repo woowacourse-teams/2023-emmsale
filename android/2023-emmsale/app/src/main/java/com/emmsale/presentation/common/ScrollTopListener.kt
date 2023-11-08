@@ -35,9 +35,6 @@ class ScrollTopListener(
         targetView.isVisible = isVisibleTargetView(lastVisibleItemPosition)
     }
 
-    private fun isVisibleTargetView(lastVisibleItemPosition: Int) =
-        lastVisibleItemPosition >= scrollUpStandardPosition
-
     private fun setupTargetViewClickListener(recyclerView: RecyclerView) {
         if (targetView.hasOnClickListeners()) return
 
@@ -45,6 +42,9 @@ class ScrollTopListener(
             recyclerView.smoothScrollToPosition(0)
         }
     }
+
+    private fun isVisibleTargetView(lastVisibleItemPosition: Int) =
+        lastVisibleItemPosition >= scrollUpStandardPosition
 
     companion object {
         private const val PORTRAIT_SCROLL_UP_STANDARD_POSITION = 3
