@@ -192,7 +192,7 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_eventdetail"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -201,6 +201,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@drawable/bg_shadow"
+            android:clickable="true"
             android:visibility="@{vm.currentScreen == Screen.INFORMATION ? View.VISIBLE : View.GONE  }">
 
             <androidx.appcompat.widget.AppCompatButton
@@ -217,7 +218,7 @@
                 android:stateListAnimator="@null"
                 android:text="@string/eventinformation_navigate_website"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/iv_eventdetail_scrap"
                 app:layout_constraintStart_toStartOf="parent"
