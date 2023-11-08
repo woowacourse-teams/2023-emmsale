@@ -9,6 +9,7 @@ import com.emmsale.R
 import com.emmsale.data.model.Event
 import com.emmsale.databinding.FragmentCompetitionBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.common.ScrollTopListener
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
 import com.emmsale.presentation.common.views.FilterTag
 import com.emmsale.presentation.common.views.filterChipOf
@@ -69,6 +70,9 @@ class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
 
     private fun initEventRecyclerView() {
         binding.rvEvents.adapter = eventAdapter
+        binding.rvEvents.addOnScrollListener(
+            ScrollTopListener(targetView = binding.fabScrollTop),
+        )
     }
 
     private fun setupEventsObserver() {

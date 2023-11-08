@@ -120,6 +120,22 @@
                 tools:itemCount="5"
                 tools:listitem="@layout/item_conference" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_scroll_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:src="@drawable/ic_all_arrow_up"
+                android:visibility="gone"
+                app:backgroundTint="@color/primary_color"
+                app:borderWidth="3dp"
+                app:fabCustomSize="48dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:maxImageSize="16dp"
+                app:tint="@color/white"
+                tools:visibility="visible" />
+
             <ProgressBar
                 android:id="@+id/progressbar_loading"
                 android:layout_width="wrap_content"
