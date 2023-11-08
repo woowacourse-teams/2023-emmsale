@@ -35,20 +35,23 @@ public class Member extends BaseEntity {
   private String githubUsername;
 
   public Member(final Long id, final Long githubId, final String imageUrl, final String name,
+      final String description,
       final String githubUsername) {
     this.id = id;
     this.githubId = githubId;
     this.imageUrl = imageUrl;
     this.name = name;
-    this.description = DEFAULT_DESCRIPTION;
+    this.description = description;
     this.githubUsername = githubUsername;
   }
 
+  public Member(final Long id, final Long githubId, final String imageUrl, final String name,
+      final String githubUsername) {
+    this(id, githubId, imageUrl, name, DEFAULT_DESCRIPTION, githubUsername);
+  }
+
   public Member(final Long githubId, final String imageUrl, final String githubUsername) {
-    this.githubId = githubId;
-    this.imageUrl = imageUrl;
-    this.description = DEFAULT_DESCRIPTION;
-    this.githubUsername = githubUsername;
+    this(null, githubId, imageUrl, null, DEFAULT_DESCRIPTION, githubUsername);
   }
 
   public void updateName(final String name) {

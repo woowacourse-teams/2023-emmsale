@@ -109,14 +109,14 @@ class MessageDaoTest extends JpaRepositorySliceTestHelper {
         new MessageOverview(
             resultMessage1.getId(),
             resultMessage1.getContent(),
-            resultMessage1.getSender().getId(),
+            resultMessage1.getSender(),
             resultMessage1.getCreatedAt(),
             resultMessage1.getRoomId()
         ),
         new MessageOverview(
             resultMessage2.getId(),
             resultMessage2.getContent(),
-            resultMessage2.getSender().getId(),
+            resultMessage2.getSender(),
             resultMessage2.getCreatedAt(),
             resultMessage2.getRoomId()
         )
@@ -128,6 +128,7 @@ class MessageDaoTest extends JpaRepositorySliceTestHelper {
     //then
     Assertions.assertThat(actual)
         .usingRecursiveComparison()
+        .ignoringFields("sender.createdAt", "sender.updatedAt")
         .isEqualTo(expect);
   }
 }

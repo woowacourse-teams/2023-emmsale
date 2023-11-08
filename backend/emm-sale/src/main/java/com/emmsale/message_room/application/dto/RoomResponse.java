@@ -17,7 +17,6 @@ public class RoomResponse {
 
   public static RoomResponse from(
       final MessageOverview messageOverview,
-      final Member recentMessageSender,
       final Member interlocutor
   ) {
     return new RoomResponse(
@@ -26,7 +25,7 @@ public class RoomResponse {
         MessageResponse.from(new Message(
             messageOverview.getId(),
             messageOverview.getContent(),
-            recentMessageSender,
+            messageOverview.getSender(),
             messageOverview.getRoomUUID(),
             messageOverview.getCreatedAt()))
     );

@@ -107,7 +107,7 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     final MessageOverview messageOverview1 = new MessageOverview(
         resultMessage1.getId(),
         resultMessage1.getContent(),
-        resultMessage1.getSender().getId(),
+        resultMessage1.getSender(),
         resultMessage1.getCreatedAt(),
         resultMessage1.getRoomId()
     );
@@ -115,15 +115,15 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     final MessageOverview messageOverview2 = new MessageOverview(
         resultMessage2.getId(),
         resultMessage2.getContent(),
-        resultMessage2.getSender().getId(),
+        resultMessage2.getSender(),
         resultMessage2.getCreatedAt(),
         resultMessage2.getRoomId()
     );
 
     final List<RoomResponse> expect = List.of(
-        RoomResponse.from(messageOverview1, resultMessage1.getSender(),
+        RoomResponse.from(messageOverview1,
             memberRepository.findById(room1Interlocutor.getId()).get()),
-        RoomResponse.from(messageOverview2, resultMessage2.getSender(),
+        RoomResponse.from(messageOverview2,
             memberRepository.findById(room2Interlocutor.getId()).get())
     );
 
