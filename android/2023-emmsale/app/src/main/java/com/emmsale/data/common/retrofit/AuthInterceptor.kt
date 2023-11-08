@@ -23,7 +23,6 @@ class AuthInterceptor(private val context: Context) : Interceptor {
 
         val response = chain.proceed(tokenAddedRequest)
         if (response.isAccessTokenExpired()) {
-            tokenRepository.deleteToken()
             navigateToLogin()
         }
         return response
