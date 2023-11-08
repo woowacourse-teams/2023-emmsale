@@ -16,6 +16,7 @@ import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import com.emmsale.R
 import com.emmsale.presentation.common.views.ConfirmDialog
@@ -113,7 +114,7 @@ private fun Context.createNotification(
     title: String,
     message: String,
     notificationId: Int,
-    intent: Intent? = null,
+    intent: Intent = Intent(),
     largeIconUrl: String? = null,
     groupKey: String? = null,
 ) = NotificationCompat.Builder(this, channelId.toString())
@@ -124,11 +125,20 @@ private fun Context.createNotification(
     .setGroupSummary(true)
     .setGroup(groupKey)
     .setContentText(message)
-    .setContentIntent(
-        PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_MUTABLE),
-    )
+    .setContentIntent(getPendingIntent(intent, notificationId))
     .setAutoCancel(true)
     .build()
+
+private fun Context.getPendingIntent(
+    intent: Intent,
+    notificationId: Int,
+): PendingIntent? = TaskStackBuilder.create(this).run {
+    addNextIntentWithParentStack(intent)
+    getPendingIntent(
+        notificationId,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+    )
+}
 
 val Context.topActivityName: String?
     get() {
