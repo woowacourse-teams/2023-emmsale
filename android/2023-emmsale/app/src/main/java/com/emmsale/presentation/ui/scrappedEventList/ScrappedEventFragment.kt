@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentScrappedEventBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.ScrollUpVisibilityListener
+import com.emmsale.presentation.common.ScrollTopListener
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.scrappedEventList.recyclerView.ScrappedEventAdapter
 import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState
@@ -25,7 +25,6 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
         super.onViewCreated(view, savedInstanceState)
         initBinding()
         setUpScrappedEvents()
-        initScrollTopFabClickListener()
     }
 
     override fun onResume() {
@@ -37,7 +36,7 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
         binding.vm = viewModel
         binding.rvScrappedEvents.adapter = scrappedEventsAdapter
         binding.rvScrappedEvents.addOnScrollListener(
-            ScrollUpVisibilityListener(requireContext(), binding.fabScrollTop),
+            ScrollTopListener(targetView = binding.fabScrollTop),
         )
     }
 
@@ -45,10 +44,6 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
         viewModel.scrappedEvents.observe(viewLifecycleOwner) { scrappedEvents ->
             scrappedEventsAdapter.submitList(scrappedEvents.list)
         }
-    }
-
-    private fun initScrollTopFabClickListener() {
-        binding.fabScrollTop.setOnClickListener { binding.rvScrappedEvents.smoothScrollToPosition(0) }
     }
 
     private fun showEventDetail(scrappedEventUiState: ScrappedEventUiState) {
