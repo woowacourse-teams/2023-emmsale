@@ -22,13 +22,13 @@ class AuthInterceptor(private val context: Context) : Interceptor {
         val tokenAddedRequest = chain.request().putAccessToken(token?.accessToken)
 
         val response = chain.proceed(tokenAddedRequest)
-        if (response.isAccessTokenExpired()) {
+        if (response.isAccessTokenInvalid()) {
             navigateToLogin()
         }
         return response
     }
 
-    private fun Response.isAccessTokenExpired(): Boolean = (code == 401)
+    private fun Response.isAccessTokenInvalid(): Boolean = (code == 401)
 
     private fun Request.putAccessToken(token: String?): Request =
         putHeader(ACCESS_TOKEN_HEADER, ACCESS_TOKEN_FORMAT.format(token))
