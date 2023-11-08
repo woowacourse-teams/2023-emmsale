@@ -9,6 +9,7 @@ import com.emmsale.R
 import com.emmsale.data.model.Event
 import com.emmsale.databinding.FragmentConferenceBinding
 import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.common.ScrollUpVisibilityListener
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat
 import com.emmsale.presentation.common.views.FilterTag
 import com.emmsale.presentation.common.views.filterChipOf
@@ -59,6 +60,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
         initViewModel()
         initEventRecyclerView()
         initEventFilterButtonClickListener()
+        initScrollTopFabClickListener()
     }
 
     private fun initViewModel() {
@@ -67,6 +69,9 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
 
     private fun initEventRecyclerView() {
         binding.rvEvents.adapter = eventAdapter
+        binding.rvEvents.addOnScrollListener(
+            ScrollUpVisibilityListener(requireContext(), binding.fabScrollTop),
+        )
     }
 
     private fun setupEventsObserver() {
@@ -127,6 +132,10 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
 
     private fun initEventFilterButtonClickListener() {
         binding.btnEventFilter.setOnClickListener { navigateToEventFilter() }
+    }
+
+    private fun initScrollTopFabClickListener() {
+        binding.fabScrollTop.setOnClickListener { binding.rvEvents.smoothScrollToPosition(0) }
     }
 
     private fun navigateToEventDetail(event: Event) {
