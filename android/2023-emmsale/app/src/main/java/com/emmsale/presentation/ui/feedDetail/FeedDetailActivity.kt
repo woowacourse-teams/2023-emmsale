@@ -7,17 +7,19 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ActivityFeedDetailBinding
 import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
-import com.emmsale.presentation.ui.commentList.recyclerView.CommentRecyclerViewDivider
 import com.emmsale.presentation.ui.feedDetail.FeedDetailViewModel.Companion.KEY_FEED_ID
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailAdapter
@@ -28,7 +30,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FeedDetailActivity : AppCompatActivity() {
     private val binding by lazy { ActivityFeedDetailBinding.inflate(layoutInflater) }
+
     private val viewModel: FeedDetailViewModel by viewModels()
+
+    private val highlightCommentId: Long by lazy {
+        intent.getLongExtra(KEY_HIGHLIGHT_COMMENT_ID, INVALID_COMMENT_ID)
+    }
 
     private val inputMethodManager: InputMethodManager by lazy {
         getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -37,10 +44,30 @@ class FeedDetailActivity : AppCompatActivity() {
 
     private val feedDetailAdapter: FeedDetailAdapter = FeedDetailAdapter(::showProfile)
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
-        onParentCommentClick = ::showChildComments,
-        onProfileImageClick = ::showProfile,
+        onCommentClick = { comment ->
+            ChildCommentActivity.startActivity(
+                context = this,
+                feedId = comment.feedId,
+                parentCommentId = comment.parentId ?: comment.id,
+                highlightCommentId = comment.id,
+            )
+        },
+        onAuthorImageClick = ::showProfile,
         onCommentMenuClick = ::showCommentMenuDialog,
-    )
+    ).apply {
+        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (highlightCommentId == INVALID_COMMENT_ID || viewModel.isAlreadyFirstFetched || itemCount == 0) return
+                val position = viewModel.feedDetail.value.comments
+                    .indexOfFirst { it.comment.id == highlightCommentId } + FEED_DETAIL_COUNT
+                binding.rvFeeddetailFeedAndComments.scrollToPosition(position)
+
+                viewModel.highlightComment(highlightCommentId)
+
+                viewModel.isAlreadyFirstFetched = true
+            }
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,14 +97,6 @@ class FeedDetailActivity : AppCompatActivity() {
 
     private fun hideKeyboard() {
         inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
-    }
-
-    private fun showKeyboard() {
-        @Suppress("DEPRECATION")
-        inputMethodManager.toggleSoftInput(
-            InputMethodManager.SHOW_FORCED,
-            InputMethodManager.HIDE_IMPLICIT_ONLY,
-        )
     }
 
     private fun cancelUpdateComment() {
@@ -155,16 +174,12 @@ class FeedDetailActivity : AppCompatActivity() {
                 commentsAdapter,
             )
             itemAnimator = null
-            addItemDecoration(CommentRecyclerViewDivider(this@FeedDetailActivity))
+            addItemDecoration(DividerItemDecoration(this@FeedDetailActivity))
         }
     }
 
     private fun showProfile(authorId: Long) {
         ProfileActivity.startActivity(this, authorId)
-    }
-
-    private fun showChildComments(commentId: Long) {
-        ChildCommentActivity.startActivity(this, viewModel.feedId, commentId)
     }
 
     private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, commentId: Long) {
@@ -303,10 +318,25 @@ class FeedDetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun startActivity(context: Context, feedId: Long) {
-            val intent = Intent(context, FeedDetailActivity::class.java)
-                .putExtra(KEY_FEED_ID, feedId)
-            context.startActivity(intent)
+        private const val KEY_HIGHLIGHT_COMMENT_ID = "KEY_HIGHLIGHT_COMMENT_ID"
+        private const val INVALID_COMMENT_ID: Long = -1
+        private const val FEED_DETAIL_COUNT: Int = 1
+
+        fun startActivity(
+            context: Context,
+            feedId: Long,
+            highlightCommentId: Long = INVALID_COMMENT_ID,
+        ) {
+            context.startActivity(getIntent(context, feedId, highlightCommentId))
         }
+
+        fun getIntent(
+            context: Context,
+            feedId: Long,
+            highlightCommentId: Long = INVALID_COMMENT_ID,
+        ) = Intent(context, FeedDetailActivity::class.java)
+            .putExtra(KEY_FEED_ID, feedId)
+            .putExtra(KEY_HIGHLIGHT_COMMENT_ID, highlightCommentId)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     }
 }

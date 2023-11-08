@@ -1,52 +1,25 @@
 package com.emmsale.presentation.ui.childCommentList.uiState
 
 import com.emmsale.data.model.Comment
+import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 
-data class ChildCommentsUiState(
-    val isLoading: Boolean,
-    val isError: Boolean,
-    val parentComment: CommentUiState,
-    val childComments: List<CommentUiState>,
-) {
+data class ChildCommentsUiState(val comments: List<CommentUiState> = emptyList()) {
 
-    fun changeToLoadingState(): ChildCommentsUiState = copy(
-        isLoading = true,
-        isError = false,
+    fun highlight(commentId: Long) = copy(
+        comments = comments.map { if (it.comment.id == commentId) it.highlight() else it },
     )
 
-    fun changeToErrorState(): ChildCommentsUiState = copy(
-        isLoading = false,
-        isError = true,
-    )
-
-    fun changeChildCommentsState(
-        comment: Comment,
-        loginMemberId: Long,
-    ): ChildCommentsUiState = copy(
-        isLoading = false,
-        isError = false,
-        parentComment = CommentUiState.create(comment, loginMemberId),
-        childComments = comment.childComments.map { CommentUiState.create(it, loginMemberId) },
+    fun unhighlight(commentId: Long) = copy(
+        comments = comments.map { if (it.comment.id == commentId) it.unhighlight() else it },
     )
 
     companion object {
-        val FIRST_LOADING = ChildCommentsUiState(
-            isLoading = true,
-            isError = false,
-            parentComment = CommentUiState(
-                authorId = -1,
-                authorName = "",
-                authorImageUrl = "",
-                lastModifiedDate = "",
-                isUpdated = false,
-                id = -1,
-                content = "",
-                isUpdatable = false,
-                isDeletable = false,
-                isReportable = false,
-                isDeleted = false,
-            ),
-            childComments = listOf(),
+        fun create(
+            uid: Long,
+            parentComment: Comment,
+        ) = ChildCommentsUiState(
+            comments = listOf(CommentUiState.create(uid, parentComment)) +
+                parentComment.childComments.map { CommentUiState.create(uid, it) },
         )
     }
 }

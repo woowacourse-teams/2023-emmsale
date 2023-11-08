@@ -5,8 +5,8 @@ import java.time.format.DateTimeFormatter
 
 data class MyCommentUiState(
     val id: Long,
-    val eventId: Long,
-    val eventName: String,
+    val feedId: Long,
+    val feedTitle: String,
     val authorId: Long,
     val parentId: Long?,
     val content: String,
@@ -20,8 +20,8 @@ data class MyCommentUiState(
 
         fun from(comment: Comment) = MyCommentUiState(
             id = comment.id,
-            eventId = comment.feedId,
-            eventName = comment.feedTitle,
+            feedId = comment.feedId,
+            feedTitle = comment.feedTitle,
             authorId = comment.authorId,
             parentId = comment.parentId,
             content = comment.content,

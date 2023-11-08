@@ -15,6 +15,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityMessageListBinding
 import com.emmsale.presentation.common.EventObserver
 import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.common.KeyboardHider
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.messageList.MessageListViewModel.Companion.KEY_OTHER_UID
 import com.emmsale.presentation.ui.messageList.MessageListViewModel.Companion.KEY_ROOM_ID
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 class MessageListActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
     private val viewModel: MessageListViewModel by viewModels()
-    private val keyboardHider by lazy { KeyboardHider(binding.etMessageInput) }
+    private val keyboardHider by lazy { KeyboardHider(this) }
 
     private val messageListAdapter by lazy { MessageListAdapter(onProfileClick = ::navigateToProfile) }
 

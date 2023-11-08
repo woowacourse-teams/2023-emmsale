@@ -25,6 +25,7 @@ import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @HiltViewModel
 class FeedDetailViewModel @Inject constructor(
@@ -33,6 +34,10 @@ class FeedDetailViewModel @Inject constructor(
     private val commentRepository: CommentRepository,
     private val tokenRepository: TokenRepository,
 ) : ViewModel(), Refreshable {
+    var isAlreadyFirstFetched: Boolean by Delegates.vetoable(false) { _, _, newValue ->
+        newValue
+    }
+
     val feedId = savedStateHandle[KEY_FEED_ID] ?: DEFAULT_FEED_ID
 
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
@@ -234,6 +239,10 @@ class FeedDetailViewModel @Inject constructor(
                         Event(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
+    }
+
+    fun highlightComment(commentId: Long) {
+        _feedDetail.value = _feedDetail.value.highlightComment(commentId)
     }
 
     companion object {

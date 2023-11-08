@@ -4,16 +4,23 @@ import com.emmsale.data.model.Comment
 
 data class CommentUiState(
     val isWrittenByLoginUser: Boolean,
+    val isHighlight: Boolean,
     val comment: Comment,
 ) {
     val isUpdated: Boolean = comment.createdAt != comment.updatedAt
 
     val childCommentsCount = comment.childComments.count { !it.deleted }
 
+    fun highlight() = copy(isHighlight = true)
+
+    fun unhighlight() = copy(isHighlight = false)
+
     companion object {
-        fun create(uid: Long, comment: Comment): CommentUiState = CommentUiState(
-            isWrittenByLoginUser = uid == comment.authorId,
-            comment = comment,
-        )
+        fun create(uid: Long, comment: Comment, isHighlight: Boolean = false): CommentUiState =
+            CommentUiState(
+                isWrittenByLoginUser = uid == comment.authorId,
+                isHighlight = isHighlight,
+                comment = comment,
+            )
     }
 }

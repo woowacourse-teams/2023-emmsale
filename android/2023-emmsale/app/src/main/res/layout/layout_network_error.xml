@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="onRefreshListener"
+            type="com.emmsale.presentation.common.views.NetworkErrorView.OnRefreshListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_errorscreen_error_icon_foreground"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/all_network_error_icon_description"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_errorscreen_error_icon_background"
+            app:layout_constraintEnd_toEndOf="@+id/iv_errorscreen_error_icon_background"
+            app:layout_constraintStart_toStartOf="@+id/iv_errorscreen_error_icon_background"
+            app:layout_constraintTop_toTopOf="@+id/iv_errorscreen_error_icon_background"
+            app:srcCompat="@drawable/ic_all_network_error" />
+
+        <ImageView
+            android:id="@+id/iv_errorscreen_error_icon_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bg_errorscreen_network_error_icon" />
+
+        <TextView
+            android:id="@+id/tv_error_screen_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/all_network_error_title"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/iv_errorscreen_error_icon_background"
+            app:layout_constraintStart_toStartOf="@+id/iv_errorscreen_error_icon_background"
+            app:layout_constraintTop_toBottomOf="@+id/iv_errorscreen_error_icon_background" />
+
+        <TextView
+            android:id="@+id/tv_error_screen_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:gravity="center"
+            android:lineSpacingExtra="4.2sp"
+            android:text="@string/all_network_error_message"
+            android:textColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="@+id/tv_error_screen_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_error_screen_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_error_screen_title" />
+
+        <TextView
+            android:id="@+id/tv_retry_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:background="@drawable/bg_all_middle_primary_button"
+            android:onClick="@{() -> onRefreshListener.onRefresh()}"
+            android:paddingHorizontal="41dp"
+            android:paddingVertical="9dp"
+            android:text="@string/all_retry"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_error_screen_description"
+            app:layout_constraintStart_toStartOf="@+id/tv_error_screen_description"
+            app:layout_constraintTop_toBottomOf="@+id/tv_error_screen_description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

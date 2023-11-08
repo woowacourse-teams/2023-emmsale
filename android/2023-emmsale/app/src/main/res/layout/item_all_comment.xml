@@ -11,89 +11,125 @@
 
         <import type="kotlin.Unit" />
 
+        <import type="com.emmsale.data.model.Comment" />
+
         <variable
             name="uiState"
             type="com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState" />
 
         <variable
-            name="onClick"
-            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
-
-        <variable
-            name="onProfileImageClick"
+            name="onAuthorImageClick"
             type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
 
         <variable
             name="onCommentMenuClick"
             type="kotlin.jvm.functions.Function2&lt;Boolean, Long, Unit>" />
+
+        <variable
+            name="onCommentClick"
+            type="kotlin.jvm.functions.Function1&lt;Comment, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> onClick.invoke(uiState.comment.id)}">
+        android:paddingHorizontal="17dp"
+        android:background="@{uiState.highlight ? @color/comment_highlight_color : @android:color/transparent}"
+        android:onClick="@{() -> onCommentClick.invoke(uiState.comment)}">
+
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:visible="@{uiState.comment.parentId != null}"
+            app:constraint_referenced_ids="iv_child_comment_arrow_decoration,space_visible_when_child_comment" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_visible_views_when_comment_is_not_deleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:visible="@{!uiState.comment.deleted}"
+            app:constraint_referenced_ids="iv_comment_author_image,tv_comment_last_modified_date,iv_comment_menu_button" />
+
+        <ImageView
+            android:id="@+id/iv_child_comment_arrow_decoration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_marginTop="@{uiState.comment.deleted ? `18dp` : `22dp`}"
+            android:importantForAccessibility="no"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_comment_child_comment_arrow"
+            tools:layout_marginTop="22dp"/>
+
+        <Space
+            android:id="@+id/space_visible_when_child_comment"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/iv_child_comment_arrow_decoration"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_comment_author_image"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginStart="17dp"
             android:layout_marginTop="15dp"
-            android:contentDescription="@string/comment_author_image"
-            android:onClick="@{() -> onProfileImageClick.invoke(uiState.comment.authorId)}"
+            android:contentDescription="@string/comment_author_image_description"
+            android:onClick="@{() -> onAuthorImageClick.invoke(uiState.comment.authorId)}"
             app:imageUrl="@{uiState.comment.authorImageUrl}"
             app:isCircle="@{true}"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/space_visible_when_child_comment"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tv_comment_authorname"
+            android:id="@+id/tv_comment_author_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_marginTop="@{uiState.comment.deleted ? `19dp` : `14dp`}"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="14dp"
-            android:text="@{uiState.comment.authorName}"
+            app:layout_goneMarginStart="0dp"
+            android:text="@{uiState.comment.deleted ? @string/comment_deleted_comment_author_name : uiState.comment.authorName}"
             android:textSize="12sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/iv_comment_author_image"
+            app:layout_constraintStart_toEndOf="@+id/iv_comment_author_image"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="김커디" />
+            tools:text="김커디"
+            tools:layout_marginTop="14dp"/>
 
         <TextView
-            android:id="@+id/tv_comment_lastmodifieddate"
+            android:id="@+id/tv_comment_last_modified_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:dateText="@{uiState.comment.updatedAt}"
             app:dateTimeFormatter="@{DateTimePattern.RELATIVE_TIME}"
-            app:layout_constraintBottom_toBottomOf="@id/iv_comment_author_image"
-            app:layout_constraintStart_toStartOf="@+id/tv_comment_authorname"
-            tools:text="2023.08.03" />
+            app:layout_constraintStart_toStartOf="@+id/tv_comment_author_name"
+            tools:text="2023.08.03"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_comment_author_name" />
 
         <TextView
-            android:id="@+id/tv_comment_isupdated"
+            android:id="@+id/tv_comment_is_updated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:text="@string/all_is_updated"
             android:textColor="@color/gray"
             android:textSize="11sp"
-            android:visibility="@{uiState.isUpdated ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_comment_lastmodifieddate"
-            app:layout_constraintStart_toEndOf="@+id/tv_comment_lastmodifieddate"
-            app:layout_constraintTop_toTopOf="@+id/tv_comment_lastmodifieddate" />
+            app:visible="@{uiState.isUpdated &amp;&amp; !uiState.comment.deleted}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_comment_last_modified_date"
+            app:layout_constraintStart_toEndOf="@+id/tv_comment_last_modified_date"
+            app:layout_constraintTop_toTopOf="@+id/tv_comment_last_modified_date" />
 
         <ImageView
-            android:id="@+id/iv_comment_menubutton"
+            android:id="@+id/iv_comment_menu_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="13dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/comment_menu_button"
             android:onClick="@{() -> onCommentMenuClick.invoke(uiState.isWrittenByLoginUser, uiState.comment.id)}"
-            android:padding="4dp"
+            android:padding="2dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_comment_author_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_comment_author_image"
@@ -103,20 +139,23 @@
             android:id="@+id/tv_comment_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="17dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="8dp"
+            app:layout_goneMarginBottom="14dp"
+            app:layout_goneMarginTop="6dp"
             android:autoLink="web"
             android:lineSpacingExtra="2dp"
             android:linksClickable="true"
-            android:text="@{uiState.comment.content}"
+            android:text="@{uiState.comment.deleted ? @string/comment_deleted_comment_content : uiState.comment.content}"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/iv_comment_author_image"
-            app:layout_constraintTop_toBottomOf="@+id/iv_comment_author_image"
+            app:layout_constraintStart_toStartOf="@+id/tv_comment_author_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_comment_last_modified_date"
+            app:layout_constraintBottom_toTopOf="@id/tv_comment_child_comment_count"
             tools:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하" />
 
         <TextView
-            android:id="@+id/tv_comment_childcommentscount"
+            android:id="@+id/tv_comment_child_comment_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -124,9 +163,9 @@
             android:text="@{@string/comments_child_comments_count_format(uiState.childCommentsCount)}"
             android:textColor="@color/gray"
             android:textSize="11sp"
+            app:visible="@{uiState.comment.parentId == null}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_comment_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_comment_content"
+            app:layout_constraintStart_toStartOf="@id/tv_comment_content"
             tools:text="답글 0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="bottomNavigationStyle">@style/bottomNavigationViewStyle</item>
         <item name="android:textViewStyle">@style/basicTextFontStyle</item>
+        <item name="android:editTextStyle">@style/basicTextFontStyle</item>
         <item name="bottomSheetDialogTheme">
             @style/ThemeOverlay.MaterialComponents.BottomSheetDialog
         </item>

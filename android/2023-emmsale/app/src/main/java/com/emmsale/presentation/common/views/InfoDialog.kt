@@ -15,6 +15,8 @@ class InfoDialog(
     private val title: String,
     private val message: String,
     private val buttonLabel: String = context.getString(R.string.all_okay),
+    private val onButtonClick: (() -> Unit)? = null,
+    private val cancelable: Boolean = true,
 ) : Dialog(context) {
     private val binding: DialogInfoBinding by lazy { DialogInfoBinding.inflate(layoutInflater) }
 
@@ -22,6 +24,7 @@ class InfoDialog(
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        setCancelable(cancelable)
         initDialogWindow()
         initDataBinding()
     }
@@ -39,6 +42,7 @@ class InfoDialog(
         binding.message = message
         binding.buttonLabel = buttonLabel
         binding.onButtonClick = {
+            onButtonClick?.invoke()
             dismiss()
         }
     }

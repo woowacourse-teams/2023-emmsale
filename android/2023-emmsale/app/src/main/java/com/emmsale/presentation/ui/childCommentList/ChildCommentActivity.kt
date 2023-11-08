@@ -1,26 +1,29 @@
 package com.emmsale.presentation.ui.childCommentList
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.CommonUiEvent
+import com.emmsale.presentation.common.extension.hideKeyboard
+import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
+import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_FEED_ID
 import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_PARENT_COMMENT_ID
-import com.emmsale.presentation.ui.childCommentList.recyclerView.ChildCommentRecyclerViewDivider
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
-import com.emmsale.presentation.ui.childCommentList.uiState.CommentsUiState
+import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.profile.ProfileActivity
@@ -29,33 +32,39 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ChildCommentActivity : AppCompatActivity() {
     private val binding by lazy { ActivityChildCommentsBinding.inflate(layoutInflater) }
+
     private val viewModel: ChildCommentViewModel by viewModels()
 
-    private val inputMethodManager: InputMethodManager by lazy {
-        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    }
-
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
-        onParentCommentClick = {},
-        onProfileImageClick = ::showProfile,
+        onCommentClick = { comment -> viewModel.unhighlight(comment.id) },
+        onAuthorImageClick = { authorId -> ProfileActivity.startActivity(this, authorId) },
         onCommentMenuClick = ::showCommentMenuDialog,
     )
 
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
+    private val highlightCommentId: Long by lazy {
+        intent.getLongExtra(KEY_HIGHLIGHT_COMMENT_ID, INVALID_COMMENT_ID)
+    }
+
+    private val fromPostDetail: Boolean by lazy {
+        intent.getBooleanExtra(KEY_FROM_POST_DETAIL, true)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        initDataBinding()
-        initBackPressedDispatcher()
-        initToolbar()
-        initChildCommentsRecyclerView()
-        initEditComment()
-        setupUiLogic()
+
+        setupDataBinding()
+        setupBackPressedDispatcher()
+        setupToolbar()
+        setupChildCommentsRecyclerView()
+        observeComments()
+        observeUiEvent()
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onRestart() {
+        super.onRestart()
         viewModel.refresh()
     }
 
@@ -72,17 +81,19 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun BottomMenuDialog.addCommentUpdateButton(commentId: Long) {
         addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
-            editComment(commentId)
+            viewModel.setEditMode(true, commentId)
+            binding.stiwCommentUpdate.requestFocusOnEditText()
+            showKeyboard()
         }
     }
 
     private fun BottomMenuDialog.addCommentDeleteButton(commentId: Long) {
         addMenuItemBelow(context.getString(R.string.all_delete_button_label)) {
-            onCommentDeleteButtonClick(commentId)
+            showDeleteCommentConfirmDialog(commentId)
         }
     }
 
-    private fun onCommentDeleteButtonClick(commentId: Long) {
+    private fun showDeleteCommentConfirmDialog(commentId: Long) {
         val context = binding.root.context
         WarningDialog(
             context = context,
@@ -90,7 +101,7 @@ class ChildCommentActivity : AppCompatActivity() {
             message = context.getString(R.string.commentdeletedialog_message),
             positiveButtonLabel = context.getString(R.string.commentdeletedialog_positive_button_label),
             negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
-            onPositiveButtonClick = { deleteComment(commentId) },
+            onPositiveButtonClick = { viewModel.deleteComment(commentId) },
         ).show()
     }
 
@@ -98,24 +109,10 @@ class ChildCommentActivity : AppCompatActivity() {
         addMenuItemBelow(
             context.getString(R.string.all_report_button_label),
             MenuItemType.IMPORTANT,
-        ) { reportComment(commentId) }
+        ) { showReportConfirmDialog(commentId) }
     }
 
-    private fun showProfile(authorId: Long) {
-        ProfileActivity.startActivity(this, authorId)
-    }
-
-    private fun editComment(commentId: Long) {
-        viewModel.setEditMode(true, commentId)
-        binding.etChildcommentsCommentUpdate.requestFocus()
-        showKeyboard()
-    }
-
-    private fun deleteComment(commentId: Long) {
-        viewModel.deleteComment(commentId)
-    }
-
-    private fun reportComment(commentId: Long) {
+    private fun showReportConfirmDialog(commentId: Long) {
         WarningDialog(
             context = this,
             title = getString(R.string.all_report_dialog_title),
@@ -126,79 +123,82 @@ class ChildCommentActivity : AppCompatActivity() {
         ).show()
     }
 
-    private fun initDataBinding() {
+    private fun setupDataBinding() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        binding.cancelUpdateComment = ::cancelUpdateComment
-        binding.updateComment = ::updateComment
+        binding.onCommentSubmitButtonClick = {
+            viewModel.postChildComment(it)
+            hideKeyboard()
+        }
+        binding.onCommentUpdateCancelButtonClick = {
+            viewModel.setEditMode(false)
+            hideKeyboard()
+        }
+        binding.onUpdatedCommentSubmitButtonClick = {
+            val commentId = viewModel.editingCommentId.value
+            if (commentId != null) viewModel.updateComment(commentId, it)
+            hideKeyboard()
+        }
     }
 
-    private fun cancelUpdateComment() {
-        viewModel.setEditMode(false)
-        hideKeyboard()
+    private fun setupBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!fromPostDetail) {
+                        FeedDetailActivity.startActivity(
+                            this@ChildCommentActivity,
+                            viewModel.feedId,
+                        )
+                    }
+                    finish()
+                }
+            },
+        )
     }
 
-    private fun updateComment() {
-        val commentId = viewModel.editingCommentId.value ?: return
-        val content = binding.etChildcommentsCommentUpdate.text.toString()
-        viewModel.updateComment(commentId, content)
-        hideKeyboard()
-    }
-
-    private fun initBackPressedDispatcher() {
-        onBackPressedDispatcher.addCallback(this, ChildCommentOnBackPressedCallback())
-    }
-
-    private fun initToolbar() {
+    private fun setupToolbar() {
         binding.tbChildcommentsToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
-    private fun initChildCommentsRecyclerView() {
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupChildCommentsRecyclerView() {
         binding.rvChildcommentsChildcomments.apply {
             adapter = commentsAdapter
             itemAnimator = null
-            addItemDecoration(ChildCommentRecyclerViewDivider(this@ChildCommentActivity))
+            addItemDecoration(DividerItemDecoration(this@ChildCommentActivity))
         }
     }
 
-    private fun setupUiLogic() {
-        setupCommentsUiLogic()
-        setupEditingCommentUiLogic()
-        setUpUiEvent()
-    }
-
-    private fun setupCommentsUiLogic() {
+    private fun observeComments() {
         viewModel.comments.observe(this) {
-            handleChildComments(it)
+            commentsAdapter.submitList(it.comments) { scrollToIfFirstFetch(it) }
         }
     }
 
-    private fun setupEditingCommentUiLogic() {
-        viewModel.editingCommentContent.observe(this) {
-            if (it == null) return@observe
-            binding.etChildcommentsCommentUpdate.setText(it)
-        }
+    private fun scrollToIfFirstFetch(childCommentUiState: ChildCommentsUiState) {
+        fun cantScroll(): Boolean =
+            viewModel.isAlreadyFirstFetched || childCommentUiState.comments.isEmpty()
+
+        if (highlightCommentId == INVALID_COMMENT_ID || cantScroll()) return
+        val position = viewModel.comments.value.comments
+            .indexOfFirst { commentUiState ->
+                commentUiState.comment.id == highlightCommentId
+            }
+        binding.rvChildcommentsChildcomments.scrollToPosition(position)
+
+        viewModel.highlight(highlightCommentId)
+        viewModel.isAlreadyFirstFetched = true
     }
 
-    private fun handleChildComments(comments: CommentsUiState) {
-        commentsAdapter.submitList(comments.comments)
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(this) { handleUiEvent(it) }
+        viewModel.commonUiEvent.observe(this) { handleBaseUiEvent(it) }
     }
 
-    private fun initEditComment() {
-        binding.tvChildcommentsPostchildcommentbutton.setOnClickListener {
-            onChildCommentSave()
-        }
-    }
-
-    private fun setUpUiEvent() {
-        viewModel.uiEvent.observe(this) {
-            handleUiEvent(it)
-        }
-    }
-
-    private fun handleUiEvent(event: Event<ChildCommentsUiEvent>) {
-        val content = event.getContentIfNotHandled() ?: return
-        when (content) {
+    private fun handleUiEvent(event: ChildCommentsUiEvent) {
+        when (event) {
             ChildCommentsUiEvent.CommentReportFail -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
             ChildCommentsUiEvent.CommentReportComplete -> InfoDialog(
                 context = this,
@@ -217,41 +217,55 @@ class ChildCommentActivity : AppCompatActivity() {
             ChildCommentsUiEvent.CommentPostFail -> binding.root.showSnackBar(getString(R.string.comments_comments_posting_error_message))
             ChildCommentsUiEvent.CommentUpdateFail -> binding.root.showSnackBar(getString(R.string.comments_comments_update_error_message))
             ChildCommentsUiEvent.CommentDeleteFail -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))
-            ChildCommentsUiEvent.None -> {}
-            is ChildCommentsUiEvent.UnexpectedError -> showToast(content.errorMessage)
-            ChildCommentsUiEvent.CommentPostComplete -> scrollToLastPosition()
+            ChildCommentsUiEvent.CommentPostComplete -> {
+                smoothScrollToLastPosition()
+                binding.btiwCommentPost.clearText()
+            }
+
+            ChildCommentsUiEvent.CommentUpdateComplete ->
+                binding.stiwCommentUpdate.isVisible = false
+
+            ChildCommentsUiEvent.IllegalCommentFetch -> InfoDialog(
+                context = this,
+                title = getString(R.string.all_fetch_fail_title),
+                message = getString(R.string.comments_not_exist_comment_message),
+                buttonLabel = getString(R.string.all_okay),
+                onButtonClick = { finish() },
+                cancelable = false,
+            ).show()
         }
     }
 
-    private fun onChildCommentSave() {
-        viewModel.saveChildComment(binding.etChildcommentsEditchildcommentcontent.text.toString())
-        binding.etChildcommentsEditchildcommentcontent.text.clear()
-        hideKeyboard()
+    private fun handleBaseUiEvent(event: CommonUiEvent) {
+        when (event) {
+            CommonUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_check_message))
+            is CommonUiEvent.Unexpected -> showToast(event.errorMessage)
+        }
     }
 
-    private fun scrollToLastPosition() {
+    private fun smoothScrollToLastPosition() {
         binding.rvChildcommentsChildcomments.smoothScrollToPosition(viewModel.comments.value.comments.size)
     }
 
-    private fun hideKeyboard() {
-        inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
-    }
-
-    private fun showKeyboard() {
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        @Suppress("DEPRECATION")
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-    }
-
     companion object {
-        private const val KEY_FROM_NOTIFICATION = "KEY_FROM_NOTIFICATION"
+        private const val KEY_HIGHLIGHT_COMMENT_ID = "KEY_HIGHLIGHT_COMMENT_ID"
+        private const val KEY_FROM_POST_DETAIL = "KEY_FROM_POST_DETAIL"
+        private const val INVALID_COMMENT_ID: Long = -1
 
-        fun startActivity(context: Context, feedId: Long, parentCommentId: Long) {
-            val intent = Intent(context, ChildCommentActivity::class.java).apply {
-                putExtra(KEY_FEED_ID, feedId)
-                putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            }
+        fun startActivity(
+            context: Context,
+            feedId: Long,
+            parentCommentId: Long,
+            highlightCommentId: Long = INVALID_COMMENT_ID,
+            fromPostDetail: Boolean = true,
+        ) {
+            val intent = getIntent(
+                context = context,
+                feedId = feedId,
+                parentCommentId = parentCommentId,
+                highlightCommentId = highlightCommentId,
+                fromPostDetail = fromPostDetail,
+            )
             context.startActivity(intent)
         }
 
@@ -259,22 +273,13 @@ class ChildCommentActivity : AppCompatActivity() {
             context: Context,
             feedId: Long,
             parentCommentId: Long,
-            fromNotification: Boolean = false,
-        ): Intent =
-            Intent(context, ChildCommentActivity::class.java).apply {
-                putExtra(KEY_FEED_ID, feedId)
-                putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                if (fromNotification) putExtra(KEY_FROM_NOTIFICATION, true)
-            }
-    }
-
-    inner class ChildCommentOnBackPressedCallback : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            if (intent.getBooleanExtra(KEY_FROM_NOTIFICATION, false)) {
-                FeedDetailActivity.startActivity(this@ChildCommentActivity, viewModel.feedId)
-            }
-            finish()
-        }
+            highlightCommentId: Long = INVALID_COMMENT_ID,
+            fromPostDetail: Boolean = true,
+        ) = Intent(context, ChildCommentActivity::class.java)
+            .putExtra(KEY_FEED_ID, feedId)
+            .putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
+            .putExtra(KEY_HIGHLIGHT_COMMENT_ID, highlightCommentId)
+            .putExtra(KEY_FROM_POST_DETAIL, fromPostDetail)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     }
 }

@@ -16,6 +16,14 @@ data class FeedDetailUiState(
 
     val commentsCount: Int = comments.count { !it.comment.deleted }
 
+    fun highlightComment(commentId: Long) = copy(
+        comments = comments.map { if (it.comment.id == commentId) it.highlight() else it },
+    )
+
+    fun unhighlightComment(commentId: Long) = copy(
+        comments = comments.map { if (it.comment.id == commentId) it.unhighlight() else it },
+    )
+
     companion object {
         val Loading: FeedDetailUiState = FeedDetailUiState(
             fetchResult = FetchResult.LOADING,
