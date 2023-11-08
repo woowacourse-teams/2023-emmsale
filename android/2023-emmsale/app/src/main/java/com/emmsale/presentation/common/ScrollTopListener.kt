@@ -16,13 +16,10 @@ class ScrollTopListener(
         return targetView.context.resources.getBoolean(R.bool.is_landscape)
     }
 
-    private fun getScrollUpStandardPosition(isLandScape: Boolean): Int {
-        val scrollUpStandard = if (isLandScape) {
-            LANDSCAPE_SCROLL_UP_STANDARD_POSITION
-        } else {
-            PORTRAIT_SCROLL_UP_STANDARD_POSITION
-        }
-        return scrollUpStandard
+    private fun getScrollUpStandardPosition(isLandScape: Boolean): Int = if (isLandScape) {
+        LANDSCAPE_SCROLL_UP_STANDARD_POSITION
+    } else {
+        PORTRAIT_SCROLL_UP_STANDARD_POSITION
     }
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
