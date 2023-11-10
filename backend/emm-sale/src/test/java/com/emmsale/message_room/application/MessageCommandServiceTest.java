@@ -60,14 +60,15 @@ class MessageCommandServiceTest extends ServiceIntegrationTestHelper {
       ));
 
       final MessageSendRequest request = new MessageSendRequest(requesterId, receiverId, content);
-      final Message expected = new Message(content, requesterId, roomUUID, LocalDateTime.now());
+      final Message expected = new Message(content, member, roomUUID, LocalDateTime.now());
 
       //when
       messageCommandService.sendMessage(request, member);
 
       //then
       assertThat(messageRepository.findAll())
-          .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "createdAt")
+          .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "createdAt",
+              "sender.createdAt", "sender.updatedAt")
           .containsExactlyInAnyOrder(expected);
     }
 
@@ -81,7 +82,7 @@ class MessageCommandServiceTest extends ServiceIntegrationTestHelper {
       final String content = "메시지 내용";
       final MessageSendRequest request
           = new MessageSendRequest(requesterId, receiverId, content);
-      final Message expected = new Message(content, requesterId, null, LocalDateTime.now());
+      final Message expected = new Message(content, member, null, LocalDateTime.now());
 
       //when
       messageCommandService.sendMessage(request, member);
@@ -90,7 +91,7 @@ class MessageCommandServiceTest extends ServiceIntegrationTestHelper {
       assertAll(
           () -> assertThat(messageRepository.findAll())
               .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "createdAt",
-                  "roomId")
+                  "roomId", "sender.createdAt", "sender.updatedAt")
               .containsExactly(expected),
           () -> verify(firebaseCloudMessageClient, times(1))
               .sendMessageTo(any(MessageNotificationEvent.class))

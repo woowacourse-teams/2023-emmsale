@@ -8,4 +8,5 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
   @Query("select m from Message m where m.roomId = :roomUUID")
   List<Message> findByRoomUUID(String roomUUID);
+
 }

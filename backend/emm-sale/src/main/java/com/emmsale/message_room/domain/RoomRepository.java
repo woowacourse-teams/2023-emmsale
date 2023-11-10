@@ -19,4 +19,6 @@ public interface RoomRepository extends JpaRepository<Room, RoomId> {
       @Param("member1") final Long interlocutorId1,
       @Param("member2") final Long interlocutorId2
   );
+
+  boolean existsByRoomId(RoomId roomId);
 }

@@ -19,7 +19,7 @@ public class MessageNotificationEvent {
     return new MessageNotificationEvent(
         message.getRoomId(),
         message.getContent(),
-        message.getSenderId(),
+        message.getSender().getId(),
         receiverId,
         message.getCreatedAt()
     );
