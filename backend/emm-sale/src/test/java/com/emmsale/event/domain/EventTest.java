@@ -31,10 +31,12 @@ import org.junit.jupiter.params.provider.CsvSource;
 class EventTest {
 
   @ParameterizedTest
-  @CsvSource(value = {"2023-03-01,UPCOMING", "2023-07-25,IN_PROGRESS",
-      "2023-08-01,ENDED"}, delimiter = ',')
+  @CsvSource(value = {"2023-03-01T00:00:00,UPCOMING", "2023-07-25T00:00:00,IN_PROGRESS",
+      "2023-08-01T00:00:00,ENDED", "2023-07-22T12:00:00,IN_PROGRESS",
+      "2023-07-22T12:00:01,IN_PROGRESS", "2023-07-30T12:00:00,IN_PROGRESS",
+      "2023-07-30T12:00:01,ENDED"}, delimiter = ',')
   @DisplayName("현재 날짜가 주어지면 행사의 진행 상태를 계산한다.")
-  void calculateEventStatus(LocalDate input, EventStatus expected) {
+  void calculateEventStatus(LocalDateTime input, EventStatus expected) {
     // given, when
     EventStatus actual = EventFixture.AI_컨퍼런스().getEventPeriod().calculateEventStatus(input);
 
@@ -273,6 +275,7 @@ class EventTest {
         exception.exceptionType());
   }
 
+  @Deprecated
   @Test
   @DisplayName("현재날짜로부터 남은 날짜를 계산할 수 있다.")
   void calculateRemainingDay() {
@@ -288,6 +291,7 @@ class EventTest {
         .isEqualTo(5);
   }
 
+  @Deprecated
   @Test
   @DisplayName("현재날짜로부터 신청 시작일까지 남은 날짜를 계산할 수 있다.")
   void calculateApplyRemainingDay() {

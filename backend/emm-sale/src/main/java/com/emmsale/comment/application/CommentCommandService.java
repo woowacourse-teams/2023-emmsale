@@ -50,9 +50,17 @@ public class CommentCommandService {
 
     final Comment savedComment = commentRepository.save(comment);
 
-    eventPublisher.publish(savedComment, member);
+    publishEvent(savedComment, feed);
 
     return CommentResponse.from(savedComment);
+  }
+
+  private void publishEvent(final Comment comment, final Feed feed) {
+    if (comment.getParent().isPresent()) {
+      eventPublisher.publish(comment);
+      return;
+    }
+    eventPublisher.publish(comment, feed.getWriter());
   }
 
   private Comment findSavedComment(final Long commentId) {

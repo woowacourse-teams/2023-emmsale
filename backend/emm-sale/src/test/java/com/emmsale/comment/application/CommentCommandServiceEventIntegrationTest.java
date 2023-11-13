@@ -98,4 +98,42 @@ class CommentCommandServiceEventIntegrationTest extends ServiceIntegrationTestHe
         () -> assertEquals(1, notificationRepository.findAll().size())
     );
   }
+
+  @Test
+  @DisplayName("publish(Comment, Member) : 피드에 최상위 부모 댓글이 달리면 피드의 작성자에게 알림이 발송된다.")
+  void test_publish_comment_to_feed_writer() {
+    //given
+    final CommentAddRequest 부모_댓글 = new CommentAddRequest("내용1", feed.getId(), null);
+
+    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
+
+    //when
+    commentCommandService.create(부모_댓글, 댓글_작성자1);
+
+    //then
+    assertAll(
+        () -> verify(firebaseCloudMessageClient, times(1))
+            .sendMessageTo(any(Notification.class), anyLong()),
+        () -> assertEquals(1, notificationRepository.findAll().size())
+    );
+  }
+
+  @Test
+  @DisplayName("publish(Comment, Member) : 피드에 최상위 부모 댓글 작성자와 피드 작성자가 동일할 경우 알림을 발행하지 않는다.")
+  void test_do_not_publish_if_comment_writer_equals_feed_writer() {
+    //given
+    final CommentAddRequest 부모_댓글 = new CommentAddRequest("내용1", feed.getId(), null);
+
+    doNothing().when(firebaseCloudMessageClient).sendMessageTo(any(Notification.class), anyLong());
+
+    //when
+    commentCommandService.create(부모_댓글, feed.getWriter());
+
+    //then
+    assertAll(
+        () -> verify(firebaseCloudMessageClient, times(0))
+            .sendMessageTo(any(Notification.class), anyLong()),
+        () -> assertEquals(0, notificationRepository.findAll().size())
+    );
+  }
 }

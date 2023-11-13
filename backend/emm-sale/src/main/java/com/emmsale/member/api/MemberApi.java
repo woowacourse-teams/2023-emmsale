@@ -7,6 +7,7 @@ import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.MemberImageResponse;
 import com.emmsale.member.application.dto.MemberProfileResponse;
 import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -99,12 +101,13 @@ public class MemberApi {
   }
 
   @PatchMapping("/members/{memberId}/profile")
-  public ResponseEntity<String> updateProfile(
+  public ResponseEntity<MemberImageResponse> updateProfile(
       @PathVariable final Long memberId,
-      final MultipartFile image,
+      @RequestPart final MultipartFile image,
       final Member member
   ) {
-    final String imageUrl = memberUpdateService.updateMemberProfile(image, memberId, member);
-    return ResponseEntity.ok(imageUrl);
+    final MemberImageResponse memberImageResponse
+        = memberUpdateService.updateMemberProfile(image, memberId, member);
+    return ResponseEntity.ok(memberImageResponse);
   }
 }

@@ -92,10 +92,10 @@ public class EventService {
 
   @Transactional(readOnly = true)
   public List<EventResponse> findEvents(final EventType category,
-      final LocalDate nowDate, final String startDate, final String endDate,
+      final LocalDateTime nowDateTime, final String startDate, final String endDate,
       final List<String> tagNames, final List<EventStatus> statuses, final String keyword) {
-    Specification<Event> spec = Specification.where(filterByCategory(category));
-
+    Specification<Event> spec = (root, query, criteriaBuilder) -> null;
+    spec = filterByCategoryIfExist(category, spec);
     spec = filterByTagIfExist(tagNames, spec);
     spec = filterByDateIfExist(startDate, endDate, spec);
     spec = filterByKeywordIfExist(keyword, spec);
@@ -103,9 +103,21 @@ public class EventService {
     final List<Event> events = eventRepository.findAll(spec);
 
     final EnumMap<EventStatus, List<Event>> eventsForEventStatus
-        = groupByEventStatus(nowDate, events);
+        = groupByEventStatus(nowDateTime, events);
 
     return filterByStatuses(statuses, eventsForEventStatus, makeImageUrlPerEventId(events));
+  }
+
+  private Specification<Event> filterByCategoryIfExist(final EventType category,
+      Specification<Event> spec) {
+    if (isExistCategory(category)) {
+      spec = spec.and(filterByCategory(category));
+    }
+    return spec;
+  }
+
+  private boolean isExistCategory(final EventType category) {
+    return category != null;
   }
 
   private Specification<Event> filterByTagIfExist(final List<String> tagNames,
@@ -198,12 +210,12 @@ public class EventService {
     return keyword != null && !keyword.isBlank();
   }
 
-  private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDate nowDate,
+  private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDateTime nowDateTime,
       final List<Event> events) {
     return events.stream()
         .sorted(comparing(event -> event.getEventPeriod().getStartDate()))
         .collect(
-            groupingBy(event -> event.getEventPeriod().calculateEventStatus(nowDate),
+            groupingBy(event -> event.getEventPeriod().calculateEventStatus(nowDateTime),
                 () -> new EnumMap<>(EventStatus.class), toList())
         );
   }

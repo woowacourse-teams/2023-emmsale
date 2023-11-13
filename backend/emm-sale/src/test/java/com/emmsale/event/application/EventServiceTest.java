@@ -90,8 +90,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null, null, null, null,
       List.of(), null, EventMode.ONLINE.getValue(), PaymentType.PAID.getValue());
 
-
-  private static final LocalDate TODAY = LocalDate.of(2023, 7, 21);
+  private static final LocalDateTime TODAY = LocalDateTime.of(2023, 7, 21, 0, 0);
   @Autowired
   private EventService eventService;
   @Autowired
@@ -241,6 +240,24 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
   @Nested
   @DisplayName("findEvents() : 행사 목록 조회")
   class findEvents {
+
+    @Test
+    @DisplayName("2023년 7월 21일에 행사를 조회하면, 모든 행사 목록을 조회할 수 있다.")
+    void findEvents_all() {
+      // given
+      final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 구름톤, AI_컨퍼런스, 모바일_컨퍼런스,
+          안드로이드_컨퍼런스, AI_아이디어_공모전);
+
+      // when
+      final List<EventResponse> actualEvents = eventService.findEvents(null, TODAY,
+          null, null, null, null, null);
+
+      // then
+      assertThat(actualEvents)
+          .usingRecursiveComparison()
+          .comparingOnlyFields("name", "status", "applyStatus", "imageUrl")
+          .isEqualTo(expectedEvents);
+    }
 
     @Test
     @DisplayName("2023년 7월 21일에 컨퍼런스 행사를 조회하면, 해당 카테고리에 해당하는 모든 행사 목록을 조회할 수 있다.")
@@ -521,11 +538,11 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
       @DisplayName("2023년 7월 21일에 컨퍼런스 행사를 조회할 때, 검색어가 공백인 경우 해당 카테고리에 해당하는 모든 행사 목록을 조회할 수 있다.")
       void findEvents_blank_search(final String keyword) {
         // given
-        final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스,
-            안드로이드_컨퍼런스);
+        final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 구름톤, AI_컨퍼런스, 모바일_컨퍼런스,
+            안드로이드_컨퍼런스, AI_아이디어_공모전);
 
         // when
-        final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+        final List<EventResponse> actualEvents = eventService.findEvents(null,
             TODAY,
             null, null, null, null, keyword);
 
@@ -545,7 +562,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
             안드로이드_컨퍼런스);
 
         // when
-        final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+        final List<EventResponse> actualEvents = eventService.findEvents(null,
             TODAY, null, null, null, null, keyword);
 
         // then
@@ -563,7 +580,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
         final List<EventResponse> expectedEvents = List.of(모바일_컨퍼런스);
 
         // when
-        final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+        final List<EventResponse> actualEvents = eventService.findEvents(null,
             TODAY, null, null, null, null, keyword);
 
         // then
@@ -581,7 +598,7 @@ class EventServiceTest extends ServiceIntegrationTestHelper {
         final List<EventResponse> expectedEvents = List.of(인프콘_2023);
 
         // when
-        final List<EventResponse> actualEvents = eventService.findEvents(EventType.CONFERENCE,
+        final List<EventResponse> actualEvents = eventService.findEvents(null,
             TODAY,
             null, null, null, List.of(IN_PROGRESS), keyword);
 

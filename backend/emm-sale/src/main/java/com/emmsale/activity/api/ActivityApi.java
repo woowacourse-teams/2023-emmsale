@@ -4,7 +4,6 @@ import com.emmsale.activity.application.ActivityCommandService;
 import com.emmsale.activity.application.ActivityQueryService;
 import com.emmsale.activity.application.dto.ActivityAddRequest;
 import com.emmsale.activity.application.dto.ActivityResponse;
-import com.emmsale.activity.application.dto.ActivityResponses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,14 +23,15 @@ public class ActivityApi {
   private final ActivityCommandService activityCommandService;
 
   @GetMapping
-  public ResponseEntity<List<ActivityResponses>> findAll() {
+  public ResponseEntity<List<ActivityResponse>> findAll() {
     return ResponseEntity.ok(activityQueryService.findAll());
   }
 
   @PostMapping
   public ResponseEntity<ActivityResponse> create(
-      @RequestBody final ActivityAddRequest request) {
+    @RequestBody final ActivityAddRequest request
+  ) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(activityCommandService.addActivity(request));
+      .body(activityCommandService.addActivity(request));
   }
 }
