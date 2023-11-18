@@ -1,4 +1,4 @@
-package com.emmsale.event.application;
+package com.emmsale.admin.event.application;
 
 import static com.emmsale.tag.TagFixture.IOS;
 import static com.emmsale.tag.TagFixture.백엔드;

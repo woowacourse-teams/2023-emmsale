@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.admin.report.api.AdminReportApi;
 import com.emmsale.report.api.ReportApi;
 import com.emmsale.report.application.dto.ReportCreateRequest;
 import com.emmsale.report.application.dto.ReportCreateResponse;
@@ -25,7 +26,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
-@WebMvcTest(ReportApi.class)
+@WebMvcTest({ReportApi.class, AdminReportApi.class})
 class ReportApiTest extends MockMvcTestHelper {
 
   @Test
@@ -100,7 +101,7 @@ class ReportApiTest extends MockMvcTestHelper {
     when(reportQueryService.findReports()).thenReturn(reportFindResponse);
 
     // when & then
-    mockMvc.perform(get("/reports"))
+    mockMvc.perform(get("/admin/reports"))
         .andExpect(status().isOk())
         .andDo(document("find-reports", responseFields));
   }

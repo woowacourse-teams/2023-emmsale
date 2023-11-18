@@ -1,4 +1,4 @@
-package com.emmsale.event.application;
+package com.emmsale.admin.event.application;
 
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static java.util.stream.Collectors.toList;

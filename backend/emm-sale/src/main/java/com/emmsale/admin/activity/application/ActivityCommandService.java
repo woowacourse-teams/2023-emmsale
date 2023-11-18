@@ -1,4 +1,4 @@
-package com.emmsale.activity.application;
+package com.emmsale.admin.activity.application;
 
 import com.emmsale.activity.application.dto.ActivityAddRequest;
 import com.emmsale.activity.application.dto.ActivityResponse;
@@ -30,4 +30,3 @@ public class ActivityCommandService {
     }
   }
 }
-

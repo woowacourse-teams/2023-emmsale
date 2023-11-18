@@ -1,4 +1,4 @@
-package com.emmsale.activity.application;
+package com.emmsale.admin.activity.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,19 +26,19 @@ class ActivityCommandServiceTest extends ServiceIntegrationTestHelper {
     final String activityName = "DDD";
     final ActivityAddRequest request = new ActivityAddRequest(ActivityType.CLUB, activityName);
     final ActivityResponse expected = new ActivityResponse(
-      7L,
-      ActivityType.CLUB.getValue(),
-      activityName
+        7L,
+        ActivityType.CLUB.getValue(),
+        activityName
     );
 
     //when
     final ActivityResponse actual
-      = activityCommandService.addActivity(request);
+        = activityCommandService.addActivity(request);
 
     //then
     assertThat(actual)
-      .usingRecursiveComparison()
-      .isEqualTo(expected);
+        .usingRecursiveComparison()
+        .isEqualTo(expected);
   }
 
   @Test
@@ -54,7 +54,7 @@ class ActivityCommandServiceTest extends ServiceIntegrationTestHelper {
 
     //then
     assertThatThrownBy(actual)
-      .isInstanceOf(ActivityException.class)
-      .hasMessage(ActivityExceptionType.ALEADY_EXIST_ACTIVITY.errorMessage());
+        .isInstanceOf(ActivityException.class)
+        .hasMessage(ActivityExceptionType.ALEADY_EXIST_ACTIVITY.errorMessage());
   }
 }

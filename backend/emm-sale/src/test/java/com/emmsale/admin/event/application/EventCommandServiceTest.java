@@ -1,8 +1,6 @@
-package com.emmsale.event.application;
+package com.emmsale.admin.event.application;
 
-import static com.emmsale.event.EventFixture.AI_아이디어_공모전;
 import static com.emmsale.event.EventFixture.AI_컨퍼런스;
-import static com.emmsale.event.EventFixture.구름톤;
 import static com.emmsale.event.EventFixture.모바일_컨퍼런스;
 import static com.emmsale.event.EventFixture.안드로이드_컨퍼런스;
 import static com.emmsale.event.EventFixture.웹_컨퍼런스;
@@ -43,7 +41,6 @@ import com.emmsale.notification.domain.Notification;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,35 +54,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 class EventCommandServiceTest extends ServiceIntegrationTestHelper {
-
-  private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
-      "이미지1", EventType.CONFERENCE.name(), List.of(), "인프런", PaymentType.PAID.getValue(),
-      EventMode.OFFLINE.getValue());
-  private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null,
-      null, null,
-      null, null, "코엑스", List.of("백엔드"), "이미지1", EventType.CONFERENCE.name(),
-      List.of(), "주최기관", PaymentType.PAID.getValue(), EventMode.ONLINE.getValue());
-  private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
-      "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
-      EventMode.ONLINE.getValue());
-  private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
-      "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
-      EventMode.ONLINE.getValue());
-  private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
-      "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
-      EventMode.ONLINE.getValue());
-  private static final EventResponse AI_아이디어_공모전 = new EventResponse(null,
-      "AI 아이디어 공모전", null, null, null, null, null, "코엑스",
-      List.of("백엔드"), "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관",
-      PaymentType.PAID.getValue(), EventMode.ONLINE.getValue());
-  private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null,
-      null, null, null, null, "코엑스", List.of("백엔드"),
-      "이미지1", EventType.COMPETITION.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
-      EventMode.ONLINE.getValue());
 
   @Autowired
   private EventCommandService eventCommandService;
@@ -113,8 +81,6 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
     final Event 모바일_컨퍼런스 = eventRepository.save(모바일_컨퍼런스());
     final Event 안드로이드_컨퍼런스 = eventRepository.save(안드로이드_컨퍼런스());
     final Event 웹_컨퍼런스 = eventRepository.save(웹_컨퍼런스());
-    final Event AI_아이디어_공모전 = eventRepository.save(AI_아이디어_공모전());
-    final Event 구름톤 = eventRepository.save(구름톤());
 
     eventTagRepository.saveAll(List.of(
         new EventTag(인프콘_2023, 백엔드), new EventTag(인프콘_2023, 프론트엔드), new EventTag(인프콘_2023, 안드로이드),
@@ -157,11 +123,9 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
     private final String eventName = "새로운 이름";
     private final String eventLocation = "새로운 장소";
     private final String eventInformationUrl = "https://새로운-상세-URL.com";
-    private final String imageUrl = "https://image.com";
     private final PaymentType paymentType = PaymentType.FREE_PAID;
     private final EventMode eventMode = EventMode.ON_OFFLINE;
     private final EventType type = EventType.CONFERENCE;
-    private final LocalDate now = LocalDate.now();
     private final String organization = "행사기관";
 
     @Test
@@ -287,7 +251,6 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
     private final String newName = "새로운 이름";
     private final String newLocation = "새로운 장소";
     private final String newInformationUrl = "https://새로운-상세-URL.com";
-    private final LocalDate now = LocalDate.now();
     private final PaymentType paymentType = PaymentType.FREE_PAID;
     private final EventMode eventMode = EventMode.ON_OFFLINE;
     private final String organization = "행사기관";

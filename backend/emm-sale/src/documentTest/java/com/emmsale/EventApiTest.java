@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.admin.event.api.AdminEventApi;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.api.EventApi;
 import com.emmsale.event.application.dto.EventDetailRequest;
@@ -52,7 +53,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-@WebMvcTest(EventApi.class)
+@WebMvcTest({EventApi.class, AdminEventApi.class})
 class EventApiTest extends MockMvcTestHelper {
 
   private static final ResponseFieldsSnippet EVENT_DETAIL_RESPONSE_FILED = PayloadDocumentation.responseFields(
@@ -259,7 +260,7 @@ class EventApiTest extends MockMvcTestHelper {
 
     //when
     final MockMultipartHttpServletRequestBuilder builder = multipart(HttpMethod.PUT,
-        "/events/" + eventId)
+        "/admin/events/" + eventId)
         .file("images", image1.getBytes())
         .file("images", image2.getBytes())
         .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
@@ -285,7 +286,7 @@ class EventApiTest extends MockMvcTestHelper {
     Mockito.doNothing().when(eventCommandService).deleteEvent(eventId);
     //when
     final ResultActions result = mockMvc.perform(
-        delete("/events/" + eventId));
+        delete("/admin/events/" + eventId));
 
     //then
     result.andExpect(status().isNoContent())
@@ -360,7 +361,7 @@ class EventApiTest extends MockMvcTestHelper {
       );
 
       //when
-      final MockMultipartHttpServletRequestBuilder builder = multipart("/events")
+      final MockMultipartHttpServletRequestBuilder builder = multipart("/admin/events")
           .file("images", image1.getBytes())
           .file("images", image2.getBytes())
           .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
@@ -407,7 +408,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getPaymentType(), event.getOrganization());
       final String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(multipart("/events")
+      mockMvc.perform(multipart("/admin/events")
               .file("images", image1.getBytes())
               .file("images", image2.getBytes())
               .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
@@ -448,7 +449,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getPaymentType(), event.getOrganization());
       final String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(multipart("/events")
+      mockMvc.perform(multipart("/admin/events")
               .file("images", image1.getBytes())
               .file("images", image2.getBytes())
               .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
@@ -490,7 +491,7 @@ class EventApiTest extends MockMvcTestHelper {
           event.getPaymentType(), event.getOrganization());
       final String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(multipart("/events")
+      mockMvc.perform(multipart("/admin/events")
               .file("images", image1.getBytes())
               .file("images", image2.getBytes())
               .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
@@ -538,7 +539,7 @@ class EventApiTest extends MockMvcTestHelper {
 
       final String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(multipart("/events")
+      mockMvc.perform(multipart("/admin/events")
               .file("images", image1.getBytes())
               .file("images", image2.getBytes())
               .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
@@ -585,7 +586,7 @@ class EventApiTest extends MockMvcTestHelper {
 
       final String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(multipart("/events")
+      mockMvc.perform(multipart("/admin/events")
               .file("images", image1.getBytes())
               .file("images", image2.getBytes())
               .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(

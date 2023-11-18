@@ -1,4 +1,4 @@
-package com.emmsale.report.application;
+package com.emmsale.admin.report.application;
 
 import com.emmsale.report.application.dto.ReportFindResponse;
 import com.emmsale.report.domain.repository.ReportRepository;

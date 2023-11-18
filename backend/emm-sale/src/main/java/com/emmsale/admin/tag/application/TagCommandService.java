@@ -1,4 +1,4 @@
-package com.emmsale.tag.application;
+package com.emmsale.admin.tag.application;
 
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.application.dto.TagResponse;

@@ -1,4 +1,4 @@
-package com.emmsale.report.application;
+package com.emmsale.admin.report.application;
 
 
 import static com.emmsale.event.EventFixture.eventFixture;
@@ -12,6 +12,7 @@ import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
+import com.emmsale.report.application.ReportCommandService;
 import com.emmsale.report.application.dto.ReportCreateRequest;
 import com.emmsale.report.application.dto.ReportCreateResponse;
 import com.emmsale.report.application.dto.ReportFindResponse;

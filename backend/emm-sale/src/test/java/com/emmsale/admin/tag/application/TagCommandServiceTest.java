@@ -1,4 +1,4 @@
-package com.emmsale.tag.application;
+package com.emmsale.admin.tag.application;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
