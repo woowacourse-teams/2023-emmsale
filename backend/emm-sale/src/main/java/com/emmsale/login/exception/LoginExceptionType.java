@@ -32,6 +32,18 @@ public enum LoginExceptionType implements BaseExceptionType {
   INVALID_ACCESS_TOKEN_TYPE(
       HttpStatus.BAD_REQUEST,
       "Access Token Type이 올바르지 않습니다."
+  ),
+  NOT_FOUND_ADMIN_LOGIN_INFORMATION(
+      HttpStatus.BAD_REQUEST,
+      "관리자 로그인 정보를 찾을 수 없습니다."
+  ),
+  INVALID_ADMIN_LOGIN_INFORMATION(
+      HttpStatus.BAD_REQUEST,
+      "관리자 아이디 또는 비밀번호가 올바르지 않습니다."
+  ),
+  INVALID_ADMIN_ACCESS_TOKEN(
+      HttpStatus.BAD_REQUEST,
+      "관리자 토큰이 유효하지 않습니다."
   );
 
   private final HttpStatus httpStatus;

@@ -6,6 +6,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import com.emmsale.activity.application.ActivityQueryService;
 import com.emmsale.admin.activity.application.ActivityCommandService;
 import com.emmsale.admin.event.application.EventCommandService;
+import com.emmsale.admin.login.application.AdminLoginService;
 import com.emmsale.admin.report.application.ReportQueryService;
 import com.emmsale.admin.tag.application.TagCommandService;
 import com.emmsale.block.application.BlockCommandService;
@@ -80,6 +81,8 @@ abstract class MockMvcTestHelper {
   protected InterestTagService interestTagService;
   @MockBean
   protected LoginService loginService;
+  @MockBean
+  protected AdminLoginService adminLoginService;
   @MockBean
   protected EventQueryService eventQueryService;
   @MockBean

@@ -1,7 +1,9 @@
 package com.emmsale;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -9,18 +11,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.admin.login.api.AdminLoginApi;
+import com.emmsale.admin.login.application.dto.AdminLoginRequest;
+import com.emmsale.admin.login.application.dto.AdminTokenResponse;
 import com.emmsale.login.api.LoginApi;
 import com.emmsale.login.application.dto.TokenResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.test.web.servlet.ResultActions;
 
-@WebMvcTest(LoginApi.class)
+@WebMvcTest({LoginApi.class, AdminLoginApi.class})
 class LoginApiTest extends MockMvcTestHelper {
 
   @Test
@@ -61,5 +68,36 @@ class LoginApiTest extends MockMvcTestHelper {
     // then
     result.andExpect(status().isBadRequest())
         .andDo(print());
+  }
+
+  @Test
+  @DisplayName("id와 password가 유효할 경우 200과 함께 AdminTokenResponse를 반환해 준다.")
+  void availableAdminLoginTest() throws Exception {
+    // given
+    final AdminLoginRequest request = new AdminLoginRequest("관리자 id", "관리자 password");
+    final AdminTokenResponse adminTokenResponse = new AdminTokenResponse("access_token");
+
+    BDDMockito.given(adminLoginService.createAdminToken(any())).willReturn(adminTokenResponse);
+
+    final RequestFieldsSnippet requestFields = requestFields(
+        fieldWithPath("id").type(JsonFieldType.STRING).description("관리자 로그인 id"),
+        fieldWithPath("password").type(JsonFieldType.STRING).description("관리자 로그인 password")
+    );
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("accessToken").type(JsonFieldType.STRING).description("관리자 Access Token 값")
+    );
+
+    // when
+    final ResultActions result = mockMvc.perform(
+        post("/admin/login")
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(objectMapper.writeValueAsString(request))
+    );
+
+    // then
+    result.andExpect(status().isOk())
+        .andDo(print())
+        .andDo(document("admin-login-snippet", requestFields, responseFields));
   }
 }
