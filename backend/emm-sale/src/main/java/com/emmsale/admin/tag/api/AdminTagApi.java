@@ -1,6 +1,7 @@
 package com.emmsale.admin.tag.api;
 
 import com.emmsale.admin.tag.application.TagCommandService;
+import com.emmsale.member.domain.Member;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.application.dto.TagResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,8 @@ public class AdminTagApi {
   private final TagCommandService commandService;
 
   @PostMapping
-  public ResponseEntity<TagResponse> create(@RequestBody final TagRequest tagRequest) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(commandService.addTag(tagRequest));
+  public ResponseEntity<TagResponse> create(@RequestBody final TagRequest tagRequest,
+      final Member admin) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(commandService.addTag(tagRequest, admin));
   }
 }

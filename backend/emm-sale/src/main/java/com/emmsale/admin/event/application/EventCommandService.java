@@ -1,5 +1,6 @@
 package com.emmsale.admin.event.application;
 
+import static com.emmsale.admin.login.utils.AdminValidator.validateAuthorization;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static java.util.stream.Collectors.toList;
 
@@ -14,6 +15,7 @@ import com.emmsale.event_publisher.EventPublisher;
 import com.emmsale.image.application.ImageCommandService;
 import com.emmsale.image.domain.AllImagesOfContent;
 import com.emmsale.image.domain.ImageType;
+import com.emmsale.member.domain.Member;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
@@ -36,7 +38,8 @@ public class EventCommandService {
   private final ImageCommandService imageCommandService;
 
   public EventResponse addEvent(final EventDetailRequest request,
-      final List<MultipartFile> images) {
+      final List<MultipartFile> images, final Member admin) {
+    validateAuthorization(admin);
     final Event event = eventRepository.save(request.toEvent());
     final List<Tag> tags = findAllPersistTagsOrElseThrow(request.getTags());
     event.addAllEventTags(tags);
@@ -49,7 +52,8 @@ public class EventCommandService {
   }
 
   public EventResponse updateEvent(final Long eventId, final EventDetailRequest request,
-      final List<MultipartFile> images) {
+      final List<MultipartFile> images, final Member admin) {
+    validateAuthorization(admin);
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
 
@@ -77,7 +81,8 @@ public class EventCommandService {
     return EventResponse.from(updatedEvent, savedImages);
   }
 
-  public void deleteEvent(final Long eventId) {
+  public void deleteEvent(final Long eventId, final Member admin) {
+    validateAuthorization(admin);
     if (!eventRepository.existsById(eventId)) {
       throw new EventException(NOT_FOUND_EVENT);
     }

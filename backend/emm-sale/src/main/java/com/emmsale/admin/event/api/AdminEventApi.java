@@ -3,6 +3,7 @@ package com.emmsale.admin.event.api;
 import com.emmsale.admin.event.application.EventCommandService;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.member.domain.Member;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,21 +29,25 @@ public class AdminEventApi {
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public EventResponse addEvent(@RequestPart @Valid final EventDetailRequest request,
-      @RequestPart final List<MultipartFile> images) {
-    return eventCommandService.addEvent(request, images);
+      @RequestPart final List<MultipartFile> images,
+      final Member admin
+  ) {
+    return eventCommandService.addEvent(request, images, admin);
   }
 
   @PutMapping(path = "/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.OK)
   public EventResponse updateEvent(@PathVariable final Long eventId,
       @RequestPart @Valid final EventDetailRequest request,
-      @RequestPart final List<MultipartFile> images) {
-    return eventCommandService.updateEvent(eventId, request, images);
+      @RequestPart final List<MultipartFile> images,
+      final Member admin
+  ) {
+    return eventCommandService.updateEvent(eventId, request, images, admin);
   }
 
   @DeleteMapping("/{eventId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteEvent(@PathVariable final Long eventId) {
-    eventCommandService.deleteEvent(eventId);
+  public void deleteEvent(@PathVariable final Long eventId, final Member admin) {
+    eventCommandService.deleteEvent(eventId, admin);
   }
 }

@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.admin.report.api.AdminReportApi;
+import com.emmsale.member.domain.Member;
 import com.emmsale.report.api.ReportApi;
 import com.emmsale.report.application.dto.ReportCreateRequest;
 import com.emmsale.report.application.dto.ReportCreateResponse;
@@ -75,6 +76,7 @@ class ReportApiTest extends MockMvcTestHelper {
   @DisplayName("신고 목록을 조회할 수 있다.")
   void findReports() throws Exception {
     // given
+    final String accessToken = "Bearer accessToken";
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("신고 id"),
         fieldWithPath("[].reporterId").type(JsonFieldType.NUMBER).description("신고자의 Id"),
@@ -98,10 +100,11 @@ class ReportApiTest extends MockMvcTestHelper {
 
     );
 
-    when(reportQueryService.findReports()).thenReturn(reportFindResponse);
+    when(reportQueryService.findReports(any(Member.class))).thenReturn(reportFindResponse);
 
     // when & then
-    mockMvc.perform(get("/admin/reports"))
+    mockMvc.perform(get("/admin/reports")
+            .header("Authorization", accessToken))
         .andExpect(status().isOk())
         .andDo(document("find-reports", responseFields));
   }

@@ -14,6 +14,7 @@ import com.emmsale.activity.application.dto.ActivityAddRequest;
 import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.domain.ActivityType;
 import com.emmsale.admin.activity.api.AdminActivityApi;
+import com.emmsale.member.domain.Member;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,8 +73,10 @@ class ActivityApiTest extends MockMvcTestHelper {
         ActivityType.CLUB.getValue(),
         "DND"
     );
+    final String accessToken = "Bearer accessToken";
 
-    when(activityCommandService.addActivity(any(ActivityAddRequest.class))).thenReturn(response);
+    when(activityCommandService.addActivity(any(ActivityAddRequest.class),
+        any(Member.class))).thenReturn(response);
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("id").type(JsonFieldType.NUMBER).description("활동 식별자"),
@@ -83,6 +86,7 @@ class ActivityApiTest extends MockMvcTestHelper {
 
     //when & then
     mockMvc.perform(post("/admin/activities")
+            .header("Authorization", accessToken)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())

@@ -1,5 +1,6 @@
 package com.emmsale.admin.event.application;
 
+import static com.emmsale.member.MemberFixture.adminMember;
 import static com.emmsale.tag.TagFixture.IOS;
 import static com.emmsale.tag.TagFixture.백엔드;
 import static com.emmsale.tag.TagFixture.안드로이드;
@@ -77,7 +78,7 @@ class EventServiceEventIntegrationTestQuery extends ServiceIntegrationTestHelper
     );
 
     //when
-    eventCommandService.addEvent(eventDetailRequest, null);
+    eventCommandService.addEvent(eventDetailRequest, null, adminMember());
 
     //then
     verify(firebaseCloudMessageClient, times(2))
@@ -121,7 +122,7 @@ class EventServiceEventIntegrationTestQuery extends ServiceIntegrationTestHelper
     );
 
     //when
-    eventCommandService.addEvent(eventDetailRequest, null);
+    eventCommandService.addEvent(eventDetailRequest, null, adminMember());
 
     //then
     verify(firebaseCloudMessageClient, times(0))
@@ -155,7 +156,7 @@ class EventServiceEventIntegrationTestQuery extends ServiceIntegrationTestHelper
     );
 
     //when
-    eventCommandService.addEvent(eventDetailRequest, null);
+    eventCommandService.addEvent(eventDetailRequest, null, adminMember());
 
     //then
     verify(firebaseCloudMessageClient, times(0))

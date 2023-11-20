@@ -1,5 +1,8 @@
 package com.emmsale.admin.tag.application;
 
+import static com.emmsale.admin.login.utils.AdminValidator.validateAuthorization;
+
+import com.emmsale.member.domain.Member;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.application.dto.TagResponse;
 import com.emmsale.tag.domain.Tag;
@@ -17,7 +20,9 @@ public class TagCommandService {
 
   private final TagRepository tagRepository;
 
-  public TagResponse addTag(final TagRequest request) {
+  public TagResponse addTag(final TagRequest request,
+      final Member admin) {
+    validateAuthorization(admin);
     final String name = request.getName();
     validateAlreadyExist(name);
     return TagResponse.from(tagRepository.save(new Tag(name)));
