@@ -5,18 +5,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RecruitmentResponse(
-    @SerialName("id")
+    @SerialName("postId")
     val id: Long,
-    @SerialName("memberId")
-    val memberId: Long,
-    @SerialName("name")
-    val name: String,
-    @SerialName("imageUrl")
-    val imageUrl: String,
     @SerialName("content")
     val content: String,
     @SerialName("updatedAt")
     val updatedAt: String,
+    @SerialName("member")
+    val member: MemberResponse,
+    @SerialName("eventId")
+    val eventId: Long,
 )
 
 @Serializable

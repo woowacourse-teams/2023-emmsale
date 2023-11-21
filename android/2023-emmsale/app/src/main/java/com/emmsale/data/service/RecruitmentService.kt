@@ -3,7 +3,6 @@ package com.emmsale.data.service
 import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
-import com.emmsale.data.apiModel.request.RecruitmentRequestCreateRequest
 import com.emmsale.data.apiModel.response.RecruitmentReportResponse
 import com.emmsale.data.apiModel.response.RecruitmentResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
@@ -51,18 +50,6 @@ interface RecruitmentService {
     suspend fun checkIsAlreadyPostRecruitment(
         @Path("eventId") eventId: Long,
         @Query("member-id") memberId: Long,
-    ): ApiResponse<Boolean>
-
-    @POST("/request-notifications")
-    suspend fun postCompanion(
-        @Body recruitmentRequestCreateRequest: RecruitmentRequestCreateRequest,
-    ): ApiResponse<Unit>
-
-    @GET("/request-notifications/existed")
-    suspend fun checkIsAlreadyRequestCompanion(
-        @Query("receiverId") receiverId: Long,
-        @Query("eventId") eventId: Long,
-        @Query("senderId") senderId: Long,
     ): ApiResponse<Boolean>
 
     @POST("/reports")

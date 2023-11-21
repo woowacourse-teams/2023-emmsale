@@ -40,9 +40,9 @@ data class RecruitmentPostUiState(
 
         fun from(recruitment: Recruitment): RecruitmentPostUiState = RecruitmentPostUiState(
             id = recruitment.id,
-            memberId = recruitment.memberId,
-            name = recruitment.name,
-            profileImageUrl = recruitment.imageUrl,
+            memberId = recruitment.writer.id,
+            name = recruitment.writer.name,
+            profileImageUrl = recruitment.writer.profileImageUrl,
             content = recruitment.content ?: "",
             updatedAt = recruitment.updatedDate.toString(),
             isMyPost = false,
@@ -53,12 +53,12 @@ data class RecruitmentPostUiState(
         fun create(recruitment: Recruitment, myUid: Long): RecruitmentPostUiState =
             RecruitmentPostUiState(
                 id = recruitment.id,
-                memberId = recruitment.memberId,
-                name = recruitment.name,
-                profileImageUrl = recruitment.imageUrl,
+                memberId = recruitment.writer.id,
+                name = recruitment.writer.name,
+                profileImageUrl = recruitment.writer.profileImageUrl,
                 content = recruitment.content ?: "",
                 updatedAt = recruitment.updatedDate.toString(),
-                isMyPost = recruitment.memberId == myUid,
+                isMyPost = recruitment.writer.id == myUid,
                 isLoading = false,
                 isError = false,
             )

@@ -3,7 +3,6 @@ package com.emmsale.data.repository.concretes
 import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
-import com.emmsale.data.apiModel.request.RecruitmentRequestCreateRequest
 import com.emmsale.data.apiModel.response.RecruitmentResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.common.retrofit.callAdapter.Failure
@@ -87,29 +86,6 @@ class DefaultRecruitmentRepository @Inject constructor(
         eventId = eventId,
         recruitmentId = recruitmentId,
         recruitmentDeleteRequest = RecruitmentDeleteRequest(content),
-    )
-
-    override suspend fun requestCompanion(
-        eventId: Long,
-        memberId: Long,
-        message: String,
-    ): ApiResponse<Unit> = recruitmentService.postCompanion(
-        RecruitmentRequestCreateRequest(
-            senderId = myUid,
-            receiverId = memberId,
-            eventId = eventId,
-            message = message,
-        ),
-    )
-
-    override suspend fun checkIsAlreadyRequestCompanion(
-        eventId: Long,
-        senderId: Long,
-        receiverId: Long,
-    ): ApiResponse<Boolean> = recruitmentService.checkIsAlreadyRequestCompanion(
-        eventId = eventId,
-        senderId = senderId,
-        receiverId = receiverId,
     )
 
     override suspend fun checkIsAlreadyPostRecruitment(
