@@ -21,7 +21,7 @@ data class ActivityResponse(
         EDUCATION,
 
         @SerialName("직무")
-        FIELD,
+        INTEREST_FIELD,
     }
 }
 

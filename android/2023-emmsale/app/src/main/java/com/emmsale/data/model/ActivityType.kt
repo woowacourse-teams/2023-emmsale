@@ -1,5 +1,5 @@
 package com.emmsale.data.model
 
 enum class ActivityType {
-    FIELD, EDUCATION, CLUB
+    INTEREST_FIELD, EDUCATION, CLUB
 }

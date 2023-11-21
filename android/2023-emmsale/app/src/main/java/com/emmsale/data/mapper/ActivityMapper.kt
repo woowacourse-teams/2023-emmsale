@@ -15,5 +15,5 @@ fun ActivityResponse.toData(): Activity = Activity(
 private fun ActivityResponse.ActivityType.toData(): ActivityType = when (this) {
     ActivityResponse.ActivityType.CLUB -> ActivityType.CLUB
     ActivityResponse.ActivityType.EDUCATION -> ActivityType.EDUCATION
-    ActivityResponse.ActivityType.FIELD -> ActivityType.FIELD
+    ActivityResponse.ActivityType.INTEREST_FIELD -> ActivityType.INTEREST_FIELD
 }

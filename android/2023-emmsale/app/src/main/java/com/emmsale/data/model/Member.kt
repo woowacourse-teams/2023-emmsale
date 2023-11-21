@@ -9,7 +9,7 @@ data class Member(
     val activities: List<Activity> = emptyList(),
 ) {
     val fields: List<Activity>
-        get() = activities.filter { it.activityType == ActivityType.FIELD }
+        get() = activities.filter { it.activityType == ActivityType.INTEREST_FIELD }
 
     val educations: List<Activity>
         get() = activities.filter { it.activityType == ActivityType.EDUCATION }
