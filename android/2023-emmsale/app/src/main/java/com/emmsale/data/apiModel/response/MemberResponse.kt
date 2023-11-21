@@ -15,6 +15,6 @@ data class MemberResponse(
     val description: String = "",
     @SerialName("imageUrl")
     val imageUrl: String,
-    @SerialName("openProfileUrl")
-    val openProfileUrl: String = "",
+    @SerialName("activities")
+    val activities: List<ActivityResponse> = emptyList(),
 )
