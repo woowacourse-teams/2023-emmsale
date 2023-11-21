@@ -4,7 +4,7 @@ import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
 import com.emmsale.data.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
-import com.emmsale.data.apiModel.response.MemberActivitiesResponse
+import com.emmsale.data.apiModel.response.ActivityResponse
 import com.emmsale.data.apiModel.response.MemberResponse
 import com.emmsale.data.apiModel.response.ProfileImageUrlResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
@@ -52,7 +52,7 @@ interface MemberService {
     @DELETE("/members/activities")
     suspend fun deleteMemberActivities(
         @Query("activity-ids") ids: List<Long>,
-    ): ApiResponse<List<MemberActivitiesResponse>>
+    ): ApiResponse<List<ActivityResponse>>
 
     @DELETE("/members/{memberId}")
     suspend fun deleteMember(
