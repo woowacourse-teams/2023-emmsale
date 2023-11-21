@@ -12,7 +12,6 @@ data class ActivityResponse(
     @SerialName("activityType")
     val activityType: ActivityType,
 ) {
-    @Serializable
     enum class ActivityType {
         @SerialName("동아리")
         CLUB,
@@ -24,11 +23,3 @@ data class ActivityResponse(
         INTEREST_FIELD,
     }
 }
-
-@Serializable
-data class MemberActivitiesResponse(
-    @SerialName("activityType")
-    val activityType: String,
-    @SerialName("memberActivityResponses")
-    val memberActivityResponses: List<ActivityResponse>,
-)
