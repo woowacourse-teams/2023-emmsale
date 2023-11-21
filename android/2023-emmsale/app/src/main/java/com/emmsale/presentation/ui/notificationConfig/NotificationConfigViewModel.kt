@@ -10,7 +10,7 @@ import com.emmsale.data.model.Config
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.firebase.analytics.logChangeConfig
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
@@ -43,9 +43,9 @@ class NotificationConfigViewModel @Inject constructor(
         NotNullMutableLiveData(NotificationTagsUiState.Loading)
     val notificationTags: NotNullLiveData<NotificationTagsUiState> = _notificationTags
 
-    private val _uiEvent: NotNullMutableLiveData<Event<NotificationConfigUiEvent>> =
-        NotNullMutableLiveData(Event(NotificationConfigUiEvent.NONE))
-    val uiEvent: NotNullLiveData<Event<NotificationConfigUiEvent>> = _uiEvent
+    private val _uiEvent: NotNullMutableLiveData<UiEvent<NotificationConfigUiEvent>> =
+        NotNullMutableLiveData(UiEvent(NotificationConfigUiEvent.NONE))
+    val uiEvent: NotNullLiveData<UiEvent<NotificationConfigUiEvent>> = _uiEvent
 
     init {
         fetchNotificationTags()
@@ -123,7 +123,7 @@ class NotificationConfigViewModel @Inject constructor(
                     eventTagRepository.updateInterestEventTags(removedInterestEventTag)
             ) {
                 is Failure, NetworkError ->
-                    _uiEvent.value = Event(NotificationConfigUiEvent.INTEREST_TAG_REMOVE_ERROR)
+                    _uiEvent.value = UiEvent(NotificationConfigUiEvent.INTEREST_TAG_REMOVE_ERROR)
 
                 is Success -> fetchNotificationTags()
                 is Unexpected -> throw Throwable(result.error)

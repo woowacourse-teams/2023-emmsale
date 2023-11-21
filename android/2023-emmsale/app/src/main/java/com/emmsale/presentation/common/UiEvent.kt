@@ -2,7 +2,7 @@ package com.emmsale.presentation.common
 
 import androidx.lifecycle.Observer
 
-class Event<out T>(private val content: T) {
+class UiEvent<out T>(private val content: T) {
 
     var hasBeenHandled = false
         private set
@@ -17,8 +17,8 @@ class Event<out T>(private val content: T) {
     fun peekContent(): T = content
 }
 
-class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<Event<T>> {
-    override fun onChanged(value: Event<T>) {
+class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<UiEvent<T>> {
+    override fun onChanged(value: UiEvent<T>) {
         value.getContentIfNotHandled()?.let { event ->
             onEventUnhandledContent(event)
         }

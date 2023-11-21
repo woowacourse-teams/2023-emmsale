@@ -1,8 +1,6 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.CompetitionResponse
-import com.emmsale.data.apiModel.response.ConferenceResponse
-import com.emmsale.data.apiModel.response.EventDetailResponse
+import com.emmsale.data.apiModel.response.EventResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toApiModel
 import com.emmsale.data.mapper.toData
@@ -10,7 +8,6 @@ import com.emmsale.data.model.CompetitionStatus
 import com.emmsale.data.model.ConferenceStatus
 import com.emmsale.data.model.Event
 import com.emmsale.data.model.EventCategory
-import com.emmsale.data.model.EventDetail
 import com.emmsale.data.model.EventTag
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.service.EventService
@@ -38,7 +35,7 @@ class DefaultEventRepository @Inject constructor(
             tags = tags.map { it.name },
             startDate = startDate?.toRequestFormat(),
             endDate = endDate?.toRequestFormat(),
-        ).map(List<ConferenceResponse>::toData)
+        ).map { it.toData() }
     }
 
     override suspend fun getCompetitions(
@@ -53,13 +50,13 @@ class DefaultEventRepository @Inject constructor(
             tags = tags.map { it.name },
             startDate = startDate?.toRequestFormat(),
             endDate = endDate?.toRequestFormat(),
-        ).map(List<CompetitionResponse>::toData)
+        ).map { it.toData() }
     }
 
-    override suspend fun getEventDetail(eventId: Long): ApiResponse<EventDetail> {
+    override suspend fun getEventDetail(eventId: Long): ApiResponse<Event> {
         return eventService
             .getEventDetail(eventId)
-            .map(EventDetailResponse::toData)
+            .map(EventResponse::toData)
     }
 
     override suspend fun searchEvents(
@@ -77,7 +74,7 @@ class DefaultEventRepository @Inject constructor(
             tags = tags.map { it.name },
             statuses = statuses.toApiModel(),
             category = category,
-        ).map(List<ConferenceResponse>::toData)
+        ).map { it.toData() }
     }
 
     private fun EventCategory.toApiModel(): String = when (this) {

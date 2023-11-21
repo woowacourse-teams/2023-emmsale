@@ -9,7 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.InfoDialog
@@ -160,7 +160,7 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleUiEvent(event: Event<RecruitmentPostDetailUiEvent>) {
+    private fun handleUiEvent(event: UiEvent<RecruitmentPostDetailUiEvent>) {
         val content = event.getContentIfNotHandled() ?: return
         when (content) {
             is RecruitmentPostDetailUiEvent.MessageSendComplete -> {

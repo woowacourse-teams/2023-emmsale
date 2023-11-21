@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.repository.interfaces.PostRepository
-import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.postWriting.uiState.PostUploadResultUiState
@@ -28,15 +28,15 @@ class PostWritingViewModel @Inject constructor(
         NotNullMutableLiveData(emptyList())
     val imageUris: NotNullLiveData<List<String>> = _imageUris
 
-    private val _postUploadResult: MutableLiveData<Event<PostUploadResultUiState>> =
+    private val _postUploadResult: MutableLiveData<UiEvent<PostUploadResultUiState>> =
         MutableLiveData()
-    val postUploadResult: LiveData<Event<PostUploadResultUiState>> = _postUploadResult
+    val postUploadResult: LiveData<UiEvent<PostUploadResultUiState>> = _postUploadResult
 
     val title = MutableLiveData<String>()
     val content = MutableLiveData<String>()
 
     fun uploadPost(imageFiles: List<File>) {
-        _postUploadResult.value = Event(PostUploadResultUiState(FetchResult.LOADING))
+        _postUploadResult.value = UiEvent(PostUploadResultUiState(FetchResult.LOADING))
         viewModelScope.launch {
             when (
                 val fetchResult =
@@ -49,9 +49,11 @@ class PostWritingViewModel @Inject constructor(
             ) {
                 is Success ->
                     _postUploadResult.value =
-                        Event(PostUploadResultUiState(FetchResult.SUCCESS, fetchResult.data))
+                        UiEvent(PostUploadResultUiState(FetchResult.SUCCESS, fetchResult.data))
 
-                else -> _postUploadResult.value = Event(PostUploadResultUiState(FetchResult.ERROR))
+                else ->
+                    _postUploadResult.value =
+                        UiEvent(PostUploadResultUiState(FetchResult.ERROR))
             }
         }
     }

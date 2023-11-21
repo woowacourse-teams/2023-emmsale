@@ -11,7 +11,7 @@ import com.emmsale.data.model.Message
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
@@ -45,8 +45,8 @@ class MessageListViewModel @Inject constructor(
     private val _messages = NotNullMutableLiveData(MessagesUiState())
     val messages: NotNullLiveData<MessagesUiState> = _messages
 
-    private val _uiEvent = MutableLiveData<Event<MessageListUiEvent>>()
-    val uiEvent: LiveData<Event<MessageListUiEvent>> = _uiEvent
+    private val _uiEvent = MutableLiveData<UiEvent<MessageListUiEvent>>()
+    val uiEvent: LiveData<UiEvent<MessageListUiEvent>> = _uiEvent
 
     private val _otherMember = MutableLiveData<Member>()
     val otherMember: LiveData<Member> = _otherMember
@@ -54,7 +54,7 @@ class MessageListViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             fetchMessages()
-            _uiEvent.value = Event(MESSAGE_LIST_FIRST_LOADED)
+            _uiEvent.value = UiEvent(MESSAGE_LIST_FIRST_LOADED)
         }
     }
 
@@ -79,7 +79,7 @@ class MessageListViewModel @Inject constructor(
     private suspend fun fetchOtherMember() {
         when (val otherMemberResult = memberRepository.getMember(otherUid)) {
             is Success -> _otherMember.value = otherMemberResult.data
-            else -> _uiEvent.value = Event(NOT_FOUND_OTHER_MEMBER)
+            else -> _uiEvent.value = UiEvent(NOT_FOUND_OTHER_MEMBER)
         }
     }
 
@@ -133,17 +133,17 @@ class MessageListViewModel @Inject constructor(
     fun sendMessage(message: String) {
         if (message.isBlank()) return
 
-        _uiEvent.value = Event(MESSAGE_SENDING)
+        _uiEvent.value = UiEvent(MESSAGE_SENDING)
         loading()
 
         viewModelScope.launch {
             when (messageRoomRepository.sendMessage(myUid, otherUid, message)) {
                 is Success -> {
                     fetchMessages()
-                    _uiEvent.value = Event(MESSAGE_SENT_REFRESHED)
+                    _uiEvent.value = UiEvent(MESSAGE_SENT_REFRESHED)
                 }
 
-                else -> _uiEvent.value = Event(MESSAGE_SENT_FAILED)
+                else -> _uiEvent.value = UiEvent(MESSAGE_SENT_FAILED)
             }
         }
     }

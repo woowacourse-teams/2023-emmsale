@@ -13,8 +13,8 @@ import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
@@ -55,9 +55,9 @@ class FeedDetailViewModel @Inject constructor(
         _feedDetail.value.comments.find { commentUiState -> commentUiState.comment.id == it }?.comment?.content
     }
 
-    private val _uiEvent: NotNullMutableLiveData<Event<FeedDetailUiEvent>> =
-        NotNullMutableLiveData(Event(FeedDetailUiEvent.None))
-    val uiEvent: NotNullLiveData<Event<FeedDetailUiEvent>> = _uiEvent
+    private val _uiEvent: NotNullMutableLiveData<UiEvent<FeedDetailUiEvent>> =
+        NotNullMutableLiveData(UiEvent(FeedDetailUiEvent.None))
+    val uiEvent: NotNullLiveData<UiEvent<FeedDetailUiEvent>> = _uiEvent
 
     init {
         refresh()
@@ -73,7 +73,7 @@ class FeedDetailViewModel @Inject constructor(
             when (val result = feedRepository.getFeed(feedId)) {
                 is Failure -> {
                     if (result.code == DELETED_FEED_FETCH_ERROR_CODE) {
-                        _uiEvent.value = Event(FeedDetailUiEvent.DeletedFeedFetch)
+                        _uiEvent.value = UiEvent(FeedDetailUiEvent.DeletedFeedFetch)
                     } else {
                         _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
                     }
@@ -89,7 +89,7 @@ class FeedDetailViewModel @Inject constructor(
 
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -110,7 +110,7 @@ class FeedDetailViewModel @Inject constructor(
 
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -120,7 +120,7 @@ class FeedDetailViewModel @Inject constructor(
             _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
             when (val result = feedRepository.deleteFeed(feedId)) {
                 is Failure -> {
-                    _uiEvent.value = Event(FeedDetailUiEvent.FeedDeleteFail)
+                    _uiEvent.value = UiEvent(FeedDetailUiEvent.FeedDeleteFail)
                     _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
                 }
 
@@ -128,11 +128,11 @@ class FeedDetailViewModel @Inject constructor(
                     _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
 
                 is Success ->
-                    _uiEvent.value = Event(FeedDetailUiEvent.FeedDeleteComplete)
+                    _uiEvent.value = UiEvent(FeedDetailUiEvent.FeedDeleteComplete)
 
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -142,7 +142,7 @@ class FeedDetailViewModel @Inject constructor(
             _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
             when (val result = commentRepository.saveComment(content, feedId)) {
                 is Failure -> {
-                    _uiEvent.value = Event(FeedDetailUiEvent.CommentPostFail)
+                    _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentPostFail)
                     _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
                     logComment(content, feedId)
                 }
@@ -152,12 +152,12 @@ class FeedDetailViewModel @Inject constructor(
 
                 is Success -> {
                     refresh()
-                    _uiEvent.value = Event(FeedDetailUiEvent.CommentPostComplete)
+                    _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentPostComplete)
                 }
 
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -167,7 +167,7 @@ class FeedDetailViewModel @Inject constructor(
             _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
             when (val result = commentRepository.updateComment(commentId, content)) {
                 is Failure -> {
-                    _uiEvent.value = Event(FeedDetailUiEvent.CommentUpdateFail)
+                    _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentUpdateFail)
                     _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
                 }
 
@@ -181,7 +181,7 @@ class FeedDetailViewModel @Inject constructor(
 
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -191,7 +191,7 @@ class FeedDetailViewModel @Inject constructor(
             _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
             when (val result = commentRepository.deleteComment(commentId)) {
                 is Failure -> {
-                    _uiEvent.value = Event(FeedDetailUiEvent.CommentDeleteFail)
+                    _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentDeleteFail)
                     _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
                 }
 
@@ -201,7 +201,7 @@ class FeedDetailViewModel @Inject constructor(
                 is Success -> refresh()
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -223,9 +223,9 @@ class FeedDetailViewModel @Inject constructor(
             when (val result = commentRepository.reportComment(commentId, authorId, uid)) {
                 is Failure -> {
                     if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
-                        _uiEvent.value = Event(FeedDetailUiEvent.CommentReportDuplicate)
+                        _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportDuplicate)
                     } else {
-                        _uiEvent.value = Event(FeedDetailUiEvent.CommentReportFail)
+                        _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportFail)
                     }
                     _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
                 }
@@ -233,10 +233,10 @@ class FeedDetailViewModel @Inject constructor(
                 NetworkError ->
                     _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
 
-                is Success -> _uiEvent.value = Event(FeedDetailUiEvent.CommentReportComplete)
+                is Success -> _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportComplete)
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }

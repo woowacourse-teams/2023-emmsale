@@ -1,14 +1,16 @@
 package com.emmsale.data.mapper
 
 import com.emmsale.BuildConfig
-import com.emmsale.data.apiModel.response.EventDetailResponse
-import com.emmsale.data.model.EventDetail
+import com.emmsale.data.apiModel.response.EventResponse
+import com.emmsale.data.model.Event
 import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun EventDetailResponse.toData(): EventDetail = EventDetail(
+fun List<EventResponse>.toData(): List<Event> = map { it.toData() }
+
+fun EventResponse.toData(): Event = Event(
     id = id,
     name = name,
     organization = organization,
@@ -31,14 +33,14 @@ private fun String.toLocalDateTime(): LocalDateTime {
     return LocalDateTime.parse(this, format)
 }
 
-private fun EventDetailResponse.PaymentType.toPaymentType(): PaymentType = when (this) {
-    EventDetailResponse.PaymentType.PAID -> PaymentType.PAID
-    EventDetailResponse.PaymentType.FREE -> PaymentType.FREE
-    EventDetailResponse.PaymentType.PAID_OR_FREE -> PaymentType.PAID_OR_FREE
+private fun EventResponse.PaymentType.toPaymentType(): PaymentType = when (this) {
+    EventResponse.PaymentType.PAID -> PaymentType.PAID
+    EventResponse.PaymentType.FREE -> PaymentType.FREE
+    EventResponse.PaymentType.PAID_OR_FREE -> PaymentType.PAID_OR_FREE
 }
 
-private fun EventDetailResponse.OnOfflineMode.toData(): OnOfflineMode = when (this) {
-    EventDetailResponse.OnOfflineMode.ONLINE -> OnOfflineMode.ONLINE
-    EventDetailResponse.OnOfflineMode.OFFLINE -> OnOfflineMode.OFFLINE
-    EventDetailResponse.OnOfflineMode.ON_OFFLINE -> OnOfflineMode.ON_OFFLINE
+private fun EventResponse.OnOfflineMode.toData(): OnOfflineMode = when (this) {
+    EventResponse.OnOfflineMode.ONLINE -> OnOfflineMode.ONLINE
+    EventResponse.OnOfflineMode.OFFLINE -> OnOfflineMode.OFFLINE
+    EventResponse.OnOfflineMode.ON_OFFLINE -> OnOfflineMode.ON_OFFLINE
 }

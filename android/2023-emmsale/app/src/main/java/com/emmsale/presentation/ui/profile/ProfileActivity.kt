@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityProfileBinding
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTagChip
@@ -114,7 +114,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleUiEvent(event: Event<ProfileUiEvent>) {
+    private fun handleUiEvent(event: UiEvent<ProfileUiEvent>) {
         val content = event.getContentIfNotHandled() ?: return
         when (content) {
             ProfileUiEvent.BlockComplete -> InfoDialog(

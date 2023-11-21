@@ -9,14 +9,14 @@ import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
-import com.emmsale.data.model.EventDetail
+import com.emmsale.data.model.Event
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.ScrappedEventRepository
-import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult.ERROR
 import com.emmsale.presentation.common.FetchResult.LOADING
 import com.emmsale.presentation.common.FetchResult.SUCCESS
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.firebase.analytics.logEventClick
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
@@ -41,8 +41,8 @@ class EventDetailViewModel @Inject constructor(
         NotNullMutableLiveData(EventDetailUiState())
     val eventDetail: NotNullLiveData<EventDetailUiState> = _eventDetail
 
-    private val _scrapUiEvent = MutableLiveData<Event<EventInfoUiEvent>>()
-    val scrapUiEvent: LiveData<Event<EventInfoUiEvent>> = _scrapUiEvent
+    private val _scrapUiEvent = MutableLiveData<UiEvent<EventInfoUiEvent>>()
+    val scrapUiEvent: LiveData<UiEvent<EventInfoUiEvent>> = _scrapUiEvent
 
     private val _isScraped: MutableLiveData<Boolean> = MutableLiveData(false)
     val isScraped: LiveData<Boolean> = _isScraped
@@ -50,8 +50,8 @@ class EventDetailViewModel @Inject constructor(
     private val _currentScreen = NotNullMutableLiveData(EventDetailScreenUiState.INFORMATION)
     val currentScreen: NotNullLiveData<EventDetailScreenUiState> = _currentScreen
 
-    private val _hasWritingPermission: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    val hasWritingPermission: LiveData<Event<Boolean>> = _hasWritingPermission
+    private val _hasWritingPermission: MutableLiveData<UiEvent<Boolean>> = MutableLiveData()
+    val hasWritingPermission: LiveData<UiEvent<Boolean>> = _hasWritingPermission
 
     init {
         refresh()
@@ -96,7 +96,7 @@ class EventDetailViewModel @Inject constructor(
         viewModelScope.launch {
             when (scrappedEventRepository.scrapEvent(eventId = eventId)) {
                 is Success -> _isScraped.value = true
-                else -> _scrapUiEvent.value = Event(EventInfoUiEvent.SCRAP_ERROR)
+                else -> _scrapUiEvent.value = UiEvent(EventInfoUiEvent.SCRAP_ERROR)
             }
         }
     }
@@ -105,15 +105,15 @@ class EventDetailViewModel @Inject constructor(
         viewModelScope.launch {
             when (scrappedEventRepository.deleteScrap(eventId = eventId)) {
                 is Success -> _isScraped.value = false
-                else -> _scrapUiEvent.value = Event(EventInfoUiEvent.SCRAP_DELETE_ERROR)
+                else -> _scrapUiEvent.value = UiEvent(EventInfoUiEvent.SCRAP_DELETE_ERROR)
             }
         }
     }
 
-    private fun changeToSuccessState(eventDetail: EventDetail) {
+    private fun changeToSuccessState(event: Event) {
         _eventDetail.value =
-            _eventDetail.value.copy(fetchResult = SUCCESS, eventDetail = eventDetail)
-        logEventClick(eventDetail.name, eventDetail.id)
+            _eventDetail.value.copy(fetchResult = SUCCESS, eventDetail = event)
+        logEventClick(event.name, event.id)
     }
 
     private fun changeToLoadingState() {
@@ -134,7 +134,7 @@ class EventDetailViewModel @Inject constructor(
     }
 
     private fun setHasPermissionWritingState(state: Boolean) {
-        _hasWritingPermission.value = Event(state)
+        _hasWritingPermission.value = UiEvent(state)
     }
 
     companion object {

@@ -25,7 +25,7 @@ class CompetitionRecyclerViewAdapter(
 
         currentList
             .subList(currentPosition, endPosition)
-            .forEach { event -> preload(context, event.posterUrl) }
+            .forEach { event -> preload(context, event.posterImageUrl) }
     }
 
     private fun preload(context: Context, url: String?) {

@@ -11,8 +11,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityPostWritingBinding
-import com.emmsale.presentation.common.Event
 import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showToast
@@ -86,7 +86,7 @@ class PostWritingActivity : AppCompatActivity() {
         viewModel.postUploadResult.observe(this, ::handleUploadPostResult)
     }
 
-    private fun handleUploadPostResult(event: Event<PostUploadResultUiState>) {
+    private fun handleUploadPostResult(event: UiEvent<PostUploadResultUiState>) {
         val content = event.getContentIfNotHandled() ?: return
         when (content.fetchResult) {
             FetchResult.SUCCESS -> {
