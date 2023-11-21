@@ -46,8 +46,8 @@ interface MemberService {
 
     @POST("/members/activities")
     suspend fun addMemberActivities(
-        @Body memberActivitiesUpdateRequest: MemberActivitiesUpdateRequest,
-    ): ApiResponse<Unit>
+        @Body body: MemberActivitiesUpdateRequest,
+    ): ApiResponse<List<ActivityResponse>>
 
     @DELETE("/members/activities")
     suspend fun deleteMemberActivities(

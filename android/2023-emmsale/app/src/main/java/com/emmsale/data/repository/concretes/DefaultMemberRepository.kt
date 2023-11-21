@@ -105,8 +105,8 @@ class DefaultMemberRepository @Inject constructor(
         activityIds: List<Long>,
     ): ApiResponse<Unit> = withContext(dispatcher) {
         memberService.addMemberActivities(
-            MemberActivitiesUpdateRequest(activityIds),
-        )
+            body = MemberActivitiesUpdateRequest(activityIds),
+        ).map { }
     }
 
     override suspend fun deleteMemberActivities(
