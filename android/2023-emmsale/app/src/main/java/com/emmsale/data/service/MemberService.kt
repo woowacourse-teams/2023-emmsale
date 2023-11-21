@@ -1,6 +1,6 @@
 package com.emmsale.data.service
 
-import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
+import com.emmsale.data.apiModel.request.MemberActivitiesAddRequest
 import com.emmsale.data.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
@@ -46,7 +46,7 @@ interface MemberService {
 
     @POST("/members/activities")
     suspend fun addMemberActivities(
-        @Body body: MemberActivitiesUpdateRequest,
+        @Body body: MemberActivitiesAddRequest,
     ): ApiResponse<List<ActivityResponse>>
 
     @DELETE("/members/activities")

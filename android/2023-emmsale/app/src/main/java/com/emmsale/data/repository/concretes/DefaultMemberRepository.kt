@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
+import com.emmsale.data.apiModel.request.MemberActivitiesAddRequest
 import com.emmsale.data.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
@@ -105,7 +105,7 @@ class DefaultMemberRepository @Inject constructor(
         activityIds: List<Long>,
     ): ApiResponse<Unit> = withContext(dispatcher) {
         memberService.addMemberActivities(
-            body = MemberActivitiesUpdateRequest(activityIds),
+            body = MemberActivitiesAddRequest(activityIds),
         ).map { }
     }
 

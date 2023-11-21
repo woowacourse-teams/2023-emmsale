@@ -12,7 +12,7 @@ data class MemberCreateRequest(
 )
 
 @Serializable
-data class MemberActivitiesUpdateRequest(
+data class MemberActivitiesAddRequest(
     @SerialName("activityIds")
     val activityIds: List<Long>,
 )
