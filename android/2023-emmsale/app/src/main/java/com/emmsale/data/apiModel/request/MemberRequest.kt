@@ -18,12 +18,6 @@ data class MemberActivitiesUpdateRequest(
 )
 
 @Serializable
-data class MemberOpenProfileUrlUpdateRequest(
-    @SerialName("openProfileUrl")
-    val openProfileUrl: String,
-)
-
-@Serializable
 data class MemberDescriptionUpdateRequest(
     @SerialName("description")
     val description: String,
