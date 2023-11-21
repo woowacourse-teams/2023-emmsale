@@ -1,5 +1,7 @@
 package com.emmsale.feed.application;
 
+import static java.util.stream.Collectors.toUnmodifiableList;
+
 import com.emmsale.block.domain.Block;
 import com.emmsale.block.domain.BlockRepository;
 import com.emmsale.comment.infrastructure.persistence.CommentDao;
@@ -7,9 +9,7 @@ import com.emmsale.comment.infrastructure.persistence.dto.FeedCommentCount;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.event.exception.EventExceptionType;
-import com.emmsale.feed.application.dto.FeedDetailResponse;
-import com.emmsale.feed.application.dto.FeedListResponse;
-import com.emmsale.feed.application.dto.FeedSimpleResponse;
+import com.emmsale.feed.application.dto.FeedResponseRefactor;
 import com.emmsale.feed.domain.Feed;
 import com.emmsale.feed.domain.repository.FeedRepository;
 import com.emmsale.feed.exception.FeedException;
@@ -40,32 +40,17 @@ public class FeedQueryService {
   private final ImageRepository imageRepository;
   private final CommentDao commentDao;
 
-  public FeedListResponse findAllFeeds(final Member member, final Long eventId) {
+  public List<FeedResponseRefactor> findAllFeeds(final Member member, final Long eventId) {
     validateEvent(eventId);
 
-    final List<Feed> feeds = excludeBlockedMembersFeed(member,
-        feedRepository.findAllByEventIdAndNotDeleted(eventId));
-    final List<Long> feedIds = feeds.stream()
-        .map(Feed::getId)
-        .collect(Collectors.toList());
-
-    final Map<Long, Long> feedCommentCounts = getFeedIdCommentCountMap(feedIds);
-    final Map<Long, List<Image>> feedImages = getFeedImagesMap(feedIds);
-
-    final List<FeedSimpleResponse> feedSimpleResponses = feeds.stream()
-        .map(feed -> {
-          final List<Image> images = feedImages.getOrDefault(feed.getId(), Collections.emptyList());
-          final Long commentCount = feedCommentCounts.getOrDefault(feed.getId(),
-              DEFAULT_COMMENT_COUNT);
-          return FeedSimpleResponse.from(feed, images, commentCount);
-        })
-        .collect(Collectors.toList());
-
-    return new FeedListResponse(eventId, feedSimpleResponses);
+    final List<Feed> feeds = feedRepository.findAllByEventIdAndNotDeleted(eventId);
+    final List<Feed> filteredFeeds = excludeBlockedMembersFeed(member, feeds);
+    return createFeedResponses(filteredFeeds);
   }
 
   private Map<Long, List<Image>> getFeedImagesMap(final List<Long> feedIds) {
-    final Map<Long, List<Image>> feedImagesMap = imageRepository.findAllByFeedIdIn(feedIds).stream()
+    final Map<Long, List<Image>> feedImagesMap = imageRepository.findAllByFeedIdIn(feedIds)
+        .stream()
         .collect(Collectors.groupingBy(
             Image::getContentId,
             Collectors.mapping(
@@ -105,16 +90,16 @@ public class FeedQueryService {
         .collect(Collectors.toList());
   }
 
-  public FeedDetailResponse findFeed(final Member member, final Long id) {
-    final Feed feed = feedRepository.findById(id)
-        .orElseThrow(() -> new FeedException(FeedExceptionType.NOT_FOUND_FEED));
+  public FeedResponseRefactor findFeed(final Member member, final Long id) {
+    final Feed feed = feedRepository.getByIdOrThrow(id);
     final List<Image> images = imageRepository.findAllByFeedId(feed.getId());
     images.sort(Comparator.comparing(Image::getOrder));
 
     validateBlockedMemberFeed(member, feed);
     validateDeletedFeed(feed);
 
-    return FeedDetailResponse.from(feed, images);
+    //이 부분은 안드분들과 이야기를 해봐야할 듯 실질적으로 쓰지 않는 값
+    return FeedResponseRefactor.of(feed, images, 0L);
   }
 
   private void validateBlockedMemberFeed(final Member member, final Feed feed) {
@@ -136,9 +121,13 @@ public class FeedQueryService {
     }
   }
 
-  public List<FeedSimpleResponse> findAllMyFeeds(final Member member) {
+  public List<FeedResponseRefactor> findAllMyFeeds(final Member member) {
     final List<Feed> feeds = feedRepository.findByMember(member);
 
+    return createFeedResponses(feeds);
+  }
+
+  private List<FeedResponseRefactor> createFeedResponses(List<Feed> feeds) {
     final List<Long> feedIds = feeds.stream()
         .map(Feed::getId)
         .collect(Collectors.toList());
@@ -151,8 +140,8 @@ public class FeedQueryService {
           final List<Image> images = feedImages.getOrDefault(feed.getId(), Collections.emptyList());
           final Long commentCount = feedCommentCounts.getOrDefault(feed.getId(),
               DEFAULT_COMMENT_COUNT);
-          return FeedSimpleResponse.from(feed, images, commentCount);
+          return FeedResponseRefactor.of(feed, images, commentCount);
         })
-        .collect(Collectors.toList());
+        .collect(toUnmodifiableList());
   }
 }
