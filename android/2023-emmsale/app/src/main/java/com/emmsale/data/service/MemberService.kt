@@ -4,7 +4,6 @@ import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
 import com.emmsale.data.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
-import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
 import com.emmsale.data.apiModel.response.MemberActivitiesResponse
 import com.emmsale.data.apiModel.response.MemberResponse
 import com.emmsale.data.apiModel.response.ProfileImageUrlResponse
@@ -36,11 +35,6 @@ interface MemberService {
     @PUT("/members/description")
     suspend fun updateMemberDescription(
         @Body memberDescriptionUpdateRequest: MemberDescriptionUpdateRequest,
-    ): ApiResponse<Unit>
-
-    @PUT("/members/open-profile-url")
-    suspend fun updateMemberOpenProfileUrl(
-        @Body memberOpenProfileUrlUpdateRequest: MemberOpenProfileUrlUpdateRequest,
     ): ApiResponse<Unit>
 
     @Multipart // <- 이 부분이 중요
