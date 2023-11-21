@@ -10,8 +10,20 @@ data class ActivityResponse(
     @SerialName("name")
     val name: String,
     @SerialName("activityType")
-    val activityType: String,
-)
+    val activityType: ActivityType,
+) {
+    @Serializable
+    enum class ActivityType {
+        @SerialName("동아리")
+        CLUB,
+
+        @SerialName("교육")
+        EDUCATION,
+
+        @SerialName("직무")
+        FIELD,
+    }
+}
 
 @Serializable
 data class MemberActivitiesResponse(
