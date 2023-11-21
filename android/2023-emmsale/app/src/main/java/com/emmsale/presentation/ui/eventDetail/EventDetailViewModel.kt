@@ -12,7 +12,6 @@ import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.model.Event
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
-import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.presentation.common.FetchResult.ERROR
 import com.emmsale.presentation.common.FetchResult.LOADING
 import com.emmsale.presentation.common.FetchResult.SUCCESS
@@ -32,7 +31,6 @@ import javax.inject.Inject
 class EventDetailViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val eventRepository: EventRepository,
-    private val scrappedEventRepository: ScrappedEventRepository,
     private val recruitmentRepository: RecruitmentRepository,
 ) : ViewModel(), Refreshable {
     val eventId = stateHandle[EVENT_ID_KEY] ?: DEFAULT_EVENT_ID
@@ -78,7 +76,7 @@ class EventDetailViewModel @Inject constructor(
 
     private fun fetchIsScrapped() {
         viewModelScope.launch {
-            when (val isScrappedFetchResult = scrappedEventRepository.isScraped(eventId)) {
+            when (val isScrappedFetchResult = eventRepository.isScraped(eventId)) {
                 is Success -> _isScraped.value = isScrappedFetchResult.data
                 is Failure, NetworkError, is Unexpected -> {}
             }
@@ -94,7 +92,7 @@ class EventDetailViewModel @Inject constructor(
 
     private fun scrapEvent() {
         viewModelScope.launch {
-            when (scrappedEventRepository.scrapEvent(eventId = eventId)) {
+            when (eventRepository.scrapEvent(eventId = eventId)) {
                 is Success -> _isScraped.value = true
                 else -> _scrapUiEvent.value = UiEvent(EventInfoUiEvent.SCRAP_ERROR)
             }
@@ -103,7 +101,7 @@ class EventDetailViewModel @Inject constructor(
 
     private fun deleteScrap() {
         viewModelScope.launch {
-            when (scrappedEventRepository.deleteScrap(eventId = eventId)) {
+            when (eventRepository.deleteScrap(eventId = eventId)) {
                 is Success -> _isScraped.value = false
                 else -> _scrapUiEvent.value = UiEvent(EventInfoUiEvent.SCRAP_DELETE_ERROR)
             }

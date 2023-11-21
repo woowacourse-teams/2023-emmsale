@@ -15,7 +15,6 @@ import com.emmsale.data.service.MyPostService
 import com.emmsale.data.service.NotificationService
 import com.emmsale.data.service.PostService
 import com.emmsale.data.service.RecruitmentService
-import com.emmsale.data.service.ScrappedEventService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -83,12 +82,6 @@ class ServiceModule {
     fun provideNotificationService(
         serviceFactory: ServiceFactory,
     ): NotificationService = serviceFactory.create(NotificationService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideScrappedEventService(
-        serviceFactory: ServiceFactory,
-    ): ScrappedEventService = serviceFactory.create(ScrappedEventService::class.java)
 
     @Provides
     @Singleton

@@ -33,4 +33,12 @@ interface EventRepository {
         statuses: List<ConferenceStatus> = emptyList(),
         category: String? = null,
     ): ApiResponse<List<Event>>
+
+    suspend fun getScrappedEvents(): ApiResponse<List<Event>>
+
+    suspend fun scrapEvent(eventId: Long): ApiResponse<Unit>
+
+    suspend fun deleteScrap(eventId: Long): ApiResponse<Unit>
+
+    suspend fun isScraped(eventId: Long): ApiResponse<Boolean>
 }

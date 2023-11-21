@@ -18,7 +18,6 @@ import com.emmsale.data.repository.concretes.DefaultMyPostRepository
 import com.emmsale.data.repository.concretes.DefaultNotificationRepository
 import com.emmsale.data.repository.concretes.DefaultPostRepository
 import com.emmsale.data.repository.concretes.DefaultRecruitmentRepository
-import com.emmsale.data.repository.concretes.DefaultScrappedEventRepository
 import com.emmsale.data.repository.concretes.DefaultTokenRepository
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.BlockedMemberRepository
@@ -38,7 +37,6 @@ import com.emmsale.data.repository.interfaces.MyPostRepository
 import com.emmsale.data.repository.interfaces.NotificationRepository
 import com.emmsale.data.repository.interfaces.PostRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
-import com.emmsale.data.repository.interfaces.ScrappedEventRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import dagger.Binds
 import dagger.Module
@@ -131,12 +129,6 @@ abstract class RepositoryModule {
     abstract fun bindNotificationRepository(
         impl: DefaultNotificationRepository,
     ): NotificationRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindScrappedEventRepository(
-        impl: DefaultScrappedEventRepository,
-    ): ScrappedEventRepository
 
     @Binds
     @Singleton

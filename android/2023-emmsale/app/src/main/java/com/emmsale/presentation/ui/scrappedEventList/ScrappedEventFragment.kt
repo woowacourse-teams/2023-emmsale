@@ -47,6 +47,6 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
     }
 
     private fun showEventDetail(scrappedEventUiState: ScrappedEventUiState) {
-        EventDetailActivity.startActivity(requireContext(), scrappedEventUiState.scrappedEvent.id)
+        EventDetailActivity.startActivity(requireContext(), scrappedEventUiState.event.id)
     }
 }

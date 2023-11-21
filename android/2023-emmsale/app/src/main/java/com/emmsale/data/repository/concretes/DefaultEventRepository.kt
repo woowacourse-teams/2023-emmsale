@@ -1,7 +1,12 @@
 package com.emmsale.data.repository.concretes
 
+import com.emmsale.data.apiModel.request.ScrappedEventCreateRequest
 import com.emmsale.data.apiModel.response.EventResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.NetworkError
+import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.mapper.toApiModel
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.CompetitionStatus
@@ -84,5 +89,32 @@ class DefaultEventRepository @Inject constructor(
 
     private fun LocalDate?.toRequestFormat(): String? {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd").format(this)
+    }
+
+    override suspend fun getScrappedEvents(): ApiResponse<List<Event>> {
+        return eventService
+            .getScrappedEvents()
+            .map(List<EventResponse>::toData)
+    }
+
+    override suspend fun scrapEvent(eventId: Long): ApiResponse<Unit> {
+        return eventService.scrapEvent(
+            ScrappedEventCreateRequest(eventId),
+        )
+    }
+
+    override suspend fun deleteScrap(eventId: Long): ApiResponse<Unit> {
+        return eventService.deleteScrap(eventId)
+    }
+
+    override suspend fun isScraped(eventId: Long): ApiResponse<Boolean> {
+        return when (val response = getScrappedEvents()) {
+            is Failure -> response
+            is NetworkError -> response
+            is Unexpected -> response
+            is Success -> Success(
+                response.data.any { it.id == eventId },
+            )
+        }
     }
 }
