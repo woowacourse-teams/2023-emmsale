@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.ActivitiesResponse
+import com.emmsale.data.apiModel.response.ActivityResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.mapper.toData
@@ -22,7 +22,7 @@ class DefaultActivityRepository @Inject constructor(
         if (allActivities.isNotEmpty()) return@withContext Success(allActivities)
         val result = activityService
             .getActivities()
-            .map(List<ActivitiesResponse>::toData)
+            .map(List<ActivityResponse>::toData)
 
         if (result is Success) {
             allActivities = result.data
