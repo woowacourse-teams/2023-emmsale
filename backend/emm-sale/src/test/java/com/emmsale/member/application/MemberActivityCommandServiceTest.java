@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
-import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
@@ -84,17 +84,17 @@ class MemberActivityCommandServiceTest extends ServiceIntegrationTestHelper {
     final Member member = memberRepository.findById(savedMemberId).get();
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
-    final List<MemberActivityResponse> expected = List.of(
-        new MemberActivityResponse(1L, "YAPP", "동아리"),
-        new MemberActivityResponse(2L, "DND", "동아리"),
-        new MemberActivityResponse(3L, "nexters", "동아리"),
-        new MemberActivityResponse(5L, "인프콘", "컨퍼런스"),
-        new MemberActivityResponse(6L, "우아한테크코스", "교육"),
-        new MemberActivityResponse(7L, "Backend", "직무")
+    final List<ActivityResponse> expected = List.of(
+        new ActivityResponse(1L, "동아리", "YAPP"),
+        new ActivityResponse(2L, "동아리", "DND"),
+        new ActivityResponse(3L, "동아리", "nexters"),
+        new ActivityResponse(4L, "컨퍼런스", "인프콘"),
+        new ActivityResponse(5L, "교육", "우아한테크코스"),
+        new ActivityResponse(6L, "직무", "Backend")
     );
 
     //when
-    final List<MemberActivityResponse> actual = memberActivityCommandService.addActivity(member,
+    final List<ActivityResponse> actual = memberActivityCommandService.addActivity(member,
         request);
     //then
     assertThat(expected)
@@ -154,12 +154,12 @@ class MemberActivityCommandServiceTest extends ServiceIntegrationTestHelper {
 
     final Member member = memberRepository.findById(savedMemberId).get();
 
-    final List<MemberActivityResponse> expected = List.of(
-        new MemberActivityResponse(3L, "nexters", "동아리")
+    final List<ActivityResponse> expected = List.of(
+        new ActivityResponse(3L, "동아리", "nexters")
     );
 
     //when
-    final List<MemberActivityResponse> actual = memberActivityCommandService.deleteActivity(member,
+    final List<ActivityResponse> actual = memberActivityCommandService.deleteActivity(member,
         deleteActivityIds);
 
     //then
