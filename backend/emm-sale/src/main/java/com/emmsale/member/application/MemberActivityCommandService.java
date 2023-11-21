@@ -2,6 +2,7 @@ package com.emmsale.member.application;
 
 import static java.util.stream.Collectors.toUnmodifiableList;
 
+import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.domain.ActivityRepository;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
@@ -58,7 +59,7 @@ public class MemberActivityCommandService {
     }
   }
 
-  public List<MemberActivityResponse> addActivity(
+  public List<ActivityResponse> addActivity(
       final Member member,
       final MemberActivityAddRequest memberActivityAddRequest
   ) {
@@ -74,7 +75,8 @@ public class MemberActivityCommandService {
 
     return memberActivityRepository.findAllByMember(member)
         .stream()
-        .map(MemberActivityResponse::from)
+        .map(MemberActivity::getActivity)
+        .map(ActivityResponse::from)
         .collect(toUnmodifiableList());
   }
 
@@ -91,7 +93,7 @@ public class MemberActivityCommandService {
     return new HashSet<>(activityIds).size() != activityIds.size();
   }
 
-  public List<MemberActivityResponse> deleteActivity(
+  public List<ActivityResponse> deleteActivity(
       final Member member,
       final List<Long> deleteActivityIds
   ) {
@@ -105,7 +107,8 @@ public class MemberActivityCommandService {
 
     return memberActivityRepository.findAllByMember(member)
         .stream()
-        .map(MemberActivityResponse::from)
+        .map(MemberActivity::getActivity)
+        .map(ActivityResponse::from)
         .collect(toUnmodifiableList());
   }
 }
