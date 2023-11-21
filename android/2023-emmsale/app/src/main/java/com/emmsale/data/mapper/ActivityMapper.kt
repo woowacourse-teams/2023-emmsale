@@ -1,7 +1,6 @@
 package com.emmsale.data.mapper
 
 import com.emmsale.data.apiModel.response.ActivityResponse
-import com.emmsale.data.apiModel.response.MemberActivitiesResponse
 import com.emmsale.data.model.Activity
 import com.emmsale.data.model.ActivityType
 
@@ -12,12 +11,6 @@ fun ActivityResponse.toData(): Activity = Activity(
     activityType = activityType.toData(),
     name = name,
 )
-
-@JvmName("mapMemberActivitiesApiModelToData")
-fun List<MemberActivitiesResponse>.toData(): List<Activity> = flatMap { it.toData() }
-
-fun MemberActivitiesResponse.toData(): List<Activity> =
-    memberActivityResponses.map { it.toData() }
 
 private fun String.toData(): ActivityType = when (this) {
     "동아리" -> ActivityType.CLUB
