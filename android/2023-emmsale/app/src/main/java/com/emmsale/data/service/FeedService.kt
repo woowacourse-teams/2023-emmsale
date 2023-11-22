@@ -1,6 +1,5 @@
 package com.emmsale.data.service
 
-import com.emmsale.data.apiModel.response.FeedDetailResponse
 import com.emmsale.data.apiModel.response.FeedResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import okhttp3.MultipartBody
@@ -23,11 +22,6 @@ interface FeedService {
 
     @GET("/feeds/{feedId}")
     suspend fun getFeed(
-        @Path("feedId") feedId: Long,
-    ): ApiResponse<FeedDetailResponse>
-
-    @GET("/feeds/{feedId}")
-    suspend fun getFeed2(
         @Path("feedId") feedId: Long,
     ): ApiResponse<FeedResponse>
 
