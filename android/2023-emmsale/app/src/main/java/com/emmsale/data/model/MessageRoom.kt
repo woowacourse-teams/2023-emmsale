@@ -6,3 +6,9 @@ data class MessageRoom(
     val messageRoomImageUrl: String,
     val recentMessage: Message,
 )
+
+data class MessageRoom2(
+    val roomId: String,
+    val interlocutor: Member,
+    val recentMessage: Message2,
+)
