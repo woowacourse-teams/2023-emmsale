@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.postWriting
+package com.emmsale.presentation.ui.feedWriting
 
 import android.content.Context
 import android.content.Intent
@@ -10,7 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
-import com.emmsale.databinding.ActivityPostWritingBinding
+import com.emmsale.databinding.ActivityFeedWritingBinding
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
@@ -20,18 +20,18 @@ import com.emmsale.presentation.common.imageUtil.getImageFileFromUri
 import com.emmsale.presentation.common.imageUtil.isImagePermissionGrantedCompat
 import com.emmsale.presentation.common.imageUtil.onImagePermissionCompat
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
-import com.emmsale.presentation.ui.postWriting.PostWritingViewModel.Companion.EVENT_ID_KEY
-import com.emmsale.presentation.ui.postWriting.recyclerView.PostWritingImageAdapter
-import com.emmsale.presentation.ui.postWriting.uiState.PostUploadResultUiState
+import com.emmsale.presentation.ui.feedWriting.FeedWritingViewModel.Companion.EVENT_ID_KEY
+import com.emmsale.presentation.ui.feedWriting.recyclerView.FeedWritingImageAdapter
+import com.emmsale.presentation.ui.feedWriting.uiState.FeedUploadResultUiEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PostWritingActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityPostWritingBinding.inflate(layoutInflater) }
-    private val viewModel: PostWritingViewModel by viewModels()
+class FeedWritingActivity : AppCompatActivity() {
+    private val binding by lazy { ActivityFeedWritingBinding.inflate(layoutInflater) }
+    private val viewModel: FeedWritingViewModel by viewModels()
 
-    private val adapter: PostWritingImageAdapter by lazy {
-        PostWritingImageAdapter(deleteImage = viewModel::deleteImageUrl)
+    private val adapter: FeedWritingImageAdapter by lazy {
+        FeedWritingImageAdapter(deleteImage = viewModel::deleteImageUrl)
     }
 
     private val imagePermissionLauncher = registerForActivityResult(
@@ -76,17 +76,17 @@ class PostWritingActivity : AppCompatActivity() {
 
     private fun setUpBinding() {
         setContentView(binding.root)
-        binding.rvPostWritingImageList.adapter = adapter
+        binding.rvFeedWritingImageList.adapter = adapter
         binding.vm = viewModel
         binding.showAlbum = ::showAlbum
         binding.lifecycleOwner = this
     }
 
     private fun setUpPostUploadResult() {
-        viewModel.postUploadResult.observe(this, ::handleUploadPostResult)
+        viewModel.feedUploadResult.observe(this, ::handleUploadPostResult)
     }
 
-    private fun handleUploadPostResult(event: UiEvent<PostUploadResultUiState>) {
+    private fun handleUploadPostResult(event: UiEvent<FeedUploadResultUiEvent>) {
         val content = event.getContentIfNotHandled() ?: return
         when (content.fetchResult) {
             FetchResult.SUCCESS -> {
@@ -166,7 +166,7 @@ class PostWritingActivity : AppCompatActivity() {
         private const val MAX_IMAGE_COUNT = 5
 
         fun startActivity(context: Context, eventId: Long) {
-            val intent = Intent(context, PostWritingActivity::class.java)
+            val intent = Intent(context, FeedWritingActivity::class.java)
                 .putExtra(EVENT_ID_KEY, eventId)
             context.startActivity(intent)
         }

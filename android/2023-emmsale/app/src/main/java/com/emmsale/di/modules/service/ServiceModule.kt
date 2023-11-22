@@ -13,7 +13,6 @@ import com.emmsale.data.service.MemberService
 import com.emmsale.data.service.MessageRoomService
 import com.emmsale.data.service.MyPostService
 import com.emmsale.data.service.NotificationService
-import com.emmsale.data.service.PostService
 import com.emmsale.data.service.RecruitmentService
 import dagger.Module
 import dagger.Provides
@@ -94,12 +93,6 @@ class ServiceModule {
     fun provideMyPostService(
         serviceFactory: ServiceFactory,
     ): MyPostService = serviceFactory.create(MyPostService::class.java)
-
-    @Provides
-    @Singleton
-    fun providePostService(
-        serviceFactory: ServiceFactory,
-    ): PostService = serviceFactory.create(PostService::class.java)
 
     @Provides
     @Singleton

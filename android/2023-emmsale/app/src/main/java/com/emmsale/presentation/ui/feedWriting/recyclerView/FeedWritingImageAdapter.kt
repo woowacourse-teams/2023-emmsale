@@ -1,10 +1,10 @@
-package com.emmsale.presentation.ui.postWriting.recyclerView
+package com.emmsale.presentation.ui.feedWriting.recyclerView
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
-class PostWritingImageAdapter(
+class FeedWritingImageAdapter(
     private val deleteImage: (String) -> Unit,
 ) : ListAdapter<String, PostWritingImageViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostWritingImageViewHolder {

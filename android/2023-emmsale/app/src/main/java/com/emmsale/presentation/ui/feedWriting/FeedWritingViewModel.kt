@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.postWriting
+package com.emmsale.presentation.ui.feedWriting
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,21 +6,21 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.repository.interfaces.PostRepository
+import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.postWriting.uiState.PostUploadResultUiState
+import com.emmsale.presentation.ui.feedWriting.uiState.FeedUploadResultUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class PostWritingViewModel @Inject constructor(
+class FeedWritingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val postRepository: PostRepository,
+    private val feedRepository: FeedRepository,
 ) : ViewModel() {
     private val eventId = savedStateHandle[EVENT_ID_KEY] ?: DEFAULT_ID
 
@@ -28,19 +28,19 @@ class PostWritingViewModel @Inject constructor(
         NotNullMutableLiveData(emptyList())
     val imageUris: NotNullLiveData<List<String>> = _imageUris
 
-    private val _postUploadResult: MutableLiveData<UiEvent<PostUploadResultUiState>> =
+    private val _feedUploadResult: MutableLiveData<UiEvent<FeedUploadResultUiEvent>> =
         MutableLiveData()
-    val postUploadResult: LiveData<UiEvent<PostUploadResultUiState>> = _postUploadResult
+    val feedUploadResult: LiveData<UiEvent<FeedUploadResultUiEvent>> = _feedUploadResult
 
     val title = MutableLiveData<String>()
     val content = MutableLiveData<String>()
 
     fun uploadPost(imageFiles: List<File>) {
-        _postUploadResult.value = UiEvent(PostUploadResultUiState(FetchResult.LOADING))
+        _feedUploadResult.value = UiEvent(FeedUploadResultUiEvent(FetchResult.LOADING))
         viewModelScope.launch {
             when (
                 val fetchResult =
-                    postRepository.uploadPost(
+                    feedRepository.uploadFeed(
                         eventId,
                         title.value ?: DEFAULT_TITLE,
                         content.value ?: DEFAULT_CONTENT,
@@ -48,12 +48,12 @@ class PostWritingViewModel @Inject constructor(
                     )
             ) {
                 is Success ->
-                    _postUploadResult.value =
-                        UiEvent(PostUploadResultUiState(FetchResult.SUCCESS, fetchResult.data))
+                    _feedUploadResult.value =
+                        UiEvent(FeedUploadResultUiEvent(FetchResult.SUCCESS, fetchResult.data))
 
                 else ->
-                    _postUploadResult.value =
-                        UiEvent(PostUploadResultUiState(FetchResult.ERROR))
+                    _feedUploadResult.value =
+                        UiEvent(FeedUploadResultUiEvent(FetchResult.ERROR))
             }
         }
     }

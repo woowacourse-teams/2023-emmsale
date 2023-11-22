@@ -29,7 +29,7 @@
             android:launchMode="singleTask"
             android:parentActivityName=".presentation.ui.main.MainActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".presentation.ui.postWriting.PostWritingActivity" />
+        <activity android:name=".presentation.ui.feedWriting.FeedWritingActivity" />
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true">

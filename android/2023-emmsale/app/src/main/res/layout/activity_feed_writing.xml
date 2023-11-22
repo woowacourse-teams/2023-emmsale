@@ -13,7 +13,7 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.postWriting.PostWritingViewModel" />
+            type="com.emmsale.presentation.ui.feedWriting.FeedWritingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,7 +42,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/iv_post_writing_camera"
+            app:layout_constraintBottom_toTopOf="@+id/iv_feed_writing_camera"
             app:layout_constraintTop_toBottomOf="@id/tb_toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +50,7 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:id="@+id/et_post_writing_title"
+                    android:id="@+id/et_feed_writing_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
@@ -67,7 +67,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
-                    android:id="@+id/divider_postWriting"
+                    android:id="@+id/divider_feed_writing"
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     android:layout_marginHorizontal="17dp"
@@ -75,10 +75,10 @@
                     android:background="@color/light_gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/et_post_writing_title" />
+                    app:layout_constraintTop_toBottomOf="@id/et_feed_writing_title" />
 
                 <EditText
-                    android:id="@+id/et_post_writing_content"
+                    android:id="@+id/et_feed_writing_content"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
@@ -94,10 +94,10 @@
                     android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_post_writing_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/et_feed_writing_title" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_post_writing_image_list"
+                    android:id="@+id/rv_feed_writing_image_list"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
@@ -106,14 +106,14 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/et_post_writing_content"
+                    app:layout_constraintTop_toBottomOf="@id/et_feed_writing_content"
                     tools:listitem="@layout/item_writing_image" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
 
         <ImageView
-            android:id="@+id/iv_post_writing_camera"
+            android:id="@+id/iv_feed_writing_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -125,13 +125,13 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ProgressBar
-            android:id="@+id/progressBar_post_writing"
+            android:id="@+id/progressBar_feed_writing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.postUploadResult.peekContent().fetchResult == FetchResult.LOADING}" />
+            app:visible="@{vm.feedUploadResult.peekContent().fetchResult == FetchResult.LOADING}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

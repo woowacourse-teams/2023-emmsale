@@ -16,8 +16,8 @@ import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDeleg
 import com.emmsale.presentation.ui.eventDetail.EventDetailViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
+import com.emmsale.presentation.ui.feedWriting.FeedWritingActivity
 import com.emmsale.presentation.ui.main.MainActivity
-import com.emmsale.presentation.ui.postWriting.PostWritingActivity
 import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -88,7 +88,7 @@ class EventDetailActivity :
             EventDetailScreenUiState.INFORMATION -> Unit
             EventDetailScreenUiState.RECRUITMENT -> viewModel.fetchHasWritingPermission()
             EventDetailScreenUiState.POST -> {
-                PostWritingActivity.startActivity(this, viewModel.eventId)
+                FeedWritingActivity.startActivity(this, viewModel.eventId)
             }
         }
     }

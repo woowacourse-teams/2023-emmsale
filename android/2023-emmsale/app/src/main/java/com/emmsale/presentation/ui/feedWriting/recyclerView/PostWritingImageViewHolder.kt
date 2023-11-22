@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.postWriting.recyclerView
+package com.emmsale.presentation.ui.feedWriting.recyclerView
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

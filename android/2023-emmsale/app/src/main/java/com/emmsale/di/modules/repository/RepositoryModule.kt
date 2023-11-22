@@ -16,7 +16,6 @@ import com.emmsale.data.repository.concretes.DefaultMemberRepository
 import com.emmsale.data.repository.concretes.DefaultMessageRoomRepository
 import com.emmsale.data.repository.concretes.DefaultMyPostRepository
 import com.emmsale.data.repository.concretes.DefaultNotificationRepository
-import com.emmsale.data.repository.concretes.DefaultPostRepository
 import com.emmsale.data.repository.concretes.DefaultRecruitmentRepository
 import com.emmsale.data.repository.concretes.DefaultTokenRepository
 import com.emmsale.data.repository.interfaces.ActivityRepository
@@ -35,7 +34,6 @@ import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.MyPostRepository
 import com.emmsale.data.repository.interfaces.NotificationRepository
-import com.emmsale.data.repository.interfaces.PostRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import dagger.Binds
@@ -147,12 +145,6 @@ abstract class RepositoryModule {
     abstract fun bindMyPostRepository(
         impl: DefaultMyPostRepository,
     ): MyPostRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindPostRepository(
-        impl: DefaultPostRepository,
-    ): PostRepository
 
     @Binds
     @Singleton
