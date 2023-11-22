@@ -12,17 +12,17 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.postList.PostListViewModel" />
+            type="com.emmsale.presentation.ui.feedList.FeedListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="93dp"
-        tools:context=".presentation.ui.postList.PostListFragment">
+        tools:context=".presentation.ui.feedList.FeedListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_postlist"
+            android:id="@+id/rv_feed_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:itemAnimator="@{null}"
@@ -31,7 +31,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/item_post" />
+            tools:listitem="@layout/item_feed" />
 
         <ProgressBar
             android:id="@+id/pb_eventDetailParticipant_loadingbar"
@@ -42,21 +42,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.posts.fetchResult == FetchResult.LOADING}"
+            app:visible="@{vm.feeds.fetchResult == FetchResult.LOADING}"
             tools:visibility="gone" />
 
         <include
             layout="@layout/layout_all_error_screen"
             android:background="@color/white"
             android:clickable="true"
-            app:visible="@{vm.posts.fetchResult == FetchResult.ERROR}"
+            app:visible="@{vm.feeds.fetchResult == FetchResult.ERROR}"
             bind:viewModel="@{vm}"
             tools:visibility="gone" />
 
         <androidx.core.widget.NestedScrollView
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.posts.posts.empty &amp;&amp; vm.posts.fetchResult == FetchResult.SUCCESS}"
+            app:visible="@{vm.feeds.feeds.empty &amp;&amp; vm.feeds.fetchResult == FetchResult.SUCCESS}"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

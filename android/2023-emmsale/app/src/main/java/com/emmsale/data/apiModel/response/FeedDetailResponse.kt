@@ -32,3 +32,25 @@ data class WriterResponse(
     @SerialName("imageUrl")
     val imageUrl: String,
 )
+
+@Serializable
+data class FeedResponse(
+    @SerialName("id")
+    val id: Long,
+    @SerialName("eventId")
+    val eventId: Long,
+    @SerialName("title")
+    val title: String,
+    @SerialName("content")
+    val content: String,
+    @SerialName("writer")
+    val writer: MemberResponse,
+    @SerialName("images")
+    val imageUrls: List<String>,
+    @SerialName("commentCount")
+    val commentCount: Int,
+    @SerialName("createdAt")
+    val createdAt: String,
+    @SerialName("updatedAt")
+    val updatedAt: String,
+)

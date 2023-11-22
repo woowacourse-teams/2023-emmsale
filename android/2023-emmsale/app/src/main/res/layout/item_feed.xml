@@ -10,8 +10,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="post"
-            type="com.emmsale.data.model.Post" />
+            name="feed"
+            type="com.emmsale.data.model.Feed" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,20 +19,20 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_post_title"
+            android:id="@+id/tv_feed_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/nanum_square_bold"
-            android:text="@{post.title}"
+            android:text="@{feed.title}"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="타임라인 어떻게 되나요?" />
 
         <TextView
-            android:id="@+id/tv_post_content"
+            android:id="@+id/tv_feed_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
@@ -41,15 +41,15 @@
             android:ellipsize="end"
             android:fontFamily="@font/nanum_square_regular"
             android:maxLines="2"
-            android:text="@{post.content}"
+            android:text="@{feed.content}"
             android:textSize="13sp"
-            app:layout_constraintEnd_toStartOf="@+id/iv_post_title_image"
+            app:layout_constraintEnd_toStartOf="@+id/iv_feed_title_image"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_post_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_feed_title"
             tools:text="행사 시간 공유 좀 해주실 분 부탁드려요" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/icon_post_comment"
+            android:id="@+id/icon_feed_comment"
             android:layout_width="11sp"
             android:layout_height="11sp"
             android:layout_marginStart="17dp"
@@ -58,7 +58,7 @@
             android:src="@drawable/ic_all_comment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_post_content" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_feed_content" />
 
         <TextView
             android:id="@+id/tv_post_comment_count"
@@ -66,16 +66,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:fontFamily="@font/nanum_square_regular"
-            android:text="@{String.valueOf(post.commentCount)}"
+            android:text="@{String.valueOf(feed.commentCount)}"
             android:textColor="@color/primary_color"
             android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/icon_post_comment"
-            app:layout_constraintStart_toEndOf="@+id/icon_post_comment"
-            app:layout_constraintTop_toTopOf="@+id/icon_post_comment"
+            app:layout_constraintBottom_toBottomOf="@+id/icon_feed_comment"
+            app:layout_constraintStart_toEndOf="@+id/icon_feed_comment"
+            app:layout_constraintTop_toTopOf="@+id/icon_feed_comment"
             tools:text="3" />
 
         <ImageView
-            android:id="@+id/icon_post_like"
+            android:id="@+id/icon_feed_like"
             android:layout_width="11sp"
             android:layout_height="11sp"
             android:layout_marginStart="6dp"
@@ -85,10 +85,10 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_post_comment_count"
-            app:layout_constraintTop_toBottomOf="@+id/tv_post_content" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_feed_content" />
 
         <TextView
-            android:id="@+id/tv_post_like_count"
+            android:id="@+id/tv_feed_like_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
@@ -96,9 +96,9 @@
             android:textColor="@color/post_like_color"
             android:textSize="11sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/icon_post_like"
-            app:layout_constraintStart_toEndOf="@+id/icon_post_like"
-            app:layout_constraintTop_toTopOf="@+id/icon_post_like"
+            app:layout_constraintBottom_toBottomOf="@+id/icon_feed_like"
+            app:layout_constraintStart_toEndOf="@+id/icon_feed_like"
+            app:layout_constraintTop_toTopOf="@+id/icon_feed_like"
             tools:text="1" />
 
         <View
@@ -109,35 +109,35 @@
             android:layout_marginTop="1dp"
             android:layout_marginBottom="1dp"
             android:background="@color/light_gray"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_post_created_at"
-            app:layout_constraintStart_toEndOf="@id/tv_post_like_count"
-            app:layout_constraintTop_toTopOf="@+id/tv_post_created_at" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_feed_created_at"
+            app:layout_constraintStart_toEndOf="@id/tv_feed_like_count"
+            app:layout_constraintTop_toTopOf="@+id/tv_feed_created_at" />
 
         <TextView
-            android:id="@+id/tv_post_created_at"
+            android:id="@+id/tv_feed_created_at"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:fontFamily="@font/nanum_square_regular"
             android:textColor="@color/light_gray"
             android:textSize="11sp"
-            app:dateText="@{post.createdAt}"
+            app:dateText="@{feed.createdAt}"
             app:dateTimeFormatter="@{DateTimePattern.RELATIVE_TIME}"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_post_like_count"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_feed_like_count"
             app:layout_constraintStart_toEndOf="@+id/divider_like_to_time"
-            app:layout_constraintTop_toTopOf="@+id/tv_post_like_count"
+            app:layout_constraintTop_toTopOf="@+id/tv_feed_like_count"
             tools:text="15분전" />
 
         <ImageView
-            android:id="@+id/iv_post_title_image"
+            android:id="@+id/iv_feed_title_image"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="17dp"
             android:scaleType="centerCrop"
-            android:visibility="@{post.titleImageUrl == null ? View.GONE : View.VISIBLE}"
-            app:imageUrl="@{post.titleImageUrl}"
-            app:layout_constraintBottom_toBottomOf="@+id/icon_post_comment"
+            android:visibility="@{feed.imageUrls.isEmpty() ? View.GONE : View.VISIBLE}"
+            app:imageUrl="@{feed.titleImageUrl}"
+            app:layout_constraintBottom_toBottomOf="@+id/icon_feed_comment"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -1,10 +1,10 @@
-package com.emmsale.presentation.ui.postList.uiState
+package com.emmsale.presentation.ui.feedList.uiState
 
-import com.emmsale.data.model.Post
+import com.emmsale.data.model.Feed
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.FetchResultUiState
 
-data class PostsUiState(
+data class FeedsUiState(
     override val fetchResult: FetchResult = FetchResult.LOADING,
-    val posts: List<Post> = emptyList(),
+    val feeds: List<Feed> = emptyList(),
 ) : FetchResultUiState()

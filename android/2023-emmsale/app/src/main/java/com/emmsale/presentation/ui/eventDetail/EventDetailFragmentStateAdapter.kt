@@ -8,7 +8,7 @@ import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState.
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState.POST
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState.RECRUITMENT
 import com.emmsale.presentation.ui.eventDetailInfo.EventInfoFragment
-import com.emmsale.presentation.ui.postList.PostListFragment
+import com.emmsale.presentation.ui.feedList.FeedListFragment
 import com.emmsale.presentation.ui.recruitmentList.EventRecruitmentFragment
 
 class EventDetailFragmentStateAdapter(
@@ -21,7 +21,7 @@ class EventDetailFragmentStateAdapter(
     override fun createFragment(position: Int): Fragment {
         return when (EventDetailScreenUiState.from(position)) {
             INFORMATION -> EventInfoFragment.create()
-            POST -> PostListFragment.create(eventId)
+            POST -> FeedListFragment.create(eventId)
             RECRUITMENT -> EventRecruitmentFragment.create(eventId)
         }
     }
