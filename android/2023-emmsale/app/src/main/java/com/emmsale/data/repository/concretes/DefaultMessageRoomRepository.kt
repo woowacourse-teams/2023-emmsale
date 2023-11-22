@@ -2,11 +2,15 @@ package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.request.MessageRequest
 import com.emmsale.data.apiModel.response.MessageResponse
+import com.emmsale.data.apiModel.response.MessageResponse2
 import com.emmsale.data.apiModel.response.MessageRoomResponse
+import com.emmsale.data.apiModel.response.MessageRoomResponse2
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Message
+import com.emmsale.data.model.Message2
 import com.emmsale.data.model.MessageRoom
+import com.emmsale.data.model.MessageRoom2
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.service.MessageRoomService
 import com.emmsale.di.modules.other.IoDispatcher
@@ -43,5 +47,22 @@ class DefaultMessageRoomRepository @Inject constructor(
         messageRoomService
             .sendMessage(MessageRequest(senderId, receiverId, message))
             .map { it.roomId }
+    }
+
+    override suspend fun getMessageRooms2(
+        memberId: Long,
+    ): ApiResponse<List<MessageRoom2>> = withContext(dispatcher) {
+        messageRoomService
+            .getMessageRooms2(memberId)
+            .map(List<MessageRoomResponse2>::toData)
+    }
+
+    override suspend fun getMessagesByRoomId2(
+        roomId: String,
+        memberId: Long,
+    ): ApiResponse<List<Message2>> = withContext(dispatcher) {
+        messageRoomService
+            .getMessagesByRoomId2(roomId, memberId)
+            .map(List<MessageResponse2>::toData)
     }
 }
