@@ -10,17 +10,7 @@ data class MessageRoomResponse(
     @SerialName("interlocutor")
     val interlocutor: MemberResponse,
     @SerialName("recentlyMessage")
-    val recentMessage: MessageResponse2,
-)
-
-@Serializable
-data class MessageResponse(
-    @SerialName("senderId")
-    val senderId: Long,
-    @SerialName("content")
-    val message: String,
-    @SerialName("createdAt")
-    val createdAt: String,
+    val recentMessage: MessageResponse,
 )
 
 @Serializable
@@ -30,7 +20,7 @@ data class MessageSendResponse(
 )
 
 @Serializable
-data class MessageResponse2(
+data class MessageResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("sender")

@@ -85,7 +85,7 @@ class MessageListViewModel @Inject constructor(
 
     private fun updateMessages(newMessages: List<Message>) {
         val messagesNotBlank = newMessages
-            .filter { it.message.isNotBlank() }
+            .filter { it.content.isNotBlank() }
             .toUiState()
         _messages.value = messages.value.toSuccess(messagesNotBlank)
     }
@@ -125,9 +125,9 @@ class MessageListViewModel @Inject constructor(
 
     private fun Message.createChatMessageUiState(
         shouldShowProfile: Boolean = true,
-    ): MessageUiState = when (senderId) {
+    ): MessageUiState = when (sender.id) {
         myUid -> MyMessageUiState.create(this, shouldShowProfile)
-        else -> OtherMessageUiState.create(this, otherMember.value!!, shouldShowProfile)
+        else -> OtherMessageUiState.create(this, shouldShowProfile)
     }
 
     fun sendMessage(message: String) {

@@ -2,15 +2,9 @@ package com.emmsale.data.repository.interfaces
 
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.model.Message
-import com.emmsale.data.model.Message2
 import com.emmsale.data.model.MessageRoom
 
 interface MessageRoomRepository {
-    suspend fun getMessagesByRoomId(
-        roomId: String,
-        memberId: Long,
-    ): ApiResponse<List<Message>>
-
     suspend fun sendMessage(
         senderId: Long,
         receiverId: Long,
@@ -21,8 +15,8 @@ interface MessageRoomRepository {
         memberId: Long,
     ): ApiResponse<List<MessageRoom>>
 
-    suspend fun getMessagesByRoomId2(
+    suspend fun getMessagesByRoomId(
         roomId: String,
         memberId: Long,
-    ): ApiResponse<List<Message2>>
+    ): ApiResponse<List<Message>>
 }

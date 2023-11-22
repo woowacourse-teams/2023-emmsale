@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:onClick="@{() -> onMessageRoomClick.invoke(messageRoom.roomId, messageRoom.recentMessage.sender.id)}"
+        android:onClick="@{() -> onMessageRoomClick.invoke(messageRoom.roomId, messageRoom.interlocutor.id)}"
         android:paddingHorizontal="17dp"
         android:paddingVertical="11dp">
 

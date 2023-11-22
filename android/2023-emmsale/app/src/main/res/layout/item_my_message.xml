@@ -38,7 +38,7 @@
             android:background="@drawable/bg_mymessage_message"
             android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
-            android:text="@{message.message}"
+            android:text="@{message.content}"
             android:textColor="@color/my_message_text_color"
             android:textSize="12sp"
             app:layout_marginTop="@{message.first ? @dimen/my_first_message_top_margin : @dimen/my_not_fisrt_message_top_margin}"
