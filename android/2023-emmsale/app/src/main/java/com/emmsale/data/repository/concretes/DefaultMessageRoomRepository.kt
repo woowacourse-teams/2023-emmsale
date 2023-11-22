@@ -4,13 +4,11 @@ import com.emmsale.data.apiModel.request.MessageRequest
 import com.emmsale.data.apiModel.response.MessageResponse
 import com.emmsale.data.apiModel.response.MessageResponse2
 import com.emmsale.data.apiModel.response.MessageRoomResponse
-import com.emmsale.data.apiModel.response.MessageRoomResponse2
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.Message
 import com.emmsale.data.model.Message2
 import com.emmsale.data.model.MessageRoom
-import com.emmsale.data.model.MessageRoom2
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.service.MessageRoomService
 import com.emmsale.di.modules.other.IoDispatcher
@@ -22,11 +20,12 @@ class DefaultMessageRoomRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val messageRoomService: MessageRoomService,
 ) : MessageRoomRepository {
+
     override suspend fun getMessageRooms(
         memberId: Long,
     ): ApiResponse<List<MessageRoom>> = withContext(dispatcher) {
         messageRoomService
-            .getMessageRooms(memberId)
+            .getMessageRooms2(memberId)
             .map(List<MessageRoomResponse>::toData)
     }
 
@@ -47,14 +46,6 @@ class DefaultMessageRoomRepository @Inject constructor(
         messageRoomService
             .sendMessage(MessageRequest(senderId, receiverId, message))
             .map { it.roomId }
-    }
-
-    override suspend fun getMessageRooms2(
-        memberId: Long,
-    ): ApiResponse<List<MessageRoom2>> = withContext(dispatcher) {
-        messageRoomService
-            .getMessageRooms2(memberId)
-            .map(List<MessageRoomResponse2>::toData)
     }
 
     override suspend fun getMessagesByRoomId2(

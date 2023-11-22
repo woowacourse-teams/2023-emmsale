@@ -7,16 +7,10 @@ import kotlinx.serialization.Serializable
 data class MessageRoomResponse(
     @SerialName("roomId")
     val roomId: String,
-    @SerialName("interlocutorId")
-    val senderId: Long,
-    @SerialName("interlocutorName")
-    val senderName: String,
-    @SerialName("interlocutorProfile")
-    val senderProfileImageUrl: String,
+    @SerialName("interlocutor")
+    val interlocutor: MemberResponse,
     @SerialName("recentlyMessage")
-    val recentMessage: String,
-    @SerialName("recentlyMessageTime")
-    val recentMessageTime: String,
+    val recentMessage: MessageResponse2,
 )
 
 @Serializable
@@ -33,16 +27,6 @@ data class MessageResponse(
 data class MessageSendResponse(
     @SerialName("roomId")
     val roomId: String,
-)
-
-@Serializable
-data class MessageRoomResponse2(
-    @SerialName("roomId")
-    val roomId: String,
-    @SerialName("interlocutor")
-    val interlocutor: MemberResponse,
-    @SerialName("recentlyMessage")
-    val recentMessage: MessageResponse2,
 )
 
 @Serializable

@@ -4,7 +4,6 @@ import com.emmsale.data.apiModel.request.MessageRequest
 import com.emmsale.data.apiModel.response.MessageResponse
 import com.emmsale.data.apiModel.response.MessageResponse2
 import com.emmsale.data.apiModel.response.MessageRoomResponse
-import com.emmsale.data.apiModel.response.MessageRoomResponse2
 import com.emmsale.data.apiModel.response.MessageSendResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import retrofit2.http.Body
@@ -14,11 +13,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MessageRoomService {
-    @GET("/rooms/overview")
-    suspend fun getMessageRooms(
-        @Query("member-id") memberId: Long,
-    ): ApiResponse<List<MessageRoomResponse>>
-
     @GET("/rooms/{roomId}")
     suspend fun getMessagesByRoomId(
         @Path("roomId") roomId: String,
@@ -28,7 +22,7 @@ interface MessageRoomService {
     @GET("/rooms/overview")
     suspend fun getMessageRooms2(
         @Query("member-id") memberId: Long,
-    ): ApiResponse<List<MessageRoomResponse2>>
+    ): ApiResponse<List<MessageRoomResponse>>
 
     @GET("/rooms/{roomId}")
     suspend fun getMessagesByRoomId2(

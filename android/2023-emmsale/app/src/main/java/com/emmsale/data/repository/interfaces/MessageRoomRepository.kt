@@ -4,13 +4,8 @@ import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.model.Message
 import com.emmsale.data.model.Message2
 import com.emmsale.data.model.MessageRoom
-import com.emmsale.data.model.MessageRoom2
 
 interface MessageRoomRepository {
-    suspend fun getMessageRooms(
-        memberId: Long,
-    ): ApiResponse<List<MessageRoom>>
-
     suspend fun getMessagesByRoomId(
         roomId: String,
         memberId: Long,
@@ -22,9 +17,9 @@ interface MessageRoomRepository {
         message: String,
     ): ApiResponse<String>
 
-    suspend fun getMessageRooms2(
+    suspend fun getMessageRooms(
         memberId: Long,
-    ): ApiResponse<List<MessageRoom2>>
+    ): ApiResponse<List<MessageRoom>>
 
     suspend fun getMessagesByRoomId2(
         roomId: String,

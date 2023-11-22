@@ -11,7 +11,7 @@ import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.ui.messageRoomList.uistate.MemberRoomListUiState
+import com.emmsale.presentation.ui.messageRoomList.uistate.MessageRoomListUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,8 +21,8 @@ class MessageRoomViewModel @Inject constructor(
     private val memberRepository: TokenRepository,
     private val messageRoomRepository: MessageRoomRepository,
 ) : ViewModel(), Refreshable {
-    private val _messageRooms = NotNullMutableLiveData(MemberRoomListUiState())
-    val messageRooms: NotNullLiveData<MemberRoomListUiState> = _messageRooms
+    private val _messageRooms = NotNullMutableLiveData(MessageRoomListUiState())
+    val messageRooms: NotNullLiveData<MessageRoomListUiState> = _messageRooms
 
     override fun refresh() {
         fetchMessageRooms()

@@ -5,6 +5,7 @@ import com.emmsale.data.apiModel.response.MessageResponse2
 import com.emmsale.data.model.Message
 import com.emmsale.data.model.Message2
 
+@JvmName("MessageResponse")
 fun List<MessageResponse>.toData(): List<Message> = map { it.toData() }
 
 fun MessageResponse.toData(): Message = Message.create(
