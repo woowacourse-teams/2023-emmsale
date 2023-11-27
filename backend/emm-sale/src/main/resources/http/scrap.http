@@ -1,0 +1,21 @@
+### 스크랩 조회
+
+GET http://localhost:8080/scraps
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjk5MTI5NDAwLCJleHAiOjE3MDI3Mjk0MDB9.Gokmyr--11BIQCXHYv8_M156ngoZ6cIs9Exk7EEbwd0
+
+### 스크랩 추가
+
+POST http://localhost:8080/scraps
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjk5MTI5NDAwLCJleHAiOjE3MDI3Mjk0MDB9.Gokmyr--11BIQCXHYv8_M156ngoZ6cIs9Exk7EEbwd0
+
+{
+  "eventId": 1
+}
+
+### 스크랩 삭제
+
+DELETE http://localhost:8080/scraps?event-id=1
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjk5MTI5NDAwLCJleHAiOjE3MDI3Mjk0MDB9.Gokmyr--11BIQCXHYv8_M156ngoZ6cIs9Exk7EEbwd0

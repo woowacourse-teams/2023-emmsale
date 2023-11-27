@@ -3,7 +3,6 @@ package com.emmsale.member.domain;
 import com.emmsale.base.BaseEntity;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
-import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,37 +29,33 @@ public class Member extends BaseEntity {
   private String name;
   @Column(nullable = false)
   private String description;
-  @Column
-  @Getter(value = AccessLevel.PRIVATE)
-  private String openProfileUrl;
   @Column(nullable = false)
   private String imageUrl;
   @Column(nullable = false)
   private String githubUsername;
 
   public Member(final Long id, final Long githubId, final String imageUrl, final String name,
+      final String description,
       final String githubUsername) {
     this.id = id;
     this.githubId = githubId;
     this.imageUrl = imageUrl;
     this.name = name;
-    this.description = DEFAULT_DESCRIPTION;
+    this.description = description;
     this.githubUsername = githubUsername;
   }
 
+  public Member(final Long id, final Long githubId, final String imageUrl, final String name,
+      final String githubUsername) {
+    this(id, githubId, imageUrl, name, DEFAULT_DESCRIPTION, githubUsername);
+  }
+
   public Member(final Long githubId, final String imageUrl, final String githubUsername) {
-    this.githubId = githubId;
-    this.imageUrl = imageUrl;
-    this.description = DEFAULT_DESCRIPTION;
-    this.githubUsername = githubUsername;
+    this(null, githubId, imageUrl, null, DEFAULT_DESCRIPTION, githubUsername);
   }
 
   public void updateName(final String name) {
     this.name = name;
-  }
-
-  public void updateOpenProfileUrl(final String openProfileUrl) {
-    this.openProfileUrl = openProfileUrl;
   }
 
   public void updateDescription(final String description) {
@@ -111,9 +106,5 @@ public class Member extends BaseEntity {
 
   public boolean isNotGithubProfile() {
     return !imageUrl.startsWith(GITHUB_PROFILE_DOMAIN);
-  }
-
-  public Optional<String> getOptionalOpenProfileUrl() {
-    return Optional.ofNullable(openProfileUrl);
   }
 }

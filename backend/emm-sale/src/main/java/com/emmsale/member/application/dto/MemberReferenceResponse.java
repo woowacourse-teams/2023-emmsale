@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class MemberProfileResponse {
+public class MemberReferenceResponse {
 
   private static final String GITHUB_URL_PREFIX = "https://github.com/";
 
@@ -14,16 +14,14 @@ public class MemberProfileResponse {
   private final String name;
   private final String description;
   private final String imageUrl;
-  private final String openProfileUrl;
   private final String githubUrl;
 
-  public static MemberProfileResponse from(Member member) {
-    return new MemberProfileResponse(
+  public static MemberReferenceResponse from(Member member) {
+    return new MemberReferenceResponse(
         member.getId(),
         member.getName(),
         member.getDescription(),
         member.getImageUrl(),
-        member.getOptionalOpenProfileUrl().orElse(""),
         GITHUB_URL_PREFIX + member.getGithubUsername()
     );
   }

@@ -6,9 +6,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.MemberQueryResponse;
-import com.emmsale.member.application.dto.MemberProfileResponse;
+import com.emmsale.member.application.dto.MemberActivityResponse;
+import com.emmsale.member.application.dto.MemberDetailResponse;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
+import java.util.List;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -67,23 +69,27 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
     void findProfile_success() {
       //given
       final Long memberId = 1L;
-      final MemberProfileResponse expectResponse = new MemberProfileResponse(
+      final MemberDetailResponse expect = new MemberDetailResponse(
           memberId,
           null,
           "",
           "https://imageurl.com",
-          "https://openprofileurl.com",
-          "https://github.com/amaran-th"
+          "https://github.com/amaran-th",
+          List.of(
+              new MemberActivityResponse(1L, "YAPP", "동아리"),
+              new MemberActivityResponse(2L, "DND", "동아리"),
+              new MemberActivityResponse(3L, "nexters", "동아리")
+          )
       );
 
       //when
-      final MemberProfileResponse actualResponse = memberQueryService.findProfile(memberId);
+      final MemberDetailResponse actual = memberQueryService.findProfile(memberId);
 
       //then
-      assertThat(actualResponse)
+      assertThat(actual)
           .usingRecursiveComparison()
           .ignoringFields("description")
-          .isEqualTo(expectResponse);
+          .isEqualTo(expect);
     }
 
     @Test

@@ -8,4 +8,5 @@ public enum EventStatus {
   IN_PROGRESS,
   UPCOMING,
   ENDED;
+
 }

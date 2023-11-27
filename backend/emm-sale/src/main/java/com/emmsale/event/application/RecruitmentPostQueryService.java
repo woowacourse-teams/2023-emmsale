@@ -6,7 +6,6 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 import com.emmsale.event.application.dto.RecruitmentPostQueryResponse;
-import com.emmsale.event.application.dto.RecruitmentPostResponse;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.RecruitmentPost;
 import com.emmsale.event.domain.repository.EventRepository;
@@ -29,12 +28,12 @@ public class RecruitmentPostQueryService {
   private final RecruitmentPostRepository recruitmentPostRepository;
   private final EventRepository eventRepository;
 
-  public List<RecruitmentPostResponse> findRecruitmentPosts(final Long eventId) {
+  public List<RecruitmentPostQueryResponse> findRecruitmentPosts(final Long eventId) {
     final Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new EventException(NOT_FOUND_EVENT));
     return event.getRecruitmentPosts().stream()
         .sorted(comparing(RecruitmentPost::getId))
-        .map(RecruitmentPostResponse::from)
+        .map(RecruitmentPostQueryResponse::from)
         .collect(toUnmodifiableList());
   }
 
@@ -42,11 +41,11 @@ public class RecruitmentPostQueryService {
     return recruitmentPostRepository.existsByEventIdAndMemberId(eventId, memberId);
   }
 
-  public RecruitmentPostResponse findRecruitmentPost(final Long eventId, final Long postId) {
+  public RecruitmentPostQueryResponse findRecruitmentPost(final Long eventId, final Long postId) {
     final RecruitmentPost recruitmentPost = recruitmentPostRepository.findById(postId)
         .orElseThrow(() -> new EventException(NOT_FOUND_RECRUITMENT_POST));
     recruitmentPost.validateEvent(eventId);
-    return RecruitmentPostResponse.from(recruitmentPost);
+    return RecruitmentPostQueryResponse.from(recruitmentPost);
   }
 
   public List<RecruitmentPostQueryResponse> findRecruitmentPostsByMemberId(
@@ -59,7 +58,7 @@ public class RecruitmentPostQueryService {
 
     return posts.stream()
         .map(RecruitmentPostQueryResponse::from)
-        .collect(Collectors.toList());
+        .collect(Collectors.toUnmodifiableList());
   }
 
   private void validateOwner(final Member member, final Long memberId) {

@@ -28,10 +28,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
+class EventServiceEventIntegrationTestQuery extends ServiceIntegrationTestHelper {
 
   @Autowired
-  private EventService eventService;
+  private EventCommandService eventCommandService;
   @Autowired
   private InterestTagRepository interestTagRepository;
   @Autowired
@@ -77,7 +77,7 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventService.addEvent(eventDetailRequest, null);
+    eventCommandService.addEvent(eventDetailRequest, null);
 
     //then
     verify(firebaseCloudMessageClient, times(2))
@@ -121,7 +121,7 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventService.addEvent(eventDetailRequest, null);
+    eventCommandService.addEvent(eventDetailRequest, null);
 
     //then
     verify(firebaseCloudMessageClient, times(0))
@@ -155,7 +155,7 @@ class EventServiceEventIntegrationTest extends ServiceIntegrationTestHelper {
     );
 
     //when
-    eventService.addEvent(eventDetailRequest, null);
+    eventCommandService.addEvent(eventDetailRequest, null);
 
     //then
     verify(firebaseCloudMessageClient, times(0))

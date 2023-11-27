@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -25,19 +25,19 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class ImageCommandService {
   // TODO: 2023/09/14 put 메서드 구현
-  
+
   private final S3Client s3Client;
   private final ImageRepository imageRepository;
   private final EventRepository eventRepository;
   private final FeedRepository feedRepository;
-  
+
   public List<Image> saveImages(final ImageType imageType, final Long contentId,
       final List<MultipartFile> multipartFiles) {
     validateContentExist(imageType, contentId);
     validateImageCount(imageType, multipartFiles);
-    
+
     final List<String> imageNames = s3Client.uploadImages(multipartFiles);
-    
+
     try {
       return saveImagesToDb(imageType, contentId, imageNames);
     } catch (Exception exception) {
@@ -46,7 +46,7 @@ public class ImageCommandService {
       throw new ImageException(ImageExceptionType.FAIL_DB_UPLOAD_IMAGE);
     }
   }
-  
+
   private void validateContentExist(final ImageType imageType, final Long contentId) {
     if (imageType == ImageType.EVENT) {
       validateEventExist(contentId);
@@ -55,26 +55,26 @@ public class ImageCommandService {
       validateFeedExist(contentId);
     }
   }
-  
+
   private void validateEventExist(final Long contentId) {
     if (!eventRepository.existsById(contentId)) {
       throw new EventException(EventExceptionType.NOT_FOUND_EVENT);
     }
   }
-  
+
   private void validateFeedExist(final Long contentId) {
     if (!feedRepository.existsById(contentId)) {
       throw new FeedException(FeedExceptionType.NOT_FOUND_FEED);
     }
   }
-  
+
   private void validateImageCount(final ImageType imageType,
       final List<MultipartFile> multipartFiles) {
     if (imageType.isOverMaxImageCount(multipartFiles.size())) {
       throw new ImageException(ImageExceptionType.OVER_MAX_IMAGE_COUNT);
     }
   }
-  
+
   private List<Image> saveImagesToDb(final ImageType imageType, final Long contentId,
       final List<String> imageNames) {
     final List<Image> images = new ArrayList<>();
@@ -85,7 +85,7 @@ public class ImageCommandService {
     }
     return images;
   }
-  
+
   public void deleteImages(final ImageType imageType, final Long contentId) {
     final List<Image> images = imageRepository.findAllByTypeAndContentId(imageType, contentId);
     final List<Long> imageIds = images.stream()

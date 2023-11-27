@@ -38,18 +38,18 @@ class MessageRepositoryTest extends JpaRepositorySliceTestHelper {
     final Room member3Room2 = new Room(new RoomId(room2UUID, room2Interlocutor.getId()),
         LocalDateTime.parse("2023-09-07T16:48:24"));
 
-    final Message room1Message1 = new Message("방1메시지1", loginMember.getId(), room1UUID,
+    final Message room1Message1 = new Message("방1메시지1", loginMember, room1UUID,
         LocalDateTime.parse("2023-05-07T16:45:39"));
-    final Message room1Message2 = new Message("방1메시지2", loginMember.getId(), room1UUID,
+    final Message room1Message2 = new Message("방1메시지2", loginMember, room1UUID,
         LocalDateTime.parse("2023-06-07T16:45:38"));
 
     messageRepository.saveAll(
         List.of(
             room1Message1,
             room1Message2,
-            new Message("방2메시지3", loginMember.getId(), room2UUID,
+            new Message("방2메시지3", loginMember, room2UUID,
                 LocalDateTime.parse("2023-10-07T16:45:39")),
-            new Message("방2메시지4", room1Interlocutor.getId(), room2UUID,
+            new Message("방2메시지4", room1Interlocutor, room2UUID,
                 LocalDateTime.parse("2023-10-07T16:45:39"))
         )
     );

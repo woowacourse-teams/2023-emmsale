@@ -7,8 +7,13 @@ import org.springframework.data.repository.query.Param;
 
 public interface MemberActivityRepository extends JpaRepository<MemberActivity, Long> {
 
-  @Query("select mc from MemberActivity mc where mc.member = :member")
-  List<MemberActivity> findAllByMember(@Param("member") final Member member);
+  @Query("select mc from MemberActivity mc "
+      + "join fetch Activity a "
+      + "on a = mc.activity "
+      + "where mc.member = :member ")
+  List<MemberActivity> findAllByMember(
+      @Param("member") final Member member
+  );
 
   @Query("select mc from MemberActivity mc "
       + "where mc.member = :member "

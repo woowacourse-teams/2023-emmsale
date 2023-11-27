@@ -90,5 +90,4 @@ class MemberTest {
       assertTrue(member.isNotGithubProfile());
     }
   }
-
 }

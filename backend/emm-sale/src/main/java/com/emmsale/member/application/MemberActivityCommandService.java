@@ -1,15 +1,15 @@
 package com.emmsale.member.application;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
+import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.domain.ActivityRepository;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
-import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberActivity;
 import com.emmsale.member.domain.MemberActivityRepository;
-import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import java.util.HashSet;
@@ -21,11 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MemberActivityService {
+public class MemberActivityCommandService {
 
   private final MemberActivityRepository memberActivityRepository;
   private final ActivityRepository activityRepository;
-  private final MemberRepository memberRepository;
 
   public void registerActivities(
       final Member member,
@@ -44,7 +43,7 @@ public class MemberActivityService {
     final List<MemberActivity> memberActivities = activityRepository.findAllById(activityIds)
         .stream()
         .map(it -> new MemberActivity(it, member))
-        .collect(toList());
+        .collect(toUnmodifiableList());
 
     validateAllActivityIdsExist(activityIds, memberActivities);
 
@@ -60,7 +59,7 @@ public class MemberActivityService {
     }
   }
 
-  public List<MemberActivityResponses> addActivity(
+  public List<ActivityResponse> addActivity(
       final Member member,
       final MemberActivityAddRequest memberActivityAddRequest
   ) {
@@ -74,7 +73,11 @@ public class MemberActivityService {
     }
     saveMemberActivities(member, activityIds);
 
-    return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
+    return memberActivityRepository.findAllByMember(member)
+        .stream()
+        .map(MemberActivity::getActivity)
+        .map(ActivityResponse::from)
+        .collect(toUnmodifiableList());
   }
 
   private boolean isAlreadyExistActivity(final List<MemberActivity> memberActivities,
@@ -90,7 +93,7 @@ public class MemberActivityService {
     return new HashSet<>(activityIds).size() != activityIds.size();
   }
 
-  public List<MemberActivityResponses> deleteActivity(
+  public List<ActivityResponse> deleteActivity(
       final Member member,
       final List<Long> deleteActivityIds
   ) {
@@ -98,18 +101,14 @@ public class MemberActivityService {
         memberActivityRepository.findAllByMemberAndActivityIds(member, deleteActivityIds)
             .stream()
             .map(MemberActivity::getId)
-            .collect(toList());
+            .collect(toUnmodifiableList());
 
     memberActivityRepository.deleteAllByIdInBatch(savedMemberActivityIds);
 
-    return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
-  }
-
-  @Transactional(readOnly = true)
-  public List<MemberActivityResponses> findActivities(final Long memberId) {
-    final Member member = memberRepository.findById(memberId)
-        .orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
-    return MemberActivityResponses.from(memberActivityRepository.findAllByMember(member));
+    return memberActivityRepository.findAllByMember(member)
+        .stream()
+        .map(MemberActivity::getActivity)
+        .map(ActivityResponse::from)
+        .collect(toUnmodifiableList());
   }
 }
-

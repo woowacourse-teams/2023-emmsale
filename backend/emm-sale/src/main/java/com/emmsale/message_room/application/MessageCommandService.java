@@ -39,7 +39,7 @@ public class MessageCommandService {
         .map(room -> room.getRoomId().getUuid())
         .orElseGet(() -> saveRooms(request));
 
-    final Message message = new Message(request.getContent(), request.getSenderId(),
+    final Message message = new Message(request.getContent(), member,
         roomId, LocalDateTime.now());
 
     messageRepository.save(message);

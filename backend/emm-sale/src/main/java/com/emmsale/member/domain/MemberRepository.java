@@ -1,5 +1,8 @@
 package com.emmsale.member.domain;
 
+import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
+
+import com.emmsale.member.exception.MemberException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -19,4 +22,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
   @Query("select m from Member m where m.id in :memberIds")
   List<Member> findAllByIdIn(@Param("memberIds") final Set<Long> memberIds);
+
+  default Member getByIdOrElseThrow(final Long id) {
+    return findById(id).orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
+  }
 }

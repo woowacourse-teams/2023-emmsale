@@ -16,15 +16,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.member.api.MemberApi;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberActivityResponse;
-import com.emmsale.member.application.dto.MemberActivityResponses;
+import com.emmsale.member.application.dto.MemberDetailResponse;
 import com.emmsale.member.application.dto.MemberImageResponse;
-import com.emmsale.member.application.dto.MemberProfileResponse;
-import com.emmsale.member.application.dto.OpenProfileUrlRequest;
 import com.emmsale.member.domain.Member;
 import java.io.IOException;
 import java.util.List;
@@ -46,18 +45,20 @@ class MemberApiTest extends MockMvcTestHelper {
 
   private static final ResponseFieldsSnippet MEMBER_ACTIVITY_RESPONSE_FIELDS = responseFields(
       fieldWithPath("[].activityType").type(JsonFieldType.STRING).description("activity 분류"),
-      fieldWithPath("[].memberActivityResponses[].id").type(JsonFieldType.NUMBER)
-          .description("activity id"),
-      fieldWithPath("[].memberActivityResponses[].name").type(JsonFieldType.STRING)
-          .description("activity 이름")
+      fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("activity id"),
+      fieldWithPath("[].name").type(JsonFieldType.STRING).description("activity 이름")
   );
   private static final ResponseFieldsSnippet MEMBER_PROFILE_RESPONSE_FIELDS = responseFields(
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
       fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
       fieldWithPath("description").type(JsonFieldType.STRING).description("사용자 한 줄 자기소개"),
       fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("사용자 프로필 이미지 url"),
-      fieldWithPath("openProfileUrl").type(JsonFieldType.STRING).description("오픈 프로필 url"),
-      fieldWithPath("githubUrl").type(JsonFieldType.STRING).description("깃허브 URL")
+      fieldWithPath("githubUrl").type(JsonFieldType.STRING).description("깃허브 URL"),
+      fieldWithPath("activities[].id").type(JsonFieldType.NUMBER).description("MemberActivity Id"),
+      fieldWithPath("activities[].name").type(JsonFieldType.STRING)
+          .description("MemberActivity 이름"),
+      fieldWithPath("activities[].activityType").type(JsonFieldType.STRING)
+          .description("MemberActivity Type")
   );
   private static final RequestFieldsSnippet MEMBER_ACTIVITY_REQUEST_FIELDS = requestFields(
       fieldWithPath("activityIds").description("활동 id들"));
@@ -95,10 +96,10 @@ class MemberApiTest extends MockMvcTestHelper {
     final List<Long> activityIds = List.of(4L, 5L, 6L);
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
-    final List<MemberActivityResponses> memberActivityResponses = createMemberActivityResponses();
+    final List<ActivityResponse> activityResponses = createActivityResponses();
 
-    when(memberActivityService.addActivity(any(), any()))
-        .thenReturn(memberActivityResponses);
+    when(memberActivityCommandService.addActivity(any(), any()))
+        .thenReturn(activityResponses);
 
     //when & then
     mockMvc.perform(post("/members/activities")
@@ -111,26 +112,14 @@ class MemberApiTest extends MockMvcTestHelper {
             MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
-  private List<MemberActivityResponses> createMemberActivityResponses() {
+  private List<ActivityResponse> createActivityResponses() {
     return List.of(
-        new MemberActivityResponses("동아리",
-            List.of(
-                new MemberActivityResponse(1L, "YAPP"),
-                new MemberActivityResponse(2L, "DND"),
-                new MemberActivityResponse(3L, "nexters")
-            )),
-        new MemberActivityResponses("컨퍼런스",
-            List.of(
-                new MemberActivityResponse(4L, "인프콘")
-            )),
-        new MemberActivityResponses("교육",
-            List.of(
-                new MemberActivityResponse(5L, "우아한테크코스")
-            )),
-        new MemberActivityResponses("직무",
-            List.of(
-                new MemberActivityResponse(6L, "Backend")
-            ))
+        new ActivityResponse(1L, "YAPP", "동아리"),
+        new ActivityResponse(2L, "DND", "동아리"),
+        new ActivityResponse(3L, "nexters", "동아리"),
+        new ActivityResponse(4L, "인프콘", "컨퍼런스"),
+        new ActivityResponse(5L, "우아한테크코스", "교육"),
+        new ActivityResponse(6L, "Backend", "직무")
     );
   }
 
@@ -140,15 +129,12 @@ class MemberApiTest extends MockMvcTestHelper {
     //given
     final String activityIds = "1,2";
 
-    final List<MemberActivityResponses> memberActivityResponses = List.of(
-        new MemberActivityResponses("동아리",
-            List.of(
-                new MemberActivityResponse(3L, "nexters")
-            ))
+    final List<ActivityResponse> activityResponses = List.of(
+        new ActivityResponse(3L, "nexters", "동아리")
     );
 
-    when(memberActivityService.deleteActivity(any(), any()))
-        .thenReturn(memberActivityResponses);
+    when(memberActivityCommandService.deleteActivity(any(), any()))
+        .thenReturn(activityResponses);
 
     //when & then
     mockMvc.perform(
@@ -164,11 +150,10 @@ class MemberApiTest extends MockMvcTestHelper {
   @DisplayName("내 활동들을 조회할 수 있다.")
   void test_findActivity() throws Exception {
     //given
-    final List<MemberActivityResponses> memberActivityResponse = createMemberActivityResponses();
+    final List<ActivityResponse> memberActivityResponse = createActivityResponses();
 
     //when
-    when(memberActivityService.findActivities(any()))
-        .thenReturn(memberActivityResponse);
+    when(memberActivityQueryService.findActivities(any())).thenReturn(memberActivityResponse);
 
     //then
     mockMvc.perform(get("/members/1/activities")
@@ -176,29 +161,6 @@ class MemberApiTest extends MockMvcTestHelper {
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("find-activity", MEMBER_ACTIVITY_RESPONSE_FIELDS));
-  }
-
-  @Test
-  @DisplayName("사용자의 openProfileUrl을 성공적으로 업데이트하면, 200 OK가 반환된다.")
-  void test_updateOpenProfileUrl() throws Exception {
-    // given
-    final String openProfileUrl = "https://open.kakao.com/o/openprofileurl";
-    final OpenProfileUrlRequest request = new OpenProfileUrlRequest(openProfileUrl);
-
-    final RequestFieldsSnippet REQUEST_FIELDS = requestFields(
-        fieldWithPath("openProfileUrl").description("오픈 채팅 url")
-    );
-
-    // when
-    final ResultActions result = mockMvc.perform(put("/members/open-profile-url")
-        .header(HttpHeaders.AUTHORIZATION, FAKE_BEARER_ACCESS_TOKEN)
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(request)));
-
-    // then
-    result.andExpect(status().isNoContent())
-        .andDo(print())
-        .andDo(document("update-open-profile-url", REQUEST_FIELDS));
   }
 
   @Test
@@ -228,13 +190,15 @@ class MemberApiTest extends MockMvcTestHelper {
   @DisplayName("특정 사용자의 프로필 정보를 조회할 수 있다.")
   void test_findProfile() throws Exception {
     //given
-    final MemberProfileResponse memberProfileResponse = new MemberProfileResponse(
+    final MemberDetailResponse memberProfileResponse = new MemberDetailResponse(
         1L,
         "김길동",
         "안녕하세요, 김길동입니다.",
         "https://image",
-        "https://open.profile.url",
-        "https://github.com/amaran-th"
+        "https://github.com/amaran-th",
+        List.of(
+            new MemberActivityResponse(1L, "YAPP", "동아리")
+        )
     );
     when(memberQueryService.findProfile(any()))
         .thenReturn(memberProfileResponse);
@@ -252,7 +216,7 @@ class MemberApiTest extends MockMvcTestHelper {
   void deleteMemberTest() throws Exception {
     //given
     final long memberId = 1L;
-    doNothing().when(memberUpdateService).deleteMember(any(), anyLong());
+    doNothing().when(memberCommandService).deleteMember(any(), anyLong());
     final String accessToken = "access_token";
 
     //when
@@ -272,7 +236,7 @@ class MemberApiTest extends MockMvcTestHelper {
     final String accessToken = "access_token";
     final MockMultipartHttpServletRequestBuilder builder = createUpdateProfileBuilder(memberId);
 
-    when(memberUpdateService.updateMemberProfile
+    when(memberCommandService.updateMemberProfile
         (any(MultipartFile.class), anyLong(), any(Member.class)))
         .thenReturn(memberImageResponse);
 

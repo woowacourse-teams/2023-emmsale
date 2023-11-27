@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.MemberFixture;
+import com.emmsale.member.application.dto.MemberReferenceResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.message_room.application.dto.MessageResponse;
@@ -79,26 +80,26 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     //given
     final Message resultMessage1 = new Message(
         "방1메시지3",
-        loginMember.getId(),
+        loginMember,
         room1UUID,
         LocalDateTime.parse("2023-10-07T16:45:39")
     );
     final Message resultMessage2 = new Message(
         "방2메시지4",
-        room2Interlocutor.getId(),
+        room2Interlocutor,
         room2UUID,
         LocalDateTime.parse("2023-10-07T16:45:39")
     );
 
     messageRepository.saveAll(
         List.of(
-            new Message("방1메시지1", loginMember.getId(), room1UUID,
+            new Message("방1메시지1", loginMember, room1UUID,
                 LocalDateTime.parse("2023-05-07T16:45:39")),
-            new Message("방1메시지2", loginMember.getId(), room1UUID,
+            new Message("방1메시지2", loginMember, room1UUID,
                 LocalDateTime.parse("2023-06-07T16:45:39")),
             resultMessage1,
             resultMessage2,
-            new Message("방3메시지5", loginMember.getId(), room3UUID,
+            new Message("방3메시지5", loginMember, room3UUID,
                 LocalDateTime.parse("2023-08-07T16:45:39"))
         )
     );
@@ -106,6 +107,7 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     final MessageOverview messageOverview1 = new MessageOverview(
         resultMessage1.getId(),
         resultMessage1.getContent(),
+        resultMessage1.getSender(),
         resultMessage1.getCreatedAt(),
         resultMessage1.getRoomId()
     );
@@ -113,6 +115,7 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
     final MessageOverview messageOverview2 = new MessageOverview(
         resultMessage2.getId(),
         resultMessage2.getContent(),
+        resultMessage2.getSender(),
         resultMessage2.getCreatedAt(),
         resultMessage2.getRoomId()
     );
@@ -137,32 +140,33 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("findByRoomId() : Room UUID를 통해 Room에 있는 메시지들을 조회할 수 있다.")
   void test_findByRoomId() throws Exception {
     //given
-    final Message room1Message1 = new Message("방1메시지1", loginMember.getId(), room1UUID,
+    final Message room1Message1 = new Message("방1메시지1", loginMember, room1UUID,
         LocalDateTime.parse("2023-05-07T16:45:39"));
-    final Message room1Message2 = new Message("방1메시지2", loginMember.getId(), room1UUID,
+    final Message room1Message2 = new Message("방1메시지2", loginMember, room1UUID,
         LocalDateTime.parse("2023-06-07T16:45:38"));
 
     messageRepository.saveAll(
         List.of(
             room1Message1,
             room1Message2,
-            new Message("방2메시지3", loginMember.getId(), room2UUID,
+            new Message("방2메시지3", loginMember, room2UUID,
                 LocalDateTime.parse("2023-10-07T16:45:39")),
-            new Message("방2메시지4", room1Interlocutor.getId(), room2UUID,
+            new Message("방2메시지4", room1Interlocutor, room2UUID,
                 LocalDateTime.parse("2023-10-07T16:45:39"))
         )
     );
 
     final List<MessageResponse> expect = List.of(
-        new MessageResponse(room1Message1.getSenderId(), room1Message1.getContent(),
+        new MessageResponse(room1Message1.getId(),
+            MemberReferenceResponse.from(room1Message1.getSender()), room1Message1.getContent(),
             room1Message1.getCreatedAt()),
-        new MessageResponse(room1Message2.getSenderId(), room1Message2.getContent(),
+        new MessageResponse(room1Message2.getId(),
+            MemberReferenceResponse.from(room1Message2.getSender()), room1Message2.getContent(),
             room1Message2.getCreatedAt())
     );
 
     //when
-    final List<MessageResponse> actual = roomQueryService.findByRoomId(loginMember, room1UUID,
-        loginMember.getId());
+    final List<MessageResponse> actual = roomQueryService.findByRoomId(loginMember, room1UUID);
 
     //then
     Assertions.assertThat(actual)
@@ -174,33 +178,34 @@ class RoomQueryServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("findByInterlocutorIds() : Room 에 참여한 사용자의 ID를 통해 쪽지방을 조회할 수 있다.")
   void test_findByInterlocutorIds() throws Exception {
     //given
-    final Message room1Message1 = new Message("방1메시지1", loginMember.getId(), room1UUID,
+    final Message room1Message1 = new Message("방1메시지1", loginMember, room1UUID,
         LocalDateTime.parse("2023-05-07T16:45:39"));
-    final Message room1Message2 = new Message("방1메시지2", loginMember.getId(), room1UUID,
+    final Message room1Message2 = new Message("방1메시지2", loginMember, room1UUID,
         LocalDateTime.parse("2023-06-07T16:45:38"));
 
     messageRepository.saveAll(
         List.of(
             room1Message1,
             room1Message2,
-            new Message("방2메시지3", loginMember.getId(), room2UUID,
+            new Message("방2메시지3", loginMember, room2UUID,
                 LocalDateTime.parse("2023-10-07T16:45:39")),
-            new Message("방2메시지4", room1Interlocutor.getId(), room2UUID,
+            new Message("방2메시지4", room1Interlocutor, room2UUID,
                 LocalDateTime.parse("2023-10-07T16:45:39"))
         )
     );
 
     final List<MessageResponse> expect = List.of(
-        new MessageResponse(room1Message1.getSenderId(), room1Message1.getContent(),
+        new MessageResponse(room1Message1.getId(),
+            MemberReferenceResponse.from(room1Message1.getSender()), room1Message1.getContent(),
             room1Message1.getCreatedAt()),
-        new MessageResponse(room1Message2.getSenderId(), room1Message2.getContent(),
+        new MessageResponse(room1Message2.getId(),
+            MemberReferenceResponse.from(room1Message2.getSender()), room1Message2.getContent(),
             room1Message2.getCreatedAt())
     );
 
     //when
     final List<MessageResponse> actual = roomQueryService.findByInterlocutorIds(
         room1Interlocutor.getId(),
-        loginMember.getId(),
         loginMember
     );
 

@@ -28,18 +28,16 @@ public class RoomApi {
   @GetMapping("/rooms/{room-id}")
   public List<MessageResponse> findByRoomId(
       final Member member,
-      @PathVariable("room-id") final String roomId,
-      @RequestParam("member-id") final Long memberId
+      @PathVariable("room-id") final String roomId
   ) {
-    return roomQueryService.findByRoomId(member, roomId, memberId);
+    return roomQueryService.findByRoomId(member, roomId);
   }
 
   @GetMapping("/rooms")
   public List<MessageResponse> findByInterlocutorIds(
       @RequestParam("receiver-id") final Long receiverId,
-      @RequestParam("member-id") final Long memberId,
       final Member loginMember
   ) {
-    return roomQueryService.findByInterlocutorIds(receiverId, memberId, loginMember);
+    return roomQueryService.findByInterlocutorIds(receiverId, loginMember);
   }
 }
