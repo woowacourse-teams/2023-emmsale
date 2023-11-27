@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.member.api.MemberApi;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
@@ -95,10 +96,10 @@ class MemberApiTest extends MockMvcTestHelper {
     final List<Long> activityIds = List.of(4L, 5L, 6L);
     final MemberActivityAddRequest request = new MemberActivityAddRequest(activityIds);
 
-    final List<MemberActivityResponse> memberActivityResponses = createMemberActivityResponses();
+    final List<ActivityResponse> activityResponses = createActivityResponses();
 
     when(memberActivityCommandService.addActivity(any(), any()))
-        .thenReturn(memberActivityResponses);
+        .thenReturn(activityResponses);
 
     //when & then
     mockMvc.perform(post("/members/activities")
@@ -111,14 +112,14 @@ class MemberApiTest extends MockMvcTestHelper {
             MEMBER_ACTIVITY_RESPONSE_FIELDS));
   }
 
-  private List<MemberActivityResponse> createMemberActivityResponses() {
+  private List<ActivityResponse> createActivityResponses() {
     return List.of(
-        new MemberActivityResponse(1L, "YAPP", "동아리"),
-        new MemberActivityResponse(2L, "DND", "동아리"),
-        new MemberActivityResponse(3L, "nexters", "동아리"),
-        new MemberActivityResponse(4L, "인프콘", "컨퍼런스"),
-        new MemberActivityResponse(5L, "우아한테크코스", "교육"),
-        new MemberActivityResponse(6L, "Backend", "직무")
+        new ActivityResponse(1L, "YAPP", "동아리"),
+        new ActivityResponse(2L, "DND", "동아리"),
+        new ActivityResponse(3L, "nexters", "동아리"),
+        new ActivityResponse(4L, "인프콘", "컨퍼런스"),
+        new ActivityResponse(5L, "우아한테크코스", "교육"),
+        new ActivityResponse(6L, "Backend", "직무")
     );
   }
 
@@ -128,12 +129,12 @@ class MemberApiTest extends MockMvcTestHelper {
     //given
     final String activityIds = "1,2";
 
-    final List<MemberActivityResponse> memberActivityResponses = List.of(
-        new MemberActivityResponse(3L, "nexters", "동아리")
+    final List<ActivityResponse> activityResponses = List.of(
+        new ActivityResponse(3L, "nexters", "동아리")
     );
 
     when(memberActivityCommandService.deleteActivity(any(), any()))
-        .thenReturn(memberActivityResponses);
+        .thenReturn(activityResponses);
 
     //when & then
     mockMvc.perform(
@@ -149,11 +150,10 @@ class MemberApiTest extends MockMvcTestHelper {
   @DisplayName("내 활동들을 조회할 수 있다.")
   void test_findActivity() throws Exception {
     //given
-    final List<MemberActivityResponse> memberActivityResponse = createMemberActivityResponses();
+    final List<ActivityResponse> memberActivityResponse = createActivityResponses();
 
     //when
-    when(memberActivityQueryService.findActivities(any()))
-        .thenReturn(memberActivityResponse);
+    when(memberActivityQueryService.findActivities(any())).thenReturn(memberActivityResponse);
 
     //then
     mockMvc.perform(get("/members/1/activities")
