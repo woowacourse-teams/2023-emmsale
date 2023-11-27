@@ -8,7 +8,6 @@ import com.emmsale.admin.login.application.dto.AdminTokenResponse;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.login.exception.LoginException;
 import com.emmsale.login.exception.LoginExceptionType;
-import com.emmsale.login.utils.JwtTokenProvider;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
@@ -16,15 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
 class AdminLoginServiceTest extends ServiceIntegrationTestHelper {
 
   @Autowired
   private AdminLoginService adminLoginService;
-  @MockBean
-  private JwtTokenProvider tokenProvider;
   @Value("${data.admin_login.id}")
   private String adminId;
   @Value("${data.admin_login.password}")

@@ -52,6 +52,7 @@ import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.restdocs.request.RequestPartsSnippet;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -264,14 +265,15 @@ class EventApiTest extends MockMvcTestHelper {
     );
 
     //when
-    final MockMultipartHttpServletRequestBuilder builder = multipart(HttpMethod.PUT,
+    final MockHttpServletRequestBuilder builder = multipart(HttpMethod.PUT,
         "/admin/events/" + eventId)
         .file("images", image1.getBytes())
         .file("images", image2.getBytes())
         .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
-            StandardCharsets.UTF_8)));
+            StandardCharsets.UTF_8)))
+        .header("Authorization", accessToken);
 
-    final ResultActions result = mockMvc.perform(builder.header("Authorization", accessToken));
+    final ResultActions result = mockMvc.perform(builder);
 
     //when & then
     result.andExpect(status().isOk())

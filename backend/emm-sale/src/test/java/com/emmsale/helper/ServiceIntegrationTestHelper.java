@@ -3,6 +3,7 @@ package com.emmsale.helper;
 import com.emmsale.image.application.ImageCommandService;
 import com.emmsale.image.application.S3Client;
 import com.emmsale.login.utils.GithubClient;
+import com.emmsale.login.utils.JwtTokenProvider;
 import com.emmsale.notification.application.FirebaseCloudMessageClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,6 +20,8 @@ public abstract class ServiceIntegrationTestHelper {
   protected FirebaseCloudMessageClient firebaseCloudMessageClient;
   @MockBean
   protected ImageCommandService imageCommandService;
+  @MockBean
+  protected JwtTokenProvider tokenProvider;
   @MockBean
   protected S3Client s3Client;
 }
