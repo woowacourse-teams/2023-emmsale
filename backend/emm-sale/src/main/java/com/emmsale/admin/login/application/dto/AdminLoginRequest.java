@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminLoginRequest {
 
-  final String id;
-  final String password;
+  private final String id;
+  private final String password;
 
 }
