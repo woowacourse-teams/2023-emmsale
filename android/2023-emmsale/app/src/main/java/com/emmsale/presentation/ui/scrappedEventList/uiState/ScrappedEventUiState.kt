@@ -1,13 +1,13 @@
 package com.emmsale.presentation.ui.scrappedEventList.uiState
 
-import com.emmsale.data.model.ScrappedEvent
+import com.emmsale.data.model.Event
 
 data class ScrappedEventUiState(
-    val scrappedEvent: ScrappedEvent,
+    val event: Event,
 ) {
     companion object {
-        fun from(scrappedEvent: ScrappedEvent) = ScrappedEventUiState(
-            scrappedEvent = scrappedEvent,
+        fun from(scrappedEvent: Event) = ScrappedEventUiState(
+            event = scrappedEvent,
         )
     }
 }

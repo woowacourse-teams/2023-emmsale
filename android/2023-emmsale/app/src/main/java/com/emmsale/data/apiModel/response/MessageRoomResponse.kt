@@ -7,30 +7,26 @@ import kotlinx.serialization.Serializable
 data class MessageRoomResponse(
     @SerialName("roomId")
     val roomId: String,
-    @SerialName("interlocutorId")
-    val senderId: Long,
-    @SerialName("interlocutorName")
-    val senderName: String,
-    @SerialName("interlocutorProfile")
-    val senderProfileImageUrl: String,
+    @SerialName("interlocutor")
+    val interlocutor: MemberResponse,
     @SerialName("recentlyMessage")
-    val recentMessage: String,
-    @SerialName("recentlyMessageTime")
-    val recentMessageTime: String,
-)
-
-@Serializable
-data class MessageResponse(
-    @SerialName("senderId")
-    val senderId: Long,
-    @SerialName("content")
-    val message: String,
-    @SerialName("createdAt")
-    val createdAt: String,
+    val recentMessage: MessageResponse,
 )
 
 @Serializable
 data class MessageSendResponse(
     @SerialName("roomId")
     val roomId: String,
+)
+
+@Serializable
+data class MessageResponse(
+    @SerialName("id")
+    val id: Long,
+    @SerialName("sender")
+    val sender: MemberResponse,
+    @SerialName("content")
+    val content: String,
+    @SerialName("createdAt")
+    val createdAt: String,
 )

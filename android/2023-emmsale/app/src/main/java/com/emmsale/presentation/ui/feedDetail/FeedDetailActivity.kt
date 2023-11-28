@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.databinding.ActivityFeedDetailBinding
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
@@ -258,7 +258,7 @@ class FeedDetailActivity : AppCompatActivity() {
         viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
-    private fun handleUiEvent(event: Event<FeedDetailUiEvent>) {
+    private fun handleUiEvent(event: UiEvent<FeedDetailUiEvent>) {
         val content = event.getContentIfNotHandled() ?: return
         when (content) {
             FeedDetailUiEvent.None -> {}

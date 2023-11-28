@@ -9,15 +9,15 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEventDetailBinding
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.eventDetail.EventDetailViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetailInfo.uiState.EventInfoUiEvent
+import com.emmsale.presentation.ui.feedWriting.FeedWritingActivity
 import com.emmsale.presentation.ui.main.MainActivity
-import com.emmsale.presentation.ui.postWriting.PostWritingActivity
 import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -60,7 +60,7 @@ class EventDetailActivity :
         }
     }
 
-    private fun handleEvent(event: Event<EventInfoUiEvent>) {
+    private fun handleEvent(event: UiEvent<EventInfoUiEvent>) {
         val content = event.getContentIfNotHandled() ?: return
         when (content) {
             EventInfoUiEvent.SCRAP_ERROR -> binding.root.showSnackBar("스크랩 불가")
@@ -88,7 +88,7 @@ class EventDetailActivity :
             EventDetailScreenUiState.INFORMATION -> Unit
             EventDetailScreenUiState.RECRUITMENT -> viewModel.fetchHasWritingPermission()
             EventDetailScreenUiState.POST -> {
-                PostWritingActivity.startActivity(this, viewModel.eventId)
+                FeedWritingActivity.startActivity(this, viewModel.eventId)
             }
         }
     }

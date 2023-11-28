@@ -17,7 +17,7 @@ data class OnboardingUiState(
 
     companion object {
         fun from(activities: List<Activity>): OnboardingUiState = OnboardingUiState(
-            fields = activities.toUiState(ActivityType.FIELD),
+            fields = activities.toUiState(ActivityType.INTEREST_FIELD),
             educations = activities.toUiState(ActivityType.EDUCATION),
             clubs = activities.toUiState(ActivityType.CLUB),
         )

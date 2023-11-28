@@ -1,11 +1,10 @@
 package com.emmsale.data.service
 
-import com.emmsale.data.apiModel.request.MemberActivitiesUpdateRequest
+import com.emmsale.data.apiModel.request.MemberActivitiesAddRequest
 import com.emmsale.data.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.apiModel.request.MemberCreateRequest
 import com.emmsale.data.apiModel.request.MemberDescriptionUpdateRequest
-import com.emmsale.data.apiModel.request.MemberOpenProfileUrlUpdateRequest
-import com.emmsale.data.apiModel.response.MemberActivitiesResponse
+import com.emmsale.data.apiModel.response.ActivityResponse
 import com.emmsale.data.apiModel.response.MemberResponse
 import com.emmsale.data.apiModel.response.ProfileImageUrlResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
@@ -38,11 +37,6 @@ interface MemberService {
         @Body memberDescriptionUpdateRequest: MemberDescriptionUpdateRequest,
     ): ApiResponse<Unit>
 
-    @PUT("/members/open-profile-url")
-    suspend fun updateMemberOpenProfileUrl(
-        @Body memberOpenProfileUrlUpdateRequest: MemberOpenProfileUrlUpdateRequest,
-    ): ApiResponse<Unit>
-
     @Multipart // <- 이 부분이 중요
     @PATCH("/members/{memberId}/profile")
     suspend fun updateMemberProfileImage(
@@ -52,13 +46,13 @@ interface MemberService {
 
     @POST("/members/activities")
     suspend fun addMemberActivities(
-        @Body memberActivitiesUpdateRequest: MemberActivitiesUpdateRequest,
-    ): ApiResponse<Unit>
+        @Body body: MemberActivitiesAddRequest,
+    ): ApiResponse<List<ActivityResponse>>
 
     @DELETE("/members/activities")
     suspend fun deleteMemberActivities(
         @Query("activity-ids") ids: List<Long>,
-    ): ApiResponse<List<MemberActivitiesResponse>>
+    ): ApiResponse<List<ActivityResponse>>
 
     @DELETE("/members/{memberId}")
     suspend fun deleteMember(

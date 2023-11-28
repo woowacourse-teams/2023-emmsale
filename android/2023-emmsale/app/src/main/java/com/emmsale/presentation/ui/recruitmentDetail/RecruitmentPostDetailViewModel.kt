@@ -12,7 +12,7 @@ import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
@@ -46,9 +46,9 @@ class RecruitmentPostDetailViewModel @Inject constructor(
     private val _event = MutableLiveData<RecruitmentPostDetailUiEvent?>(null)
     val event: LiveData<RecruitmentPostDetailUiEvent?> = _event
 
-    private val _uiEvent: NotNullMutableLiveData<Event<RecruitmentPostDetailUiEvent>> =
-        NotNullMutableLiveData(Event(RecruitmentPostDetailUiEvent.None))
-    val uiEvent: NotNullLiveData<Event<RecruitmentPostDetailUiEvent>> = _uiEvent
+    private val _uiEvent: NotNullMutableLiveData<UiEvent<RecruitmentPostDetailUiEvent>> =
+        NotNullMutableLiveData(UiEvent(RecruitmentPostDetailUiEvent.None))
+    val uiEvent: NotNullLiveData<UiEvent<RecruitmentPostDetailUiEvent>> = _uiEvent
 
     private val myUid = requireNotNull(tokenRepository.getMyUid()) {
         "[ERROR] 내 아이디를 가져오지 못했어요."
@@ -61,7 +61,7 @@ class RecruitmentPostDetailViewModel @Inject constructor(
     override fun refresh() {
         viewModelScope.launch {
             when (val result = recruitmentRepository.getEventRecruitment(eventId, recruitmentId)) {
-                is Failure -> _uiEvent.value = Event(RecruitmentPostDetailUiEvent.PostFetchFail)
+                is Failure -> _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.PostFetchFail)
                 NetworkError -> _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
                 is Success -> {
                     _recruitmentPost.value = RecruitmentPostUiState.create(result.data, myUid)
@@ -69,7 +69,7 @@ class RecruitmentPostDetailViewModel @Inject constructor(
 
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -77,15 +77,15 @@ class RecruitmentPostDetailViewModel @Inject constructor(
     fun deleteRecruitmentPost() {
         viewModelScope.launch {
             when (val result = recruitmentRepository.deleteRecruitment(eventId, recruitmentId)) {
-                is Failure -> _uiEvent.value = Event(RecruitmentPostDetailUiEvent.PostDeleteFail)
+                is Failure -> _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.PostDeleteFail)
                 NetworkError -> _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
                 is Success ->
                     _uiEvent.value =
-                        Event(RecruitmentPostDetailUiEvent.PostDeleteComplete)
+                        UiEvent(RecruitmentPostDetailUiEvent.PostDeleteComplete)
 
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -100,19 +100,19 @@ class RecruitmentPostDetailViewModel @Inject constructor(
             when (result) {
                 is Failure -> {
                     if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
-                        _uiEvent.value = Event(RecruitmentPostDetailUiEvent.ReportDuplicate)
+                        _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.ReportDuplicate)
                     } else {
-                        _uiEvent.value = Event(RecruitmentPostDetailUiEvent.ReportFail)
+                        _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.ReportFail)
                     }
                 }
 
                 NetworkError ->
                     _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
 
-                is Success -> _uiEvent.value = Event(RecruitmentPostDetailUiEvent.ReportComplete)
+                is Success -> _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.ReportComplete)
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }
@@ -128,11 +128,11 @@ class RecruitmentPostDetailViewModel @Inject constructor(
                     )
             ) {
                 is Failure ->
-                    _uiEvent.value = Event(RecruitmentPostDetailUiEvent.MessageSendFail)
+                    _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.MessageSendFail)
 
                 NetworkError -> _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
                 is Success ->
-                    _uiEvent.value = Event(
+                    _uiEvent.value = UiEvent(
                         RecruitmentPostDetailUiEvent.MessageSendComplete(
                             result.data,
                             _recruitmentPost.value.memberId,
@@ -141,7 +141,7 @@ class RecruitmentPostDetailViewModel @Inject constructor(
 
                 is Unexpected ->
                     _uiEvent.value =
-                        Event(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
+                        UiEvent(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
             }
         }
     }

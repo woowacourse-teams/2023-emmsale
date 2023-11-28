@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.databinding.FragmentPrimaryNotificationBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
@@ -130,7 +130,7 @@ class PrimaryNotificationFragment : BaseFragment<FragmentPrimaryNotificationBind
         }
     }
 
-    private fun handleUiEvent(event: Event<PrimaryNotificationsUiEvent>) {
+    private fun handleUiEvent(event: UiEvent<PrimaryNotificationsUiEvent>) {
         val content = event.getContentIfNotHandled() ?: return
 
         when (content) {

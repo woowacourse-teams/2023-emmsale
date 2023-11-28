@@ -11,7 +11,7 @@ import com.emmsale.data.repository.interfaces.BlockedMemberRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
@@ -43,9 +43,9 @@ class ProfileViewModel @Inject constructor(
 
     private val _blockedMembers = NotNullMutableLiveData(listOf<BlockedMemberUiState>())
 
-    private val _uiEvent: NotNullMutableLiveData<Event<ProfileUiEvent>> =
-        NotNullMutableLiveData(Event(ProfileUiEvent.None))
-    val uiEvent: NotNullLiveData<Event<ProfileUiEvent>> = _uiEvent
+    private val _uiEvent: NotNullMutableLiveData<UiEvent<ProfileUiEvent>> =
+        NotNullMutableLiveData(UiEvent(ProfileUiEvent.None))
+    val uiEvent: NotNullLiveData<UiEvent<ProfileUiEvent>> = _uiEvent
 
     init {
         refresh()
@@ -98,16 +98,16 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             _profile.value = _profile.value.copy(isLoading = true)
             when (val result = memberRepository.blockMember(memberId)) {
-                is Failure -> _uiEvent.value = Event(ProfileUiEvent.BlockFail)
+                is Failure -> _uiEvent.value = UiEvent(ProfileUiEvent.BlockFail)
 
                 NetworkError -> _profile.value = _profile.value.copy(isError = true)
                 is Success -> {
-                    _uiEvent.value = Event(ProfileUiEvent.BlockComplete)
+                    _uiEvent.value = UiEvent(ProfileUiEvent.BlockComplete)
                     refresh()
                 }
 
                 is Unexpected ->
-                    _uiEvent.value = Event(ProfileUiEvent.UnexpectedError(result.error.toString()))
+                    _uiEvent.value = UiEvent(ProfileUiEvent.UnexpectedError(result.error.toString()))
             }
             _profile.value = _profile.value.copy(isLoading = false)
         }
@@ -119,15 +119,15 @@ class ProfileViewModel @Inject constructor(
             val blockId = _blockedMembers.value.find { it.blockedMemberId == memberId }?.blockId
                 ?: return@launch
             when (val result = blockedMemberRepository.deleteBlockedMember(blockId)) {
-                is Failure -> _uiEvent.value = Event(ProfileUiEvent.UnblockFail)
+                is Failure -> _uiEvent.value = UiEvent(ProfileUiEvent.UnblockFail)
                 NetworkError -> _profile.value = _profile.value.copy(isError = true)
                 is Success -> {
-                    _uiEvent.value = Event(ProfileUiEvent.UnblockSuccess)
+                    _uiEvent.value = UiEvent(ProfileUiEvent.UnblockSuccess)
                     refresh()
                 }
 
                 is Unexpected ->
-                    _uiEvent.value = Event(ProfileUiEvent.UnexpectedError(result.error.toString()))
+                    _uiEvent.value = UiEvent(ProfileUiEvent.UnexpectedError(result.error.toString()))
             }
             _profile.value = _profile.value.copy(isLoading = false)
         }
@@ -141,16 +141,16 @@ class ProfileViewModel @Inject constructor(
                     messageRoomRepository.sendMessage(uid, _profile.value.member.id, message)
             ) {
                 is Failure ->
-                    _uiEvent.value = Event(ProfileUiEvent.MessageSendFail)
+                    _uiEvent.value = UiEvent(ProfileUiEvent.MessageSendFail)
 
                 NetworkError -> _profile.value = _profile.value.copy(isError = true)
                 is Success ->
-                    _uiEvent.value = Event(
+                    _uiEvent.value = UiEvent(
                         ProfileUiEvent.MessageSendComplete(result.data, _profile.value.member.id),
                     )
 
                 is Unexpected ->
-                    _uiEvent.value = Event(ProfileUiEvent.UnexpectedError(result.error.toString()))
+                    _uiEvent.value = UiEvent(ProfileUiEvent.UnexpectedError(result.error.toString()))
             }
             _profile.value = _profile.value.copy(isLoading = false)
         }

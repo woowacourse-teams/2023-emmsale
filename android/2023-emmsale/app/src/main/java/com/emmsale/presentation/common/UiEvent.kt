@@ -1,0 +1,26 @@
+package com.emmsale.presentation.common
+
+import androidx.lifecycle.Observer
+
+class UiEvent<out T>(private val content: T) {
+
+    var hasBeenHandled = false
+        private set
+
+    fun getContentIfNotHandled(): T? = if (hasBeenHandled) {
+        null
+    } else {
+        hasBeenHandled = true
+        content
+    }
+
+    fun peekContent(): T = content
+}
+
+class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<UiEvent<T>> {
+    override fun onChanged(value: UiEvent<T>) {
+        value.getContentIfNotHandled()?.let { event ->
+            onEventUnhandledContent(event)
+        }
+    }
+}

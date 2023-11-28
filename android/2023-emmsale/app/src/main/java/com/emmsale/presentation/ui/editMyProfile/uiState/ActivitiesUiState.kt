@@ -3,14 +3,14 @@ package com.emmsale.presentation.ui.editMyProfile.uiState
 import com.emmsale.data.model.Activity
 import com.emmsale.data.model.ActivityType.CLUB
 import com.emmsale.data.model.ActivityType.EDUCATION
-import com.emmsale.data.model.ActivityType.FIELD
+import com.emmsale.data.model.ActivityType.INTEREST_FIELD
 
 data class ActivitiesUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val activities: List<ActivityUiState> = emptyList(),
 ) {
-    val fields = activities.filter { it.activity.activityType == FIELD }
+    val fields = activities.filter { it.activity.activityType == INTEREST_FIELD }
 
     val selectedFieldsSize: Int = fields.count { it.isSelected }
 

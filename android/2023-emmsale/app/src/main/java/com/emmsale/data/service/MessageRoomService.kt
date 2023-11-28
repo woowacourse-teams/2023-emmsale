@@ -13,20 +13,14 @@ import retrofit2.http.Query
 
 interface MessageRoomService {
     @GET("/rooms/overview")
-    suspend fun getMessageRooms(
+    suspend fun getMessageRooms2(
         @Query("member-id") memberId: Long,
     ): ApiResponse<List<MessageRoomResponse>>
 
     @GET("/rooms/{roomId}")
-    suspend fun getMessagesByRoomId(
+    suspend fun getMessagesByRoomId2(
         @Path("roomId") roomId: String,
         @Query("member-id") memberId: Long,
-    ): ApiResponse<List<MessageResponse>>
-
-    @GET("/rooms")
-    suspend fun getMessagesByMemberIds(
-        @Query("member-id") myUid: Long,
-        @Query("receiver-id") otherUid: Long,
     ): ApiResponse<List<MessageResponse>>
 
     @POST("/messages")

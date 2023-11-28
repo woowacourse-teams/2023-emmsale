@@ -13,9 +13,7 @@ import com.emmsale.data.service.MemberService
 import com.emmsale.data.service.MessageRoomService
 import com.emmsale.data.service.MyPostService
 import com.emmsale.data.service.NotificationService
-import com.emmsale.data.service.PostService
 import com.emmsale.data.service.RecruitmentService
-import com.emmsale.data.service.ScrappedEventService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -86,12 +84,6 @@ class ServiceModule {
 
     @Provides
     @Singleton
-    fun provideScrappedEventService(
-        serviceFactory: ServiceFactory,
-    ): ScrappedEventService = serviceFactory.create(ScrappedEventService::class.java)
-
-    @Provides
-    @Singleton
     fun provideBlockedMemberService(
         serviceFactory: ServiceFactory,
     ): BlockedMemberService = serviceFactory.create(BlockedMemberService::class.java)
@@ -101,12 +93,6 @@ class ServiceModule {
     fun provideMyPostService(
         serviceFactory: ServiceFactory,
     ): MyPostService = serviceFactory.create(MyPostService::class.java)
-
-    @Provides
-    @Singleton
-    fun providePostService(
-        serviceFactory: ServiceFactory,
-    ): PostService = serviceFactory.create(PostService::class.java)
 
     @Provides
     @Singleton

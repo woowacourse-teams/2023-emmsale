@@ -276,6 +276,7 @@
     <string name="requestcompanion_dialog_title">함께 하기 요청</string>
     <string name="requestcompanion_dialog_message_format">%s님께 함께하기 요청을\n보내시겠습니까?</string>
 
+    <string name="recruitmentpostdetail_appbar_title_text">함께해요</string>
     <string name="recruitmentpostdetail_request_button_text">함께하기 요청</string>
     <string name="recruitmentpostdetail_request_button_complete_text">요청 완료</string>
     <string name="recruitmentpostdetail_success_request_message">요청에 성공했어요</string>

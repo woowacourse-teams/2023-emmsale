@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.emmsale.presentation.common.FetchResult" />
+
+        <variable
+            name="showAlbum"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="vm"
+            type="com.emmsale.presentation.ui.feedWriting.FeedWritingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_postwriting_toolbar"
+            app:navigationIcon="@drawable/ic_all_back"
+            app:title="@string/recruitmentpostwriting_appbar_title_text" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toBottomOf="@id/tb_toolbar" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/iv_feed_writing_camera"
+            app:layout_constraintTop_toBottomOf="@id/tb_toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/et_feed_writing_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="17dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@null"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:hint="@string/post_writing_title_hint"
+                    android:inputType="text"
+                    android:text="@={vm.title}"
+                    android:textColorHint="@color/gray"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/divider_feed_writing"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginHorizontal="17dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/light_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_feed_writing_title" />
+
+                <EditText
+                    android:id="@+id/et_feed_writing_content"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="17dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@null"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:hint="@string/post_writing_content_hint"
+                    android:lineHeight="17dp"
+                    android:maxLines="100"
+                    android:paddingBottom="30dp"
+                    android:text="@={vm.content}"
+                    android:textColorHint="@color/light_gray"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/et_feed_writing_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_feed_writing_image_list"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="17dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_feed_writing_content"
+                    tools:listitem="@layout/item_writing_image" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+        <ImageView
+            android:id="@+id/iv_feed_writing_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{()->showAlbum.invoke()}"
+            android:paddingStart="17dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_all_camera"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar_feed_writing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visible="@{vm.feedUploadResult.peekContent().fetchResult == FetchResult.LOADING}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

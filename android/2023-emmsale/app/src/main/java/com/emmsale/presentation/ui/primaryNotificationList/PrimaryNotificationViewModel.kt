@@ -8,7 +8,7 @@ import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.NotificationRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
@@ -28,8 +28,8 @@ class PrimaryNotificationViewModel @Inject constructor(
         NotNullMutableLiveData<PrimaryNotificationScreenUiState>(PrimaryNotificationScreenUiState.Loading)
     val uiState: NotNullLiveData<PrimaryNotificationScreenUiState> = _allNotificationsUiState
 
-    private val _uiEvent = NotNullMutableLiveData(Event(PrimaryNotificationsUiEvent.NONE))
-    val uiEvent: NotNullLiveData<Event<PrimaryNotificationsUiEvent>> = _uiEvent
+    private val _uiEvent = NotNullMutableLiveData(UiEvent(PrimaryNotificationsUiEvent.NONE))
+    val uiEvent: NotNullLiveData<UiEvent<PrimaryNotificationsUiEvent>> = _uiEvent
 
     init {
         refresh()
@@ -62,7 +62,7 @@ class PrimaryNotificationViewModel @Inject constructor(
                     notificationRepository.deleteUpdatedNotifications(pastNotificationIds)
             ) {
                 is Failure, NetworkError ->
-                    _uiEvent.value = Event(PrimaryNotificationsUiEvent.DELETE_FAIL)
+                    _uiEvent.value = UiEvent(PrimaryNotificationsUiEvent.DELETE_FAIL)
 
                 is Success -> refresh()
                 is Unexpected -> throw Throwable(result.error)
@@ -90,7 +90,7 @@ class PrimaryNotificationViewModel @Inject constructor(
                     notificationRepository.deleteUpdatedNotifications(listOf(notificationId))
             ) {
                 is Failure, NetworkError ->
-                    _uiEvent.value = Event(PrimaryNotificationsUiEvent.DELETE_FAIL)
+                    _uiEvent.value = UiEvent(PrimaryNotificationsUiEvent.DELETE_FAIL)
 
                 is Success -> refresh()
                 is Unexpected -> throw Throwable(result.error)

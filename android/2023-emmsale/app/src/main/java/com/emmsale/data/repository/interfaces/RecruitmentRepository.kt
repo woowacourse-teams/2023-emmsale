@@ -30,18 +30,6 @@ interface RecruitmentRepository {
         recruitmentId: Long,
     ): ApiResponse<Unit>
 
-    suspend fun requestCompanion(
-        eventId: Long,
-        memberId: Long,
-        message: String,
-    ): ApiResponse<Unit>
-
-    suspend fun checkIsAlreadyRequestCompanion(
-        eventId: Long,
-        senderId: Long,
-        receiverId: Long,
-    ): ApiResponse<Boolean>
-
     suspend fun checkIsAlreadyPostRecruitment(eventId: Long): ApiResponse<Boolean>
 
     suspend fun reportRecruitment(

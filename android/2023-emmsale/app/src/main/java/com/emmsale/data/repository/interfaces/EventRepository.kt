@@ -4,7 +4,6 @@ import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.model.CompetitionStatus
 import com.emmsale.data.model.ConferenceStatus
 import com.emmsale.data.model.Event
-import com.emmsale.data.model.EventDetail
 import com.emmsale.data.model.EventTag
 import java.time.LocalDate
 
@@ -24,7 +23,7 @@ interface EventRepository {
         endDate: LocalDate? = null,
     ): ApiResponse<List<Event>>
 
-    suspend fun getEventDetail(eventId: Long): ApiResponse<EventDetail>
+    suspend fun getEventDetail(eventId: Long): ApiResponse<Event>
 
     suspend fun searchEvents(
         keyword: String,
@@ -34,4 +33,12 @@ interface EventRepository {
         statuses: List<ConferenceStatus> = emptyList(),
         category: String? = null,
     ): ApiResponse<List<Event>>
+
+    suspend fun getScrappedEvents(): ApiResponse<List<Event>>
+
+    suspend fun scrapEvent(eventId: Long): ApiResponse<Unit>
+
+    suspend fun deleteScrap(eventId: Long): ApiResponse<Unit>
+
+    suspend fun isScraped(eventId: Long): ApiResponse<Boolean>
 }

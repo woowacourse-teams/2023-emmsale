@@ -158,10 +158,7 @@ class EditMyProfileViewModel @Inject constructor(
 
     private suspend fun updateMemberActivities(activityIds: List<Long>) {
         when (val result = memberRepository.addMemberActivities(activityIds)) {
-            is Failure, NetworkError ->
-                _errorEvents.value =
-                    EditMyProfileErrorEvent.ACTIVITIES_ADD
-
+            is Failure, NetworkError -> _errorEvents.value = EditMyProfileErrorEvent.ACTIVITIES_ADD
             is Success -> refresh()
             is Unexpected -> throw Throwable(result.error)
         }

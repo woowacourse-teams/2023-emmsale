@@ -12,15 +12,9 @@ data class MemberCreateRequest(
 )
 
 @Serializable
-data class MemberActivitiesUpdateRequest(
+data class MemberActivitiesAddRequest(
     @SerialName("activityIds")
     val activityIds: List<Long>,
-)
-
-@Serializable
-data class MemberOpenProfileUrlUpdateRequest(
-    @SerialName("openProfileUrl")
-    val openProfileUrl: String,
 )
 
 @Serializable

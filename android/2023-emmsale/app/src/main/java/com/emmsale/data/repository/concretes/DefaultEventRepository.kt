@@ -1,16 +1,18 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.CompetitionResponse
-import com.emmsale.data.apiModel.response.ConferenceResponse
-import com.emmsale.data.apiModel.response.EventDetailResponse
+import com.emmsale.data.apiModel.request.ScrappedEventCreateRequest
+import com.emmsale.data.apiModel.response.EventResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.NetworkError
+import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.mapper.toApiModel
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.model.CompetitionStatus
 import com.emmsale.data.model.ConferenceStatus
 import com.emmsale.data.model.Event
 import com.emmsale.data.model.EventCategory
-import com.emmsale.data.model.EventDetail
 import com.emmsale.data.model.EventTag
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.service.EventService
@@ -38,7 +40,7 @@ class DefaultEventRepository @Inject constructor(
             tags = tags.map { it.name },
             startDate = startDate?.toRequestFormat(),
             endDate = endDate?.toRequestFormat(),
-        ).map(List<ConferenceResponse>::toData)
+        ).map { it.toData() }
     }
 
     override suspend fun getCompetitions(
@@ -53,13 +55,13 @@ class DefaultEventRepository @Inject constructor(
             tags = tags.map { it.name },
             startDate = startDate?.toRequestFormat(),
             endDate = endDate?.toRequestFormat(),
-        ).map(List<CompetitionResponse>::toData)
+        ).map { it.toData() }
     }
 
-    override suspend fun getEventDetail(eventId: Long): ApiResponse<EventDetail> {
+    override suspend fun getEventDetail(eventId: Long): ApiResponse<Event> {
         return eventService
             .getEventDetail(eventId)
-            .map(EventDetailResponse::toData)
+            .map(EventResponse::toData)
     }
 
     override suspend fun searchEvents(
@@ -77,7 +79,7 @@ class DefaultEventRepository @Inject constructor(
             tags = tags.map { it.name },
             statuses = statuses.toApiModel(),
             category = category,
-        ).map(List<ConferenceResponse>::toData)
+        ).map { it.toData() }
     }
 
     private fun EventCategory.toApiModel(): String = when (this) {
@@ -87,5 +89,32 @@ class DefaultEventRepository @Inject constructor(
 
     private fun LocalDate?.toRequestFormat(): String? {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd").format(this)
+    }
+
+    override suspend fun getScrappedEvents(): ApiResponse<List<Event>> {
+        return eventService
+            .getScrappedEvents()
+            .map(List<EventResponse>::toData)
+    }
+
+    override suspend fun scrapEvent(eventId: Long): ApiResponse<Unit> {
+        return eventService.scrapEvent(
+            ScrappedEventCreateRequest(eventId),
+        )
+    }
+
+    override suspend fun deleteScrap(eventId: Long): ApiResponse<Unit> {
+        return eventService.deleteScrap(eventId)
+    }
+
+    override suspend fun isScraped(eventId: Long): ApiResponse<Boolean> {
+        return when (val response = getScrappedEvents()) {
+            is Failure -> response
+            is NetworkError -> response
+            is Unexpected -> response
+            is Success -> Success(
+                response.data.any { it.id == eventId },
+            )
+        }
     }
 }

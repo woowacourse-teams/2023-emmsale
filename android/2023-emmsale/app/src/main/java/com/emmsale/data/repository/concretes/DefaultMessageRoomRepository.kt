@@ -18,11 +18,12 @@ class DefaultMessageRoomRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val messageRoomService: MessageRoomService,
 ) : MessageRoomRepository {
+
     override suspend fun getMessageRooms(
         memberId: Long,
     ): ApiResponse<List<MessageRoom>> = withContext(dispatcher) {
         messageRoomService
-            .getMessageRooms(memberId)
+            .getMessageRooms2(memberId)
             .map(List<MessageRoomResponse>::toData)
     }
 
@@ -31,7 +32,7 @@ class DefaultMessageRoomRepository @Inject constructor(
         memberId: Long,
     ): ApiResponse<List<Message>> = withContext(dispatcher) {
         messageRoomService
-            .getMessagesByRoomId(roomId, memberId)
+            .getMessagesByRoomId2(roomId, memberId)
             .map(List<MessageResponse>::toData)
     }
 

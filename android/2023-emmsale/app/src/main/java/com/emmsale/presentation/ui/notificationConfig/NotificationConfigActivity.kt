@@ -10,7 +10,7 @@ import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.data.model.EventTag
 import com.emmsale.databinding.ActivityNotificationConfigBinding
-import com.emmsale.presentation.common.Event
+import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
 import com.emmsale.presentation.common.extension.navigateToNotificationSettings
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
@@ -149,7 +149,7 @@ class NotificationConfigActivity :
         }
     }
 
-    private fun handleNotificationTagsErrors(event: Event<NotificationConfigUiEvent>) {
+    private fun handleNotificationTagsErrors(event: UiEvent<NotificationConfigUiEvent>) {
         val content = event.getContentIfNotHandled() ?: return
         when (content) {
             NotificationConfigUiEvent.INTEREST_TAG_REMOVE_ERROR -> showTagRemovingErrorMessage()
