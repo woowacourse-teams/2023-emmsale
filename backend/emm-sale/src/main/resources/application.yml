@@ -52,6 +52,10 @@ firebase:
 
 data:
   admin-url: http://localhost:3000
+  admin_login:
+    id: admin
+    password: 1234
+    member_id: 3
 
 cloud:
   aws:

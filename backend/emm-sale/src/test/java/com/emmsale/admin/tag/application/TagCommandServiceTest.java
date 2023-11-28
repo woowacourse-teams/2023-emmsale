@@ -1,9 +1,13 @@
-package com.emmsale.tag.application;
+package com.emmsale.admin.tag.application;
 
+import static com.emmsale.member.MemberFixture.adminMember;
+import static com.emmsale.member.MemberFixture.generalMember;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
+import com.emmsale.login.exception.LoginException;
+import com.emmsale.login.exception.LoginExceptionType;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.application.dto.TagResponse;
 import com.emmsale.tag.exception.TagException;
@@ -27,7 +31,7 @@ class TagCommandServiceTest extends ServiceIntegrationTestHelper {
     final TagResponse expected = new TagResponse(1L, tagName);
 
     //when
-    final TagResponse actual = commandService.addTag(request);
+    final TagResponse actual = commandService.addTag(request, adminMember());
 
     //then
     assertThat(actual)
@@ -37,14 +41,14 @@ class TagCommandServiceTest extends ServiceIntegrationTestHelper {
 
   @Test
   @DisplayName("이미 존재하는 태그를 추가하면 예외를 반환한다.")
-  void addTag_duplicate_fail() {
+  void addTag_fail_duplicate() {
     //given
     final String tagName = "프론트엔드";
     final TagRequest request = new TagRequest(tagName);
-    commandService.addTag(request);
+    commandService.addTag(request, adminMember());
 
     //when
-    final ThrowingCallable actual = () -> commandService.addTag(request);
+    final ThrowingCallable actual = () -> commandService.addTag(request, adminMember());
 
     //then
     assertThatThrownBy(actual)
@@ -52,5 +56,19 @@ class TagCommandServiceTest extends ServiceIntegrationTestHelper {
         .hasMessage(TagExceptionType.ALEADY_EXIST_TAG.errorMessage());
   }
 
+  @Test
+  @DisplayName("관리자가 아닌 회원이 태그를 추가하면 예외를 반환한다.")
+  void addTag_fail_authorization() {
+    //given
+    final String tagName = "프론트엔드";
+    final TagRequest request = new TagRequest(tagName);
 
+    //when
+    final ThrowingCallable actual = () -> commandService.addTag(request, generalMember());
+
+    //then
+    assertThatThrownBy(actual)
+        .isInstanceOf(LoginException.class)
+        .hasMessage(LoginExceptionType.INVALID_ADMIN_ACCESS_TOKEN.errorMessage());
+  }
 }

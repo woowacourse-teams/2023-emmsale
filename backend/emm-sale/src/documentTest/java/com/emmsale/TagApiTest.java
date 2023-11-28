@@ -10,6 +10,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.admin.tag.api.AdminTagApi;
+import com.emmsale.member.domain.Member;
 import com.emmsale.tag.api.TagApi;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.application.dto.TagResponse;
@@ -22,7 +24,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
-@WebMvcTest(TagApi.class)
+@WebMvcTest({TagApi.class, AdminTagApi.class})
 class TagApiTest extends MockMvcTestHelper {
 
   @Test
@@ -57,8 +59,9 @@ class TagApiTest extends MockMvcTestHelper {
     );
     final TagRequest request = new TagRequest("프론트");
     final TagResponse response = new TagResponse(3L, "프론트");
+    final String accessToken = "Bearer accessToken";
 
-    when(tagCommandService.addTag(any(TagRequest.class))).thenReturn(response);
+    when(tagCommandService.addTag(any(TagRequest.class), any(Member.class))).thenReturn(response);
 
     final ResponseFieldsSnippet responseFields = responseFields(
         fieldWithPath("id").type(JsonFieldType.NUMBER).description("태그 식별자"),
@@ -66,7 +69,8 @@ class TagApiTest extends MockMvcTestHelper {
     );
 
     //when & then
-    mockMvc.perform(post("/tags")
+    mockMvc.perform(post("/admin/tags")
+            .header("Authorization", accessToken)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())

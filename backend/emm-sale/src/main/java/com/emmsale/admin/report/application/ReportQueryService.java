@@ -1,5 +1,8 @@
-package com.emmsale.report.application;
+package com.emmsale.admin.report.application;
 
+import static com.emmsale.admin.login.utils.AdminValidator.validateAuthorization;
+
+import com.emmsale.member.domain.Member;
 import com.emmsale.report.application.dto.ReportFindResponse;
 import com.emmsale.report.domain.repository.ReportRepository;
 import java.util.List;
@@ -14,7 +17,8 @@ public class ReportQueryService {
 
   private final ReportRepository reportRepository;
 
-  public List<ReportFindResponse> findReports() {
+  public List<ReportFindResponse> findReports(final Member admin) {
+    validateAuthorization(admin);
     return ReportFindResponse.from(reportRepository.findAll());
   }
 }
