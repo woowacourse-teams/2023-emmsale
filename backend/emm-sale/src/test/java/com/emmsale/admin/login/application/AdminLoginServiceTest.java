@@ -1,13 +1,13 @@
 package com.emmsale.admin.login.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
 
 import com.emmsale.admin.login.application.dto.AdminLoginRequest;
 import com.emmsale.admin.login.application.dto.AdminTokenResponse;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.login.exception.LoginException;
 import com.emmsale.login.exception.LoginExceptionType;
+import com.emmsale.login.utils.JwtTokenProvider;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class AdminLoginServiceTest extends ServiceIntegrationTestHelper {
 
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
   @Autowired
   private AdminLoginService adminLoginService;
   @Value("${data.admin_login.id}")
@@ -34,8 +36,7 @@ class AdminLoginServiceTest extends ServiceIntegrationTestHelper {
     // given
     final Long memberId = adminMemberId;
     final AdminLoginRequest request = new AdminLoginRequest(adminId, adminPassword);
-    final String expectAccessToken = "expect_access_token";
-    given(tokenProvider.createToken(String.valueOf(memberId))).willReturn(expectAccessToken);
+    final String expectAccessToken = jwtTokenProvider.createToken(String.valueOf(memberId));
 
     // when
     final AdminTokenResponse actualToken = adminLoginService.createAdminToken(request);
