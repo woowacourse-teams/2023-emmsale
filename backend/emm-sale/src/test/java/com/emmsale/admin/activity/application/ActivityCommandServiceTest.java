@@ -77,6 +77,6 @@ class ActivityCommandServiceTest extends ServiceIntegrationTestHelper {
     //then
     assertThatThrownBy(actual)
         .isInstanceOf(LoginException.class)
-        .hasMessage(LoginExceptionType.INVALID_ACCESS_TOKEN.errorMessage());
+        .hasMessage(LoginExceptionType.INVALID_ADMIN_ACCESS_TOKEN.errorMessage());
   }
 }

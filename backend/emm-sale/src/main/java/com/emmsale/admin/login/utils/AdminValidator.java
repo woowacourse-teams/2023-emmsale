@@ -13,7 +13,7 @@ public class AdminValidator {
 
   public static void validateAuthorization(final Member admin) {
     if (admin.isNotMe(adminMemberId)) {
-      throw new LoginException(LoginExceptionType.INVALID_ACCESS_TOKEN);
+      throw new LoginException(LoginExceptionType.INVALID_ADMIN_ACCESS_TOKEN);
     }
   }
 

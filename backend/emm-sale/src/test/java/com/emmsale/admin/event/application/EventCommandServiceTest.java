@@ -11,7 +11,7 @@ import static com.emmsale.event.exception.EventExceptionType.START_DATE_TIME_AFT
 import static com.emmsale.image.ImageFixture.행사_이미지1;
 import static com.emmsale.image.ImageFixture.행사_이미지2;
 import static com.emmsale.image.ImageFixture.행사_이미지3;
-import static com.emmsale.login.exception.LoginExceptionType.INVALID_ACCESS_TOKEN;
+import static com.emmsale.login.exception.LoginExceptionType.INVALID_ADMIN_ACCESS_TOKEN;
 import static com.emmsale.member.MemberFixture.adminMember;
 import static com.emmsale.member.MemberFixture.generalMember;
 import static com.emmsale.tag.TagFixture.AI;
@@ -268,7 +268,7 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
       final LoginException exception = assertThrowsExactly(LoginException.class,
           () -> eventCommandService.addEvent(request, mockMultipartFiles, generalMember()));
 
-      assertEquals(INVALID_ACCESS_TOKEN, exception.exceptionType());
+      assertEquals(INVALID_ADMIN_ACCESS_TOKEN, exception.exceptionType());
     }
   }
 
@@ -457,7 +457,7 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
           () -> eventCommandService.updateEvent(eventId, updateRequest, mockMultipartFiles,
               generalMember()));
 
-      assertEquals(INVALID_ACCESS_TOKEN, exception.exceptionType());
+      assertEquals(INVALID_ADMIN_ACCESS_TOKEN, exception.exceptionType());
     }
   }
 
@@ -502,7 +502,7 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
       final LoginException exception = assertThrowsExactly(LoginException.class,
           () -> eventCommandService.deleteEvent(eventId, generalMember()));
 
-      assertEquals(INVALID_ACCESS_TOKEN, exception.exceptionType());
+      assertEquals(INVALID_ADMIN_ACCESS_TOKEN, exception.exceptionType());
     }
   }
 
