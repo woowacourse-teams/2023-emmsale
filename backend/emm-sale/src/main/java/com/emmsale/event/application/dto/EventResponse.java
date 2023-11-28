@@ -46,10 +46,7 @@ public class EventResponse {
       final Event event,
       final AllImagesOfContent images
   ) {
-    final List<String> tagNames = event.getTags().stream()
-        .map(EventTag::getTag)
-        .map(Tag::getName)
-        .collect(toUnmodifiableList());
+    final List<String> tagNames = event.extractTags();
 
     return new EventResponse(
         event.getId(),
@@ -70,15 +67,19 @@ public class EventResponse {
     );
   }
 
-  public static List<EventResponse> makeEventResponsesByStatus(final List<Event> events,
-      final Map<Long, AllImagesOfContent> imagesPerEventId) {
+  public static List<EventResponse> makeEventResponsesByStatus(
+      final List<Event> events,
+      final Map<Long, AllImagesOfContent> imagesPerEventId
+  ) {
     return events.stream()
         .map(event -> toEventResponse(imagesPerEventId, event))
         .collect(Collectors.toUnmodifiableList());
   }
 
   private static EventResponse toEventResponse(
-      final Map<Long, AllImagesOfContent> imagesPerEventId, final Event event) {
+      final Map<Long, AllImagesOfContent> imagesPerEventId,
+      final Event event
+  ) {
     final AllImagesOfContent allImageUrls = imagesPerEventId.get(event.getId());
     return EventResponse.from(event, allImageUrls);
   }

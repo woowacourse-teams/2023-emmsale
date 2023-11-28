@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
 @RestControllerAdvice
@@ -44,7 +45,7 @@ public class GlobalControllerAdvice {
     return new ResponseEntity<>(new ExceptionResponse(message), HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(HttpMessageNotReadableException.class)
+  @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
   public ResponseEntity<ExceptionResponse> handleHttpMessageNotReadableException(
       final HttpMessageNotReadableException e) {
     final String message = "입력 형식이 올바르지 않습니다.";

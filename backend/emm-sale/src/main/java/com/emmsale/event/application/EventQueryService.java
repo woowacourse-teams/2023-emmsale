@@ -1,9 +1,5 @@
 package com.emmsale.event.application;
 
-import static com.emmsale.event.domain.repository.EventSpecification.filterByCategory;
-import static com.emmsale.event.domain.repository.EventSpecification.filterByNameContainsSearchKeywords;
-import static com.emmsale.event.domain.repository.EventSpecification.filterByPeriod;
-import static com.emmsale.event.domain.repository.EventSpecification.filterByTags;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
@@ -11,12 +7,12 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.EventSearchRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
-import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.repository.EventRepository;
+import com.emmsale.event.domain.repository.EventSpecification;
 import com.emmsale.event.exception.EventException;
-import com.emmsale.event.exception.EventExceptionType;
 import com.emmsale.image.application.ImageQueryService;
 import com.emmsale.image.domain.AllImagesOfContent;
 import com.emmsale.image.domain.ImageType;
@@ -25,7 +21,6 @@ import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -41,9 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class EventQueryService {
 
-  private static final String MIN_DATE = "2000-01-01";
-  private static final String MAX_DATE = "2999-12-31";
-
   private final EventRepository eventRepository;
   private final TagRepository tagRepository;
   private final ImageQueryService imageQueryService;
@@ -57,14 +49,19 @@ public class EventQueryService {
     return EventResponse.from(event, images);
   }
 
-  public List<EventResponse> findEvents(final EventType category,
-      final LocalDateTime nowDateTime, final String startDate, final String endDate,
-      final List<String> tagNames, final List<EventStatus> statuses, final String keyword) {
-    Specification<Event> spec = (root, query, criteriaBuilder) -> null;
-    spec = filterByCategoryIfExist(category, spec);
-    spec = filterByTagIfExist(tagNames, spec);
-    spec = filterByDateIfExist(startDate, endDate, spec);
-    spec = filterByKeywordIfExist(keyword, spec);
+  public List<EventResponse> findEvents(
+      final EventSearchRequest request,
+      final LocalDate startDate,
+      final LocalDate endDate,
+      final LocalDateTime nowDateTime
+  ) {
+    validateTags(request.getTags());
+
+    final Specification<Event> spec = Specification
+        .where(EventSpecification.filterByCategory(request.getCategory()))
+        .and(EventSpecification.filterByTags(request.getTags()))
+        .and(EventSpecification.filterByPeriod(startDate, endDate))
+        .and(EventSpecification.filterByNameContainsSearchKeywords(request.getKeyword()));
 
     final List<Event> events = eventRepository.findAll(spec);
 
@@ -75,97 +72,21 @@ public class EventQueryService {
         .map(Event::getId)
         .collect(Collectors.toUnmodifiableList());
 
-    return filterByStatuses(statuses, eventsForEventStatus,
+    return filterByStatuses(request.getStatuses(), eventsForEventStatus,
         imageQueryService.findImagesPerContentId(ImageType.EVENT, eventIds));
   }
 
-  private Specification<Event> filterByCategoryIfExist(final EventType category,
-      Specification<Event> spec) {
-    if (isExistCategory(category)) {
-      spec = spec.and(filterByCategory(category));
-    }
-    return spec;
-  }
-
-  private boolean isExistCategory(final EventType category) {
-    return category != null;
-  }
-
-  private Specification<Event> filterByTagIfExist(final List<String> tagNames,
-      Specification<Event> spec) {
-    if (isExistTagNames(tagNames)) {
-      validateTags(tagNames);
-      spec = spec.and(filterByTags(tagNames));
-    }
-    return spec;
-  }
-
-  private boolean isExistTagNames(final List<String> tagNames) {
-    return tagNames != null;
-  }
-
   private void validateTags(final List<String> tagNames) {
-    final List<Tag> tags = tagRepository.findByNameIn(tagNames);
+    if (tagNames != null) {
+      final List<Tag> tags = tagRepository.findByNameIn(tagNames);
+      validateExistTags(tagNames, tags);
+    }
+  }
+
+  private void validateExistTags(final List<String> tagNames, final List<Tag> tags) {
     if (tags.size() != tagNames.size()) {
       throw new TagException(NOT_FOUND_TAG);
     }
-  }
-
-  private Specification<Event> filterByDateIfExist(final String startDate, final String endDate,
-      Specification<Event> spec) {
-    if (isExistFilterDate(startDate, endDate)) {
-      final LocalDateTime startDateTime = validateStartDate(startDate);
-      final LocalDateTime endDateTime = validateEndDate(endDate);
-      validateEndDateAfterDateStart(startDateTime, endDateTime);
-      spec = spec.and(filterByPeriod(startDateTime, endDateTime));
-    }
-    return spec;
-  }
-
-  private boolean isExistFilterDate(final String startDate, final String endDate) {
-    return startDate != null || endDate != null;
-  }
-
-  private LocalDateTime validateStartDate(final String date) {
-    try {
-      if (date == null) {
-        return LocalDate.parse(MIN_DATE).atStartOfDay();
-      }
-      return LocalDate.parse(date).atStartOfDay();
-    } catch (final DateTimeParseException exception) {
-      throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
-    }
-  }
-
-  private LocalDateTime validateEndDate(final String date) {
-    try {
-      if (date == null) {
-        return LocalDate.parse(MAX_DATE).atTime(23, 59, 59);
-      }
-      return LocalDate.parse(date).atTime(23, 59, 59);
-    } catch (final DateTimeParseException exception) {
-      throw new EventException(EventExceptionType.INVALID_DATE_FORMAT);
-    }
-  }
-
-  private void validateEndDateAfterDateStart(final LocalDateTime startDate,
-      final LocalDateTime endDate) {
-    if (endDate.isBefore(startDate)) {
-      throw new EventException(EventExceptionType.START_DATE_AFTER_END_DATE);
-    }
-  }
-
-  private Specification<Event> filterByKeywordIfExist(final String keyword,
-      Specification<Event> spec) {
-    if (isExistKeyword(keyword)) {
-      final String[] keywords = keyword.trim().split(" ");
-      spec = spec.and(filterByNameContainsSearchKeywords(keywords));
-    }
-    return spec;
-  }
-
-  private boolean isExistKeyword(final String keyword) {
-    return keyword != null && !keyword.isBlank();
   }
 
   private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDateTime nowDateTime,
@@ -173,7 +94,7 @@ public class EventQueryService {
     return events.stream()
         .sorted(comparing(event -> event.getEventPeriod().getStartDate()))
         .collect(
-            groupingBy(event -> event.getEventPeriod().calculateEventStatus(nowDateTime),
+            groupingBy(event -> event.calculateStatus(nowDateTime),
                 () -> new EnumMap<>(EventStatus.class), toList())
         );
   }
@@ -190,7 +111,7 @@ public class EventQueryService {
   }
 
   private boolean isExistStatusName(final List<EventStatus> statuses) {
-    return statuses != null;
+    return statuses != null && !statuses.isEmpty();
   }
 
   private List<EventResponse> filterEventResponseByStatuses(
