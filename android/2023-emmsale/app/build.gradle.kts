@@ -20,7 +20,7 @@ android {
         applicationId = "com.emmsale"
         minSdk = 28
         targetSdk = 33
-        versionCode = 59
+        versionCode = 60
         versionName = "2.2.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -54,7 +54,7 @@ android {
             buildConfigField(
                 "String",
                 "IMAGE_URL_PREFIX",
-                "\"https://d3ms3abrjbgefs.cloudfront.net/prod/\"",
+                "\"https://kerdy-prod.s3.ap-northeast-2.amazonaws.com/prod/\"",
             )
             signingConfig = signingConfigs.getByName("debug")
         }
