@@ -113,7 +113,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
             return runBlocking {
                 when (val result = commentRepository.getComment(commentId)) {
                     is Failure, NetworkError -> ERROR_FEED_ID to ERROR_FEED_ID
-                    is Success -> result.data.feedId to result.data.id
+                    is Success -> result.data.feed.id to result.data.id
                     is Unexpected -> throw Throwable(result.error)
                 }
             }

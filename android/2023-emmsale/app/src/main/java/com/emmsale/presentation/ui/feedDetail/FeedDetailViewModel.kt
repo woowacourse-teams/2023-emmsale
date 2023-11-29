@@ -218,7 +218,7 @@ class FeedDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
             val authorId =
-                _feedDetail.value.comments.find { it.comment.id == commentId }?.comment?.authorId
+                _feedDetail.value.comments.find { it.comment.id == commentId }?.comment?.writer?.id
                     ?: return@launch
             when (val result = commentRepository.reportComment(commentId, authorId, uid)) {
                 is Failure -> {
