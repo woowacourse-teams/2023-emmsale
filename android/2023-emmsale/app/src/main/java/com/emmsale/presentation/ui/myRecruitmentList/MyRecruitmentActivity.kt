@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.myPostList
+package com.emmsale.presentation.ui.myRecruitmentList
 
 import android.content.Context
 import android.content.Intent
@@ -10,17 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMyPostBinding
 import com.emmsale.presentation.common.extension.showToast
-import com.emmsale.presentation.ui.myPostList.recyclerView.MyPostAdapter
+import com.emmsale.presentation.ui.myRecruitmentList.recyclerView.MyRecruitmentAdapter
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyPostActivity : AppCompatActivity() {
+class MyRecruitmentActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMyPostBinding.inflate(layoutInflater) }
-    private val viewModel: MyPostViewModel by viewModels()
+    private val viewModel: MyRecruitmentViewModel by viewModels()
 
-    private val myPostAdapter: MyPostAdapter by lazy {
-        MyPostAdapter(navigateToDetail = ::navigateToDetail)
+    private val myRecruitmentAdapter: MyRecruitmentAdapter by lazy {
+        MyRecruitmentAdapter(navigateToDetail = ::navigateToDetail)
     }
 
     private val fetchByResultActivityLauncher =
@@ -40,18 +40,18 @@ class MyPostActivity : AppCompatActivity() {
     }
 
     private fun setUpMyPosts() {
-        viewModel.myPosts.observe(this) { myPosts ->
-            if (myPosts.isError) {
+        viewModel.myRecruitments.observe(this) { myRecruitments ->
+            if (myRecruitments.isError) {
                 showToast(R.string.all_data_loading_failed_message)
             } else {
-                myPostAdapter.submitList(myPosts.list)
+                myRecruitmentAdapter.submitList(myRecruitments.list)
             }
         }
     }
 
     private fun initRecyclerView() {
         binding.rvMyPost.layoutManager = LinearLayoutManager(this)
-        binding.rvMyPost.adapter = myPostAdapter
+        binding.rvMyPost.adapter = myRecruitmentAdapter
     }
 
     private fun navigateToDetail(eventId: Long, recruitmentId: Long) {
@@ -72,7 +72,7 @@ class MyPostActivity : AppCompatActivity() {
 
     companion object {
         fun startActivity(context: Context) {
-            val intent = Intent(context, MyPostActivity::class.java)
+            val intent = Intent(context, MyRecruitmentActivity::class.java)
             context.startActivity(intent)
         }
     }

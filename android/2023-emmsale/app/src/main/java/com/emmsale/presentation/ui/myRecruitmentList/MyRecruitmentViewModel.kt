@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.myPostList
+package com.emmsale.presentation.ui.myRecruitmentList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,35 +11,35 @@ import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.ui.myPostList.uiState.MyPostsUiState
+import com.emmsale.presentation.ui.myRecruitmentList.uiState.MyRecruitmentsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPostViewModel @Inject constructor(
+class MyRecruitmentViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val recruitmentRepository: RecruitmentRepository,
 ) : ViewModel(), Refreshable {
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _myPosts: NotNullMutableLiveData<MyPostsUiState> =
-        NotNullMutableLiveData(MyPostsUiState())
-    val myPosts: NotNullLiveData<MyPostsUiState> = _myPosts
+    private val _myRecruitments: NotNullMutableLiveData<MyRecruitmentsUiState> =
+        NotNullMutableLiveData(MyRecruitmentsUiState())
+    val myRecruitments: NotNullLiveData<MyRecruitmentsUiState> = _myRecruitments
 
     init {
         refresh()
     }
 
     override fun refresh() {
-        _myPosts.value = _myPosts.value.copy(isLoading = true)
+        _myRecruitments.value = _myRecruitments.value.copy(isLoading = true)
         viewModelScope.launch {
             when (val result = recruitmentRepository.getMemberRecruitments(uid)) {
                 is Failure, NetworkError ->
-                    _myPosts.value =
-                        _myPosts.value.copy(isLoading = false, isError = true)
+                    _myRecruitments.value =
+                        _myRecruitments.value.copy(isLoading = false, isError = true)
 
-                is Success -> _myPosts.value = MyPostsUiState.from(result.data)
+                is Success -> _myRecruitments.value = MyRecruitmentsUiState.from(result.data)
                 is Unexpected -> throw Throwable(result.error)
             }
         }

@@ -10,7 +10,7 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.myPostList.MyPostViewModel" />
+            type="com.emmsale.presentation.ui.myRecruitmentList.MyRecruitmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,7 +45,7 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{vm.myPosts.isLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{vm.myRecruitments.isLoading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
             android:layout_height="0dp"
             android:background="@color/white"
             android:clickable="true"
-            android:visibility="@{vm.myPosts.isError ? View.VISIBLE : View.GONE}"
+            android:visibility="@{vm.myRecruitments.isError ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
