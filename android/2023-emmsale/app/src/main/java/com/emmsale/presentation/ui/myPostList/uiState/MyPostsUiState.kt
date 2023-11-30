@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.myPostList.uiState
 
-import com.emmsale.data.model.MyPost
+import com.emmsale.data.model.Recruitment
 
 data class MyPostsUiState(
     val list: List<MyPostUiState> = listOf(),
@@ -8,12 +8,10 @@ data class MyPostsUiState(
     val isError: Boolean = false,
 ) {
     companion object {
-        fun from(myPosts: List<MyPost>): MyPostsUiState {
-            return MyPostsUiState(
-                myPosts.map { MyPostUiState.from(it) },
-                isLoading = false,
-                isError = false,
-            )
-        }
+        fun from(recruitments: List<Recruitment>) = MyPostsUiState(
+            list = recruitments.map { MyPostUiState.from(it) },
+            isLoading = false,
+            isError = false,
+        )
     }
 }

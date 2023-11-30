@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.myPostList.uiState
 
-import com.emmsale.data.model.MyPost
+import com.emmsale.data.model.Recruitment
 
 data class MyPostUiState(
     val postId: Long = DEFAULT_ID,
@@ -12,12 +12,12 @@ data class MyPostUiState(
     companion object {
         private const val DEFAULT_ID = -1L
 
-        fun from(myPost: MyPost): MyPostUiState = MyPostUiState(
-            postId = myPost.postId,
-            eventId = myPost.eventId,
-            eventName = myPost.eventName,
-            content = myPost.content ?: "",
-            updatedAt = myPost.updatedAt.toString(),
+        fun from(recruitment: Recruitment) = MyPostUiState(
+            postId = recruitment.id,
+            eventId = recruitment.event.id,
+            eventName = recruitment.event.name,
+            content = recruitment.content,
+            updatedAt = recruitment.updatedDate.toString(),
         )
     }
 }

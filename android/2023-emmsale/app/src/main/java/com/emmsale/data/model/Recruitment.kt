@@ -6,6 +6,6 @@ data class Recruitment(
     val id: Long,
     val writer: Member,
     val event: Event,
-    val content: String?,
+    val content: String,
     val updatedDate: LocalDate,
 )

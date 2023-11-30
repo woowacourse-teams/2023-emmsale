@@ -6,7 +6,8 @@ import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
-import com.emmsale.data.repository.interfaces.MyPostRepository
+import com.emmsale.data.repository.interfaces.RecruitmentRepository
+import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
@@ -17,8 +18,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPostViewModel @Inject constructor(
-    private val myPostRepository: MyPostRepository,
+    private val tokenRepository: TokenRepository,
+    private val recruitmentRepository: RecruitmentRepository,
 ) : ViewModel(), Refreshable {
+    private val uid: Long by lazy { tokenRepository.getMyUid()!! }
+
     private val _myPosts: NotNullMutableLiveData<MyPostsUiState> =
         NotNullMutableLiveData(MyPostsUiState())
     val myPosts: NotNullLiveData<MyPostsUiState> = _myPosts
@@ -30,7 +34,7 @@ class MyPostViewModel @Inject constructor(
     override fun refresh() {
         _myPosts.value = _myPosts.value.copy(isLoading = true)
         viewModelScope.launch {
-            when (val result = myPostRepository.getMyPosts()) {
+            when (val result = recruitmentRepository.getMemberRecruitments(uid)) {
                 is Failure, NetworkError ->
                     _myPosts.value =
                         _myPosts.value.copy(isLoading = false, isError = true)
