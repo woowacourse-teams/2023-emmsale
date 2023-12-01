@@ -47,8 +47,8 @@ class FeedDetailActivity : AppCompatActivity() {
         onCommentClick = { comment ->
             ChildCommentActivity.startActivity(
                 context = this,
-                feedId = comment.feedId,
-                parentCommentId = comment.parentId ?: comment.id,
+                feedId = comment.feed.id,
+                parentCommentId = comment.parentCommentId ?: comment.id,
                 highlightCommentId = comment.id,
             )
         },

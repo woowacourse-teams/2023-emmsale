@@ -3,6 +3,7 @@ package com.emmsale.data.service
 import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
+import com.emmsale.data.apiModel.response.MyPostResponse
 import com.emmsale.data.apiModel.response.RecruitmentReportResponse
 import com.emmsale.data.apiModel.response.RecruitmentResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
@@ -26,6 +27,11 @@ interface RecruitmentService {
         @Path("eventId") eventId: Long,
         @Path("recruitment-post-id") recruitmentId: Long,
     ): ApiResponse<RecruitmentResponse>
+
+    @GET("/events/recruitment-posts")
+    suspend fun getMemberRecruitments(
+        @Query("member-id") memberId: Long,
+    ): ApiResponse<List<MyPostResponse>>
 
     @POST("/events/{eventId}/recruitment-posts")
     suspend fun postRecruitment(

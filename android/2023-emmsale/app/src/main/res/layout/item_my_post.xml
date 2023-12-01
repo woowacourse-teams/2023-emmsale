@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="myPost"
-            type="com.emmsale.presentation.ui.myPostList.uiState.MyPostUiState" />
+            name="recruitment"
+            type="com.emmsale.presentation.ui.myRecruitmentList.uiState.MyRecruitmentUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,7 +38,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/nanum_square_bold"
             android:maxLines="1"
-            android:text="@{myPost.eventName}"
+            android:text="@{recruitment.eventName}"
             android:textColor="@color/black"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/nanum_square_regular"
-            android:text="@{myPost.updatedAt}"
+            android:text="@{recruitment.updatedAt}"
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/nanum_square_regular"
             android:maxLines="5"
-            android:text="@{myPost.content}"
+            android:text="@{recruitment.content}"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

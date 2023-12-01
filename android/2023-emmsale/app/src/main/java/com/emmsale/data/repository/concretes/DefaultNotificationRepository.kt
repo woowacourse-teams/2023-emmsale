@@ -3,12 +3,8 @@ package com.emmsale.data.repository.concretes
 import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentNotificationReportCreateRequest
 import com.emmsale.data.apiModel.response.NotificationResponse
-import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.mapper.toRequestModel
-import com.emmsale.data.model.RecruitmentNotification
-import com.emmsale.data.model.RecruitmentStatus
 import com.emmsale.data.model.updatedNotification.UpdatedNotification
 import com.emmsale.data.repository.interfaces.NotificationRepository
 import com.emmsale.data.service.NotificationService
@@ -21,23 +17,6 @@ class DefaultNotificationRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val notificationService: NotificationService,
 ) : NotificationRepository {
-    override suspend fun getRecruitmentNotifications(
-        memberId: Long,
-    ): ApiResponse<List<RecruitmentNotification>> = withContext(dispatcher) {
-        notificationService
-            .getRecruitmentNotifications(memberId)
-            .map(List<RecruitmentNotificationResponse>::toData)
-    }
-
-    override suspend fun updateRecruitmentStatus(
-        notificationId: Long,
-        recruitmentStatus: RecruitmentStatus,
-    ): ApiResponse<Unit> = withContext(dispatcher) {
-        notificationService.updateRecruitmentStatus(
-            notificationId = notificationId,
-            newStatus = recruitmentStatus.toRequestModel(),
-        )
-    }
 
     override suspend fun updateNotificationReadStatus(
         notificationId: Long,

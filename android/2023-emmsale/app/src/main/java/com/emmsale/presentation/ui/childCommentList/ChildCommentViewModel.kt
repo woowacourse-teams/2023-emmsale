@@ -151,7 +151,7 @@ class ChildCommentViewModel @Inject constructor(
             _screenUiState.value = ScreenUiState.LOADING
         }
         val authorId =
-            _comments.value.comments.find { it.comment.id == commentId }!!.comment.authorId
+            _comments.value.comments.find { it.comment.id == commentId }!!.comment.writer.id
         when (val result = commentRepository.reportComment(commentId, authorId, uid)) {
             is Failure -> {
                 if (result.code == REPORT_DUPLICATE_ERROR_CODE) {

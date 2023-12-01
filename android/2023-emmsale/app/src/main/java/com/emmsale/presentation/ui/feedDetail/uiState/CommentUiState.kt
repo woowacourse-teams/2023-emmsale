@@ -9,7 +9,7 @@ data class CommentUiState(
 ) {
     val isUpdated: Boolean = comment.createdAt != comment.updatedAt
 
-    val childCommentsCount = comment.childComments.count { !it.deleted }
+    val childCommentsCount = comment.childComments.count { !it.isDeleted }
 
     fun highlight() = copy(isHighlight = true)
 
@@ -18,7 +18,7 @@ data class CommentUiState(
     companion object {
         fun create(uid: Long, comment: Comment, isHighlight: Boolean = false): CommentUiState =
             CommentUiState(
-                isWrittenByLoginUser = uid == comment.authorId,
+                isWrittenByLoginUser = uid == comment.writer.id,
                 isHighlight = isHighlight,
                 comment = comment,
             )

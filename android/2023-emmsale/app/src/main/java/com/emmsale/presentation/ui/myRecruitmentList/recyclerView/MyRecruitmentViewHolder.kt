@@ -1,12 +1,12 @@
-package com.emmsale.presentation.ui.myPostList.recyclerView
+package com.emmsale.presentation.ui.myRecruitmentList.recyclerView
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.databinding.ItemMyPostBinding
-import com.emmsale.presentation.ui.myPostList.uiState.MyPostUiState
+import com.emmsale.presentation.ui.myRecruitmentList.uiState.MyRecruitmentUiState
 
-class MyPostViewHolder(
+class MyRecruitmentViewHolder(
     private val binding: ItemMyPostBinding,
     navigateToDetail: (eventId: Long, recruitmentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -14,24 +14,24 @@ class MyPostViewHolder(
     init {
         itemView.setOnClickListener {
             navigateToDetail(
-                binding.myPost!!.eventId,
-                binding.myPost!!.postId,
+                binding.recruitment!!.eventId,
+                binding.recruitment!!.postId,
             )
         }
     }
 
-    fun bind(myPost: MyPostUiState) {
-        binding.myPost = myPost
+    fun bind(myRecruitment: MyRecruitmentUiState) {
+        binding.recruitment = myRecruitment
     }
 
     companion object {
         fun create(
             parent: ViewGroup,
             navigateToDetail: (eventId: Long, recruitmentId: Long) -> Unit,
-        ): MyPostViewHolder {
+        ): MyRecruitmentViewHolder {
             val binding =
                 ItemMyPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return MyPostViewHolder(binding, navigateToDetail)
+            return MyRecruitmentViewHolder(binding, navigateToDetail)
         }
     }
 }

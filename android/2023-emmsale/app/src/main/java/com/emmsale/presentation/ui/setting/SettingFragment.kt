@@ -15,7 +15,7 @@ import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.blockMemberList.MemberBlockActivity
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.myCommentList.MyCommentsActivity
-import com.emmsale.presentation.ui.myPostList.MyPostActivity
+import com.emmsale.presentation.ui.myRecruitmentList.MyRecruitmentActivity
 import com.emmsale.presentation.ui.notificationConfig.NotificationConfigActivity
 import com.emmsale.presentation.ui.setting.uiState.MemberUiState
 import com.emmsale.presentation.ui.useTerm.UseTermWebViewActivity
@@ -51,7 +51,7 @@ class SettingFragment :
     }
 
     private fun showWritings() {
-        MyPostActivity.startActivity(requireContext())
+        MyRecruitmentActivity.startActivity(requireContext())
     }
 
     private fun showWrittenComments() {

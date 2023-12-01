@@ -4,8 +4,6 @@ import com.emmsale.data.apiModel.response.CommentTypeNotificationResponse
 import com.emmsale.data.apiModel.response.EventTypeNotificationResponse
 import com.emmsale.data.apiModel.response.NotificationResponse
 import com.emmsale.data.apiModel.response.NotificationResponse.NotificationType
-import com.emmsale.data.apiModel.response.RecruitmentNotificationResponse
-import com.emmsale.data.model.RecruitmentNotification
 import com.emmsale.data.model.updatedNotification.ChildCommentNotification
 import com.emmsale.data.model.updatedNotification.InterestEventNotification
 import com.emmsale.data.model.updatedNotification.UpdatedNotification
@@ -55,18 +53,3 @@ private fun String.toLocalDateTime(): LocalDateTime {
     val formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")
     return LocalDateTime.parse(this, formatter)
 }
-
-fun RecruitmentNotificationResponse.toData(): RecruitmentNotification = RecruitmentNotification(
-    id = id,
-    senderUid = senderUid,
-    receiverUid = receiverUid,
-    message = message,
-    eventId = eventId,
-    status = status.toRecruitmentStatus(),
-    isRead = isRead,
-    notificationDate = createdAt.toLocalDateTime(),
-)
-
-@JvmName("RecruitmentNotificationResponse")
-fun List<RecruitmentNotificationResponse>.toData(): List<RecruitmentNotification> =
-    map { it.toData() }

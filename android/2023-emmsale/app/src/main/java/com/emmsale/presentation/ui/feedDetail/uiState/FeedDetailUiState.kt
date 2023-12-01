@@ -14,7 +14,7 @@ data class FeedDetailUiState(
 
     val isUpdated: Boolean = feedDetail.createdAt != feedDetail.updatedAt
 
-    val commentsCount: Int = comments.count { !it.comment.deleted }
+    val commentsCount: Int = comments.count { !it.comment.isDeleted }
 
     fun highlightComment(commentId: Long) = copy(
         comments = comments.map { if (it.comment.id == commentId) it.highlight() else it },

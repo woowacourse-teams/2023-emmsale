@@ -14,7 +14,6 @@ import com.emmsale.data.repository.concretes.DefaultFeedRepository
 import com.emmsale.data.repository.concretes.DefaultLoginRepository
 import com.emmsale.data.repository.concretes.DefaultMemberRepository
 import com.emmsale.data.repository.concretes.DefaultMessageRoomRepository
-import com.emmsale.data.repository.concretes.DefaultMyPostRepository
 import com.emmsale.data.repository.concretes.DefaultNotificationRepository
 import com.emmsale.data.repository.concretes.DefaultRecruitmentRepository
 import com.emmsale.data.repository.concretes.DefaultTokenRepository
@@ -32,7 +31,6 @@ import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.data.repository.interfaces.LoginRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
-import com.emmsale.data.repository.interfaces.MyPostRepository
 import com.emmsale.data.repository.interfaces.NotificationRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
@@ -139,12 +137,6 @@ abstract class RepositoryModule {
     abstract fun bindConfigRepository(
         impl: DefaultConfigRepository,
     ): ConfigRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindMyPostRepository(
-        impl: DefaultMyPostRepository,
-    ): MyPostRepository
 
     @Binds
     @Singleton

@@ -38,7 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.ui.myPostList.MyPostActivity" />
+        <activity android:name=".presentation.ui.myRecruitmentList.MyRecruitmentActivity" />
         <activity android:name=".presentation.ui.notificationTagConfig.NotificationTagConfigActivity" />
         <activity android:name=".presentation.ui.myCommentList.MyCommentsActivity" />
         <activity android:name=".presentation.ui.blockMemberList.MemberBlockActivity" />

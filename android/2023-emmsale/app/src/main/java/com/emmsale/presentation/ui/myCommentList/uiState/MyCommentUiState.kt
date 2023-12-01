@@ -20,15 +20,15 @@ data class MyCommentUiState(
 
         fun from(comment: Comment) = MyCommentUiState(
             id = comment.id,
-            feedId = comment.feedId,
-            feedTitle = comment.feedTitle,
-            authorId = comment.authorId,
-            parentId = comment.parentId,
+            feedId = comment.feed.id,
+            feedTitle = comment.feed.title,
+            authorId = comment.writer.id,
+            parentId = comment.parentCommentId,
             content = comment.content,
             childCount = comment.childComments.size,
             lastModifiedDate = comment.updatedAt.format(dateTimeFormatter),
             isUpdated = comment.createdAt != comment.updatedAt,
-            isDeleted = comment.deleted,
+            isDeleted = comment.isDeleted,
         )
     }
 }
