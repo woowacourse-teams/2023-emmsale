@@ -14,7 +14,7 @@ public enum LoginExceptionType implements BaseExceptionType {
       "GitHub Profile을 찾을 수 없습니다."
   ),
   INVALID_ACCESS_TOKEN(
-      HttpStatus.BAD_REQUEST,
+      HttpStatus.UNAUTHORIZED,
       "토큰이 유효하지 않습니다."
   ),
   NOT_FOUND_AUTHORIZATION_TOKEN(
