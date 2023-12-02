@@ -48,7 +48,7 @@ abstract class NetworkViewModel : ViewModel() {
         fetchData: suspend () -> ApiResponse<T>,
         onSuccess: (T) -> Unit = {},
         onFailure: (code: Int, message: String?) -> Unit = { _, _ -> },
-        onLoading: suspend () -> Unit = suspend { changeToLoadingState() },
+        onLoading: suspend () -> Unit = { changeToLoadingState() },
         onNetworkError: () -> Unit = ::changeToNetworkErrorState,
     ): Job = viewModelScope.launch {
         val loadingJob = launch { onLoading() }
@@ -90,8 +90,11 @@ abstract class NetworkViewModel : ViewModel() {
         command: suspend () -> ApiResponse<T>,
         onSuccess: (T) -> Unit = {},
         onFailure: (code: Int, message: String?) -> Unit = { _, _ -> },
-        onLoading: suspend () -> Unit = suspend { delayLoading() },
+        onLoading: suspend () -> Unit = { delayLoading() },
+        onStart: () -> Unit = {},
+        onFinish: () -> Unit = {},
     ): Job = viewModelScope.launch {
+        onStart()
         val loadingJob = launch { onLoading() }
         when (val result = command()) {
             is Success -> onSuccess(result.data)
@@ -102,15 +105,19 @@ abstract class NetworkViewModel : ViewModel() {
         }
         loadingJob.cancel()
         _screenUiState.value = ScreenUiState.NONE
+        onFinish()
     }
 
     protected fun <T : Any> commandAndRefresh(
         command: suspend () -> ApiResponse<T>,
         onSuccess: (T) -> Unit = {},
         onFailure: (code: Int, message: String?) -> Unit = { _, _ -> },
-        onLoading: suspend () -> Unit = suspend { delayLoading() },
+        onLoading: suspend () -> Unit = { delayLoading() },
+        onStart: () -> Unit = {},
+        onFinish: () -> Unit = {},
         refresh: () -> Job = { this@NetworkViewModel.refresh() },
     ): Job = viewModelScope.launch {
+        onStart()
         val loadingJob = launch { onLoading() }
         when (val result = command()) {
             is Success -> {
@@ -126,6 +133,7 @@ abstract class NetworkViewModel : ViewModel() {
         }
         loadingJob.cancel()
         _screenUiState.value = ScreenUiState.NONE
+        onFinish()
     }
 
     companion object {
