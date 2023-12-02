@@ -1,20 +1,16 @@
 package com.emmsale.presentation.base
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
+import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import com.emmsale.R
 import com.emmsale.presentation.common.CommonUiEvent
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
 
-abstract class NetworkActivity<V : ViewDataBinding>(private val layoutResId: Int) :
-    AppCompatActivity() {
-
-    protected val binding: V by lazy {
-        DataBindingUtil.inflate(layoutInflater, layoutResId, null, false)
-    }
+abstract class NetworkActivity<V : ViewDataBinding>(
+    @LayoutRes layoutResId: Int,
+) : BaseActivity<V>(layoutResId) {
 
     abstract val viewModel: NetworkViewModel
 
