@@ -16,14 +16,14 @@ abstract class NetworkActivity<V : ViewDataBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observeCommentUiEvent()
+        observeCommonUiEvent()
     }
 
-    private fun observeCommentUiEvent() {
-        viewModel.commonUiEvent.observe(this) { handleCommentUiEvent(it) }
+    private fun observeCommonUiEvent() {
+        viewModel.commonUiEvent.observe(this) { handleCommonUiEvent(it) }
     }
 
-    private fun handleCommentUiEvent(event: CommonUiEvent) {
+    private fun handleCommonUiEvent(event: CommonUiEvent) {
         when (event) {
             CommonUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_check_message))
             is CommonUiEvent.Unexpected -> showToast(event.errorMessage)
