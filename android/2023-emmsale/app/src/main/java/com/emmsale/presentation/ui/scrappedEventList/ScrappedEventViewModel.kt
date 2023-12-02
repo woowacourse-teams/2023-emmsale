@@ -1,41 +1,40 @@
 package com.emmsale.presentation.ui.scrappedEventList
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.repository.interfaces.EventRepository
-import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.common.ScreenUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.Refreshable
 import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
 class ScrappedEventViewModel @Inject constructor(
     private val eventRepository: EventRepository,
-) : ViewModel(), Refreshable {
+) : NetworkViewModel() {
     private val _scrappedEvents = NotNullMutableLiveData(ScrappedEventsUiState())
     val scrappedEvents: NotNullLiveData<ScrappedEventsUiState> = _scrappedEvents
 
-    override fun refresh() {
-        changeToLoadingState()
-        viewModelScope.launch {
-            when (val response = eventRepository.getScrappedEvents()) {
-                is Success -> _scrappedEvents.value = ScrappedEventsUiState.from(response.data)
-                else -> changeToErrorState()
-            }
-        }
+    init {
+        // NoContentView가 활성화 되지 않기위해 필요
+        _screenUiState.value = ScreenUiState.LOADING
     }
 
-    private fun changeToLoadingState() {
-        _scrappedEvents.value = ScrappedEventsUiState(fetchResult = FetchResult.LOADING)
+    var isFirstFetch: Boolean = true
+
+    override fun refresh(): Job {
+        return refreshData(
+            refresh = { eventRepository.getScrappedEvents() },
+            onSuccess = { _scrappedEvents.value = ScrappedEventsUiState.from(it) },
+        )
     }
 
-    private fun changeToErrorState() {
-        _scrappedEvents.value =
-            ScrappedEventsUiState(fetchResult = FetchResult.ERROR)
+    fun fetchScrappedEvents() {
+        fetchData(
+            fetchData = { eventRepository.getScrappedEvents() },
+            onSuccess = { _scrappedEvents.value = ScrappedEventsUiState.from(it) },
+        )
     }
 }
