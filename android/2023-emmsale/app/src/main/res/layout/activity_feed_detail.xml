@@ -50,6 +50,7 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             app:onRefresh1="@{vm::refresh}"
+            app:swipeRefreshColor="@{@color/primary_color}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/btiw_comment_post"
