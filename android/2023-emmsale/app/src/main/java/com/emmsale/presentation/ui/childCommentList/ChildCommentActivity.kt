@@ -21,9 +21,9 @@ import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_FEED_ID
 import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_PARENT_COMMENT_ID
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
-import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
+import com.emmsale.presentation.ui.feedDetail.uiState.CommentsUiState
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -175,14 +175,14 @@ class ChildCommentActivity :
         }
     }
 
-    private fun scrollToIfFirstFetch(childCommentUiState: ChildCommentsUiState) {
+    private fun scrollToIfFirstFetch(commentUiState: CommentsUiState) {
         fun cantScroll(): Boolean =
-            viewModel.isAlreadyFirstFetched || childCommentUiState.comments.isEmpty()
+            viewModel.isAlreadyFirstFetched || commentUiState.comments.isEmpty()
 
         if (highlightCommentId == INVALID_COMMENT_ID || cantScroll()) return
         val position = viewModel.comments.value.comments
-            .indexOfFirst { commentUiState ->
-                commentUiState.comment.id == highlightCommentId
+            .indexOfFirst {
+                it.comment.id == highlightCommentId
             }
         binding.rvChildcommentsChildcomments.scrollToPosition(position)
 

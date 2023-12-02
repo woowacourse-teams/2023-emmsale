@@ -11,7 +11,7 @@ import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
-import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiState
+import com.emmsale.presentation.ui.feedDetail.uiState.CommentsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import javax.inject.Inject
@@ -33,17 +33,14 @@ class ChildCommentViewModel @Inject constructor(
     val feedId = stateHandle.get<Long>(KEY_FEED_ID)!!
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _comments = NotNullMutableLiveData(ChildCommentsUiState())
-    val comments: NotNullLiveData<ChildCommentsUiState> = _comments
+    private val _comments = NotNullMutableLiveData(CommentsUiState())
+    val comments: NotNullLiveData<CommentsUiState> = _comments
 
     private val _editingCommentId = MutableLiveData<Long?>()
     val editingCommentId: LiveData<Long?> = _editingCommentId
 
-    val editingCommentContent: LiveData<String?> = _editingCommentId.map {
-        _comments.value.comments
-            .find { commentUiState -> commentUiState.comment.id == it }
-            ?.comment
-            ?.content
+    val editingCommentContent: LiveData<String?> = _editingCommentId.map { commentId ->
+        if (commentId == null) null else _comments.value[commentId]?.comment?.content
     }
 
     private val _canSubmitComment = NotNullMutableLiveData(true)
@@ -58,7 +55,7 @@ class ChildCommentViewModel @Inject constructor(
 
     private fun fetchComments(): Job = fetchData(
         fetchData = { commentRepository.getComment(parentCommentId) },
-        onSuccess = { _comments.value = ChildCommentsUiState.create(uid, it) },
+        onSuccess = { _comments.value = CommentsUiState(uid, it) },
         onFailure = { _, _ -> _uiEvent.value = ChildCommentsUiEvent.IllegalCommentFetch },
     )
 
@@ -106,7 +103,7 @@ class ChildCommentViewModel @Inject constructor(
 
     override fun refresh(): Job = refreshData(
         refresh = { commentRepository.getComment(parentCommentId) },
-        onSuccess = { _comments.value = ChildCommentsUiState.create(uid, it) },
+        onSuccess = { _comments.value = CommentsUiState(uid, it) },
     )
 
     fun highlight(commentId: Long) {
