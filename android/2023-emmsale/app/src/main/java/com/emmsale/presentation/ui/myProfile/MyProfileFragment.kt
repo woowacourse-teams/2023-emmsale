@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMyProfileBinding
-import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.common.views.CategoryTagChip
 import com.emmsale.presentation.ui.editMyProfile.EditMyProfileActivity
 import com.emmsale.presentation.ui.login.LoginActivity
@@ -15,9 +15,9 @@ import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecorat
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
+class MyProfileFragment : NetworkFragment<FragmentMyProfileBinding>() {
     override val layoutResId: Int = R.layout.fragment_my_profile
-    private val viewModel: MyProfileViewModel by viewModels()
+    override val viewModel: MyProfileViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,11 +26,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         setupUiLogic()
         initToolbar()
         initActivitiesRecyclerView()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.refresh()
     }
 
     private fun initDataBinding() {
