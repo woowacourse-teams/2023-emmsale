@@ -46,6 +46,9 @@ class ChildCommentViewModel @Inject constructor(
             ?.content
     }
 
+    private val _canSubmitComment = NotNullMutableLiveData(true)
+    val canSubmitComment: NotNullLiveData<Boolean> = _canSubmitComment
+
     private val _uiEvent = SingleLiveEvent<ChildCommentsUiEvent>()
     val uiEvent: LiveData<ChildCommentsUiEvent> = _uiEvent
 
@@ -63,12 +66,16 @@ class ChildCommentViewModel @Inject constructor(
         command = { commentRepository.saveComment(content, feedId, parentCommentId) },
         onSuccess = { _uiEvent.value = ChildCommentsUiEvent.CommentPostComplete },
         onFailure = { _, _ -> _uiEvent.value = ChildCommentsUiEvent.CommentPostFail },
+        onStart = { _canSubmitComment.value = false },
+        onFinish = { _canSubmitComment.value = true },
     )
 
     fun updateComment(commentId: Long, content: String): Job = commandAndRefresh(
         command = { commentRepository.updateComment(commentId, content) },
         onSuccess = { _editingCommentId.value = null },
         onFailure = { _, _ -> _uiEvent.value = ChildCommentsUiEvent.CommentUpdateFail },
+        onStart = { _canSubmitComment.value = false },
+        onFinish = { _canSubmitComment.value = true },
     )
 
     fun deleteComment(commentId: Long): Job = commandAndRefresh(
