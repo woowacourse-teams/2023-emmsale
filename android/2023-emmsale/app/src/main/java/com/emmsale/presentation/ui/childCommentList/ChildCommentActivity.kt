@@ -6,15 +6,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityChildCommentsBinding
-import com.emmsale.presentation.common.CommonUiEvent
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
@@ -30,10 +28,10 @@ import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChildCommentActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityChildCommentsBinding.inflate(layoutInflater) }
+class ChildCommentActivity :
+    NetworkActivity<ActivityChildCommentsBinding>(R.layout.activity_child_comments) {
 
-    private val viewModel: ChildCommentViewModel by viewModels()
+    override val viewModel: ChildCommentViewModel by viewModels()
 
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
         onCommentClick = { comment -> viewModel.unhighlight(comment.id) },
@@ -194,7 +192,6 @@ class ChildCommentActivity : AppCompatActivity() {
 
     private fun observeUiEvent() {
         viewModel.uiEvent.observe(this) { handleUiEvent(it) }
-        viewModel.commonUiEvent.observe(this) { handleBaseUiEvent(it) }
     }
 
     private fun handleUiEvent(event: ChildCommentsUiEvent) {
@@ -233,13 +230,6 @@ class ChildCommentActivity : AppCompatActivity() {
                 onButtonClick = { finish() },
                 cancelable = false,
             ).show()
-        }
-    }
-
-    private fun handleBaseUiEvent(event: CommonUiEvent) {
-        when (event) {
-            CommonUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_check_message))
-            is CommonUiEvent.Unexpected -> showToast(event.errorMessage)
         }
     }
 
