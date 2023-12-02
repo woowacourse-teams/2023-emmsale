@@ -3,29 +3,32 @@ package com.emmsale.presentation.ui.feedDetail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
+import com.emmsale.data.model.Comment
+import com.emmsale.data.model.Feed
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.common.CommonUiEvent
+import com.emmsale.presentation.common.ScreenUiState
 import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
+import com.emmsale.presentation.ui.feedDetail.uiState.CommentsUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
-import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @HiltViewModel
 class FeedDetailViewModel @Inject constructor(
@@ -33,178 +36,134 @@ class FeedDetailViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val commentRepository: CommentRepository,
     private val tokenRepository: TokenRepository,
-) : ViewModel(), Refreshable {
-    var isAlreadyFirstFetched: Boolean by Delegates.vetoable(false) { _, _, newValue ->
-        newValue
-    }
+) : NetworkViewModel() {
 
     val feedId = savedStateHandle[KEY_FEED_ID] ?: DEFAULT_FEED_ID
 
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _feedDetail: NotNullMutableLiveData<FeedDetailUiState> =
-        NotNullMutableLiveData(FeedDetailUiState.Loading)
-    val feedDetail: NotNullLiveData<FeedDetailUiState> = _feedDetail
+    private val _feed = NotNullMutableLiveData(Feed())
+    val feed: NotNullLiveData<Feed> = _feed
+
+    private val _comments = NotNullMutableLiveData(CommentsUiState())
+    val comments: NotNullLiveData<CommentsUiState> = _comments
 
     val isFeedDetailWrittenByLoginUser: Boolean
-        get() = _feedDetail.value.feedDetail.writer.id == uid
+        get() = _feed.value.writer.id == uid
 
     private val _editingCommentId = MutableLiveData<Long?>()
     val editingCommentId: LiveData<Long?> = _editingCommentId
-    val editingCommentContent = _editingCommentId.map {
-        _feedDetail.value.comments.find { commentUiState -> commentUiState.comment.id == it }?.comment?.content
+    val editingCommentContent: LiveData<String?> = _editingCommentId.map { commentId ->
+        if (commentId == null) null else _comments.value[commentId]?.comment?.content
     }
+
+    private val _canSubmitComment = NotNullMutableLiveData(true)
+    val canSubmitComment: NotNullLiveData<Boolean> = _canSubmitComment
 
     private val _uiEvent: NotNullMutableLiveData<UiEvent<FeedDetailUiEvent>> =
         NotNullMutableLiveData(UiEvent(FeedDetailUiEvent.None))
     val uiEvent: NotNullLiveData<UiEvent<FeedDetailUiEvent>> = _uiEvent
 
     init {
-        refresh()
+        fetchFeedAndComments()
     }
 
-    override fun refresh() {
-        fetchFeedDetail()
-        fetchComments()
-    }
+    override fun refresh(): Job = viewModelScope.launch {
+        val (feedResult, commentResult) = listOf(
+            async { feedRepository.getFeed(feedId) },
+            async { commentRepository.getComments(feedId) },
+        ).awaitAll()
 
-    private fun fetchFeedDetail() {
-        viewModelScope.launch {
-            when (val result = feedRepository.getFeed(feedId)) {
-                is Failure -> {
-                    if (result.code == DELETED_FEED_FETCH_ERROR_CODE) {
-                        _uiEvent.value = UiEvent(FeedDetailUiEvent.DeletedFeedFetch)
-                    } else {
-                        _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
-                    }
-                }
-
-                NetworkError ->
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
-
-                is Success -> _feedDetail.value = _feedDetail.value.copy(
-                    fetchResult = FetchResult.SUCCESS,
-                    feedDetail = result.data,
-                )
-
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
-            }
+        if (feedResult is Unexpected) {
+            _commonUiEvent.value = CommonUiEvent.Unexpected(feedResult.error?.message.toString())
+            return@launch
+        } else if (commentResult is Unexpected) {
+            _commonUiEvent.value = CommonUiEvent.Unexpected(commentResult.error?.message.toString())
+            return@launch
         }
-    }
 
-    private fun fetchComments() {
-        viewModelScope.launch {
-            when (val result = commentRepository.getComments(feedId)) {
-                is Failure -> {}
-                NetworkError ->
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
-
-                is Success -> _feedDetail.value = _feedDetail.value.copy(
-                    comments = result.data.flatMap { parentComment ->
-                        listOf(CommentUiState.create(uid, parentComment)) +
-                            parentComment.childComments.map { CommentUiState.create(uid, it) }
-                    },
-                )
-
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
-            }
+        if (feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE) {
+            _uiEvent.value = UiEvent(FeedDetailUiEvent.DeletedFeedFetch)
         }
-    }
 
-    fun deleteFeed() {
-        viewModelScope.launch {
-            _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
-            when (val result = feedRepository.deleteFeed(feedId)) {
-                is Failure -> {
-                    _uiEvent.value = UiEvent(FeedDetailUiEvent.FeedDeleteFail)
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
-                }
-
-                NetworkError ->
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
-
-                is Success ->
-                    _uiEvent.value = UiEvent(FeedDetailUiEvent.FeedDeleteComplete)
-
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
-            }
+        if (feedResult is NetworkError || commentResult is NetworkError) {
+            dispatchNetworkErrorEvent()
+            return@launch
         }
-    }
 
-    fun saveComment(content: String) {
-        viewModelScope.launch {
-            _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
-            when (val result = commentRepository.saveComment(content, feedId)) {
-                is Failure -> {
-                    _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentPostFail)
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
-                    logComment(content, feedId)
-                }
-
-                NetworkError ->
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
-
-                is Success -> {
-                    refresh()
-                    _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentPostComplete)
-                }
-
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
-            }
+        if (feedResult is Success && commentResult is Success) {
+            val comments = commentResult.data as List<Comment>
+            val feed = feedResult.data as Feed
+            _feed.value = feed.copy(commentCount = comments.sumOf { it.childComments.size + 1 })
+            _comments.value = CommentsUiState(uid, comments)
         }
+        _screenUiState.value = ScreenUiState.NONE
     }
 
-    fun updateComment(commentId: Long, content: String) {
-        viewModelScope.launch {
-            _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
-            when (val result = commentRepository.updateComment(commentId, content)) {
-                is Failure -> {
-                    _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentUpdateFail)
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
-                }
+    private fun fetchFeedAndComments(): Job = viewModelScope.launch {
+        _screenUiState.value = ScreenUiState.LOADING
 
-                NetworkError ->
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
+        val (feedResult, commentResult) = listOf(
+            async { feedRepository.getFeed(feedId) },
+            async { commentRepository.getComments(feedId) },
+        ).awaitAll()
 
-                is Success -> {
-                    _editingCommentId.value = null
-                    refresh()
-                }
-
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
-            }
+        if (feedResult is Unexpected) {
+            _commonUiEvent.value = CommonUiEvent.Unexpected(feedResult.error?.message.toString())
+            return@launch
+        } else if (commentResult is Unexpected) {
+            _commonUiEvent.value = CommonUiEvent.Unexpected(commentResult.error?.message.toString())
+            return@launch
         }
-    }
 
-    fun deleteComment(commentId: Long) {
-        viewModelScope.launch {
-            _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
-            when (val result = commentRepository.deleteComment(commentId)) {
-                is Failure -> {
-                    _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentDeleteFail)
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
-                }
-
-                NetworkError ->
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
-
-                is Success -> refresh()
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
-            }
+        if (feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE) {
+            _uiEvent.value = UiEvent(FeedDetailUiEvent.DeletedFeedFetch)
         }
+
+        if (feedResult is NetworkError || commentResult is NetworkError) {
+            _screenUiState.value = ScreenUiState.NETWORK_ERROR
+            return@launch
+        }
+
+        if (feedResult is Success && commentResult is Success) {
+            val comments = commentResult.data as List<Comment>
+            val feed = feedResult.data as Feed
+            _feed.value = feed.copy(commentCount = comments.sumOf { it.childComments.size + 1 })
+            _comments.value = CommentsUiState(uid, comments)
+        }
+
+        _screenUiState.value = ScreenUiState.NONE
     }
+
+    fun deleteFeed(): Job = command(
+        command = { feedRepository.deleteFeed(feedId) },
+        onSuccess = { _uiEvent.value = UiEvent(FeedDetailUiEvent.FeedDeleteComplete) },
+        onFailure = { _, _ -> _uiEvent.value = UiEvent(FeedDetailUiEvent.FeedDeleteFail) },
+    )
+
+    fun postComment(content: String): Job = commandAndRefresh(
+        command = { commentRepository.saveComment(content, feedId) },
+        onSuccess = { _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentPostComplete) },
+        onFailure = { _, _ ->
+            _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentPostFail)
+            logComment(content, feedId)
+        },
+        onStart = { _canSubmitComment.value = false },
+        onFinish = { _canSubmitComment.value = true },
+    )
+
+    fun updateComment(commentId: Long, content: String): Job = commandAndRefresh(
+        command = { commentRepository.updateComment(commentId, content) },
+        onSuccess = { _editingCommentId.value = null },
+        onFailure = { _, _ -> _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentUpdateFail) },
+        onStart = { _canSubmitComment.value = false },
+        onFinish = { _canSubmitComment.value = true },
+    )
+
+    fun deleteComment(commentId: Long): Job = commandAndRefresh(
+        command = { commentRepository.deleteComment(commentId) },
+        onFailure = { _, _ -> _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentDeleteFail) },
+    )
 
     fun setEditMode(isEditMode: Boolean, commentId: Long = -1) {
         if (!isEditMode) {
@@ -214,36 +173,22 @@ class FeedDetailViewModel @Inject constructor(
         _editingCommentId.value = commentId
     }
 
-    fun reportComment(commentId: Long) {
-        viewModelScope.launch {
-            _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.LOADING)
-            val authorId =
-                _feedDetail.value.comments.find { it.comment.id == commentId }?.comment?.writer?.id
-                    ?: return@launch
-            when (val result = commentRepository.reportComment(commentId, authorId, uid)) {
-                is Failure -> {
-                    if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
-                        _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportDuplicate)
-                    } else {
-                        _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportFail)
-                    }
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.SUCCESS)
-                }
-
-                NetworkError ->
-                    _feedDetail.value = _feedDetail.value.copy(fetchResult = FetchResult.ERROR)
-
-                is Success -> _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportComplete)
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(FeedDetailUiEvent.UnexpectedError(result.error.toString()))
+    fun reportComment(commentId: Long): Job = command(
+        command = {
+            val authorId = _comments.value[commentId]
+                ?.comment?.writer?.id
+                ?: throw IllegalArgumentException("화면에 없는 댓글을 지우려고 시도했습니다. 지우려는 댓글 아이디: $commentId")
+            commentRepository.reportComment(commentId, authorId, uid)
+        },
+        onSuccess = { _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportComplete) },
+        onFailure = { code, _ ->
+            if (code == REPORT_DUPLICATE_ERROR_CODE) {
+                _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportDuplicate)
+            } else {
+                _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportFail)
             }
-        }
-    }
-
-    fun highlightComment(commentId: Long) {
-        _feedDetail.value = _feedDetail.value.highlightComment(commentId)
-    }
+        },
+    )
 
     companion object {
         const val KEY_FEED_ID: String = "KEY_FEED_ID"

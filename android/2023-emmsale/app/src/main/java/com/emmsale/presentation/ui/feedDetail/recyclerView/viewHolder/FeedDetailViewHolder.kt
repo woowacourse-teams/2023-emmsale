@@ -3,11 +3,11 @@ package com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.emmsale.data.model.Feed
 import com.emmsale.databinding.ItemFeeddetailFeedDetailBinding
 import com.emmsale.presentation.common.extension.dp
 import com.emmsale.presentation.common.recyclerView.IntervalItemDecoration
 import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailImagesAdapter
-import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
 
 class FeedDetailViewHolder(
     private val binding: ItemFeeddetailFeedDetailBinding,
@@ -25,9 +25,9 @@ class FeedDetailViewHolder(
         }
     }
 
-    fun bind(feedDetailUiState: FeedDetailUiState) {
-        binding.uiState = feedDetailUiState
-        imageUrlsAdapter.submitList(feedDetailUiState.feedDetail.imageUrls)
+    fun bind(feed: Feed) {
+        binding.feed = feed
+        imageUrlsAdapter.submitList(feed.imageUrls)
     }
 
     companion object {

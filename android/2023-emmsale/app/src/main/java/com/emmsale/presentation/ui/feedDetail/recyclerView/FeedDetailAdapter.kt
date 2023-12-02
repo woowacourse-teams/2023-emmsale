@@ -3,13 +3,13 @@ package com.emmsale.presentation.ui.feedDetail.recyclerView
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.emmsale.data.model.Feed
 import com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder.FeedDetailViewHolder
-import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
 
 class FeedDetailAdapter(
     private val onProfileImageClick: (authorId: Long) -> Unit,
 ) : RecyclerView.Adapter<FeedDetailViewHolder>() {
-    private val items: MutableList<FeedDetailUiState> = mutableListOf()
+    private val items: MutableList<Feed> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedDetailViewHolder =
         FeedDetailViewHolder.from(parent, onProfileImageClick)
@@ -21,9 +21,9 @@ class FeedDetailAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setFeedDetail(feedDetailUiState: FeedDetailUiState) {
+    fun setFeedDetail(feed: Feed) {
         items.clear()
-        items.add(feedDetailUiState)
+        items.add(feed)
         notifyDataSetChanged()
     }
 }
