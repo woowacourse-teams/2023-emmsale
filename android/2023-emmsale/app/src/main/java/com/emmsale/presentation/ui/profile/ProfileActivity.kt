@@ -4,12 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityProfileBinding
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.CategoryTagChip
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
@@ -24,9 +23,9 @@ import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityProfileBinding.inflate(layoutInflater) }
-    private val viewModel: ProfileViewModel by viewModels()
+class ProfileActivity : NetworkActivity<ActivityProfileBinding>(R.layout.activity_profile) {
+
+    override val viewModel: ProfileViewModel by viewModels()
 
     private val menuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
@@ -43,7 +42,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun initDataBinding() {
-        binding.lifecycleOwner = this
         binding.viewModel = viewModel
     }
 
@@ -130,6 +128,7 @@ class ProfileActivity : AppCompatActivity() {
                     content.roomId,
                     content.otherId,
                 )
+                sendMessageDialog.clearText()
                 sendMessageDialog.dismiss()
             }
 
@@ -137,7 +136,6 @@ class ProfileActivity : AppCompatActivity() {
             ProfileUiEvent.None -> {}
             ProfileUiEvent.UnblockFail -> binding.root.showSnackBar(getString(R.string.profile_unblock_fail_message))
             ProfileUiEvent.UnblockSuccess -> binding.root.showSnackBar(getString(R.string.profile_unblock_complete_message))
-            is ProfileUiEvent.UnexpectedError -> showToast(content.errorMessage)
         }
     }
 

@@ -10,7 +10,7 @@ data class BlockedMemberUiState(
 ) {
     companion object {
         fun from(blockedMember: BlockedMember): BlockedMemberUiState = BlockedMemberUiState(
-            id = blockedMember.id,
+            id = blockedMember.blockedMemberId,
             blockId = blockedMember.blockId,
             name = blockedMember.memberName,
             profileImageUrl = blockedMember.profileImageUrl,

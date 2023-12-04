@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BlockedMemberResponse(
     @SerialName("blockMemberId")
-    val id: Long,
+    val blockedMemberId: Long,
     @SerialName("id")
     val blockId: Long,
     @SerialName("memberName")
