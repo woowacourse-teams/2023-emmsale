@@ -44,97 +44,111 @@ abstract class NetworkViewModel : ViewModel() {
 
     abstract fun refresh(): Job
 
+    protected fun <T : Any> requestNetwork(
+        request: suspend () -> ApiResponse<T>,
+        onSuccess: suspend (T) -> Unit,
+        onFailure: (code: Int, message: String?) -> Unit,
+        onLoading: suspend () -> Unit,
+        onNetworkError: () -> Unit,
+        onStart: () -> Unit,
+        onFinish: () -> Unit,
+    ): Job = viewModelScope.launch {
+        onStart()
+        val loadingJob = launch { onLoading() }
+        when (val result = request()) {
+            is Success -> onSuccess(result.data)
+            is Failure -> onFailure(result.code, result.message)
+            NetworkError -> {
+                onNetworkError()
+                if (_screenUiState.value == ScreenUiState.NETWORK_ERROR) {
+                    onFinish()
+                    return@launch
+                }
+            }
+
+            is Unexpected ->
+                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
+        }
+        loadingJob.cancel()
+        _screenUiState.value = ScreenUiState.NONE
+        onFinish()
+    }
+
     protected fun <T : Any> fetchData(
         fetchData: suspend () -> ApiResponse<T>,
         onSuccess: (T) -> Unit = {},
         onFailure: (code: Int, message: String?) -> Unit = { _, _ -> },
         onLoading: suspend () -> Unit = { changeToLoadingState() },
         onNetworkError: () -> Unit = ::changeToNetworkErrorState,
-    ): Job = viewModelScope.launch {
-        val loadingJob = launch { onLoading() }
-        when (val result = fetchData()) {
-            is Success -> onSuccess(result.data)
-            is Failure -> onFailure(result.code, result.message)
-            NetworkError -> {
-                onNetworkError()
-                return@launch
-            }
-
-            is Unexpected ->
-                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
-        }
-        loadingJob.cancel()
-        _screenUiState.value = ScreenUiState.NONE
-    }
+        onStart: () -> Unit = {},
+        onFinish: () -> Unit = {},
+    ): Job = requestNetwork(
+        request = { fetchData() },
+        onSuccess = { onSuccess(it) },
+        onFailure = { code, message -> onFailure(code, message) },
+        onLoading = { onLoading() },
+        onNetworkError = { onNetworkError() },
+        onStart = { onStart() },
+        onFinish = { onFinish() },
+    )
 
     protected fun <T : Any> refreshData(
         refresh: suspend () -> ApiResponse<T>,
         onSuccess: (T) -> Unit = {},
         onFailure: (code: Int, message: String?) -> Unit = { _, _ -> },
-    ): Job = viewModelScope.launch {
-        when (val result = refresh()) {
-            is Success -> onSuccess(result.data)
-            is Failure -> onFailure(result.code, result.message)
-            NetworkError -> {
-                dispatchNetworkErrorEvent()
-                return@launch
-            }
-
-            is Unexpected ->
-                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
-        }
-        _screenUiState.value = ScreenUiState.NONE
-    }
+        onLoading: suspend () -> Unit = {},
+        onNetworkError: () -> Unit = {},
+        onStart: () -> Unit = {},
+        onFinish: () -> Unit = {},
+    ): Job = requestNetwork(
+        request = { refresh() },
+        onSuccess = { onSuccess(it) },
+        onFailure = { code, message -> onFailure(code, message) },
+        onLoading = { onLoading() },
+        onNetworkError = { onNetworkError() },
+        onStart = { onStart() },
+        onFinish = { onFinish() },
+    )
 
     protected fun <T : Any> command(
         command: suspend () -> ApiResponse<T>,
         onSuccess: (T) -> Unit = {},
         onFailure: (code: Int, message: String?) -> Unit = { _, _ -> },
         onLoading: suspend () -> Unit = { delayLoading() },
+        onNetworkError: () -> Unit = ::dispatchNetworkErrorEvent,
         onStart: () -> Unit = {},
         onFinish: () -> Unit = {},
-    ): Job = viewModelScope.launch {
-        onStart()
-        val loadingJob = launch { onLoading() }
-        when (val result = command()) {
-            is Success -> onSuccess(result.data)
-            is Failure -> onFailure(result.code, result.message)
-            NetworkError -> dispatchNetworkErrorEvent()
-            is Unexpected ->
-                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
-        }
-        loadingJob.cancel()
-        _screenUiState.value = ScreenUiState.NONE
-        onFinish()
-    }
+    ): Job = requestNetwork(
+        request = { command() },
+        onSuccess = { onSuccess(it) },
+        onFailure = { code, message -> onFailure(code, message) },
+        onLoading = { onLoading() },
+        onNetworkError = { onNetworkError() },
+        onStart = { onStart() },
+        onFinish = { onFinish() },
+    )
 
     protected fun <T : Any> commandAndRefresh(
         command: suspend () -> ApiResponse<T>,
-        onSuccess: (T) -> Unit = {},
+        onSuccess: suspend (T) -> Unit = {},
         onFailure: (code: Int, message: String?) -> Unit = { _, _ -> },
         onLoading: suspend () -> Unit = { delayLoading() },
+        onNetworkError: () -> Unit = ::dispatchNetworkErrorEvent,
         onStart: () -> Unit = {},
         onFinish: () -> Unit = {},
         refresh: () -> Job = { this@NetworkViewModel.refresh() },
-    ): Job = viewModelScope.launch {
-        onStart()
-        val loadingJob = launch { onLoading() }
-        when (val result = command()) {
-            is Success -> {
-                refresh().join()
-                onSuccess(result.data)
-            }
-
-            is Failure -> onFailure(result.code, result.message)
-            NetworkError -> dispatchNetworkErrorEvent()
-
-            is Unexpected ->
-                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
-        }
-        loadingJob.cancel()
-        _screenUiState.value = ScreenUiState.NONE
-        onFinish()
-    }
+    ): Job = requestNetwork(
+        request = { command() },
+        onSuccess = {
+            refresh().join()
+            onSuccess(it)
+        },
+        onFailure = { code, message -> onFailure(code, message) },
+        onLoading = { onLoading() },
+        onNetworkError = { onNetworkError() },
+        onStart = { onStart() },
+        onFinish = { onFinish() },
+    )
 
     companion object {
         private const val LOADING_DELAY: Long = 1000
