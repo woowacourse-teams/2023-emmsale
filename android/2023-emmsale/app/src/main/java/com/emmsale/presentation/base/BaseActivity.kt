@@ -1,5 +1,6 @@
 package com.emmsale.presentation.base
 
+import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -11,5 +12,10 @@ abstract class BaseActivity<V : ViewDataBinding>(
 
     protected val binding: V by lazy {
         DataBindingUtil.inflate(layoutInflater, layoutResId, null, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding.lifecycleOwner = this
     }
 }
