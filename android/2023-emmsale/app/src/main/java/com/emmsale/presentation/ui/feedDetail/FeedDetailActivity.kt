@@ -60,6 +60,11 @@ class FeedDetailActivity :
         setupComments()
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        viewModel.refresh()
+    }
+
     private fun setUpDataBinding() {
         binding.lifecycleOwner = this
         binding.vm = viewModel
