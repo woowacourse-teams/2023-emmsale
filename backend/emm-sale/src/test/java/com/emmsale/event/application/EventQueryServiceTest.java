@@ -10,7 +10,6 @@ import static com.emmsale.event.EventFixture.안드로이드_컨퍼런스;
 import static com.emmsale.event.EventFixture.웹_컨퍼런스;
 import static com.emmsale.event.EventFixture.인프콘_2023;
 import static com.emmsale.event.domain.EventStatus.IN_PROGRESS;
-import static com.emmsale.event.exception.EventExceptionType.INVALID_DATE_FORMAT;
 import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.event.exception.EventExceptionType.START_DATE_AFTER_END_DATE;
 import static com.emmsale.image.ImageFixture.행사_이미지1;
@@ -25,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.EventSearchRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventStatus;
@@ -234,9 +234,17 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
           모바일_컨퍼런스,
           안드로이드_컨퍼런스, AI_아이디어_공모전);
 
+      final EventSearchRequest eventSearchRequest = new EventSearchRequest(
+          null,
+          null,
+          null,
+          null
+      );
+
       // when
-      final List<EventResponse> actualEvents = eventQueryService.findEvents(null, TODAY,
-          null, null, null, null, null);
+      final List<EventResponse> actualEvents = eventQueryService.findEvents(
+          eventSearchRequest, null,null, TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -252,11 +260,17 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스,
           안드로이드_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          null,
+          null,
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          null, null, null, null, null);
+          request, null, null, TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -271,11 +285,17 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       // given
       final List<EventResponse> expectedEvents = List.of(구름톤, AI_아이디어_공모전);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.COMPETITION,
+          null,
+          null,
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.COMPETITION,
-          TODAY,
-          null, null, null, null, null);
+          request, null, null, TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -291,11 +311,16 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스,
           안드로이드_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(EventType.CONFERENCE, null, null,
+          null);
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          "2023-07-01", "2023-07-31", null, null, null);
+          request,
+          LocalDate.of(2023, 7, 1),
+          LocalDate.of(2023, 7, 31),
+          TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -310,11 +335,20 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       // given
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 모바일_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          null,
+          null,
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          "2023-08-01", "2023-08-31", null, null, null);
+          request,
+          LocalDate.of(2023, 8, 1),
+          LocalDate.of(2023, 8, 31),
+          TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -329,11 +363,20 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       // given
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 안드로이드_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          null,
+          null,
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          "2023-06-01", "2023-06-30", null, null, null);
+          request,
+          LocalDate.of(2023, 6, 1),
+          LocalDate.of(2023, 6, 30),
+          TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -348,11 +391,20 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       // given
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          null,
+          null,
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          "2023-07-17", null, null, null, null);
+          request,
+          LocalDate.of(2023, 7, 17),
+          null,
+          TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -368,11 +420,20 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스,
           안드로이드_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          null,
+          null,
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          null, "2023-07-31", null, null, null);
+          request,
+          null,
+          LocalDate.of(2023, 7, 31),
+          TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -384,56 +445,44 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
     @Test
     @DisplayName("아무 행사도 없는 2023년 12월 행사를 조회하면, 빈 목록을 반환한다.")
     void findEvents_2023_12() {
-      // given, when
-      final List<EventResponse> actualEvents = eventQueryService.findEvents(
+      // given
+      final EventSearchRequest request = new EventSearchRequest(
           EventType.CONFERENCE,
-          TODAY,
-          "2023-12-01", "2023-12-31", null, null, null);
+          null,
+          null,
+          null
+      );
+
+      // when
+      final List<EventResponse> actualEvents = eventQueryService.findEvents(
+          request,
+          LocalDate.of(2023, 12, 1),
+          LocalDate.of(2023, 12, 31),
+          TODAY
+      );
 
       // then
       assertThat(actualEvents).isEmpty();
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"abcde", "00-0-0", "-1-1-1-1", "2023-02-30"})
-    @DisplayName("유효하지 않은 값이 시작일 정보로 들어오면 예외를 반환한다.")
-    void findEvents_start_date_fail(final String startDate) {
-      // given, when
-      final ThrowingCallable actual = () -> eventQueryService.findEvents(EventType.CONFERENCE,
-          TODAY,
-          startDate, "2023-07-31", null, null, null);
-
-      // then
-      assertThatThrownBy(actual)
-          .isInstanceOf(EventException.class)
-          .hasMessage(INVALID_DATE_FORMAT.errorMessage());
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"abcde", "00-0-0", "-1-1-1-1", "2023-02-30"})
-    @DisplayName("유효하지 않은 값이 종료일 값으로 들어오면 예외를 반환한다.")
-    void findEvents_end_date_fail(final String endDate) {
-      // given, when
-      final ThrowingCallable actual = () -> eventQueryService.findEvents(EventType.CONFERENCE,
-          TODAY,
-          "2023-07-01", endDate, null, null, null);
-
-      // then
-      assertThatThrownBy(actual)
-          .isInstanceOf(EventException.class)
-          .hasMessage(INVALID_DATE_FORMAT.errorMessage());
-    }
-
     @Test
     @DisplayName("시작일이 종료일보다 뒤에 있으면 예외를 반환한다.")
     void findEvents_start_after_end_fail() {
-      // given, when
-      final ThrowingCallable actual = () -> eventQueryService.findEvents(EventType.CONFERENCE,
-          TODAY,
-          "2023-07-16", "2023-07-15", null, null, null);
+      // given
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          null,
+          null,
+          null
+      );
+      final LocalDate startDate = LocalDate.of(2023, 7, 16);
+      final LocalDate endDate = LocalDate.of(2023, 7, 15);
 
-      // then
-      assertThatThrownBy(actual)
+      // when & then
+      assertThatThrownBy(() -> eventQueryService.findEvents(request,
+          startDate,
+          endDate,
+          TODAY))
           .isInstanceOf(EventException.class)
           .hasMessage(START_DATE_AFTER_END_DATE.errorMessage());
     }
@@ -444,11 +493,20 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       // given
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 모바일_컨퍼런스, 안드로이드_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          List.of("안드로이드"),
+          null,
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          null, null, List.of("안드로이드"), null, null);
+          request,
+          null,
+          null,
+          TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -464,11 +522,20 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, 모바일_컨퍼런스,
           안드로이드_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          List.of("안드로이드", "백엔드"),
+          null,
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          null, null, List.of("안드로이드", "백엔드"), null, null);
+          request,
+          null,
+          null,
+          TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -480,10 +547,21 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
     @Test
     @DisplayName("존재하지 않는 태그가 입력으로 들어오면 예외를 반환한다.")
     void findEvents_tag_filter_fail() {
-      // given, when
-      final ThrowingCallable actual = () -> eventQueryService.findEvents(EventType.CONFERENCE,
-          TODAY,
-          null, null, List.of("개발"), null, null);
+      // given
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          List.of("개발"),
+          null,
+          null
+      );
+
+      // when
+      final ThrowingCallable actual = () -> eventQueryService.findEvents(
+          request,
+          null,
+          null,
+          TODAY
+      );
 
       // then
       assertThatThrownBy(actual)
@@ -497,11 +575,20 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       // given
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          Collections.emptyList(),
+          List.of(IN_PROGRESS),
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          null, null, null, List.of(IN_PROGRESS), null);
+          request,
+          null,
+          null,
+          TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -516,11 +603,20 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       // given
       final List<EventResponse> expectedEvents = List.of(인프콘_2023, 웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          Collections.emptyList(),
+          List.of(EventStatus.UPCOMING, IN_PROGRESS),
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          null, null, null, List.of(EventStatus.UPCOMING, IN_PROGRESS), null);
+          request,
+          null,
+          null,
+          TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -535,11 +631,20 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       // given
       final List<EventResponse> expectedEvents = List.of(모바일_컨퍼런스);
 
+      final EventSearchRequest request = new EventSearchRequest(
+          EventType.CONFERENCE,
+          List.of("안드로이드", "백엔드"),
+          List.of(EventStatus.UPCOMING),
+          null
+      );
+
       // when
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
-          EventType.CONFERENCE,
-          TODAY,
-          "2023-09-01", "2023-09-30", List.of("안드로이드", "백엔드"), List.of(EventStatus.UPCOMING), null);
+          request,
+          LocalDate.of(2023, 9, 1),
+          LocalDate.of(2023, 9, 30),
+          TODAY
+      );
 
       // then
       assertThat(actualEvents)
@@ -561,10 +666,21 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
             모바일_컨퍼런스,
             안드로이드_컨퍼런스, AI_아이디어_공모전);
 
+        final EventSearchRequest request = new EventSearchRequest(
+            null,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            keyword
+        );
+
         // when
-        final List<EventResponse> actualEvents = eventQueryService.findEvents(null,
-            TODAY,
-            null, null, null, null, keyword);
+
+        final List<EventResponse> actualEvents = eventQueryService.findEvents(
+            request,
+            null,
+            null,
+            TODAY
+        );
 
         // then
         assertThat(actualEvents)
@@ -581,9 +697,21 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
         final List<EventResponse> expectedEvents = List.of(웹_컨퍼런스, AI_컨퍼런스, 모바일_컨퍼런스,
             안드로이드_컨퍼런스);
 
+        final EventSearchRequest request = new EventSearchRequest(
+            null,
+            Collections.emptyList(),
+            null,
+            keyword
+        );
+
         // when
-        final List<EventResponse> actualEvents = eventQueryService.findEvents(null,
-            TODAY, null, null, null, null, keyword);
+
+        final List<EventResponse> actualEvents = eventQueryService.findEvents(
+            request,
+            null,
+            null,
+            TODAY
+        );
 
         // then
         assertThat(actualEvents)
@@ -599,9 +727,21 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
         final String keyword = " 모 컨퍼";
         final List<EventResponse> expectedEvents = List.of(모바일_컨퍼런스);
 
+        final EventSearchRequest request = new EventSearchRequest(
+            null,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            keyword
+        );
+
         // when
-        final List<EventResponse> actualEvents = eventQueryService.findEvents(null,
-            TODAY, null, null, null, null, keyword);
+
+        final List<EventResponse> actualEvents = eventQueryService.findEvents(
+            request,
+            null,
+            null,
+            TODAY
+        );
 
         // then
         assertThat(actualEvents)
@@ -617,10 +757,21 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
         final String keyword = "프콘 ";
         final List<EventResponse> expectedEvents = List.of(인프콘_2023);
 
+        final EventSearchRequest request = new EventSearchRequest(
+            null,
+            Collections.emptyList(),
+            List.of(IN_PROGRESS),
+            keyword
+        );
+
         // when
-        final List<EventResponse> actualEvents = eventQueryService.findEvents(null,
-            TODAY,
-            null, null, null, List.of(IN_PROGRESS), keyword);
+
+        final List<EventResponse> actualEvents = eventQueryService.findEvents(
+            request,
+            null,
+            null,
+            TODAY
+        );
 
         // then
         assertThat(actualEvents)

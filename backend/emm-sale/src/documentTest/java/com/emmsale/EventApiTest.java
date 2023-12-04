@@ -9,12 +9,14 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.api.EventApi;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventResponse;
+import com.emmsale.event.application.dto.EventSearchRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventType;
@@ -22,6 +24,7 @@ import com.emmsale.event.domain.PaymentType;
 import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.application.dto.TagRequest;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -176,10 +179,9 @@ class EventApiTest extends MockMvcTestHelper {
             EventMode.ONLINE.getValue())
     );
 
-    Mockito.when(eventQueryService.findEvents(any(EventType.class),
-        any(LocalDateTime.class), eq("2023-07-01"),
-        eq("2023-07-31"),
-        eq(null), any(), eq("컨퍼"))).thenReturn(eventResponses);
+    Mockito.when(eventQueryService.findEvents(any(EventSearchRequest.class),
+        any(LocalDate.class), any(LocalDate.class), any(LocalDateTime.class)))
+        .thenReturn(eventResponses);
 
     // when & then
     mockMvc.perform(get("/events")
@@ -189,6 +191,7 @@ class EventApiTest extends MockMvcTestHelper {
             .param("statuses", "UPCOMING,IN_PROGRESS")
             .param("keyword", "컨퍼")
         )
+        .andDo(print())
         .andExpect(status().isOk())
         .andDo(MockMvcRestDocumentation.document("find-events", requestParameters,
             EVENT_RESPONSE_FILED));
@@ -269,7 +272,7 @@ class EventApiTest extends MockMvcTestHelper {
 
     //when & then
     result.andExpect(status().isOk())
-        .andDo(MockMvcResultHandlers.print())
+        .andDo(print())
         .andDo(MockMvcRestDocumentation.document("update-event", requestPartsSnippet,
             EVENT_DETAIL_RESPONSE_FILED));
 
@@ -289,7 +292,7 @@ class EventApiTest extends MockMvcTestHelper {
 
     //then
     result.andExpect(status().isNoContent())
-        .andDo(MockMvcResultHandlers.print()).andDo(
+        .andDo(print()).andDo(
             MockMvcRestDocumentation.document("delete-event"));
   }
 
@@ -370,7 +373,7 @@ class EventApiTest extends MockMvcTestHelper {
 
       //then
       result.andExpect(status().isCreated())
-          .andDo(MockMvcResultHandlers.print())
+          .andDo(print())
           .andDo(MockMvcRestDocumentation.document("add-event", EVENT_DETAIL_RESPONSE_FILED,
               requestPartsSnippet));
     }

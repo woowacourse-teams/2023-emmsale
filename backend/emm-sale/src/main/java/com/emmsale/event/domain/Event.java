@@ -146,6 +146,10 @@ public class Event extends BaseEntity {
     return !this.getId().equals(eventId);
   }
 
+  public EventStatus calculateStatus(final LocalDateTime now) {
+    return eventPeriod.calculateEventStatus(now);
+  }
+
   public List<String> extractTags() {
     return tags.stream()
         .map(tag -> tag.getTag().getName())

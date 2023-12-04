@@ -4,13 +4,13 @@ import com.emmsale.event.application.EventCommandService;
 import com.emmsale.event.application.EventQueryService;
 import com.emmsale.event.application.dto.EventDetailRequest;
 import com.emmsale.event.application.dto.EventResponse;
-import com.emmsale.event.domain.EventStatus;
-import com.emmsale.event.domain.EventType;
+import com.emmsale.event.application.dto.EventSearchRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,16 +41,13 @@ public class EventApi {
 
   @GetMapping
   public ResponseEntity<List<EventResponse>> findEvents(
-      @RequestParam(required = false) final EventType category,
-      @RequestParam(name = "start_date", required = false) final String startDate,
-      @RequestParam(name = "end_date", required = false) final String endDate,
-      @RequestParam(required = false) final List<String> tags,
-      @RequestParam(required = false) final List<EventStatus> statuses,
-      @RequestParam(required = false) final String keyword) {
+      final EventSearchRequest eventSearchRequest,
+      @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam(name = "start_date", required = false) final LocalDate startDate,
+      @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam(name = "end_date", required = false) final LocalDate endDate
+  ) {
     return ResponseEntity.ok(
-        eventQueryService.findEvents(category, LocalDateTime.now(), startDate, endDate, tags,
-            statuses,
-            keyword));
+        eventQueryService.findEvents(eventSearchRequest, startDate, endDate, LocalDateTime.now())
+    );
   }
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
