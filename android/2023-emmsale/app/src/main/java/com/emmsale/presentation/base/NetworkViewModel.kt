@@ -50,8 +50,8 @@ abstract class NetworkViewModel : ViewModel() {
         onFailure: (code: Int, message: String?) -> Unit,
         onLoading: suspend () -> Unit,
         onNetworkError: () -> Unit,
-        onStart: () -> Unit,
-        onFinish: () -> Unit,
+        onStart: () -> Unit = {},
+        onFinish: () -> Unit = {},
     ): Job = viewModelScope.launch {
         onStart()
         val loadingJob = launch { onLoading() }
