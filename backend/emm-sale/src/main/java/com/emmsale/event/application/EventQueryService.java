@@ -4,12 +4,12 @@ import static com.emmsale.event.exception.EventExceptionType.NOT_FOUND_EVENT;
 import static com.emmsale.tag.exception.TagExceptionType.NOT_FOUND_TAG;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
 
 import com.emmsale.event.application.dto.EventResponse;
 import com.emmsale.event.application.dto.EventSearchRequest;
 import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
+import com.emmsale.event.domain.Events;
 import com.emmsale.event.domain.repository.EventRepository;
 import com.emmsale.event.domain.repository.EventSpecification;
 import com.emmsale.event.exception.EventException;
@@ -21,11 +21,8 @@ import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -57,23 +54,19 @@ public class EventQueryService {
   ) {
     validateTags(request.getTags());
 
-    final Specification<Event> spec = Specification
-        .where(EventSpecification.filterByCategory(request.getCategory()))
-        .and(EventSpecification.filterByTags(request.getTags()))
-        .and(EventSpecification.filterByPeriod(startDate, endDate))
-        .and(EventSpecification.filterByNameContainsSearchKeywords(request.getKeyword()));
+    final Specification<Event> spec = specificationEvents(request, startDate, endDate);
 
-    final List<Event> events = eventRepository.findAll(spec);
+    final Events events = new Events(eventRepository.findAll(spec));
+    final EnumMap<EventStatus, List<Event>> map = events.groupByEventStatus(
+        request.getStatuses(),
+        nowDateTime
+    );
+    final List<Long> eventIds = events.getEventIds();
 
-    final EnumMap<EventStatus, List<Event>> eventsForEventStatus
-        = groupByEventStatus(nowDateTime, events);
-
-    final List<Long> eventIds = events.stream()
-        .map(Event::getId)
-        .collect(Collectors.toUnmodifiableList());
-
-    return filterByStatuses(request.getStatuses(), eventsForEventStatus,
-        imageQueryService.findImagesPerContentId(ImageType.EVENT, eventIds));
+    return EventResponse.mergeEventResponses(
+        map,
+        imageQueryService.findImagesPerContentId(ImageType.EVENT, eventIds)
+    );
   }
 
   private void validateTags(final List<String> tagNames) {
@@ -89,44 +82,12 @@ public class EventQueryService {
     }
   }
 
-  private EnumMap<EventStatus, List<Event>> groupByEventStatus(final LocalDateTime nowDateTime,
-      final List<Event> events) {
-    return events.stream()
-        .sorted(comparing(event -> event.getEventPeriod().getStartDate()))
-        .collect(
-            groupingBy(event -> event.calculateStatus(nowDateTime),
-                () -> new EnumMap<>(EventStatus.class), toList())
-        );
-  }
-
-  private List<EventResponse> filterByStatuses(
-      final List<EventStatus> statuses,
-      final EnumMap<EventStatus, List<Event>> eventsForEventStatus,
-      final Map<Long, AllImagesOfContent> imagesPerEventId
-  ) {
-    if (isExistStatusName(statuses)) {
-      return filterEventResponseByStatuses(statuses, eventsForEventStatus, imagesPerEventId);
-    }
-    return EventResponse.mergeEventResponses(eventsForEventStatus, imagesPerEventId);
-  }
-
-  private boolean isExistStatusName(final List<EventStatus> statuses) {
-    return statuses != null && !statuses.isEmpty();
-  }
-
-  private List<EventResponse> filterEventResponseByStatuses(
-      final List<EventStatus> statuses,
-      final EnumMap<EventStatus, List<Event>> eventsForEventStatus,
-      final Map<Long, AllImagesOfContent> imagesPerEventId
-  ) {
-    return eventsForEventStatus.entrySet()
-        .stream()
-        .filter(entry -> statuses.contains(entry.getKey()))
-        .map(entry -> EventResponse.makeEventResponsesByStatus(entry.getValue(),
-            imagesPerEventId))
-        .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
-          combinedEvents.addAll(eventsToAdd);
-          return combinedEvents;
-        });
+  private static Specification<Event> specificationEvents(final EventSearchRequest request,
+      final LocalDate startDate, final LocalDate endDate) {
+    return Specification
+        .where(EventSpecification.filterByCategory(request.getCategory()))
+        .and(EventSpecification.filterByTags(request.getTags()))
+        .and(EventSpecification.filterByPeriod(startDate, endDate))
+        .and(EventSpecification.filterByNameContainsSearchKeywords(request.getKeyword()));
   }
 }

@@ -67,7 +67,19 @@ public class EventResponse {
     );
   }
 
-  public static List<EventResponse> makeEventResponsesByStatus(
+  public static List<EventResponse> mergeEventResponses(
+      final Map<EventStatus, List<Event>> groupByEventStatus,
+      final Map<Long, AllImagesOfContent> imagesPerEventId
+  ) {
+    return groupByEventStatus.values().stream()
+        .map(events -> makeEventResponsesByStatus(events, imagesPerEventId))
+        .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
+          combinedEvents.addAll(eventsToAdd);
+          return combinedEvents;
+        });
+  }
+
+  private static List<EventResponse> makeEventResponsesByStatus(
       final List<Event> events,
       final Map<Long, AllImagesOfContent> imagesPerEventId
   ) {
@@ -82,17 +94,5 @@ public class EventResponse {
   ) {
     final AllImagesOfContent allImageUrls = imagesPerEventId.get(event.getId());
     return EventResponse.from(event, allImageUrls);
-  }
-
-  public static List<EventResponse> mergeEventResponses(
-      final Map<EventStatus, List<Event>> groupByEventStatus,
-      final Map<Long, AllImagesOfContent> imagesPerEventId
-  ) {
-    return groupByEventStatus.values().stream()
-        .map(events -> makeEventResponsesByStatus(events, imagesPerEventId))
-        .reduce(new ArrayList<>(), (combinedEvents, eventsToAdd) -> {
-          combinedEvents.addAll(eventsToAdd);
-          return combinedEvents;
-        });
   }
 }
