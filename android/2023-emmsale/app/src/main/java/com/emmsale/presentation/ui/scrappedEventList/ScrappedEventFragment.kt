@@ -29,7 +29,7 @@ class ScrappedEventFragment : NetworkFragment<FragmentScrappedEventBinding>() {
 
     override fun onResume() {
         super.onResume()
-        if (viewModel.isFirstFetch) viewModel.fetchScrappedEvents() else viewModel.refresh()
+        viewModel.refresh()
     }
 
     private fun setupBinding() {
