@@ -76,12 +76,10 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
     }
 
     private fun navigateToPostedPage() {
-        startActivity(
-            RecruitmentPostDetailActivity.getIntent(
-                this,
-                viewModel.eventId,
-                viewModel.postedRecruitmentId.value,
-            ),
+        RecruitmentPostDetailActivity.startActivity(
+            context = this,
+            eventId = viewModel.eventId,
+            recruitmentId = viewModel.postedRecruitmentId.value,
         )
     }
 
@@ -105,7 +103,6 @@ class RecruitmentPostWritingActivity : AppCompatActivity() {
             val content = binding.etRecruitmentwriting.text.toString()
             if (content.isEmpty()) {
                 binding.root.showSnackBar(getString(R.string.recruitmentpostwriting_no_content_error_message))
-                true
             }
             when (viewModel.recruitmentWriting.value.writingMode) {
                 EDIT -> viewModel.editRecruitment(content)

@@ -55,13 +55,12 @@ class MyRecruitmentActivity : AppCompatActivity() {
     }
 
     private fun navigateToDetail(eventId: Long, recruitmentId: Long) {
-        val intent = RecruitmentPostDetailActivity.getIntent(
+        RecruitmentPostDetailActivity.startActivity(
             this,
             eventId = eventId,
             recruitmentId = recruitmentId,
             isNavigatedFromMyPost = true,
         )
-        fetchByResultActivityLauncher.launch(intent)
     }
 
     private fun initBackPressButton() {

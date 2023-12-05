@@ -218,17 +218,17 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
     companion object {
         private const val FROM_MY_POST_KEY = "FROM_MY_POST_KEY"
 
-        fun getIntent(
+        fun startActivity(
             context: Context,
             eventId: Long,
             recruitmentId: Long,
             isNavigatedFromMyPost: Boolean = false,
-        ): Intent {
-            val intent = Intent(context, RecruitmentPostDetailActivity::class.java)
-            intent.putExtra(EVENT_ID_KEY, eventId)
-            intent.putExtra(RECRUITMENT_ID_KEY, recruitmentId)
-            intent.putExtra(FROM_MY_POST_KEY, isNavigatedFromMyPost)
-            return intent
+        ) {
+            Intent(context, RecruitmentPostDetailActivity::class.java)
+                .putExtra(EVENT_ID_KEY, eventId)
+                .putExtra(RECRUITMENT_ID_KEY, recruitmentId)
+                .putExtra(FROM_MY_POST_KEY, isNavigatedFromMyPost)
+                .run { context.startActivity(this) }
         }
     }
 }

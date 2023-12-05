@@ -5,9 +5,11 @@
 
     <data>
 
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
+
         <variable
             name="recruitment"
-            type="com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostUiState" />
+            type="com.emmsale.data.model.Recruitment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +24,7 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="18dp"
             android:fontFamily="@font/nanum_square_bold"
-            android:text="@{recruitment.name}"
+            android:text="@{recruitment.writer.name}"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
             android:fontFamily="@font/nanum_square_regular"
-            android:text="@{recruitment.updatedAt}"
+            app:dateText="@{recruitment.updatedDate}"
+            app:dateTimeFormatter="@{DateTimePattern.YEAR_DASH_MONTH_DASH_DAY}"
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_eventrecruitment_membername"

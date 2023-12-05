@@ -3,26 +3,26 @@ package com.emmsale.presentation.ui.recruitmentList.recyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.emmsale.data.model.Recruitment
 import com.emmsale.databinding.ItemRecruitmentBinding
-import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostUiState
 
 class RecruitmentViewHolder(
     private val binding: ItemRecruitmentBinding,
-    private val navigateToDetail: (RecruitmentPostUiState) -> Unit,
+    private val navigateToDetail: (Recruitment) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
         itemView.setOnClickListener { navigateToDetail(binding.recruitment!!) }
     }
 
-    fun bind(recruitment: RecruitmentPostUiState) {
+    fun bind(recruitment: Recruitment) {
         binding.recruitment = recruitment
     }
 
     companion object {
         fun create(
             parent: ViewGroup,
-            navigateToDetail: (RecruitmentPostUiState) -> Unit,
+            navigateToDetail: (Recruitment) -> Unit,
         ): RecruitmentViewHolder {
             val binding = ItemRecruitmentBinding.inflate(
                 LayoutInflater.from(parent.context),
