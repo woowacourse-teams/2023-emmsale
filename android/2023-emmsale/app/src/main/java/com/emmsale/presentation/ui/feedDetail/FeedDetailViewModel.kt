@@ -14,7 +14,7 @@ import com.emmsale.data.model.Feed
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.CommonUiEvent
 import com.emmsale.presentation.common.ScreenUiState
 import com.emmsale.presentation.common.UiEvent
@@ -36,7 +36,7 @@ class FeedDetailViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val commentRepository: CommentRepository,
     private val tokenRepository: TokenRepository,
-) : NetworkViewModel() {
+) : RefreshableViewModel() {
 
     val feedId = savedStateHandle[KEY_FEED_ID] ?: DEFAULT_FEED_ID
 

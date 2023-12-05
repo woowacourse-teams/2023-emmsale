@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.map
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
@@ -22,7 +22,7 @@ class ChildCommentViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
-) : NetworkViewModel() {
+) : RefreshableViewModel() {
 
     var isAlreadyFirstFetched: Boolean by vetoable(false) { _, _, newValue ->
         newValue
@@ -125,7 +125,5 @@ class ChildCommentViewModel @Inject constructor(
         private const val INVALID_COMMENT_ID: Long = -1
 
         private const val REPORT_DUPLICATE_ERROR_CODE = 400
-
-        private const val LOADING_DELAY: Long = 1000
     }
 }

@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
@@ -21,7 +21,7 @@ class RecruitmentPostDetailViewModel @Inject constructor(
     private val recruitmentRepository: RecruitmentRepository,
     private val messageRoomRepository: MessageRoomRepository,
     tokenRepository: TokenRepository,
-) : NetworkViewModel() {
+) : RefreshableViewModel() {
     val eventId: Long = requireNotNull(savedStateHandle[EVENT_ID_KEY]) {
         "[ERROR] 행사 아이디를 가져오지 못했어요."
     }

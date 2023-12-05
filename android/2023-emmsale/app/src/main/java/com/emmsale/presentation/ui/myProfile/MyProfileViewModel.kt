@@ -2,7 +2,7 @@ package com.emmsale.presentation.ui.myProfile
 
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.ui.myProfile.uiState.MyProfileUiState
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class MyProfileViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
-) : NetworkViewModel() {
+) : RefreshableViewModel() {
 
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 

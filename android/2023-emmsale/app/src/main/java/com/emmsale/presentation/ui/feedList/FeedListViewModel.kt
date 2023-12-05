@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.feedList
 import androidx.lifecycle.SavedStateHandle
 import com.emmsale.data.model.Feed
 import com.emmsale.data.repository.interfaces.FeedRepository
-import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class FeedListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val feedRepository: FeedRepository,
-) : NetworkViewModel() {
+) : RefreshableViewModel() {
     val eventId: Long = savedStateHandle[EVENT_ID_KEY] ?: DEFAULT_EVENT_ID
 
     private val _feeds = NotNullMutableLiveData(listOf<Feed>())

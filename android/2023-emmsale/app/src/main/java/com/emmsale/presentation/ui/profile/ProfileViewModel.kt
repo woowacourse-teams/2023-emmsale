@@ -9,7 +9,7 @@ import com.emmsale.data.repository.interfaces.BlockedMemberRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.ScreenUiState
 import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -29,7 +29,7 @@ class ProfileViewModel @Inject constructor(
     private val memberRepository: MemberRepository,
     private val messageRoomRepository: MessageRoomRepository,
     private val blockedMemberRepository: BlockedMemberRepository,
-) : NetworkViewModel() {
+) : RefreshableViewModel() {
     private val memberId: Long = requireNotNull(savedStateHandle[KEY_MEMBER_ID]) {
         "[ERROR] 멤버 아이디를 가져오지 못했어요."
     }

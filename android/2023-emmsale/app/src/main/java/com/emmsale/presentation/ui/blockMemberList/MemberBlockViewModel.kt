@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.blockMemberList
 import androidx.lifecycle.LiveData
 import com.emmsale.data.model.BlockedMember
 import com.emmsale.data.repository.interfaces.BlockedMemberRepository
-import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MemberBlockViewModel @Inject constructor(
     private val blockedMemberRepository: BlockedMemberRepository,
-) : NetworkViewModel() {
+) : RefreshableViewModel() {
     private val _blockedMembers = NotNullMutableLiveData(listOf<BlockedMember>())
     val blockedMembers: NotNullLiveData<List<BlockedMember>> = _blockedMembers
 

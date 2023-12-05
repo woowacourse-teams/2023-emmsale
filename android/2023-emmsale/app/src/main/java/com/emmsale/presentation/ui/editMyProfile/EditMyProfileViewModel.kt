@@ -6,7 +6,7 @@ import com.emmsale.data.model.Member
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
@@ -24,7 +24,7 @@ class EditMyProfileViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val activityRepository: ActivityRepository,
-) : NetworkViewModel() {
+) : RefreshableViewModel() {
 
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 

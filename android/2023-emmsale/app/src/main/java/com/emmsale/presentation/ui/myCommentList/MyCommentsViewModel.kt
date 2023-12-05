@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.myCommentList
 import com.emmsale.data.model.Comment
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class MyCommentsViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
-) : NetworkViewModel() {
+) : RefreshableViewModel() {
 
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 

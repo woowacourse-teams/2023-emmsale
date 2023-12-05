@@ -45,13 +45,12 @@ class RecruitmentPostDetailActivity :
 
     private val sendMessageDialog: SendMessageDialog by lazy { SendMessageDialog() }
 
-    private val fetchByResultActivityLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-        ) { result ->
-            if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
-            viewModel.refresh()
-        }
+    private val fetchByResultActivityLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
+        viewModel.refresh()
+    }
 
     private fun showDeleteDialog() {
         WarningDialog(
