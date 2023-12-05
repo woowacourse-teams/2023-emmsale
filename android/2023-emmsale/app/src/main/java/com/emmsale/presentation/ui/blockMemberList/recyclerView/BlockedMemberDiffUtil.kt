@@ -1,16 +1,16 @@
 package com.emmsale.presentation.ui.blockMemberList.recyclerView
 
 import androidx.recyclerview.widget.DiffUtil
-import com.emmsale.presentation.ui.blockMemberList.uiState.BlockedMemberUiState
+import com.emmsale.data.model.BlockedMember
 
-object BlockedMemberDiffUtil : DiffUtil.ItemCallback<BlockedMemberUiState>() {
+object BlockedMemberDiffUtil : DiffUtil.ItemCallback<BlockedMember>() {
     override fun areItemsTheSame(
-        oldItem: BlockedMemberUiState,
-        newItem: BlockedMemberUiState,
-    ): Boolean = oldItem.id == newItem.id
+        oldItem: BlockedMember,
+        newItem: BlockedMember,
+    ): Boolean = oldItem.blockId == newItem.blockId
 
     override fun areContentsTheSame(
-        oldItem: BlockedMemberUiState,
-        newItem: BlockedMemberUiState,
+        oldItem: BlockedMember,
+        newItem: BlockedMember,
     ): Boolean = oldItem == newItem
 }

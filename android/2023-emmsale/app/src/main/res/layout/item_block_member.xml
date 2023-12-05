@@ -10,7 +10,7 @@
 
         <variable
             name="blockedMember"
-            type="com.emmsale.presentation.ui.blockMemberList.uiState.BlockedMemberUiState" />
+            type="com.emmsale.data.model.BlockedMember" />
 
         <variable
             name="onUnblockMemberClick"
@@ -44,7 +44,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="@{blockedMember.name}"
+            android:text="@{blockedMember.memberName}"
             android:textAppearance="@style/KerdyTextStyleBlackBold15"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

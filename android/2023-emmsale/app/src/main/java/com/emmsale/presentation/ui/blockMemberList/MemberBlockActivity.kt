@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMemberBlockBinding
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.ui.blockMemberList.recyclerView.BlockedMemberAdapter
@@ -14,9 +14,10 @@ import com.emmsale.presentation.ui.blockMemberList.uiState.BlockedMembersUiEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MemberBlockActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityMemberBlockBinding.inflate(layoutInflater) }
-    private val viewModel: MemberBlockViewModel by viewModels()
+class MemberBlockActivity :
+    NetworkActivity<ActivityMemberBlockBinding>(R.layout.activity_member_block) {
+
+    override val viewModel: MemberBlockViewModel by viewModels()
     private val blockedMemberAdapter: BlockedMemberAdapter by lazy { BlockedMemberAdapter(::showUnblockMemberDialog) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,27 +47,22 @@ class MemberBlockActivity : AppCompatActivity() {
     }
 
     private fun setupBlockedMembersObserver() {
-        viewModel.blockedMembers.observe(this) { uiState ->
-            if (!uiState.isLoading) blockedMemberAdapter.submitList(uiState.blockedMembers)
+        viewModel.blockedMembers.observe(this) {
+            blockedMemberAdapter.submitList(it)
         }
     }
 
     private fun setupUiEvent() {
-        viewModel.event.observe(this) {
+        viewModel.uiEvent.observe(this) {
             handleEvent(it)
         }
     }
 
-    private fun handleEvent(event: BlockedMembersUiEvent?) {
-        if (event == null) return
-        when (event) {
-            BlockedMembersUiEvent.DELETE_ERROR -> showBlockedMemberDeletingErrorMessage()
+    private fun handleEvent(uiEvent: BlockedMembersUiEvent) {
+        when (uiEvent) {
+            BlockedMembersUiEvent.DeleteFail -> binding.root.showSnackBar(R.string.memberblock_unblock_member_failed_message)
+            BlockedMembersUiEvent.FetchFail -> binding.root.showSnackBar(R.string.memberblock_loading_blocked_members_failed_message)
         }
-        viewModel.resetEvent()
-    }
-
-    private fun showBlockedMemberDeletingErrorMessage() {
-        binding.root.showSnackBar(R.string.memberblock_unblock_member_failed_message)
     }
 
     private fun showUnblockMemberDialog(blockId: Long) {

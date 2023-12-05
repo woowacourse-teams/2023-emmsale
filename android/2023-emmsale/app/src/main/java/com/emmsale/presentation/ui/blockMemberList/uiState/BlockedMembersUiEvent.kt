@@ -1,5 +1,6 @@
 package com.emmsale.presentation.ui.blockMemberList.uiState
 
-enum class BlockedMembersUiEvent {
-    DELETE_ERROR,
+sealed interface BlockedMembersUiEvent {
+    object FetchFail : BlockedMembersUiEvent
+    object DeleteFail : BlockedMembersUiEvent
 }

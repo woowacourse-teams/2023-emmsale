@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
+import com.emmsale.data.model.BlockedMember
 import com.emmsale.databinding.ItemBlockMemberBinding
-import com.emmsale.presentation.ui.blockMemberList.uiState.BlockedMemberUiState
 
 class BlockedMemberViewHolder(
     parent: ViewGroup,
@@ -19,7 +19,7 @@ class BlockedMemberViewHolder(
         binding.onUnblockMemberClick = onUnblockMemberClick
     }
 
-    fun bind(blockedMember: BlockedMemberUiState) {
+    fun bind(blockedMember: BlockedMember) {
         binding.blockedMember = blockedMember
     }
 }
