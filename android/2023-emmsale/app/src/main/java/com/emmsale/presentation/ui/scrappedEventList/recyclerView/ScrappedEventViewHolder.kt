@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
+import com.emmsale.data.model.Event
 import com.emmsale.databinding.ItemScrappedEventBinding
-import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState
 
 class ScrappedEventViewHolder(
     parent: ViewGroup,
-    onClickEvent: (ScrappedEventUiState) -> Unit,
+    onClickEvent: (Event) -> Unit,
 ) : ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_scrapped_event, parent, false),
 ) {
@@ -19,7 +19,7 @@ class ScrappedEventViewHolder(
         binding.onClickScrappedEvent = onClickEvent
     }
 
-    fun bind(event: ScrappedEventUiState) {
+    fun bind(event: Event) {
         binding.event = event
     }
 }

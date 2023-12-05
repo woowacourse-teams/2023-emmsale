@@ -4,20 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
+import com.emmsale.data.model.Event
 import com.emmsale.databinding.FragmentScrappedEventBinding
-import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.CommonUiEvent
+import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.common.ScrollTopListener
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.scrappedEventList.recyclerView.ScrappedEventAdapter
-import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
+class ScrappedEventFragment : NetworkFragment<FragmentScrappedEventBinding>() {
     override val layoutResId: Int = R.layout.fragment_scrapped_event
-    private val viewModel: ScrappedEventViewModel by viewModels()
+    override val viewModel: ScrappedEventViewModel by viewModels()
 
     private val scrappedEventsAdapter: ScrappedEventAdapter by lazy {
         ScrappedEventAdapter(::showEventDetail)
@@ -27,17 +25,11 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
         super.onViewCreated(view, savedInstanceState)
         setupBinding()
         observeScrappedEvents()
-        observeCommonUiEvent()
     }
 
     override fun onResume() {
         super.onResume()
-        if (viewModel.isFirstFetch) {
-            viewModel.fetchScrappedEvents()
-            viewModel.isFirstFetch = false
-        } else {
-            viewModel.refresh()
-        }
+        if (viewModel.isFirstFetch) viewModel.fetchScrappedEvents() else viewModel.refresh()
     }
 
     private fun setupBinding() {
@@ -50,20 +42,11 @@ class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
 
     private fun observeScrappedEvents() {
         viewModel.scrappedEvents.observe(viewLifecycleOwner) { scrappedEvents ->
-            scrappedEventsAdapter.submitList(scrappedEvents.list)
+            scrappedEventsAdapter.submitList(scrappedEvents)
         }
     }
 
-    private fun observeCommonUiEvent() {
-        viewModel.commonUiEvent.observe(viewLifecycleOwner) { commonUiEvent ->
-            when (commonUiEvent) {
-                CommonUiEvent.RequestFailByNetworkError -> showToast(getString(R.string.all_network_error_message))
-                is CommonUiEvent.Unexpected -> showToast(getString(R.string.all_network_error_message))
-            }
-        }
-    }
-
-    private fun showEventDetail(scrappedEventUiState: ScrappedEventUiState) {
-        EventDetailActivity.startActivity(requireContext(), scrappedEventUiState.event.id)
+    private fun showEventDetail(scrappedEvent: Event) {
+        EventDetailActivity.startActivity(requireContext(), scrappedEvent.id)
     }
 }
