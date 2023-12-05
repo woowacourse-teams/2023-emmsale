@@ -9,10 +9,10 @@ import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showSnackBar
@@ -23,14 +23,15 @@ import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapter
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.FieldsAdapter
-import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileErrorEvent
+import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileUiEvent
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditMyProfileActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityEditMyProfileBinding.inflate(layoutInflater) }
-    private val viewModel: EditMyProfileViewModel by viewModels()
+class EditMyProfileActivity :
+    NetworkActivity<ActivityEditMyProfileBinding>(R.layout.activity_edit_my_profile) {
+
+    override val viewModel: EditMyProfileViewModel by viewModels()
 
     private val fieldsDialog by lazy { FieldsAddBottomDialogFragment() }
     private val educationsDialog by lazy { EducationsAddBottomDialogFragment() }
@@ -218,20 +219,18 @@ class EditMyProfileActivity : AppCompatActivity() {
     }
 
     private fun setupErrorsUiLogic() {
-        viewModel.errorEvents.observe(this) {
+        viewModel.uiEvent.observe(this) {
             handleErrors(it)
         }
     }
 
-    private fun handleErrors(errorEvent: EditMyProfileErrorEvent?) {
-        when (errorEvent) {
-            EditMyProfileErrorEvent.DESCRIPTION_UPDATE -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_description_error_message))
-            EditMyProfileErrorEvent.ACTIVITY_REMOVE -> binding.root.showSnackBar(getString(R.string.editmyprofile_activity_remove_error_message))
-            EditMyProfileErrorEvent.ACTIVITIES_ADD -> binding.root.showSnackBar(getString(R.string.editmyprofile_acitivities_add_error_message))
-            EditMyProfileErrorEvent.PROFILE_IMAGE_UPDATE -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_profile_image_error_message))
-            else -> return
+    private fun handleErrors(uiEvent: EditMyProfileUiEvent) {
+        when (uiEvent) {
+            EditMyProfileUiEvent.ActivitiesAddFail -> binding.root.showSnackBar(getString(R.string.editmyprofile_acitivities_add_error_message))
+            EditMyProfileUiEvent.ActivityRemoveFail -> binding.root.showSnackBar(getString(R.string.editmyprofile_activity_remove_error_message))
+            EditMyProfileUiEvent.DescriptionUpdateFail -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_description_error_message))
+            EditMyProfileUiEvent.ProfileImageUpdateFail -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_profile_image_error_message))
         }
-        viewModel.removeError()
     }
 
     companion object {

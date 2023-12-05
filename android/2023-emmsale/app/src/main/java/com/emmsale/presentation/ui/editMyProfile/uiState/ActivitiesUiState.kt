@@ -6,8 +6,6 @@ import com.emmsale.data.model.ActivityType.EDUCATION
 import com.emmsale.data.model.ActivityType.INTEREST_FIELD
 
 data class ActivitiesUiState(
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
     val activities: List<ActivityUiState> = emptyList(),
 ) {
     val fields = activities.filter { it.activity.activityType == INTEREST_FIELD }
@@ -30,22 +28,8 @@ data class ActivitiesUiState(
             .filterNot { myActivities.contains(it) }
             .map { ActivityUiState(it, false) }
 
-        return copy(
-            isLoading = false,
-            isError = false,
-            activities = unSelectedActivities,
-        )
+        return ActivitiesUiState(unSelectedActivities)
     }
-
-    fun changeToErrorState(): ActivitiesUiState = copy(
-        isLoading = false,
-        isError = true,
-    )
-
-    fun changeToLoadingState(): ActivitiesUiState = copy(
-        isLoading = true,
-        isError = false,
-    )
 
     fun toggleIsSelected(activityId: Long): ActivitiesUiState = copy(
         activities = activities.map { if (it.activity.id == activityId) it.toggleSelection() else it },

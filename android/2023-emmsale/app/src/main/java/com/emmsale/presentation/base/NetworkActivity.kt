@@ -12,7 +12,7 @@ abstract class NetworkActivity<V : ViewDataBinding>(
     @LayoutRes layoutResId: Int,
 ) : BaseActivity<V>(layoutResId) {
 
-    abstract val viewModel: NetworkViewModel
+    protected abstract val viewModel: NetworkViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
