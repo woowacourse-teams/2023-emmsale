@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.common.FetchResult" />
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <variable
             name="vm"
@@ -42,21 +41,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.feeds.fetchResult == FetchResult.LOADING}"
+            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
             tools:visibility="gone" />
 
-        <include
-            layout="@layout/layout_all_error_screen"
-            android:background="@color/white"
-            android:clickable="true"
-            app:visible="@{vm.feeds.fetchResult == FetchResult.ERROR}"
-            bind:viewModel="@{vm}"
-            tools:visibility="gone" />
+        <com.emmsale.presentation.common.views.NetworkErrorView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:visible="@{vm.screenUiState == ScreenUiState.NETWORK_ERROR}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:onRefresh="@{() -> vm.refresh()}"/>
 
         <androidx.core.widget.NestedScrollView
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.feeds.feeds.empty &amp;&amp; vm.feeds.fetchResult == FetchResult.SUCCESS}"
+            app:visible="@{vm.feeds.empty &amp;&amp; vm.screenUiState == ScreenUiState.NONE}"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

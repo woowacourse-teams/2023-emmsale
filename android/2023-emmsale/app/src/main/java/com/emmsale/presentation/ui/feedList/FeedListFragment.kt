@@ -5,16 +5,16 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentFeedListBinding
-import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedList.FeedListViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.feedList.recyclerView.FeedListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FeedListFragment : BaseFragment<FragmentFeedListBinding>() {
+class FeedListFragment : NetworkFragment<FragmentFeedListBinding>() {
     override val layoutResId: Int = R.layout.fragment_feed_list
-    private val viewModel: FeedListViewModel by viewModels()
+    override val viewModel: FeedListViewModel by viewModels()
 
     private val feedListAdapter: FeedListAdapter by lazy {
         FeedListAdapter(navigateToFeedDetail = ::navigateToFeedDetail)
@@ -34,7 +34,7 @@ class FeedListFragment : BaseFragment<FragmentFeedListBinding>() {
 
     private fun setUpFeeds() {
         viewModel.feeds.observe(viewLifecycleOwner) {
-            feedListAdapter.submitList(it.feeds)
+            feedListAdapter.submitList(it)
         }
     }
 
