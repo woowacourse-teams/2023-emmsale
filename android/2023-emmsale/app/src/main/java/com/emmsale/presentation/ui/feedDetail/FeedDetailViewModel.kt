@@ -94,7 +94,7 @@ class FeedDetailViewModel @Inject constructor(
         if (feedResult is Success && commentResult is Success) {
             val comments = commentResult.data as List<Comment>
             val feed = feedResult.data as Feed
-            _feed.value = feed.copy(commentCount = comments.sumOf { it.childComments.size + 1 })
+            _feed.value = feed.copy(commentCount = comments.undeletedCount())
             _comments.value = CommentsUiState(uid, comments)
         }
         _screenUiState.value = ScreenUiState.NONE
@@ -128,12 +128,21 @@ class FeedDetailViewModel @Inject constructor(
         if (feedResult is Success && commentResult is Success) {
             val comments = commentResult.data as List<Comment>
             val feed = feedResult.data as Feed
-            _feed.value = feed.copy(commentCount = comments.sumOf { it.childComments.size + 1 })
+            _feed.value = feed.copy(commentCount = comments.undeletedCount())
             _comments.value = CommentsUiState(uid, comments)
         }
 
         _screenUiState.value = ScreenUiState.NONE
     }
+
+    private fun List<Comment>.undeletedCount(): Int = commentsCount() - deletedCommentsCount()
+
+    private fun List<Comment>.commentsCount(): Int = this.sumOf { it.childComments.size + 1 }
+
+    private fun List<Comment>.deletedCommentsCount(): Int =
+        this.sumOf { parentComment ->
+            parentComment.childComments.count { comment -> comment.isDeleted } + if (parentComment.isDeleted) 1 else 0
+        }
 
     fun deleteFeed(): Job = command(
         command = { feedRepository.deleteFeed(feedId) },
