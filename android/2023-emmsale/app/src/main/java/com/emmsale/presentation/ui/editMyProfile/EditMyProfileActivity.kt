@@ -25,7 +25,6 @@ import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapterD
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.FieldsAdapter
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileErrorEvent
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileUiState
-import com.emmsale.presentation.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -202,22 +201,8 @@ class EditMyProfileActivity : AppCompatActivity() {
     }
 
     private fun setupUiLogic() {
-        setupLoginUiLogic()
         setupProfileUiLogic()
         setupErrorsUiLogic()
-    }
-
-    private fun setupLoginUiLogic() {
-        viewModel.isLogin.observe(this) {
-            handleNotLogin(it)
-        }
-    }
-
-    private fun handleNotLogin(isLogin: Boolean) {
-        if (!isLogin) {
-            LoginActivity.startActivity(this)
-            finish()
-        }
     }
 
     private fun setupProfileUiLogic() {
