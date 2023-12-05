@@ -278,6 +278,7 @@
 
     <string name="recruitmentpostdetail_appbar_title_text">함께해요</string>
     <string name="recruitmentpostdetail_request_button_text">함께하기 요청</string>
+    <string name="recruitmentpostdetail_writer_image_description">함께해요 글 작성자의 프로필 이미지</string>
     <string name="recruitmentpostdetail_request_button_complete_text">요청 완료</string>
     <string name="recruitmentpostdetail_success_request_message">요청에 성공했어요</string>
     <string name="recruitmentpostdetail_fail_request_message">요청에 실패했어요</string>

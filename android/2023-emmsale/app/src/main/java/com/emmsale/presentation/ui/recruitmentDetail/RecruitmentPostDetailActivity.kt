@@ -6,17 +6,14 @@ import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
-import com.emmsale.presentation.common.UiEvent
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
-import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailViewModel.Companion.EVENT_ID_KEY
@@ -26,13 +23,11 @@ import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingActi
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RecruitmentPostDetailActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityRecruitmentPostDetailBinding.inflate(layoutInflater) }
-    private val viewModel: RecruitmentPostDetailViewModel by viewModels()
+class RecruitmentPostDetailActivity :
+    NetworkActivity<ActivityRecruitmentPostDetailBinding>(R.layout.activity_recruitment_post_detail) {
 
-    private val isNavigatedFromMyPost: Boolean by lazy {
-        intent.getBooleanExtra(FROM_MY_POST_KEY, false)
-    }
+    override val viewModel: RecruitmentPostDetailViewModel by viewModels()
+
     private val postEditorDialog: BottomMenuDialog by lazy {
         BottomMenuDialog(this).apply {
             addMenuItemBelow(
@@ -65,7 +60,7 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
             message = getString(R.string.recruitmentpostdetail_delete_dialog_message),
             positiveButtonLabel = getString(R.string.all_delete_button_label),
             negativeButtonLabel = getString(R.string.all_cancel),
-            onPositiveButtonClick = { viewModel.deleteRecruitmentPost() },
+            onPositiveButtonClick = { viewModel.deleteRecruitment() },
         ).show()
     }
 
@@ -101,16 +96,15 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.lifecycleOwner = this
         binding.vm = viewModel
-        binding.isNavigatedFromMyPost = isNavigatedFromMyPost
+        binding.onRequestRecruitmentButtonClick =
+            { sendMessageDialog.show(supportFragmentManager, SendMessageDialog.TAG) }
     }
 
     private fun initClickListener() {
         setUpOptionButtonClick()
-        setUpRequestCompanionButtonClick()
         setUpBackPressButtonClick()
         setUpBackPressIconClick()
         setUpProfileClick()
-        setUpNavigateToEventDetailButtonClick()
     }
 
     private fun setupEventUiLogic() {
@@ -119,26 +113,14 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpRequestCompanionButtonClick() {
-        binding.btnRecruitmentdetailRequestCompanion.setOnClickListener {
-            sendMessageDialog.show(supportFragmentManager, SendMessageDialog.TAG)
-        }
-    }
-
     private fun setUpOptionButtonClick() {
         binding.tbToolbar.setOnMenuItemClickListener {
-            if (viewModel.recruitmentPost.value.isMyPost) {
+            if (viewModel.recruitment.value.isMyPost) {
                 postEditorDialog.show()
             } else {
                 postReportDialog.show()
             }
             true
-        }
-    }
-
-    private fun setUpNavigateToEventDetailButtonClick() {
-        binding.btnRecruitmentdetailNavigateToEventDetail.setOnClickListener {
-            EventDetailActivity.startActivity(this, viewModel.eventId)
         }
     }
 
@@ -156,24 +138,23 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
 
     private fun setUpProfileClick() {
         binding.ivRecruitmentdetailProfileImage.setOnClickListener {
-            ProfileActivity.startActivity(this, viewModel.recruitmentPost.value.memberId)
+            ProfileActivity.startActivity(this, viewModel.recruitment.value.recruitment.writer.id)
         }
     }
 
-    private fun handleUiEvent(event: UiEvent<RecruitmentPostDetailUiEvent>) {
-        val content = event.getContentIfNotHandled() ?: return
-        when (content) {
+    private fun handleUiEvent(uiEvent: RecruitmentPostDetailUiEvent) {
+        when (uiEvent) {
             is RecruitmentPostDetailUiEvent.MessageSendComplete -> {
                 MessageListActivity.startActivity(
                     this,
-                    content.roomId,
-                    content.otherId,
+                    uiEvent.roomId,
+                    uiEvent.otherId,
                 )
+                sendMessageDialog.clearText()
                 sendMessageDialog.dismiss()
             }
 
             RecruitmentPostDetailUiEvent.MessageSendFail -> binding.root.showSnackBar(R.string.sendmessagedialog_message_send_fail_message)
-            RecruitmentPostDetailUiEvent.None -> {}
             RecruitmentPostDetailUiEvent.PostDeleteComplete -> {
                 binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_deletion_success_message))
                 onBackPressedDispatcher.onBackPressed()
@@ -196,7 +177,6 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
             ).show()
 
             RecruitmentPostDetailUiEvent.ReportFail -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
-            is RecruitmentPostDetailUiEvent.UnexpectedError -> showToast(content.errorMessage)
         }
     }
 
@@ -207,27 +187,23 @@ class RecruitmentPostDetailActivity : AppCompatActivity() {
 
     private fun navigateToEditPage() {
         val intent = RecruitmentPostWritingActivity.getEditModeIntent(
-            this,
-            viewModel.eventId,
-            viewModel.recruitmentId,
-            viewModel.recruitmentPost.value.content,
+            context = this,
+            eventId = viewModel.eventId,
+            recruitmentId = viewModel.recruitmentId,
+            recruitmentContent = viewModel.recruitment.value.recruitment.content,
         )
         fetchByResultActivityLauncher.launch(intent)
     }
 
     companion object {
-        private const val FROM_MY_POST_KEY = "FROM_MY_POST_KEY"
-
         fun startActivity(
             context: Context,
             eventId: Long,
             recruitmentId: Long,
-            isNavigatedFromMyPost: Boolean = false,
         ) {
             Intent(context, RecruitmentPostDetailActivity::class.java)
                 .putExtra(EVENT_ID_KEY, eventId)
                 .putExtra(RECRUITMENT_ID_KEY, recruitmentId)
-                .putExtra(FROM_MY_POST_KEY, isNavigatedFromMyPost)
                 .run { context.startActivity(this) }
         }
     }

@@ -59,7 +59,6 @@ class MyRecruitmentActivity : AppCompatActivity() {
             this,
             eventId = eventId,
             recruitmentId = recruitmentId,
-            isNavigatedFromMyPost = true,
         )
     }
 

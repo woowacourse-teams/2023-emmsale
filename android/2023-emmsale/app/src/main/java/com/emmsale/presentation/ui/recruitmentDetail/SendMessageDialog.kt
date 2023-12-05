@@ -40,17 +40,12 @@ class SendMessageDialog : DialogFragment() {
     private fun setupDataBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
-        binding.onSendButtonClick = ::onSendButtonClick
-        binding.onCancelButtonClick = ::onCancelButtonClick
+        binding.onSendButtonClick = { viewModel.sendMessage(it) }
+        binding.onCancelButtonClick = { dismiss() }
     }
 
-    private fun onSendButtonClick(message: String) {
-        viewModel.sendMessage(message)
+    fun clearText() {
         binding.etSendmessagedialogMessage.text.clear()
-    }
-
-    private fun onCancelButtonClick() {
-        dismiss()
     }
 
     override fun onDestroyView() {

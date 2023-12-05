@@ -1,8 +1,6 @@
 package com.emmsale.presentation.ui.recruitmentDetail.uiState
 
 sealed interface RecruitmentPostDetailUiEvent {
-    object None : RecruitmentPostDetailUiEvent
-    data class UnexpectedError(val errorMessage: String) : RecruitmentPostDetailUiEvent
     object PostFetchFail : RecruitmentPostDetailUiEvent
     object PostDeleteComplete : RecruitmentPostDetailUiEvent
     object PostDeleteFail : RecruitmentPostDetailUiEvent

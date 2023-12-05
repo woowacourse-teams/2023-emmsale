@@ -7,13 +7,17 @@
 
         <import type="android.view.View" />
 
-        <variable
-            name="isNavigatedFromMyPost"
-            type="Boolean" />
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
+
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
 
         <variable
             name="vm"
             type="com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailViewModel" />
+
+        <variable
+            name="onRequestRecruitmentButtonClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="17dp"
-            app:layout_constraintBottom_toTopOf="@id/btn_recruitmentdetail_request_companion"
+            app:layout_constraintBottom_toTopOf="@id/btn_request_recruitment"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_toolbar">
@@ -61,7 +65,7 @@
                     android:layout_marginStart="9dp"
                     android:layout_marginTop="18dp"
                     android:fontFamily="@font/nanum_square_bold"
-                    android:text="@{vm.recruitmentPost.name}"
+                    android:text="@{vm.recruitment.recruitment.writer.name}"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@+id/iv_recruitmentdetail_profile_image"
@@ -75,7 +79,8 @@
                     android:layout_marginStart="9dp"
                     android:layout_marginTop="6dp"
                     android:fontFamily="@font/nanum_square_regular"
-                    android:text="@{vm.recruitmentPost.updatedAt}"
+                    app:dateText="@{vm.recruitment.recruitment.updatedDate}"
+                    app:dateTimeFormatter="@{DateTimePattern.YEAR_DOT_MONTH_DOT_DAY}"
                     android:textColor="@color/gray"
                     android:textSize="11sp"
                     app:layout_constraintStart_toEndOf="@+id/iv_recruitmentdetail_profile_image"
@@ -90,7 +95,7 @@
                     android:layout_marginEnd="17dp"
                     android:fontFamily="@font/nanum_square_regular"
                     android:lineHeight="17.5dp"
-                    android:text="@{vm.recruitmentPost.content}"
+                    android:text="@{vm.recruitment.recruitment.content}"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -98,45 +103,25 @@
                     app:layout_constraintTop_toBottomOf="@+id/iv_recruitmentdetail_profile_image"
                     tools:text="아무나 같이가실 분 구합니다! 역에서 만나서 같이가면 좋을 것 같아요! 많이들 신청해 주세용!!!" />
 
-
                 <ImageView
                     android:id="@+id/iv_recruitmentdetail_profile_image"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="17dp"
                     android:layout_marginTop="14dp"
-                    app:imageUrl="@{vm.recruitmentPost.profileImageUrl}"
+                    app:imageUrl="@{vm.recruitment.recruitment.writer.profileImageUrl}"
                     app:isCircle="@{true}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    tools:srcCompat="@tools:sample/avatars"
+                    android:contentDescription="@string/recruitmentpostdetail_writer_image_description" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 
         <TextView
-            android:id="@+id/btn_recruitmentdetail_request_companion"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginHorizontal="17dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_all_two_state_button"
-            android:clickable="true"
-            android:enabled="@{!vm.isAlreadyRequest}"
-            android:fontFamily="@font/nanum_square_bold"
-            android:gravity="center"
-            android:text="@{vm.isAlreadyRequest ? @string/recruitmentpostdetail_request_button_complete_text : @string/recruitmentpostdetail_request_button_text}"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:visibility="@{vm.recruitmentPost.isMyPost ? View.GONE : View.VISIBLE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
-        <TextView
-            android:id="@+id/btn_recruitmentdetail_navigate_to_event_detail"
+            android:id="@+id/btn_request_recruitment"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginHorizontal="17dp"
@@ -148,7 +133,8 @@
             android:text="@string/recruitmentpostdetail_request_button_text"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:visibility="@{isNavigatedFromMyPost ? View.VISIBLE : View.GONE}"
+            android:onClick="@{() -> onRequestRecruitmentButtonClick.invoke()}"
+            app:visible="@{!vm.recruitment.isMyPost}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -157,11 +143,21 @@
             android:id="@+id/progressBar2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{vm.recruitmentPost.loading? View.VISIBLE:View.GONE}"
+            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.emmsale.presentation.common.views.NetworkErrorView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:visible="@{vm.screenUiState == ScreenUiState.NETWORK_ERROR}"
+            app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:onRefresh="@{() -> vm.refresh()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

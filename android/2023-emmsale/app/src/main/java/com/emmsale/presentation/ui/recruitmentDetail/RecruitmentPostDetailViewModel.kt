@@ -1,25 +1,18 @@
 package com.emmsale.presentation.ui.recruitmentDetail
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.UiEvent
+import com.emmsale.presentation.base.NetworkViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.Refreshable
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.RecruitmentPostDetailUiEvent
-import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostUiState
+import com.emmsale.presentation.ui.recruitmentDetail.uiState.RecruitmentUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,7 +21,7 @@ class RecruitmentPostDetailViewModel @Inject constructor(
     private val recruitmentRepository: RecruitmentRepository,
     private val messageRoomRepository: MessageRoomRepository,
     tokenRepository: TokenRepository,
-) : ViewModel(), Refreshable {
+) : NetworkViewModel() {
     val eventId: Long = requireNotNull(savedStateHandle[EVENT_ID_KEY]) {
         "[ERROR] 행사 아이디를 가져오지 못했어요."
     }
@@ -36,115 +29,81 @@ class RecruitmentPostDetailViewModel @Inject constructor(
         "[ERROR] 모집글 아이디를 가져오지 못했어요."
     }
 
-    private val _recruitmentPost: NotNullMutableLiveData<RecruitmentPostUiState> =
-        NotNullMutableLiveData(RecruitmentPostUiState.Loading)
-    val recruitmentPost: NotNullLiveData<RecruitmentPostUiState> = _recruitmentPost
+    private val _recruitment: NotNullMutableLiveData<RecruitmentUiState> =
+        NotNullMutableLiveData(RecruitmentUiState())
+    val recruitment: NotNullLiveData<RecruitmentUiState> = _recruitment
 
-    private val _isAlreadyRequest: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isAlreadyRequest: LiveData<Boolean> = _isAlreadyRequest
+    private val _canSendMessage = NotNullMutableLiveData(true)
+    val canSendMessage: NotNullLiveData<Boolean> = _canSendMessage
 
-    private val _event = MutableLiveData<RecruitmentPostDetailUiEvent?>(null)
-    val event: LiveData<RecruitmentPostDetailUiEvent?> = _event
-
-    private val _uiEvent: NotNullMutableLiveData<UiEvent<RecruitmentPostDetailUiEvent>> =
-        NotNullMutableLiveData(UiEvent(RecruitmentPostDetailUiEvent.None))
-    val uiEvent: NotNullLiveData<UiEvent<RecruitmentPostDetailUiEvent>> = _uiEvent
+    private val _uiEvent = SingleLiveEvent<RecruitmentPostDetailUiEvent>()
+    val uiEvent: LiveData<RecruitmentPostDetailUiEvent> = _uiEvent
 
     private val myUid = requireNotNull(tokenRepository.getMyUid()) {
         "[ERROR] 내 아이디를 가져오지 못했어요."
     }
 
     init {
-        refresh()
+        fetchRecruitment()
     }
 
-    override fun refresh() {
-        viewModelScope.launch {
-            when (val result = recruitmentRepository.getEventRecruitment(eventId, recruitmentId)) {
-                is Failure -> _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.PostFetchFail)
-                NetworkError -> _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
-                is Success -> {
-                    _recruitmentPost.value = RecruitmentPostUiState.create(result.data, myUid)
-                }
+    private fun fetchRecruitment(): Job = fetchData(
+        fetchData = { recruitmentRepository.getEventRecruitment(eventId, recruitmentId) },
+        onSuccess = { _recruitment.value = RecruitmentUiState(it, myUid) },
+        onFailure = { _, _ -> _uiEvent.value = RecruitmentPostDetailUiEvent.PostFetchFail },
+    )
 
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
-            }
-        }
-    }
+    override fun refresh(): Job = refreshData(
+        refresh = { recruitmentRepository.getEventRecruitment(eventId, recruitmentId) },
+        onSuccess = { _recruitment.value = RecruitmentUiState(it, myUid) },
+    )
 
-    fun deleteRecruitmentPost() {
-        viewModelScope.launch {
-            when (val result = recruitmentRepository.deleteRecruitment(eventId, recruitmentId)) {
-                is Failure -> _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.PostDeleteFail)
-                NetworkError -> _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
-                is Success ->
-                    _uiEvent.value =
-                        UiEvent(RecruitmentPostDetailUiEvent.PostDeleteComplete)
+    fun deleteRecruitment(): Job = command(
+        command = { recruitmentRepository.deleteRecruitment(eventId, recruitmentId) },
+        onSuccess = { _uiEvent.value = RecruitmentPostDetailUiEvent.PostDeleteComplete },
+        onFailure = { _, _ ->
+            _uiEvent.value = RecruitmentPostDetailUiEvent.PostDeleteFail
+        },
+    )
 
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
-            }
-        }
-    }
-
-    fun reportRecruitment() {
-        viewModelScope.launch {
-            val result = recruitmentRepository.reportRecruitment(
-                recruitmentId,
-                recruitmentPost.value.memberId,
-                myUid,
+    fun reportRecruitment(): Job = command(
+        command = {
+            recruitmentRepository.reportRecruitment(
+                recruitmentId = _recruitment.value.recruitment.id,
+                authorId = _recruitment.value.recruitment.writer.id,
+                reporterId = myUid,
             )
-            when (result) {
-                is Failure -> {
-                    if (result.code == REPORT_DUPLICATE_ERROR_CODE) {
-                        _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.ReportDuplicate)
-                    } else {
-                        _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.ReportFail)
-                    }
-                }
-
-                NetworkError ->
-                    _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
-
-                is Success -> _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.ReportComplete)
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
+        },
+        onSuccess = { _uiEvent.value = RecruitmentPostDetailUiEvent.ReportComplete },
+        onFailure = { code, _ ->
+            if (code == REPORT_DUPLICATE_ERROR_CODE) {
+                _uiEvent.value = RecruitmentPostDetailUiEvent.ReportDuplicate
+            } else {
+                _uiEvent.value = RecruitmentPostDetailUiEvent.ReportFail
             }
-        }
-    }
+        },
+    )
 
-    fun sendMessage(message: String) {
-        viewModelScope.launch {
-            when (
-                val result =
-                    messageRoomRepository.sendMessage(
-                        myUid,
-                        _recruitmentPost.value.memberId,
-                        message,
-                    )
-            ) {
-                is Failure ->
-                    _uiEvent.value = UiEvent(RecruitmentPostDetailUiEvent.MessageSendFail)
-
-                NetworkError -> _recruitmentPost.value = _recruitmentPost.value.copy(isError = true)
-                is Success ->
-                    _uiEvent.value = UiEvent(
-                        RecruitmentPostDetailUiEvent.MessageSendComplete(
-                            result.data,
-                            _recruitmentPost.value.memberId,
-                        ),
-                    )
-
-                is Unexpected ->
-                    _uiEvent.value =
-                        UiEvent(RecruitmentPostDetailUiEvent.UnexpectedError(result.error.toString()))
-            }
-        }
-    }
+    fun sendMessage(message: String): Job = command(
+        command = {
+            messageRoomRepository.sendMessage(
+                senderId = myUid,
+                receiverId = _recruitment.value.recruitment.writer.id,
+                message = message,
+            )
+        },
+        onSuccess = {
+            _uiEvent.value = RecruitmentPostDetailUiEvent.MessageSendComplete(
+                roomId = it,
+                otherId = _recruitment.value.recruitment.writer.id,
+            )
+        },
+        onFailure = { _, _ ->
+            _uiEvent.value = RecruitmentPostDetailUiEvent.MessageSendFail
+        },
+        onStart = { _canSendMessage.value = false },
+        onFinish = { _canSendMessage.value = true },
+    )
 
     companion object {
         const val EVENT_ID_KEY = "EVENT_ID_KEY"
