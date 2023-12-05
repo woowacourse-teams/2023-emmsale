@@ -12,4 +12,6 @@ data class Comment(
     val updatedAt: LocalDateTime = LocalDateTime.MAX,
     val isDeleted: Boolean = false,
     val childComments: List<Comment> = emptyList(),
-)
+) {
+    val isUpdated: Boolean = createdAt != updatedAt
+}

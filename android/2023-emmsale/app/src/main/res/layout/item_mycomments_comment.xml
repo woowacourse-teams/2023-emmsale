@@ -9,9 +9,11 @@
 
         <import type="kotlin.Unit" />
 
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
+
         <variable
             name="comment"
-            type="com.emmsale.presentation.ui.myCommentList.uiState.MyCommentUiState" />
+            type="com.emmsale.data.model.Comment" />
 
         <variable
             name="onClick"
@@ -21,7 +23,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> onClick.invoke(comment.feedId, comment.parentId == null ? comment.id : comment.parentId, comment.id)}"
+        android:onClick="@{() -> onClick.invoke(comment.feed.id, comment.parentCommentId == null ? comment.id : comment.parentCommentId, comment.id)}"
         android:background="?attr/selectableItemBackground">
 
         <TextView
@@ -30,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginTop="17dp"
-            android:text="@{comment.feedTitle}"
+            android:text="@{comment.feed.title}"
             android:textSize="13sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +59,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="17dp"
-            android:text="@{comment.lastModifiedDate}"
+            app:dateText="@{comment.updatedAt}"
+            app:dateTimeFormatter="@{DateTimePattern.YEAR_MONTH_DAY}"
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,7 +76,7 @@
             android:text="@string/all_is_updated"
             android:textColor="@color/gray"
             android:textSize="11sp"
-            android:visibility="@{comment.isUpdated ? View.VISIBLE : View.GONE}"
+            app:visible="@{comment.isUpdated}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_mycomment_last_modified_date"
             app:layout_constraintStart_toEndOf="@+id/tv_mycomment_last_modified_date"
             app:layout_constraintTop_toTopOf="@+id/tv_mycomment_last_modified_date" />

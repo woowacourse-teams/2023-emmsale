@@ -3,8 +3,8 @@ package com.emmsale.presentation.ui.myCommentList.recyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ItemMycommentsCommentBinding
-import com.emmsale.presentation.ui.myCommentList.uiState.MyCommentUiState
 
 class MyCommentViewHolder(
     private val binding: ItemMycommentsCommentBinding,
@@ -15,7 +15,7 @@ class MyCommentViewHolder(
         binding.onClick = onClick
     }
 
-    fun bind(comment: MyCommentUiState) {
+    fun bind(comment: Comment) {
         binding.comment = comment
     }
 

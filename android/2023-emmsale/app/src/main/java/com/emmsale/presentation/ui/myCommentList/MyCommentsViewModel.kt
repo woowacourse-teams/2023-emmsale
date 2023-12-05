@@ -1,52 +1,46 @@
 package com.emmsale.presentation.ui.myCommentList
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
+import com.emmsale.data.model.Comment
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
+import com.emmsale.presentation.base.NetworkViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.ui.myCommentList.uiState.MyCommentsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
 class MyCommentsViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,
-) : ViewModel(), Refreshable {
+) : NetworkViewModel() {
 
-    private val _isLogin = NotNullMutableLiveData(true)
-    val isLogin: NotNullLiveData<Boolean> = _isLogin
+    private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _comments = NotNullMutableLiveData(MyCommentsUiState.FIRST_LOADING)
-    val comments: NotNullLiveData<MyCommentsUiState> = _comments
+    private val _comments = NotNullMutableLiveData(listOf<Comment>())
+    val comments: NotNullLiveData<List<Comment>> = _comments
 
     init {
-        refresh()
+        fetchMyComments()
     }
 
-    override fun refresh() {
-        viewModelScope.launch {
-            val token = tokenRepository.getToken()
-            if (token == null) {
-                _isLogin.value = false
-                return@launch
-            }
+    private fun fetchMyComments(): Job = fetchData(
+        fetchData = { commentRepository.getCommentsByMemberId(uid) },
+        onSuccess = {
+            _comments.value = it.extractMyComments().reversed()
+        },
+    )
 
-            when (val result = commentRepository.getCommentsByMemberId(token.uid)) {
-                is Failure, NetworkError -> _comments.value = _comments.value.changeToErrorState()
-                is Success ->
-                    _comments.value = _comments.value.setCommentsState(result.data, token.uid)
+    override fun refresh(): Job = refreshData(
+        refresh = { commentRepository.getCommentsByMemberId(uid) },
+        onSuccess = {
+            _comments.value = it.extractMyComments().reversed()
+        },
+    )
 
-                is Unexpected -> throw Throwable(result.error)
-            }
-        }
-    }
+    private fun List<Comment>.extractMyComments(): List<Comment> =
+        flatMap { comment ->
+            listOf(comment) + comment.childComments
+        }.filter { comment -> comment.writer.id == uid && !comment.isDeleted }
 }
