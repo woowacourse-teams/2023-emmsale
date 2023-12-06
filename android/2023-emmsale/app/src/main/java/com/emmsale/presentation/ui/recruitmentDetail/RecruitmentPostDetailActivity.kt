@@ -130,9 +130,7 @@ class RecruitmentPostDetailActivity :
     }
 
     private fun setUpBackPressIconClick() {
-        binding.tbToolbar.setNavigationOnClickListener {
-            finishWithResult()
-        }
+        binding.tbToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
     private fun setUpProfileClick() {
@@ -154,11 +152,7 @@ class RecruitmentPostDetailActivity :
             }
 
             RecruitmentPostDetailUiEvent.MessageSendFail -> binding.root.showSnackBar(R.string.sendmessagedialog_message_send_fail_message)
-            RecruitmentPostDetailUiEvent.PostDeleteComplete -> {
-                binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_deletion_success_message))
-                onBackPressedDispatcher.onBackPressed()
-            }
-
+            RecruitmentPostDetailUiEvent.PostDeleteComplete -> onBackPressedDispatcher.onBackPressed()
             RecruitmentPostDetailUiEvent.PostDeleteFail -> binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_deletion_fail_message))
             RecruitmentPostDetailUiEvent.PostFetchFail -> binding.root.showSnackBar(getString(R.string.recruitmentpostdetail_fail_request_message))
             RecruitmentPostDetailUiEvent.ReportComplete -> InfoDialog(
