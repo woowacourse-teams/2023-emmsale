@@ -261,12 +261,11 @@
     <string name="postlist_no_content_view_title">아직 게시물이 없어요!</string>
 
     <string name="recruitmentpostwriting_no_content_error_message">내용이 없으면 모집글을 올릴 수 없어요</string>
-    <string name="recruitmentpostwriting_register_success_message">글을 등록하였습니다</string>
-    <string name="recruitmentpostwriting_register_error_message">등록에 실패하였습니다! 인터넷을 확인하시고, 관리자에게 문의해주세요</string>
     <string name="recruitmentpostwriting_appbar_title_text">글쓰기</string>
+    <string name="recruitmentpostwriting_post_fail_message">모집글 작성에 실패했어요 😥</string>
+    <string name="recruitmentpostwriting_edit_fail_message">모집글 수정에 실패했어요 😥</string>
     <string name="recruitmentpostwriting_register_button_text">등록</string>
     <string name="recruitmentpostwriting_hint_message">모집글을 작성해주세요.</string>
-    <string name="recruitmentpostwriting_edit_success_message">수정에 성공하였습니다</string>
     <string name="recruitmentpostwriting_edit_button_text">수정</string>
 
     <string name="requestcompanion_dialog_message_hint">요청 메세지를 작성해주세요.</string>

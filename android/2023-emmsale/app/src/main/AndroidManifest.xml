@@ -43,7 +43,9 @@
         <activity android:name=".presentation.ui.myCommentList.MyCommentsActivity" />
         <activity android:name=".presentation.ui.blockMemberList.MemberBlockActivity" />
         <activity android:name=".presentation.ui.notificationConfig.NotificationConfigActivity" />
-        <activity android:name=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity" />
+        <activity
+            android:name=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity" />
         <activity android:name=".presentation.ui.editMyProfile.EditMyProfileActivity" />
         <activity android:name=".presentation.ui.profile.ProfileActivity" />

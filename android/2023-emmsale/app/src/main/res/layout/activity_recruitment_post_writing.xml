@@ -7,6 +7,8 @@
 
         <import type="android.view.View" />
 
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
+
         <variable
             name="vm"
             type="com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingViewModel" />
@@ -56,7 +58,7 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{vm.recruitmentWriting.loading?View.VISIBLE:View.GONE}"
+            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
