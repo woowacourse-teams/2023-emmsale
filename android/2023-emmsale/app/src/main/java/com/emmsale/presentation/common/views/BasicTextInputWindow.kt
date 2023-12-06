@@ -5,13 +5,24 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
-import androidx.databinding.BindingAdapter
+import androidx.databinding.BindingMethod
+import androidx.databinding.BindingMethods
 import com.emmsale.R
 import com.emmsale.databinding.LayoutBasicInputWindowBinding
 import com.emmsale.presentation.common.extension.dp
-import com.emmsale.presentation.common.views.BasicTextInputWindow.OnSubmitListener
-import kotlin.properties.Delegates.observable
 
+@BindingMethods(
+    BindingMethod(
+        type = BasicTextInputWindow::class,
+        attribute = "onSubmit",
+        method = "setOnSubmitListener",
+    ),
+    BindingMethod(
+        type = BasicTextInputWindow::class,
+        attribute = "isSubmitEnabled",
+        method = "setIsSubmitEnabled",
+    ),
+)
 class BasicTextInputWindow @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -19,14 +30,6 @@ class BasicTextInputWindow @JvmOverloads constructor(
 
     private val binding: LayoutBasicInputWindowBinding by lazy {
         LayoutBasicInputWindowBinding.inflate(LayoutInflater.from(context), this, false)
-    }
-
-    var isSubmitEnabled: Boolean by observable(false) { _, _, newValue ->
-        binding.isSubmitEnabled = newValue
-    }
-
-    var onSubmitListener: OnSubmitListener by observable(OnSubmitListener { }) { _, _, newValue ->
-        binding.onSubmitListener = newValue
     }
 
     init {
@@ -49,6 +52,14 @@ class BasicTextInputWindow @JvmOverloads constructor(
         }
     }
 
+    fun setOnSubmitListener(onSubmitListener: OnSubmitListener) {
+        binding.onSubmitListener = onSubmitListener
+    }
+
+    fun setIsSubmitEnabled(enabled: Boolean) {
+        binding.isSubmitEnabled = enabled
+    }
+
     fun clearText() {
         binding.etBasicInput.text.clear()
     }
@@ -56,14 +67,4 @@ class BasicTextInputWindow @JvmOverloads constructor(
     fun interface OnSubmitListener {
         fun onSubmit(text: String)
     }
-}
-
-@BindingAdapter("app:onSubmit")
-fun BasicTextInputWindow.setOnSubmitListener(onSubmitListener: OnSubmitListener) {
-    this.onSubmitListener = onSubmitListener
-}
-
-@BindingAdapter("app:isSubmitEnabled")
-fun BasicTextInputWindow.setIsSubmitEnabled(isSubmitEnabled: Boolean) {
-    this.isSubmitEnabled = isSubmitEnabled
 }
