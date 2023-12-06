@@ -1,11 +1,12 @@
 package com.emmsale.presentation.ui.recruitmentWriting
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.presentation.base.NetworkViewModel
-import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState
@@ -21,14 +22,26 @@ class RecruitmentPostWritingViewModel @Inject constructor(
 ) : NetworkViewModel() {
     val eventId: Long = savedStateHandle[EVENT_ID_KEY] ?: DEFAULT_EVENT_ID
     private val recruitmentIdToEdit: Long? = savedStateHandle[RECRUITMENT_ID_KEY]
-    val recruitmentContentToEdit: String =
+    private val recruitmentContentToEdit: String =
         savedStateHandle[RECRUITMENT_CONTENT_KEY] ?: DEFAULT_CONTENT
 
     val writingMode: WritingModeUiState =
         if (recruitmentIdToEdit == null) WritingModeUiState.POST else WritingModeUiState.EDIT
 
-    private val _canPost = NotNullMutableLiveData(true)
-    val canPost: NotNullLiveData<Boolean> = _canPost
+    val content: MutableLiveData<String> = MutableLiveData(recruitmentContentToEdit)
+
+    private val isEdited: Boolean
+        get() = content.value != recruitmentContentToEdit
+
+    private val _canSubmit = NotNullMutableLiveData(true)
+    val canSubmit = MediatorLiveData(false).apply {
+        addSource(content) {
+            value = it.isNotBlank() && isEdited && _canSubmit.value
+        }
+        addSource(_canSubmit) {
+            value = content.value?.isNotBlank() ?: false && isEdited && it
+        }
+    }
 
     private val _uiEvent = SingleLiveEvent<RecruitmentPostWritingUiEvent>()
     val uiEvent: LiveData<RecruitmentPostWritingUiEvent> = _uiEvent
@@ -37,8 +50,8 @@ class RecruitmentPostWritingViewModel @Inject constructor(
         command = { recruitmentRepository.postRecruitment(eventId, content) },
         onSuccess = { _uiEvent.value = RecruitmentPostWritingUiEvent.PostComplete(it) },
         onFailure = { _, _ -> _uiEvent.value = RecruitmentPostWritingUiEvent.PostFail },
-        onStart = { _canPost.value = false },
-        onFinish = { _canPost.value = true },
+        onStart = { _canSubmit.value = false },
+        onFinish = { _canSubmit.value = true },
     )
 
     fun editRecruitment(content: String): Job = command(
@@ -48,8 +61,8 @@ class RecruitmentPostWritingViewModel @Inject constructor(
         },
         onSuccess = { _uiEvent.value = RecruitmentPostWritingUiEvent.EditComplete },
         onFailure = { _, _ -> _uiEvent.value = RecruitmentPostWritingUiEvent.EditFail },
-        onStart = { _canPost.value = false },
-        onFinish = { _canPost.value = true },
+        onStart = { _canSubmit.value = false },
+        onFinish = { _canSubmit.value = true },
     )
 
     companion object {

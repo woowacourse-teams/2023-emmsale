@@ -16,7 +16,7 @@
         <item name="toolbarStyle">@style/PrimaryToolbarStyle</item>
         <!-- actionMenu 관련 속성은 메인 테마에 적용해야 함. 툴바 스타일에 적용하면 적용되지 않음 -->
         <item name="actionMenuTextAppearance">@style/PrimaryActionMenuTextAppearance</item>
-        <item name="actionMenuTextColor">@color/primary_color</item>
+        <item name="actionMenuTextColor">@color/all_enable_primary</item>
 
         <item name="IconTextButtonStyle">@style/IconTextButtonStyle</item>
         <item name="FilterTagStyle">@style/FilterTagStyle</item>

@@ -3,11 +3,14 @@ package com.emmsale.presentation.ui.recruitmentWriting
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.core.view.get
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostWritingBinding
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.showSnackBar
+import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.EDIT
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.POST
@@ -27,7 +30,9 @@ class RecruitmentPostWritingActivity :
         super.onCreate(savedInstanceState)
 
         setupDataBinding()
+        setupBackPressedDispatcher()
         setupToolbar()
+        observeCanSubmit()
         observeUiEvent()
     }
 
@@ -37,36 +42,29 @@ class RecruitmentPostWritingActivity :
     }
 
     private fun setupToolbar() {
-        binding.tbToolbar.setNavigationOnClickListener { finish() }
+        binding.tbToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-        setupMenuText()
-        setupMenuClickListener()
-    }
-
-    private fun setupMenuText() {
-        binding.tbToolbar.menu.clear()
         when (viewModel.writingMode) {
             POST -> binding.tbToolbar.inflateMenu(R.menu.menu_postwriting_toolbar)
-            EDIT -> {
-                binding.tbToolbar.inflateMenu(R.menu.menu_postedit_toolbar)
-                binding.etRecruitmentwriting.setText(viewModel.recruitmentContentToEdit)
-            }
+            EDIT -> binding.tbToolbar.inflateMenu(R.menu.menu_postedit_toolbar)
         }
+        setupMenuClickListener()
     }
 
     private fun setupMenuClickListener() {
         binding.tbToolbar.setOnMenuItemClickListener {
             val content = binding.etRecruitmentwriting.text.toString()
-            if (content.isEmpty()) {
-                binding.root.showSnackBar(getString(R.string.recruitmentpostwriting_no_content_error_message))
-                return@setOnMenuItemClickListener true
-            }
-            if (!viewModel.canPost.value) return@setOnMenuItemClickListener true
             when (viewModel.writingMode) {
                 POST -> viewModel.postRecruitment(content)
                 EDIT -> viewModel.editRecruitment(content)
             }
             true
+        }
+    }
+
+    private fun observeCanSubmit() {
+        viewModel.canSubmit.observe(this) { canSubmit ->
+            binding.tbToolbar.menu?.get(0)?.isEnabled = canSubmit
         }
     }
 
@@ -95,6 +93,28 @@ class RecruitmentPostWritingActivity :
 
             RecruitmentPostWritingUiEvent.PostFail -> binding.root.showSnackBar(R.string.recruitmentpostwriting_post_fail_message)
         }
+    }
+
+    private fun setupBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (viewModel.canSubmit.value == true) showFinishConfirmDialog() else finish()
+                }
+            },
+        )
+    }
+
+    private fun showFinishConfirmDialog() {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.recruitmentpostwriting_writing_cancel_confirm_dialog_title),
+            message = getString(R.string.recruitmentpostwriting_writing_cancel_confirm_dialog_message),
+            positiveButtonLabel = getString(R.string.all_okay),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { finish() },
+        ).show()
     }
 
     companion object {

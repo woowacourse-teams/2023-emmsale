@@ -260,10 +260,11 @@
     <string name="postlist_no_content_view_desc">가장 먼저 게시글을 작성해보세요!</string>
     <string name="postlist_no_content_view_title">아직 게시물이 없어요!</string>
 
-    <string name="recruitmentpostwriting_no_content_error_message">내용이 없으면 모집글을 올릴 수 없어요</string>
     <string name="recruitmentpostwriting_appbar_title_text">글쓰기</string>
     <string name="recruitmentpostwriting_post_fail_message">모집글 작성에 실패했어요 😥</string>
     <string name="recruitmentpostwriting_edit_fail_message">모집글 수정에 실패했어요 😥</string>
+    <string name="recruitmentpostwriting_writing_cancel_confirm_dialog_title">작성 취소</string>
+    <string name="recruitmentpostwriting_writing_cancel_confirm_dialog_message">작성하던 글이 사라집니다.\n나가시겠습니까?</string>
     <string name="recruitmentpostwriting_register_button_text">등록</string>
     <string name="recruitmentpostwriting_hint_message">모집글을 작성해주세요.</string>
     <string name="recruitmentpostwriting_edit_button_text">수정</string>
