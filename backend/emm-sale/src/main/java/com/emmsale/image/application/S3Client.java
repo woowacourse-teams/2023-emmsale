@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -40,21 +41,32 @@ public class S3Client {
   }
 
   public List<String> uploadImages(final List<MultipartFile> multipartFiles) {
-    return multipartFiles.stream().map(this::uploadImage)
+    final AtomicBoolean catchException = new AtomicBoolean(false);
+
+    final List<String> uploadedImageNames = multipartFiles.stream()
+        .parallel()
+        .map(file -> uploadImage(file, catchException))
+        .filter(Objects::nonNull)
         .collect(Collectors.toList());
+    if (catchException.get()) {
+      deleteImages(uploadedImageNames);
+      throw new ImageException(ImageExceptionType.FAIL_S3_UPLOAD_IMAGE);
+    }
+    return uploadedImageNames;
   }
 
-  public String uploadImage(final MultipartFile file) {
+  public String uploadImage(final MultipartFile file, final AtomicBoolean catchException) {
     final String fileExtension = extractFileExtension(file);
     final String newFileName = UUID.randomUUID().toString().concat(fileExtension);
     final ObjectMetadata objectMetadata = configureObjectMetadata(file);
 
     try (final InputStream inputStream = file.getInputStream()) {
       amazonS3.putObject(new PutObjectRequest(bucket, newFileName, inputStream, objectMetadata));
+      return newFileName;
     } catch (final IOException | SdkClientException exception) {
-      throw new ImageException(ImageExceptionType.FAIL_S3_UPLOAD_IMAGE);
+      catchException.set(true);
+      return null;
     }
-    return newFileName;
   }
 
   private String extractFileExtension(final MultipartFile file) {
@@ -82,8 +94,10 @@ public class S3Client {
 
   public void deleteImages(final List<String> fileNames) {
     try {
-      fileNames.forEach(fileName ->
-          amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName)));
+      fileNames.stream()
+          .parallel()
+          .forEach(fileName ->
+              amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName)));
     } catch (SdkClientException exception) {
       throw new ImageException(ImageExceptionType.FAIL_S3_DELETE_IMAGE);
     }
