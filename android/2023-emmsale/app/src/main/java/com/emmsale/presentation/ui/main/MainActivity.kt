@@ -50,8 +50,8 @@ class MainActivity : AppCompatActivity() {
     private fun initBottomNavigationView(selectedItemId: Int? = null) {
         binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
                 R.id.mi_main_event -> showFragment(EventFragment.TAG)
+                R.id.mi_main_profile -> showFragment(MyProfileFragment.TAG)
                 R.id.mi_main_message -> showFragment(MessageRoomFragment.TAG)
                 R.id.mi_main_setting -> showFragment(SettingFragment.TAG)
             }
