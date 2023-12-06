@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.common.FetchResult" />
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <variable
             name="showAlbum"
@@ -132,6 +132,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.feedUploadResult.peekContent().fetchResult == FetchResult.LOADING}" />
+            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
