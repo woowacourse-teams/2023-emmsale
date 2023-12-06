@@ -2,13 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/mi_main_event"
+        android:icon="@drawable/ic_main_menuitemevent"
+        android:title="@string/main_menu_item_name_of_event"
+        app:tint="@color/primary_color" />
+    <item
         android:id="@+id/mi_main_profile"
         android:icon="@drawable/ic_main_menuitemprofile"
         android:title="@string/main_menu_item_name_of_profile" />
-    <item
-        android:id="@+id/mi_main_event"
-        android:icon="@drawable/ic_main_menuitemhome"
-        android:title="@string/main_menu_item_name_of_home" />
     <item
         android:id="@+id/mi_main_message"
         android:icon="@drawable/ic_main_menuitemmessage"
