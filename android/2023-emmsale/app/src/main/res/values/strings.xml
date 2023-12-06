@@ -245,8 +245,8 @@
     <string name="eventdetail_tab_comment">댓글</string>
     <string name="eventdetail_tab_recruitment">같이가요</string>
     <string name="eventdetail_tablayout_content_description">상세정보 보기 탭</string>
-    <string name="eventdetail_scrap_error">스크랩 불가</string>
-    <string name="eventdetail_scrap_delete_error">스크랩 삭제 불가</string>
+    <string name="eventdetail_scrap_fail">스크랩 불가</string>
+    <string name="eventdetail_scrap_off_fail">스크랩 해제 불가</string>
 
     <string name="eventInfo_cost">비용</string>
     <string name="eventInfo_place">장소</string>

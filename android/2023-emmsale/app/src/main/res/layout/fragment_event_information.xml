@@ -55,11 +55,11 @@
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:dateTimeFormatter="@{DateTimePattern.MONTH_DAY_WEEKDAY}"
-                        app:endDateTime="@{vm.eventDetail.eventDetail.applyingEndDate}"
+                        app:endDateTime="@{vm.event.applyingEndDate}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/tv_event_info_date_title"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:startDateTime="@{vm.eventDetail.eventDetail.applyingStartDate}"
+                        app:startDateTime="@{vm.event.applyingStartDate}"
                         tools:text="2023.08.15 12:00 ~ 2023.08.17 17:00" />
 
                     <TextView
@@ -86,11 +86,11 @@
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:dateTimeFormatter="@{DateTimePattern.MONTH_DAY_WEEKDAY}"
-                        app:endDateTime="@{vm.eventDetail.eventDetail.endDate}"
+                        app:endDateTime="@{vm.event.endDate}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/tv_event_info_date_title"
                         app:layout_constraintTop_toBottomOf="@+id/tv_even_info_apply_date"
-                        app:startDateTime="@{vm.eventDetail.eventDetail.startDate}"
+                        app:startDateTime="@{vm.event.startDate}"
                         tools:text="2023.8.15 12:00 " />
 
                     <TextView
@@ -114,7 +114,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="17dp"
                         android:fontFamily="@font/nanum_square_regular"
-                        android:text="@{vm.eventDetail.eventDetail.location}"
+                        android:text="@{vm.event.location}"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -146,7 +146,7 @@
                         android:textSize="12sp"
                         app:layout_constraintStart_toEndOf="@+id/tv_event_info_place_title"
                         app:layout_constraintTop_toBottomOf="@id/tv_event_info_place"
-                        app:paymentType="@{vm.eventDetail.eventDetail.paymentType}"
+                        app:paymentType="@{vm.event.paymentType}"
                         tools:text="무료" />
 
                     <androidx.recyclerview.widget.RecyclerView

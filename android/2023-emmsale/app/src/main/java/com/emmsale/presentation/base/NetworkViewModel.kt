@@ -51,9 +51,10 @@ abstract class NetworkViewModel : ViewModel() {
         onStart: () -> Unit = {},
         onFinish: () -> Unit = {},
     ): Job = viewModelScope.launch {
-        onStart()
         val loadingJob = launch { onLoading() }
-        when (val result = request()) {
+        val result = request()
+        onStart()
+        when (result) {
             is Success -> onSuccess(result.data)
             is Failure -> onFailure(result.code, result.message)
             NetworkError -> {
