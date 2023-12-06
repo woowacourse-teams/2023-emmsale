@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.core.view.get
 import com.emmsale.R
 import com.emmsale.databinding.ActivityRecruitmentPostWritingBinding
 import com.emmsale.presentation.base.NetworkActivity
@@ -32,6 +31,7 @@ class RecruitmentPostWritingActivity :
         setupDataBinding()
         setupBackPressedDispatcher()
         setupToolbar()
+
         observeCanSubmit()
         observeUiEvent()
     }
@@ -39,6 +39,28 @@ class RecruitmentPostWritingActivity :
     private fun setupDataBinding() {
         setContentView(binding.root)
         binding.vm = viewModel
+    }
+
+    private fun setupBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (viewModel.isChanged()) showFinishConfirmDialog() else finish()
+                }
+            },
+        )
+    }
+
+    private fun showFinishConfirmDialog() {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.recruitmentpostwriting_writing_cancel_confirm_dialog_title),
+            message = getString(R.string.recruitmentpostwriting_writing_cancel_confirm_dialog_message),
+            positiveButtonLabel = getString(R.string.all_okay),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { finish() },
+        ).show()
     }
 
     private fun setupToolbar() {
@@ -64,14 +86,12 @@ class RecruitmentPostWritingActivity :
 
     private fun observeCanSubmit() {
         viewModel.canSubmit.observe(this) { canSubmit ->
-            binding.tbToolbar.menu?.get(0)?.isEnabled = canSubmit
+            binding.tbToolbar.menu.findItem(R.id.register).isEnabled = canSubmit
         }
     }
 
     private fun observeUiEvent() {
-        viewModel.uiEvent.observe(this) {
-            handleUiEvent(it)
-        }
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
     private fun handleUiEvent(uiEvent: RecruitmentPostWritingUiEvent) {
@@ -93,28 +113,6 @@ class RecruitmentPostWritingActivity :
 
             RecruitmentPostWritingUiEvent.PostFail -> binding.root.showSnackBar(R.string.recruitmentpostwriting_post_fail_message)
         }
-    }
-
-    private fun setupBackPressedDispatcher() {
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (viewModel.canSubmit.value == true) showFinishConfirmDialog() else finish()
-                }
-            },
-        )
-    }
-
-    private fun showFinishConfirmDialog() {
-        WarningDialog(
-            context = this,
-            title = getString(R.string.recruitmentpostwriting_writing_cancel_confirm_dialog_title),
-            message = getString(R.string.recruitmentpostwriting_writing_cancel_confirm_dialog_message),
-            positiveButtonLabel = getString(R.string.all_okay),
-            negativeButtonLabel = getString(R.string.all_cancel),
-            onPositiveButtonClick = { finish() },
-        ).show()
     }
 
     companion object {

@@ -29,19 +29,16 @@ class RecruitmentPostWritingViewModel @Inject constructor(
         if (recruitmentIdToEdit == null) WritingModeUiState.POST else WritingModeUiState.EDIT
 
     val content: MutableLiveData<String> = MutableLiveData(recruitmentContentToEdit)
-
-    private val isEdited: Boolean
-        get() = content.value != recruitmentContentToEdit
+    private val contentIsNotBlank: Boolean
+        get() = content.value?.isNotBlank() ?: false
 
     private val _canSubmit = NotNullMutableLiveData(true)
     val canSubmit = MediatorLiveData(false).apply {
-        addSource(content) {
-            value = it.isNotBlank() && isEdited && _canSubmit.value
-        }
-        addSource(_canSubmit) {
-            value = content.value?.isNotBlank() ?: false && isEdited && it
-        }
+        addSource(content) { value = canSubmit() }
+        addSource(_canSubmit) { value = canSubmit() }
     }
+
+    private fun canSubmit(): Boolean = contentIsNotBlank && isChanged() && _canSubmit.value
 
     private val _uiEvent = SingleLiveEvent<RecruitmentPostWritingUiEvent>()
     val uiEvent: LiveData<RecruitmentPostWritingUiEvent> = _uiEvent
@@ -64,6 +61,8 @@ class RecruitmentPostWritingViewModel @Inject constructor(
         onStart = { _canSubmit.value = false },
         onFinish = { _canSubmit.value = true },
     )
+
+    fun isChanged(): Boolean = content.value != recruitmentContentToEdit
 
     companion object {
         const val EVENT_ID_KEY = "EVENT_ID_KEY"
