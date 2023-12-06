@@ -52,7 +52,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:onRefresh="@{() -> vm.refresh()}"/>
+            app:onRefresh="@{() -> vm.refresh()}" />
 
         <androidx.core.widget.NestedScrollView
             app:layout_constraintStart_toStartOf="parent"

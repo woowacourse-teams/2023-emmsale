@@ -39,6 +39,7 @@ class FeedWritingViewModel @Inject constructor(
         addSource(content) { value = canSubmit() }
         addSource(_canSubmit) { value = canSubmit() }
     }
+
     private fun canSubmit(): Boolean = titleIsNotBlank && contentIsNotBlank && _canSubmit.value
 
     private val _uiEvent = SingleLiveEvent<FeedWritingUiEvent>()
