@@ -97,7 +97,7 @@
                     tools:ignore="LabelFor"
                     app:layout_constraintEnd_toEndOf="@+id/tv_editmyprofile_name" />
 
-                <com.emmsale.presentation.common.views.VerticalDivider
+                <com.emmsale.presentation.common.views.Divider
                     android:id="@+id/verticalDivider"
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
@@ -202,7 +202,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_choose_field_message"
                     tools:listitem="@layout/item_editmyprofile_field" />
 
-                <com.emmsale.presentation.common.views.VerticalDivider
+                <com.emmsale.presentation.common.views.Divider
                     android:id="@+id/verticalDivider2"
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"

@@ -1,11 +1,10 @@
 package com.emmsale.data.repository.concretes
 
 import com.emmsale.data.apiModel.request.NotificationListDeleteRequest
-import com.emmsale.data.apiModel.request.RecruitmentNotificationReportCreateRequest
 import com.emmsale.data.apiModel.response.NotificationResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.model.updatedNotification.UpdatedNotification
+import com.emmsale.data.model.notification.Notification
 import com.emmsale.data.repository.interfaces.NotificationRepository
 import com.emmsale.data.service.NotificationService
 import com.emmsale.di.modules.other.IoDispatcher
@@ -18,45 +17,25 @@ class DefaultNotificationRepository @Inject constructor(
     private val notificationService: NotificationService,
 ) : NotificationRepository {
 
-    override suspend fun updateNotificationReadStatus(
-        notificationId: Long,
-    ): ApiResponse<Unit> = withContext(dispatcher) {
-        notificationService.updateRecruitmentNotificationReadStatus(notificationId)
-    }
-
-    override suspend fun getUpdatedNotifications(
+    override suspend fun getNotifications(
         memberId: Long,
-    ): ApiResponse<List<UpdatedNotification>> = withContext(dispatcher) {
+    ): ApiResponse<List<Notification>> = withContext(dispatcher) {
         notificationService
             .getNotifications(memberId)
             .map(List<NotificationResponse>::toData)
     }
 
-    override suspend fun updateUpdatedNotificationReadStatus(
+    override suspend fun readNotification(
         notificationId: Long,
     ): ApiResponse<Unit> = withContext(dispatcher) {
-        notificationService.updateNotificationReadStatus(notificationId)
+        notificationService.readNotification(notificationId)
     }
 
-    override suspend fun deleteUpdatedNotifications(
+    override suspend fun deleteNotifications(
         notificationIds: List<Long>,
     ): ApiResponse<Unit> = withContext(dispatcher) {
         notificationService.deleteNotification(
             NotificationListDeleteRequest(notificationIds),
         )
-    }
-
-    override suspend fun reportRecruitmentNotification(
-        recruitmentNotificationId: Long,
-        senderId: Long,
-        reporterId: Long,
-    ): ApiResponse<Unit> = withContext(dispatcher) {
-        notificationService.reportRecruitmentNotification(
-            RecruitmentNotificationReportCreateRequest.create(
-                recruitmentNotificationId = recruitmentNotificationId,
-                senderId = senderId,
-                reporterId = reporterId,
-            ),
-        ).map { }
     }
 }

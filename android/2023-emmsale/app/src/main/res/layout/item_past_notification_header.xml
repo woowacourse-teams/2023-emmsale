@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginTop="30dp"
-            android:text="@string/primarynotification_past_notification_header_title"
+            android:text="@string/notifications_past_notification_header_title"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{() -> onDeleteAllClick.invoke()}"
             android:paddingVertical="10dp"
-            android:text="@string/primarynotification_past_notification_delete_all"
+            android:text="@string/notifications_past_notification_delete_all"
             android:textColor="@color/light_gray"
             android:textSize="12sp"
             android:textStyle="bold"
@@ -40,12 +40,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_past_notification_title" />
 
-        <View
-            android:id="@+id/divider2"
+        <com.emmsale.presentation.common.views.Divider
             android:layout_width="0dp"
             android:layout_height="0.5dp"
             android:layout_marginTop="20dp"
-            android:background="@color/light_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_past_notification_title" />

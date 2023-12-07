@@ -116,7 +116,7 @@
                 app:layout_constraintStart_toStartOf="@+id/iv_setting_member_image"
                 app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image" />
 
-            <com.emmsale.presentation.common.views.VerticalDivider
+            <com.emmsale.presentation.common.views.Divider
                 android:id="@+id/verticaldivider_setting_vertical_divider"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"

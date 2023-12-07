@@ -1,21 +1,13 @@
 package com.emmsale.data.repository.interfaces
 
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
-import com.emmsale.data.model.updatedNotification.UpdatedNotification
+import com.emmsale.data.model.notification.Notification
 
 interface NotificationRepository {
 
-    suspend fun updateNotificationReadStatus(notificationId: Long): ApiResponse<Unit>
+    suspend fun getNotifications(memberId: Long): ApiResponse<List<Notification>>
 
-    suspend fun getUpdatedNotifications(memberId: Long): ApiResponse<List<UpdatedNotification>>
+    suspend fun readNotification(notificationId: Long): ApiResponse<Unit>
 
-    suspend fun updateUpdatedNotificationReadStatus(notificationId: Long): ApiResponse<Unit>
-
-    suspend fun deleteUpdatedNotifications(notificationIds: List<Long>): ApiResponse<Unit>
-
-    suspend fun reportRecruitmentNotification(
-        recruitmentNotificationId: Long,
-        senderId: Long,
-        reporterId: Long,
-    ): ApiResponse<Unit>
+    suspend fun deleteNotifications(notificationIds: List<Long>): ApiResponse<Unit>
 }

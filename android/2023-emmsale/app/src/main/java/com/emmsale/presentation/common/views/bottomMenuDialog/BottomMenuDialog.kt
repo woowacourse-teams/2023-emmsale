@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import com.emmsale.R
 import com.emmsale.databinding.DialogBottomMenuBinding
-import com.emmsale.presentation.common.views.VerticalDivider
+import com.emmsale.presentation.common.views.Divider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class BottomMenuDialog(
@@ -25,7 +25,7 @@ class BottomMenuDialog(
         onClick: () -> Unit,
     ) {
         if (binding.llBottommenudialogMenuitems.childCount > 0) {
-            binding.llBottommenudialogMenuitems.addView(VerticalDivider(context))
+            binding.llBottommenudialogMenuitems.addView(Divider(context))
         }
         binding.llBottommenudialogMenuitems.addView(createMenuItem(title, menuItemType, onClick))
     }

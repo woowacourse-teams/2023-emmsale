@@ -319,16 +319,16 @@
     <string name="logoutdialog_positive_button_label">로그아웃</string>
     <string name="logoutdialog_negative_button_label">취소</string>
 
-    <string name="primarynotification_new_notification_header_title">새로운 알림</string>
-    <string name="primarynotification_past_notification_header_title">지난 알림</string>
-    <string name="primarynotification_past_notification_delete_all">전체 삭제</string>
-    <string name="primarynotification_profile_image_desc">유저 프로필</string>
-    <string name="primarynotification_past_notification_delete">지난 알림 삭제</string>
-    <string name="primarynotification_child_comment_message">댓글에 답글이 달렸어요.</string>
-    <string name="primarynotification_interest_event_message">관심 태그 행사가 업데이트 되었어요.</string>
-    <string name="primarynotification_delete_notification_failed_message">알림 삭제를 할 수 없어요!</string>
-    <string name="primarynotification_delete_notification_confirm_message">지난 알림을 모두 삭제하시겠어요?</string>
-    <string name="primarynotification_delete_notification_confirm_title">알림 삭제</string>
+    <string name="notifications_new_notification_header_title">새로운 알림</string>
+    <string name="notifications_past_notification_header_title">지난 알림</string>
+    <string name="notifications_past_notification_delete_all">전체 삭제</string>
+    <string name="notifications_profile_image_desc">유저 프로필</string>
+    <string name="notifications_past_notification_delete">지난 알림 삭제</string>
+    <string name="notifications_child_comment_message">댓글에 답글이 달렸어요.</string>
+    <string name="notifications_interest_event_message">관심 태그 행사가 업데이트 되었어요.</string>
+    <string name="notifications_delete_notification_failed_message">알림 삭제를 할 수 없어요!</string>
+    <string name="notifications_delete_notification_confirm_message">지난 알림을 모두 삭제하시겠어요?</string>
+    <string name="notifications_delete_notification_confirm_title">알림 삭제</string>
 
     <string name="myprofile_profile_edit">프로필 수정</string>
 

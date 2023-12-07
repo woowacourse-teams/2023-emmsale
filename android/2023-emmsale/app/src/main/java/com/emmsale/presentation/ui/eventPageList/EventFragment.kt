@@ -6,7 +6,7 @@ import com.emmsale.R
 import com.emmsale.databinding.FragmentEventBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.ui.eventSearch.EventSearchActivity
-import com.emmsale.presentation.ui.notificationPageList.NotificationBoxActivity
+import com.emmsale.presentation.ui.notificationList.NotificationsActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,7 +79,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
     private fun initNotificationView() {
         binding.tbEventToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.notification_button -> NotificationBoxActivity.startActivity(requireContext())
+                R.id.notification_button -> NotificationsActivity.startActivity(requireContext())
             }
             true
         }

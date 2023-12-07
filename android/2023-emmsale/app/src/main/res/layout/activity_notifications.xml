@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
+
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.notificationList.NotificationsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.notificationPageList.NotificationBoxActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_notifications"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            android:keepScreenOn="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_all_back"
+            app:title="@string/notificationbox_title"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_notifications"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:itemAnimator="@{null}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_notifications" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.LOADING}"
+            app:layout_constraintTop_toBottomOf="@id/tb_notifications"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.emmsale.presentation.common.views.NetworkErrorView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.NETWORK_ERROR}"
+            app:onRefresh="@{() -> viewModel.refresh()}"
+            app:layout_constraintTop_toBottomOf="@id/tb_notifications"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
