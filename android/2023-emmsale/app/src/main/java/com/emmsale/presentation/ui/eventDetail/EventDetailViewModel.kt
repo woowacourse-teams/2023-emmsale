@@ -2,7 +2,9 @@ package com.emmsale.presentation.ui.eventDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.model.Event
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
@@ -14,6 +16,7 @@ import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,37 +55,29 @@ class EventDetailViewModel @Inject constructor(
         onSuccess = { _event.value = it },
     )
 
-    private fun fetchIsScrapped(): Job = fetchData(
-        fetchData = { eventRepository.isScraped(eventId) },
-        onSuccess = { _isScraped.value = it },
-        onLoading = {},
-    )
+    private fun fetchIsScrapped(): Job = viewModelScope.launch {
+        when (val result = eventRepository.isScraped(eventId)) {
+            is Success -> _isScraped.value = result.data
+            else -> {}
+        }
+    }
 
-    private fun fetchIsAlreadyRecruitmentPostWritten(): Job = fetchData(
-        fetchData = { recruitmentRepository.checkIsAlreadyPostRecruitment(eventId) },
-        onSuccess = { isAlreadyRecruitmentPostWritten = it },
-        onLoading = {},
-    )
+    private fun fetchIsAlreadyRecruitmentPostWritten(): Job = viewModelScope.launch {
+        when (val result = recruitmentRepository.checkIsAlreadyPostRecruitment(eventId)) {
+            is Success -> isAlreadyRecruitmentPostWritten = result.data
+            else -> {}
+        }
+    }
 
     override fun refresh(): Job {
-        refreshIsScrapped()
-        refreshIsAlreadyRecruitmentPostWritten()
+        fetchIsScrapped()
+        fetchIsAlreadyRecruitmentPostWritten()
         return refreshEvent()
     }
 
     private fun refreshEvent(): Job = refreshData(
         refresh = { eventRepository.getEventDetail(eventId) },
         onSuccess = { _event.value = it },
-    )
-
-    private fun refreshIsScrapped(): Job = refreshData(
-        refresh = { eventRepository.isScraped(eventId) },
-        onSuccess = { _isScraped.value = it },
-    )
-
-    private fun refreshIsAlreadyRecruitmentPostWritten(): Job = refreshData(
-        refresh = { recruitmentRepository.checkIsAlreadyPostRecruitment(eventId) },
-        onSuccess = { isAlreadyRecruitmentPostWritten = it },
     )
 
     fun fetchCurrentScreen(position: Int) {
