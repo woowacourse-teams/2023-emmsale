@@ -3,10 +3,11 @@ package com.emmsale.presentation.ui.notificationTagConfig
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityNotificationTagConfigBinding
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
@@ -15,37 +16,47 @@ import com.emmsale.presentation.common.views.ConfirmDialog
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.notificationTagConfig.uiState.NotificationTagConfigUiEvent
 import com.emmsale.presentation.ui.notificationTagConfig.uiState.NotificationTagConfigUiState
+import com.emmsale.presentation.ui.notificationTagConfig.uiState.NotificationTagsConfigUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NotificationTagConfigActivity :
-    AppCompatActivity(),
+    NetworkActivity<ActivityNotificationTagConfigBinding>(R.layout.activity_notification_tag_config),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("notification_tag_config") {
-    private val viewModel: NotificationTagConfigViewModel by viewModels()
-    private val binding by lazy { ActivityNotificationTagConfigBinding.inflate(layoutInflater) }
+
+    override val viewModel: NotificationTagConfigViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        registerScreen(this)
         setContentView(binding.root)
-        initView()
+
+        registerScreen(this)
+
+        setupDateBinding()
+        setupBackPressedDispatcher()
+        setupToolbar()
+
+        observeNotificationTags()
+        observeUiEvent()
     }
 
-    private fun initView() {
+    private fun setupDateBinding() {
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
-        initClickListener()
-        initObservers()
     }
 
-    private fun initClickListener() {
-        initToolbarNavigationClickListener()
+    private fun setupBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (viewModel.isChanged.value == true) showFinishConfirmDialog() else finish()
+                }
+            },
+        )
     }
 
-    private fun initToolbarNavigationClickListener() {
-        binding.tbNotificationTagConfig.setNavigationOnClickListener {
-            showFinishConfirmDialog()
-        }
+    private fun setupToolbar() {
+        binding.tbNotificationTagConfig.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
     private fun showFinishConfirmDialog() {
@@ -57,64 +68,45 @@ class NotificationTagConfigActivity :
         ).show()
     }
 
-    private fun initObservers() {
-        setupNotificationTagsObserver()
-        setupUiEvent()
+    private fun observeNotificationTags() {
+        viewModel.notificationTags.observe(this, ::updateNotificationTagViews)
     }
 
-    private fun setupNotificationTagsObserver() {
-        viewModel.notificationTags.observe(this) { uiState ->
-            updateNotificationTagViews(uiState.conferenceTags)
-        }
-    }
-
-    private fun updateNotificationTagViews(conferenceTags: List<NotificationTagConfigUiState>) {
-        clearNotificationTagViews()
-        addConferenceTags(conferenceTags)
-    }
-
-    private fun clearNotificationTagViews() {
+    private fun updateNotificationTagViews(uiState: NotificationTagsConfigUiState) {
         binding.cgNotificationTag.removeAllViews()
+        addEventTags(uiState.eventTags)
     }
 
-    private fun addConferenceTags(conferenceTags: List<NotificationTagConfigUiState>) {
-        conferenceTags.forEach(::addConferenceTag)
+    private fun addEventTags(eventTags: List<NotificationTagConfigUiState>) {
+        eventTags.forEach(::addEventTag)
     }
 
-    private fun addConferenceTag(conferenceTag: NotificationTagConfigUiState) {
-        binding.cgNotificationTag.addView(createEventTag(conferenceTag))
+    private fun addEventTag(eventTags: NotificationTagConfigUiState) {
+        binding.cgNotificationTag.addView(createEventTag(eventTags))
     }
 
     private fun createEventTag(eventTag: NotificationTagConfigUiState): ActivityTag =
         activityChipOf {
-            text = eventTag.tagName
+            text = eventTag.eventTag.name
             isChecked = eventTag.isChecked
             setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    viewModel.addInterestTag(eventTag.id)
+                    viewModel.checkTag(eventTag.eventTag.id)
                 } else {
-                    viewModel.removeInterestTag(eventTag.id)
+                    viewModel.uncheckTag(eventTag.eventTag.id)
                 }
             }
         }
 
-    private fun setupUiEvent() {
-        viewModel.event.observe(this) {
-            handleEvent(it)
-        }
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
-    private fun handleEvent(event: NotificationTagConfigUiEvent?) {
-        if (event == null) return
-        when (event) {
-            NotificationTagConfigUiEvent.UPDATE_SUCCESS -> finish()
-            NotificationTagConfigUiEvent.UPDATE_FAIL -> showInterestTagsUpdateErrorMessage()
+    private fun handleUiEvent(uiEvent: NotificationTagConfigUiEvent) {
+        when (uiEvent) {
+            NotificationTagConfigUiEvent.UpdateComplete -> finish()
+            NotificationTagConfigUiEvent.UpdateFail -> binding.root.showSnackBar(R.string.notificationtagconfig_interest_tags_update_error_message)
         }
-        viewModel.resetEvent()
-    }
-
-    private fun showInterestTagsUpdateErrorMessage() {
-        binding.root.showSnackBar(R.string.notificationtagconfig_interest_tags_update_error_message)
     }
 
     companion object {

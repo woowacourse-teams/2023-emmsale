@@ -3,40 +3,22 @@ package com.emmsale.presentation.ui.notificationTagConfig.uiState
 import com.emmsale.data.model.EventTag
 
 data class NotificationTagsConfigUiState(
-    val conferenceTags: List<NotificationTagConfigUiState> = emptyList(),
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
+    val eventTags: List<NotificationTagConfigUiState> = emptyList(),
 ) {
-    fun addInterestTagById(id: Long): NotificationTagsConfigUiState = copy(
-        conferenceTags = conferenceTags.map { tag ->
-            if (tag.id == id) tag.setChecked(true) else tag
-        },
-        isError = false,
+
+    constructor(eventTags: List<EventTag>, interestEventTags: List<EventTag>) : this(
+        eventTags.map { NotificationTagConfigUiState(it, it in interestEventTags) },
     )
 
-    fun removeInterestTagById(id: Long): NotificationTagsConfigUiState = copy(
-        conferenceTags = conferenceTags.map { tag ->
-            if (tag.id == id) tag.setChecked(false) else tag
+    fun checkTag(tagId: Long) = NotificationTagsConfigUiState(
+        eventTags = eventTags.map {
+            if (it.eventTag.id == tagId) it.copy(isChecked = true) else it
         },
-        isError = false,
     )
 
-    companion object {
-        fun from(
-            eventTags: List<EventTag>,
-            interestEventTags: List<EventTag>,
-        ): NotificationTagsConfigUiState {
-            val interestTagIds = interestEventTags.map(EventTag::id)
-
-            return NotificationTagsConfigUiState(
-                conferenceTags = eventTags.map { eventTag ->
-                    NotificationTagConfigUiState.from(
-                        eventTag = eventTag,
-                        isSelected = eventTag.id in interestTagIds,
-                    )
-                },
-                isError = false,
-            )
-        }
-    }
+    fun uncheckTag(tagId: Long) = NotificationTagsConfigUiState(
+        eventTags = eventTags.map {
+            if (it.eventTag.id == tagId) it.copy(isChecked = false) else it
+        },
+    )
 }

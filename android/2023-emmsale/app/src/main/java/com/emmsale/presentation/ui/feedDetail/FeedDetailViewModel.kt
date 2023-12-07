@@ -74,28 +74,38 @@ class FeedDetailViewModel @Inject constructor(
             async { commentRepository.getComments(feedId) },
         ).awaitAll()
 
-        if (feedResult is Unexpected) {
-            _commonUiEvent.value = CommonUiEvent.Unexpected(feedResult.error?.message.toString())
-            return@launch
-        } else if (commentResult is Unexpected) {
-            _commonUiEvent.value = CommonUiEvent.Unexpected(commentResult.error?.message.toString())
-            return@launch
-        }
+        when {
+            feedResult is Unexpected -> {
+                _commonUiEvent.value =
+                    CommonUiEvent.Unexpected(feedResult.error?.message.toString())
+                return@launch
+            }
 
-        if (feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE) {
-            _uiEvent.value = UiEvent(FeedDetailUiEvent.DeletedFeedFetch)
-        }
+            commentResult is Unexpected -> {
+                _commonUiEvent.value =
+                    CommonUiEvent.Unexpected(commentResult.error?.message.toString())
+                return@launch
+            }
 
-        if (feedResult is NetworkError || commentResult is NetworkError) {
-            dispatchNetworkErrorEvent()
-            return@launch
-        }
+            feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
+                _uiEvent.value = UiEvent(FeedDetailUiEvent.DeletedFeedFetch)
+            }
 
-        if (feedResult is Success && commentResult is Success) {
-            val comments = commentResult.data as List<Comment>
-            val feed = feedResult.data as Feed
-            _feed.value = feed.copy(commentCount = comments.undeletedCount())
-            _comments.value = CommentsUiState(uid, comments)
+            feedResult is Failure || commentResult is Failure -> {
+                dispatchFetchFailEvent()
+            }
+
+            feedResult is NetworkError || commentResult is NetworkError -> {
+                dispatchNetworkErrorEvent()
+                return@launch
+            }
+
+            feedResult is Success && commentResult is Success -> {
+                val comments = commentResult.data as List<Comment>
+                val feed = feedResult.data as Feed
+                _feed.value = feed.copy(commentCount = comments.undeletedCount())
+                _comments.value = CommentsUiState(uid, comments)
+            }
         }
         _screenUiState.value = ScreenUiState.NONE
     }
@@ -108,28 +118,38 @@ class FeedDetailViewModel @Inject constructor(
             async { commentRepository.getComments(feedId) },
         ).awaitAll()
 
-        if (feedResult is Unexpected) {
-            _commonUiEvent.value = CommonUiEvent.Unexpected(feedResult.error?.message.toString())
-            return@launch
-        } else if (commentResult is Unexpected) {
-            _commonUiEvent.value = CommonUiEvent.Unexpected(commentResult.error?.message.toString())
-            return@launch
-        }
+        when {
+            feedResult is Unexpected -> {
+                _commonUiEvent.value =
+                    CommonUiEvent.Unexpected(feedResult.error?.message.toString())
+                return@launch
+            }
 
-        if (feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE) {
-            _uiEvent.value = UiEvent(FeedDetailUiEvent.DeletedFeedFetch)
-        }
+            commentResult is Unexpected -> {
+                _commonUiEvent.value =
+                    CommonUiEvent.Unexpected(commentResult.error?.message.toString())
+                return@launch
+            }
 
-        if (feedResult is NetworkError || commentResult is NetworkError) {
-            _screenUiState.value = ScreenUiState.NETWORK_ERROR
-            return@launch
-        }
+            feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
+                _uiEvent.value = UiEvent(FeedDetailUiEvent.DeletedFeedFetch)
+            }
 
-        if (feedResult is Success && commentResult is Success) {
-            val comments = commentResult.data as List<Comment>
-            val feed = feedResult.data as Feed
-            _feed.value = feed.copy(commentCount = comments.undeletedCount())
-            _comments.value = CommentsUiState(uid, comments)
+            feedResult is Failure || commentResult is Failure -> {
+                dispatchFetchFailEvent()
+            }
+
+            feedResult is NetworkError || commentResult is NetworkError -> {
+                changeToNetworkErrorState()
+                return@launch
+            }
+
+            feedResult is Success && commentResult is Success -> {
+                val comments = commentResult.data as List<Comment>
+                val feed = feedResult.data as Feed
+                _feed.value = feed.copy(commentCount = comments.undeletedCount())
+                _comments.value = CommentsUiState(uid, comments)
+            }
         }
 
         _screenUiState.value = ScreenUiState.NONE

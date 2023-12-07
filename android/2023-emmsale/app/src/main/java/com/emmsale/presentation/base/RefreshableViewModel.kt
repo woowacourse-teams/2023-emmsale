@@ -1,16 +1,21 @@
 package com.emmsale.presentation.base
 
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.presentation.common.CommonUiEvent
 import kotlinx.coroutines.Job
 
 abstract class RefreshableViewModel : NetworkViewModel() {
 
     abstract fun refresh(): Job
 
+    protected fun dispatchFetchFailEvent() {
+        _commonUiEvent.value = CommonUiEvent.FetchFail
+    }
+
     protected fun <T : Any> fetchData(
         fetchData: suspend () -> ApiResponse<T>,
         onSuccess: (T) -> Unit = {},
-        onFailure: (code: Int, message: String?) -> Unit = { _, _ -> },
+        onFailure: (code: Int, message: String?) -> Unit = { _, _ -> dispatchFetchFailEvent() },
         onLoading: suspend () -> Unit = { changeToLoadingState() },
         onNetworkError: () -> Unit = ::changeToNetworkErrorState,
         onStart: () -> Unit = {},
@@ -28,7 +33,7 @@ abstract class RefreshableViewModel : NetworkViewModel() {
     protected fun <T : Any> refreshData(
         refresh: suspend () -> ApiResponse<T>,
         onSuccess: (T) -> Unit = {},
-        onFailure: (code: Int, message: String?) -> Unit = { _, _ -> },
+        onFailure: (code: Int, message: String?) -> Unit = { _, _ -> dispatchFetchFailEvent() },
         onLoading: suspend () -> Unit = {},
         onNetworkError: () -> Unit = {},
         onStart: () -> Unit = {},
