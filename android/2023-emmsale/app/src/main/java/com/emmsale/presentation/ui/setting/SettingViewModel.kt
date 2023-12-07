@@ -1,19 +1,18 @@
 package com.emmsale.presentation.ui.setting
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.emmsale.BuildConfig
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
+import com.emmsale.data.model.Member
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.ui.setting.uiState.MemberUiState
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
+import com.emmsale.presentation.ui.setting.uiState.SettingUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,41 +20,34 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
-) : ViewModel(), Refreshable {
+) : RefreshableViewModel() {
 
-    private val _isLogin = NotNullMutableLiveData(true)
-    val isLogin: NotNullLiveData<Boolean> = _isLogin
+    private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _member = NotNullMutableLiveData(MemberUiState.FIRST_LOADING)
-    val member: NotNullLiveData<MemberUiState> = _member
+    private val _member = NotNullMutableLiveData(Member())
+    val member: NotNullLiveData<Member> = _member
 
-    private val _appVersion = NotNullMutableLiveData(BuildConfig.VERSION_NAME)
-    val appVersion: NotNullLiveData<String> = _appVersion
+    val appVersion: String = BuildConfig.VERSION_NAME
+
+    private val _uiEvent = SingleLiveEvent<SettingUiEvent>()
+    val uiEvent: LiveData<SettingUiEvent> = _uiEvent
 
     init {
-        refresh()
+        fetchMember()
     }
 
-    override fun refresh() {
-        viewModelScope.launch {
-            val token = tokenRepository.getToken()
-            if (token == null) {
-                _isLogin.value = false
-                return@launch
-            }
-            when (val result = memberRepository.getMember(token.uid)) {
-                is Failure, NetworkError -> _member.value = _member.value.changeToErrorState()
-                is Success -> _member.value = _member.value.changeMemberState(result.data)
-                is Unexpected -> throw Throwable(result.error)
-            }
-        }
-    }
+    private fun fetchMember(): Job = fetchData(
+        fetchData = { memberRepository.getMember(uid) },
+        onSuccess = { _member.value = it },
+    )
 
-    fun logout() {
-        _member.value = _member.value.changeToLoadingState()
-        viewModelScope.launch {
-            tokenRepository.deleteToken()
-            _member.value = _member.value.changeToLogoutState()
-        }
+    override fun refresh(): Job = refreshData(
+        refresh = { memberRepository.getMember(uid) },
+        onSuccess = { _member.value = it },
+    )
+
+    fun logout(): Job = viewModelScope.launch {
+        tokenRepository.deleteToken()
+        _uiEvent.value = SettingUiEvent.Logout
     }
 }

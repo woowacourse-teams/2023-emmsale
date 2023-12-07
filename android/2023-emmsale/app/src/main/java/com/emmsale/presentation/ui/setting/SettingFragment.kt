@@ -8,7 +8,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentSettingBinding
-import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.common.views.WarningDialog
@@ -17,16 +17,17 @@ import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.myCommentList.MyCommentsActivity
 import com.emmsale.presentation.ui.myRecruitmentList.MyRecruitmentActivity
 import com.emmsale.presentation.ui.notificationConfig.NotificationConfigActivity
-import com.emmsale.presentation.ui.setting.uiState.MemberUiState
+import com.emmsale.presentation.ui.setting.uiState.SettingUiEvent
 import com.emmsale.presentation.ui.useTerm.UseTermWebViewActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SettingFragment :
-    BaseFragment<FragmentSettingBinding>(),
+    NetworkFragment<FragmentSettingBinding>(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("setting") {
+
     override val layoutResId: Int = R.layout.fragment_setting
-    private val viewModel: SettingViewModel by viewModels()
+    override val viewModel: SettingViewModel by viewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -35,42 +36,26 @@ class SettingFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initDataBinding()
-        setupUiLogic()
+
+        setupDataBinding()
+
+        observeUiEvent()
     }
 
-    private fun initDataBinding() {
+    private fun setupDataBinding() {
         binding.viewModel = viewModel
-        binding.showWritings = ::showWritings
-        binding.showWrittenComments = ::showWrittenComments
-        binding.showNotificationSetting = ::navigateToNotificationConfig
-        binding.showBlocks = ::showBlocks
-        binding.showUseTerm = ::showUseTerm
-        binding.logout = ::logout
-        binding.showInquirePage = ::showInquirePage
+        binding.onWritingsButtonClick = { MyRecruitmentActivity.startActivity(requireContext()) }
+        binding.onWrittenCommentsButtonClick =
+            { MyCommentsActivity.startActivity(requireContext()) }
+        binding.onNotificationSettingButtonClick =
+            { NotificationConfigActivity.startActivity(requireContext()) }
+        binding.onBlockMembersButtonClick = { MemberBlockActivity.startActivity(requireContext()) }
+        binding.onUseTermButtonClick = { UseTermWebViewActivity.startActivity(requireContext()) }
+        binding.onLogoutButtonClick = ::showLogoutConfirmDialog
+        binding.onInquirePageButtonClick = ::showInquirePage
     }
 
-    private fun showWritings() {
-        MyRecruitmentActivity.startActivity(requireContext())
-    }
-
-    private fun showWrittenComments() {
-        MyCommentsActivity.startActivity(context ?: return)
-    }
-
-    private fun navigateToNotificationConfig() {
-        NotificationConfigActivity.startActivity(requireContext())
-    }
-
-    private fun showBlocks() {
-        MemberBlockActivity.startActivity(context ?: return)
-    }
-
-    private fun showUseTerm() {
-        UseTermWebViewActivity.startActivity(requireContext())
-    }
-
-    private fun logout() {
+    private fun showLogoutConfirmDialog() {
         WarningDialog(
             context = context ?: return,
             title = getString(R.string.logoutdialog_title),
@@ -86,42 +71,16 @@ class SettingFragment :
         startActivity(intent)
     }
 
-    private fun setupUiLogic() {
-        setupLoginUiLogic()
-        setupMemberUiLogic()
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(viewLifecycleOwner, ::handleUiEvent)
     }
 
-    private fun setupLoginUiLogic() {
-        viewModel.isLogin.observe(viewLifecycleOwner) {
-            handleNotLogin(it)
-        }
-    }
-
-    private fun handleNotLogin(isLogin: Boolean) {
-        if (!isLogin) {
-            LoginActivity.startActivity(requireContext())
-            activity?.finish()
-        }
-    }
-
-    private fun setupMemberUiLogic() {
-        viewModel.member.observe(viewLifecycleOwner) {
-            handleMemberDelete(it)
-            handleLogout(it)
-        }
-    }
-
-    private fun handleMemberDelete(member: MemberUiState) {
-        if (member.isDeleted) {
-            LoginActivity.startActivity(context ?: return)
-            activity?.finish()
-        }
-    }
-
-    private fun handleLogout(member: MemberUiState) {
-        if (member.isLogout) {
-            LoginActivity.startActivity(context ?: return)
-            activity?.finish()
+    private fun handleUiEvent(uiEvent: SettingUiEvent) {
+        when (uiEvent) {
+            SettingUiEvent.Logout -> {
+                LoginActivity.startActivity(context ?: return)
+                activity?.finish()
+            }
         }
     }
 

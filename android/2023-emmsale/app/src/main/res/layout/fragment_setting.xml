@@ -1,47 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.view.View" />
 
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
+
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.setting.SettingViewModel" />
 
         <variable
-            name="showWritings"
+            name="onWritingsButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="showWrittenComments"
+            name="onWrittenCommentsButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="showNotificationSetting"
+            name="onNotificationSettingButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="showBlocks"
+            name="onBlockMembersButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="showUseTerm"
+            name="onUseTermButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="deleteMember"
+            name="onWithdrawalButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="logout"
+            name="onLogoutButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="showInquirePage"
+            name="onInquirePageButtonClick"
             type="kotlin.jvm.functions.Function0" />
     </data>
 
@@ -52,27 +53,20 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/tb_setting_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content"
+            android:paddingTop="?attr/actionBarSize">
 
             <ImageView
                 android:id="@+id/iv_setting_member_image"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="17dp"
-                android:layout_marginTop="2dp"
                 android:contentDescription="@string/setting_member_image_description"
-                app:imageUrl="@{viewModel.member.imageUrl}"
+                app:imageUrl="@{viewModel.member.profileImageUrl}"
                 app:isCircle="@{true}"
+                android:layout_marginTop="2dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tb_setting_toolbar"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
@@ -93,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:text="@{viewModel.member.githubId}"
+                android:text="@{viewModel.member.githubUrl}"
                 android:textColor="#8b8b8b"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/tv_setting_member_name"
@@ -108,7 +102,7 @@
                 android:layout_marginEnd="17dp"
                 android:background="@drawable/bg_setting_button"
                 android:gravity="center"
-                android:onClick="@{() -> showWrittenComments.invoke()}"
+                android:onClick="@{() -> onWrittenCommentsButtonClick.invoke()}"
                 android:paddingVertical="12dp"
                 android:text="@string/setting_written_comments_button_label"
                 android:textSize="11sp"
@@ -132,7 +126,7 @@
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="14dp"
                 android:layout_marginEnd="17dp"
-                android:onClick="@{() -> showNotificationSetting.invoke()}"
+                android:onClick="@{() -> onNotificationSettingButtonClick.invoke()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/verticaldivider_setting_vertical_divider">
@@ -166,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:layout_marginEnd="17dp"
-                android:onClick="@{() -> showBlocks.invoke()}"
+                android:onClick="@{() -> onBlockMembersButtonClick.invoke()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_setting_notification_setting_button">
@@ -200,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:layout_marginEnd="17dp"
-                android:onClick="@{() -> showUseTerm.invoke()}"
+                android:onClick="@{() -> onUseTermButtonClick.invoke()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_setting_blocks_button">
@@ -234,7 +228,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:layout_marginEnd="17dp"
-                android:onClick="@{() -> deleteMember.invoke()}"
+                android:onClick="@{() -> onWithdrawalButtonClick.invoke()}"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -259,7 +253,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:layout_marginEnd="17dp"
-                android:onClick="@{() -> showInquirePage.invoke()}"
+                android:onClick="@{() -> onInquirePageButtonClick.invoke()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_setting_use_term_button">
@@ -327,7 +321,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:layout_marginEnd="17dp"
-                android:onClick="@{() -> logout.invoke()}"
+                android:onClick="@{() -> onLogoutButtonClick.invoke()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_setting_version_info_button">
@@ -352,24 +346,21 @@
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{viewModel.member.isLoading ? View.VISIBLE : View.GONE}"
+                app:visible="@{viewModel.screenUiState == ScreenUiState.LOADING}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <include
-                layout="@layout/layout_all_error_screen"
+            <com.emmsale.presentation.common.views.NetworkErrorView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/white"
-                android:visibility="@{viewModel.member.isError ? View.VISIBLE : View.GONE}"
+                app:visible="@{viewModel.screenUiState == ScreenUiState.NETWORK_ERROR}"
+                app:onRefresh="@{() -> viewModel.refresh()}"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tb_setting_toolbar"
-                bind:viewModel="@{viewModel}"
-                tools:visibility="gone" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
