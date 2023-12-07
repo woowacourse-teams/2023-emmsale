@@ -35,9 +35,9 @@ abstract class NetworkActivity<V : ViewDataBinding>(
     private fun showIllegalAccessDialog() {
         InfoDialog(
             context = this,
-            title = "오류",
-            message = "잘못된 접근입니다.",
-            buttonLabel = "확인",
+            title = getString(R.string.all_fetch_error_dialog_title),
+            message = getString(R.string.all_fetch_error_dialog_message),
+            buttonLabel = getString(R.string.all_okay),
             onButtonClick = { finish() },
             cancelable = false,
         ).show()
