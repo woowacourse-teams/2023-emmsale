@@ -2,7 +2,6 @@ package com.emmsale.presentation.ui.eventDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.model.Event
 import com.emmsale.data.repository.interfaces.EventRepository
@@ -15,7 +14,6 @@ import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -66,10 +64,10 @@ class EventDetailViewModel @Inject constructor(
         onLoading = {},
     )
 
-    override fun refresh(): Job = viewModelScope.launch {
-        refreshEvent()
+    override fun refresh(): Job {
         refreshIsScrapped()
         refreshIsAlreadyRecruitmentPostWritten()
+        return refreshEvent()
     }
 
     private fun refreshEvent(): Job = refreshData(

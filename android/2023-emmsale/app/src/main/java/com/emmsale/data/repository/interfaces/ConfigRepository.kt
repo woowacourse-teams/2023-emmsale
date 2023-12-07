@@ -10,8 +10,6 @@ interface ConfigRepository {
 
     fun saveAutoLoginConfig(isAutoLogin: Boolean)
 
-    fun saveFollowNotificationReceiveConfig(isReceive: Boolean)
-
     fun saveCommentNotificationReceiveConfig(isReceive: Boolean)
 
     fun saveInterestEventNotificationReceiveConfig(isReceive: Boolean)
