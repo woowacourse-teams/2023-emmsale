@@ -11,7 +11,7 @@ import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
-class EventRecruitmentViewModel @Inject constructor(
+class RecruitmentsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val recruitmentRepository: RecruitmentRepository,
 ) : RefreshableViewModel() {

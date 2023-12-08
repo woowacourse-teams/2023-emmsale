@@ -4,50 +4,30 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.emmsale.R
 import com.emmsale.data.model.Recruitment
-import com.emmsale.databinding.FragmentEventRecruitmentBinding
+import com.emmsale.databinding.FragmentRecruitmentsBinding
 import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
-import com.emmsale.presentation.ui.recruitmentList.EventRecruitmentViewModel.Companion.EVENT_ID_KEY
+import com.emmsale.presentation.ui.recruitmentList.RecruitmentsViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.recruitmentList.recyclerView.EventRecruitmentAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EventRecruitmentFragment :
-    NetworkFragment<FragmentEventRecruitmentBinding>(),
+class RecruitmentsFragment :
+    NetworkFragment<FragmentRecruitmentsBinding>(),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("event_recruitment") {
-    override val layoutResId: Int = R.layout.fragment_event_recruitment
-    override val viewModel: EventRecruitmentViewModel by viewModels()
+    override val layoutResId: Int = R.layout.fragment_recruitments
+    override val viewModel: RecruitmentsViewModel by viewModels()
 
     private val recruitmentAdapter: EventRecruitmentAdapter by lazy {
         EventRecruitmentAdapter(::navigateToRecruitmentDetail)
     }
 
     private lateinit var eventDetailActivity: EventDetailActivity
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        eventDetailActivity = context as EventDetailActivity
-        registerScreen(this)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.vm = viewModel
-        initRecyclerView()
-        setUpRecruitments()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.refresh()
-    }
 
     private fun navigateToRecruitmentDetail(recruitment: Recruitment) {
         RecruitmentPostDetailActivity.startActivity(
@@ -57,19 +37,38 @@ class EventRecruitmentFragment :
         )
     }
 
-    private fun initRecyclerView() {
-        binding.rvRecruitment.adapter = recruitmentAdapter
-        binding.rvRecruitment.layoutManager = LinearLayoutManager(requireContext())
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        eventDetailActivity = context as EventDetailActivity
+        registerScreen(this)
     }
 
-    private fun setUpRecruitments() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.vm = viewModel
+
+        setupRecruitmentsRecyclerView()
+
+        observeRecruitments()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
+    }
+
+    private fun setupRecruitmentsRecyclerView() {
+        binding.rvRecruitment.adapter = recruitmentAdapter
+    }
+
+    private fun observeRecruitments() {
         viewModel.recruitments.observe(viewLifecycleOwner) {
             recruitmentAdapter.submitList(it)
         }
     }
 
     companion object {
-        fun create(eventId: Long): EventRecruitmentFragment = EventRecruitmentFragment().apply {
+        fun create(eventId: Long): RecruitmentsFragment = RecruitmentsFragment().apply {
             arguments = Bundle().apply {
                 putLong(EVENT_ID_KEY, eventId)
             }

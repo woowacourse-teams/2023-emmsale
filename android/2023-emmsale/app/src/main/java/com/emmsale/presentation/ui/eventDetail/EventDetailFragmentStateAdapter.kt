@@ -9,7 +9,7 @@ import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState.
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState.RECRUITMENT
 import com.emmsale.presentation.ui.eventDetailInfo.EventInfoFragment
 import com.emmsale.presentation.ui.feedList.FeedListFragment
-import com.emmsale.presentation.ui.recruitmentList.EventRecruitmentFragment
+import com.emmsale.presentation.ui.recruitmentList.RecruitmentsFragment
 
 class EventDetailFragmentStateAdapter(
     fragmentActivity: FragmentActivity,
@@ -22,7 +22,7 @@ class EventDetailFragmentStateAdapter(
         return when (EventDetailScreenUiState.from(position)) {
             INFORMATION -> EventInfoFragment.create()
             POST -> FeedListFragment.create(eventId)
-            RECRUITMENT -> EventRecruitmentFragment.create(eventId)
+            RECRUITMENT -> RecruitmentsFragment.create(eventId)
         }
     }
 }
