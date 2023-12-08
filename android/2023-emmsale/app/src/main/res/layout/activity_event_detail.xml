@@ -228,7 +228,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:clickable="true"
+                android:enabled="@{vm.canChangeIsScrapped}"
                 android:onClick="@{() -> vm.toggleIsScrapped()}"
                 android:padding="6dp"
                 android:src="@{vm.isScraped ? @drawable/ic_all_scrap_checked : @drawable/ic_all_scrap_unchecked}"

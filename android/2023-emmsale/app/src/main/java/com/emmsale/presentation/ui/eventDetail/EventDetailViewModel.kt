@@ -3,7 +3,6 @@ package com.emmsale.presentation.ui.eventDetail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.model.Event
 import com.emmsale.data.repository.interfaces.EventRepository
@@ -36,7 +35,8 @@ class EventDetailViewModel @Inject constructor(
     var isAlreadyRecruitmentPostWritten = false
         private set
 
-    private var canChangeIsScrapped = true
+    private val _canChangeIsScrapped = NotNullMutableLiveData(true)
+    val canChangeIsScrapped: NotNullLiveData<Boolean> = _canChangeIsScrapped
 
     private val _currentScreen = NotNullMutableLiveData(EventDetailScreenUiState.INFORMATION)
     val currentScreen: NotNullLiveData<EventDetailScreenUiState> = _currentScreen
@@ -86,7 +86,6 @@ class EventDetailViewModel @Inject constructor(
 
     fun toggleIsScrapped(): Job = command(
         command = {
-            if (!canChangeIsScrapped) return@command Failure(MEANINGLESS_CODE, "")
             if (isScraped.value) {
                 eventRepository.scrapOffEvent(eventId)
             } else {
@@ -94,22 +93,19 @@ class EventDetailViewModel @Inject constructor(
             }
         },
         onSuccess = { _isScraped.value = !_isScraped.value },
-        onFailure = { code, _ ->
-            if (code == MEANINGLESS_CODE) return@command
-
+        onFailure = { _, _ ->
             if (isScraped.value) {
                 _uiEvent.value = EventDetailUiEvent.ScrapOffFail
             } else {
                 _uiEvent.value = EventDetailUiEvent.ScrapFail
             }
         },
-        onStart = { canChangeIsScrapped = false },
-        onFinish = { canChangeIsScrapped = true },
+        onStart = { _canChangeIsScrapped.value = false },
+        onFinish = { _canChangeIsScrapped.value = true },
     )
 
     companion object {
         const val EVENT_ID_KEY = "EVENT_ID_KEY"
         private const val DEFAULT_EVENT_ID = -1L
-        private const val MEANINGLESS_CODE = -1
     }
 }
