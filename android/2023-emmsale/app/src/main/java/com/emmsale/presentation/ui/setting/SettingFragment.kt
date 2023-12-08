@@ -52,7 +52,7 @@ class SettingFragment :
         binding.onBlockMembersButtonClick = { BlockedMembersActivity.startActivity(requireContext()) }
         binding.onUseTermButtonClick = { UseTermWebViewActivity.startActivity(requireContext()) }
         binding.onLogoutButtonClick = ::showLogoutConfirmDialog
-        binding.onInquirePageButtonClick = ::showInquirePage
+        binding.onInquirePageButtonClick = ::navigateToInquirePage
     }
 
     private fun showLogoutConfirmDialog() {
@@ -66,7 +66,7 @@ class SettingFragment :
         ).show()
     }
 
-    private fun showInquirePage() {
+    private fun navigateToInquirePage() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(INQUIRE_PAGE_URL))
         startActivity(intent)
     }
