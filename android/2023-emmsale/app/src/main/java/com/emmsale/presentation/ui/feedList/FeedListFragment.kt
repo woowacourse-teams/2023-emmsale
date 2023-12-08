@@ -20,11 +20,17 @@ class FeedListFragment : NetworkFragment<FragmentFeedListBinding>() {
         FeedListAdapter(navigateToFeedDetail = ::navigateToFeedDetail)
     }
 
+    private fun navigateToFeedDetail(feedId: Long) {
+        FeedDetailActivity.startActivity(requireContext(), feedId)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.vm = viewModel
         binding.rvFeedList.adapter = feedListAdapter
-        setUpFeeds()
+
+        observeFeeds()
     }
 
     override fun onResume() {
@@ -32,14 +38,10 @@ class FeedListFragment : NetworkFragment<FragmentFeedListBinding>() {
         viewModel.refresh()
     }
 
-    private fun setUpFeeds() {
+    private fun observeFeeds() {
         viewModel.feeds.observe(viewLifecycleOwner) {
             feedListAdapter.submitList(it)
         }
-    }
-
-    private fun navigateToFeedDetail(feedId: Long) {
-        FeedDetailActivity.startActivity(requireContext(), feedId)
     }
 
     companion object {
