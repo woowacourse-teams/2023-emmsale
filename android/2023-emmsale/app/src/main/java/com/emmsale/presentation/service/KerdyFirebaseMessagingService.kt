@@ -15,7 +15,7 @@ import com.emmsale.presentation.common.extension.isUpdateNeeded
 import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.extension.topActivityName
-import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
+import com.emmsale.presentation.ui.childCommentList.ChildCommentsActivity
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.splash.SplashActivity
@@ -130,7 +130,7 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         val intent = if (isUpdateNeeded) {
             SplashActivity.getIntent(this)
         } else {
-            ChildCommentActivity.getIntent(this, feedId, parentCommentId, childCommentId, false)
+            ChildCommentsActivity.getIntent(this, feedId, parentCommentId, childCommentId, false)
         }
 
         baseContext.showNotification(

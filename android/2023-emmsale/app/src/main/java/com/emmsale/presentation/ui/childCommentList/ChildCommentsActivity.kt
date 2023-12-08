@@ -18,8 +18,8 @@ import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
-import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_FEED_ID
-import com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel.Companion.KEY_PARENT_COMMENT_ID
+import com.emmsale.presentation.ui.childCommentList.ChildCommentsViewModel.Companion.KEY_FEED_ID
+import com.emmsale.presentation.ui.childCommentList.ChildCommentsViewModel.Companion.KEY_PARENT_COMMENT_ID
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
@@ -28,10 +28,10 @@ import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChildCommentActivity :
+class ChildCommentsActivity :
     NetworkActivity<ActivityChildCommentsBinding>(R.layout.activity_child_comments) {
 
-    override val viewModel: ChildCommentViewModel by viewModels()
+    override val viewModel: ChildCommentsViewModel by viewModels()
 
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
         onCommentClick = { comment -> viewModel.unhighlight(comment.id) },
@@ -47,23 +47,6 @@ class ChildCommentActivity :
 
     private val fromPostDetail: Boolean by lazy {
         intent.getBooleanExtra(KEY_FROM_POST_DETAIL, true)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
-        setupDataBinding()
-        setupBackPressedDispatcher()
-        setupToolbar()
-        setupChildCommentsRecyclerView()
-        observeComments()
-        observeUiEvent()
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        viewModel.refresh()
     }
 
     private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, commentId: Long) {
@@ -121,9 +104,26 @@ class ChildCommentActivity :
         ).show()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        setupDataBinding()
+        setupBackPressedDispatcher()
+        setupToolbar()
+        setupChildCommentsRecyclerView()
+
+        observeComments()
+        observeUiEvent()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        viewModel.refresh()
+    }
+
     private fun setupDataBinding() {
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
         binding.onCommentSubmitButtonClick = {
             viewModel.postChildComment(it)
             hideKeyboard()
@@ -146,7 +146,7 @@ class ChildCommentActivity :
                 override fun handleOnBackPressed() {
                     if (!fromPostDetail) {
                         FeedDetailActivity.startActivity(
-                            this@ChildCommentActivity,
+                            this@ChildCommentsActivity,
                             viewModel.feedId,
                         )
                     }
@@ -165,7 +165,7 @@ class ChildCommentActivity :
         binding.rvChildcommentsChildcomments.apply {
             adapter = commentsAdapter
             itemAnimator = null
-            addItemDecoration(DividerItemDecoration(this@ChildCommentActivity))
+            addItemDecoration(DividerItemDecoration(this@ChildCommentsActivity))
         }
     }
 
@@ -191,7 +191,7 @@ class ChildCommentActivity :
     }
 
     private fun observeUiEvent() {
-        viewModel.uiEvent.observe(this) { handleUiEvent(it) }
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
     private fun handleUiEvent(event: ChildCommentsUiEvent) {
@@ -265,7 +265,7 @@ class ChildCommentActivity :
             parentCommentId: Long,
             highlightCommentId: Long = INVALID_COMMENT_ID,
             fromPostDetail: Boolean = true,
-        ) = Intent(context, ChildCommentActivity::class.java)
+        ) = Intent(context, ChildCommentsActivity::class.java)
             .putExtra(KEY_FEED_ID, feedId)
             .putExtra(KEY_PARENT_COMMENT_ID, parentCommentId)
             .putExtra(KEY_HIGHLIGHT_COMMENT_ID, highlightCommentId)

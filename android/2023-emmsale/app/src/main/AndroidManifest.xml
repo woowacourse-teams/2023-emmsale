@@ -50,7 +50,7 @@
         <activity android:name=".presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity" />
         <activity android:name=".presentation.ui.editMyProfile.EditMyProfileActivity" />
         <activity android:name=".presentation.ui.profile.ProfileActivity" />
-        <activity android:name=".presentation.ui.childCommentList.ChildCommentActivity" />
+        <activity android:name=".presentation.ui.childCommentList.ChildCommentsActivity" />
         <activity android:name=".presentation.ui.useTerm.UseTermWebViewActivity" />
         <activity android:name=".presentation.ui.conferenceFilter.ConferenceFilterActivity" />
         <activity android:name=".presentation.ui.competitionFilter.CompetitionFilterActivity" />

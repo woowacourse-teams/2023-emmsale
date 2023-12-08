@@ -13,7 +13,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel" />
+            type="com.emmsale.presentation.ui.childCommentList.ChildCommentsViewModel" />
 
         <variable
             name="onCommentSubmitButtonClick"
@@ -31,7 +31,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.childCommentList.ChildCommentActivity">
+        tools:context=".presentation.ui.childCommentList.ChildCommentsActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_childcomments_toolbar"

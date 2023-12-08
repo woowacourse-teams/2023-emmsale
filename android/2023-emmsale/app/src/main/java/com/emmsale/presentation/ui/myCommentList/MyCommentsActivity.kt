@@ -9,7 +9,7 @@ import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityMyCommentsBinding
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
-import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
+import com.emmsale.presentation.ui.childCommentList.ChildCommentsActivity
 import com.emmsale.presentation.ui.myCommentList.recyclerView.MyCommentsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,7 +47,7 @@ class MyCommentsActivity :
     }
 
     private fun navigateToChildComments(eventId: Long, parentCommentId: Long, commentId: Long) {
-        ChildCommentActivity.startActivity(
+        ChildCommentsActivity.startActivity(
             context = this,
             feedId = eventId,
             parentCommentId = parentCommentId,

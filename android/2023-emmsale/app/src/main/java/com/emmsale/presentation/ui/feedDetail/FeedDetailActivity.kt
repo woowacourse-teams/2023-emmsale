@@ -17,7 +17,7 @@ import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
-import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
+import com.emmsale.presentation.ui.childCommentList.ChildCommentsActivity
 import com.emmsale.presentation.ui.feedDetail.FeedDetailViewModel.Companion.KEY_FEED_ID
 import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailAdapter
@@ -36,7 +36,7 @@ class FeedDetailActivity :
     private val feedDetailAdapter: FeedDetailAdapter = FeedDetailAdapter(::showProfile)
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
         onCommentClick = { comment ->
-            ChildCommentActivity.startActivity(
+            ChildCommentsActivity.startActivity(
                 context = this,
                 feedId = comment.feed.id,
                 parentCommentId = comment.parentCommentId ?: comment.id,

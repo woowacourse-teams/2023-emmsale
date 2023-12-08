@@ -18,7 +18,7 @@ import javax.inject.Inject
 import kotlin.properties.Delegates.vetoable
 
 @HiltViewModel
-class ChildCommentViewModel @Inject constructor(
+class ChildCommentsViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val tokenRepository: TokenRepository,
     private val commentRepository: CommentRepository,

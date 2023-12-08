@@ -13,7 +13,7 @@ import com.emmsale.databinding.ActivityNotificationsBinding
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
-import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
+import com.emmsale.presentation.ui.childCommentList.ChildCommentsActivity
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.notificationList.recyclerView.adapter.NotificationsAdapter
 import com.emmsale.presentation.ui.notificationList.recyclerView.adapter.PastNotificationHeaderAdapter
@@ -61,7 +61,7 @@ class NotificationsActivity :
     }
 
     private fun navigateToCommentScreen(feedId: Long, parentCommentId: Long, commentId: Long) {
-        ChildCommentActivity.startActivity(
+        ChildCommentsActivity.startActivity(
             context = this,
             feedId = feedId,
             parentCommentId = parentCommentId,
