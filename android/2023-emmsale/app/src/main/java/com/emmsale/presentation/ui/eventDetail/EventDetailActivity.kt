@@ -31,16 +31,23 @@ class EventDetailActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
 
         registerScreen(this)
 
+        setupDataBinding()
         setupFragmentStateAdapter()
         setupBackPressedDispatcher()
         setupToolbar()
         setupOnTabSelectedListener()
-        setupDataBinding()
 
         observeUiEvent()
+    }
+
+    private fun setupDataBinding() {
+        binding.vm = viewModel
+        binding.navigateToUrl = ::navigateToUrl
+        binding.navigateToWritingPost = ::navigateToWriting
     }
 
     private fun setupFragmentStateAdapter() {
@@ -84,13 +91,6 @@ class EventDetailActivity :
                 override fun onTabReselected(tab: TabLayout.Tab?) = Unit
             },
         )
-    }
-
-    private fun setupDataBinding() {
-        setContentView(binding.root)
-        binding.vm = viewModel
-        binding.navigateToUrl = ::navigateToUrl
-        binding.navigateToWritingPost = ::navigateToWriting
     }
 
     private fun navigateToUrl(url: String) {
