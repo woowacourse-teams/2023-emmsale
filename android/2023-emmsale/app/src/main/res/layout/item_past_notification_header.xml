@@ -40,9 +40,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_past_notification_title" />
 
-        <com.emmsale.presentation.common.views.Divider
+        <com.emmsale.presentation.common.views.HorizontalDivider
             android:layout_width="0dp"
-            android:layout_height="0.5dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

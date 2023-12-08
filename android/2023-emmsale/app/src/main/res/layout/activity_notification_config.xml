@@ -96,10 +96,10 @@
                     app:layout_constraintTop_toTopOf="@+id/tv_notification_all_receive_label"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-                <com.emmsale.presentation.common.views.Divider
+                <com.emmsale.presentation.common.views.HorizontalDivider
                     android:id="@+id/vertical_divider"
                     android:layout_width="0dp"
-                    android:layout_height="0.5dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="23dp"
                     android:background="@color/light_gray"
                     app:layout_constraintEnd_toEndOf="parent"

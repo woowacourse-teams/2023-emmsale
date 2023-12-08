@@ -110,10 +110,10 @@
                 app:layout_constraintStart_toStartOf="@+id/iv_setting_member_image"
                 app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image" />
 
-            <com.emmsale.presentation.common.views.Divider
+            <com.emmsale.presentation.common.views.HorizontalDivider
                 android:id="@+id/verticaldivider_setting_vertical_divider"
                 android:layout_width="0dp"
-                android:layout_height="0.5dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
