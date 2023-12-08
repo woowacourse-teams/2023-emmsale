@@ -7,6 +7,8 @@
 
         <import type="android.view.View" />
 
+        <import type="kotlin.Unit" />
+
         <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
@@ -18,6 +20,10 @@
         <variable
             name="onRequestRecruitmentButtonClick"
             type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onProfileImageClick"
+            type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -111,6 +117,7 @@
                     android:layout_marginTop="14dp"
                     app:imageUrl="@{vm.recruitment.recruitment.writer.profileImageUrl}"
                     app:isCircle="@{true}"
+                    android:onClick="@{() -> onProfileImageClick.invoke(vm.recruitment.recruitment.writer.id)}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:srcCompat="@tools:sample/avatars"

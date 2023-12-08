@@ -52,6 +52,16 @@ class RecruitmentPostDetailActivity :
         viewModel.refresh()
     }
 
+    private fun navigateToEditPage() {
+        val intent = RecruitmentPostWritingActivity.getEditModeIntent(
+            context = this,
+            eventId = viewModel.eventId,
+            recruitmentId = viewModel.recruitmentId,
+            recruitmentContent = viewModel.recruitment.value.recruitment.content,
+        )
+        fetchByResultActivityLauncher.launch(intent)
+    }
+
     private fun showDeleteDialog() {
         WarningDialog(
             context = this,
@@ -86,33 +96,32 @@ class RecruitmentPostDetailActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initBinding()
-        initClickListener()
-        setupEventUiLogic()
+        setContentView(binding.root)
+
+        setupDataBinding()
+        setupBackPressedDispatcher()
+        setupToolbar()
+
+        observeUiEvent()
     }
 
-    private fun initBinding() {
-        setContentView(binding.root)
-        binding.lifecycleOwner = this
+    private fun setupDataBinding() {
         binding.vm = viewModel
         binding.onRequestRecruitmentButtonClick =
             { sendMessageDialog.show(supportFragmentManager, SendMessageDialog.TAG) }
+        binding.onProfileImageClick = { memberId -> ProfileActivity.startActivity(this, memberId) }
     }
 
-    private fun initClickListener() {
-        setUpOptionButtonClick()
-        setUpBackPressButtonClick()
-        setUpBackPressIconClick()
-        setUpProfileClick()
-    }
-
-    private fun setupEventUiLogic() {
-        viewModel.uiEvent.observe(this) {
-            handleUiEvent(it)
+    private fun setupBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(this) {
+            setResult(RESULT_OK)
+            finish()
         }
     }
 
-    private fun setUpOptionButtonClick() {
+    private fun setupToolbar() {
+        binding.tbToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+
         binding.tbToolbar.setOnMenuItemClickListener {
             if (viewModel.recruitment.value.isMyPost) {
                 postEditorDialog.show()
@@ -123,20 +132,8 @@ class RecruitmentPostDetailActivity :
         }
     }
 
-    private fun setUpBackPressButtonClick() {
-        onBackPressedDispatcher.addCallback(this) {
-            finishWithResult()
-        }
-    }
-
-    private fun setUpBackPressIconClick() {
-        binding.tbToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
-    }
-
-    private fun setUpProfileClick() {
-        binding.ivRecruitmentdetailProfileImage.setOnClickListener {
-            ProfileActivity.startActivity(this, viewModel.recruitment.value.recruitment.writer.id)
-        }
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
     private fun handleUiEvent(uiEvent: RecruitmentPostDetailUiEvent) {
@@ -171,21 +168,6 @@ class RecruitmentPostDetailActivity :
 
             RecruitmentPostDetailUiEvent.ReportFail -> binding.root.showSnackBar(getString(R.string.all_report_fail_message))
         }
-    }
-
-    private fun finishWithResult() {
-        setResult(RESULT_OK)
-        finish()
-    }
-
-    private fun navigateToEditPage() {
-        val intent = RecruitmentPostWritingActivity.getEditModeIntent(
-            context = this,
-            eventId = viewModel.eventId,
-            recruitmentId = viewModel.recruitmentId,
-            recruitmentContent = viewModel.recruitment.value.recruitment.content,
-        )
-        fetchByResultActivityLauncher.launch(intent)
     }
 
     companion object {
