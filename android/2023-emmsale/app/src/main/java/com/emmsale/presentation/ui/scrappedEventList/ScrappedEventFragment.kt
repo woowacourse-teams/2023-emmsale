@@ -18,22 +18,27 @@ class ScrappedEventFragment : NetworkFragment<FragmentScrappedEventBinding>() {
     override val viewModel: ScrappedEventViewModel by viewModels()
 
     private val scrappedEventsAdapter: ScrappedEventAdapter by lazy {
-        ScrappedEventAdapter(::showEventDetail)
+        ScrappedEventAdapter(::navigateToEventDetail)
+    }
+
+    private fun navigateToEventDetail(scrappedEvent: Event) {
+        EventDetailActivity.startActivity(requireContext(), scrappedEvent.id)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupBinding()
+
+        setupDataBinding()
+        setupScrappedEventsRecyclerView()
+
         observeScrappedEvents()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.refresh()
+    private fun setupDataBinding() {
+        binding.vm = viewModel
     }
 
-    private fun setupBinding() {
-        binding.vm = viewModel
+    private fun setupScrappedEventsRecyclerView() {
         binding.rvScrappedEvents.adapter = scrappedEventsAdapter
         binding.rvScrappedEvents.addOnScrollListener(
             ScrollTopListener(targetView = binding.fabScrollTop),
@@ -46,7 +51,8 @@ class ScrappedEventFragment : NetworkFragment<FragmentScrappedEventBinding>() {
         }
     }
 
-    private fun showEventDetail(scrappedEvent: Event) {
-        EventDetailActivity.startActivity(requireContext(), scrappedEvent.id)
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
     }
 }
