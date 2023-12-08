@@ -19,11 +19,8 @@ import com.emmsale.presentation.common.ScreenUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
-import com.emmsale.presentation.ui.messageList.uistate.MessageDateUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
-import com.emmsale.presentation.ui.messageList.uistate.MessageUiState
-import com.emmsale.presentation.ui.messageList.uistate.MyMessageUiState
-import com.emmsale.presentation.ui.messageList.uistate.OtherMessageUiState
+import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -46,8 +43,8 @@ class MessageListViewModel @Inject constructor(
     private val _otherMember = MutableLiveData<Member>()
     val otherMember: LiveData<Member> = _otherMember
 
-    private val _messages = NotNullMutableLiveData(emptyList<MessageUiState>())
-    val messages: NotNullLiveData<List<MessageUiState>> = _messages
+    private val _messages = NotNullMutableLiveData(MessagesUiState())
+    val messages: NotNullLiveData<MessagesUiState> = _messages
 
     private val _canSendMessage = NotNullMutableLiveData(true)
     val canSendMessage: NotNullLiveData<Boolean> = _canSendMessage
@@ -58,10 +55,6 @@ class MessageListViewModel @Inject constructor(
     init {
         changeToLoadingState()
         refresh()
-        // viewModelScope.launch {
-        //
-        //     _uiEvent.value = UiEvent(MESSAGE_LIST_FIRST_LOADED)
-        // }
     }
 
     override fun refresh(): Job = viewModelScope.launch {
@@ -74,76 +67,28 @@ class MessageListViewModel @Inject constructor(
             otherMemberResult is Unexpected -> {
                 _commonUiEvent.value =
                     CommonUiEvent.Unexpected(otherMemberResult.error?.message.toString())
-                return@launch
             }
 
             messagesResult is Unexpected -> {
                 _commonUiEvent.value =
                     CommonUiEvent.Unexpected(messagesResult.error?.message.toString())
-                return@launch
             }
 
             otherMemberResult is Failure || messagesResult is Failure -> dispatchFetchFailEvent()
 
             otherMemberResult is NetworkError || messagesResult is NetworkError -> {
-                changeToNetworkErrorState()
+                dispatchNetworkErrorEvent()
                 return@launch
             }
 
             otherMemberResult is Success && messagesResult is Success -> {
                 _otherMember.value = otherMemberResult.data as Member
-                updateMessages(messagesResult.data as List<Message>)
+                _messages.value =
+                    MessagesUiState.create(messagesResult.data as List<Message>, myUid)
             }
         }
 
         _screenUiState.value = ScreenUiState.NONE
-    }
-
-    private fun updateMessages(newMessages: List<Message>) {
-        val messagesNotBlank = newMessages
-            .filter { it.content.isNotBlank() }
-            .toUiState()
-        _messages.value = messagesNotBlank
-    }
-
-    private fun List<Message>.toUiState(): List<MessageUiState> {
-        val newMessages = mutableListOf<MessageUiState>()
-
-        forEachIndexed { index, message ->
-            when {
-                index == 0 -> {
-                    newMessages += message.createMessageDateUiState()
-                    newMessages += message.createChatMessageUiState()
-                }
-
-                message.isDifferentDate(this[index - 1]) -> {
-                    newMessages += message.createMessageDateUiState()
-                }
-            }
-
-            val previousMessage = getOrNull(index - 1) ?: return@forEachIndexed
-            val shouldShowProfile = message.shouldShowMemberProfile(previousMessage)
-            newMessages += message.createChatMessageUiState(shouldShowProfile)
-        }
-
-        return newMessages
-    }
-
-    private fun Message.shouldShowMemberProfile(prevMessage: Message): Boolean {
-        return isSameDateTime(prevMessage) ||
-            isDifferentSender(prevMessage) ||
-            isDifferentDate(prevMessage)
-    }
-
-    private fun Message.createMessageDateUiState(): MessageDateUiState = MessageDateUiState(
-        messageDate = createdAt,
-    )
-
-    private fun Message.createChatMessageUiState(
-        shouldShowProfile: Boolean = true,
-    ): MessageUiState = when (sender.id) {
-        myUid -> MyMessageUiState.create(this, shouldShowProfile)
-        else -> OtherMessageUiState.create(this, shouldShowProfile)
     }
 
     fun sendMessage(message: String): Job = commandAndRefresh(
