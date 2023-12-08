@@ -14,6 +14,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityMessageListBinding
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.KeyboardHider
+import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.messageList.MessageListViewModel.Companion.KEY_OTHER_UID
 import com.emmsale.presentation.ui.messageList.MessageListViewModel.Companion.KEY_ROOM_ID
@@ -21,6 +22,8 @@ import com.emmsale.presentation.ui.messageList.recyclerview.MessageListAdapter
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -77,6 +80,7 @@ class MessageListActivity :
     private fun observeMessages() {
         viewModel.messages.observe(this) {
             messageListAdapter.submitList(it.messages) {
+                if (binding.rvMessageList.childCount == 0) return@submitList
                 if (!binding.rvMessageList.canScrollVertically(BOTTOM_SCROLL_DIRECTION)) smoothScrollToEnd()
             }
         }
@@ -101,19 +105,48 @@ class MessageListActivity :
         binding.rvMessageList.smoothScrollToPosition(viewModel.messages.value.size)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        val couldScrollVertically = binding.rvMessageList.canScrollVertically(BOTTOM_SCROLL_DIRECTION)
+
+        val roomId = intent.getStringExtra(KEY_ROOM_ID) ?: return
+        val profileUrl = intent.getStringExtra(KEY_PROFILE_URL)
+        val otherName = intent.getStringExtra(KEY_OTHER_NAME) ?: return
+        val messageContent = intent.getStringExtra(KEY_MESSAGE_CONTENT) ?: return
+        if (roomId != viewModel.roomId) {
+            notifyOtherRoomNewMessage(
+                otherRoomId = roomId,
+                profileUrl = profileUrl,
+                otherName = otherName,
+                messageContent = messageContent,
+            )
+            return
+        }
+
+        val couldNotScrollVertically = binding.rvMessageList
+            .canScrollVertically(BOTTOM_SCROLL_DIRECTION)
+            .not()
         viewModel.refresh()
+        if (couldNotScrollVertically) return
 
-        if (couldScrollVertically) {
-            val roomId = intent?.getStringExtra(KEY_ROOM_ID)
-            if (roomId != viewModel.roomId) return
+        showNewMessage(profileUrl, otherName, messageContent)
+    }
 
-            val profileUrl = intent.getStringExtra(KEY_PROFILE_URL)
-            val otherName = intent.getStringExtra(KEY_OTHER_NAME) ?: return
-            val messageContent = intent.getStringExtra(KEY_MESSAGE_CONTENT) ?: return
-            showNewMessage(profileUrl, otherName, messageContent)
+    private fun notifyOtherRoomNewMessage(
+        otherRoomId: String,
+        profileUrl: String?,
+        otherName: String,
+        messageContent: String,
+    ) {
+        CoroutineScope(Dispatchers.Default).launch {
+            showNotification(
+                title = otherName,
+                message = messageContent,
+                notificationId = otherRoomId.hashCode(),
+                channelId = R.id.id_all_message_notification_channel,
+                intent = intent,
+                largeIconUrl = profileUrl,
+                groupKey = otherRoomId,
+            )
         }
     }
 
