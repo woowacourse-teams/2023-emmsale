@@ -14,19 +14,19 @@
             type="com.emmsale.presentation.ui.editMyProfile.EditMyProfileViewModel" />
 
         <variable
-            name="showFieldTags"
+            name="onFieldTagsAddButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="showEducations"
+            name="onEducationAddButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="showClubs"
+            name="onClubAddButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="editProfileImage"
+            name="onProfileImageUpdateUiClick"
             type="kotlin.jvm.functions.Function0" />
     </data>
 
@@ -135,7 +135,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="16dp"
                     android:contentDescription="@string/editmyprofile_field_add_button"
-                    android:onClick="@{() -> showFieldTags.invoke()}"
+                    android:onClick="@{() -> onFieldTagsAddButtonClick.invoke()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_editmyprofile_field_label"
                     app:srcCompat="@drawable/img_editmyprofile_activity_add_button" />
@@ -158,7 +158,7 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="22dp"
                     android:contentDescription="@string/editmyprofile_member_image"
-                    android:onClick="@{() -> editProfileImage.invoke()}"
+                    android:onClick="@{() -> onProfileImageUpdateUiClick.invoke()}"
                     app:imageUrl="@{viewModel.profile.member.profileImageUrl}"
                     app:mask="@{@drawable/img_profile_image_masking}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -173,7 +173,7 @@
                     app:layout_constraintEnd_toEndOf="@id/iv_editmyprofile_member_image"
                     app:layout_constraintBottom_toBottomOf="@id/iv_editmyprofile_member_image"
                     android:elevation="3dp"
-                    android:onClick="@{() -> editProfileImage.invoke()}"
+                    android:onClick="@{() -> onProfileImageUpdateUiClick.invoke()}"
                     android:contentDescription="@string/editmyprofile_profile_image_edit_button_image_description" />
 
                 <ImageView
@@ -307,7 +307,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="39dp"
                     android:background="@drawable/bg_editmyprofile_activity_add_button"
-                    android:onClick="@{() -> showClubs.invoke()}"
+                    android:onClick="@{() -> onClubAddButtonClick.invoke()}"
                     android:text="@string/editmyprofile_add"
                     android:textSize="11sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -320,7 +320,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/bg_editmyprofile_activity_add_button"
-                    android:onClick="@{() -> showEducations.invoke()}"
+                    android:onClick="@{() -> onEducationAddButtonClick.invoke()}"
                     android:text="@string/editmyprofile_add"
                     android:textSize="11sp"
                     app:layout_constraintStart_toStartOf="@+id/rv_editmyprofile_educations"

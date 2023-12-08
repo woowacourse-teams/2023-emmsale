@@ -13,15 +13,16 @@ import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
 import com.emmsale.presentation.base.NetworkActivity
+import com.emmsale.presentation.common.extension.dp
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.imageUtil.getImageFileFromUri
 import com.emmsale.presentation.common.imageUtil.isImagePermissionGrantedCompat
 import com.emmsale.presentation.common.imageUtil.onImagePermissionCompat
+import com.emmsale.presentation.common.recyclerView.IntervalItemDecoration
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapter
-import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.FieldsAdapter
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileUiEvent
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileUiState
@@ -57,27 +58,6 @@ class EditMyProfileActivity :
             }
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
-        initDataBinding()
-        initToolbar()
-        initDescriptionEditText()
-        initActivitiesRecyclerViews()
-        initFieldsRecyclerView()
-        setupUiLogic()
-    }
-
-    private fun initDataBinding() {
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
-        binding.showFieldTags = ::showFieldTags
-        binding.showEducations = ::showEducations
-        binding.showClubs = ::showClubs
-        binding.editProfileImage = ::editProfileImage
-    }
-
     private fun navigateToGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
@@ -90,21 +70,26 @@ class EditMyProfileActivity :
         )
     }
 
-    private fun editProfileImage() {
-        onImagePermissionCompat(
-            onGranted = ::navigateToGallery,
-            onShouldShowRequestPermissionRationale = { showNavigateToDetailSettingDialog() },
-            onDenied = { imagePermissionLauncher.launch(it) },
-        )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        setupDataBinding()
+        setupToolbar()
+        setupDescriptionEditText()
+        setupActivitiesRecyclerViews()
+        setupFieldsRecyclerView()
+
+        observeProfile()
+        observeUiEvent()
     }
 
-    private fun showNavigateToDetailSettingDialog() {
-        showPermissionRequestDialog(
-            message = getString(R.string.all_image_permission_request_dialog_message),
-            title = getString(R.string.all_image_permission_request_dialog_title),
-            onConfirm = { navigateToApplicationDetailSetting(permissionSettingLauncher) },
-            onDenied = {},
-        )
+    private fun setupDataBinding() {
+        binding.viewModel = viewModel
+        binding.onFieldTagsAddButtonClick = ::showFieldTags
+        binding.onEducationAddButtonClick = ::showEducations
+        binding.onClubAddButtonClick = ::showClubs
+        binding.onProfileImageUpdateUiClick = ::startToEditProfileImage
     }
 
     private fun showFieldTags() {
@@ -125,11 +110,28 @@ class EditMyProfileActivity :
         }
     }
 
-    private fun initToolbar() {
-        binding.tbEditmyprofileToolbar.setNavigationOnClickListener { finish() }
+    private fun startToEditProfileImage() {
+        onImagePermissionCompat(
+            onGranted = ::navigateToGallery,
+            onShouldShowRequestPermissionRationale = { showNavigateToDetailSettingDialog() },
+            onDenied = { imagePermissionLauncher.launch(it) },
+        )
     }
 
-    private fun initDescriptionEditText() {
+    private fun showNavigateToDetailSettingDialog() {
+        showPermissionRequestDialog(
+            message = getString(R.string.all_image_permission_request_dialog_message),
+            title = getString(R.string.all_image_permission_request_dialog_title),
+            onConfirm = { navigateToApplicationDetailSetting(permissionSettingLauncher) },
+            onDenied = {},
+        )
+    }
+
+    private fun setupToolbar() {
+        binding.tbEditmyprofileToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+    }
+
+    private fun setupDescriptionEditText() {
         binding.etEditmyprofileDescription.imeOptions = EditorInfo.IME_ACTION_DONE
         binding.etEditmyprofileDescription.setRawInputType(InputType.TYPE_CLASS_TEXT)
         binding.etEditmyprofileDescription.addTextChangedListener(
@@ -168,29 +170,21 @@ class EditMyProfileActivity :
         }
     }
 
-    private fun initFieldsRecyclerView() {
-        binding.rvEditmyprofileFields.adapter = FieldsAdapter(::removeField)
-    }
-
-    private fun removeField(activityId: Long) {
-        viewModel.removeActivity(activityId)
-    }
-
-    private fun initActivitiesRecyclerViews() {
-        val decoration = ActivitiesAdapterDecoration()
+    private fun setupActivitiesRecyclerViews() {
+        val decoration = IntervalItemDecoration(height = 2.dp)
         listOf(
             binding.rvEditmyprofileClubs,
             binding.rvEditmyprofileEducations,
         ).forEach {
             it.apply {
-                adapter = ActivitiesAdapter(::removeActivity)
+                adapter = ActivitiesAdapter(::showActivityRemoveConfirmDialog)
                 itemAnimator = null
                 addItemDecoration(decoration)
             }
         }
     }
 
-    private fun removeActivity(activityId: Long) {
+    private fun showActivityRemoveConfirmDialog(activityId: Long) {
         WarningDialog(
             context = this,
             title = getString(R.string.editmyprofile_activity_remove_warning_title),
@@ -201,15 +195,16 @@ class EditMyProfileActivity :
         ).show()
     }
 
-    private fun setupUiLogic() {
-        setupProfileUiLogic()
-        setupErrorsUiLogic()
+    private fun setupFieldsRecyclerView() {
+        binding.rvEditmyprofileFields.adapter = FieldsAdapter(::removeField)
     }
 
-    private fun setupProfileUiLogic() {
-        viewModel.profile.observe(this) {
-            handleActivities(it)
-        }
+    private fun removeField(activityId: Long) {
+        viewModel.removeActivity(activityId)
+    }
+
+    private fun observeProfile() {
+        viewModel.profile.observe(this, ::handleActivities)
     }
 
     private fun handleActivities(profile: EditMyProfileUiState) {
@@ -218,13 +213,11 @@ class EditMyProfileActivity :
         (binding.rvEditmyprofileEducations.adapter as ActivitiesAdapter).submitList(profile.member.educations)
     }
 
-    private fun setupErrorsUiLogic() {
-        viewModel.uiEvent.observe(this) {
-            handleErrors(it)
-        }
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
-    private fun handleErrors(uiEvent: EditMyProfileUiEvent) {
+    private fun handleUiEvent(uiEvent: EditMyProfileUiEvent) {
         when (uiEvent) {
             EditMyProfileUiEvent.ActivitiesAddFail -> binding.root.showSnackBar(getString(R.string.editmyprofile_acitivities_add_error_message))
             EditMyProfileUiEvent.ActivityRemoveFail -> binding.root.showSnackBar(getString(R.string.editmyprofile_activity_remove_error_message))
