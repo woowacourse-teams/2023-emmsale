@@ -52,6 +52,7 @@ class NotificationTagConfigViewModel @Inject constructor(
     }
 
     private fun fetchAll(): Job = viewModelScope.launch {
+        changeToLoadingState()
         val (eventTagsResult, interestTagsResult) = listOf(
             async { eventTagRepository.getEventTags() },
             async { eventTagRepository.getInterestEventTags(uid) },

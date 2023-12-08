@@ -77,13 +77,11 @@ class FeedDetailViewModel @Inject constructor(
             feedResult is Unexpected -> {
                 _commonUiEvent.value =
                     CommonUiEvent.Unexpected(feedResult.error?.message.toString())
-                return@launch
             }
 
             commentResult is Unexpected -> {
                 _commonUiEvent.value =
                     CommonUiEvent.Unexpected(commentResult.error?.message.toString())
-                return@launch
             }
 
             feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
@@ -121,13 +119,11 @@ class FeedDetailViewModel @Inject constructor(
             feedResult is Unexpected -> {
                 _commonUiEvent.value =
                     CommonUiEvent.Unexpected(feedResult.error?.message.toString())
-                return@launch
             }
 
             commentResult is Unexpected -> {
                 _commonUiEvent.value =
                     CommonUiEvent.Unexpected(commentResult.error?.message.toString())
-                return@launch
             }
 
             feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
