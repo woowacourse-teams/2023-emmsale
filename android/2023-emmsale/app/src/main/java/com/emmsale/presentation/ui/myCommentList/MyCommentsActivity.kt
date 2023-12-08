@@ -23,22 +23,22 @@ class MyCommentsActivity :
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        initDataBinding()
-        initToolbar()
-        initMyCommentsRecyclerView()
-        setupUiLogic()
+        setupDataBinding()
+        setupToolbar()
+        setupMyCommentsRecyclerView()
+
+        observeComments()
     }
 
-    fun initDataBinding() {
+    private fun setupDataBinding() {
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
     }
 
-    private fun initToolbar() {
-        binding.tbMycommentsToolbar.setNavigationOnClickListener { finish() }
+    private fun setupToolbar() {
+        binding.tbMycommentsToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
-    private fun initMyCommentsRecyclerView() {
+    private fun setupMyCommentsRecyclerView() {
         binding.rvMycommentsMycomments.apply {
             adapter = MyCommentsAdapter(::navigateToChildComments)
             itemAnimator = null
@@ -56,11 +56,7 @@ class MyCommentsActivity :
         )
     }
 
-    private fun setupUiLogic() {
-        setupCommentsUiLogic()
-    }
-
-    private fun setupCommentsUiLogic() {
+    private fun observeComments() {
         viewModel.comments.observe(this) {
             handleComments(it)
         }
