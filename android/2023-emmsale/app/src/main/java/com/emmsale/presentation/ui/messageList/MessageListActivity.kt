@@ -6,13 +6,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMessageListBinding
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.KeyboardHider
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.messageList.MessageListViewModel.Companion.KEY_OTHER_UID
@@ -26,39 +26,42 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MessageListActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
-    private val viewModel: MessageListViewModel by viewModels()
+class MessageListActivity :
+    NetworkActivity<ActivityMessageListBinding>(R.layout.activity_message_list) {
+
+    override val viewModel: MessageListViewModel by viewModels()
     private val keyboardHider by lazy { KeyboardHider(this) }
 
     private val messageListAdapter by lazy { MessageListAdapter(onProfileClick = ::navigateToProfile) }
 
-    private var job: Job? = null
+    private var bottomMessageShowingJob: Job? = null
+
+    private fun navigateToProfile(uid: Long) {
+        ProfileActivity.startActivity(this, uid)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupBinding()
+        setContentView(binding.root)
+
+        setupDataBinding()
         setupToolbar()
         setupMessageRecyclerView()
-        setupMessages()
-        setUpEventUiEvent()
+
+        observeMessages()
+        observeUiEvent()
     }
 
-    private fun setupBinding() {
-        setContentView(binding.root)
+    private fun setupDataBinding() {
         binding.vm = viewModel
-        binding.lifecycleOwner = this
     }
 
     private fun setupToolbar() {
-        binding.tbMessageList.setNavigationOnClickListener {
-            finish()
-        }
+        binding.tbMessageList.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupMessageRecyclerView() {
-        binding.rvMessageList.setHasFixedSize(true)
         binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
         binding.rvMessageList.setOnScrollChangeListener { v, _, _, _, _ ->
@@ -71,32 +74,13 @@ class MessageListActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToProfile(uid: Long) {
-        ProfileActivity.startActivity(this, uid)
-    }
-
-    private fun setupMessages() {
-        viewModel.messages.observe(this) { messages ->
-            messageListAdapter.submitList(messages)
+    private fun observeMessages() {
+        viewModel.messages.observe(this) {
+            messageListAdapter.submitList(it.messages)
         }
     }
 
-    private fun scrollToEnd() {
-        val lastPosition = viewModel.messages.value.size - 1
-
-        // RecyclerView 버그로 scrollToPosition이 완전히 마지막으로 이동하지 않아서 아래와 같이 작성함.
-        binding.rvMessageList.scrollToPosition(lastPosition)
-        lifecycleScope.launch {
-            delay(50)
-            binding.rvMessageList.smoothScrollToPosition(lastPosition)
-        }
-    }
-
-    private fun smoothScrollToEnd() {
-        binding.rvMessageList.smoothScrollToPosition(viewModel.messages.value.size)
-    }
-
-    private fun setUpEventUiEvent() {
+    private fun observeUiEvent() {
         viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
@@ -109,6 +93,10 @@ class MessageListActivity : AppCompatActivity() {
 
             MessageListUiEvent.MessageSendFail -> binding.root.showSnackBar(R.string.messagelist_message_sent_failed)
         }
+    }
+
+    private fun smoothScrollToEnd() {
+        binding.rvMessageList.smoothScrollToPosition(viewModel.messages.value.size)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -131,8 +119,8 @@ class MessageListActivity : AppCompatActivity() {
         val lastPosition = itemCount - 1
 
         if (lastVisiblePos != lastPosition) {
-            job?.cancel()
-            job = lifecycleScope.launch {
+            bottomMessageShowingJob?.cancel()
+            bottomMessageShowingJob = lifecycleScope.launch {
                 showBottomMessage(profileUrl, otherName, messageContent)
                 delay(4000)
                 hideBottomMessage()
