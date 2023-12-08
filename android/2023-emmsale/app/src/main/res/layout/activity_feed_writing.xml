@@ -33,10 +33,11 @@
             app:navigationIcon="@drawable/ic_all_back"
             app:title="@string/recruitmentpostwriting_appbar_title_text" />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/gray"
+        <com.emmsale.presentation.common.views.HorizontalDivider
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/tb_toolbar" />
 
         <androidx.core.widget.NestedScrollView
@@ -54,7 +55,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
-                    android:layout_marginTop="14dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="10dp"
                     android:background="@null"
                     android:fontFamily="@font/nanum_square_bold"
                     android:hint="@string/post_writing_title_hint"
@@ -71,7 +73,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
-                    android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/et_feed_writing_title" />
@@ -81,7 +82,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
-                    android:layout_marginTop="16dp"
+                    android:paddingTop="18dp"
                     android:background="@null"
                     android:fontFamily="@font/nanum_square_regular"
                     android:hint="@string/post_writing_content_hint"

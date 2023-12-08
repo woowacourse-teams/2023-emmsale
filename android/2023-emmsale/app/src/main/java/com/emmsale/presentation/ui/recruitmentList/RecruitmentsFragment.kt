@@ -10,6 +10,7 @@ import com.emmsale.databinding.FragmentRecruitmentsBinding
 import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
+import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
 import com.emmsale.presentation.ui.recruitmentList.RecruitmentsViewModel.Companion.EVENT_ID_KEY
@@ -59,6 +60,7 @@ class RecruitmentsFragment :
 
     private fun setupRecruitmentsRecyclerView() {
         binding.rvRecruitment.adapter = recruitmentAdapter
+        binding.rvRecruitment.addItemDecoration(DividerItemDecoration(requireContext()))
     }
 
     private fun observeRecruitments() {
