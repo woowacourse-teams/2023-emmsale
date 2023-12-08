@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMessageListBinding
-import com.emmsale.presentation.common.EventObserver
-import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.KeyboardHider
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.messageList.MessageListViewModel.Companion.KEY_OTHER_UID
@@ -78,14 +76,13 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun setupMessages() {
-        viewModel.messages.observe(this) { uiState ->
-            if (uiState.fetchResult != FetchResult.SUCCESS) return@observe
-            messageListAdapter.submitList(uiState.messages)
+        viewModel.messages.observe(this) { messages ->
+            messageListAdapter.submitList(messages)
         }
     }
 
     private fun scrollToEnd() {
-        val lastPosition = viewModel.messages.value.messageSize - 1
+        val lastPosition = viewModel.messages.value.size - 1
 
         // RecyclerView 버그로 scrollToPosition이 완전히 마지막으로 이동하지 않아서 아래와 같이 작성함.
         binding.rvMessageList.scrollToPosition(lastPosition)
@@ -96,20 +93,21 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun smoothScrollToEnd() {
-        binding.rvMessageList.smoothScrollToPosition(viewModel.messages.value.messageSize)
+        binding.rvMessageList.smoothScrollToPosition(viewModel.messages.value.size)
     }
 
     private fun setUpEventUiEvent() {
-        viewModel.uiEvent.observe(this, EventObserver(::handleEvent))
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
-    private fun handleEvent(event: MessageListUiEvent) {
-        when (event) {
-            MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED -> scrollToEnd()
-            MessageListUiEvent.MESSAGE_SENDING -> binding.etMessageInput.text.clear()
-            MessageListUiEvent.MESSAGE_SENT_REFRESHED -> smoothScrollToEnd()
-            MessageListUiEvent.MESSAGE_SENT_FAILED -> binding.root.showSnackBar(R.string.messagelist_message_sent_failed)
-            MessageListUiEvent.NOT_FOUND_OTHER_MEMBER -> binding.root.showSnackBar(R.string.messagelist_not_found_other_member)
+    private fun handleUiEvent(uiEvent: MessageListUiEvent) {
+        when (uiEvent) {
+            MessageListUiEvent.MessageSendComplete -> {
+                binding.btiwSendMessage.clearText()
+                smoothScrollToEnd()
+            }
+
+            MessageListUiEvent.MessageSendFail -> binding.root.showSnackBar(R.string.messagelist_message_sent_failed)
         }
     }
 
@@ -129,7 +127,7 @@ class MessageListActivity : AppCompatActivity() {
     private fun showNewMessage(profileUrl: String?, otherName: String, messageContent: String) {
         val layoutManager = binding.rvMessageList.layoutManager as LinearLayoutManager
         val lastVisiblePos = layoutManager.findLastVisibleItemPosition()
-        val itemCount = viewModel.messages.value.messages.size
+        val itemCount = viewModel.messages.value.size
         val lastPosition = itemCount - 1
 
         if (lastVisiblePos != lastPosition) {

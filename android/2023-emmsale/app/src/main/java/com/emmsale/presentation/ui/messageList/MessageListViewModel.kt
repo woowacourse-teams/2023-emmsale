@@ -3,30 +3,31 @@ package com.emmsale.presentation.ui.messageList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.model.Member
 import com.emmsale.data.model.Message
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.UiEvent
+import com.emmsale.presentation.base.RefreshableViewModel
+import com.emmsale.presentation.common.CommonUiEvent
+import com.emmsale.presentation.common.ScreenUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.Refreshable
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import com.emmsale.presentation.ui.messageList.uistate.MessageDateUiState
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
-import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED
-import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENDING
-import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENT_FAILED
-import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.MESSAGE_SENT_REFRESHED
-import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent.NOT_FOUND_OTHER_MEMBER
 import com.emmsale.presentation.ui.messageList.uistate.MessageUiState
-import com.emmsale.presentation.ui.messageList.uistate.MessagesUiState
 import com.emmsale.presentation.ui.messageList.uistate.MyMessageUiState
 import com.emmsale.presentation.ui.messageList.uistate.OtherMessageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,58 +37,73 @@ class MessageListViewModel @Inject constructor(
     tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
     private val messageRoomRepository: MessageRoomRepository,
-) : ViewModel(), Refreshable {
+) : RefreshableViewModel() {
     val roomId = savedStateHandle[KEY_ROOM_ID] ?: DEFAULT_ROOM_ID
     private val otherUid = savedStateHandle[KEY_OTHER_UID] ?: DEFAULT_OTHER_ID
 
     private val myUid: Long = tokenRepository.getMyUid() ?: -1
 
-    private val _messages = NotNullMutableLiveData(MessagesUiState())
-    val messages: NotNullLiveData<MessagesUiState> = _messages
-
-    private val _uiEvent = MutableLiveData<UiEvent<MessageListUiEvent>>()
-    val uiEvent: LiveData<UiEvent<MessageListUiEvent>> = _uiEvent
-
     private val _otherMember = MutableLiveData<Member>()
     val otherMember: LiveData<Member> = _otherMember
 
+    private val _messages = NotNullMutableLiveData(emptyList<MessageUiState>())
+    val messages: NotNullLiveData<List<MessageUiState>> = _messages
+
+    private val _canSendMessage = NotNullMutableLiveData(true)
+    val canSendMessage: NotNullLiveData<Boolean> = _canSendMessage
+
+    private val _uiEvent = SingleLiveEvent<MessageListUiEvent>()
+    val uiEvent: LiveData<MessageListUiEvent> = _uiEvent
+
     init {
-        viewModelScope.launch {
-            fetchMessages()
-            _uiEvent.value = UiEvent(MESSAGE_LIST_FIRST_LOADED)
+        changeToLoadingState()
+        refresh()
+        // viewModelScope.launch {
+        //
+        //     _uiEvent.value = UiEvent(MESSAGE_LIST_FIRST_LOADED)
+        // }
+    }
+
+    override fun refresh(): Job = viewModelScope.launch {
+        val (otherMemberResult, messagesResult) = listOf(
+            async { memberRepository.getMember(otherUid) },
+            async { messageRoomRepository.getMessagesByRoomId(roomId, myUid) },
+        ).awaitAll()
+
+        when {
+            otherMemberResult is Unexpected -> {
+                _commonUiEvent.value =
+                    CommonUiEvent.Unexpected(otherMemberResult.error?.message.toString())
+                return@launch
+            }
+
+            messagesResult is Unexpected -> {
+                _commonUiEvent.value =
+                    CommonUiEvent.Unexpected(messagesResult.error?.message.toString())
+                return@launch
+            }
+
+            otherMemberResult is Failure || messagesResult is Failure -> dispatchFetchFailEvent()
+
+            otherMemberResult is NetworkError || messagesResult is NetworkError -> {
+                changeToNetworkErrorState()
+                return@launch
+            }
+
+            otherMemberResult is Success && messagesResult is Success -> {
+                _otherMember.value = otherMemberResult.data as Member
+                updateMessages(messagesResult.data as List<Message>)
+            }
         }
-    }
 
-    override fun refresh() {
-        viewModelScope.launch { fetchMessages() }
-    }
-
-    private suspend fun fetchMessages() {
-        loading()
-        fetchOtherMember()
-
-        when (val messagesResult = messageRoomRepository.getMessagesByRoomId(roomId, myUid)) {
-            is Success -> updateMessages(messagesResult.data)
-            else -> _messages.value = messages.value.toError()
-        }
-    }
-
-    private fun loading() {
-        _messages.value = messages.value.toLoading()
-    }
-
-    private suspend fun fetchOtherMember() {
-        when (val otherMemberResult = memberRepository.getMember(otherUid)) {
-            is Success -> _otherMember.value = otherMemberResult.data
-            else -> _uiEvent.value = UiEvent(NOT_FOUND_OTHER_MEMBER)
-        }
+        _screenUiState.value = ScreenUiState.NONE
     }
 
     private fun updateMessages(newMessages: List<Message>) {
         val messagesNotBlank = newMessages
             .filter { it.content.isNotBlank() }
             .toUiState()
-        _messages.value = messages.value.toSuccess(messagesNotBlank)
+        _messages.value = messagesNotBlank
     }
 
     private fun List<Message>.toUiState(): List<MessageUiState> {
@@ -130,23 +146,13 @@ class MessageListViewModel @Inject constructor(
         else -> OtherMessageUiState.create(this, shouldShowProfile)
     }
 
-    fun sendMessage(message: String) {
-        if (message.isBlank()) return
-
-        _uiEvent.value = UiEvent(MESSAGE_SENDING)
-        loading()
-
-        viewModelScope.launch {
-            when (messageRoomRepository.sendMessage(myUid, otherUid, message)) {
-                is Success -> {
-                    fetchMessages()
-                    _uiEvent.value = UiEvent(MESSAGE_SENT_REFRESHED)
-                }
-
-                else -> _uiEvent.value = UiEvent(MESSAGE_SENT_FAILED)
-            }
-        }
-    }
+    fun sendMessage(message: String): Job = commandAndRefresh(
+        command = { messageRoomRepository.sendMessage(myUid, otherUid, message) },
+        onSuccess = { _uiEvent.value = MessageListUiEvent.MessageSendComplete },
+        onFailure = { _, _ -> _uiEvent.value = MessageListUiEvent.MessageSendFail },
+        onStart = { _canSendMessage.value = false },
+        onFinish = { _canSendMessage.value = true },
+    )
 
     companion object {
         const val KEY_ROOM_ID = "KEY_ROOM_ID"
