@@ -126,12 +126,11 @@
             app:visible="@{!etEventSearch.text.toString().isBlank()}"
             tools:visibility="gone" />
 
-        <View
+        <com.emmsale.presentation.common.views.HorizontalDivider
             android:id="@+id/divider"
             android:layout_width="0dp"
-            android:layout_height="0.5dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:background="@color/light_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/barrier" />

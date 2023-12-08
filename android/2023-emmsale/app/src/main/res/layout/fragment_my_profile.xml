@@ -104,12 +104,11 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@tools:sample/avatars" />
 
-                <View
+                <com.emmsale.presentation.common.views.HorizontalDivider
                     android:id="@+id/view_myprofile_divider"
                     android:layout_width="0dp"
-                    android:layout_height="0.5dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@color/light_gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cg_myprofile_fields" />

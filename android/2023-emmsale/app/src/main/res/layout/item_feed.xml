@@ -143,11 +143,10 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/img_all_loading" />
 
-        <View
+        <com.emmsale.presentation.common.views.HorizontalDivider
             android:id="@+id/divider_item"
             android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:background="@color/light_gray"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
