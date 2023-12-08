@@ -17,7 +17,11 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
+
+        selectTab()
+        setupEventSearchView()
+        setupEventViewPager()
+        setupNotificationView()
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -26,34 +30,27 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
         selectTab(selectedPosition)
     }
 
-    private fun initView() {
-        selectTab()
-        initEventViewPager()
-        initNotificationView()
-        initEventSearchView()
+    private fun selectTab(position: Int = CONFERENCE_TAB) {
+        binding.tlEvent.getTabAt(position)?.select()
     }
 
-    private fun initEventSearchView() {
+    private fun setupEventSearchView() {
         binding.btnEventSearch.setOnClickListener {
             EventSearchActivity.startActivity(requireContext())
         }
     }
 
-    private fun selectTab(position: Int = CONFERENCE_TAB) {
-        binding.tlEvent.getTabAt(position)?.select()
+    private fun setupEventViewPager() {
+        setupEventFragmentStateAdapter()
+        setupEventTabLayoutMediator()
+        setupEventTabLayoutSelectedListener()
     }
 
-    private fun initEventViewPager() {
-        initEventFragmentStateAdapter()
-        initEventTabLayoutMediator()
-        initEventTabLayoutSelectedListener()
-    }
-
-    private fun initEventFragmentStateAdapter() {
+    private fun setupEventFragmentStateAdapter() {
         binding.vpEvent.adapter = EventFragmentStateAdapter(this)
     }
 
-    private fun initEventTabLayoutMediator() {
+    private fun setupEventTabLayoutMediator() {
         val eventTabNames = listOf(
             getString(R.string.event_scrap),
             getString(R.string.event_conference),
@@ -65,7 +62,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
         }.attach()
     }
 
-    private fun initEventTabLayoutSelectedListener() {
+    private fun setupEventTabLayoutSelectedListener() {
         binding.tlEvent.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 binding.vpEvent.currentItem = tab.position
@@ -76,7 +73,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>() {
         })
     }
 
-    private fun initNotificationView() {
+    private fun setupNotificationView() {
         binding.tbEventToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.notification_button -> NotificationsActivity.startActivity(requireContext())
