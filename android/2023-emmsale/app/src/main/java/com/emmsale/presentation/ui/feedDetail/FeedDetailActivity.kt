@@ -33,15 +33,15 @@ class FeedDetailActivity :
 
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
-    private val feedDetailAdapter: FeedDetailAdapter = FeedDetailAdapter(::showProfile)
+    private val feedDetailAdapter: FeedDetailAdapter = FeedDetailAdapter(::navigateToProfile)
 
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
-        onCommentClick = ::showChildComments,
-        onAuthorImageClick = ::showProfile,
+        onCommentClick = ::navigateToChildComments,
+        onAuthorImageClick = ::navigateToProfile,
         onCommentMenuClick = ::showCommentMenuDialog,
     )
 
-    private fun showChildComments(comment: Comment) {
+    private fun navigateToChildComments(comment: Comment) {
         ChildCommentsActivity.startActivity(
             context = this,
             feedId = comment.feed.id,
@@ -50,7 +50,7 @@ class FeedDetailActivity :
         )
     }
 
-    private fun showProfile(authorId: Long) {
+    private fun navigateToProfile(authorId: Long) {
         ProfileActivity.startActivity(this, authorId)
     }
 
