@@ -14,7 +14,7 @@
             type="String" />
 
         <variable
-            name="deleteImage"
+            name="onImageDeleteButtonClick"
             type="Function1&lt;String, Unit>" />
     </data>
 
@@ -26,21 +26,19 @@
             android:id="@+id/iv_item_post_image"
             android:layout_width="140dp"
             android:layout_height="140dp"
-            android:layout_marginEnd="10dp"
             app:imageUrl="@{imageUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:roundedImageRadius="@{10}"
+            app:canZoomIn="@{true}"
             tools:src="@drawable/img_all_loading" />
 
         <ImageView
             android:id="@+id/iv_item_post_image_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/light_gray"
-            android:onClick="@{_->deleteImage.invoke(imageUrl)}"
-            android:padding="10dp"
+            android:onClick="@{() -> onImageDeleteButtonClick.invoke(imageUrl)}"
             android:src="@drawable/ic_all_close"
             app:layout_constraintEnd_toEndOf="@id/iv_item_post_image"
             app:layout_constraintTop_toTopOf="@id/iv_item_post_image" />

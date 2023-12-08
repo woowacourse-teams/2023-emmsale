@@ -1,12 +1,26 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="14dp"
-    android:height="14dp"
-    android:viewportWidth="14"
-    android:viewportHeight="14">
-    <path
-        android:fillColor="#00000000"
-        android:pathData="M13,1L7,7M7,7L1,13M7,7L1,1M7,7L13,13"
-        android:strokeWidth="2"
-        android:strokeColor="@color/back_button_color"
-        android:strokeLineCap="round" />
-</vector>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />
+            <solid android:color="@color/light_gray" />
+            <corners android:topRightRadius="10dp" />
+        </shape>
+    </item>
+
+    <item>
+        <vector
+            android:width="14dp"
+            android:height="14dp"
+            android:viewportWidth="14"
+            android:viewportHeight="14">
+            <path
+                android:fillColor="#00000000"
+                android:pathData="M13,1L7,7M7,7L1,13M7,7L1,1M7,7L13,13"
+                android:strokeWidth="2"
+                android:strokeColor="@color/back_button_color"
+                android:strokeLineCap="round" />
+        </vector>
+    </item>
+
+</layer-list>

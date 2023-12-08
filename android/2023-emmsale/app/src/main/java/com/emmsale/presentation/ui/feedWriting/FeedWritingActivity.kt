@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.ActivityFeedWritingBinding
 import com.emmsale.presentation.base.NetworkActivity
+import com.emmsale.presentation.common.extension.dp
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showSnackBar
@@ -19,6 +20,7 @@ import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.imageUtil.getImageFileFromUri
 import com.emmsale.presentation.common.imageUtil.isImagePermissionGrantedCompat
 import com.emmsale.presentation.common.imageUtil.onImagePermissionCompat
+import com.emmsale.presentation.common.recyclerView.IntervalItemDecoration
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedWriting.FeedWritingViewModel.Companion.EVENT_ID_KEY
@@ -150,6 +152,7 @@ class FeedWritingActivity :
 
     private fun setupImagesAdapter() {
         binding.rvFeedWritingImageList.adapter = imagesAdapter
+        binding.rvFeedWritingImageList.addItemDecoration(IntervalItemDecoration(width = 10.dp))
     }
 
     private fun observeCanSubmit() {

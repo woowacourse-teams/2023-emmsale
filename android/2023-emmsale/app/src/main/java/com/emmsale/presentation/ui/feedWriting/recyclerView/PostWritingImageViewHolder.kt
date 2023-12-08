@@ -12,7 +12,7 @@ class PostWritingImageViewHolder(
 
     fun bind(imageUrl: String) {
         binding.imageUrl = imageUrl
-        binding.deleteImage = deleteImage
+        binding.onImageDeleteButtonClick = deleteImage
     }
 
     companion object {
