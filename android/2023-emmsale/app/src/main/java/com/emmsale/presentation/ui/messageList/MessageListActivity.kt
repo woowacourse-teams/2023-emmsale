@@ -76,7 +76,9 @@ class MessageListActivity :
 
     private fun observeMessages() {
         viewModel.messages.observe(this) {
-            messageListAdapter.submitList(it.messages)
+            messageListAdapter.submitList(it.messages) {
+                if (!binding.rvMessageList.canScrollVertically(BOTTOM_SCROLL_DIRECTION)) smoothScrollToEnd()
+            }
         }
     }
 
@@ -101,24 +103,26 @@ class MessageListActivity :
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        val couldScrollVertically = binding.rvMessageList.canScrollVertically(BOTTOM_SCROLL_DIRECTION)
         viewModel.refresh()
 
-        val roomId = intent?.getStringExtra(KEY_ROOM_ID)
-        if (roomId != viewModel.roomId) return
+        if (couldScrollVertically) {
+            val roomId = intent?.getStringExtra(KEY_ROOM_ID)
+            if (roomId != viewModel.roomId) return
 
-        val profileUrl = intent.getStringExtra(KEY_PROFILE_URL)
-        val otherName = intent.getStringExtra(KEY_OTHER_NAME) ?: return
-        val messageContent = intent.getStringExtra(KEY_MESSAGE_CONTENT) ?: return
-        showNewMessage(profileUrl, otherName, messageContent)
+            val profileUrl = intent.getStringExtra(KEY_PROFILE_URL)
+            val otherName = intent.getStringExtra(KEY_OTHER_NAME) ?: return
+            val messageContent = intent.getStringExtra(KEY_MESSAGE_CONTENT) ?: return
+            showNewMessage(profileUrl, otherName, messageContent)
+        }
     }
 
     private fun showNewMessage(profileUrl: String?, otherName: String, messageContent: String) {
         val layoutManager = binding.rvMessageList.layoutManager as LinearLayoutManager
         val lastVisiblePos = layoutManager.findLastVisibleItemPosition()
-        val itemCount = viewModel.messages.value.size
-        val lastPosition = itemCount - 1
+        val lastPosition = viewModel.messages.value.size
 
-        if (lastVisiblePos != lastPosition) {
+        if (lastVisiblePos < lastPosition) {
             bottomMessageShowingJob?.cancel()
             bottomMessageShowingJob = lifecycleScope.launch {
                 showBottomMessage(profileUrl, otherName, messageContent)
