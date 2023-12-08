@@ -13,7 +13,7 @@ import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
-class MemberBlockViewModel @Inject constructor(
+class BlockedMembersViewModel @Inject constructor(
     private val blockedMemberRepository: BlockedMemberRepository,
 ) : RefreshableViewModel() {
     private val _blockedMembers = NotNullMutableLiveData(listOf<BlockedMember>())

@@ -11,7 +11,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.blockMemberList.MemberBlockViewModel" />
+            type="com.emmsale.presentation.ui.blockMemberList.BlockedMembersViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

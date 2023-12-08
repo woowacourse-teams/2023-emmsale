@@ -42,7 +42,7 @@
         <activity android:name=".presentation.ui.notificationTagConfig.NotificationTagConfigActivity" />
         <activity android:name=".presentation.ui.notificationList.NotificationsActivity" />
         <activity android:name=".presentation.ui.myCommentList.MyCommentsActivity" />
-        <activity android:name=".presentation.ui.blockMemberList.MemberBlockActivity" />
+        <activity android:name=".presentation.ui.blockMemberList.BlockedMembersActivity" />
         <activity android:name=".presentation.ui.notificationConfig.NotificationConfigActivity" />
         <activity
             android:name=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity"

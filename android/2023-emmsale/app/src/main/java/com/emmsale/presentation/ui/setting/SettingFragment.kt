@@ -12,7 +12,7 @@ import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.common.views.WarningDialog
-import com.emmsale.presentation.ui.blockMemberList.MemberBlockActivity
+import com.emmsale.presentation.ui.blockMemberList.BlockedMembersActivity
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.myCommentList.MyCommentsActivity
 import com.emmsale.presentation.ui.myRecruitmentList.MyRecruitmentActivity
@@ -49,7 +49,7 @@ class SettingFragment :
             { MyCommentsActivity.startActivity(requireContext()) }
         binding.onNotificationSettingButtonClick =
             { NotificationConfigActivity.startActivity(requireContext()) }
-        binding.onBlockMembersButtonClick = { MemberBlockActivity.startActivity(requireContext()) }
+        binding.onBlockMembersButtonClick = { BlockedMembersActivity.startActivity(requireContext()) }
         binding.onUseTermButtonClick = { UseTermWebViewActivity.startActivity(requireContext()) }
         binding.onLogoutButtonClick = ::showLogoutConfirmDialog
         binding.onInquirePageButtonClick = ::showInquirePage
