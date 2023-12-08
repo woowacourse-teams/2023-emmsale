@@ -1,47 +1,35 @@
 package com.emmsale.presentation.ui.messageRoomList
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
+import com.emmsale.data.model.MessageRoom
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.ui.messageRoomList.uistate.MessageRoomListUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
 class MessageRoomViewModel @Inject constructor(
-    private val memberRepository: TokenRepository,
+    private val tokenRepository: TokenRepository,
     private val messageRoomRepository: MessageRoomRepository,
-) : ViewModel(), Refreshable {
-    private val _messageRooms = NotNullMutableLiveData(MessageRoomListUiState())
-    val messageRooms: NotNullLiveData<MessageRoomListUiState> = _messageRooms
+) : RefreshableViewModel() {
 
-    override fun refresh() {
-        fetchMessageRooms()
+    private val uid: Long by lazy { tokenRepository.getMyUid()!! }
+
+    private val _messageRooms = NotNullMutableLiveData(emptyList<MessageRoom>())
+    val messageRooms: NotNullLiveData<List<MessageRoom>> = _messageRooms
+
+    init {
+        fetchData(
+            fetchData = { messageRoomRepository.getMessageRooms(uid) },
+            onSuccess = { _messageRooms.value = it },
+        )
     }
 
-    private fun fetchMessageRooms() {
-        val uid = memberRepository.getMyUid() ?: return
-        _messageRooms.value = messageRooms.value.toLoading()
-
-        viewModelScope.launch {
-            when (val result = messageRoomRepository.getMessageRooms(uid)) {
-                is Success -> {
-                    _messageRooms.value = messageRooms.value.toSuccess(result.data)
-                }
-
-                is Failure, NetworkError, is Unexpected -> {
-                    _messageRooms.value = messageRooms.value.toError()
-                }
-            }
-        }
-    }
+    override fun refresh(): Job = refreshData(
+        refresh = { messageRoomRepository.getMessageRooms(uid) },
+        onSuccess = { _messageRooms.value = it },
+    )
 }
