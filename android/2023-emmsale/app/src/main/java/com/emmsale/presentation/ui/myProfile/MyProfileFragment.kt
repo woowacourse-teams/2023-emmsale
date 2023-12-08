@@ -26,7 +26,7 @@ class MyProfileFragment : NetworkFragment<FragmentMyProfileBinding>() {
         setupToolbar()
         setupActivitiesRecyclerView()
 
-        observeMember()
+        observeProfile()
     }
 
     private fun setupDataBinding() {
@@ -56,8 +56,8 @@ class MyProfileFragment : NetworkFragment<FragmentMyProfileBinding>() {
         }
     }
 
-    private fun observeMember() {
-        viewModel.member.observe(viewLifecycleOwner) { member ->
+    private fun observeProfile() {
+        viewModel.profile.observe(viewLifecycleOwner) { member ->
             handleFields(member.fields)
             handleEducations(member.educations)
             handleClubs(member.clubs)

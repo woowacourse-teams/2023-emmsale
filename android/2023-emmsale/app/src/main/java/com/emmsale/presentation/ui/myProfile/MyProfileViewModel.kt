@@ -18,8 +18,8 @@ class MyProfileViewModel @Inject constructor(
 
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _member = NotNullMutableLiveData(Member())
-    val member: NotNullLiveData<Member> = _member
+    private val _profile = NotNullMutableLiveData(Member())
+    val profile: NotNullLiveData<Member> = _profile
 
     init {
         fetchProfile()
@@ -27,11 +27,11 @@ class MyProfileViewModel @Inject constructor(
 
     private fun fetchProfile(): Job = fetchData(
         fetchData = { memberRepository.getMember(uid) },
-        onSuccess = { _member.value = it },
+        onSuccess = { _profile.value = it },
     )
 
     override fun refresh(): Job = refreshData(
         refresh = { memberRepository.getMember(uid) },
-        onSuccess = { _member.value = it },
+        onSuccess = { _profile.value = it },
     )
 }
