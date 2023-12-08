@@ -1,5 +1,6 @@
 package com.emmsale.presentation.ui.profile
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.retrofit.callAdapter.Failure
@@ -11,9 +12,9 @@ import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.ScreenUiState
-import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,9 +36,6 @@ class ProfileViewModel @Inject constructor(
     }
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _isLogin = NotNullMutableLiveData(true)
-    val isLogin: NotNullLiveData<Boolean> = _isLogin
-
     private val _profile = NotNullMutableLiveData(ProfileUiState(false, Member()))
     val profile: NotNullLiveData<ProfileUiState> = _profile
 
@@ -46,9 +44,8 @@ class ProfileViewModel @Inject constructor(
     private val _canSendMessage = NotNullMutableLiveData(true)
     val canSendMessage: NotNullLiveData<Boolean> = _canSendMessage
 
-    private val _uiEvent: NotNullMutableLiveData<UiEvent<ProfileUiEvent>> =
-        NotNullMutableLiveData(UiEvent(ProfileUiEvent.None))
-    val uiEvent: NotNullLiveData<UiEvent<ProfileUiEvent>> = _uiEvent
+    private val _uiEvent = SingleLiveEvent<ProfileUiEvent>()
+    val uiEvent: LiveData<ProfileUiEvent> = _uiEvent
 
     init {
         fetchAll()
@@ -82,8 +79,8 @@ class ProfileViewModel @Inject constructor(
 
     fun blockMember(): Job = commandAndRefresh(
         command = { memberRepository.blockMember(memberId) },
-        onSuccess = { _uiEvent.value = UiEvent(ProfileUiEvent.BlockComplete) },
-        onFailure = { _, _ -> _uiEvent.value = UiEvent(ProfileUiEvent.BlockFail) },
+        onSuccess = { _uiEvent.value = ProfileUiEvent.BlockComplete },
+        onFailure = { _, _ -> _uiEvent.value = ProfileUiEvent.BlockFail },
     )
 
     fun unblockMember(): Job = commandAndRefresh(
@@ -92,17 +89,16 @@ class ProfileViewModel @Inject constructor(
                 ?: return@commandAndRefresh Failure(-1, null)
             blockedMemberRepository.deleteBlockedMember(blockId)
         },
-        onSuccess = { _uiEvent.value = UiEvent(ProfileUiEvent.UnblockSuccess) },
-        onFailure = { _, _ -> _uiEvent.value = UiEvent(ProfileUiEvent.UnblockFail) },
+        onSuccess = { _uiEvent.value = ProfileUiEvent.UnblockSuccess },
+        onFailure = { _, _ -> _uiEvent.value = ProfileUiEvent.UnblockFail },
     )
 
     fun sendMessage(message: String): Job = command(
         command = { messageRoomRepository.sendMessage(uid, _profile.value.member.id, message) },
         onSuccess = {
-            _uiEvent.value =
-                UiEvent(ProfileUiEvent.MessageSendComplete(it, _profile.value.member.id))
+            _uiEvent.value = ProfileUiEvent.MessageSendComplete(it, _profile.value.member.id)
         },
-        onFailure = { _, _ -> _uiEvent.value = UiEvent(ProfileUiEvent.MessageSendFail) },
+        onFailure = { _, _ -> _uiEvent.value = ProfileUiEvent.MessageSendFail },
         onStart = { _canSendMessage.value = false },
         onFinish = { _canSendMessage.value = true },
     )

@@ -7,17 +7,16 @@ import androidx.activity.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.ActivityProfileBinding
 import com.emmsale.presentation.base.NetworkActivity
-import com.emmsale.presentation.common.UiEvent
+import com.emmsale.presentation.common.extension.dp
 import com.emmsale.presentation.common.extension.showSnackBar
+import com.emmsale.presentation.common.recyclerView.IntervalItemDecoration
 import com.emmsale.presentation.common.views.CategoryTagChip
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
-import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.profile.ProfileViewModel.Companion.KEY_MEMBER_ID
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
-import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,18 +34,20 @@ class ProfileActivity : NetworkActivity<ActivityProfileBinding>(R.layout.activit
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        initDataBinding()
-        initToolbar()
-        setupUiLogic()
-        initActivitiesRecyclerView()
+        setupDataBinding()
+        setupToolbar()
+        setupActivitiesRecyclerView()
+
+        observeProfile()
+        observeUiEvent()
     }
 
-    private fun initDataBinding() {
+    private fun setupDataBinding() {
         binding.viewModel = viewModel
     }
 
-    private fun initToolbar() {
-        binding.tbProfileToolbar.setNavigationOnClickListener { finish() }
+    private fun setupToolbar() {
+        binding.tbProfileToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
         binding.tbProfileToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.more -> showMoreMenu()
@@ -60,7 +61,7 @@ class ProfileActivity : NetworkActivity<ActivityProfileBinding>(R.layout.activit
         menuDialog.apply {
             addMenuItemBelow("쪽지 보내기") { onSendMessageButtonClick() }
             if (viewModel.isBlocked()) {
-                addMenuItemBelow(getString(R.string.profilemenudialog_unblock_button_label)) { onUnblockButtonClick() }
+                addMenuItemBelow(getString(R.string.profilemenudialog_unblock_button_label)) { viewModel.unblockMember() }
             } else {
                 addMenuItemBelow(getString(R.string.profilemenudialog_block_button_label)) { onBlockButtonClick() }
             }
@@ -82,23 +83,21 @@ class ProfileActivity : NetworkActivity<ActivityProfileBinding>(R.layout.activit
         ).show()
     }
 
-    private fun onUnblockButtonClick() {
-        viewModel.unblockMember()
-    }
-
-    private fun setupUiLogic() {
-        setupLoginUiLogic()
-        setupProfileUiLogic()
-        setupProfileEventUiLogic()
-    }
-
-    private fun setupLoginUiLogic() {
-        viewModel.isLogin.observe(this) {
-            handleNotLogin(it)
+    private fun setupActivitiesRecyclerView() {
+        val decoration = IntervalItemDecoration(height = 13.dp)
+        listOf(
+            binding.rvProfileEducations,
+            binding.rvProfileClubs,
+        ).forEach {
+            it.apply {
+                adapter = ActivitiesAdapter()
+                itemAnimator = null
+                addItemDecoration(decoration)
+            }
         }
     }
 
-    private fun setupProfileUiLogic() {
+    private fun observeProfile() {
         viewModel.profile.observe(this) {
             handleLoginMember(it)
             handleFields(it)
@@ -106,49 +105,9 @@ class ProfileActivity : NetworkActivity<ActivityProfileBinding>(R.layout.activit
         }
     }
 
-    private fun setupProfileEventUiLogic() {
-        viewModel.uiEvent.observe(this) {
-            handleUiEvent(it)
-        }
-    }
-
-    private fun handleUiEvent(event: UiEvent<ProfileUiEvent>) {
-        val content = event.getContentIfNotHandled() ?: return
-        when (content) {
-            ProfileUiEvent.BlockComplete -> InfoDialog(
-                context = this,
-                title = getString(R.string.profile_block_complete_dialog_title),
-                message = getString(R.string.profile_block_complete_dialog_message),
-            ).show()
-
-            ProfileUiEvent.BlockFail -> binding.root.showSnackBar(getString(R.string.profile_block_fail_message))
-            is ProfileUiEvent.MessageSendComplete -> {
-                MessageListActivity.startActivity(
-                    this,
-                    content.roomId,
-                    content.otherId,
-                )
-                sendMessageDialog.clearText()
-                sendMessageDialog.dismiss()
-            }
-
-            ProfileUiEvent.MessageSendFail -> binding.root.showSnackBar(getString(R.string.sendmessagedialog_message_send_fail_message))
-            ProfileUiEvent.None -> {}
-            ProfileUiEvent.UnblockFail -> binding.root.showSnackBar(getString(R.string.profile_unblock_fail_message))
-            ProfileUiEvent.UnblockSuccess -> binding.root.showSnackBar(getString(R.string.profile_unblock_complete_message))
-        }
-    }
-
     private fun handleLoginMember(profile: ProfileUiState) {
         if (profile.isLoginMember) {
             binding.tbProfileToolbar.menu.clear()
-        }
-    }
-
-    private fun handleNotLogin(isLogin: Boolean) {
-        if (!isLogin) {
-            LoginActivity.startActivity(this)
-            finish()
         }
     }
 
@@ -171,17 +130,32 @@ class ProfileActivity : NetworkActivity<ActivityProfileBinding>(R.layout.activit
         )
     }
 
-    private fun initActivitiesRecyclerView() {
-        val decoration = ActivitiesAdapterDecoration()
-        listOf(
-            binding.rvProfileEducations,
-            binding.rvProfileClubs,
-        ).forEach {
-            it.apply {
-                adapter = ActivitiesAdapter()
-                itemAnimator = null
-                addItemDecoration(decoration)
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
+    }
+
+    private fun handleUiEvent(uiEvent: ProfileUiEvent) {
+        when (uiEvent) {
+            ProfileUiEvent.BlockComplete -> InfoDialog(
+                context = this,
+                title = getString(R.string.profile_block_complete_dialog_title),
+                message = getString(R.string.profile_block_complete_dialog_message),
+            ).show()
+
+            ProfileUiEvent.BlockFail -> binding.root.showSnackBar(getString(R.string.profile_block_fail_message))
+            is ProfileUiEvent.MessageSendComplete -> {
+                MessageListActivity.startActivity(
+                    this,
+                    uiEvent.roomId,
+                    uiEvent.otherId,
+                )
+                sendMessageDialog.clearText()
+                sendMessageDialog.dismiss()
             }
+
+            ProfileUiEvent.MessageSendFail -> binding.root.showSnackBar(getString(R.string.sendmessagedialog_message_send_fail_message))
+            ProfileUiEvent.UnblockFail -> binding.root.showSnackBar(getString(R.string.profile_unblock_fail_message))
+            ProfileUiEvent.UnblockSuccess -> binding.root.showSnackBar(getString(R.string.profile_unblock_complete_message))
         }
     }
 

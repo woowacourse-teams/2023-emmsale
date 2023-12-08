@@ -7,5 +7,4 @@ sealed interface ProfileUiEvent {
     object UnblockSuccess : ProfileUiEvent
     object MessageSendFail : ProfileUiEvent
     data class MessageSendComplete(val roomId: String, val otherId: Long) : ProfileUiEvent
-    object None : ProfileUiEvent
 }
