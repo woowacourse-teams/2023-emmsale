@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
+import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityFeedDetailBinding
 import com.emmsale.presentation.base.NetworkActivity
-import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
@@ -34,120 +34,20 @@ class FeedDetailActivity :
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
     private val feedDetailAdapter: FeedDetailAdapter = FeedDetailAdapter(::showProfile)
+
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
-        onCommentClick = { comment ->
-            ChildCommentsActivity.startActivity(
-                context = this,
-                feedId = comment.feed.id,
-                parentCommentId = comment.parentCommentId ?: comment.id,
-                highlightCommentId = comment.id,
-            )
-        },
+        onCommentClick = ::showChildComments,
         onAuthorImageClick = ::showProfile,
         onCommentMenuClick = ::showCommentMenuDialog,
     )
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
-        setUpDataBinding()
-        setUpToolbar()
-        setUpRecyclerView()
-        setUpUiEvent()
-        setUpCommentEditing()
-        setUpFeed()
-        setupComments()
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        viewModel.refresh()
-    }
-
-    private fun setUpDataBinding() {
-        binding.lifecycleOwner = this
-        binding.vm = viewModel
-        binding.onCommentSubmitButtonClick = {
-            viewModel.postComment(it)
-            hideKeyboard()
-        }
-        binding.onCommentUpdateCancelButtonClick = {
-            viewModel.setEditMode(false)
-            hideKeyboard()
-        }
-        binding.onUpdatedCommentSubmitButtonClick = {
-            val commentId = viewModel.editingCommentId.value
-            if (commentId != null) viewModel.updateComment(commentId, it)
-            hideKeyboard()
-        }
-    }
-
-    private fun setUpToolbar() {
-        binding.tbFeeddetailToolbar.setNavigationOnClickListener { finish() }
-        binding.tbFeeddetailToolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.more -> showFeedDetailMenuDialog()
-            }
-            true
-        }
-    }
-
-    private fun showFeedDetailMenuDialog() {
-        bottomMenuDialog.resetMenu()
-        if (viewModel.isFeedDetailWrittenByLoginUser) {
-            bottomMenuDialog.addFeedUpdateButton()
-            bottomMenuDialog.addFeedDeleteButton()
-        } else {
-            bottomMenuDialog.addFeedReportButton()
-        }
-        bottomMenuDialog.show()
-    }
-
-    private fun BottomMenuDialog.addFeedUpdateButton() {
-        addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
-            binding.root.showSnackBar("아직 게시글 수정 기능이 준비되지 않았습니다.")
-        }
-    }
-
-    private fun BottomMenuDialog.addFeedDeleteButton() {
-        addMenuItemBelow(context.getString(R.string.all_delete_button_label)) {
-            showFeedDeleteConfirmDialog()
-        }
-    }
-
-    private fun showFeedDeleteConfirmDialog() {
-        WarningDialog(
+    private fun showChildComments(comment: Comment) {
+        ChildCommentsActivity.startActivity(
             context = this,
-            title = getString(R.string.feeddetaildeletedialog_title),
-            message = getString(R.string.feeddetaildeletedialog_message),
-            positiveButtonLabel = getString(R.string.all_delete_button_label),
-            negativeButtonLabel = getString(R.string.all_cancel),
-            onPositiveButtonClick = { viewModel.deleteFeed() },
-        ).show()
-    }
-
-    private fun BottomMenuDialog.addFeedReportButton() {
-        addMenuItemBelow(
-            context.getString(R.string.all_report_button_label),
-            MenuItemType.IMPORTANT,
-        ) {
-            binding.root.showSnackBar("아직 게시글 신고 기능이 준비되지 않았습니다.")
-        }
-    }
-
-    private fun setUpRecyclerView() {
-        val concatAdapterConfig = ConcatAdapter.Config.Builder().build()
-
-        binding.rvFeeddetailFeedAndComments.apply {
-            adapter = ConcatAdapter(
-                concatAdapterConfig,
-                feedDetailAdapter,
-                commentsAdapter,
-            )
-            itemAnimator = null
-            addItemDecoration(DividerItemDecoration(this@FeedDetailActivity))
-        }
+            feedId = comment.feed.id,
+            parentCommentId = comment.parentCommentId ?: comment.id,
+            highlightCommentId = comment.id,
+        )
     }
 
     private fun showProfile(authorId: Long) {
@@ -210,20 +110,126 @@ class FeedDetailActivity :
         ).show()
     }
 
-    private fun setUpCommentEditing() {
-        viewModel.editingCommentContent.observe(this) {
-            if (it == null) return@observe
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        setupDataBinding()
+        setupToolbar()
+        setupChildCommentsRecyclerView()
+
+        observeFeed()
+        observeComments()
+        observeUiEvent()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        viewModel.refresh()
+    }
+
+    private fun setupDataBinding() {
+        binding.vm = viewModel
+        binding.onCommentSubmitButtonClick = {
+            viewModel.postComment(it)
+            hideKeyboard()
+        }
+        binding.onCommentUpdateCancelButtonClick = {
+            viewModel.setEditMode(false)
+            hideKeyboard()
+        }
+        binding.onUpdatedCommentSubmitButtonClick = {
+            val commentId = viewModel.editingCommentId.value
+            if (commentId != null) viewModel.updateComment(commentId, it)
+            hideKeyboard()
         }
     }
 
-    private fun setUpUiEvent() {
+    private fun setupToolbar() {
+        binding.tbFeeddetailToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding.tbFeeddetailToolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.more -> showFeedDetailMenuDialog()
+            }
+            true
+        }
+    }
+
+    private fun showFeedDetailMenuDialog() {
+        bottomMenuDialog.resetMenu()
+        if (viewModel.isFeedDetailWrittenByLoginUser) {
+            bottomMenuDialog.addFeedUpdateButton()
+            bottomMenuDialog.addFeedDeleteButton()
+        } else {
+            bottomMenuDialog.addFeedReportButton()
+        }
+        bottomMenuDialog.show()
+    }
+
+    private fun BottomMenuDialog.addFeedUpdateButton() {
+        addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
+            binding.root.showSnackBar("아직 게시글 수정 기능이 준비되지 않았습니다.")
+        }
+    }
+
+    private fun BottomMenuDialog.addFeedDeleteButton() {
+        addMenuItemBelow(context.getString(R.string.all_delete_button_label)) {
+            showFeedDeleteConfirmDialog()
+        }
+    }
+
+    private fun showFeedDeleteConfirmDialog() {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.feeddetaildeletedialog_title),
+            message = getString(R.string.feeddetaildeletedialog_message),
+            positiveButtonLabel = getString(R.string.all_delete_button_label),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { viewModel.deleteFeed() },
+        ).show()
+    }
+
+    private fun BottomMenuDialog.addFeedReportButton() {
+        addMenuItemBelow(
+            context.getString(R.string.all_report_button_label),
+            MenuItemType.IMPORTANT,
+        ) {
+            binding.root.showSnackBar("아직 게시글 신고 기능이 준비되지 않았습니다.")
+        }
+    }
+
+    private fun setupChildCommentsRecyclerView() {
+        val concatAdapterConfig = ConcatAdapter.Config.Builder().build()
+
+        binding.rvFeeddetailFeedAndComments.apply {
+            adapter = ConcatAdapter(
+                concatAdapterConfig,
+                feedDetailAdapter,
+                commentsAdapter,
+            )
+            itemAnimator = null
+            addItemDecoration(DividerItemDecoration(this@FeedDetailActivity))
+        }
+    }
+
+    private fun observeFeed() {
+        viewModel.feed.observe(this) {
+            feedDetailAdapter.setFeedDetail(it)
+        }
+    }
+
+    private fun observeComments() {
+        viewModel.comments.observe(this) {
+            commentsAdapter.submitList(it.comments)
+        }
+    }
+
+    private fun observeUiEvent() {
         viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
-    private fun handleUiEvent(event: UiEvent<FeedDetailUiEvent>) {
-        val content = event.getContentIfNotHandled() ?: return
-        when (content) {
-            FeedDetailUiEvent.None -> {}
+    private fun handleUiEvent(uiEvent: FeedDetailUiEvent) {
+        when (uiEvent) {
             FeedDetailUiEvent.CommentDeleteFail -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))
             FeedDetailUiEvent.CommentPostFail -> binding.root.showSnackBar(getString(R.string.comments_comments_posting_error_message))
             FeedDetailUiEvent.CommentReportComplete -> InfoDialog(
@@ -272,18 +278,6 @@ class FeedDetailActivity :
 
     private fun scrollToLastPosition() {
         binding.rvFeeddetailFeedAndComments.smoothScrollToPosition(viewModel.comments.value.size + 1)
-    }
-
-    private fun setUpFeed() {
-        viewModel.feed.observe(this) {
-            feedDetailAdapter.setFeedDetail(it)
-        }
-    }
-
-    private fun setupComments() {
-        viewModel.comments.observe(this) {
-            commentsAdapter.submitList(it.comments)
-        }
     }
 
     companion object {

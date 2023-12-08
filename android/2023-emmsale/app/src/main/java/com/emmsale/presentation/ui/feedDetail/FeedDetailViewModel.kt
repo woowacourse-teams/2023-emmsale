@@ -17,10 +17,10 @@ import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.CommonUiEvent
 import com.emmsale.presentation.common.ScreenUiState
-import com.emmsale.presentation.common.UiEvent
 import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentsUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,9 +60,8 @@ class FeedDetailViewModel @Inject constructor(
     private val _canSubmitComment = NotNullMutableLiveData(true)
     val canSubmitComment: NotNullLiveData<Boolean> = _canSubmitComment
 
-    private val _uiEvent: NotNullMutableLiveData<UiEvent<FeedDetailUiEvent>> =
-        NotNullMutableLiveData(UiEvent(FeedDetailUiEvent.None))
-    val uiEvent: NotNullLiveData<UiEvent<FeedDetailUiEvent>> = _uiEvent
+    private val _uiEvent = SingleLiveEvent<FeedDetailUiEvent>()
+    val uiEvent: LiveData<FeedDetailUiEvent> = _uiEvent
 
     init {
         fetchFeedAndComments()
@@ -88,7 +87,7 @@ class FeedDetailViewModel @Inject constructor(
             }
 
             feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
-                _uiEvent.value = UiEvent(FeedDetailUiEvent.DeletedFeedFetch)
+                _uiEvent.value = FeedDetailUiEvent.DeletedFeedFetch
             }
 
             feedResult is Failure || commentResult is Failure -> {
@@ -132,7 +131,7 @@ class FeedDetailViewModel @Inject constructor(
             }
 
             feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
-                _uiEvent.value = UiEvent(FeedDetailUiEvent.DeletedFeedFetch)
+                _uiEvent.value = FeedDetailUiEvent.DeletedFeedFetch
             }
 
             feedResult is Failure || commentResult is Failure -> {
@@ -166,15 +165,15 @@ class FeedDetailViewModel @Inject constructor(
 
     fun deleteFeed(): Job = command(
         command = { feedRepository.deleteFeed(feedId) },
-        onSuccess = { _uiEvent.value = UiEvent(FeedDetailUiEvent.FeedDeleteComplete) },
-        onFailure = { _, _ -> _uiEvent.value = UiEvent(FeedDetailUiEvent.FeedDeleteFail) },
+        onSuccess = { _uiEvent.value = FeedDetailUiEvent.FeedDeleteComplete },
+        onFailure = { _, _ -> _uiEvent.value = FeedDetailUiEvent.FeedDeleteFail },
     )
 
     fun postComment(content: String): Job = commandAndRefresh(
         command = { commentRepository.saveComment(content, feedId) },
-        onSuccess = { _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentPostComplete) },
+        onSuccess = { _uiEvent.value = FeedDetailUiEvent.CommentPostComplete },
         onFailure = { _, _ ->
-            _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentPostFail)
+            _uiEvent.value = FeedDetailUiEvent.CommentPostFail
             logComment(content, feedId)
         },
         onStart = { _canSubmitComment.value = false },
@@ -184,14 +183,14 @@ class FeedDetailViewModel @Inject constructor(
     fun updateComment(commentId: Long, content: String): Job = commandAndRefresh(
         command = { commentRepository.updateComment(commentId, content) },
         onSuccess = { _editingCommentId.value = null },
-        onFailure = { _, _ -> _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentUpdateFail) },
+        onFailure = { _, _ -> _uiEvent.value = FeedDetailUiEvent.CommentUpdateFail },
         onStart = { _canSubmitComment.value = false },
         onFinish = { _canSubmitComment.value = true },
     )
 
     fun deleteComment(commentId: Long): Job = commandAndRefresh(
         command = { commentRepository.deleteComment(commentId) },
-        onFailure = { _, _ -> _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentDeleteFail) },
+        onFailure = { _, _ -> _uiEvent.value = FeedDetailUiEvent.CommentDeleteFail },
     )
 
     fun setEditMode(isEditMode: Boolean, commentId: Long = -1) {
@@ -209,12 +208,12 @@ class FeedDetailViewModel @Inject constructor(
                 ?: throw IllegalArgumentException("화면에 없는 댓글을 지우려고 시도했습니다. 지우려는 댓글 아이디: $commentId")
             commentRepository.reportComment(commentId, authorId, uid)
         },
-        onSuccess = { _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportComplete) },
+        onSuccess = { _uiEvent.value = FeedDetailUiEvent.CommentReportComplete },
         onFailure = { code, _ ->
             if (code == REPORT_DUPLICATE_ERROR_CODE) {
-                _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportDuplicate)
+                _uiEvent.value = FeedDetailUiEvent.CommentReportDuplicate
             } else {
-                _uiEvent.value = UiEvent(FeedDetailUiEvent.CommentReportFail)
+                _uiEvent.value = FeedDetailUiEvent.CommentReportFail
             }
         },
     )

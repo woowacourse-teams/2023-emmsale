@@ -1,7 +1,6 @@
 package com.emmsale.presentation.ui.feedDetail.uiState
 
 sealed interface FeedDetailUiEvent {
-    object None : FeedDetailUiEvent
     object DeletedFeedFetch : FeedDetailUiEvent
     object FeedDeleteFail : FeedDetailUiEvent
     object FeedDeleteComplete : FeedDetailUiEvent
