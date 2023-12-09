@@ -45,11 +45,11 @@ abstract class NetworkViewModel : ViewModel() {
     protected fun <T : Any> requestNetwork(
         request: suspend () -> ApiResponse<T>,
         onSuccess: suspend (T) -> Unit,
-        onFailure: (code: Int, message: String?) -> Unit,
+        onFailure: suspend (code: Int, message: String?) -> Unit,
         onLoading: suspend () -> Unit,
-        onNetworkError: () -> Unit,
-        onStart: () -> Unit = {},
-        onFinish: () -> Unit = {},
+        onNetworkError: suspend () -> Unit,
+        onStart: suspend () -> Unit = {},
+        onFinish: suspend () -> Unit = {},
     ): Job = viewModelScope.launch {
         onStart()
         val loadingJob = launch { onLoading() }
@@ -74,12 +74,12 @@ abstract class NetworkViewModel : ViewModel() {
 
     protected fun <T : Any> command(
         command: suspend () -> ApiResponse<T>,
-        onSuccess: (T) -> Unit = {},
-        onFailure: (code: Int, message: String?) -> Unit = { _, _ -> },
+        onSuccess: suspend (T) -> Unit = {},
+        onFailure: suspend (code: Int, message: String?) -> Unit = { _, _ -> },
         onLoading: suspend () -> Unit = { delayLoading() },
-        onNetworkError: () -> Unit = ::dispatchNetworkErrorEvent,
-        onStart: () -> Unit = {},
-        onFinish: () -> Unit = {},
+        onNetworkError: suspend () -> Unit = { dispatchNetworkErrorEvent() },
+        onStart: suspend () -> Unit = {},
+        onFinish: suspend () -> Unit = {},
     ): Job = requestNetwork(
         request = { command() },
         onSuccess = { onSuccess(it) },
