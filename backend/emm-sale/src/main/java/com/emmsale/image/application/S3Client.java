@@ -40,7 +40,10 @@ public class S3Client {
   }
 
   public List<String> uploadImages(final List<MultipartFile> multipartFiles) {
-    return multipartFiles.stream().map(this::uploadImage)
+    return multipartFiles.stream()
+        .parallel()
+        .map(this::uploadImage)
+        .filter(Objects::nonNull)
         .collect(Collectors.toList());
   }
 
@@ -51,10 +54,10 @@ public class S3Client {
 
     try (final InputStream inputStream = file.getInputStream()) {
       amazonS3.putObject(new PutObjectRequest(bucket, newFileName, inputStream, objectMetadata));
+      return newFileName;
     } catch (final IOException | SdkClientException exception) {
       throw new ImageException(ImageExceptionType.FAIL_S3_UPLOAD_IMAGE);
     }
-    return newFileName;
   }
 
   private String extractFileExtension(final MultipartFile file) {
@@ -82,8 +85,10 @@ public class S3Client {
 
   public void deleteImages(final List<String> fileNames) {
     try {
-      fileNames.forEach(fileName ->
-          amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName)));
+      fileNames.stream()
+          .parallel()
+          .forEach(fileName ->
+              amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName)));
     } catch (SdkClientException exception) {
       throw new ImageException(ImageExceptionType.FAIL_S3_DELETE_IMAGE);
     }

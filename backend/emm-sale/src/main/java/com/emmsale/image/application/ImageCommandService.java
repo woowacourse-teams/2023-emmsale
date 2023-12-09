@@ -37,14 +37,7 @@ public class ImageCommandService {
     validateImageCount(imageType, multipartFiles);
 
     final List<String> imageNames = s3Client.uploadImages(multipartFiles);
-
-    try {
-      return saveImagesToDb(imageType, contentId, imageNames);
-    } catch (Exception exception) {
-      s3Client.deleteImages(imageNames);
-      // TODO: 2023/09/15 이 동작이 실패했을 경우에 대한 처리(추후 고도화)
-      throw new ImageException(ImageExceptionType.FAIL_DB_UPLOAD_IMAGE);
-    }
+    return saveImagesToDb(imageType, contentId, imageNames);
   }
 
   private void validateContentExist(final ImageType imageType, final Long contentId) {
@@ -96,6 +89,5 @@ public class ImageCommandService {
         .collect(Collectors.toList());
     imageRepository.deleteAllByIdInBatch(imageIds);
     s3Client.deleteImages(imageNames);
-    // TODO: 2023/09/15 S3의 이미지가 '일부만' 삭제되는 경우에 대한 처리(추후 고도화)
   }
 }
