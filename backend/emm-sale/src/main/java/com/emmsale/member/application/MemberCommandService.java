@@ -8,7 +8,6 @@ import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,7 @@ public class MemberCommandService {
       s3Client.deleteImages(List.of(imageName));
     }
 
-    final String imageName = s3Client.uploadImage(image, new AtomicBoolean(false));
+    final String imageName = s3Client.uploadImage(image);
     final String imageUrl = s3Client.convertImageUrl(imageName);
     member.updateProfile(imageUrl);
 

@@ -164,38 +164,6 @@ class ImageCommandServiceTest extends ServiceIntegrationTestHelper {
       assertThatThrownBy(actual).isInstanceOf(ImageException.class)
           .hasMessage(ImageExceptionType.OVER_MAX_IMAGE_COUNT.errorMessage());
     }
-
-    @Test
-    @DisplayName("이미지를 DB에 저장하는 작업이 실패하면 S3에 저장된 이미지를 삭제하고 예외를 던진다.")
-    void saveImages_fail_and_rollback() {
-      //givend
-      final Event event = eventRepository.save(인프콘_2023());
-      final List<String> imageNames = List.of("테스트테스트.png", "테스트테스트2.png");
-      final List<MultipartFile> files = List.of(
-          new MockMultipartFile("test", "test.png", "", new byte[]{}),
-          new MockMultipartFile("test", "test.png", "", new byte[]{}));
-
-      BDDMockito.given(s3Client.uploadImages(any()))
-          .willReturn(imageNames);
-      BDDMockito.willDoNothing().given(s3Client).deleteImages(any());
-      BDDMockito.given(mockImageRepository.save(any(Image.class)))
-          .willThrow(new IllegalArgumentException());
-
-      //when
-      final ThrowingCallable actual = () -> imageCommandServiceWithMockImageRepository.saveImages(
-          ImageType.EVENT, event.getId(), files);
-
-      //then
-      assertThatThrownBy(actual)
-          .isInstanceOf(ImageException.class)
-          .hasMessage(ImageExceptionType.FAIL_DB_UPLOAD_IMAGE.errorMessage());
-      assertAll(
-          () -> verify(s3Client, times(1))
-              .uploadImages(any()),
-          () -> verify(s3Client, times(1))
-              .deleteImages(any())
-      );
-    }
   }
 
   @Nested

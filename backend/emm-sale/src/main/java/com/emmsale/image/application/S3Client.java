@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -41,21 +40,14 @@ public class S3Client {
   }
 
   public List<String> uploadImages(final List<MultipartFile> multipartFiles) {
-    final AtomicBoolean catchException = new AtomicBoolean(false);
-
-    final List<String> uploadedImageNames = multipartFiles.stream()
+    return multipartFiles.stream()
         .parallel()
-        .map(file -> uploadImage(file, catchException))
+        .map(this::uploadImage)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
-    if (catchException.get()) {
-      deleteImages(uploadedImageNames);
-      throw new ImageException(ImageExceptionType.FAIL_S3_UPLOAD_IMAGE);
-    }
-    return uploadedImageNames;
   }
 
-  public String uploadImage(final MultipartFile file, final AtomicBoolean catchException) {
+  public String uploadImage(final MultipartFile file) {
     final String fileExtension = extractFileExtension(file);
     final String newFileName = UUID.randomUUID().toString().concat(fileExtension);
     final ObjectMetadata objectMetadata = configureObjectMetadata(file);
@@ -64,8 +56,7 @@ public class S3Client {
       amazonS3.putObject(new PutObjectRequest(bucket, newFileName, inputStream, objectMetadata));
       return newFileName;
     } catch (final IOException | SdkClientException exception) {
-      catchException.set(true);
-      return null;
+      throw new ImageException(ImageExceptionType.FAIL_S3_UPLOAD_IMAGE);
     }
   }
 

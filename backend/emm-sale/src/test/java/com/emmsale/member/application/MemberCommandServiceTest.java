@@ -5,10 +5,8 @@ import static com.emmsale.member.exception.MemberExceptionType.FORBIDDEN_UPDATE_
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -148,7 +146,7 @@ class MemberCommandServiceTest extends ServiceIntegrationTestHelper {
     @BeforeEach
     void setUp() {
       ReflectionTestUtils.setField(s3Client, "bucket", bucket);
-      when(s3Client.uploadImage(eq(image), any())).thenReturn(imageName);
+      when(s3Client.uploadImage(image)).thenReturn(imageName);
       when(s3Client.convertImageUrl(anyString())).thenCallRealMethod();
       when(s3Client.convertImageName(anyString())).thenCallRealMethod();
     }
@@ -168,7 +166,7 @@ class MemberCommandServiceTest extends ServiceIntegrationTestHelper {
           () -> assertThat(member.getImageUrl())
               .isEqualTo(s3Client.convertImageUrl(imageName)),
           () -> verify(s3Client, times(1))
-              .uploadImage(eq(image), any())
+              .uploadImage(image)
       );
     }
 
@@ -188,7 +186,7 @@ class MemberCommandServiceTest extends ServiceIntegrationTestHelper {
           () -> assertThat(member.getImageUrl())
               .isEqualTo(s3Client.convertImageUrl(imageName)),
           () -> verify(s3Client, times(1))
-              .uploadImage(eq(image), any()),
+              .uploadImage(image),
           () -> verify(s3Client, times(1))
               .deleteImages(anyList())
       );
