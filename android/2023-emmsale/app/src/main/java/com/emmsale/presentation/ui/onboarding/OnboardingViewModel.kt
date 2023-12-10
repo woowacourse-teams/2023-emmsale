@@ -1,22 +1,20 @@
 package com.emmsale.presentation.ui.onboarding
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
+import androidx.lifecycle.map
+import com.emmsale.data.model.ActivityType
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.onboarding.uiState.MemberSavingUiState
-import com.emmsale.presentation.ui.onboarding.uiState.OnboardingUiState
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
+import com.emmsale.presentation.ui.onboarding.uiState.ActivityUiState
+import com.emmsale.presentation.ui.onboarding.uiState.OnboardingUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,68 +22,72 @@ class OnboardingViewModel @Inject constructor(
     private val activityRepository: ActivityRepository,
     private val memberRepository: MemberRepository,
     private val configRepository: ConfigRepository,
-) : ViewModel() {
+) : RefreshableViewModel() {
+
     val name: MutableLiveData<String> = MutableLiveData("")
 
-    private val _activities = NotNullMutableLiveData(OnboardingUiState())
-    val activities: NotNullLiveData<OnboardingUiState> = _activities
+    private val _activities = NotNullMutableLiveData(listOf<ActivityUiState>())
 
-    val isExceedFieldLimit: Boolean
-        get() = activities.value.fields.count { it.isSelected } == MAXIMUM_FIELD_SELECTION
+    val fields: LiveData<List<ActivityUiState>> =
+        _activities.map { activities -> activities.filter { activity -> activity.activity.activityType == ActivityType.INTEREST_FIELD } }
+
+    val educations: LiveData<List<ActivityUiState>> =
+        _activities.map { activities -> activities.filter { activity -> activity.activity.activityType == ActivityType.EDUCATION } }
+
+    val clubs: LiveData<List<ActivityUiState>> =
+        _activities.map { activities -> activities.filter { activity -> activity.activity.activityType == ActivityType.CLUB } }
+
+    private val _canSubmit = NotNullMutableLiveData(true)
+    val canSubmit: NotNullLiveData<Boolean> = _canSubmit
+
+    private val _uiEvent = SingleLiveEvent<OnboardingUiEvent>()
+    val uiEvent: LiveData<OnboardingUiEvent> = _uiEvent
 
     init {
-        _activities.value = _activities.value.copy(isLoading = true)
         fetchActivities()
     }
 
-    private fun fetchActivities(): Job = viewModelScope.launch {
-        when (val result = activityRepository.getActivities()) {
-            is Failure, NetworkError ->
-                _activities.postValue(activities.value.copy(isLoadingActivitiesFailed = true))
+    private fun fetchActivities(): Job = fetchData(
+        fetchData = { activityRepository.getActivities() },
+        onSuccess = { _activities.value = it.map(::ActivityUiState) },
+    )
 
-            is Success -> _activities.postValue(OnboardingUiState.from(result.data))
-            is Unexpected -> throw Throwable(result.error)
-        }
-    }
+    override fun refresh(): Job = refreshData(
+        refresh = { activityRepository.getActivities() },
+        onSuccess = { _activities.value = it.map(::ActivityUiState) },
+    )
 
     fun updateSelection(tagId: Long, isSelected: Boolean) {
-        val fields = _activities.value.fields
-            .map { if (tagId == it.id) it.copy(isSelected = isSelected) else it }
-        val educations = _activities.value.educations
-            .map { if (tagId == it.id) it.copy(isSelected = isSelected) else it }
-        val clubs = _activities.value.clubs
-            .map { if (tagId == it.id) it.copy(isSelected = isSelected) else it }
+        val newActivities = _activities.value
+            .map { if (it.activity.id == tagId) it.copy(isSelected = isSelected) else it }
 
-        _activities.value = _activities.value.copy(
-            fields = fields,
-            educations = educations,
-            clubs = clubs,
-        )
-    }
-
-    fun updateMember() {
-        viewModelScope.launch {
-            _activities.value = _activities.value.copy(isLoading = true)
-            when (
-                val result = memberRepository.createMember(
-                    name.value!!,
-                    _activities.value.selectedActivityIds,
-                )
-            ) {
-                is Failure, NetworkError -> updateMemberSavingUiState(MemberSavingUiState.Failed)
-                is Success -> {
-                    updateMemberSavingUiState(MemberSavingUiState.Success)
-                    configRepository.saveAutoLoginConfig(true)
-                }
-
-                is Unexpected -> throw Throwable(result.error)
-            }
+        if (newActivities.isExceedFieldLimit()) {
+            _uiEvent.value = OnboardingUiEvent.FieldLimitExceedChecked
+            _activities.value = _activities.value
+            return
         }
+
+        _activities.value = newActivities
     }
 
-    private fun updateMemberSavingUiState(memberSaving: MemberSavingUiState) {
-        _activities.value = _activities.value.copy(memberSavingUiState = memberSaving)
-    }
+    private fun List<ActivityUiState>.isExceedFieldLimit(): Boolean =
+        count { it.activity.activityType == ActivityType.INTEREST_FIELD && it.isSelected } > MAXIMUM_FIELD_SELECTION
+
+    fun join(): Job = command(
+        command = {
+            memberRepository.createMember(
+                name = name.value!!,
+                activityIds = _activities.value.filter { it.isSelected }.map { it.activity.id },
+            )
+        },
+        onSuccess = {
+            configRepository.saveAutoLoginConfig(true)
+            _uiEvent.value = OnboardingUiEvent.JoinComplete
+        },
+        onFailure = { _, _ -> _uiEvent.value = OnboardingUiEvent.JoinFail },
+        onStart = { _canSubmit.value = false },
+        onFinish = { _canSubmit.value = true },
+    )
 
     companion object {
         private const val MAXIMUM_FIELD_SELECTION = 4

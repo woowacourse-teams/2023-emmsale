@@ -10,24 +10,19 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingNameFragment :
-    BaseFragment<FragmentOnboardingNameBinding>(R.layout.fragment_onboarding_name),
-    View.OnClickListener {
+    BaseFragment<FragmentOnboardingNameBinding>(R.layout.fragment_onboarding_name) {
 
     val viewModel: OnboardingViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupDateBinding()
+    }
+
+    private fun setupDateBinding() {
         binding.viewModel = viewModel
-        initClickListener()
-    }
-
-    private fun initClickListener() {
-        binding.btnNext.setOnClickListener(this)
-    }
-
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.btn_next -> (requireActivity() as OnboardingActivity).navigateToNextPage()
-        }
+        binding.onNextButtonClick =
+            { (requireActivity() as OnboardingActivity).navigateToNextPage() }
     }
 }

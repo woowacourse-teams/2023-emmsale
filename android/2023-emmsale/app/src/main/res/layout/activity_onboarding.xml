@@ -5,7 +5,8 @@
 
     <data>
 
-        <import type="android.view.View" />
+
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <variable
             name="viewModel"
@@ -15,7 +16,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         tools:context=".presentation.ui.onboarding.OnboardingActivity">
 
         <androidx.viewpager2.widget.ViewPager2
@@ -33,13 +33,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="@{viewModel.activities.loading ? View.VISIBLE : View.GONE}"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="0.15"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
+
+        <com.emmsale.presentation.common.views.NetworkErrorView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.NETWORK_ERROR}"
+            app:onRefresh="@{() -> viewModel.refresh()}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

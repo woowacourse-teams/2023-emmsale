@@ -12,27 +12,35 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingClubFragment :
-    BaseFragment<FragmentOnboardingClubBinding>(R.layout.fragment_onboarding_club),
-    View.OnClickListener {
+    BaseFragment<FragmentOnboardingClubBinding>(R.layout.fragment_onboarding_club) {
 
     val viewModel: OnboardingViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupDataBinding()
+        setupToolbar()
+
+        observeClubs()
+    }
+
+    private fun setupDataBinding() {
         binding.viewModel = viewModel
-        initClickListener()
-        setupClubs()
+        binding.onNextButtonClick =
+            { (requireActivity() as OnboardingActivity).navigateToNextPage() }
     }
 
-    private fun initClickListener() {
-        binding.btnNext.setOnClickListener(this)
-        binding.btnBack.setOnClickListener(this)
+    private fun setupToolbar() {
+        binding.tbClubFragment.setNavigationOnClickListener {
+            (requireActivity() as OnboardingActivity).onBackPressedDispatcher.onBackPressed()
+        }
     }
 
-    private fun setupClubs() {
-        viewModel.activities.observe(viewLifecycleOwner) { activities ->
+    private fun observeClubs() {
+        viewModel.clubs.observe(viewLifecycleOwner) { clubs ->
             binding.chipgroupClubTags.removeAllViews()
-            activities.clubs.forEach(::addClubChip)
+            clubs.forEach(::addClubChip)
         }
     }
 
@@ -41,17 +49,10 @@ class OnboardingClubFragment :
     }
 
     private fun createChip(activity: ActivityUiState) = activityChipOf {
-        text = activity.name
+        text = activity.activity.name
         isChecked = activity.isSelected
         setOnCheckedChangeListener { _, isChecked ->
-            viewModel.updateSelection(activity.id, isChecked)
-        }
-    }
-
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.btn_next -> (requireActivity() as OnboardingActivity).navigateToNextPage()
-            R.id.btn_back -> (requireActivity() as OnboardingActivity).navigateToPrevPage()
+            viewModel.updateSelection(activity.activity.id, isChecked)
         }
     }
 }

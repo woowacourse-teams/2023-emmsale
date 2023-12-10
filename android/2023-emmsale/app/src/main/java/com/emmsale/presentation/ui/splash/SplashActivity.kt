@@ -87,7 +87,7 @@ class SplashActivity : ComponentActivity() {
             },
             onFailed = {
                 showToast(R.string.splash_not_installed_playstore)
-                navigateToPlayStore()
+                navigateToLogin()
             },
         )
     }
