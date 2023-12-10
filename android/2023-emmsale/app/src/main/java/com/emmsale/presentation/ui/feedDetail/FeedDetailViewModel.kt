@@ -23,6 +23,7 @@ import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentsUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
+import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -42,19 +43,20 @@ class FeedDetailViewModel @Inject constructor(
 
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _feed = NotNullMutableLiveData(Feed())
-    val feed: NotNullLiveData<Feed> = _feed
+    private val _feedDetail = NotNullMutableLiveData(FeedDetailUiState())
+    val feedDetail: NotNullLiveData<FeedDetailUiState> = _feedDetail
 
-    private val _comments = NotNullMutableLiveData(CommentsUiState())
-    val comments: NotNullLiveData<CommentsUiState> = _comments
+    private val feed: LiveData<Feed> = _feedDetail.map { it.feed.feed }
+
+    val comments: LiveData<CommentsUiState> = _feedDetail.map { it.comments }
 
     val isFeedDetailWrittenByLoginUser: Boolean
-        get() = _feed.value.writer.id == uid
+        get() = feed.value?.writer?.id == uid
 
     private val _editingCommentId = MutableLiveData<Long?>()
     val editingCommentId: LiveData<Long?> = _editingCommentId
     val editingCommentContent: LiveData<String?> = _editingCommentId.map { commentId ->
-        if (commentId == null) null else _comments.value[commentId]?.comment?.content
+        if (commentId == null) null else comments.value?.get(commentId)?.comment?.content
     }
 
     private val _canSubmitComment = NotNullMutableLiveData(true)
@@ -65,46 +67,6 @@ class FeedDetailViewModel @Inject constructor(
 
     init {
         fetchFeedAndComments()
-    }
-
-    override fun refresh(): Job = viewModelScope.launch {
-        val (feedResult, commentResult) = listOf(
-            async { feedRepository.getFeed(feedId) },
-            async { commentRepository.getComments(feedId) },
-        ).awaitAll()
-
-        when {
-            feedResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(feedResult.error?.message.toString())
-            }
-
-            commentResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(commentResult.error?.message.toString())
-            }
-
-            feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
-                _uiEvent.value = FeedDetailUiEvent.DeletedFeedFetch
-            }
-
-            feedResult is Failure || commentResult is Failure -> {
-                dispatchFetchFailEvent()
-            }
-
-            feedResult is NetworkError || commentResult is NetworkError -> {
-                dispatchNetworkErrorEvent()
-                return@launch
-            }
-
-            feedResult is Success && commentResult is Success -> {
-                val comments = commentResult.data as List<Comment>
-                val feed = feedResult.data as Feed
-                _feed.value = feed.copy(commentCount = comments.undeletedCount())
-                _comments.value = CommentsUiState(uid, comments)
-            }
-        }
-        _screenUiState.value = ScreenUiState.NONE
     }
 
     private fun fetchFeedAndComments(): Job = viewModelScope.launch {
@@ -141,12 +103,50 @@ class FeedDetailViewModel @Inject constructor(
 
             feedResult is Success && commentResult is Success -> {
                 val comments = commentResult.data as List<Comment>
-                val feed = feedResult.data as Feed
-                _feed.value = feed.copy(commentCount = comments.undeletedCount())
-                _comments.value = CommentsUiState(uid, comments)
+                val feed = (feedResult.data as Feed).copy(commentCount = comments.undeletedCount())
+                _feedDetail.value = FeedDetailUiState(feed, comments, uid)
             }
         }
 
+        _screenUiState.value = ScreenUiState.NONE
+    }
+
+    override fun refresh(): Job = viewModelScope.launch {
+        val (feedResult, commentResult) = listOf(
+            async { feedRepository.getFeed(feedId) },
+            async { commentRepository.getComments(feedId) },
+        ).awaitAll()
+
+        when {
+            feedResult is Unexpected -> {
+                _commonUiEvent.value =
+                    CommonUiEvent.Unexpected(feedResult.error?.message.toString())
+            }
+
+            commentResult is Unexpected -> {
+                _commonUiEvent.value =
+                    CommonUiEvent.Unexpected(commentResult.error?.message.toString())
+            }
+
+            feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
+                _uiEvent.value = FeedDetailUiEvent.DeletedFeedFetch
+            }
+
+            feedResult is Failure || commentResult is Failure -> {
+                dispatchFetchFailEvent()
+            }
+
+            feedResult is NetworkError || commentResult is NetworkError -> {
+                dispatchNetworkErrorEvent()
+                return@launch
+            }
+
+            feedResult is Success && commentResult is Success -> {
+                val comments = commentResult.data as List<Comment>
+                val feed = (feedResult.data as Feed).copy(commentCount = comments.undeletedCount())
+                _feedDetail.value = FeedDetailUiState(feed, comments, uid)
+            }
+        }
         _screenUiState.value = ScreenUiState.NONE
     }
 
@@ -199,7 +199,7 @@ class FeedDetailViewModel @Inject constructor(
 
     fun reportComment(commentId: Long): Job = command(
         command = {
-            val authorId = _comments.value[commentId]
+            val authorId = comments.value?.get(commentId)
                 ?.comment?.writer?.id
                 ?: throw IllegalArgumentException("화면에 없는 댓글을 지우려고 시도했습니다. 지우려는 댓글 아이디: $commentId")
             commentRepository.reportComment(commentId, authorId, uid)

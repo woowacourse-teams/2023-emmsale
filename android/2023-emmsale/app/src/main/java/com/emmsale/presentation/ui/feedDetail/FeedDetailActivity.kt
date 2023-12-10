@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
 import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityFeedDetailBinding
@@ -19,8 +18,7 @@ import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.ChildCommentsActivity
 import com.emmsale.presentation.ui.feedDetail.FeedDetailViewModel.Companion.KEY_FEED_ID
-import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
-import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailAdapter
+import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedAndCommentsAdapter
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,11 +31,9 @@ class FeedDetailActivity :
 
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
-    private val feedDetailAdapter: FeedDetailAdapter = FeedDetailAdapter(::navigateToProfile)
-
-    private val commentsAdapter: CommentsAdapter = CommentsAdapter(
-        onCommentClick = ::navigateToChildComments,
+    private val feedAndCommentsAdapter = FeedAndCommentsAdapter(
         onAuthorImageClick = ::navigateToProfile,
+        onCommentClick = ::navigateToChildComments,
         onCommentMenuClick = ::showCommentMenuDialog,
     )
 
@@ -54,13 +50,13 @@ class FeedDetailActivity :
         ProfileActivity.startActivity(this, authorId)
     }
 
-    private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, commentId: Long) {
+    private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, comment: Comment) {
         bottomMenuDialog.resetMenu()
         if (isWrittenByLoginUser) {
-            bottomMenuDialog.addCommentUpdateButton(commentId)
-            bottomMenuDialog.addCommentDeleteButton(commentId)
+            bottomMenuDialog.addCommentUpdateButton(comment.id)
+            bottomMenuDialog.addCommentDeleteButton(comment.id)
         } else {
-            bottomMenuDialog.addCommentReportButton(commentId)
+            bottomMenuDialog.addCommentReportButton(comment.id)
         }
         bottomMenuDialog.show()
     }
@@ -116,10 +112,9 @@ class FeedDetailActivity :
 
         setupDataBinding()
         setupToolbar()
-        setupChildCommentsRecyclerView()
+        setupFeedAndCommentsRecyclerView()
 
-        observeFeed()
-        observeComments()
+        observeFeedDetail()
         observeUiEvent()
     }
 
@@ -198,29 +193,17 @@ class FeedDetailActivity :
         }
     }
 
-    private fun setupChildCommentsRecyclerView() {
-        val concatAdapterConfig = ConcatAdapter.Config.Builder().build()
-
-        binding.rvFeeddetailFeedAndComments.apply {
-            adapter = ConcatAdapter(
-                concatAdapterConfig,
-                feedDetailAdapter,
-                commentsAdapter,
-            )
+    private fun setupFeedAndCommentsRecyclerView() {
+        binding.rvFeedAndComments.apply {
+            adapter = feedAndCommentsAdapter
             itemAnimator = null
             addItemDecoration(DividerItemDecoration(this@FeedDetailActivity))
         }
     }
 
-    private fun observeFeed() {
-        viewModel.feed.observe(this) {
-            feedDetailAdapter.setFeedDetail(it)
-        }
-    }
-
-    private fun observeComments() {
-        viewModel.comments.observe(this) {
-            commentsAdapter.submitList(it.comments)
+    private fun observeFeedDetail() {
+        viewModel.feedDetail.observe(this) {
+            feedAndCommentsAdapter.submitList(listOf(it.feed) + it.comments.comments)
         }
     }
 
@@ -277,7 +260,8 @@ class FeedDetailActivity :
     }
 
     private fun scrollToLastPosition() {
-        binding.rvFeeddetailFeedAndComments.smoothScrollToPosition(viewModel.comments.value.size + 1)
+        val commentsCount = viewModel.comments.value?.size ?: return
+        binding.rvFeedAndComments.smoothScrollToPosition(commentsCount + 1)
     }
 
     companion object {

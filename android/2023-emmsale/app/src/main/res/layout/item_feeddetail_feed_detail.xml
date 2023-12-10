@@ -16,7 +16,7 @@
             type="com.emmsale.data.model.Feed" />
 
         <variable
-            name="onProfileImageClick"
+            name="onAuthorImageClick"
             type="kotlin.jvm.functions.Function1&lt;Long, Unit>" />
     </data>
 
@@ -31,7 +31,7 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="14dp"
             android:contentDescription="@string/feeddetail_author_image_description"
-            android:onClick="@{() -> onProfileImageClick.invoke(feed.writer.id)}"
+            android:onClick="@{() -> onAuthorImageClick.invoke(feed.writer.id)}"
             app:imageUrl="@{feed.writer.profileImageUrl}"
             app:isCircle="@{true}"
             app:layout_constraintStart_toStartOf="parent"

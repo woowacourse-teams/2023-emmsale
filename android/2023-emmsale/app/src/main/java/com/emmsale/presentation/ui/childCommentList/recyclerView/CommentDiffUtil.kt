@@ -1,4 +1,4 @@
-package com.emmsale.presentation.ui.feedDetail.recyclerView
+package com.emmsale.presentation.ui.childCommentList.recyclerView
 
 import androidx.recyclerview.widget.DiffUtil
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState

@@ -8,6 +8,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.emmsale.R
+import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityChildCommentsBinding
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.hideKeyboard
@@ -20,9 +21,9 @@ import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.childCommentList.ChildCommentsViewModel.Companion.KEY_FEED_ID
 import com.emmsale.presentation.ui.childCommentList.ChildCommentsViewModel.Companion.KEY_PARENT_COMMENT_ID
+import com.emmsale.presentation.ui.childCommentList.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
-import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentsUiState
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,13 +50,13 @@ class ChildCommentsActivity :
         intent.getBooleanExtra(KEY_FROM_POST_DETAIL, true)
     }
 
-    private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, commentId: Long) {
+    private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, comment: Comment) {
         bottomMenuDialog.resetMenu()
         if (isWrittenByLoginUser) {
-            bottomMenuDialog.addCommentUpdateButton(commentId)
-            bottomMenuDialog.addCommentDeleteButton(commentId)
+            bottomMenuDialog.addCommentUpdateButton(comment.id)
+            bottomMenuDialog.addCommentDeleteButton(comment.id)
         } else {
-            bottomMenuDialog.addCommentReportButton(commentId)
+            bottomMenuDialog.addCommentReportButton(comment.id)
         }
         bottomMenuDialog.show()
     }

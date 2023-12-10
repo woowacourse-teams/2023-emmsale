@@ -59,7 +59,7 @@
             app:layout_constraintTop_toBottomOf="@id/tb_feeddetail_toolbar">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_feeddetail_feed_and_comments"
+                android:id="@+id/rv_feed_and_comments"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
