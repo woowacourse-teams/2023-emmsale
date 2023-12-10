@@ -86,7 +86,7 @@ class ChildCommentsViewModel @Inject constructor(
 
     fun reportComment(commentId: Long): Job = command(
         command = {
-            val authorId = _comments.value.comments
+            val authorId = _comments.value.commentUiStates
                 .find { it.comment.id == commentId }!!
                 .comment.writer.id
             commentRepository.reportComment(commentId, authorId, uid)
@@ -107,15 +107,15 @@ class ChildCommentsViewModel @Inject constructor(
     )
 
     fun highlight(commentId: Long) {
-        val comment = _comments.value.comments.find { it.comment.id == commentId } ?: return
+        val comment = _comments.value.commentUiStates.find { it.comment.id == commentId } ?: return
         if (comment.isHighlight) return
         _comments.value = _comments.value.highlight(commentId)
     }
 
     fun unhighlight(commentId: Long) {
-        val comment = _comments.value.comments.find { it.comment.id == commentId } ?: return
+        val comment = _comments.value.commentUiStates.find { it.comment.id == commentId } ?: return
         if (!comment.isHighlight) return
-        _comments.value = _comments.value.unhighlight(commentId)
+        _comments.value = _comments.value.unhighlight()
     }
 
     companion object {

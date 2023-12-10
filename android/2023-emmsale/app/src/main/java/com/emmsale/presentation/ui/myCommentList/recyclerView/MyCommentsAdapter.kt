@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.ListAdapter
 import com.emmsale.data.model.Comment
 
 class MyCommentsAdapter(
-    private val onClick: (eventId: Long, parentCommentId: Long, commentId: Long) -> Unit,
+    private val onCommentClick: (feedId: Long, commentId: Long) -> Unit,
 ) : ListAdapter<Comment, MyCommentViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyCommentViewHolder {
-        return MyCommentViewHolder.create(parent, onClick)
+        return MyCommentViewHolder.create(parent, onCommentClick)
     }
 
     override fun onBindViewHolder(holder: MyCommentViewHolder, position: Int) {

@@ -21,15 +21,17 @@ import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
-import com.emmsale.presentation.ui.feedDetail.uiState.CommentsUiState
+import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @HiltViewModel
 class FeedDetailViewModel @Inject constructor(
@@ -39,24 +41,30 @@ class FeedDetailViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
 ) : RefreshableViewModel() {
 
+    var isAlreadyFirstFetched: Boolean by Delegates.vetoable(false) { _, _, newValue ->
+        newValue
+    }
+
     val feedId = savedStateHandle[KEY_FEED_ID] ?: DEFAULT_FEED_ID
 
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _feedDetail = NotNullMutableLiveData(FeedDetailUiState())
-    val feedDetail: NotNullLiveData<FeedDetailUiState> = _feedDetail
+    private val _feedDetailUiState = NotNullMutableLiveData(FeedDetailUiState())
+    val feedDetailUiState: NotNullLiveData<FeedDetailUiState> = _feedDetailUiState
 
-    private val feed: LiveData<Feed> = _feedDetail.map { it.feed.feed }
+    private val feed: Feed
+        get() = _feedDetailUiState.value.feedUiState.feed
 
-    val comments: LiveData<CommentsUiState> = _feedDetail.map { it.comments }
+    val commentUiStates: List<CommentUiState>
+        get() = _feedDetailUiState.value.commentsUiState.commentUiStates
 
     val isFeedDetailWrittenByLoginUser: Boolean
-        get() = feed.value?.writer?.id == uid
+        get() = feed.writer.id == uid
 
     private val _editingCommentId = MutableLiveData<Long?>()
     val editingCommentId: LiveData<Long?> = _editingCommentId
     val editingCommentContent: LiveData<String?> = _editingCommentId.map { commentId ->
-        if (commentId == null) null else comments.value?.get(commentId)?.comment?.content
+        if (commentId == null) null else commentUiStates.find { it.comment.id == commentId }?.comment?.content
     }
 
     private val _canSubmitComment = NotNullMutableLiveData(true)
@@ -64,6 +72,8 @@ class FeedDetailViewModel @Inject constructor(
 
     private val _uiEvent = SingleLiveEvent<FeedDetailUiEvent>()
     val uiEvent: LiveData<FeedDetailUiEvent> = _uiEvent
+
+    private var unhighlightJob: Job? = null
 
     init {
         fetchFeedAndComments()
@@ -104,7 +114,7 @@ class FeedDetailViewModel @Inject constructor(
             feedResult is Success && commentResult is Success -> {
                 val comments = commentResult.data as List<Comment>
                 val feed = (feedResult.data as Feed).copy(commentCount = comments.undeletedCount())
-                _feedDetail.value = FeedDetailUiState(feed, comments, uid)
+                _feedDetailUiState.value = FeedDetailUiState(feed, comments, uid)
             }
         }
 
@@ -144,7 +154,7 @@ class FeedDetailViewModel @Inject constructor(
             feedResult is Success && commentResult is Success -> {
                 val comments = commentResult.data as List<Comment>
                 val feed = (feedResult.data as Feed).copy(commentCount = comments.undeletedCount())
-                _feedDetail.value = FeedDetailUiState(feed, comments, uid)
+                _feedDetailUiState.value = FeedDetailUiState(feed, comments, uid)
             }
         }
         _screenUiState.value = ScreenUiState.NONE
@@ -195,11 +205,12 @@ class FeedDetailViewModel @Inject constructor(
             return
         }
         _editingCommentId.value = commentId
+        highlightComment(commentId)
     }
 
     fun reportComment(commentId: Long): Job = command(
         command = {
-            val authorId = comments.value?.get(commentId)
+            val authorId = commentUiStates.find { it.comment.id == commentId }
                 ?.comment?.writer?.id
                 ?: throw IllegalArgumentException("화면에 없는 댓글을 지우려고 시도했습니다. 지우려는 댓글 아이디: $commentId")
             commentRepository.reportComment(commentId, authorId, uid)
@@ -214,11 +225,26 @@ class FeedDetailViewModel @Inject constructor(
         },
     )
 
+    fun highlightComment(commentId: Long) {
+        val comment = commentUiStates.find { it.comment.id == commentId } ?: return
+        if (comment.isHighlight) return
+        _feedDetailUiState.value = _feedDetailUiState.value.highlightComment(commentId)
+        _uiEvent.value = FeedDetailUiEvent.CommentHighlight(commentId)
+
+        unhighlightJob?.cancel()
+        unhighlightJob = viewModelScope.launch {
+            delay(HIGHLIGHT_DURATION)
+            _feedDetailUiState.value = _feedDetailUiState.value.unhighlightComment()
+        }
+    }
+
     companion object {
         const val KEY_FEED_ID: String = "KEY_FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
 
         private const val DELETED_FEED_FETCH_ERROR_CODE = 403
         private const val REPORT_DUPLICATE_ERROR_CODE = 400
+
+        private const val HIGHLIGHT_DURATION = 2000L
     }
 }

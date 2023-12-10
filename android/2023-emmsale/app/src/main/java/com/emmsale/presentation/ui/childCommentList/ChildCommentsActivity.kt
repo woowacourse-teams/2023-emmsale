@@ -172,16 +172,16 @@ class ChildCommentsActivity :
 
     private fun observeComments() {
         viewModel.comments.observe(this) {
-            commentsAdapter.submitList(it.comments) { scrollToIfFirstFetch(it) }
+            commentsAdapter.submitList(it.commentUiStates) { scrollToIfFirstFetch(it) }
         }
     }
 
     private fun scrollToIfFirstFetch(commentUiState: CommentsUiState) {
         fun cantScroll(): Boolean =
-            viewModel.isAlreadyFirstFetched || commentUiState.comments.isEmpty()
+            viewModel.isAlreadyFirstFetched || commentUiState.commentUiStates.isEmpty()
 
         if (highlightCommentId == INVALID_COMMENT_ID || cantScroll()) return
-        val position = viewModel.comments.value.comments
+        val position = viewModel.comments.value.commentUiStates
             .indexOfFirst {
                 it.comment.id == highlightCommentId
             }
@@ -235,7 +235,7 @@ class ChildCommentsActivity :
     }
 
     private fun smoothScrollToLastPosition() {
-        binding.rvChildcommentsChildcomments.smoothScrollToPosition(viewModel.comments.value.comments.size)
+        binding.rvChildcommentsChildcomments.smoothScrollToPosition(viewModel.comments.value.commentUiStates.size)
     }
 
     companion object {

@@ -8,11 +8,11 @@ import com.emmsale.databinding.ItemMycommentsCommentBinding
 
 class MyCommentViewHolder(
     private val binding: ItemMycommentsCommentBinding,
-    onClick: (eventId: Long, parentCommentId: Long, commentId: Long) -> Unit,
+    onCommentClick: (feedId: Long, commentId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.onClick = onClick
+        binding.onCommentClick = onCommentClick
     }
 
     fun bind(comment: Comment) {
@@ -22,12 +22,12 @@ class MyCommentViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
-            onClick: (eventId: Long, parentCommentId: Long, commentId: Long) -> Unit,
+            onCommentClick: (feedId: Long, commentId: Long) -> Unit,
         ): MyCommentViewHolder {
             val binding = ItemMycommentsCommentBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
-            return MyCommentViewHolder(binding, onClick)
+            return MyCommentViewHolder(binding, onCommentClick)
         }
     }
 }

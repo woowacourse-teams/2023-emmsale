@@ -11,4 +11,5 @@ sealed interface FeedDetailUiEvent {
     object CommentReportFail : FeedDetailUiEvent
     object CommentReportComplete : FeedDetailUiEvent
     object CommentPostComplete : FeedDetailUiEvent
+    data class CommentHighlight(val commentId: Long) : FeedDetailUiEvent
 }

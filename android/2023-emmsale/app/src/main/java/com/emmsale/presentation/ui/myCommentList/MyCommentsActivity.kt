@@ -9,7 +9,7 @@ import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityMyCommentsBinding
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
-import com.emmsale.presentation.ui.childCommentList.ChildCommentsActivity
+import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.myCommentList.recyclerView.MyCommentsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,19 +40,17 @@ class MyCommentsActivity :
 
     private fun setupMyCommentsRecyclerView() {
         binding.rvMycommentsMycomments.apply {
-            adapter = MyCommentsAdapter(::navigateToChildComments)
+            adapter = MyCommentsAdapter(::navigateToFeedDetail)
             itemAnimator = null
             addItemDecoration(DividerItemDecoration(this@MyCommentsActivity))
         }
     }
 
-    private fun navigateToChildComments(eventId: Long, parentCommentId: Long, commentId: Long) {
-        ChildCommentsActivity.startActivity(
+    private fun navigateToFeedDetail(feedId: Long, commentId: Long) {
+        FeedDetailActivity.startActivity(
             context = this,
-            feedId = eventId,
-            parentCommentId = parentCommentId,
+            feedId = feedId,
             highlightCommentId = commentId,
-            fromPostDetail = false,
         )
     }
 

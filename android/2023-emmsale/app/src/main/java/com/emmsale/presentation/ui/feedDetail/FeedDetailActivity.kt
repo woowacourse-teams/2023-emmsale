@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearSmoothScroller
 import com.emmsale.R
 import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityFeedDetailBinding
@@ -22,10 +24,16 @@ import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedAndCommentsAdapte
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FeedDetailActivity :
     NetworkActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
+
+    private val highlightCommentId: Long by lazy {
+        intent.getLongExtra(KEY_HIGHLIGHT_COMMENT_ID, INVALID_COMMENT_ID)
+    }
 
     override val viewModel: FeedDetailViewModel by viewModels()
 
@@ -202,8 +210,33 @@ class FeedDetailActivity :
     }
 
     private fun observeFeedDetail() {
-        viewModel.feedDetail.observe(this) {
-            feedAndCommentsAdapter.submitList(listOf(it.feed) + it.comments.comments)
+        viewModel.feedDetailUiState.observe(this) {
+            val feedAndComments = listOf(it.feedUiState) + it.commentsUiState.commentUiStates
+            feedAndCommentsAdapter.submitList(feedAndComments) {
+                if (highlightCommentId == INVALID_COMMENT_ID || isNotRealFirstFetch()) return@submitList
+                viewModel.highlightComment(highlightCommentId)
+                viewModel.isAlreadyFirstFetched = true
+            }
+        }
+    }
+
+    private fun isNotRealFirstFetch(): Boolean =
+        viewModel.isAlreadyFirstFetched || viewModel.commentUiStates.isEmpty()
+
+    private fun highlightComment(commentId: Long) {
+        val position = viewModel.commentUiStates
+            .indexOfFirst {
+                it.comment.id == commentId
+            }
+
+        binding.rvFeedAndComments.scrollToPosition(position + 1)
+        lifecycleScope.launch {
+            delay(200L)
+            binding.rvFeedAndComments.layoutManager?.startSmoothScroll(
+                object : LinearSmoothScroller(this@FeedDetailActivity) {
+                    override fun getVerticalSnapPreference(): Int = SNAP_TO_START
+                }.apply { targetPosition = position + 1 },
+            )
         }
     }
 
@@ -237,8 +270,9 @@ class FeedDetailActivity :
                     title = getString(R.string.feeddetail_feed_delete_complete_title),
                     message = getString(R.string.feeddetail_feed_delete_complete_message),
                     buttonLabel = getString(R.string.all_okay),
+                    onButtonClick = { finish() },
+                    cancelable = false,
                 ).show()
-                finish()
             }
 
             FeedDetailUiEvent.FeedDeleteFail -> binding.root.showSnackBar(getString(R.string.feeddetail_feed_delete_fail_message))
@@ -248,35 +282,44 @@ class FeedDetailActivity :
                     title = getString(R.string.feeddetail_deleted_feed_fetch_title),
                     message = getString(R.string.feeddetail_deleted_feed_fetch_message),
                     buttonLabel = getString(R.string.all_okay),
+                    onButtonClick = { finish() },
+                    cancelable = false,
                 ).show()
-                finish()
             }
 
             FeedDetailUiEvent.CommentPostComplete -> {
                 binding.btiwCommentPost.clearText()
                 scrollToLastPosition()
             }
+
+            is FeedDetailUiEvent.CommentHighlight -> highlightComment(uiEvent.commentId)
         }
     }
 
     private fun scrollToLastPosition() {
-        val commentsCount = viewModel.comments.value?.size ?: return
-        binding.rvFeedAndComments.smoothScrollToPosition(commentsCount + 1)
+        val commentsCount = viewModel.commentUiStates.size
+        binding.rvFeedAndComments.smoothScrollToPosition(commentsCount)
     }
 
     companion object {
+        private const val KEY_HIGHLIGHT_COMMENT_ID = "KEY_HIGHLIGHT_COMMENT_ID"
+        private const val INVALID_COMMENT_ID: Long = -1
+
         fun startActivity(
             context: Context,
             feedId: Long,
+            highlightCommentId: Long = INVALID_COMMENT_ID,
         ) {
-            context.startActivity(getIntent(context, feedId))
+            context.startActivity(getIntent(context, feedId, highlightCommentId))
         }
 
         fun getIntent(
             context: Context,
             feedId: Long,
+            highlightCommentId: Long = INVALID_COMMENT_ID,
         ) = Intent(context, FeedDetailActivity::class.java)
             .putExtra(KEY_FEED_ID, feedId)
+            .putExtra(KEY_HIGHLIGHT_COMMENT_ID, highlightCommentId)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     }
 }

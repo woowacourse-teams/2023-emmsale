@@ -2,7 +2,7 @@ package com.emmsale.presentation.ui.feedDetail.uiState
 
 import com.emmsale.data.model.Comment
 
-data class CommentsUiState(val comments: List<CommentUiState> = emptyList()) {
+data class CommentsUiState(val commentUiStates: List<CommentUiState> = emptyList()) {
 
     constructor(uid: Long, comments: List<Comment>) : this(
         comments.flatMap { comment ->
@@ -18,16 +18,16 @@ data class CommentsUiState(val comments: List<CommentUiState> = emptyList()) {
             comment.childComments.map { childComment -> CommentUiState.create(uid, childComment) },
     )
 
-    val size: Int = comments.size
+    val size: Int = commentUiStates.size
 
     operator fun get(commentId: Long): CommentUiState? =
-        comments.find { it.comment.id == commentId }
+        commentUiStates.find { it.comment.id == commentId }
 
     fun highlight(commentId: Long) = copy(
-        comments = comments.map { if (it.comment.id == commentId) it.highlight() else it },
+        commentUiStates = commentUiStates.map { if (it.comment.id == commentId) it.highlight() else it.unhighlight() },
     )
 
-    fun unhighlight(commentId: Long) = copy(
-        comments = comments.map { if (it.comment.id == commentId) it.unhighlight() else it },
+    fun unhighlight() = copy(
+        commentUiStates = commentUiStates.map { it.unhighlight() },
     )
 }

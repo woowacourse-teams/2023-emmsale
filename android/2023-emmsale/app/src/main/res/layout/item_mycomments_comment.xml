@@ -16,14 +16,14 @@
             type="com.emmsale.data.model.Comment" />
 
         <variable
-            name="onClick"
-            type="kotlin.jvm.functions.Function3&lt;Long, Long, Long, Unit>" />
+            name="onCommentClick"
+            type="kotlin.jvm.functions.Function2&lt;Long, Long, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> onClick.invoke(comment.feed.id, comment.parentCommentId == null ? comment.id : comment.parentCommentId, comment.id)}"
+        android:onClick="@{() -> onCommentClick.invoke(comment.feed.id, comment.id)}"
         android:background="?attr/selectableItemBackground">
 
         <TextView
