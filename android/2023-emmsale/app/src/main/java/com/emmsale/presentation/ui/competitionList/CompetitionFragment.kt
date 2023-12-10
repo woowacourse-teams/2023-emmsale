@@ -22,8 +22,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
 @AndroidEntryPoint
-class CompetitionFragment : BaseFragment<FragmentCompetitionBinding>() {
-    override val layoutResId: Int = R.layout.fragment_competition
+class CompetitionFragment :
+    BaseFragment<FragmentCompetitionBinding>(R.layout.fragment_competition) {
+
     private val viewModel: CompetitionViewModel by viewModels()
     private val eventAdapter: CompetitionRecyclerViewAdapter by lazy {
         CompetitionRecyclerViewAdapter(::navigateToEventDetail)

@@ -23,10 +23,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SettingFragment :
-    NetworkFragment<FragmentSettingBinding>(),
+    NetworkFragment<FragmentSettingBinding>(R.layout.fragment_setting),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("setting") {
 
-    override val layoutResId: Int = R.layout.fragment_setting
     override val viewModel: SettingViewModel by viewModels()
 
     override fun onAttach(context: Context) {

@@ -13,8 +13,8 @@ import com.emmsale.presentation.ui.feedList.recyclerView.FeedListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FeedListFragment : NetworkFragment<FragmentFeedListBinding>() {
-    override val layoutResId: Int = R.layout.fragment_feed_list
+class FeedListFragment : NetworkFragment<FragmentFeedListBinding>(R.layout.fragment_feed_list) {
+
     override val viewModel: FeedListViewModel by viewModels()
 
     private val feedListAdapter: FeedListAdapter by lazy {

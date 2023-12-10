@@ -1,13 +1,16 @@
 package com.emmsale.presentation.base
 
 import android.os.Bundle
+import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import com.emmsale.R
 import com.emmsale.presentation.common.CommonUiEvent
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.InfoDialog
 
-abstract class NetworkFragment<V : ViewDataBinding> : BaseFragment<V>() {
+abstract class NetworkFragment<V : ViewDataBinding>(
+    @LayoutRes layoutResId: Int,
+) : BaseFragment<V>(layoutResId) {
 
     abstract val viewModel: NetworkViewModel
 

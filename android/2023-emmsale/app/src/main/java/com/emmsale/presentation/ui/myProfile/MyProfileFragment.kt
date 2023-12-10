@@ -15,8 +15,8 @@ import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyProfileFragment : NetworkFragment<FragmentMyProfileBinding>() {
-    override val layoutResId: Int = R.layout.fragment_my_profile
+class MyProfileFragment : NetworkFragment<FragmentMyProfileBinding>(R.layout.fragment_my_profile) {
+
     override val viewModel: MyProfileViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

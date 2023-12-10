@@ -12,9 +12,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingEducationFragment :
-    BaseFragment<FragmentOnboardingEducationBinding>(),
+    BaseFragment<FragmentOnboardingEducationBinding>(R.layout.fragment_onboarding_education),
     View.OnClickListener {
-    override val layoutResId: Int = R.layout.fragment_onboarding_education
+
     val viewModel: OnboardingViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

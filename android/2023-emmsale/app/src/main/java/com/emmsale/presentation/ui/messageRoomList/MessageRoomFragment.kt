@@ -11,8 +11,9 @@ import com.emmsale.presentation.ui.messageRoomList.recyclerview.MessageRoomListA
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MessageRoomFragment : NetworkFragment<FragmentMessageRoomBinding>() {
-    override val layoutResId: Int = R.layout.fragment_message_room
+class MessageRoomFragment :
+    NetworkFragment<FragmentMessageRoomBinding>(R.layout.fragment_message_room) {
+
     override val viewModel: MessageRoomViewModel by viewModels()
 
     private val messageRoomListAdapter by lazy { MessageRoomListAdapter(::navigateToMessageList) }

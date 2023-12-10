@@ -13,8 +13,9 @@ import com.emmsale.presentation.ui.scrappedEventList.recyclerView.ScrappedEventA
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ScrappedEventFragment : NetworkFragment<FragmentScrappedEventBinding>() {
-    override val layoutResId: Int = R.layout.fragment_scrapped_event
+class ScrappedEventFragment :
+    NetworkFragment<FragmentScrappedEventBinding>(R.layout.fragment_scrapped_event) {
+
     override val viewModel: ScrappedEventViewModel by viewModels()
 
     private val scrappedEventsAdapter: ScrappedEventAdapter by lazy {

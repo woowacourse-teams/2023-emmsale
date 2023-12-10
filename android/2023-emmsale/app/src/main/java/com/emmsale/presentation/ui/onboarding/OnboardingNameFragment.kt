@@ -9,8 +9,10 @@ import com.emmsale.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OnboardingNameFragment : BaseFragment<FragmentOnboardingNameBinding>(), View.OnClickListener {
-    override val layoutResId: Int = R.layout.fragment_onboarding_name
+class OnboardingNameFragment :
+    BaseFragment<FragmentOnboardingNameBinding>(R.layout.fragment_onboarding_name),
+    View.OnClickListener {
+
     val viewModel: OnboardingViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

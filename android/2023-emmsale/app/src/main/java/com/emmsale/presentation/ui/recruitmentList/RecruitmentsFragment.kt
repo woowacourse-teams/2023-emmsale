@@ -19,9 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RecruitmentsFragment :
-    NetworkFragment<FragmentRecruitmentsBinding>(),
+    NetworkFragment<FragmentRecruitmentsBinding>(R.layout.fragment_recruitments),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("event_recruitment") {
-    override val layoutResId: Int = R.layout.fragment_recruitments
+
     override val viewModel: RecruitmentsViewModel by viewModels()
 
     private val recruitmentAdapter: EventRecruitmentAdapter by lazy {

@@ -12,8 +12,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EventFragment : BaseFragment<FragmentEventBinding>() {
-    override val layoutResId: Int = R.layout.fragment_event
+class EventFragment : BaseFragment<FragmentEventBinding>(R.layout.fragment_event) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
