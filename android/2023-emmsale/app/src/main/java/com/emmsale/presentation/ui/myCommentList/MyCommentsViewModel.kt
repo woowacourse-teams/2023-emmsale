@@ -28,14 +28,16 @@ class MyCommentsViewModel @Inject constructor(
     private fun fetchMyComments(): Job = fetchData(
         fetchData = { commentRepository.getCommentsByMemberId(uid) },
         onSuccess = {
-            _comments.value = it.extractMyComments().reversed()
+            _comments.value = it.extractMyComments()
+                .sortedByDescending { comment -> comment.createdAt }
         },
     )
 
     override fun refresh(): Job = refreshData(
         refresh = { commentRepository.getCommentsByMemberId(uid) },
         onSuccess = {
-            _comments.value = it.extractMyComments().reversed()
+            _comments.value = it.extractMyComments()
+                .sortedByDescending { comment -> comment.createdAt }
         },
     )
 

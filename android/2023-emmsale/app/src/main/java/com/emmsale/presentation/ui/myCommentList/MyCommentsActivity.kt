@@ -64,6 +64,11 @@ class MyCommentsActivity :
         (binding.rvMycommentsMycomments.adapter as MyCommentsAdapter).submitList(comments)
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        viewModel.refresh()
+    }
+
     companion object {
         fun startActivity(context: Context) {
             context.startActivity(Intent(context, MyCommentsActivity::class.java))
