@@ -223,23 +223,6 @@ class FeedDetailActivity :
     private fun isNotRealFirstFetch(): Boolean =
         viewModel.isAlreadyFirstFetched || viewModel.commentUiStates.isEmpty()
 
-    private fun highlightComment(commentId: Long) {
-        val position = viewModel.commentUiStates
-            .indexOfFirst {
-                it.comment.id == commentId
-            }
-
-        binding.rvFeedAndComments.scrollToPosition(position + 1)
-        lifecycleScope.launch {
-            delay(200L)
-            binding.rvFeedAndComments.layoutManager?.startSmoothScroll(
-                object : LinearSmoothScroller(this@FeedDetailActivity) {
-                    override fun getVerticalSnapPreference(): Int = SNAP_TO_START
-                }.apply { targetPosition = position + 1 },
-            )
-        }
-    }
-
     private fun observeUiEvent() {
         viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
@@ -299,6 +282,23 @@ class FeedDetailActivity :
     private fun scrollToLastPosition() {
         val commentsCount = viewModel.commentUiStates.size
         binding.rvFeedAndComments.smoothScrollToPosition(commentsCount)
+    }
+
+    private fun highlightComment(commentId: Long) {
+        val position = viewModel.commentUiStates
+            .indexOfFirst {
+                it.comment.id == commentId
+            }
+
+        binding.rvFeedAndComments.scrollToPosition(position + 1)
+        lifecycleScope.launch {
+            delay(200L)
+            binding.rvFeedAndComments.layoutManager?.startSmoothScroll(
+                object : LinearSmoothScroller(this@FeedDetailActivity) {
+                    override fun getVerticalSnapPreference(): Int = SNAP_TO_START
+                }.apply { targetPosition = position + 1 },
+            )
+        }
     }
 
     companion object {
