@@ -1,6 +1,7 @@
 package com.emmsale.presentation.ui.eventDetail
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.retrofit.callAdapter.Success
@@ -32,14 +33,20 @@ class EventDetailViewModel @Inject constructor(
     private val _isScraped = NotNullMutableLiveData(false)
     val isScraped: NotNullLiveData<Boolean> = _isScraped
 
-    var isAlreadyRecruitmentPostWritten = false
-        private set
-
     private val _canChangeIsScrapped = NotNullMutableLiveData(true)
     val canChangeIsScrapped: NotNullLiveData<Boolean> = _canChangeIsScrapped
 
     private val _currentScreen = NotNullMutableLiveData(EventDetailScreenUiState.INFORMATION)
     val currentScreen: NotNullLiveData<EventDetailScreenUiState> = _currentScreen
+
+    private val _canStartToWriteRecruitment = NotNullMutableLiveData(true)
+    val canStartToWrite: LiveData<Boolean> = MediatorLiveData<Boolean>().apply {
+        addSource(_canStartToWriteRecruitment) { value = canStartToWrite() }
+        addSource(_currentScreen) { value = canStartToWrite() }
+    }
+
+    private fun canStartToWrite(): Boolean =
+        _currentScreen.value != EventDetailScreenUiState.RECRUITMENT || _canStartToWriteRecruitment.value
 
     private val _uiEvent = SingleLiveEvent<EventDetailUiEvent>()
     val uiEvent: LiveData<EventDetailUiEvent> = _uiEvent
@@ -47,7 +54,6 @@ class EventDetailViewModel @Inject constructor(
     init {
         fetchEvent()
         fetchIsScrapped()
-        fetchIsAlreadyRecruitmentPostWritten()
     }
 
     private fun fetchEvent(): Job = fetchData(
@@ -62,16 +68,8 @@ class EventDetailViewModel @Inject constructor(
         }
     }
 
-    private fun fetchIsAlreadyRecruitmentPostWritten(): Job = viewModelScope.launch {
-        when (val result = recruitmentRepository.checkIsAlreadyPostRecruitment(eventId)) {
-            is Success -> isAlreadyRecruitmentPostWritten = result.data
-            else -> {}
-        }
-    }
-
     override fun refresh(): Job {
         fetchIsScrapped()
-        fetchIsAlreadyRecruitmentPostWritten()
         return refreshEvent()
     }
 
@@ -102,6 +100,21 @@ class EventDetailViewModel @Inject constructor(
         },
         onStart = { _canChangeIsScrapped.value = false },
         onFinish = { _canChangeIsScrapped.value = true },
+    )
+
+    fun checkIsAlreadyPostRecruitment(): Job = fetchData(
+        fetchData = { recruitmentRepository.checkIsAlreadyPostRecruitment(eventId) },
+        onSuccess = { isAlreadyPosted ->
+            _uiEvent.value = if (isAlreadyPosted) {
+                EventDetailUiEvent.RecruitmentIsAlreadyPosted
+            } else {
+                EventDetailUiEvent.RecruitmentPostApproval
+            }
+        },
+        onFailure = { _, _ -> _uiEvent.value = EventDetailUiEvent.RecruitmentPostedCheckFail },
+        onLoading = { delayLoading() },
+        onStart = { _canStartToWriteRecruitment.value = false },
+        onFinish = { _canStartToWriteRecruitment.value = true },
     )
 
     companion object {

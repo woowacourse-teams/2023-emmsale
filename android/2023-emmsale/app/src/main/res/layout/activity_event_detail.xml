@@ -256,6 +256,7 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="17dp"
             android:layout_marginBottom="17dp"
+            android:enabled="@{vm.canStartToWrite}"
             android:background="@drawable/bg_recruitment_writing_button"
             android:onClick="@{() -> navigateToWritingPost.invoke()}"
             android:src="@drawable/ic_recruitment_pencil"

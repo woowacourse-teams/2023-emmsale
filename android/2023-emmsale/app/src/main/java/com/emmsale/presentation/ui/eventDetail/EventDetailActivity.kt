@@ -50,6 +50,24 @@ class EventDetailActivity :
         binding.navigateToWritingPost = ::navigateToWriting
     }
 
+    private fun navigateToUrl(url: String) {
+        val browserIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(url),
+        )
+        startActivity(browserIntent)
+    }
+
+    private fun navigateToWriting() {
+        when (viewModel.currentScreen.value) {
+            EventDetailScreenUiState.INFORMATION -> Unit
+            EventDetailScreenUiState.RECRUITMENT -> viewModel.checkIsAlreadyPostRecruitment()
+            EventDetailScreenUiState.POST -> {
+                FeedWritingActivity.startActivity(this, viewModel.eventId)
+            }
+        }
+    }
+
     private fun setupFragmentStateAdapter() {
         binding.vpEventdetail.adapter =
             EventDetailFragmentStateAdapter(this, viewModel.eventId)
@@ -93,33 +111,6 @@ class EventDetailActivity :
         )
     }
 
-    private fun navigateToUrl(url: String) {
-        val browserIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse(url),
-        )
-        startActivity(browserIntent)
-    }
-
-    private fun navigateToWriting() {
-        when (viewModel.currentScreen.value) {
-            EventDetailScreenUiState.INFORMATION -> Unit
-            EventDetailScreenUiState.RECRUITMENT -> if (viewModel.isAlreadyRecruitmentPostWritten) {
-                binding.root.showSnackBar(R.string.eventrecruitment_has_not_permission_writing)
-            } else {
-                navigateToRecruitmentWriting()
-            }
-
-            EventDetailScreenUiState.POST -> {
-                FeedWritingActivity.startActivity(this, viewModel.eventId)
-            }
-        }
-    }
-
-    private fun navigateToRecruitmentWriting() {
-        startActivity(RecruitmentPostWritingActivity.getPostModeIntent(this, viewModel.eventId))
-    }
-
     private fun observeUiEvent() {
         viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
@@ -128,7 +119,14 @@ class EventDetailActivity :
         when (uiEvent) {
             EventDetailUiEvent.ScrapFail -> binding.root.showSnackBar(R.string.eventdetail_scrap_fail)
             EventDetailUiEvent.ScrapOffFail -> binding.root.showSnackBar(R.string.eventdetail_scrap_off_fail)
+            EventDetailUiEvent.RecruitmentIsAlreadyPosted -> binding.root.showSnackBar(R.string.eventrecruitment_has_not_permission_writing)
+            EventDetailUiEvent.RecruitmentPostApproval -> navigateToRecruitmentWriting()
+            EventDetailUiEvent.RecruitmentPostedCheckFail -> binding.root.showSnackBar(R.string.eventrecruitment_has_not_permission_writing_check_fail_message)
         }
+    }
+
+    private fun navigateToRecruitmentWriting() {
+        startActivity(RecruitmentPostWritingActivity.getPostModeIntent(this, viewModel.eventId))
     }
 
     companion object {
