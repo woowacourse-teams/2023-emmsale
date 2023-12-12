@@ -1,24 +1,25 @@
 package com.emmsale.presentation.ui.profile
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
+import com.emmsale.data.model.BlockedMember
+import com.emmsale.data.model.Member
 import com.emmsale.data.repository.interfaces.BlockedMemberRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.common.UiEvent
+import com.emmsale.presentation.base.RefreshableViewModel
+import com.emmsale.presentation.common.ScreenUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.ui.profile.uiState.BlockedMemberUiState
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiEvent
 import com.emmsale.presentation.ui.profile.uiState.ProfileUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,132 +30,78 @@ class ProfileViewModel @Inject constructor(
     private val memberRepository: MemberRepository,
     private val messageRoomRepository: MessageRoomRepository,
     private val blockedMemberRepository: BlockedMemberRepository,
-) : ViewModel(), Refreshable {
+) : RefreshableViewModel() {
     private val memberId: Long = requireNotNull(savedStateHandle[KEY_MEMBER_ID]) {
         "[ERROR] 멤버 아이디를 가져오지 못했어요."
     }
     private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _isLogin = NotNullMutableLiveData(true)
-    val isLogin: NotNullLiveData<Boolean> = _isLogin
-
-    private val _profile = NotNullMutableLiveData(ProfileUiState.FIRST_LOADING)
+    private val _profile = NotNullMutableLiveData(ProfileUiState(false, Member()))
     val profile: NotNullLiveData<ProfileUiState> = _profile
 
-    private val _blockedMembers = NotNullMutableLiveData(listOf<BlockedMemberUiState>())
+    private val _blockedMembers = NotNullMutableLiveData(listOf<BlockedMember>())
 
-    private val _uiEvent: NotNullMutableLiveData<UiEvent<ProfileUiEvent>> =
-        NotNullMutableLiveData(UiEvent(ProfileUiEvent.None))
-    val uiEvent: NotNullLiveData<UiEvent<ProfileUiEvent>> = _uiEvent
+    private val _canSendMessage = NotNullMutableLiveData(true)
+    val canSendMessage: NotNullLiveData<Boolean> = _canSendMessage
+
+    private val _uiEvent = SingleLiveEvent<ProfileUiEvent>()
+    val uiEvent: LiveData<ProfileUiEvent> = _uiEvent
 
     init {
+        fetchAll()
+    }
+
+    private fun fetchAll(): Job = viewModelScope.launch {
+        changeToLoadingState()
         refresh()
     }
 
-    override fun refresh() {
-        viewModelScope.launch {
-            _profile.value = _profile.value.changeToLoadingState()
-            val token = tokenRepository.getToken()
-            if (token == null) {
-                _isLogin.value = false
-                return@launch
-            }
-
-            when (val result = memberRepository.getMember(memberId)) {
-                is Failure, NetworkError ->
-                    _profile.value = _profile.value.changeToFetchingErrorState()
-
-                is Success ->
-                    _profile.value = _profile.value.changeMemberState(result.data, token.uid)
-
-                is Unexpected -> throw Throwable(result.error)
-            }
-
-            fetchBlockedMembers()
-
-            _profile.value = _profile.value.copy(isLoading = false)
-        }
+    override fun refresh(): Job = viewModelScope.launch {
+        listOf(fetchProfile(), fetchBlockedMembers()).joinAll()
+        if (_screenUiState.value == ScreenUiState.NETWORK_ERROR) return@launch
+        _screenUiState.value = ScreenUiState.NONE
     }
 
-    private fun fetchBlockedMembers() {
-        viewModelScope.launch {
-            when (val result = blockedMemberRepository.getBlockedMembers()) {
-                is Failure, NetworkError ->
-                    _profile.value = _profile.value.changeToFetchingErrorState()
+    private fun fetchProfile(): Job = fetchData(
+        fetchData = { memberRepository.getMember(memberId) },
+        onSuccess = { _profile.value = ProfileUiState(it, uid) },
+        onLoading = {},
+    )
 
-                is Success ->
-                    _blockedMembers.value = result.data.map { BlockedMemberUiState.from(it) }
+    private fun fetchBlockedMembers(): Job = fetchData(
+        fetchData = { blockedMemberRepository.getBlockedMembers() },
+        onSuccess = { _blockedMembers.value = it },
+        onLoading = {},
+        onNetworkError = {},
+    )
 
-                is Unexpected -> throw Throwable(result.error)
-            }
-        }
-    }
+    fun isBlocked(): Boolean = memberId in _blockedMembers.value.map { it.blockedMemberId }
 
-    fun isBlocked(): Boolean {
-        return memberId in _blockedMembers.value.map { it.blockedMemberId }
-    }
+    fun blockMember(): Job = commandAndRefresh(
+        command = { memberRepository.blockMember(memberId) },
+        onSuccess = { _uiEvent.value = ProfileUiEvent.BlockComplete },
+        onFailure = { _, _ -> _uiEvent.value = ProfileUiEvent.BlockFail },
+    )
 
-    fun blockMember() {
-        viewModelScope.launch {
-            _profile.value = _profile.value.copy(isLoading = true)
-            when (val result = memberRepository.blockMember(memberId)) {
-                is Failure -> _uiEvent.value = UiEvent(ProfileUiEvent.BlockFail)
-
-                NetworkError -> _profile.value = _profile.value.copy(isError = true)
-                is Success -> {
-                    _uiEvent.value = UiEvent(ProfileUiEvent.BlockComplete)
-                    refresh()
-                }
-
-                is Unexpected ->
-                    _uiEvent.value = UiEvent(ProfileUiEvent.UnexpectedError(result.error.toString()))
-            }
-            _profile.value = _profile.value.copy(isLoading = false)
-        }
-    }
-
-    fun unblockMember() {
-        viewModelScope.launch {
-            _profile.value = _profile.value.copy(isLoading = true)
+    fun unblockMember(): Job = commandAndRefresh(
+        command = {
             val blockId = _blockedMembers.value.find { it.blockedMemberId == memberId }?.blockId
-                ?: return@launch
-            when (val result = blockedMemberRepository.deleteBlockedMember(blockId)) {
-                is Failure -> _uiEvent.value = UiEvent(ProfileUiEvent.UnblockFail)
-                NetworkError -> _profile.value = _profile.value.copy(isError = true)
-                is Success -> {
-                    _uiEvent.value = UiEvent(ProfileUiEvent.UnblockSuccess)
-                    refresh()
-                }
+                ?: return@commandAndRefresh Failure(-1, null)
+            blockedMemberRepository.deleteBlockedMember(blockId)
+        },
+        onSuccess = { _uiEvent.value = ProfileUiEvent.UnblockSuccess },
+        onFailure = { _, _ -> _uiEvent.value = ProfileUiEvent.UnblockFail },
+    )
 
-                is Unexpected ->
-                    _uiEvent.value = UiEvent(ProfileUiEvent.UnexpectedError(result.error.toString()))
-            }
-            _profile.value = _profile.value.copy(isLoading = false)
-        }
-    }
-
-    fun sendMessage(message: String) {
-        viewModelScope.launch {
-            _profile.value = _profile.value.copy(isLoading = true)
-            when (
-                val result =
-                    messageRoomRepository.sendMessage(uid, _profile.value.member.id, message)
-            ) {
-                is Failure ->
-                    _uiEvent.value = UiEvent(ProfileUiEvent.MessageSendFail)
-
-                NetworkError -> _profile.value = _profile.value.copy(isError = true)
-                is Success ->
-                    _uiEvent.value = UiEvent(
-                        ProfileUiEvent.MessageSendComplete(result.data, _profile.value.member.id),
-                    )
-
-                is Unexpected ->
-                    _uiEvent.value = UiEvent(ProfileUiEvent.UnexpectedError(result.error.toString()))
-            }
-            _profile.value = _profile.value.copy(isLoading = false)
-        }
-    }
+    fun sendMessage(message: String): Job = command(
+        command = { messageRoomRepository.sendMessage(uid, _profile.value.member.id, message) },
+        onSuccess = {
+            _uiEvent.value = ProfileUiEvent.MessageSendComplete(it, _profile.value.member.id)
+        },
+        onFailure = { _, _ -> _uiEvent.value = ProfileUiEvent.MessageSendFail },
+        onStart = { _canSendMessage.value = false },
+        onFinish = { _canSendMessage.value = true },
+    )
 
     companion object {
         const val KEY_MEMBER_ID = "KEY_MEMBER_ID"

@@ -11,7 +11,7 @@ import com.emmsale.R
 import com.emmsale.databinding.ActivityMyPostBinding
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.ui.myRecruitmentList.recyclerView.MyRecruitmentAdapter
-import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
+import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,13 +55,11 @@ class MyRecruitmentActivity : AppCompatActivity() {
     }
 
     private fun navigateToDetail(eventId: Long, recruitmentId: Long) {
-        val intent = RecruitmentPostDetailActivity.getIntent(
+        RecruitmentDetailActivity.startActivity(
             this,
             eventId = eventId,
             recruitmentId = recruitmentId,
-            isNavigatedFromMyPost = true,
         )
-        fetchByResultActivityLauncher.launch(intent)
     }
 
     private fun initBackPressButton() {

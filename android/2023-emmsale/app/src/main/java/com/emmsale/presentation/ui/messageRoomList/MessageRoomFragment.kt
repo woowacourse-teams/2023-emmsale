@@ -5,18 +5,22 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentMessageRoomBinding
-import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.messageRoomList.recyclerview.MessageRoomListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MessageRoomFragment : BaseFragment<FragmentMessageRoomBinding>() {
-    override val layoutResId: Int = R.layout.fragment_message_room
-    private val viewModel: MessageRoomViewModel by viewModels()
+class MessageRoomFragment :
+    NetworkFragment<FragmentMessageRoomBinding>(R.layout.fragment_message_room) {
 
-    private lateinit var messageRoomListAdapter: MessageRoomListAdapter
+    override val viewModel: MessageRoomViewModel by viewModels()
+
+    private val messageRoomListAdapter by lazy { MessageRoomListAdapter(::navigateToMessageList) }
+
+    private fun navigateToMessageList(roomId: String, otherUid: Long) {
+        startActivity(MessageListActivity.getIntent(requireContext(), roomId, otherUid))
+    }
 
     override fun onResume() {
         super.onResume()
@@ -25,30 +29,25 @@ class MessageRoomFragment : BaseFragment<FragmentMessageRoomBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupBinding()
+
+        setupDataBinding()
         setupMessageRoomRecyclerView()
-        setupMessageRooms()
+
+        observeMessageRooms()
     }
 
-    private fun setupBinding() {
-        binding.lifecycleOwner = this
+    private fun setupDataBinding() {
         binding.vm = viewModel
     }
 
     private fun setupMessageRoomRecyclerView() {
-        messageRoomListAdapter = MessageRoomListAdapter(::navigateToMessageList)
         binding.rvMessageRoomList.adapter = messageRoomListAdapter
     }
 
-    private fun setupMessageRooms() {
-        viewModel.messageRooms.observe(viewLifecycleOwner) { uiState ->
-            if (uiState.fetchResult != FetchResult.SUCCESS) return@observe
-            messageRoomListAdapter.submitList(uiState.messageRooms)
+    private fun observeMessageRooms() {
+        viewModel.messageRooms.observe(viewLifecycleOwner) { messageRooms ->
+            messageRoomListAdapter.submitList(messageRooms)
         }
-    }
-
-    private fun navigateToMessageList(roomId: String, otherUid: Long) {
-        startActivity(MessageListActivity.getIntent(requireContext(), roomId, otherUid))
     }
 
     companion object {

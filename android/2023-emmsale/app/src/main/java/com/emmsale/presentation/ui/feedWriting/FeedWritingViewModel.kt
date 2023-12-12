@@ -1,19 +1,17 @@
 package com.emmsale.presentation.ui.feedWriting
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.repository.interfaces.FeedRepository
-import com.emmsale.presentation.common.FetchResult
-import com.emmsale.presentation.common.UiEvent
+import com.emmsale.presentation.base.NetworkViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.feedWriting.uiState.FeedUploadResultUiEvent
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
+import com.emmsale.presentation.ui.feedWriting.uiState.FeedWritingUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import java.io.File
 import javax.inject.Inject
 
@@ -21,66 +19,63 @@ import javax.inject.Inject
 class FeedWritingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val feedRepository: FeedRepository,
-) : ViewModel() {
+) : NetworkViewModel() {
     private val eventId = savedStateHandle[EVENT_ID_KEY] ?: DEFAULT_ID
 
-    private val _imageUris: NotNullMutableLiveData<List<String>> =
-        NotNullMutableLiveData(emptyList())
+    val title = MutableLiveData<String>()
+    private val titleIsNotBlank: Boolean
+        get() = title.value?.isNotBlank() ?: false
+
+    val content = MutableLiveData<String>()
+    private val contentIsNotBlank: Boolean
+        get() = content.value?.isNotBlank() ?: false
+
+    private val _imageUris = NotNullMutableLiveData(emptyList<String>())
     val imageUris: NotNullLiveData<List<String>> = _imageUris
 
-    private val _feedUploadResult: MutableLiveData<UiEvent<FeedUploadResultUiEvent>> =
-        MutableLiveData()
-    val feedUploadResult: LiveData<UiEvent<FeedUploadResultUiEvent>> = _feedUploadResult
-
-    val title = MutableLiveData<String>()
-    val content = MutableLiveData<String>()
-
-    fun uploadPost(imageFiles: List<File>) {
-        _feedUploadResult.value = UiEvent(FeedUploadResultUiEvent(FetchResult.LOADING))
-        viewModelScope.launch {
-            when (
-                val fetchResult =
-                    feedRepository.uploadFeed(
-                        eventId,
-                        title.value ?: DEFAULT_TITLE,
-                        content.value ?: DEFAULT_CONTENT,
-                        imageFiles,
-                    )
-            ) {
-                is Success ->
-                    _feedUploadResult.value =
-                        UiEvent(FeedUploadResultUiEvent(FetchResult.SUCCESS, fetchResult.data))
-
-                else ->
-                    _feedUploadResult.value =
-                        UiEvent(FeedUploadResultUiEvent(FetchResult.ERROR))
-            }
-        }
+    private val _canSubmit = NotNullMutableLiveData(true)
+    val calSubmit = MediatorLiveData(false).apply {
+        addSource(title) { value = canSubmit() }
+        addSource(content) { value = canSubmit() }
+        addSource(_canSubmit) { value = canSubmit() }
     }
 
-    fun isTitleValid(): Boolean {
-        return (title.value?.length ?: 0) >= MINIMUM_TITLE_LENGTH
+    private fun canSubmit(): Boolean = titleIsNotBlank && contentIsNotBlank && _canSubmit.value
+
+    private val _uiEvent = SingleLiveEvent<FeedWritingUiEvent>()
+    val uiEvent: LiveData<FeedWritingUiEvent> = _uiEvent
+
+    fun uploadPost(imageFiles: List<File>): Job = command(
+        command = {
+            feedRepository.uploadFeed(
+                eventId,
+                title.value ?: DEFAULT_TITLE,
+                content.value ?: DEFAULT_CONTENT,
+                imageFiles,
+            )
+        },
+        onSuccess = { _uiEvent.value = FeedWritingUiEvent.PostComplete(it) },
+        onFailure = { _, _ -> _uiEvent.value = FeedWritingUiEvent.PostFail },
+        onLoading = { changeToLoadingState() },
+        onStart = { _canSubmit.value = false },
+        onFinish = { _canSubmit.value = true },
+    )
+
+    fun setImageUris(imageUris: List<String>) {
+        _imageUris.value = imageUris
     }
 
-    fun isContentValid(): Boolean {
-        return (content.value?.length ?: 0) >= MINIMUM_CONTENT_LENGTH
+    fun deleteImageUri(imageUri: String) {
+        _imageUris.value = _imageUris.value.filter { it != imageUri }
     }
 
-    fun fetchImageUris(imageUrls: List<String>) {
-        _imageUris.value = imageUrls
-    }
-
-    fun deleteImageUrl(imageUrl: String) {
-        val newUrls = _imageUris.value.toMutableList().apply { remove(imageUrl) }
-        _imageUris.value = newUrls
-    }
+    fun isChanged(): Boolean =
+        titleIsNotBlank || contentIsNotBlank || _imageUris.value.isNotEmpty()
 
     companion object {
         const val EVENT_ID_KEY = "EVENT_ID_KEY"
         private const val DEFAULT_TITLE = ""
         private const val DEFAULT_CONTENT = ""
         private const val DEFAULT_ID = -1L
-        private const val MINIMUM_TITLE_LENGTH = 1
-        private const val MINIMUM_CONTENT_LENGTH = 8
     }
 }

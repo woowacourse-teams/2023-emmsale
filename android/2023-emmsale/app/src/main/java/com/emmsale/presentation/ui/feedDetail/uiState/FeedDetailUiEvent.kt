@@ -1,8 +1,6 @@
 package com.emmsale.presentation.ui.feedDetail.uiState
 
 sealed interface FeedDetailUiEvent {
-    object None : FeedDetailUiEvent
-    data class UnexpectedError(val errorMessage: String) : FeedDetailUiEvent
     object DeletedFeedFetch : FeedDetailUiEvent
     object FeedDeleteFail : FeedDetailUiEvent
     object FeedDeleteComplete : FeedDetailUiEvent
@@ -13,4 +11,5 @@ sealed interface FeedDetailUiEvent {
     object CommentReportFail : FeedDetailUiEvent
     object CommentReportComplete : FeedDetailUiEvent
     object CommentPostComplete : FeedDetailUiEvent
+    data class CommentHighlight(val commentId: Long) : FeedDetailUiEvent
 }

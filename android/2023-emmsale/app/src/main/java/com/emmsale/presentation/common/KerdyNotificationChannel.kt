@@ -13,9 +13,9 @@ enum class KerdyNotificationChannel(
     private val channelImportance: Int = NotificationManager.IMPORTANCE_HIGH,
 ) {
     CHILD_COMMENT(
-        channelId = R.id.id_all_child_comment_notification_channel.toString(),
-        channelNameResId = R.string.kerdyfirebasemessaging_child_comment_notification_channel_name,
-        channelDescResId = R.string.kerdyfirebasemessaging_child_comment_notification_channel_description,
+        channelId = R.id.id_all_comment_notification_channel.toString(),
+        channelNameResId = R.string.kerdyfirebasemessaging_comment_notification_channel_name,
+        channelDescResId = R.string.kerdyfirebasemessaging_comment_notification_channel_description,
     ),
     INTEREST_EVENT(
         channelId = R.id.id_all_interest_event_notification_channel.toString(),

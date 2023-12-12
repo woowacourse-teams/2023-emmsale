@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import com.emmsale.R
 import com.emmsale.databinding.DialogBottomMenuBinding
-import com.emmsale.presentation.common.views.VerticalDivider
+import com.emmsale.presentation.common.views.HorizontalDivider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class BottomMenuDialog(
@@ -19,13 +19,20 @@ class BottomMenuDialog(
         initDialogWindow()
     }
 
+    private fun initDialogWindow() {
+        window?.attributes?.let {
+            it.width = ViewGroup.LayoutParams.MATCH_PARENT
+            it.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        }
+    }
+
     fun addMenuItemBelow(
         title: String,
         menuItemType: MenuItemType = MenuItemType.NORMAL,
         onClick: () -> Unit,
     ) {
         if (binding.llBottommenudialogMenuitems.childCount > 0) {
-            binding.llBottommenudialogMenuitems.addView(VerticalDivider(context))
+            binding.llBottommenudialogMenuitems.addView(HorizontalDivider(context))
         }
         binding.llBottommenudialogMenuitems.addView(createMenuItem(title, menuItemType, onClick))
     }
@@ -44,13 +51,6 @@ class BottomMenuDialog(
         setOnClickListener {
             onClick()
             dismiss()
-        }
-    }
-
-    private fun initDialogWindow() {
-        window?.attributes?.let {
-            it.width = ViewGroup.LayoutParams.MATCH_PARENT
-            it.height = ViewGroup.LayoutParams.WRAP_CONTENT
         }
     }
 }

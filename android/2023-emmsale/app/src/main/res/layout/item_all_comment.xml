@@ -23,7 +23,7 @@
 
         <variable
             name="onCommentMenuClick"
-            type="kotlin.jvm.functions.Function2&lt;Boolean, Long, Unit>" />
+            type="kotlin.jvm.functions.Function2&lt;Boolean, Comment, Unit>" />
 
         <variable
             name="onCommentClick"
@@ -128,8 +128,9 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/comment_menu_button"
-            android:onClick="@{() -> onCommentMenuClick.invoke(uiState.isWrittenByLoginUser, uiState.comment.id)}"
-            android:padding="2dp"
+            android:onClick="@{() -> onCommentMenuClick.invoke(uiState.isWrittenByLoginUser, uiState.comment)}"
+            android:padding="4dp"
+            android:layout_marginEnd="-2dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_comment_author_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_comment_author_image"

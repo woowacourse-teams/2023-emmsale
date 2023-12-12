@@ -1,18 +1,18 @@
 package com.emmsale.presentation.ui.scrappedEventList.recyclerView
 
 import androidx.recyclerview.widget.DiffUtil
-import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState
+import com.emmsale.data.model.Event
 
-object ScrappedEventDiffUtil : DiffUtil.ItemCallback<ScrappedEventUiState>() {
+object ScrappedEventDiffUtil : DiffUtil.ItemCallback<Event>() {
     override fun areItemsTheSame(
-        oldItem: ScrappedEventUiState,
-        newItem: ScrappedEventUiState,
+        oldItem: Event,
+        newItem: Event,
     ): Boolean =
-        oldItem.event.id == newItem.event.id
+        oldItem.id == newItem.id
 
     override fun areContentsTheSame(
-        oldItem: ScrappedEventUiState,
-        newItem: ScrappedEventUiState,
+        oldItem: Event,
+        newItem: Event,
     ): Boolean =
         oldItem == newItem
 }

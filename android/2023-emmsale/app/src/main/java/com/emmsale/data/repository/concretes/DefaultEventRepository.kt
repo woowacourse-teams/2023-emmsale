@@ -103,7 +103,7 @@ class DefaultEventRepository @Inject constructor(
         )
     }
 
-    override suspend fun deleteScrap(eventId: Long): ApiResponse<Unit> {
+    override suspend fun scrapOffEvent(eventId: Long): ApiResponse<Unit> {
         return eventService.deleteScrap(eventId)
     }
 

@@ -1,94 +1,60 @@
 package com.emmsale.presentation.ui.myProfile
 
+import android.app.Activity.RESULT_OK
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.emmsale.R
+import com.emmsale.data.model.Activity
 import com.emmsale.databinding.FragmentMyProfileBinding
-import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.base.NetworkFragment
+import com.emmsale.presentation.common.extension.dp
+import com.emmsale.presentation.common.recyclerView.IntervalItemDecoration
 import com.emmsale.presentation.common.views.CategoryTagChip
 import com.emmsale.presentation.ui.editMyProfile.EditMyProfileActivity
-import com.emmsale.presentation.ui.login.LoginActivity
-import com.emmsale.presentation.ui.myProfile.uiState.MyProfileUiState
 import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapter
-import com.emmsale.presentation.ui.profile.recyclerView.ActivitiesAdapterDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
-    override val layoutResId: Int = R.layout.fragment_my_profile
-    private val viewModel: MyProfileViewModel by viewModels()
+class MyProfileFragment : NetworkFragment<FragmentMyProfileBinding>(R.layout.fragment_my_profile) {
+
+    override val viewModel: MyProfileViewModel by viewModels()
+
+    private val editMyProfileActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode != RESULT_OK) return@registerForActivityResult
+            viewModel.refresh()
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initDataBinding()
-        setupUiLogic()
-        initToolbar()
-        initActivitiesRecyclerView()
+        setupDataBinding()
+        setupToolbar()
+        setupActivitiesRecyclerView()
+
+        observeProfile()
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.refresh()
-    }
-
-    private fun initDataBinding() {
+    private fun setupDataBinding() {
         binding.viewModel = viewModel
     }
 
-    private fun setupUiLogic() {
-        setupLoginUiLogic()
-        setupMyProfileUiLogic()
-    }
-
-    private fun setupLoginUiLogic() {
-        viewModel.isLogin.observe(viewLifecycleOwner) {
-            handleNotLogin(it)
-        }
-    }
-
-    private fun setupMyProfileUiLogic() {
-        viewModel.myProfile.observe(viewLifecycleOwner) {
-            handleFields(it)
-            handleActivities(it)
-        }
-    }
-
-    private fun handleNotLogin(isLogin: Boolean) {
-        if (!isLogin) {
-            LoginActivity.startActivity(requireContext())
-            activity?.finish()
-        }
-    }
-
-    private fun handleFields(myProfile: MyProfileUiState) {
-        binding.cgMyprofileFields.removeAllViews()
-
-        myProfile.member.fields.forEach {
-            val tagView = CategoryTagChip(requireContext()).apply { text = it.name }
-            binding.cgMyprofileFields.addView(tagView)
-        }
-    }
-
-    private fun handleActivities(myProfile: MyProfileUiState) {
-        (binding.rvMyprofileEducations.adapter as ActivitiesAdapter).submitList(
-            myProfile.member.educations,
-        )
-        (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(myProfile.member.clubs)
-    }
-
-    private fun initToolbar() {
+    private fun setupToolbar() {
         binding.tbMyprofileToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.myprofile_edit_mode -> EditMyProfileActivity.startActivity(requireContext())
+                R.id.myprofile_edit_mode -> {
+                    val intent = EditMyProfileActivity.getIntent(requireContext())
+                    editMyProfileActivityLauncher.launch(intent)
+                }
             }
             true
         }
     }
 
-    private fun initActivitiesRecyclerView() {
-        val decoration = ActivitiesAdapterDecoration()
+    private fun setupActivitiesRecyclerView() {
+        val decoration = IntervalItemDecoration(height = 13.dp)
         listOf(
             binding.rvMyprofileEducations,
             binding.rvMyprofileClubs,
@@ -99,6 +65,31 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
                 addItemDecoration(decoration)
             }
         }
+    }
+
+    private fun observeProfile() {
+        viewModel.profile.observe(viewLifecycleOwner) { member ->
+            handleFields(member.fields)
+            handleEducations(member.educations)
+            handleClubs(member.clubs)
+        }
+    }
+
+    private fun handleFields(fields: List<Activity>) {
+        binding.cgMyprofileFields.removeAllViews()
+
+        fields.forEach {
+            val tagView = CategoryTagChip(requireContext()).apply { text = it.name }
+            binding.cgMyprofileFields.addView(tagView)
+        }
+    }
+
+    private fun handleEducations(educations: List<Activity>) {
+        (binding.rvMyprofileEducations.adapter as ActivitiesAdapter).submitList(educations)
+    }
+
+    private fun handleClubs(clubs: List<Activity>) {
+        (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(clubs)
     }
 
     companion object {

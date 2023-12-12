@@ -7,6 +7,8 @@
 
         <import type="kotlin.Unit" />
 
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
+
         <variable
             name="vm"
             type="com.emmsale.presentation.ui.profile.ProfileViewModel" />
@@ -57,9 +59,10 @@
 
                     <TextView
                         android:id="@+id/tv_sendmessagedialog_description"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
+                        android:layout_marginHorizontal="17dp"
                         android:fontFamily="@font/nanum_square_bold"
                         android:gravity="center"
                         android:text="@{@string/sendmessagedialog_message(vm.profile.member.name)}"
@@ -74,9 +77,8 @@
                         android:id="@+id/et_sendmessagedialog_message"
                         android:layout_width="0dp"
                         android:layout_height="140dp"
-                        android:layout_marginStart="17dp"
+                        android:layout_marginHorizontal="17dp"
                         android:layout_marginTop="13dp"
-                        android:layout_marginEnd="17dp"
                         android:autofillHints="username"
                         android:background="@drawable/bg_requestcompanion_et"
                         android:fontFamily="@font/nanum_square_regular"
@@ -132,7 +134,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginStart="1dp"
-                        android:enabled="@{!vm.profile.isLoading &amp;&amp; !etSendmessagedialogMessage.text.toString().isBlank() ? true : false}"
+                        android:enabled="@{vm.canSendMessage &amp;&amp; !etSendmessagedialogMessage.text.toString().isBlank() ? true : false}"
                         android:fontFamily="@font/nanum_square_bold"
                         android:gravity="center"
                         android:onClick="@{() -> onSendButtonClick.invoke(etSendmessagedialogMessage.getText().toString())}"

@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.ui.notificationConfig.uiState.NotificationTagsUiState" />
+        <import type="kotlin.Unit" />
+
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.notificationConfig.NotificationConfigViewModel" />
+
+        <variable
+            name="onTagAddButtonClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onAllNotificationReceiveConfigSwitchClick"
+            type="kotlin.jvm.functions.Function1&lt;Boolean, Unit>" />
+
+        <variable
+            name="onInterestTagConfigSwitchClick"
+            type="kotlin.jvm.functions.Function1&lt;Boolean, Unit>" />
+
+        <variable
+            name="onCommentConfigSwitchClick"
+            type="kotlin.jvm.functions.Function1&lt;Boolean, Unit>" />
+
+        <variable
+            name="onMessageConfigSwitchClick"
+            type="kotlin.jvm.functions.Function1&lt;Boolean, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,6 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="17dp"
+                    android:onCheckedChanged="@{(v, isChecked) -> onAllNotificationReceiveConfigSwitchClick.invoke(isChecked)}"
                     android:thumb="@drawable/bg_notificationconfig_switch_thumb"
                     android:track="@drawable/bg_notificationconfig_switch_track"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_notification_all_receive_label"
@@ -74,10 +96,10 @@
                     app:layout_constraintTop_toTopOf="@+id/tv_notification_all_receive_label"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-                <com.emmsale.presentation.common.views.VerticalDivider
+                <com.emmsale.presentation.common.views.HorizontalDivider
                     android:id="@+id/vertical_divider"
                     android:layout_width="0dp"
-                    android:layout_height="0.5dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="23dp"
                     android:background="@color/light_gray"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -111,6 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="17dp"
+                        android:onCheckedChanged="@{(v, isChecked) -> onInterestTagConfigSwitchClick.invoke(isChecked)}"
                         android:thumb="@drawable/bg_notificationconfig_switch_thumb"
                         android:track="@drawable/bg_notificationconfig_switch_track"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_notification_tag_title"
@@ -144,6 +167,7 @@
                             android:layout_width="60dp"
                             android:layout_height="32dp"
                             android:layout_marginTop="22dp"
+                            android:onClick="@{() -> onTagAddButtonClick.invoke()}"
                             android:background="@drawable/bg_notificationconfig_add"
                             android:contentDescription="@string/notificationconfig_add_notification_tag" />
 
@@ -166,35 +190,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="17dp"
+                        android:onCheckedChanged="@{(v, isChecked) -> onCommentConfigSwitchClick.invoke(isChecked)}"
                         android:thumb="@drawable/bg_notificationconfig_switch_thumb"
                         android:track="@drawable/bg_notificationconfig_switch_track"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_notification_child_comment_title"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/tv_notification_child_comment_title"
-                        tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-                    <TextView
-                        android:id="@+id/tv_notification_follow_title"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="25dp"
-                        android:text="@string/notificationconfig_notification_follow_title"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/switch_comment_notification_receive_config"
-                        app:layout_constraintStart_toStartOf="@+id/tv_notification_tag_title"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_notification_child_comment_title" />
-
-                    <Switch
-                        android:id="@+id/switch_follow_notification_receive_config"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="17dp"
-                        android:thumb="@drawable/bg_notificationconfig_switch_thumb"
-                        android:track="@drawable/bg_notificationconfig_switch_track"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_notification_follow_title"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/tv_notification_follow_title"
                         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
                     <TextView
@@ -207,14 +208,15 @@
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/switch_comment_notification_receive_config"
-                        app:layout_constraintStart_toStartOf="@+id/tv_notification_follow_title"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_notification_follow_title" />
+                        app:layout_constraintStart_toStartOf="@+id/tv_notification_child_comment_title"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_notification_child_comment_title" />
 
                     <Switch
                         android:id="@+id/switch_message_notification_receive_config"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="17dp"
+                        android:onCheckedChanged="@{(v, isChecked) -> onMessageConfigSwitchClick.invoke(isChecked)}"
                         android:thumb="@drawable/bg_notificationconfig_switch_thumb"
                         android:track="@drawable/bg_notificationconfig_switch_track"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_notification_message_title"
@@ -234,24 +236,21 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.notificationTags instanceof NotificationTagsUiState.Loading ? View.VISIBLE : View.GONE}"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tb_notification_config" />
 
-        <include
-            layout="@layout/layout_all_error_screen"
+        <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="@{viewModel.notificationTags instanceof NotificationTagsUiState.Error ? View.VISIBLE : View.GONE}"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.NETWORK_ERROR}"
+            app:onRefresh="@{() -> viewModel.refresh()}"
+            app:layout_constraintTop_toBottomOf="@id/tb_notification_config"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_notification_config"
-            bind:viewModel="@{viewModel}"
-            tools:visibility="gone" />
-
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

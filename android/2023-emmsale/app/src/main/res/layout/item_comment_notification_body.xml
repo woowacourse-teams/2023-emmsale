@@ -11,9 +11,7 @@
 
         <import type="com.emmsale.presentation.common.extension.LocalDateTimeExt" />
 
-        <import type="com.emmsale.presentation.ui.primaryNotificationList.uiState.PrimaryNotificationUiState" />
-
-        <import type="com.emmsale.presentation.ui.primaryNotificationList.uiState.ChildCommentNotificationUiState" />
+        <import type="com.emmsale.data.model.notification.Notification" />
 
         <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
 
@@ -21,7 +19,7 @@
 
         <variable
             name="commentNotification"
-            type="com.emmsale.presentation.ui.primaryNotificationList.uiState.ChildCommentNotificationUiState" />
+            type="com.emmsale.data.model.notification.ChildCommentNotification" />
 
         <variable
             name="onDeleteClick"
@@ -29,7 +27,7 @@
 
         <variable
             name="onNotificationClick"
-            type="Function1&lt;PrimaryNotificationUiState, Unit>" />
+            type="Function1&lt;Notification, Unit>" />
 
     </data>
 
@@ -47,9 +45,9 @@
             android:id="@+id/iv_member_profile"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="@string/primarynotification_profile_image_desc"
+            android:contentDescription="@string/notifications_profile_image_desc"
             android:scaleType="centerCrop"
-            app:imageUrl="@{commentNotification.commenterProfileImageUrl}"
+            app:imageUrl="@{commentNotification.comment.writer.profileImageUrl}"
             app:isCircle="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,9 +59,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
+            android:layout_marginEnd="9dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{commentNotification.commentContent}"
+            android:text="@{commentNotification.comment.content}"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -87,15 +86,15 @@
 
         <ImageView
             android:id="@+id/btn_delete"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clickable="true"
-            android:contentDescription="@string/primarynotification_past_notification_delete"
-            android:focusable="true"
-            android:onClick="@{() -> onDeleteClick.invoke(commentNotification.notificationId)}"
-            android:src="@drawable/ic_primarynotification_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/notifications_past_notification_delete"
+            android:padding="6dp"
+            android:layout_marginEnd="-6dp"
+            android:onClick="@{() -> onDeleteClick.invoke(commentNotification.id)}"
+            android:src="@drawable/ic_notification_delete"
             app:layout_constraintBottom_toBottomOf="@+id/tv_comment"
-            app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_comment" />
 

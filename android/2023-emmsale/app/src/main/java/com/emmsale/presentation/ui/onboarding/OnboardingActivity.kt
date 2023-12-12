@@ -3,21 +3,21 @@ package com.emmsale.presentation.ui.onboarding
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityOnboardingBinding
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.main.MainActivity
-import com.emmsale.presentation.ui.onboarding.uiState.MemberSavingUiState
+import com.emmsale.presentation.ui.onboarding.uiState.OnboardingUiEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OnboardingActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityOnboardingBinding.inflate(layoutInflater) }
-    private val viewModel: OnboardingViewModel by viewModels()
+class OnboardingActivity :
+    NetworkActivity<ActivityOnboardingBinding>(R.layout.activity_onboarding) {
+
+    override val viewModel: OnboardingViewModel by viewModels()
 
     private val fragmentStateAdapter: OnboardingFragmentStateAdapter by lazy {
         OnboardingFragmentStateAdapter(this)
@@ -26,38 +26,43 @@ class OnboardingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        initFragmentStateAdapter()
-        initBackPressedDispatcher()
-        setupActivitiesUiState()
+
+        setupFragmentStateAdapter()
+        setupBackPressedDispatcher()
+
+        observeUiEvent()
     }
 
-    private fun setupActivitiesUiState() {
-        viewModel.activities.observe(this) { activities ->
-            when (activities.memberSavingUiState) {
-                is MemberSavingUiState.None -> Unit
-                is MemberSavingUiState.Success -> navigateToMain()
-                is MemberSavingUiState.Failed -> showMemberUpdateFailed()
-            }
-        }
-    }
-
-    private fun initFragmentStateAdapter() {
+    private fun setupFragmentStateAdapter() {
         binding.vpOnboarding.adapter = fragmentStateAdapter
     }
 
-    private fun initBackPressedDispatcher() {
-        onBackPressedDispatcher.addCallback(this, OnboardingOnBackPressedCallback())
+    private fun setupBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    navigateToPrevPage()
+                }
+            },
+        )
+    }
+
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
+    }
+
+    private fun handleUiEvent(uiEvent: OnboardingUiEvent) {
+        when (uiEvent) {
+            OnboardingUiEvent.FieldLimitExceedChecked -> binding.root.showSnackBar(R.string.onboardingfield_selection_limit_exceed)
+            OnboardingUiEvent.JoinComplete -> navigateToMain()
+            OnboardingUiEvent.JoinFail -> binding.root.showSnackBar(getString(R.string.onboarding_join_failed_message))
+        }
     }
 
     private fun navigateToMain() {
-        binding.progressbarLoading.visibility = View.GONE
         MainActivity.startActivity(this)
         finish()
-    }
-
-    private fun showMemberUpdateFailed() {
-        binding.progressbarLoading.visibility = View.GONE
-        binding.root.showSnackBar(getString(R.string.onboarding_member_update_failed_message))
     }
 
     fun navigateToNextPage() {
@@ -65,7 +70,7 @@ class OnboardingActivity : AppCompatActivity() {
         val lastPage = fragmentStateAdapter.itemCount - 1
         when {
             currentPage < lastPage -> binding.vpOnboarding.currentItem += 1
-            currentPage == lastPage -> viewModel.updateMember()
+            currentPage == lastPage -> viewModel.join()
         }
     }
 
@@ -80,12 +85,6 @@ class OnboardingActivity : AppCompatActivity() {
         fun startActivity(context: Context) {
             val intent = Intent(context, OnboardingActivity::class.java)
             context.startActivity(intent)
-        }
-    }
-
-    inner class OnboardingOnBackPressedCallback : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            navigateToPrevPage()
         }
     }
 }

@@ -22,8 +22,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
 @AndroidEntryPoint
-class ConferenceFragment : BaseFragment<FragmentConferenceBinding>() {
-    override val layoutResId: Int = R.layout.fragment_conference
+class ConferenceFragment : BaseFragment<FragmentConferenceBinding>(R.layout.fragment_conference) {
+
     private val viewModel: ConferenceViewModel by viewModels()
     private val eventAdapter by lazy { ConferenceRecyclerViewAdapter(::navigateToEventDetail) }
     private val filterActivityLauncher =

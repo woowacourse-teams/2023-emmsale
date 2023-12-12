@@ -1,110 +1,68 @@
 package com.emmsale.presentation.ui.recruitmentWriting
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
-import com.emmsale.presentation.common.firebase.analytics.logWriting
-import com.emmsale.presentation.common.livedata.NotNullLiveData
+import com.emmsale.presentation.base.NetworkViewModel
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostWritingUiState
-import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.EDIT
-import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.POST
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
+import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState
+import com.emmsale.presentation.ui.recruitmentWriting.uiState.RecruitmentPostWritingUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
 class RecruitmentPostWritingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val recruitmentRepository: RecruitmentRepository,
-) : ViewModel() {
+) : NetworkViewModel() {
     val eventId: Long = savedStateHandle[EVENT_ID_KEY] ?: DEFAULT_EVENT_ID
     private val recruitmentIdToEdit: Long? = savedStateHandle[RECRUITMENT_ID_KEY]
-    val recruitmentContentToEdit = savedStateHandle[RECRUITMENT_CONTENT_KEY] ?: DEFAULT_CONTENT
+    private val recruitmentContentToEdit: String =
+        savedStateHandle[RECRUITMENT_CONTENT_KEY] ?: DEFAULT_CONTENT
 
-    private val _recruitmentWriting: NotNullMutableLiveData<RecruitmentPostWritingUiState> =
-        NotNullMutableLiveData(RecruitmentPostWritingUiState())
-    val recruitmentWriting: NotNullLiveData<RecruitmentPostWritingUiState> =
-        _recruitmentWriting
+    val writingMode: WritingModeUiState =
+        if (recruitmentIdToEdit == null) WritingModeUiState.POST else WritingModeUiState.EDIT
 
-    private val _postedRecruitmentId: NotNullMutableLiveData<Long> =
-        NotNullMutableLiveData(DEFAULT_POSTED_RECRUITMENT_ID)
-    val postedRecruitmentId: NotNullLiveData<Long> = _postedRecruitmentId
+    val content: MutableLiveData<String> = MutableLiveData(recruitmentContentToEdit)
+    private val contentIsNotBlank: Boolean
+        get() = content.value?.isNotBlank() ?: false
 
-    init {
-        if (recruitmentIdToEdit != null) {
-            changeToEditMode()
-        } else {
-            changeToPostMode()
-        }
+    private val _canSubmit = NotNullMutableLiveData(true)
+    val canSubmit = MediatorLiveData(false).apply {
+        addSource(content) { value = canSubmit() }
+        addSource(_canSubmit) { value = canSubmit() }
     }
 
-    private fun changeToPostMode() {
-        _recruitmentWriting.value = _recruitmentWriting.value.setWritingMode(
-            POST,
-        )
-    }
+    private fun canSubmit(): Boolean = contentIsNotBlank && isChanged() && _canSubmit.value
 
-    private fun changeToEditMode() {
-        _recruitmentWriting.value = _recruitmentWriting.value.setWritingMode(
-            EDIT,
-        )
-    }
+    private val _uiEvent = SingleLiveEvent<RecruitmentPostWritingUiEvent>()
+    val uiEvent: LiveData<RecruitmentPostWritingUiEvent> = _uiEvent
 
-    fun postRecruitment(content: String) {
-        changeToLoadingState()
-        viewModelScope.launch {
-            when (val result = recruitmentRepository.postRecruitment(eventId, content)) {
-                is Failure, NetworkError -> changeToErrorState()
-                is Success -> {
-                    _postedRecruitmentId.value = result.data
-                    changeToPostSuccessState()
-                    logWriting("recruitment", content, eventId)
-                }
+    fun postRecruitment(content: String): Job = command(
+        command = { recruitmentRepository.postRecruitment(eventId, content) },
+        onSuccess = { _uiEvent.value = RecruitmentPostWritingUiEvent.PostComplete(it) },
+        onFailure = { _, _ -> _uiEvent.value = RecruitmentPostWritingUiEvent.PostFail },
+        onStart = { _canSubmit.value = false },
+        onFinish = { _canSubmit.value = true },
+    )
 
-                is Unexpected -> throw Throwable(result.error)
-            }
-        }
-    }
+    fun editRecruitment(content: String): Job = command(
+        command = {
+            if (recruitmentIdToEdit == null) return@command Failure(-1, "")
+            recruitmentRepository.editRecruitment(eventId, recruitmentIdToEdit, content)
+        },
+        onSuccess = { _uiEvent.value = RecruitmentPostWritingUiEvent.EditComplete },
+        onFailure = { _, _ -> _uiEvent.value = RecruitmentPostWritingUiEvent.EditFail },
+        onStart = { _canSubmit.value = false },
+        onFinish = { _canSubmit.value = true },
+    )
 
-    fun editRecruitment(content: String) {
-        changeToLoadingState()
-        if (recruitmentIdToEdit == null) {
-            changeToErrorState()
-            return
-        }
-        viewModelScope.launch {
-            when (
-                val result =
-                    recruitmentRepository.editRecruitment(eventId, recruitmentIdToEdit, content)
-            ) {
-                is Failure, NetworkError -> changeToErrorState()
-                is Success -> changeToEditSuccessState()
-                is Unexpected -> throw Throwable(result.error)
-            }
-        }
-    }
-
-    private fun changeToLoadingState() {
-        _recruitmentWriting.postValue(_recruitmentWriting.value.changeToLoadingState())
-    }
-
-    private fun changeToErrorState() {
-        _recruitmentWriting.postValue(_recruitmentWriting.value.changeToErrorState())
-    }
-
-    private fun changeToPostSuccessState() {
-        _recruitmentWriting.value = _recruitmentWriting.value.changeToPostSuccessState()
-    }
-
-    private fun changeToEditSuccessState() {
-        _recruitmentWriting.postValue(_recruitmentWriting.value.changeToEditSuccessState())
-    }
+    fun isChanged(): Boolean = content.value != recruitmentContentToEdit
 
     companion object {
         const val EVENT_ID_KEY = "EVENT_ID_KEY"
@@ -114,7 +72,5 @@ class RecruitmentPostWritingViewModel @Inject constructor(
 
         const val RECRUITMENT_CONTENT_KEY = "RECRUITMENT_CONTENT_KEY"
         private const val DEFAULT_CONTENT = ""
-
-        private const val DEFAULT_POSTED_RECRUITMENT_ID = -1L
     }
 }

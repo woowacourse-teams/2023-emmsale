@@ -3,14 +3,14 @@ package com.emmsale.presentation.ui.myCommentList.recyclerView
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.presentation.ui.myCommentList.uiState.MyCommentUiState
+import com.emmsale.data.model.Comment
 
 class MyCommentsAdapter(
-    private val onClick: (eventId: Long, parentCommentId: Long, commentId: Long) -> Unit,
-) : ListAdapter<MyCommentUiState, MyCommentViewHolder>(diffUtil) {
+    private val onCommentClick: (feedId: Long, commentId: Long) -> Unit,
+) : ListAdapter<Comment, MyCommentViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyCommentViewHolder {
-        return MyCommentViewHolder.create(parent, onClick)
+        return MyCommentViewHolder.create(parent, onCommentClick)
     }
 
     override fun onBindViewHolder(holder: MyCommentViewHolder, position: Int) {
@@ -18,15 +18,15 @@ class MyCommentsAdapter(
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<MyCommentUiState>() {
+        val diffUtil = object : DiffUtil.ItemCallback<Comment>() {
             override fun areItemsTheSame(
-                oldItem: MyCommentUiState,
-                newItem: MyCommentUiState,
+                oldItem: Comment,
+                newItem: Comment,
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: MyCommentUiState,
-                newItem: MyCommentUiState,
+                oldItem: Comment,
+                newItem: Comment,
             ): Boolean = oldItem == newItem
         }
     }

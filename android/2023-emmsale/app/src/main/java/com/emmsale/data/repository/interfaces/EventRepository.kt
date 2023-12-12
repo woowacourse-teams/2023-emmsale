@@ -38,7 +38,7 @@ interface EventRepository {
 
     suspend fun scrapEvent(eventId: Long): ApiResponse<Unit>
 
-    suspend fun deleteScrap(eventId: Long): ApiResponse<Unit>
+    suspend fun scrapOffEvent(eventId: Long): ApiResponse<Unit>
 
     suspend fun isScraped(eventId: Long): ApiResponse<Boolean>
 }

@@ -5,9 +5,11 @@
 
     <data>
 
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
+
         <variable
             name="recruitment"
-            type="com.emmsale.presentation.ui.recruitmentList.uiState.RecruitmentPostUiState" />
+            type="com.emmsale.data.model.Recruitment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +24,7 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="18dp"
             android:fontFamily="@font/nanum_square_bold"
-            android:text="@{recruitment.name}"
+            android:text="@{recruitment.writer.name}"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
             android:fontFamily="@font/nanum_square_regular"
-            android:text="@{recruitment.updatedAt}"
+            app:dateText="@{recruitment.updatedDate}"
+            app:dateTimeFormatter="@{DateTimePattern.YEAR_DASH_MONTH_DASH_DAY}"
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_eventrecruitment_membername"
@@ -55,17 +58,13 @@
             android:maxLines="1"
             android:text="@{recruitment.content}"
             android:textSize="13sp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_eventrecruitment_membername"
             tools:text="아무나 같이가실 분 구합니다! 역에서 만나서 같이가면 좋을 것 같아요! 많이들 신청해 주세용!!!" />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/gray"
-            app:layout_constraintTop_toBottomOf="@id/tv_eventrecruitment_message" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

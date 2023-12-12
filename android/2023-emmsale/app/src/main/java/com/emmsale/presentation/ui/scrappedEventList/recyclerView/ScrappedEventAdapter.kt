@@ -2,11 +2,11 @@ package com.emmsale.presentation.ui.scrappedEventList.recyclerView
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState
+import com.emmsale.data.model.Event
 
 class ScrappedEventAdapter(
-    private val onClickConference: (ScrappedEventUiState) -> Unit,
-) : ListAdapter<ScrappedEventUiState, ScrappedEventViewHolder>(ScrappedEventDiffUtil) {
+    private val onClickConference: (Event) -> Unit,
+) : ListAdapter<Event, ScrappedEventViewHolder>(ScrappedEventDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScrappedEventViewHolder =
         ScrappedEventViewHolder(parent, onClickConference)
 

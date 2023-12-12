@@ -7,6 +7,7 @@ import com.emmsale.R
 import com.emmsale.presentation.common.extension.format
 import com.emmsale.presentation.common.extension.toRelativeDateTime
 import com.emmsale.presentation.common.extension.toRelativeTime
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @BindingAdapter("app:dateText", "app:dateTimeFormatter", requireAll = false)
@@ -43,6 +44,14 @@ fun TextView.setDateRange(
     )
 }
 
+@BindingAdapter("app:dateText", "app:dateTimeFormatter")
+fun TextView.setDate(
+    localDate: LocalDate,
+    dateTimePattern: DateTimePattern,
+) {
+    text = dateTimePattern.format(context, localDate.atStartOfDay())
+}
+
 enum class DateTimePattern {
     MONTH_DAY_WEEKDAY {
         override fun format(context: Context, localDateTime: LocalDateTime): String {
@@ -67,6 +76,16 @@ enum class DateTimePattern {
     AM_PM_HOUR_MINUTE {
         override fun format(context: Context, localDateTime: LocalDateTime): String {
             return localDateTime.format(context, R.string.am_pm_hour_minute)
+        }
+    },
+    YEAR_DOT_MONTH_DOT_DAY {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            return localDateTime.format(context, R.string.year_month_day)
+        }
+    },
+    YEAR_DASH_MONTH_DASH_DAY {
+        override fun format(context: Context, localDateTime: LocalDateTime): String {
+            return localDateTime.format(context, R.string.year_dash_month_dash_day)
         }
     },
     ;

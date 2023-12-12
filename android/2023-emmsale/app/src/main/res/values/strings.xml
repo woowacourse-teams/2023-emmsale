@@ -48,12 +48,15 @@
     <string name="all_offline">오프라인</string>
     <string name="all_onoffline">온/오프라인</string>
     <string name="all_ended">종료</string>
+    <string name="all_fetch_error_dialog_title">오류</string>
+    <string name="all_fetch_error_dialog_message">데이터를 불러올 수 없습니다.</string>
+    <string name="all_unexpected_error_occurred_dialog_message">알 수 없는 오류가 발생했습니다.</string>
 
     <string name="splash_app_update_title">업데이트</string>
     <string name="splash_app_update_message">새로운 버전이 출시되었어요!\n지금 바로 커디 스토어로 이동하시겠어요?</string>
     <string name="splash_app_update_canceled_message">업데이트 없이 서비스를 이용하실 수 없어요 😥</string>
 
-    <string name="onboarding_member_update_failed_message">회원정보 업데이트를 실패했어요!</string>
+    <string name="onboarding_join_failed_message">회원가입에 실패했어요!</string>
     <string name="onboarding_back_press_desc">온보딩 화면 뒤로가기</string>
 
     <string name="onboardingname_page">1/4</string>
@@ -80,10 +83,10 @@
     <string name="onboardingeclub_message">동아리 활동이 있나요?</string>
     <string name="onboardingeclub_sub_message">동아리 활동을 했다면 추가해 주세요.</string>
 
-    <string name="kerdyfirebasemessaging_child_comment_notification_title">댓글에 답글이 달렸어요.</string>
-    <string name="kerdyfirebasemessaging_child_comment_notification_content_format">%s: %s</string>
-    <string name="kerdyfirebasemessaging_child_comment_notification_channel_name">대댓글 작성 알림 채널</string>
-    <string name="kerdyfirebasemessaging_child_comment_notification_channel_description">대댓글 작성 알림을 받기 위한 알림 채널입니다.</string>
+    <string name="kerdyfirebasemessaging_comment_notification_title">댓글이 달렸어요.</string>
+    <string name="kerdyfirebasemessaging_comment_notification_content_format">%s: %s</string>
+    <string name="kerdyfirebasemessaging_comment_notification_channel_name">댓글 작성 알림 채널</string>
+    <string name="kerdyfirebasemessaging_comment_notification_channel_description">댓글 작성 알림을 받기 위한 알림 채널입니다.</string>
     <string name="kerdyfirebasemessaging_interest_event_notification_title_format">관심 태그 행사가 업데이트 되었어요.</string>
     <string name="kerdyfirebasemessaging_interest_event_notification_channel_name">관심 태그 행사 알림 채널</string>
     <string name="kerdyfirebasemessaging_interest_event_notification_channel_description">관심 태그 행사 알림을 받기 위한 알림 채널입니다.</string>
@@ -245,8 +248,8 @@
     <string name="eventdetail_tab_comment">댓글</string>
     <string name="eventdetail_tab_recruitment">같이가요</string>
     <string name="eventdetail_tablayout_content_description">상세정보 보기 탭</string>
-    <string name="eventdetail_scrap_error">스크랩 불가</string>
-    <string name="eventdetail_scrap_delete_error">스크랩 삭제 불가</string>
+    <string name="eventdetail_scrap_fail">스크랩 불가</string>
+    <string name="eventdetail_scrap_off_fail">스크랩 해제 불가</string>
 
     <string name="eventInfo_cost">비용</string>
     <string name="eventInfo_place">장소</string>
@@ -254,19 +257,20 @@
 
     <string name="eventrecruitment_fetch_recruitments_error_message">글을 불러올 수 없습니다. 관리자에게 문의하세요.</string>
     <string name="eventrecruitment_has_not_permission_writing">모집글은 한 번만 작성이 가능합니다!!</string>
+    <string name="eventrecruitment_has_not_permission_writing_check_fail_message">모집글을 작성할 수 있는지 확인하는 데 실패했어요.</string>
     <string name="eventrecruitment_no_content_view_desc">가장 먼저 행사에 같이 갈 사람을 구해보세요!</string>
     <string name="eventrecruitment_no_content_view_title">아직 같이가요 게시글이 없어요!</string>
 
     <string name="postlist_no_content_view_desc">가장 먼저 게시글을 작성해보세요!</string>
     <string name="postlist_no_content_view_title">아직 게시물이 없어요!</string>
 
-    <string name="recruitmentpostwriting_no_content_error_message">내용이 없으면 모집글을 올릴 수 없어요</string>
-    <string name="recruitmentpostwriting_register_success_message">글을 등록하였습니다</string>
-    <string name="recruitmentpostwriting_register_error_message">등록에 실패하였습니다! 인터넷을 확인하시고, 관리자에게 문의해주세요</string>
     <string name="recruitmentpostwriting_appbar_title_text">글쓰기</string>
+    <string name="recruitmentpostwriting_post_fail_message">모집글 작성에 실패했어요 😥</string>
+    <string name="recruitmentpostwriting_edit_fail_message">모집글 수정에 실패했어요 😥</string>
+    <string name="recruitmentpostwriting_writing_cancel_confirm_dialog_title">작성 취소</string>
+    <string name="recruitmentpostwriting_writing_cancel_confirm_dialog_message">작성하던 글이 사라집니다.\n나가시겠습니까?</string>
     <string name="recruitmentpostwriting_register_button_text">등록</string>
     <string name="recruitmentpostwriting_hint_message">모집글을 작성해주세요.</string>
-    <string name="recruitmentpostwriting_edit_success_message">수정에 성공하였습니다</string>
     <string name="recruitmentpostwriting_edit_button_text">수정</string>
 
     <string name="requestcompanion_dialog_message_hint">요청 메세지를 작성해주세요.</string>
@@ -278,10 +282,10 @@
 
     <string name="recruitmentpostdetail_appbar_title_text">함께해요</string>
     <string name="recruitmentpostdetail_request_button_text">함께하기 요청</string>
+    <string name="recruitmentpostdetail_writer_image_description">함께해요 글 작성자의 프로필 이미지</string>
     <string name="recruitmentpostdetail_request_button_complete_text">요청 완료</string>
     <string name="recruitmentpostdetail_success_request_message">요청에 성공했어요</string>
     <string name="recruitmentpostdetail_fail_request_message">요청에 실패했어요</string>
-    <string name="recruitmentpostdetail_deletion_success_message">글을 삭제했어요!</string>
     <string name="recruitmentpostdetail_deletion_fail_message">함께해요 글을 삭제하는 데 실패했어요 😥</string>
     <string name="recruitmentpostdetail_dialog_editing_text">수정</string>
     <string name="recruitmentpostdetail_dialog_deletion_text">삭제</string>
@@ -319,16 +323,16 @@
     <string name="logoutdialog_positive_button_label">로그아웃</string>
     <string name="logoutdialog_negative_button_label">취소</string>
 
-    <string name="primarynotification_new_notification_header_title">새로운 알림</string>
-    <string name="primarynotification_past_notification_header_title">지난 알림</string>
-    <string name="primarynotification_past_notification_delete_all">전체 삭제</string>
-    <string name="primarynotification_profile_image_desc">유저 프로필</string>
-    <string name="primarynotification_past_notification_delete">지난 알림 삭제</string>
-    <string name="primarynotification_child_comment_message">댓글에 답글이 달렸어요.</string>
-    <string name="primarynotification_interest_event_message">관심 태그 행사가 업데이트 되었어요.</string>
-    <string name="primarynotification_delete_notification_failed_message">알림 삭제를 할 수 없어요!</string>
-    <string name="primarynotification_delete_notification_confirm_message">지난 알림을 모두 삭제하시겠어요?</string>
-    <string name="primarynotification_delete_notification_confirm_title">알림 삭제</string>
+    <string name="notifications_new_notification_header_title">새로운 알림</string>
+    <string name="notifications_past_notification_header_title">지난 알림</string>
+    <string name="notifications_past_notification_delete_all">전체 삭제</string>
+    <string name="notifications_profile_image_desc">유저 프로필</string>
+    <string name="notifications_past_notification_delete">지난 알림 삭제</string>
+    <string name="notifications_child_comment_message">댓글에 답글이 달렸어요.</string>
+    <string name="notifications_interest_event_message">관심 태그 행사가 업데이트 되었어요.</string>
+    <string name="notifications_delete_notification_failed_message">알림 삭제를 할 수 없어요!</string>
+    <string name="notifications_delete_notification_confirm_message">지난 알림을 모두 삭제하시겠어요?</string>
+    <string name="notifications_delete_notification_confirm_title">알림 삭제</string>
 
     <string name="myprofile_profile_edit">프로필 수정</string>
 

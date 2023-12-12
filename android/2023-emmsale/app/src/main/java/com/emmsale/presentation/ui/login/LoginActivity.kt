@@ -6,20 +6,19 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.emmsale.BuildConfig
 import com.emmsale.R
 import com.emmsale.databinding.ActivityLoginBinding
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
-import com.emmsale.presentation.ui.login.uiState.LoginUiState
+import com.emmsale.presentation.ui.login.uiState.LoginUiEvent
 import com.emmsale.presentation.ui.main.MainActivity
 import com.emmsale.presentation.ui.onboarding.OnboardingActivity
 import com.google.firebase.messaging.FirebaseMessaging
@@ -27,10 +26,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginActivity :
-    AppCompatActivity(),
+    NetworkActivity<ActivityLoginBinding>(R.layout.activity_login),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("login") {
-    private val viewModel: LoginViewModel by viewModels()
-    private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
+
+    override val viewModel: LoginViewModel by viewModels()
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
@@ -41,68 +40,59 @@ class LoginActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
         registerScreen(this)
-        binding.viewModel = viewModel
-        setupClickListener()
-        setupLoginState()
+
+        setupDataBinding()
+
+        observeUiEvent()
+
         askNotificationPermission()
     }
 
-    private fun setupClickListener() {
-        setupGithubLoginClickListener()
-    }
-
-    private fun setupGithubLoginClickListener() {
-        binding.btnGithubLogin.setOnClickListener {
-            navigateToGithubLogin()
-        }
-    }
-
-    private fun setupLoginState() {
-        viewModel.loginState.observe(this) { loginState ->
-            when (loginState) {
-                is LoginUiState.Login -> navigateToMain()
-                is LoginUiState.Onboarded -> navigateToOnboarding()
-                is LoginUiState.Loading -> changeLoadingVisibility(true)
-                is LoginUiState.Error -> showLoginFailedMessage()
-            }
-        }
-    }
-
-    private fun navigateToMain() {
-        MainActivity.startActivity(this)
-        finish()
-    }
-
-    private fun navigateToOnboarding() {
-        OnboardingActivity.startActivity(this)
-        finish()
+    private fun setupDataBinding() {
+        binding.viewModel = viewModel
+        binding.onLoginButtonClick = ::navigateToGithubLogin
     }
 
     private fun navigateToGithubLogin() {
         val customTabIntent = CustomTabsIntent.Builder().build()
-        customTabIntent.launchUrl(this, getGithubLoginUri())
+        customTabIntent.launchUrl(this, createGithubLoginUri())
     }
 
-    private fun getGithubLoginUri(): Uri = uri {
-        scheme("https")
-        authority("github.com")
-        appendPath("login")
-        appendPath("oauth")
-        appendPath("authorize")
-        appendQueryParameter("client_id", BuildConfig.GITHUB_CLIENT_ID)
+    private fun createGithubLoginUri() = Uri.Builder()
+        .scheme("https")
+        .authority("github.com")
+        .appendPath("login")
+        .appendPath("oauth")
+        .appendPath("authorize")
+        .appendQueryParameter("client_id", BuildConfig.GITHUB_CLIENT_ID)
+        .build()
+
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
-    private fun showLoginFailedMessage() {
-        changeLoadingVisibility(false)
-        binding.root.showSnackBar(getString(R.string.login_failed_message))
-    }
+    private fun handleUiEvent(uiEvent: LoginUiEvent) {
+        when (uiEvent) {
+            LoginUiEvent.JoinComplete -> {
+                OnboardingActivity.startActivity(this)
+                finish()
+            }
 
-    private fun changeLoadingVisibility(isShow: Boolean) {
-        when (isShow) {
-            true -> binding.pbLogin.visibility = View.VISIBLE
-            false -> binding.pbLogin.visibility = View.GONE
+            LoginUiEvent.LoginComplete -> {
+                MainActivity.startActivity(this)
+                finish()
+            }
+
+            LoginUiEvent.LoginFail -> binding.root.showSnackBar(getString(R.string.login_failed_message))
         }
+    }
+
+    @SuppressLint("InlinedApi")
+    private fun askNotificationPermission() {
+        if (checkPostNotificationPermission()) return
+        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -119,8 +109,6 @@ class LoginActivity :
         }
     }
 
-    private fun uri(block: Uri.Builder.() -> Unit): Uri = Uri.Builder().apply(block).build()
-
     private fun Intent.parseGithubCode(): String? = data?.getQueryParameter(GITHUB_CODE_PARAMETER)
 
     companion object {
@@ -130,11 +118,5 @@ class LoginActivity :
             val intent = Intent(context, LoginActivity::class.java)
             context.startActivity(intent)
         }
-    }
-
-    @SuppressLint("InlinedApi")
-    private fun askNotificationPermission() {
-        if (checkPostNotificationPermission()) return
-        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 }

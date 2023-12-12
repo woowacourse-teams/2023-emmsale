@@ -15,9 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class EventInfoFragment :
-    BaseFragment<FragmentEventInformationBinding>(),
+    BaseFragment<FragmentEventInformationBinding>(R.layout.fragment_event_information),
     FirebaseAnalyticsDelegate by FirebaseAnalyticsDelegateImpl("event_recruitment") {
-    override val layoutResId: Int = R.layout.fragment_event_information
+
     private val viewModel: EventDetailViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
@@ -32,10 +32,9 @@ class EventInfoFragment :
     }
 
     private fun setUpInformationUrls() {
-        viewModel.eventDetail.observe(viewLifecycleOwner) { eventDetailUiState ->
+        viewModel.event.observe(viewLifecycleOwner) { event ->
             binding.rvEventInfoImages.setHasFixedSize(true)
-            val detailImageUrls = eventDetailUiState.eventDetail?.detailImageUrls ?: return@observe
-            binding.rvEventInfoImages.adapter = EventInfoImageAdapter(detailImageUrls)
+            binding.rvEventInfoImages.adapter = EventInfoImageAdapter(event.detailImageUrls)
         }
     }
 

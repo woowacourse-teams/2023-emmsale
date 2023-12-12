@@ -6,14 +6,34 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.graphics.drawable.toDrawable
-import androidx.databinding.BindingAdapter
+import androidx.databinding.BindingMethod
+import androidx.databinding.BindingMethods
 import com.emmsale.R
 import com.emmsale.databinding.LayoutSubTextInputWindowBinding
 import com.emmsale.presentation.common.extension.dp
-import com.emmsale.presentation.common.views.SubTextInputWindow.OnCancelListener
-import com.emmsale.presentation.common.views.SubTextInputWindow.OnSubmitListener
-import kotlin.properties.Delegates.observable
 
+@BindingMethods(
+    BindingMethod(
+        type = SubTextInputWindow::class,
+        attribute = "text",
+        method = "setText",
+    ),
+    BindingMethod(
+        type = SubTextInputWindow::class,
+        attribute = "isSubmitEnabled",
+        method = "setIsSubmitEnabled",
+    ),
+    BindingMethod(
+        type = SubTextInputWindow::class,
+        attribute = "onSubmit",
+        method = "setOnSubmitListener",
+    ),
+    BindingMethod(
+        type = SubTextInputWindow::class,
+        attribute = "onCancel",
+        method = "setOnCancelListener",
+    ),
+)
 class SubTextInputWindow @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -21,22 +41,6 @@ class SubTextInputWindow @JvmOverloads constructor(
 
     private val binding: LayoutSubTextInputWindowBinding by lazy {
         LayoutSubTextInputWindowBinding.inflate(LayoutInflater.from(context), this, false)
-    }
-
-    var text: String by observable("") { _, _, newValue ->
-        binding.etSubTextInput.setText(newValue)
-    }
-
-    var isSubmitEnabled: Boolean by observable(false) { _, _, newValue ->
-        binding.isSubmitEnabled = newValue
-    }
-
-    var onSubmitListener: OnSubmitListener by observable(OnSubmitListener { }) { _, _, newValue ->
-        binding.onSubmitListener = newValue
-    }
-
-    var onCancelListener: OnCancelListener by observable(OnCancelListener { }) { _, _, newValue ->
-        binding.onCancelListener = newValue
     }
 
     init {
@@ -60,6 +64,22 @@ class SubTextInputWindow @JvmOverloads constructor(
         }
     }
 
+    fun setText(text: String?) {
+        if (text != null) binding.etSubTextInput.setText(text)
+    }
+
+    fun setIsSubmitEnabled(enabled: Boolean) {
+        binding.isSubmitEnabled = enabled
+    }
+
+    fun setOnSubmitListener(onSubmitListener: OnSubmitListener) {
+        binding.onSubmitListener = onSubmitListener
+    }
+
+    fun setOnCancelListener(onCancelListener: OnCancelListener) {
+        binding.onCancelListener = onCancelListener
+    }
+
     fun requestFocusOnEditText() {
         binding.etSubTextInput.requestFocus()
     }
@@ -71,24 +91,4 @@ class SubTextInputWindow @JvmOverloads constructor(
     fun interface OnCancelListener {
         fun onCancel()
     }
-}
-
-@BindingAdapter("app:text")
-fun SubTextInputWindow.setText(text: String?) {
-    if (text != null) this.text = text
-}
-
-@BindingAdapter("app:isSubmitEnabled")
-fun SubTextInputWindow.setIsSubmitEnabled(isSubmitEnabled: Boolean) {
-    this.isSubmitEnabled = isSubmitEnabled
-}
-
-@BindingAdapter("app:onSubmit")
-fun SubTextInputWindow.setOnSubmitListener(onSubmitListener: OnSubmitListener) {
-    this.onSubmitListener = onSubmitListener
-}
-
-@BindingAdapter("app:onCancel")
-fun SubTextInputWindow.setOnCancelListener(onCancelListener: OnCancelListener) {
-    this.onCancelListener = onCancelListener
 }

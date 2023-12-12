@@ -6,16 +6,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.emmsale.R
 import com.emmsale.databinding.ActivityMessageListBinding
-import com.emmsale.presentation.common.EventObserver
-import com.emmsale.presentation.common.FetchResult
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.KeyboardHider
+import com.emmsale.presentation.common.extension.showNotification
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.ui.messageList.MessageListViewModel.Companion.KEY_OTHER_UID
 import com.emmsale.presentation.ui.messageList.MessageListViewModel.Companion.KEY_ROOM_ID
@@ -23,44 +22,49 @@ import com.emmsale.presentation.ui.messageList.recyclerview.MessageListAdapter
 import com.emmsale.presentation.ui.messageList.uistate.MessageListUiEvent
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MessageListActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityMessageListBinding.inflate(layoutInflater) }
-    private val viewModel: MessageListViewModel by viewModels()
+class MessageListActivity :
+    NetworkActivity<ActivityMessageListBinding>(R.layout.activity_message_list) {
+
+    override val viewModel: MessageListViewModel by viewModels()
     private val keyboardHider by lazy { KeyboardHider(this) }
 
     private val messageListAdapter by lazy { MessageListAdapter(onProfileClick = ::navigateToProfile) }
 
-    private var job: Job? = null
+    private var bottomMessageShowingJob: Job? = null
+
+    private fun navigateToProfile(uid: Long) {
+        ProfileActivity.startActivity(this, uid)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupBinding()
+        setContentView(binding.root)
+
+        setupDataBinding()
         setupToolbar()
         setupMessageRecyclerView()
-        setupMessages()
-        setUpEventUiEvent()
+
+        observeMessages()
+        observeUiEvent()
     }
 
-    private fun setupBinding() {
-        setContentView(binding.root)
+    private fun setupDataBinding() {
         binding.vm = viewModel
-        binding.lifecycleOwner = this
     }
 
     private fun setupToolbar() {
-        binding.tbMessageList.setNavigationOnClickListener {
-            finish()
-        }
+        binding.tbMessageList.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupMessageRecyclerView() {
-        binding.rvMessageList.setHasFixedSize(true)
         binding.rvMessageList.itemAnimator = null
         binding.rvMessageList.adapter = messageListAdapter
         binding.rvMessageList.setOnScrollChangeListener { v, _, _, _, _ ->
@@ -73,68 +77,87 @@ class MessageListActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToProfile(uid: Long) {
-        ProfileActivity.startActivity(this, uid)
-    }
-
-    private fun setupMessages() {
-        viewModel.messages.observe(this) { uiState ->
-            if (uiState.fetchResult != FetchResult.SUCCESS) return@observe
-            messageListAdapter.submitList(uiState.messages)
+    private fun observeMessages() {
+        viewModel.messages.observe(this) {
+            messageListAdapter.submitList(it.messages) {
+                if (binding.rvMessageList.childCount == 0) return@submitList
+                if (!binding.rvMessageList.canScrollVertically(BOTTOM_SCROLL_DIRECTION)) smoothScrollToEnd()
+            }
         }
     }
 
-    private fun scrollToEnd() {
-        val lastPosition = viewModel.messages.value.messageSize - 1
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
+    }
 
-        // RecyclerView 버그로 scrollToPosition이 완전히 마지막으로 이동하지 않아서 아래와 같이 작성함.
-        binding.rvMessageList.scrollToPosition(lastPosition)
-        lifecycleScope.launch {
-            delay(50)
-            binding.rvMessageList.smoothScrollToPosition(lastPosition)
+    private fun handleUiEvent(uiEvent: MessageListUiEvent) {
+        when (uiEvent) {
+            MessageListUiEvent.MessageSendComplete -> {
+                binding.btiwSendMessage.clearText()
+                smoothScrollToEnd()
+            }
+
+            MessageListUiEvent.MessageSendFail -> binding.root.showSnackBar(R.string.messagelist_message_sent_failed)
         }
     }
 
     private fun smoothScrollToEnd() {
-        binding.rvMessageList.smoothScrollToPosition(viewModel.messages.value.messageSize)
+        binding.rvMessageList.smoothScrollToPosition(viewModel.messages.value.size)
     }
 
-    private fun setUpEventUiEvent() {
-        viewModel.uiEvent.observe(this, EventObserver(::handleEvent))
-    }
-
-    private fun handleEvent(event: MessageListUiEvent) {
-        when (event) {
-            MessageListUiEvent.MESSAGE_LIST_FIRST_LOADED -> scrollToEnd()
-            MessageListUiEvent.MESSAGE_SENDING -> binding.etMessageInput.text.clear()
-            MessageListUiEvent.MESSAGE_SENT_REFRESHED -> smoothScrollToEnd()
-            MessageListUiEvent.MESSAGE_SENT_FAILED -> binding.root.showSnackBar(R.string.messagelist_message_sent_failed)
-            MessageListUiEvent.NOT_FOUND_OTHER_MEMBER -> binding.root.showSnackBar(R.string.messagelist_not_found_other_member)
-        }
-    }
-
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        viewModel.refresh()
 
-        val roomId = intent?.getStringExtra(KEY_ROOM_ID)
-        if (roomId != viewModel.roomId) return
-
+        val roomId = intent.getStringExtra(KEY_ROOM_ID) ?: return
         val profileUrl = intent.getStringExtra(KEY_PROFILE_URL)
         val otherName = intent.getStringExtra(KEY_OTHER_NAME) ?: return
         val messageContent = intent.getStringExtra(KEY_MESSAGE_CONTENT) ?: return
+        if (roomId != viewModel.roomId) {
+            notifyOtherRoomNewMessage(
+                otherRoomId = roomId,
+                profileUrl = profileUrl,
+                otherName = otherName,
+                messageContent = messageContent,
+            )
+            return
+        }
+
+        val couldNotScrollVertically = binding.rvMessageList
+            .canScrollVertically(BOTTOM_SCROLL_DIRECTION)
+            .not()
+        viewModel.refresh()
+        if (couldNotScrollVertically) return
+
         showNewMessage(profileUrl, otherName, messageContent)
+    }
+
+    private fun notifyOtherRoomNewMessage(
+        otherRoomId: String,
+        profileUrl: String?,
+        otherName: String,
+        messageContent: String,
+    ) {
+        CoroutineScope(Dispatchers.Default).launch {
+            showNotification(
+                title = otherName,
+                message = messageContent,
+                notificationId = otherRoomId.hashCode(),
+                channelId = R.id.id_all_message_notification_channel,
+                intent = intent,
+                largeIconUrl = profileUrl,
+                groupKey = otherRoomId,
+            )
+        }
     }
 
     private fun showNewMessage(profileUrl: String?, otherName: String, messageContent: String) {
         val layoutManager = binding.rvMessageList.layoutManager as LinearLayoutManager
         val lastVisiblePos = layoutManager.findLastVisibleItemPosition()
-        val itemCount = viewModel.messages.value.messages.size
-        val lastPosition = itemCount - 1
+        val lastPosition = viewModel.messages.value.size
 
-        if (lastVisiblePos != lastPosition) {
-            job?.cancel()
-            job = lifecycleScope.launch {
+        if (lastVisiblePos < lastPosition) {
+            bottomMessageShowingJob?.cancel()
+            bottomMessageShowingJob = lifecycleScope.launch {
                 showBottomMessage(profileUrl, otherName, messageContent)
                 delay(4000)
                 hideBottomMessage()

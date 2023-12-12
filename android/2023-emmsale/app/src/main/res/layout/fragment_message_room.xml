@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="com.emmsale.presentation.common.FetchResult" />
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <import type="android.view.View" />
 
@@ -32,18 +31,17 @@
             app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
         <!--app:menu="@menu/menu_message_room_toolbar" 삭제 기능 구현시 추가 예정-->
 
-        <View
+        <com.emmsale.presentation.common.views.HorizontalDivider
             android:id="@+id/divider"
             android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:background="@color/light_gray"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_message_room_list" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_message_room_list"
-            onRefresh="@{() -> vm.refresh()}"
+            app:onRefresh1="@{() -> vm.refresh()}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -66,18 +64,15 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <include
-            layout="@layout/layout_all_error_screen"
+        <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:clickable="true"
-            android:visibility="@{vm.messageRooms.fetchResult == FetchResult.ERROR ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:visible="@{vm.screenUiState == ScreenUiState.NETWORK_ERROR}"
+            app:onRefresh="@{() -> vm.refresh()}"
             app:layout_constraintTop_toBottomOf="@id/tb_message_room_list"
-            bind:viewModel="@{vm}"
-            tools:visibility="gone" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.emmsale.presentation.common.views.NoContentView
             android:layout_width="0dp"
@@ -90,16 +85,16 @@
             app:noContentImageResId="@drawable/ic_no_result4"
             app:noContentImageTint="@color/primary_color"
             app:title="@string/messageroom_no_content_view_title"
-            app:visible="@{vm.messageRooms.messageRooms.empty &amp;&amp; vm.messageRooms.fetchResult == FetchResult.SUCCESS}" />
+            app:visible="@{vm.messageRooms.empty &amp;&amp; vm.screenUiState == ScreenUiState.NONE}" />
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{vm.messageRooms.fetchResult == FetchResult.LOADING ? View.VISIBLE : View.GONE}"
+            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tb_message_room_list" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

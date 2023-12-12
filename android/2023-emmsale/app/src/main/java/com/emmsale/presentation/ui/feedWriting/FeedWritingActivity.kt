@@ -5,33 +5,37 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
 import com.emmsale.databinding.ActivityFeedWritingBinding
-import com.emmsale.presentation.common.FetchResult
-import com.emmsale.presentation.common.UiEvent
+import com.emmsale.presentation.base.NetworkActivity
+import com.emmsale.presentation.common.extension.dp
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
+import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.imageUtil.getImageFileFromUri
 import com.emmsale.presentation.common.imageUtil.isImagePermissionGrantedCompat
 import com.emmsale.presentation.common.imageUtil.onImagePermissionCompat
+import com.emmsale.presentation.common.recyclerView.IntervalItemDecoration
+import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedWriting.FeedWritingViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.feedWriting.recyclerView.FeedWritingImageAdapter
-import com.emmsale.presentation.ui.feedWriting.uiState.FeedUploadResultUiEvent
+import com.emmsale.presentation.ui.feedWriting.uiState.FeedWritingUiEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FeedWritingActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityFeedWritingBinding.inflate(layoutInflater) }
-    private val viewModel: FeedWritingViewModel by viewModels()
+class FeedWritingActivity :
+    NetworkActivity<ActivityFeedWritingBinding>(R.layout.activity_feed_writing) {
 
-    private val adapter: FeedWritingImageAdapter by lazy {
-        FeedWritingImageAdapter(deleteImage = viewModel::deleteImageUrl)
+    override val viewModel: FeedWritingViewModel by viewModels()
+
+    private val imagesAdapter: FeedWritingImageAdapter by lazy {
+        FeedWritingImageAdapter(deleteImage = viewModel::deleteImageUri)
     }
 
     private val imagePermissionLauncher = registerForActivityResult(
@@ -56,75 +60,13 @@ class FeedWritingActivity : AppCompatActivity() {
 
                 imageUris.isEmpty() -> Unit
 
-                else -> viewModel.fetchImageUris(imageUrls = imageUris)
+                else -> viewModel.setImageUris(imageUris = imageUris)
             }
         }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setUpBinding()
-        setUpPostUploadResult()
-        setUpImageUrls()
-        setUpRegisterButtonClick()
-        setUpBackButtonClick()
-    }
 
     private fun getImageUriPaths(intent: Intent): List<String> {
         val clipData = intent.clipData ?: return listOf(intent.data.toString())
         return (0 until clipData.itemCount).mapNotNull { clipData.getItemAt(it).uri.toString() }
-    }
-
-    private fun setUpBinding() {
-        setContentView(binding.root)
-        binding.rvFeedWritingImageList.adapter = adapter
-        binding.vm = viewModel
-        binding.showAlbum = ::showAlbum
-        binding.lifecycleOwner = this
-    }
-
-    private fun setUpPostUploadResult() {
-        viewModel.feedUploadResult.observe(this, ::handleUploadPostResult)
-    }
-
-    private fun handleUploadPostResult(event: UiEvent<FeedUploadResultUiEvent>) {
-        val content = event.getContentIfNotHandled() ?: return
-        when (content.fetchResult) {
-            FetchResult.SUCCESS -> {
-                FeedDetailActivity.startActivity(this, content.responseId!!)
-                finish()
-            }
-
-            FetchResult.ERROR -> showToast(getString(R.string.post_writing_upload_error))
-
-            FetchResult.LOADING -> Unit
-        }
-    }
-
-    private fun setUpImageUrls() {
-        viewModel.imageUris.observe(this) { imageUrls ->
-            adapter.submitList(imageUrls)
-        }
-    }
-
-    private fun setUpRegisterButtonClick() {
-        binding.tbToolbar.setOnMenuItemClickListener {
-            uploadPost()
-            true
-        }
-    }
-
-    private fun uploadPost() {
-        when {
-            !viewModel.isTitleValid() -> showToast(getString(R.string.post_writing_title_warning))
-
-            !viewModel.isContentValid() -> showToast(getString(R.string.post_writing_content_warning))
-
-            else -> {
-                val imageUris = viewModel.imageUris.value
-                val imageFiles = imageUris.map { getImageFileFromUri(this, Uri.parse(it)) }
-                viewModel.uploadPost(imageFiles)
-            }
-        }
     }
 
     private fun showAlbum() {
@@ -156,9 +98,87 @@ class FeedWritingActivity : AppCompatActivity() {
         )
     }
 
-    private fun setUpBackButtonClick() {
-        binding.tbToolbar.setNavigationOnClickListener {
-            finish()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setupDataBinding()
+        setupBackPressedDispatcher()
+        setupToolbar()
+        setupImagesAdapter()
+
+        observeCanSubmit()
+        observeImageUrls()
+        observeUiEvent()
+    }
+
+    private fun setupDataBinding() {
+        setContentView(binding.root)
+        binding.vm = viewModel
+        binding.showAlbum = ::showAlbum
+    }
+
+    private fun setupBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (viewModel.isChanged()) showFinishConfirmDialog() else finish()
+                }
+            },
+        )
+    }
+
+    private fun showFinishConfirmDialog() {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.recruitmentpostwriting_writing_cancel_confirm_dialog_title),
+            message = getString(R.string.recruitmentpostwriting_writing_cancel_confirm_dialog_message),
+            positiveButtonLabel = getString(R.string.all_okay),
+            negativeButtonLabel = getString(R.string.all_cancel),
+            onPositiveButtonClick = { finish() },
+        ).show()
+    }
+
+    private fun setupToolbar() {
+        binding.tbToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+
+        binding.tbToolbar.setOnMenuItemClickListener {
+            val imageUris = viewModel.imageUris.value
+            val imageFiles = imageUris.map { getImageFileFromUri(this, Uri.parse(it)) }
+            viewModel.uploadPost(imageFiles)
+            true
+        }
+    }
+
+    private fun setupImagesAdapter() {
+        binding.rvFeedWritingImageList.adapter = imagesAdapter
+        binding.rvFeedWritingImageList.addItemDecoration(IntervalItemDecoration(width = 10.dp))
+    }
+
+    private fun observeCanSubmit() {
+        viewModel.calSubmit.observe(this) { canSubmit ->
+            binding.tbToolbar.menu.findItem(R.id.register).isEnabled = canSubmit
+        }
+    }
+
+    private fun observeImageUrls() {
+        viewModel.imageUris.observe(this) { imageUrls ->
+            imagesAdapter.submitList(imageUrls)
+        }
+    }
+
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
+    }
+
+    private fun handleUiEvent(uiEvent: FeedWritingUiEvent) {
+        when (uiEvent) {
+            is FeedWritingUiEvent.PostComplete -> {
+                FeedDetailActivity.startActivity(this, uiEvent.feedId)
+                finish()
+            }
+
+            FeedWritingUiEvent.PostFail -> binding.root.showSnackBar(R.string.post_writing_upload_error)
         }
     }
 

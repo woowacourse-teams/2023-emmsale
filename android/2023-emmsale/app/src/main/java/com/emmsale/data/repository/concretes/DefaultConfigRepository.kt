@@ -15,10 +15,6 @@ class DefaultConfigRepository @Inject constructor(
             KEY_NOTIFICATION_RECEIVE,
             DEFAULT_VALUE_NOTIFICATION_RECEIVE,
         ),
-        isFollowNotificationReceive = preference.getBoolean(
-            KEY_FOLLOW_NOTIFICATION_RECEIVE,
-            DEFAULT_VALUE_FOLLOW_NOTIFICATION_RECEIVE,
-        ),
         isCommentNotificationReceive = preference.getBoolean(
             KEY_CHILD_COMMENT_NOTIFICATION_RECEIVE,
             DEFAULT_VALUE_CHILD_COMMENT_NOTIFICATION_RECEIVE,
@@ -39,10 +35,6 @@ class DefaultConfigRepository @Inject constructor(
 
     override fun saveAllNotificationReceiveConfig(isReceive: Boolean) {
         preferenceEditor.putBoolean(KEY_NOTIFICATION_RECEIVE, isReceive).commit()
-    }
-
-    override fun saveFollowNotificationReceiveConfig(isReceive: Boolean) {
-        preferenceEditor.putBoolean(KEY_FOLLOW_NOTIFICATION_RECEIVE, isReceive).commit()
     }
 
     override fun saveCommentNotificationReceiveConfig(isReceive: Boolean) {
@@ -67,9 +59,6 @@ class DefaultConfigRepository @Inject constructor(
 
         private const val KEY_AUTO_LOGIN = "auto_login_key"
         private const val DEFAULT_VALUE_AUTO_LOGIN = false
-
-        private const val KEY_FOLLOW_NOTIFICATION_RECEIVE = "follow_notification_receive_key"
-        private const val DEFAULT_VALUE_FOLLOW_NOTIFICATION_RECEIVE = true
 
         private const val KEY_CHILD_COMMENT_NOTIFICATION_RECEIVE =
             "child_comment_notification_receive_key"

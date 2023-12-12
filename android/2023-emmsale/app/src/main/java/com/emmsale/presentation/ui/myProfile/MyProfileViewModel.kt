@@ -1,49 +1,37 @@
 package com.emmsale.presentation.ui.myProfile
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
+import com.emmsale.data.model.Member
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
+import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
-import com.emmsale.presentation.common.viewModel.Refreshable
-import com.emmsale.presentation.ui.myProfile.uiState.MyProfileUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
 class MyProfileViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository,
-) : ViewModel(), Refreshable {
+) : RefreshableViewModel() {
 
-    private val _isLogin = NotNullMutableLiveData(true)
-    val isLogin: NotNullLiveData<Boolean> = _isLogin
+    private val uid: Long by lazy { tokenRepository.getMyUid()!! }
 
-    private val _myProfile = NotNullMutableLiveData(MyProfileUiState())
-    val myProfile: NotNullLiveData<MyProfileUiState> = _myProfile
+    private val _profile = NotNullMutableLiveData(Member())
+    val profile: NotNullLiveData<Member> = _profile
 
-    override fun refresh() {
-        _myProfile.value = _myProfile.value.changeToLoadingState()
-        viewModelScope.launch {
-            val token = tokenRepository.getToken()
-            if (token == null) {
-                _isLogin.value = false
-                return@launch
-            }
-
-            when (val result = memberRepository.getMember(token.uid)) {
-                is Failure, NetworkError ->
-                    _myProfile.value = _myProfile.value.changeToErrorState()
-
-                is Success -> _myProfile.value = _myProfile.value.changeMemberState(result.data)
-                is Unexpected -> throw Throwable(result.error)
-            }
-        }
+    init {
+        fetchProfile()
     }
+
+    private fun fetchProfile(): Job = fetchData(
+        fetchData = { memberRepository.getMember(uid) },
+        onSuccess = { _profile.value = it },
+    )
+
+    override fun refresh(): Job = refreshData(
+        refresh = { memberRepository.getMember(uid) },
+        onSuccess = { _profile.value = it },
+    )
 }

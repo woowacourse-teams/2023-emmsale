@@ -7,31 +7,33 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
+import com.emmsale.presentation.base.NetworkActivity
+import com.emmsale.presentation.common.extension.dp
 import com.emmsale.presentation.common.extension.navigateToApplicationDetailSetting
 import com.emmsale.presentation.common.extension.showPermissionRequestDialog
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.imageUtil.getImageFileFromUri
 import com.emmsale.presentation.common.imageUtil.isImagePermissionGrantedCompat
 import com.emmsale.presentation.common.imageUtil.onImagePermissionCompat
+import com.emmsale.presentation.common.recyclerView.IntervalItemDecoration
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapter
-import com.emmsale.presentation.ui.editMyProfile.recyclerView.ActivitiesAdapterDecoration
 import com.emmsale.presentation.ui.editMyProfile.recyclerView.FieldsAdapter
-import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileErrorEvent
+import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileUiEvent
 import com.emmsale.presentation.ui.editMyProfile.uiState.EditMyProfileUiState
-import com.emmsale.presentation.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditMyProfileActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityEditMyProfileBinding.inflate(layoutInflater) }
-    private val viewModel: EditMyProfileViewModel by viewModels()
+class EditMyProfileActivity :
+    NetworkActivity<ActivityEditMyProfileBinding>(R.layout.activity_edit_my_profile) {
+
+    override val viewModel: EditMyProfileViewModel by viewModels()
 
     private val fieldsDialog by lazy { FieldsAddBottomDialogFragment() }
     private val educationsDialog by lazy { EducationsAddBottomDialogFragment() }
@@ -57,27 +59,6 @@ class EditMyProfileActivity : AppCompatActivity() {
             }
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
-        initDataBinding()
-        initToolbar()
-        initDescriptionEditText()
-        initActivitiesRecyclerViews()
-        initFieldsRecyclerView()
-        setupUiLogic()
-    }
-
-    private fun initDataBinding() {
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
-        binding.showFieldTags = ::showFieldTags
-        binding.showEducations = ::showEducations
-        binding.showClubs = ::showClubs
-        binding.editProfileImage = ::editProfileImage
-    }
-
     private fun navigateToGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
@@ -90,21 +71,27 @@ class EditMyProfileActivity : AppCompatActivity() {
         )
     }
 
-    private fun editProfileImage() {
-        onImagePermissionCompat(
-            onGranted = ::navigateToGallery,
-            onShouldShowRequestPermissionRationale = { showNavigateToDetailSettingDialog() },
-            onDenied = { imagePermissionLauncher.launch(it) },
-        )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        setupDataBinding()
+        setupBackPressedDispatcher()
+        setupToolbar()
+        setupDescriptionEditText()
+        setupActivitiesRecyclerViews()
+        setupFieldsRecyclerView()
+
+        observeProfile()
+        observeUiEvent()
     }
 
-    private fun showNavigateToDetailSettingDialog() {
-        showPermissionRequestDialog(
-            message = getString(R.string.all_image_permission_request_dialog_message),
-            title = getString(R.string.all_image_permission_request_dialog_title),
-            onConfirm = { navigateToApplicationDetailSetting(permissionSettingLauncher) },
-            onDenied = {},
-        )
+    private fun setupDataBinding() {
+        binding.viewModel = viewModel
+        binding.onFieldTagsAddButtonClick = ::showFieldTags
+        binding.onEducationAddButtonClick = ::showEducations
+        binding.onClubAddButtonClick = ::showClubs
+        binding.onProfileImageUpdateUiClick = ::startToEditProfileImage
     }
 
     private fun showFieldTags() {
@@ -125,11 +112,40 @@ class EditMyProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun initToolbar() {
-        binding.tbEditmyprofileToolbar.setNavigationOnClickListener { finish() }
+    private fun startToEditProfileImage() {
+        onImagePermissionCompat(
+            onGranted = ::navigateToGallery,
+            onShouldShowRequestPermissionRationale = { showNavigateToDetailSettingDialog() },
+            onDenied = { imagePermissionLauncher.launch(it) },
+        )
     }
 
-    private fun initDescriptionEditText() {
+    private fun showNavigateToDetailSettingDialog() {
+        showPermissionRequestDialog(
+            message = getString(R.string.all_image_permission_request_dialog_message),
+            title = getString(R.string.all_image_permission_request_dialog_title),
+            onConfirm = { navigateToApplicationDetailSetting(permissionSettingLauncher) },
+            onDenied = {},
+        )
+    }
+
+    private fun setupBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    setResult(RESULT_OK)
+                    finish()
+                }
+            },
+        )
+    }
+
+    private fun setupToolbar() {
+        binding.tbEditmyprofileToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+    }
+
+    private fun setupDescriptionEditText() {
         binding.etEditmyprofileDescription.imeOptions = EditorInfo.IME_ACTION_DONE
         binding.etEditmyprofileDescription.setRawInputType(InputType.TYPE_CLASS_TEXT)
         binding.etEditmyprofileDescription.addTextChangedListener(
@@ -168,29 +184,21 @@ class EditMyProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun initFieldsRecyclerView() {
-        binding.rvEditmyprofileFields.adapter = FieldsAdapter(::removeField)
-    }
-
-    private fun removeField(activityId: Long) {
-        viewModel.removeActivity(activityId)
-    }
-
-    private fun initActivitiesRecyclerViews() {
-        val decoration = ActivitiesAdapterDecoration()
+    private fun setupActivitiesRecyclerViews() {
+        val decoration = IntervalItemDecoration(height = 2.dp)
         listOf(
             binding.rvEditmyprofileClubs,
             binding.rvEditmyprofileEducations,
         ).forEach {
             it.apply {
-                adapter = ActivitiesAdapter(::removeActivity)
+                adapter = ActivitiesAdapter(::showActivityRemoveConfirmDialog)
                 itemAnimator = null
                 addItemDecoration(decoration)
             }
         }
     }
 
-    private fun removeActivity(activityId: Long) {
+    private fun showActivityRemoveConfirmDialog(activityId: Long) {
         WarningDialog(
             context = this,
             title = getString(R.string.editmyprofile_activity_remove_warning_title),
@@ -201,29 +209,16 @@ class EditMyProfileActivity : AppCompatActivity() {
         ).show()
     }
 
-    private fun setupUiLogic() {
-        setupLoginUiLogic()
-        setupProfileUiLogic()
-        setupErrorsUiLogic()
+    private fun setupFieldsRecyclerView() {
+        binding.rvEditmyprofileFields.adapter = FieldsAdapter(::removeField)
     }
 
-    private fun setupLoginUiLogic() {
-        viewModel.isLogin.observe(this) {
-            handleNotLogin(it)
-        }
+    private fun removeField(activityId: Long) {
+        viewModel.removeActivity(activityId)
     }
 
-    private fun handleNotLogin(isLogin: Boolean) {
-        if (!isLogin) {
-            LoginActivity.startActivity(this)
-            finish()
-        }
-    }
-
-    private fun setupProfileUiLogic() {
-        viewModel.profile.observe(this) {
-            handleActivities(it)
-        }
+    private fun observeProfile() {
+        viewModel.profile.observe(this, ::handleActivities)
     }
 
     private fun handleActivities(profile: EditMyProfileUiState) {
@@ -232,26 +227,24 @@ class EditMyProfileActivity : AppCompatActivity() {
         (binding.rvEditmyprofileEducations.adapter as ActivitiesAdapter).submitList(profile.member.educations)
     }
 
-    private fun setupErrorsUiLogic() {
-        viewModel.errorEvents.observe(this) {
-            handleErrors(it)
-        }
+    private fun observeUiEvent() {
+        viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
-    private fun handleErrors(errorEvent: EditMyProfileErrorEvent?) {
-        when (errorEvent) {
-            EditMyProfileErrorEvent.DESCRIPTION_UPDATE -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_description_error_message))
-            EditMyProfileErrorEvent.ACTIVITY_REMOVE -> binding.root.showSnackBar(getString(R.string.editmyprofile_activity_remove_error_message))
-            EditMyProfileErrorEvent.ACTIVITIES_ADD -> binding.root.showSnackBar(getString(R.string.editmyprofile_acitivities_add_error_message))
-            EditMyProfileErrorEvent.PROFILE_IMAGE_UPDATE -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_profile_image_error_message))
-            else -> return
+    private fun handleUiEvent(uiEvent: EditMyProfileUiEvent) {
+        when (uiEvent) {
+            EditMyProfileUiEvent.ActivitiesAddFail -> binding.root.showSnackBar(getString(R.string.editmyprofile_acitivities_add_error_message))
+            EditMyProfileUiEvent.ActivityRemoveFail -> binding.root.showSnackBar(getString(R.string.editmyprofile_activity_remove_error_message))
+            EditMyProfileUiEvent.DescriptionUpdateFail -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_description_error_message))
+            EditMyProfileUiEvent.ProfileImageUpdateFail -> binding.root.showSnackBar(getString(R.string.editmyprofile_update_profile_image_error_message))
         }
-        viewModel.removeError()
     }
 
     companion object {
         fun startActivity(context: Context) {
-            context.startActivity(Intent(context, EditMyProfileActivity::class.java))
+            context.startActivity(getIntent(context))
         }
+
+        fun getIntent(context: Context) = Intent(context, EditMyProfileActivity::class.java)
     }
 }

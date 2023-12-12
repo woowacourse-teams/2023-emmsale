@@ -5,41 +5,49 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentFeedListBinding
-import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.base.NetworkFragment
+import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.feedList.FeedListViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.feedList.recyclerView.FeedListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FeedListFragment : BaseFragment<FragmentFeedListBinding>() {
-    override val layoutResId: Int = R.layout.fragment_feed_list
-    private val viewModel: FeedListViewModel by viewModels()
+class FeedListFragment : NetworkFragment<FragmentFeedListBinding>(R.layout.fragment_feed_list) {
+
+    override val viewModel: FeedListViewModel by viewModels()
 
     private val feedListAdapter: FeedListAdapter by lazy {
         FeedListAdapter(navigateToFeedDetail = ::navigateToFeedDetail)
     }
 
+    private fun navigateToFeedDetail(feedId: Long) {
+        FeedDetailActivity.startActivity(requireContext(), feedId)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.vm = viewModel
+        setupFeedsRecyclerView()
+
+        observeFeeds()
+    }
+
+    private fun setupFeedsRecyclerView() {
         binding.rvFeedList.adapter = feedListAdapter
-        setUpFeeds()
+        binding.rvFeedList.addItemDecoration(DividerItemDecoration(requireContext()))
+    }
+
+    private fun observeFeeds() {
+        viewModel.feeds.observe(viewLifecycleOwner) {
+            feedListAdapter.submitList(it)
+        }
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.refresh()
-    }
-
-    private fun setUpFeeds() {
-        viewModel.feeds.observe(viewLifecycleOwner) {
-            feedListAdapter.submitList(it.feeds)
-        }
-    }
-
-    private fun navigateToFeedDetail(feedId: Long) {
-        FeedDetailActivity.startActivity(requireContext(), feedId)
     }
 
     companion object {

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.view.View" />
+
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <variable
             name="viewModel"
@@ -56,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="23dp"
-                    android:text="@{viewModel.myProfile.member.name}"
+                    android:text="@{viewModel.profile.name}"
                     android:textSize="17sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/tv_myprofile_hello"
@@ -69,7 +70,7 @@
                     android:layout_height="0dp"
                     android:layout_marginVertical="9dp"
                     android:layout_marginEnd="19dp"
-                    android:text="@{viewModel.myProfile.member.description.isBlank() ? @string/profile_no_description : viewModel.myProfile.member.description }"
+                    android:text="@{viewModel.profile.description.isBlank() ? @string/profile_no_description : viewModel.profile.description }"
                     android:textSize="13sp"
                     app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_member_image"
                     app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
@@ -96,19 +97,18 @@
                     android:layout_marginEnd="22dp"
                     android:contentDescription="@string/profile_memberimagedescription"
                     android:importantForAccessibility="no"
-                    app:imageUrl="@{viewModel.myProfile.member.profileImageUrl}"
+                    app:imageUrl="@{viewModel.profile.profileImageUrl}"
                     app:mask="@{@drawable/img_profile_image_masking}"
                     app:canZoomIn="@{true}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@tools:sample/avatars" />
 
-                <View
+                <com.emmsale.presentation.common.views.HorizontalDivider
                     android:id="@+id/view_myprofile_divider"
                     android:layout_width="0dp"
-                    android:layout_height="0.5dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@color/light_gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cg_myprofile_fields" />
@@ -211,7 +211,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         </androidx.core.widget.NestedScrollView>
 
         <ProgressBar
@@ -219,25 +218,21 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.myProfile.isLoading ? View.VISIBLE : View.GONE}"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tb_myprofile_toolbar" />
 
-        <include
-            layout="@layout/layout_all_error_screen"
+        <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/white"
-            android:clickable="true"
-            android:visibility="@{viewModel.myProfile.isError ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_myprofile_toolbar"
-            bind:viewModel="@{viewModel}"
-            tools:visibility="gone" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.NETWORK_ERROR}"
+            app:onRefresh="@{() -> viewModel.refresh()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -13,7 +13,7 @@
 
         <variable
             name="viewModel"
-            type="com.emmsale.presentation.ui.childCommentList.ChildCommentViewModel" />
+            type="com.emmsale.presentation.ui.childCommentList.ChildCommentsViewModel" />
 
         <variable
             name="onCommentSubmitButtonClick"
@@ -31,7 +31,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.childCommentList.ChildCommentActivity">
+        tools:context=".presentation.ui.childCommentList.ChildCommentsActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_childcomments_toolbar"
@@ -82,7 +82,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:hint="@string/comments_edit_comment_hint"
                     app:onSubmit="@{(content) -> onCommentSubmitButtonClick.invoke(content)}"
-                    app:isSubmitEnabled="@{viewModel.screenUiState != ScreenUiState.LOADING}"
+                    app:isSubmitEnabled="@{viewModel.canSubmitComment}"
                     app:submitButtonLabel="@string/comments_comment_submit_button_label" />
 
                 <com.emmsale.presentation.common.views.SubTextInputWindow
@@ -94,7 +94,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:text="@{viewModel.editingCommentContent}"
                     app:visible="@{viewModel.editingCommentId != null}"
-                    app:isSubmitEnabled="@{viewModel.screenUiState != ScreenUiState.LOADING}"
+                    app:isSubmitEnabled="@{viewModel.canSubmitComment}"
                     app:submitButtonLabel="@string/all_update_button_label"
                     app:cancelButtonLabel="@string/all_cancel"
                     app:onCancel="@{() -> onCommentUpdateCancelButtonClick.invoke()}"

@@ -3,116 +3,153 @@ package com.emmsale.presentation.ui.feedDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearSmoothScroller
 import com.emmsale.R
+import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityFeedDetailBinding
-import com.emmsale.presentation.common.UiEvent
+import com.emmsale.presentation.base.NetworkActivity
+import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
-import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
+import com.emmsale.presentation.ui.childCommentList.ChildCommentsActivity
 import com.emmsale.presentation.ui.feedDetail.FeedDetailViewModel.Companion.KEY_FEED_ID
-import com.emmsale.presentation.ui.feedDetail.recyclerView.CommentsAdapter
-import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedDetailAdapter
+import com.emmsale.presentation.ui.feedDetail.recyclerView.FeedAndCommentsAdapter
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedDetailUiEvent
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FeedDetailActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityFeedDetailBinding.inflate(layoutInflater) }
-
-    private val viewModel: FeedDetailViewModel by viewModels()
+class FeedDetailActivity :
+    NetworkActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
 
     private val highlightCommentId: Long by lazy {
         intent.getLongExtra(KEY_HIGHLIGHT_COMMENT_ID, INVALID_COMMENT_ID)
     }
 
-    private val inputMethodManager: InputMethodManager by lazy {
-        getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-    }
+    override val viewModel: FeedDetailViewModel by viewModels()
+
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
-    private val feedDetailAdapter: FeedDetailAdapter = FeedDetailAdapter(::showProfile)
-    private val commentsAdapter: CommentsAdapter = CommentsAdapter(
-        onCommentClick = { comment ->
-            ChildCommentActivity.startActivity(
-                context = this,
-                feedId = comment.feed.id,
-                parentCommentId = comment.parentCommentId ?: comment.id,
-                highlightCommentId = comment.id,
-            )
-        },
-        onAuthorImageClick = ::showProfile,
+    private val feedAndCommentsAdapter = FeedAndCommentsAdapter(
+        onAuthorImageClick = ::navigateToProfile,
+        onCommentClick = ::navigateToChildComments,
         onCommentMenuClick = ::showCommentMenuDialog,
-    ).apply {
-        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (highlightCommentId == INVALID_COMMENT_ID || viewModel.isAlreadyFirstFetched || itemCount == 0) return
-                val position = viewModel.feedDetail.value.comments
-                    .indexOfFirst { it.comment.id == highlightCommentId } + FEED_DETAIL_COUNT
-                binding.rvFeeddetailFeedAndComments.scrollToPosition(position)
+    )
 
-                viewModel.highlightComment(highlightCommentId)
+    private fun navigateToChildComments(comment: Comment) {
+        ChildCommentsActivity.startActivity(
+            context = this,
+            feedId = comment.feed.id,
+            parentCommentId = comment.parentCommentId ?: comment.id,
+            highlightCommentId = comment.id,
+        )
+    }
 
-                viewModel.isAlreadyFirstFetched = true
-            }
-        })
+    private fun navigateToProfile(authorId: Long) {
+        ProfileActivity.startActivity(this, authorId)
+    }
+
+    private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, comment: Comment) {
+        bottomMenuDialog.resetMenu()
+        if (isWrittenByLoginUser) {
+            bottomMenuDialog.addCommentUpdateButton(comment.id)
+            bottomMenuDialog.addCommentDeleteButton(comment.id)
+        } else {
+            bottomMenuDialog.addCommentReportButton(comment.id)
+        }
+        bottomMenuDialog.show()
+    }
+
+    private fun BottomMenuDialog.addCommentUpdateButton(commentId: Long) {
+        addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
+            viewModel.startEditComment(commentId)
+            binding.stiwCommentUpdate.requestFocusOnEditText()
+            showKeyboard()
+        }
+    }
+
+    private fun BottomMenuDialog.addCommentDeleteButton(commentId: Long) {
+        addMenuItemBelow(context.getString(R.string.all_delete_button_label)) {
+            showCommentDeleteDialog(commentId)
+        }
+    }
+
+    private fun showCommentDeleteDialog(commentId: Long) {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.commentdeletedialog_title),
+            message = getString(R.string.commentdeletedialog_message),
+            positiveButtonLabel = getString(R.string.commentdeletedialog_positive_button_label),
+            negativeButtonLabel = getString(R.string.commentdeletedialog_negative_button_label),
+            onPositiveButtonClick = { viewModel.deleteComment(commentId) },
+        ).show()
+    }
+
+    private fun BottomMenuDialog.addCommentReportButton(commentId: Long) {
+        addMenuItemBelow(
+            context.getString(R.string.all_report_button_label),
+            MenuItemType.IMPORTANT,
+        ) { showCommentReportConfirmDialog(commentId) }
+    }
+
+    private fun showCommentReportConfirmDialog(commentId: Long) {
+        WarningDialog(
+            context = this,
+            title = getString(R.string.all_report_dialog_title),
+            message = getString(R.string.comments_comment_report_dialog_message),
+            positiveButtonLabel = getString(R.string.all_report_dialog_positive_button_label),
+            negativeButtonLabel = getString(R.string.commentdeletedialog_negative_button_label),
+            onPositiveButtonClick = {
+                viewModel.reportComment(commentId)
+            },
+        ).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        setUpDataBinding()
-        setUpToolbar()
-        setUpRecyclerView()
-        setUpUiEvent()
-        setUpCommentEditing()
-        setUpFeedDetail()
+        setupDataBinding()
+        setupToolbar()
+        setupFeedAndCommentsRecyclerView()
+
+        observeFeedDetail()
+        observeUiEvent()
     }
 
-    private fun setUpDataBinding() {
-        binding.lifecycleOwner = this
+    override fun onRestart() {
+        super.onRestart()
+        viewModel.refresh()
+    }
+
+    private fun setupDataBinding() {
         binding.vm = viewModel
-        binding.postComment = ::onCommentSave
-        binding.cancelUpdateComment = ::cancelUpdateComment
-        binding.updateComment = ::updateComment
+        binding.onCommentSubmitButtonClick = {
+            viewModel.postComment(it)
+            hideKeyboard()
+        }
+        binding.onCommentUpdateCancelButtonClick = {
+            viewModel.cancelEditComment()
+            hideKeyboard()
+        }
+        binding.onUpdatedCommentSubmitButtonClick = {
+            val commentId = viewModel.editingCommentId.value
+            if (commentId != null) viewModel.updateComment(commentId, it)
+            hideKeyboard()
+        }
     }
 
-    private fun onCommentSave() {
-        viewModel.saveComment(binding.etCommentsPostComment.text.toString())
-        binding.etCommentsPostComment.text.clear()
-        hideKeyboard()
-    }
-
-    private fun hideKeyboard() {
-        inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
-    }
-
-    private fun cancelUpdateComment() {
-        viewModel.setEditMode(false)
-        hideKeyboard()
-    }
-
-    private fun updateComment() {
-        val commentId = viewModel.editingCommentId.value ?: return
-        val content = binding.etCommentsCommentUpdate.text.toString()
-        viewModel.updateComment(commentId, content)
-        hideKeyboard()
-    }
-
-    private fun setUpToolbar() {
-        binding.tbFeeddetailToolbar.setNavigationOnClickListener { finish() }
+    private fun setupToolbar() {
+        binding.tbFeeddetailToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
         binding.tbFeeddetailToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.more -> showFeedDetailMenuDialog()
@@ -140,11 +177,11 @@ class FeedDetailActivity : AppCompatActivity() {
 
     private fun BottomMenuDialog.addFeedDeleteButton() {
         addMenuItemBelow(context.getString(R.string.all_delete_button_label)) {
-            onFeedDeleteButtonClick()
+            showFeedDeleteConfirmDialog()
         }
     }
 
-    private fun onFeedDeleteButtonClick() {
+    private fun showFeedDeleteConfirmDialog() {
         WarningDialog(
             context = this,
             title = getString(R.string.feeddetaildeletedialog_title),
@@ -164,105 +201,34 @@ class FeedDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpRecyclerView() {
-        val concatAdapterConfig = ConcatAdapter.Config.Builder().build()
-
-        binding.rvFeeddetailFeedAndComments.apply {
-            adapter = ConcatAdapter(
-                concatAdapterConfig,
-                feedDetailAdapter,
-                commentsAdapter,
-            )
+    private fun setupFeedAndCommentsRecyclerView() {
+        binding.rvFeedAndComments.apply {
+            adapter = feedAndCommentsAdapter
             itemAnimator = null
             addItemDecoration(DividerItemDecoration(this@FeedDetailActivity))
         }
     }
 
-    private fun showProfile(authorId: Long) {
-        ProfileActivity.startActivity(this, authorId)
-    }
-
-    private fun showCommentMenuDialog(isWrittenByLoginUser: Boolean, commentId: Long) {
-        bottomMenuDialog.resetMenu()
-        if (isWrittenByLoginUser) {
-            bottomMenuDialog.addCommentUpdateButton(commentId)
-            bottomMenuDialog.addCommentDeleteButton(commentId)
-        } else {
-            bottomMenuDialog.addCommentReportButton(commentId)
-        }
-        bottomMenuDialog.show()
-    }
-
-    private fun BottomMenuDialog.addCommentUpdateButton(commentId: Long) {
-        addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
-            editComment(commentId)
+    private fun observeFeedDetail() {
+        viewModel.feedDetailUiState.observe(this) {
+            val feedAndComments = listOf(it.feedUiState) + it.commentsUiState.commentUiStates
+            feedAndCommentsAdapter.submitList(feedAndComments) {
+                if (highlightCommentId == INVALID_COMMENT_ID || isNotRealFirstFetch()) return@submitList
+                viewModel.highlightComment(highlightCommentId)
+                viewModel.isAlreadyFirstFetched = true
+            }
         }
     }
 
-    private fun BottomMenuDialog.addCommentDeleteButton(commentId: Long) {
-        addMenuItemBelow(context.getString(R.string.all_delete_button_label)) {
-            onCommentDeleteButtonClick(commentId)
-        }
-    }
+    private fun isNotRealFirstFetch(): Boolean =
+        viewModel.isAlreadyFirstFetched || viewModel.commentUiStates.isEmpty()
 
-    private fun onCommentDeleteButtonClick(commentId: Long) {
-        WarningDialog(
-            context = this,
-            title = getString(R.string.commentdeletedialog_title),
-            message = getString(R.string.commentdeletedialog_message),
-            positiveButtonLabel = getString(R.string.commentdeletedialog_positive_button_label),
-            negativeButtonLabel = getString(R.string.commentdeletedialog_negative_button_label),
-            onPositiveButtonClick = { deleteComment(commentId) },
-        ).show()
-    }
-
-    private fun BottomMenuDialog.addCommentReportButton(commentId: Long) {
-        addMenuItemBelow(
-            context.getString(R.string.all_report_button_label),
-            MenuItemType.IMPORTANT,
-        ) { reportComment(commentId) }
-    }
-
-    private fun editComment(commentId: Long) {
-        viewModel.setEditMode(true, commentId)
-        binding.etCommentsCommentUpdate.requestFocus()
-        showKeyboard()
-    }
-
-    private fun deleteComment(commentId: Long) {
-        viewModel.deleteComment(commentId)
-    }
-
-    private fun reportComment(commentId: Long) {
-        val context = this
-        WarningDialog(
-            context = context,
-            title = context.getString(R.string.all_report_dialog_title),
-            message = context.getString(R.string.comments_comment_report_dialog_message),
-            positiveButtonLabel = context.getString(R.string.all_report_dialog_positive_button_label),
-            negativeButtonLabel = context.getString(R.string.commentdeletedialog_negative_button_label),
-            onPositiveButtonClick = {
-                viewModel.reportComment(commentId)
-            },
-        ).show()
-    }
-
-    private fun setUpCommentEditing() {
-        viewModel.editingCommentContent.observe(this) {
-            if (it == null) return@observe
-            binding.etCommentsCommentUpdate.setText(it)
-        }
-    }
-
-    private fun setUpUiEvent() {
+    private fun observeUiEvent() {
         viewModel.uiEvent.observe(this, ::handleUiEvent)
     }
 
-    private fun handleUiEvent(event: UiEvent<FeedDetailUiEvent>) {
-        val content = event.getContentIfNotHandled() ?: return
-        when (content) {
-            FeedDetailUiEvent.None -> {}
-            is FeedDetailUiEvent.UnexpectedError -> showToast(content.errorMessage)
+    private fun handleUiEvent(uiEvent: FeedDetailUiEvent) {
+        when (uiEvent) {
             FeedDetailUiEvent.CommentDeleteFail -> binding.root.showSnackBar(getString(R.string.comments_comments_delete_error_message))
             FeedDetailUiEvent.CommentPostFail -> binding.root.showSnackBar(getString(R.string.comments_comments_posting_error_message))
             FeedDetailUiEvent.CommentReportComplete -> InfoDialog(
@@ -287,8 +253,9 @@ class FeedDetailActivity : AppCompatActivity() {
                     title = getString(R.string.feeddetail_feed_delete_complete_title),
                     message = getString(R.string.feeddetail_feed_delete_complete_message),
                     buttonLabel = getString(R.string.all_okay),
+                    onButtonClick = { finish() },
+                    cancelable = false,
                 ).show()
-                finish()
             }
 
             FeedDetailUiEvent.FeedDeleteFail -> binding.root.showSnackBar(getString(R.string.feeddetail_feed_delete_fail_message))
@@ -298,29 +265,45 @@ class FeedDetailActivity : AppCompatActivity() {
                     title = getString(R.string.feeddetail_deleted_feed_fetch_title),
                     message = getString(R.string.feeddetail_deleted_feed_fetch_message),
                     buttonLabel = getString(R.string.all_okay),
+                    onButtonClick = { finish() },
+                    cancelable = false,
                 ).show()
-                finish()
             }
 
-            FeedDetailUiEvent.CommentPostComplete -> scrollToLastPosition()
+            FeedDetailUiEvent.CommentPostComplete -> {
+                binding.btiwCommentPost.clearText()
+                scrollToLastPosition()
+            }
+
+            is FeedDetailUiEvent.CommentHighlight -> highlightComment(uiEvent.commentId)
         }
     }
 
     private fun scrollToLastPosition() {
-        binding.rvFeeddetailFeedAndComments.smoothScrollToPosition(viewModel.feedDetail.value.comments.size + 1)
+        val commentsCount = viewModel.commentUiStates.size
+        binding.rvFeedAndComments.smoothScrollToPosition(commentsCount)
     }
 
-    private fun setUpFeedDetail() {
-        viewModel.feedDetail.observe(this) {
-            feedDetailAdapter.setFeedDetail(it)
-            commentsAdapter.submitList(it.comments)
+    private fun highlightComment(commentId: Long) {
+        val position = viewModel.commentUiStates
+            .indexOfFirst {
+                it.comment.id == commentId
+            }
+
+        binding.rvFeedAndComments.scrollToPosition(position + 1)
+        lifecycleScope.launch {
+            delay(200L)
+            binding.rvFeedAndComments.layoutManager?.startSmoothScroll(
+                object : LinearSmoothScroller(this@FeedDetailActivity) {
+                    override fun getVerticalSnapPreference(): Int = SNAP_TO_START
+                }.apply { targetPosition = position + 1 },
+            )
         }
     }
 
     companion object {
         private const val KEY_HIGHLIGHT_COMMENT_ID = "KEY_HIGHLIGHT_COMMENT_ID"
         private const val INVALID_COMMENT_ID: Long = -1
-        private const val FEED_DETAIL_COUNT: Int = 1
 
         fun startActivity(
             context: Context,

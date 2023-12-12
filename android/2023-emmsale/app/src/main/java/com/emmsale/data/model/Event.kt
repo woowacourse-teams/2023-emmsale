@@ -3,7 +3,7 @@ package com.emmsale.data.model
 import java.time.LocalDateTime
 
 data class Event(
-    val id: Long,
+    val id: Long = -1,
     val name: String = "",
     val informationUrl: String = "",
     val organization: String? = null,

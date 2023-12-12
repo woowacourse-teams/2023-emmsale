@@ -4,49 +4,56 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
+import com.emmsale.data.model.Event
 import com.emmsale.databinding.FragmentScrappedEventBinding
-import com.emmsale.presentation.base.BaseFragment
+import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.common.ScrollTopListener
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import com.emmsale.presentation.ui.scrappedEventList.recyclerView.ScrappedEventAdapter
-import com.emmsale.presentation.ui.scrappedEventList.uiState.ScrappedEventUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ScrappedEventFragment : BaseFragment<FragmentScrappedEventBinding>() {
-    override val layoutResId: Int = R.layout.fragment_scrapped_event
-    private val viewModel: ScrappedEventViewModel by viewModels()
+class ScrappedEventFragment :
+    NetworkFragment<FragmentScrappedEventBinding>(R.layout.fragment_scrapped_event) {
+
+    override val viewModel: ScrappedEventViewModel by viewModels()
 
     private val scrappedEventsAdapter: ScrappedEventAdapter by lazy {
-        ScrappedEventAdapter(::showEventDetail)
+        ScrappedEventAdapter(::navigateToEventDetail)
+    }
+
+    private fun navigateToEventDetail(scrappedEvent: Event) {
+        EventDetailActivity.startActivity(requireContext(), scrappedEvent.id)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initBinding()
-        setUpScrappedEvents()
+
+        setupDataBinding()
+        setupScrappedEventsRecyclerView()
+
+        observeScrappedEvents()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.refresh()
-    }
-
-    private fun initBinding() {
+    private fun setupDataBinding() {
         binding.vm = viewModel
+    }
+
+    private fun setupScrappedEventsRecyclerView() {
         binding.rvScrappedEvents.adapter = scrappedEventsAdapter
         binding.rvScrappedEvents.addOnScrollListener(
             ScrollTopListener(targetView = binding.fabScrollTop),
         )
     }
 
-    private fun setUpScrappedEvents() {
+    private fun observeScrappedEvents() {
         viewModel.scrappedEvents.observe(viewLifecycleOwner) { scrappedEvents ->
-            scrappedEventsAdapter.submitList(scrappedEvents.list)
+            scrappedEventsAdapter.submitList(scrappedEvents)
         }
     }
 
-    private fun showEventDetail(scrappedEventUiState: ScrappedEventUiState) {
-        EventDetailActivity.startActivity(requireContext(), scrappedEventUiState.event.id)
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
     }
 }

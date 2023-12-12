@@ -6,34 +6,41 @@ import androidx.fragment.app.activityViewModels
 import com.emmsale.R
 import com.emmsale.databinding.FragmentOnboardingFieldBinding
 import com.emmsale.presentation.base.BaseFragment
-import com.emmsale.presentation.common.extension.showToast
 import com.emmsale.presentation.common.views.activityChipOf
 import com.emmsale.presentation.ui.onboarding.uiState.ActivityUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingFieldFragment :
-    BaseFragment<FragmentOnboardingFieldBinding>(),
-    View.OnClickListener {
-    override val layoutResId: Int = R.layout.fragment_onboarding_field
+    BaseFragment<FragmentOnboardingFieldBinding>(R.layout.fragment_onboarding_field) {
+
     val viewModel: OnboardingViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupDataBinding()
+        setupToolbar()
+
+        observeFields()
+    }
+
+    private fun setupDataBinding() {
         binding.viewModel = viewModel
-        initClickListener()
-        setupFields()
+        binding.onNextButtonClick =
+            { (requireActivity() as OnboardingActivity).navigateToNextPage() }
     }
 
-    private fun initClickListener() {
-        binding.btnNext.setOnClickListener(this)
-        binding.btnBack.setOnClickListener(this)
+    private fun setupToolbar() {
+        binding.tbFieldFragment.setNavigationOnClickListener {
+            (requireActivity() as OnboardingActivity).onBackPressedDispatcher.onBackPressed()
+        }
     }
 
-    private fun setupFields() {
-        viewModel.activities.observe(viewLifecycleOwner) { activities ->
+    private fun observeFields() {
+        viewModel.fields.observe(viewLifecycleOwner) { fields ->
             binding.chipgroupFieldTags.removeAllViews()
-            activities.fields.forEach(::addFieldChip)
+            fields.forEach(::addFieldChip)
         }
     }
 
@@ -42,23 +49,10 @@ class OnboardingFieldFragment :
     }
 
     private fun createChip(activity: ActivityUiState) = activityChipOf {
-        text = activity.name
+        text = activity.activity.name
         isChecked = activity.isSelected
         setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked && viewModel.isExceedFieldLimit) {
-                showToast(R.string.onboardingfield_selection_limit_exceed)
-                setChecked(false)
-                return@setOnCheckedChangeListener
-            }
-
-            viewModel.updateSelection(activity.id, isChecked)
-        }
-    }
-
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.btn_next -> (requireActivity() as OnboardingActivity).navigateToNextPage()
-            R.id.btn_back -> (requireActivity() as OnboardingActivity).navigateToPrevPage()
+            viewModel.updateSelection(activity.activity.id, isChecked)
         }
     }
 }

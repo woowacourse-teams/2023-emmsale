@@ -4,17 +4,21 @@ import com.emmsale.data.apiModel.response.CommentTypeNotificationResponse
 import com.emmsale.data.apiModel.response.EventTypeNotificationResponse
 import com.emmsale.data.apiModel.response.NotificationResponse
 import com.emmsale.data.apiModel.response.NotificationResponse.NotificationType
-import com.emmsale.data.model.updatedNotification.ChildCommentNotification
-import com.emmsale.data.model.updatedNotification.InterestEventNotification
-import com.emmsale.data.model.updatedNotification.UpdatedNotification
+import com.emmsale.data.model.Comment
+import com.emmsale.data.model.Event
+import com.emmsale.data.model.Feed
+import com.emmsale.data.model.Member
+import com.emmsale.data.model.notification.ChildCommentNotification
+import com.emmsale.data.model.notification.InterestEventNotification
+import com.emmsale.data.model.notification.Notification
 import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @JvmName("NotificationResponse")
-fun List<NotificationResponse>.toData(): List<UpdatedNotification> = map { it.toData() }
+fun List<NotificationResponse>.toData(): List<Notification> = map { it.toData() }
 
-fun NotificationResponse.toData(): UpdatedNotification = when (notificationType) {
+fun NotificationResponse.toData(): Notification = when (notificationType) {
     NotificationType.EVENT -> {
         val eventNotificationInformation = Json.decodeFromString<EventTypeNotificationResponse>(
             requireNotNull(extraNotificationInformation) { "이벤트 알림에 추가 정보가 없어요" },
@@ -22,10 +26,12 @@ fun NotificationResponse.toData(): UpdatedNotification = when (notificationType)
         InterestEventNotification(
             id = notificationId,
             receiverId = receiverId,
-            eventId = redirectId,
             createdAt = createdAt.toLocalDateTime(),
             isRead = isRead,
-            eventTitle = eventNotificationInformation.eventTitle,
+            event = Event(
+                id = redirectId,
+                name = eventNotificationInformation.eventTitle,
+            ),
         )
     }
 
@@ -40,11 +46,13 @@ fun NotificationResponse.toData(): UpdatedNotification = when (notificationType)
             receiverId = receiverId,
             createdAt = createdAt.toLocalDateTime(),
             isRead = isRead,
-            parentCommentId = commentNotificationInformation.parentId,
-            childCommentId = redirectId,
-            childCommentContent = commentNotificationInformation.content,
-            feedId = commentNotificationInformation.feedId,
-            commentProfileImageUrl = commentNotificationInformation.writerProfileImageUrl,
+            comment = Comment(
+                id = redirectId,
+                content = commentNotificationInformation.content,
+                parentCommentId = commentNotificationInformation.parentId,
+                feed = Feed(id = commentNotificationInformation.feedId),
+                writer = Member(profileImageUrl = commentNotificationInformation.writerProfileImageUrl),
+            ),
         )
     }
 }

@@ -1,22 +1,19 @@
 package com.emmsale.presentation.ui.login
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.data.model.Login
+import com.emmsale.data.model.Token
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.FcmTokenRepository
 import com.emmsale.data.repository.interfaces.LoginRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
-import com.emmsale.presentation.ui.login.uiState.LoginUiState
+import com.emmsale.presentation.base.NetworkViewModel
+import com.emmsale.presentation.common.livedata.SingleLiveEvent
+import com.emmsale.presentation.ui.login.uiState.LoginUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,42 +23,34 @@ class LoginViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val fcmTokenRepository: FcmTokenRepository,
     private val configRepository: ConfigRepository,
-) : ViewModel() {
-    private val _loginState: MutableLiveData<LoginUiState> = MutableLiveData()
-    val loginState: LiveData<LoginUiState> = _loginState
+) : NetworkViewModel() {
 
-    fun login(fcmToken: String, code: String) {
-        changeLoginState(LoginUiState.Loading)
+    private val _uiEvent = SingleLiveEvent<LoginUiEvent>()
+    val uiEvent: LiveData<LoginUiEvent> = _uiEvent
 
-        viewModelScope.launch {
-            when (val result = loginRepository.saveGithubCode(code)) {
-                is Failure, NetworkError -> changeLoginState(LoginUiState.Error)
-                is Success -> saveTokens(result.data, fcmToken)
-                is Unexpected -> throw Throwable(result.error)
-            }
+    fun login(fcmToken: String, code: String): Job = command(
+        command = { loginRepository.saveGithubCode(code) },
+        onSuccess = {
+            saveTokens(it.token, fcmToken)
+            handleLoginComplete(it)
+        },
+        onFailure = { _, _ -> _uiEvent.value = LoginUiEvent.LoginFail },
+        onLoading = { changeToLoadingState() },
+    )
+
+    private fun saveTokens(token: Token, fcmToken: String) {
+        CoroutineScope(Dispatchers.Default).launch {
+            fcmTokenRepository.saveFcmToken(token.uid, fcmToken)
         }
+        tokenRepository.saveToken(token)
     }
 
-    private suspend fun saveTokens(login: Login, fcmToken: String) {
-        joinAll(saveUserToken(login), saveFcmToken(login.token.uid, fcmToken))
-
+    private fun handleLoginComplete(login: Login) {
         if (login.isDoneOnboarding) {
-            changeLoginState(LoginUiState.Login)
+            _uiEvent.value = LoginUiEvent.LoginComplete
             configRepository.saveAutoLoginConfig(true)
         } else {
-            changeLoginState(LoginUiState.Onboarded)
+            _uiEvent.value = LoginUiEvent.JoinComplete
         }
-    }
-
-    private fun saveFcmToken(uid: Long, fcmToken: String): Job = viewModelScope.launch {
-        fcmTokenRepository.saveFcmToken(uid, fcmToken)
-    }
-
-    private fun saveUserToken(login: Login): Job = viewModelScope.launch {
-        tokenRepository.saveToken(login.token)
-    }
-
-    private fun changeLoginState(loginState: LoginUiState) {
-        _loginState.postValue(loginState)
     }
 }

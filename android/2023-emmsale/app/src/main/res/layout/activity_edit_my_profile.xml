@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.view.View" />
 
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
+
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.editMyProfile.EditMyProfileViewModel" />
 
         <variable
-            name="showFieldTags"
+            name="onFieldTagsAddButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="showEducations"
+            name="onEducationAddButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="showClubs"
+            name="onClubAddButtonClick"
             type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="editProfileImage"
+            name="onProfileImageUpdateUiClick"
             type="kotlin.jvm.functions.Function0" />
     </data>
 
@@ -96,10 +97,10 @@
                     tools:ignore="LabelFor"
                     app:layout_constraintEnd_toEndOf="@+id/tv_editmyprofile_name" />
 
-                <com.emmsale.presentation.common.views.VerticalDivider
+                <com.emmsale.presentation.common.views.HorizontalDivider
                     android:id="@+id/verticalDivider"
                     android:layout_width="0dp"
-                    android:layout_height="0.5dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -134,7 +135,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="16dp"
                     android:contentDescription="@string/editmyprofile_field_add_button"
-                    android:onClick="@{() -> showFieldTags.invoke()}"
+                    android:onClick="@{() -> onFieldTagsAddButtonClick.invoke()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_editmyprofile_field_label"
                     app:srcCompat="@drawable/img_editmyprofile_activity_add_button" />
@@ -157,7 +158,7 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="22dp"
                     android:contentDescription="@string/editmyprofile_member_image"
-                    android:onClick="@{() -> editProfileImage.invoke()}"
+                    android:onClick="@{() -> onProfileImageUpdateUiClick.invoke()}"
                     app:imageUrl="@{viewModel.profile.member.profileImageUrl}"
                     app:mask="@{@drawable/img_profile_image_masking}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -172,7 +173,7 @@
                     app:layout_constraintEnd_toEndOf="@id/iv_editmyprofile_member_image"
                     app:layout_constraintBottom_toBottomOf="@id/iv_editmyprofile_member_image"
                     android:elevation="3dp"
-                    android:onClick="@{() -> editProfileImage.invoke()}"
+                    android:onClick="@{() -> onProfileImageUpdateUiClick.invoke()}"
                     android:contentDescription="@string/editmyprofile_profile_image_edit_button_image_description" />
 
                 <ImageView
@@ -201,10 +202,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_editmyprofile_choose_field_message"
                     tools:listitem="@layout/item_editmyprofile_field" />
 
-                <com.emmsale.presentation.common.views.VerticalDivider
+                <com.emmsale.presentation.common.views.HorizontalDivider
                     android:id="@+id/verticalDivider2"
                     android:layout_width="0dp"
-                    android:layout_height="0.5dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -306,7 +307,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="39dp"
                     android:background="@drawable/bg_editmyprofile_activity_add_button"
-                    android:onClick="@{() -> showClubs.invoke()}"
+                    android:onClick="@{() -> onClubAddButtonClick.invoke()}"
                     android:text="@string/editmyprofile_add"
                     android:textSize="11sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -319,7 +320,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/bg_editmyprofile_activity_add_button"
-                    android:onClick="@{() -> showEducations.invoke()}"
+                    android:onClick="@{() -> onEducationAddButtonClick.invoke()}"
                     android:text="@string/editmyprofile_add"
                     android:textSize="11sp"
                     app:layout_constraintStart_toStartOf="@+id/rv_editmyprofile_educations"
@@ -344,25 +345,21 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.profile.isLoading ? View.VISIBLE : View.GONE}"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tb_editmyprofile_toolbar" />
 
-        <include
-            layout="@layout/layout_all_error_screen"
+        <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/white"
-            android:clickable="true"
-            android:visibility="@{viewModel.profile.isError ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.NETWORK_ERROR}"
             app:layout_constraintTop_toBottomOf="@id/tb_editmyprofile_toolbar"
-            bind:viewModel="@{viewModel}"
-            tools:visibility="gone" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:onRefresh="@{() -> viewModel.refresh()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

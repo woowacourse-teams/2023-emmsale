@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,6 +8,8 @@
         <import type="android.view.View" />
 
         <import type="com.emmsale.presentation.common.FetchResult" />
+
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <variable
             name="vm"
@@ -20,94 +21,108 @@
         android:layout_height="match_parent"
         tools:background="@color/white">
 
-        <TextView
-            android:id="@+id/tv_scraps_prefix"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="@dimen/event_count_text_margin_top"
-            android:text="@string/event_count_prefix"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            app:onRefresh1="@{() -> vm.refresh()}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:swipeRefreshColor="@{@color/primary_color}">
 
-        <TextView
-            android:id="@+id/tv_events_count"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="6dp"
-            android:gravity="center"
-            android:text="@{@string/event_count_format(vm.scrappedEvents.list.size)}"
-            android:textColor="@color/primary_color"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_scraps_prefix"
-            app:layout_constraintStart_toEndOf="@+id/tv_scraps_prefix"
-            app:layout_constraintTop_toTopOf="@+id/tv_scraps_prefix"
-            tools:text="58" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_scrapped_events"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="6dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_events_count"
-            app:spanCount="@integer/event_column_size"
-            tools:background="@drawable/bg_event_recyclerview"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_conference" />
+                <TextView
+                    android:id="@+id/tv_scraps_prefix"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="@dimen/event_count_text_margin_top"
+                    android:text="@string/event_count_prefix"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            layout="@layout/layout_all_error_screen"
-            android:background="@color/white"
-            android:clickable="true"
-            app:visible="@{vm.scrappedEvents.fetchResult == FetchResult.ERROR}"
-            bind:viewModel="@{vm}"
-            tools:visibility="gone" />
+                <TextView
+                    android:id="@+id/tv_events_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="6dp"
+                    android:gravity="center"
+                    android:text="@{@string/event_count_format(vm.scrappedEvents.size)}"
+                    android:textColor="@color/primary_color"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_scraps_prefix"
+                    app:layout_constraintStart_toEndOf="@+id/tv_scraps_prefix"
+                    app:layout_constraintTop_toTopOf="@+id/tv_scraps_prefix"
+                    tools:text="58" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_scroll_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:src="@drawable/ic_all_arrow_up"
-            android:visibility="gone"
-            app:backgroundTint="@color/primary_color"
-            app:borderWidth="3dp"
-            app:fabCustomSize="48dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:maxImageSize="16dp"
-            app:tint="@color/white"
-            tools:visibility="visible" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_scrapped_events"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="6dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_events_count"
+                    app:spanCount="@integer/event_column_size"
+                    tools:background="@drawable/bg_event_recyclerview"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/item_conference" />
 
-        <com.emmsale.presentation.common.views.NoContentView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:description="@string/scrappedevent_no_content_view_title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:noContentImageResId="@drawable/ic_no_result1"
-            app:title="@string/scrappedevent_no_content_view_desc"
-            app:visible="@{vm.scrappedEvents.list.empty &amp;&amp; vm.scrappedEvents.fetchResult == FetchResult.SUCCESS}" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_scroll_top"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/ic_all_arrow_up"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/primary_color"
+                    app:borderWidth="3dp"
+                    app:fabCustomSize="48dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:maxImageSize="16dp"
+                    app:tint="@color/white"
+                    tools:visibility="visible" />
 
-        <ProgressBar
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.scrappedEvents.fetchResult == FetchResult.LOADING}"
-            tools:visibility="gone" />
+                <com.emmsale.presentation.common.views.NoContentView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:description="@string/scrappedevent_no_content_view_title"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:noContentImageResId="@drawable/ic_no_result1"
+                    app:title="@string/scrappedevent_no_content_view_desc"
+                    app:visible="@{vm.scrappedEvents.empty &amp;&amp; vm.screenUiState == ScreenUiState.NONE}" />
 
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
+                    tools:visibility="gone" />
+
+                <com.emmsale.presentation.common.views.NetworkErrorView
+                    android:id="@+id/network_error_view"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:onRefresh="@{() -> vm.refresh()}"
+                    app:visible="@{vm.screenUiState == ScreenUiState.NETWORK_ERROR}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

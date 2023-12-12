@@ -5,9 +5,15 @@
 
     <data>
 
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
+
         <variable
             name="viewModel"
             type="com.emmsale.presentation.ui.login.LoginViewModel" />
+
+        <variable
+            name="onLoginButtonClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,6 +41,7 @@
             android:layout_marginHorizontal="40dp"
             android:layout_marginBottom="58dp"
             android:background="@drawable/bg_login_github"
+            android:onClick="@{() -> onLoginButtonClick.invoke()}"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -63,7 +70,7 @@
             android:id="@+id/pb_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

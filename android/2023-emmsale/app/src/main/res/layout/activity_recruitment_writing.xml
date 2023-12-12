@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
+
+        <variable
+            name="vm"
+            type="com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.recruitmentWriting.RecruitmentWritingActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            android:layout_marginEnd="7dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_all_back"
+            app:title="@string/recruitmentpostwriting_appbar_title_text" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toBottomOf="@id/tb_toolbar" />
+
+        <EditText
+            android:id="@+id/et_recruitmentwriting"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="17dp"
+            android:text="@={vm.content}"
+            android:background="@null"
+            android:gravity="start"
+            android:hint="@string/recruitmentpostwriting_hint_message"
+            android:inputType="textMultiLine"
+            android:maxLength="250"
+            android:textAppearance="@style/KerdyTextStyleBlackRegular13"
+            android:textColorHint="@color/gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_toolbar" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tb_toolbar" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

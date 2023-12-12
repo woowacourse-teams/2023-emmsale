@@ -14,4 +14,6 @@ data class Feed(
     val updatedAt: LocalDateTime = LocalDateTime.MAX,
 ) {
     val titleImageUrl = imageUrls.firstOrNull()
+
+    val isUpdated = createdAt != updatedAt
 }

@@ -8,22 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.emmsale.databinding.DialogRecruitmentpostdetailSendMessageBinding
+import com.emmsale.databinding.DialogRecruitmentdetailSendMessageBinding
 
 class SendMessageDialog : DialogFragment() {
 
-    private var _binding: DialogRecruitmentpostdetailSendMessageBinding? = null
+    private var _binding: DialogRecruitmentdetailSendMessageBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("쪽지 보내기 다이얼로그가 보이지 않을 때 바인딩 객체에 접근했습니다.")
 
-    private val viewModel: RecruitmentPostDetailViewModel by activityViewModels()
+    private val viewModel: RecruitmentDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = DialogRecruitmentpostdetailSendMessageBinding.inflate(inflater, container, false)
+        _binding = DialogRecruitmentdetailSendMessageBinding.inflate(inflater, container, false)
         setupWindow()
         return binding.root
     }
@@ -40,17 +40,12 @@ class SendMessageDialog : DialogFragment() {
     private fun setupDataBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
-        binding.onSendButtonClick = ::onSendButtonClick
-        binding.onCancelButtonClick = ::onCancelButtonClick
+        binding.onSendButtonClick = { viewModel.sendMessage(it) }
+        binding.onCancelButtonClick = { dismiss() }
     }
 
-    private fun onSendButtonClick(message: String) {
-        viewModel.sendMessage(message)
+    fun clearText() {
         binding.etSendmessagedialogMessage.text.clear()
-    }
-
-    private fun onCancelButtonClick() {
-        dismiss()
     }
 
     override fun onDestroyView() {

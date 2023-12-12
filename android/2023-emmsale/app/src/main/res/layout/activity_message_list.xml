@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.common.FetchResult" />
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <variable
             name="vm"
@@ -31,11 +31,10 @@
             app:titleTextAppearance="@style/ToolbarTitleFontStyle"
             tools:title="김커디" />
 
-        <View
+        <com.emmsale.presentation.common.views.HorizontalDivider
             android:id="@+id/divider"
             android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:background="@color/light_gray"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_message_list" />
@@ -46,10 +45,10 @@
             android:layout_height="0dp"
             android:clipToPadding="false"
             android:paddingHorizontal="17dp"
-            android:paddingBottom="12dp"
+            android:paddingBottom="4dp"
             android:scrollbars="none"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/cl_message_input"
+            app:layout_constraintBottom_toTopOf="@+id/btiw_send_message"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider"
@@ -68,7 +67,7 @@
             android:paddingStart="8dp"
             android:paddingEnd="20dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/cl_message_input"
+            app:layout_constraintBottom_toTopOf="@id/btiw_send_message"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible">
@@ -124,6 +123,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.emmsale.presentation.common.views.BasicTextInputWindow
+            android:id="@+id/btiw_send_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:hint="@string/messagelist_message_send_hint"
+            app:submitButtonLabel="@string/messagelist_send_message"
+            app:isSubmitEnabled="@{vm.canSendMessage}"
+            app:onSubmit="@{(message) -> vm.sendMessage(message)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <com.emmsale.presentation.common.views.NoContentView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -134,54 +145,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:noContentImageResId="@drawable/ic_no_result3"
             app:title="@string/messagelist_no_content_view_title"
-            app:visible="@{vm.messages.messages.empty &amp;&amp; vm.messages.fetchResult == FetchResult.SUCCESS}" />
+            app:visible="@{vm.messages.empty &amp;&amp; vm.screenUiState == ScreenUiState.NONE}" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_message_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="17dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_messagelist_message_input"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <EditText
-                android:id="@+id/et_message_input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="19dp"
-                android:background="@null"
-                android:hint="@string/messagelist_message_send_hint"
-                android:importantForAutofill="no"
-                android:maxHeight="30dp"
-                android:maxLength="255"
-                android:maxLines="2"
-                android:paddingVertical="16dp"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_send_message"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/btn_send_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="19dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="@{vm.messages.fetchResult != FetchResult.LOADING}"
-                android:onClick="@{() -> vm.sendMessage(etMessageInput.getText().toString())}"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="8dp"
-                android:text="@string/messagelist_send_message"
-                android:textColor="@color/primary_color"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

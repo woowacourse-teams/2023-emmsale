@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
+
+        <variable
+            name="viewModel"
+            type="com.emmsale.presentation.ui.blockMemberList.BlockedMembersViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.setting.block.MemberBlockActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_member_block"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_member_block"
+            app:title="차단 목록"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/ToolbarTitleFontStyle" />
+
+        <TextView
+            android:id="@+id/tv_block_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/memberblock_block_description"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_member_block" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_blocked_members"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_block_desc"
+            tools:listitem="@layout/item_block_member" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.LOADING}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+        <com.emmsale.presentation.common.views.NetworkErrorView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:visible="@{viewModel.screenUiState == ScreenUiState.NETWORK_ERROR}"
+            app:layout_constraintTop_toBottomOf="@id/tb_member_block"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:onRefresh="@{() -> viewModel.refresh()}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

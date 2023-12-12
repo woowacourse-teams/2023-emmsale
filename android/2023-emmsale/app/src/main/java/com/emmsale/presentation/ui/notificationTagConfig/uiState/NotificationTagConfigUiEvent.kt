@@ -1,5 +1,6 @@
 package com.emmsale.presentation.ui.notificationTagConfig.uiState
 
-enum class NotificationTagConfigUiEvent {
-    UPDATE_SUCCESS, UPDATE_FAIL
+sealed interface NotificationTagConfigUiEvent {
+    object UpdateComplete : NotificationTagConfigUiEvent
+    object UpdateFail : NotificationTagConfigUiEvent
 }

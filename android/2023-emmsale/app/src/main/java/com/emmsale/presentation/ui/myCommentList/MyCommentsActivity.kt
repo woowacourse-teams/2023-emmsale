@@ -4,97 +4,69 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.R
+import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityMyCommentsBinding
-import com.emmsale.presentation.common.extension.showSnackBar
+import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
-import com.emmsale.presentation.ui.childCommentList.ChildCommentActivity
-import com.emmsale.presentation.ui.login.LoginActivity
+import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
 import com.emmsale.presentation.ui.myCommentList.recyclerView.MyCommentsAdapter
-import com.emmsale.presentation.ui.myCommentList.uiState.MyCommentsUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyCommentsActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityMyCommentsBinding.inflate(layoutInflater) }
+class MyCommentsActivity :
+    NetworkActivity<ActivityMyCommentsBinding>(R.layout.activity_my_comments) {
 
-    private val viewModel: MyCommentsViewModel by viewModels()
+    override val viewModel: MyCommentsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        initDataBinding()
-        initToolbar()
-        initMyCommentsRecyclerView()
-        setupUiLogic()
+        setupDataBinding()
+        setupToolbar()
+        setupMyCommentsRecyclerView()
+
+        observeComments()
     }
 
-    fun initDataBinding() {
+    private fun setupDataBinding() {
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
     }
 
-    private fun initToolbar() {
-        binding.tvMycommentsToolbar.setNavigationOnClickListener { finish() }
+    private fun setupToolbar() {
+        binding.tbMycommentsToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
-    private fun initMyCommentsRecyclerView() {
+    private fun setupMyCommentsRecyclerView() {
         binding.rvMycommentsMycomments.apply {
-            adapter = MyCommentsAdapter(::navigateToChildComments)
+            adapter = MyCommentsAdapter(::navigateToFeedDetail)
             itemAnimator = null
             addItemDecoration(DividerItemDecoration(this@MyCommentsActivity))
         }
     }
 
-    private fun navigateToChildComments(eventId: Long, parentCommentId: Long, commentId: Long) {
-        ChildCommentActivity.startActivity(
+    private fun navigateToFeedDetail(feedId: Long, commentId: Long) {
+        FeedDetailActivity.startActivity(
             context = this,
-            feedId = eventId,
-            parentCommentId = parentCommentId,
+            feedId = feedId,
             highlightCommentId = commentId,
-            fromPostDetail = false,
         )
     }
 
-    private fun setupUiLogic() {
-        setupLoginUiLogic()
-        setupCommentsUiLogic()
-    }
-
-    private fun setupLoginUiLogic() {
-        viewModel.isLogin.observe(this) {
-            handleNotLogin(it)
-        }
-    }
-
-    private fun handleNotLogin(isLogin: Boolean) {
-        if (!isLogin) {
-            LoginActivity.startActivity(this)
-            finish()
-        }
-    }
-
-    private fun setupCommentsUiLogic() {
+    private fun observeComments() {
         viewModel.comments.observe(this) {
-            handleErrors(it)
             handleComments(it)
         }
     }
 
-    private fun handleErrors(comments: MyCommentsUiState) {
-        handleFetchingError(comments)
+    private fun handleComments(comments: List<Comment>) {
+        (binding.rvMycommentsMycomments.adapter as MyCommentsAdapter).submitList(comments)
     }
 
-    private fun handleFetchingError(comments: MyCommentsUiState) {
-        if (comments.isError) {
-            binding.root.showSnackBar(getString(R.string.comments_comments_fetching_error_message))
-        }
-    }
-
-    private fun handleComments(comments: MyCommentsUiState) {
-        (binding.rvMycommentsMycomments.adapter as MyCommentsAdapter).submitList(comments.comments)
+    override fun onRestart() {
+        super.onRestart()
+        viewModel.refresh()
     }
 
     companion object {

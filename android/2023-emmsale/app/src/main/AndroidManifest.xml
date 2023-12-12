@@ -40,15 +40,17 @@
         </activity>
         <activity android:name=".presentation.ui.myRecruitmentList.MyRecruitmentActivity" />
         <activity android:name=".presentation.ui.notificationTagConfig.NotificationTagConfigActivity" />
+        <activity android:name=".presentation.ui.notificationList.NotificationsActivity" />
         <activity android:name=".presentation.ui.myCommentList.MyCommentsActivity" />
-        <activity android:name=".presentation.ui.blockMemberList.MemberBlockActivity" />
+        <activity android:name=".presentation.ui.blockMemberList.BlockedMembersActivity" />
         <activity android:name=".presentation.ui.notificationConfig.NotificationConfigActivity" />
-        <activity android:name=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity" />
-        <activity android:name=".presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity" />
+        <activity
+            android:name=".presentation.ui.recruitmentWriting.RecruitmentWritingActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".presentation.ui.recruitmentDetail.RecruitmentDetailActivity" />
         <activity android:name=".presentation.ui.editMyProfile.EditMyProfileActivity" />
         <activity android:name=".presentation.ui.profile.ProfileActivity" />
-        <activity android:name=".presentation.ui.notificationPageList.NotificationBoxActivity" />
-        <activity android:name=".presentation.ui.childCommentList.ChildCommentActivity" />
+        <activity android:name=".presentation.ui.childCommentList.ChildCommentsActivity" />
         <activity android:name=".presentation.ui.useTerm.UseTermWebViewActivity" />
         <activity android:name=".presentation.ui.conferenceFilter.ConferenceFilterActivity" />
         <activity android:name=".presentation.ui.competitionFilter.CompetitionFilterActivity" />

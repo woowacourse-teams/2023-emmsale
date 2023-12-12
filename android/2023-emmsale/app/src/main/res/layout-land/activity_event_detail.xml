@@ -1,6 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -13,7 +12,7 @@
 
         <import type="kotlin.Unit" />
 
-        <import type="com.emmsale.presentation.common.FetchResult" />
+        <import type="com.emmsale.presentation.common.ScreenUiState" />
 
         <import type="com.emmsale.data.model.EventProgressStatus" />
 
@@ -52,7 +51,7 @@
             android:id="@+id/tb_eventdetail"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            app:title="@{vm.eventDetail.eventDetail.name}"
+            app:title="@{vm.event.name}"
             app:titleTextAppearance="@style/event_detail_toolbar_text_appearance"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -81,10 +80,10 @@
                     android:layout_marginStart="17dp"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    app:eventApplyingStatus="@{vm.eventDetail.eventDetail.applicationStatus}"
+                    app:eventApplyingStatus="@{vm.event.applicationStatus}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:visible="@{!(vm.eventDetail.eventDetail.progressStatus instanceof EventProgressStatus.Ended)}"
+                    app:visible="@{!(vm.event.progressStatus instanceof EventProgressStatus.Ended)}"
                     tools:text="종료"
                     tools:textColor="@color/primary_color" />
 
@@ -97,7 +96,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/tv_application_status"
                     app:layout_constraintStart_toEndOf="@+id/tv_application_status"
                     app:layout_constraintTop_toTopOf="@+id/tv_application_status"
-                    app:visible="@{!(vm.eventDetail.eventDetail.progressStatus instanceof EventProgressStatus.Ended)}" />
+                    app:visible="@{!(vm.event.progressStatus instanceof EventProgressStatus.Ended)}" />
 
                 <TextView
                     android:id="@+id/tv_progress_status"
@@ -106,7 +105,7 @@
                     android:layout_marginStart="6dp"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    app:eventProgressStatus="@{vm.eventDetail.eventDetail.progressStatus}"
+                    app:eventProgressStatus="@{vm.event.progressStatus}"
                     app:layout_constraintStart_toEndOf="@+id/divider_event_status"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_goneMarginStart="17dp"
@@ -120,7 +119,7 @@
                     android:layout_marginHorizontal="17dp"
                     android:layout_marginTop="6dp"
                     android:fontFamily="@font/nanum_square_regular"
-                    android:text="@{vm.eventDetail.eventDetail.organization}"
+                    android:text="@{vm.event.organization}"
                     android:textColor="@color/dark_gray"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -134,7 +133,7 @@
                     android:layout_height="0dp"
                     android:layout_marginHorizontal="17dp"
                     android:layout_marginTop="10dp"
-                    app:imageUrl="@{vm.eventDetail.eventDetail.posterImageUrl}"
+                    app:imageUrl="@{vm.event.posterImageUrl}"
                     app:layout_constraintDimensionRatio="400:180"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="17dp"
                     android:layout_marginTop="7dp"
-                    app:eventChips="@{vm.eventDetail.eventDetail.tags}"
+                    app:eventChips="@{vm.event.tags}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_eventdetail_poster" />
@@ -166,11 +165,11 @@
             android:layout_marginBottom="12dp"
             android:background="@drawable/bg_all_two_state_button"
             android:fontFamily="@font/nanum_square_bold"
-            android:onClick="@{_ -> navigateToUrl.invoke(vm.eventDetail.eventDetail.informationUrl)}"
+            android:onClick="@{_ -> navigateToUrl.invoke(vm.event.informationUrl)}"
             android:stateListAnimator="@null"
             android:text="@string/eventinformation_navigate_website"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_eventdetail_scrap"
             app:layout_constraintStart_toStartOf="parent" />
@@ -181,7 +180,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:clickable="true"
-            android:onClick="@{()->vm.handleEventScrap()}"
+            android:onClick="@{() -> vm.toggleIsScrapped()}"
             android:padding="6dp"
             android:src="@{vm.isScraped ? @drawable/ic_all_scrap_checked : @drawable/ic_all_scrap_unchecked}"
             app:layout_constraintBottom_toTopOf="@+id/tv_eventdetail_scrap"
@@ -239,13 +238,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:onClick="@{()->navigateToWritingPost.invoke()}"
             android:src="@drawable/ic_recruitment_pencil"
-            android:visibility="@{vm.currentScreen == Screen.INFORMATION ? View.GONE : View.VISIBLE  }" />
+            app:visible="@{vm.currentScreen != Screen.INFORMATION}" />
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{vm.eventDetail.fetchResult == FetchResult.LOADING ? View.VISIBLE : View.GONE}"
+            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -253,14 +252,11 @@
             tools:visibility="gone"
             android:id="@+id/progressBar3" />
 
-        <include
-            layout="@layout/layout_all_error_screen"
+        <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
-            android:clickable="true"
-            android:visibility="@{vm.eventDetail.fetchResult == FetchResult.ERROR ? View.VISIBLE : View.GONE}"
-            bind:viewModel="@{vm}"
-            tools:visibility="gone" />
+            app:onRefresh="@{() -> vm.refresh()}"
+            app:visible="@{vm.screenUiState == ScreenUiState.NETWORK_ERROR}" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
