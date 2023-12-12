@@ -16,7 +16,7 @@ import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
-class RecruitmentPostDetailViewModel @Inject constructor(
+class RecruitmentDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val recruitmentRepository: RecruitmentRepository,
     private val messageRoomRepository: MessageRoomRepository,

@@ -17,7 +17,7 @@ import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailUiEvent
 import com.emmsale.presentation.ui.feedWriting.FeedWritingActivity
 import com.emmsale.presentation.ui.main.MainActivity
-import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity
+import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentWritingActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -126,7 +126,7 @@ class EventDetailActivity :
     }
 
     private fun navigateToRecruitmentWriting() {
-        startActivity(RecruitmentPostWritingActivity.getPostModeIntent(this, viewModel.eventId))
+        startActivity(RecruitmentWritingActivity.getPostModeIntent(this, viewModel.eventId))
     }
 
     companion object {

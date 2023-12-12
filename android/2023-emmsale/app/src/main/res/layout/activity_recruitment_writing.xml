@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity">
+        tools:context=".presentation.ui.recruitmentWriting.RecruitmentWritingActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_toolbar"

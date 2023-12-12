@@ -7,7 +7,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.emmsale.R
-import com.emmsale.databinding.ActivityRecruitmentPostDetailBinding
+import com.emmsale.databinding.ActivityRecruitmentDetailBinding
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.InfoDialog
@@ -16,17 +16,17 @@ import com.emmsale.presentation.common.views.bottomMenuDialog.BottomMenuDialog
 import com.emmsale.presentation.common.views.bottomMenuDialog.MenuItemType
 import com.emmsale.presentation.ui.messageList.MessageListActivity
 import com.emmsale.presentation.ui.profile.ProfileActivity
-import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailViewModel.Companion.EVENT_ID_KEY
-import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailViewModel.Companion.RECRUITMENT_ID_KEY
+import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentDetailViewModel.Companion.EVENT_ID_KEY
+import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentDetailViewModel.Companion.RECRUITMENT_ID_KEY
 import com.emmsale.presentation.ui.recruitmentDetail.uiState.RecruitmentPostDetailUiEvent
-import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingActivity
+import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentWritingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RecruitmentPostDetailActivity :
-    NetworkActivity<ActivityRecruitmentPostDetailBinding>(R.layout.activity_recruitment_post_detail) {
+class RecruitmentDetailActivity :
+    NetworkActivity<ActivityRecruitmentDetailBinding>(R.layout.activity_recruitment_detail) {
 
-    override val viewModel: RecruitmentPostDetailViewModel by viewModels()
+    override val viewModel: RecruitmentDetailViewModel by viewModels()
 
     private val postEditorDialog: BottomMenuDialog by lazy {
         BottomMenuDialog(this).apply {
@@ -53,7 +53,7 @@ class RecruitmentPostDetailActivity :
     }
 
     private fun navigateToEditPage() {
-        val intent = RecruitmentPostWritingActivity.getEditModeIntent(
+        val intent = RecruitmentWritingActivity.getEditModeIntent(
             context = this,
             eventId = viewModel.eventId,
             recruitmentId = viewModel.recruitmentId,
@@ -176,7 +176,7 @@ class RecruitmentPostDetailActivity :
             eventId: Long,
             recruitmentId: Long,
         ) {
-            Intent(context, RecruitmentPostDetailActivity::class.java)
+            Intent(context, RecruitmentDetailActivity::class.java)
                 .putExtra(EVENT_ID_KEY, eventId)
                 .putExtra(RECRUITMENT_ID_KEY, recruitmentId)
                 .run { context.startActivity(this) }

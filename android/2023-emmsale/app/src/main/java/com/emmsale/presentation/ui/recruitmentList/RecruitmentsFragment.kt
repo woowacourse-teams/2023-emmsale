@@ -12,7 +12,7 @@ import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDeleg
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
-import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
+import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentDetailActivity
 import com.emmsale.presentation.ui.recruitmentList.RecruitmentsViewModel.Companion.EVENT_ID_KEY
 import com.emmsale.presentation.ui.recruitmentList.recyclerView.EventRecruitmentAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +31,7 @@ class RecruitmentsFragment :
     private lateinit var eventDetailActivity: EventDetailActivity
 
     private fun navigateToRecruitmentDetail(recruitment: Recruitment) {
-        RecruitmentPostDetailActivity.startActivity(
+        RecruitmentDetailActivity.startActivity(
             context = requireContext(),
             eventId = viewModel.eventId,
             recruitmentId = recruitment.id,

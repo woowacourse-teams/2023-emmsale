@@ -9,7 +9,7 @@
 
         <variable
             name="vm"
-            type="com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailViewModel" />
+            type="com.emmsale.presentation.ui.recruitmentDetail.RecruitmentDetailViewModel" />
 
         <variable
             name="onSendButtonClick"

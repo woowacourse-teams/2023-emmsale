@@ -6,11 +6,11 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import com.emmsale.R
-import com.emmsale.databinding.ActivityRecruitmentPostWritingBinding
+import com.emmsale.databinding.ActivityRecruitmentWritingBinding
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog
-import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentPostDetailActivity
+import com.emmsale.presentation.ui.recruitmentDetail.RecruitmentDetailActivity
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.EDIT
 import com.emmsale.presentation.ui.recruitmentList.uiState.WritingModeUiState.POST
 import com.emmsale.presentation.ui.recruitmentWriting.RecruitmentPostWritingViewModel.Companion.EVENT_ID_KEY
@@ -20,8 +20,8 @@ import com.emmsale.presentation.ui.recruitmentWriting.uiState.RecruitmentPostWri
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RecruitmentPostWritingActivity :
-    NetworkActivity<ActivityRecruitmentPostWritingBinding>(R.layout.activity_recruitment_post_writing) {
+class RecruitmentWritingActivity :
+    NetworkActivity<ActivityRecruitmentWritingBinding>(R.layout.activity_recruitment_writing) {
 
     override val viewModel: RecruitmentPostWritingViewModel by viewModels()
 
@@ -103,7 +103,7 @@ class RecruitmentPostWritingActivity :
 
             RecruitmentPostWritingUiEvent.EditFail -> binding.root.showSnackBar(R.string.recruitmentpostwriting_edit_fail_message)
             is RecruitmentPostWritingUiEvent.PostComplete -> {
-                RecruitmentPostDetailActivity.startActivity(
+                RecruitmentDetailActivity.startActivity(
                     context = this,
                     eventId = viewModel.eventId,
                     recruitmentId = uiEvent.recruitmentId,
@@ -117,7 +117,7 @@ class RecruitmentPostWritingActivity :
 
     companion object {
         fun getPostModeIntent(context: Context, eventId: Long): Intent {
-            val intent = Intent(context, RecruitmentPostWritingActivity::class.java)
+            val intent = Intent(context, RecruitmentWritingActivity::class.java)
             intent.putExtra(EVENT_ID_KEY, eventId)
             return intent
         }
@@ -128,7 +128,7 @@ class RecruitmentPostWritingActivity :
             recruitmentId: Long,
             recruitmentContent: String,
         ): Intent {
-            val intent = Intent(context, RecruitmentPostWritingActivity::class.java)
+            val intent = Intent(context, RecruitmentWritingActivity::class.java)
             intent.putExtra(EVENT_ID_KEY, eventId)
             intent.putExtra(RECRUITMENT_ID_KEY, recruitmentId)
             intent.putExtra(RECRUITMENT_CONTENT_KEY, recruitmentContent)
