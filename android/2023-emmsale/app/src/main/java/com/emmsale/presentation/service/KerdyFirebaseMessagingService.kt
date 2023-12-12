@@ -71,28 +71,19 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
         when (message.data["notificationType"]?.uppercase()) {
             COMMENT_NOTIFICATION_TYPE -> {
                 if (config.isCommentNotificationReceive) {
-                    showCommentNotification(
-                        message,
-                        isUpdateNeeded,
-                    )
+                    showCommentNotification(message, isUpdateNeeded)
                 }
             }
 
             EVENT_NOTIFICATION_TYPE -> {
                 if (config.isInterestEventNotificationReceive) {
-                    showInterestEventNotification(
-                        message,
-                        isUpdateNeeded,
-                    )
+                    showInterestEventNotification(message, isUpdateNeeded)
                 }
             }
 
             MESSAGE_NOTIFICATION_TYPE -> {
                 if (config.isMessageNotificationReceive) {
-                    showMessageNotification(
-                        message,
-                        isUpdateNeeded,
-                    )
+                    showMessageNotification(message, isUpdateNeeded)
                 }
             }
         }
