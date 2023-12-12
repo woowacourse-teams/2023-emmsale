@@ -224,8 +224,6 @@ class FeedDetailViewModel @Inject constructor(
     )
 
     fun highlightComment(commentId: Long) {
-        val comment = commentUiStates.find { it.comment.id == commentId } ?: return
-        if (comment.isHighlight) return
         _feedDetailUiState.value = _feedDetailUiState.value.highlightComment(commentId)
         _uiEvent.value = FeedDetailUiEvent.CommentHighlight(commentId)
     }
