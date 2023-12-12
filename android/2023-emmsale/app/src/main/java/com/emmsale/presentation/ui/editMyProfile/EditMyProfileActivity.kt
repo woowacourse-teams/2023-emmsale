@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
@@ -75,6 +76,7 @@ class EditMyProfileActivity :
         setContentView(binding.root)
 
         setupDataBinding()
+        setupBackPressedDispatcher()
         setupToolbar()
         setupDescriptionEditText()
         setupActivitiesRecyclerViews()
@@ -124,6 +126,18 @@ class EditMyProfileActivity :
             title = getString(R.string.all_image_permission_request_dialog_title),
             onConfirm = { navigateToApplicationDetailSetting(permissionSettingLauncher) },
             onDenied = {},
+        )
+    }
+
+    private fun setupBackPressedDispatcher() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    setResult(RESULT_OK)
+                    finish()
+                }
+            },
         )
     }
 
@@ -228,7 +242,9 @@ class EditMyProfileActivity :
 
     companion object {
         fun startActivity(context: Context) {
-            context.startActivity(Intent(context, EditMyProfileActivity::class.java))
+            context.startActivity(getIntent(context))
         }
+
+        fun getIntent(context: Context) = Intent(context, EditMyProfileActivity::class.java)
     }
 }

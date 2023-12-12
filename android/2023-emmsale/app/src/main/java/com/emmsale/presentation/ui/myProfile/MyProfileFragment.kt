@@ -1,7 +1,9 @@
 package com.emmsale.presentation.ui.myProfile
 
+import android.app.Activity.RESULT_OK
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.emmsale.R
 import com.emmsale.data.model.Activity
@@ -18,6 +20,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class MyProfileFragment : NetworkFragment<FragmentMyProfileBinding>(R.layout.fragment_my_profile) {
 
     override val viewModel: MyProfileViewModel by viewModels()
+
+    private val editMyProfileActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode != RESULT_OK) return@registerForActivityResult
+            viewModel.refresh()
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,7 +44,10 @@ class MyProfileFragment : NetworkFragment<FragmentMyProfileBinding>(R.layout.fra
     private fun setupToolbar() {
         binding.tbMyprofileToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.myprofile_edit_mode -> EditMyProfileActivity.startActivity(requireContext())
+                R.id.myprofile_edit_mode -> {
+                    val intent = EditMyProfileActivity.getIntent(requireContext())
+                    editMyProfileActivityLauncher.launch(intent)
+                }
             }
             true
         }
