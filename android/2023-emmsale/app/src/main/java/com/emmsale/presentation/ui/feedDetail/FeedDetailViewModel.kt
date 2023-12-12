@@ -28,7 +28,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -72,8 +71,6 @@ class FeedDetailViewModel @Inject constructor(
 
     private val _uiEvent = SingleLiveEvent<FeedDetailUiEvent>()
     val uiEvent: LiveData<FeedDetailUiEvent> = _uiEvent
-
-    private var unhighlightJob: Job? = null
 
     init {
         fetchFeedAndComments()
@@ -199,13 +196,14 @@ class FeedDetailViewModel @Inject constructor(
         onFailure = { _, _ -> _uiEvent.value = FeedDetailUiEvent.CommentDeleteFail },
     )
 
-    fun setEditMode(isEditMode: Boolean, commentId: Long = -1) {
-        if (!isEditMode) {
-            _editingCommentId.value = null
-            return
-        }
+    fun startEditComment(commentId: Long) {
         _editingCommentId.value = commentId
         highlightComment(commentId)
+    }
+
+    fun cancelEditComment() {
+        _editingCommentId.value = null
+        unhighlightComment()
     }
 
     fun reportComment(commentId: Long): Job = command(
@@ -230,12 +228,10 @@ class FeedDetailViewModel @Inject constructor(
         if (comment.isHighlight) return
         _feedDetailUiState.value = _feedDetailUiState.value.highlightComment(commentId)
         _uiEvent.value = FeedDetailUiEvent.CommentHighlight(commentId)
+    }
 
-        unhighlightJob?.cancel()
-        unhighlightJob = viewModelScope.launch {
-            delay(HIGHLIGHT_DURATION)
-            _feedDetailUiState.value = _feedDetailUiState.value.unhighlightComment()
-        }
+    private fun unhighlightComment() {
+        _feedDetailUiState.value = _feedDetailUiState.value.unhighlightComment()
     }
 
     companion object {
@@ -244,7 +240,5 @@ class FeedDetailViewModel @Inject constructor(
 
         private const val DELETED_FEED_FETCH_ERROR_CODE = 403
         private const val REPORT_DUPLICATE_ERROR_CODE = 400
-
-        private const val HIGHLIGHT_DURATION = 2000L
     }
 }

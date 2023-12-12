@@ -71,7 +71,7 @@ class FeedDetailActivity :
 
     private fun BottomMenuDialog.addCommentUpdateButton(commentId: Long) {
         addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
-            viewModel.setEditMode(true, commentId)
+            viewModel.startEditComment(commentId)
             binding.stiwCommentUpdate.requestFocusOnEditText()
             showKeyboard()
         }
@@ -138,7 +138,7 @@ class FeedDetailActivity :
             hideKeyboard()
         }
         binding.onCommentUpdateCancelButtonClick = {
-            viewModel.setEditMode(false)
+            viewModel.cancelEditComment()
             hideKeyboard()
         }
         binding.onUpdatedCommentSubmitButtonClick = {
