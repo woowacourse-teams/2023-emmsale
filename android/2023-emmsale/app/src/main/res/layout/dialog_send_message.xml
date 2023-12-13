@@ -7,7 +7,7 @@
 
         <import type="kotlin.Unit" />
 
-        <import type="com.emmsale.presentation.common.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.NetworkUiState" />
 
         <variable
             name="vm"

@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.common.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.NetworkUiState" />
 
         <variable
             name="vm"
@@ -145,7 +145,26 @@
             app:layout_constraintTop_toTopOf="parent"
             app:noContentImageResId="@drawable/ic_no_result3"
             app:title="@string/messagelist_no_content_view_title"
-            app:visible="@{vm.messages.empty &amp;&amp; vm.screenUiState == ScreenUiState.NONE}" />
+            app:visible="@{vm.messages.empty &amp;&amp; vm.networkUiState == NetworkUiState.NONE}" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
+            app:layout_constraintTop_toBottomOf="@id/tb_message_list"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.emmsale.presentation.common.views.NetworkErrorView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}"
+            app:onRefresh="@{() -> vm.refresh()}"
+            app:layout_constraintTop_toBottomOf="@id/tb_message_list"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

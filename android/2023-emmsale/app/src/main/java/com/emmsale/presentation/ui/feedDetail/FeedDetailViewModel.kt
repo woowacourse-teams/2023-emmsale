@@ -15,8 +15,8 @@ import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
-import com.emmsale.presentation.common.CommonUiEvent
-import com.emmsale.presentation.common.ScreenUiState
+import com.emmsale.presentation.common.NetworkUiEvent
+import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
@@ -77,7 +77,7 @@ class FeedDetailViewModel @Inject constructor(
     }
 
     private fun fetchFeedAndComments(): Job = viewModelScope.launch {
-        _screenUiState.value = ScreenUiState.LOADING
+        _networkUiState.value = NetworkUiState.LOADING
 
         val (feedResult, commentResult) = listOf(
             async { feedRepository.getFeed(feedId) },
@@ -86,13 +86,13 @@ class FeedDetailViewModel @Inject constructor(
 
         when {
             feedResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(feedResult.error?.message.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(feedResult.error?.message.toString())
             }
 
             commentResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(commentResult.error?.message.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(commentResult.error?.message.toString())
             }
 
             feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
@@ -115,7 +115,7 @@ class FeedDetailViewModel @Inject constructor(
             }
         }
 
-        _screenUiState.value = ScreenUiState.NONE
+        _networkUiState.value = NetworkUiState.NONE
     }
 
     override fun refresh(): Job = viewModelScope.launch {
@@ -126,13 +126,13 @@ class FeedDetailViewModel @Inject constructor(
 
         when {
             feedResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(feedResult.error?.message.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(feedResult.error?.message.toString())
             }
 
             commentResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(commentResult.error?.message.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(commentResult.error?.message.toString())
             }
 
             feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
@@ -154,7 +154,7 @@ class FeedDetailViewModel @Inject constructor(
                 _feedDetailUiState.value = FeedDetailUiState(feed, comments, uid)
             }
         }
-        _screenUiState.value = ScreenUiState.NONE
+        _networkUiState.value = NetworkUiState.NONE
     }
 
     private fun List<Comment>.undeletedCount(): Int = commentsCount() - deletedCommentsCount()

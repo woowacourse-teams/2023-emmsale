@@ -11,7 +11,7 @@ import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
-import com.emmsale.presentation.common.ScreenUiState
+import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
@@ -58,8 +58,8 @@ class ProfileViewModel @Inject constructor(
 
     override fun refresh(): Job = viewModelScope.launch {
         listOf(fetchProfile(), fetchBlockedMembers()).joinAll()
-        if (_screenUiState.value == ScreenUiState.NETWORK_ERROR) return@launch
-        _screenUiState.value = ScreenUiState.NONE
+        if (_networkUiState.value == NetworkUiState.NETWORK_ERROR) return@launch
+        _networkUiState.value = NetworkUiState.NONE
     }
 
     private fun fetchProfile(): Job = fetchData(

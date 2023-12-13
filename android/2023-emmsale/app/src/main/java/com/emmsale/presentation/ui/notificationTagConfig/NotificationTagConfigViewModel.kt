@@ -11,8 +11,8 @@ import com.emmsale.data.model.EventTag
 import com.emmsale.data.repository.interfaces.EventTagRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
-import com.emmsale.presentation.common.CommonUiEvent
-import com.emmsale.presentation.common.ScreenUiState
+import com.emmsale.presentation.common.NetworkUiEvent
+import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
@@ -60,10 +60,10 @@ class NotificationTagConfigViewModel @Inject constructor(
 
         when {
             eventTagsResult is Unexpected ->
-                _commonUiEvent.value = CommonUiEvent.Unexpected(eventTagsResult.error.toString())
+                _networkUiEvent.value = NetworkUiEvent.Unexpected(eventTagsResult.error.toString())
 
             interestTagsResult is Unexpected ->
-                _commonUiEvent.value = CommonUiEvent.Unexpected(interestTagsResult.error.toString())
+                _networkUiEvent.value = NetworkUiEvent.Unexpected(interestTagsResult.error.toString())
 
             eventTagsResult is Failure || interestTagsResult is Failure -> dispatchFetchFailEvent()
             eventTagsResult is NetworkError || interestTagsResult is NetworkError -> {
@@ -79,7 +79,7 @@ class NotificationTagConfigViewModel @Inject constructor(
                 )
             }
         }
-        _screenUiState.value = ScreenUiState.NONE
+        _networkUiState.value = NetworkUiState.NONE
     }
 
     override fun refresh(): Job = viewModelScope.launch {
@@ -90,10 +90,10 @@ class NotificationTagConfigViewModel @Inject constructor(
 
         when {
             eventTagsResult is Unexpected ->
-                _commonUiEvent.value = CommonUiEvent.Unexpected(eventTagsResult.error.toString())
+                _networkUiEvent.value = NetworkUiEvent.Unexpected(eventTagsResult.error.toString())
 
             interestTagsResult is Unexpected ->
-                _commonUiEvent.value = CommonUiEvent.Unexpected(interestTagsResult.error.toString())
+                _networkUiEvent.value = NetworkUiEvent.Unexpected(interestTagsResult.error.toString())
 
             eventTagsResult is Failure || interestTagsResult is Failure -> dispatchFetchFailEvent()
             eventTagsResult is NetworkError || interestTagsResult is NetworkError -> {
@@ -109,7 +109,7 @@ class NotificationTagConfigViewModel @Inject constructor(
                 )
             }
         }
-        _screenUiState.value = ScreenUiState.NONE
+        _networkUiState.value = NetworkUiState.NONE
     }
 
     fun saveInterestEventTag(): Job = command(

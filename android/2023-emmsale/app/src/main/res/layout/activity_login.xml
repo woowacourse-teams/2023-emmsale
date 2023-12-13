@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.common.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.NetworkUiState" />
 
         <variable
             name="viewModel"
@@ -70,7 +70,7 @@
             android:id="@+id/pb_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{viewModel.screenUiState == ScreenUiState.LOADING}"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

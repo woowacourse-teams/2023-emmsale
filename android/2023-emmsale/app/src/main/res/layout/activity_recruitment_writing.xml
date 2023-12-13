@@ -7,7 +7,7 @@
 
         <import type="android.view.View" />
 
-        <import type="com.emmsale.presentation.common.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.NetworkUiState" />
 
         <variable
             name="vm"
@@ -59,7 +59,7 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
+            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -12,7 +12,7 @@
 
         <import type="kotlin.Unit" />
 
-        <import type="com.emmsale.presentation.common.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.NetworkUiState" />
 
         <import type="com.emmsale.data.model.EventProgressStatus" />
 
@@ -266,7 +266,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
+            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
             tools:visibility="gone" />
 
         <com.emmsale.presentation.common.views.NetworkErrorView
@@ -274,7 +274,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"
             app:onRefresh="@{() -> vm.refresh()}"
-            app:visible="@{vm.screenUiState == ScreenUiState.NETWORK_ERROR}" />
+            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

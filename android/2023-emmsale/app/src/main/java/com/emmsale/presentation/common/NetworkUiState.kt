@@ -1,5 +1,5 @@
 package com.emmsale.presentation.common
 
-enum class ScreenUiState {
+enum class NetworkUiState {
     NONE, LOADING, NETWORK_ERROR
 }

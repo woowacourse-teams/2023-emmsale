@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import com.emmsale.R
-import com.emmsale.presentation.common.CommonUiEvent
+import com.emmsale.presentation.common.NetworkUiEvent
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.InfoDialog
 
@@ -20,14 +20,14 @@ abstract class NetworkActivity<V : ViewDataBinding>(
     }
 
     private fun observeCommonUiEvent() {
-        viewModel.commonUiEvent.observe(this) { handleCommonUiEvent(it) }
+        viewModel.networkUiEvent.observe(this) { handleCommonUiEvent(it) }
     }
 
-    private fun handleCommonUiEvent(event: CommonUiEvent) {
+    private fun handleCommonUiEvent(event: NetworkUiEvent) {
         when (event) {
-            CommonUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_check_message))
-            is CommonUiEvent.Unexpected -> showUnexpectedErrorOccurredDialog()
-            is CommonUiEvent.FetchFail -> showIllegalAccessDialog()
+            NetworkUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_check_message))
+            is NetworkUiEvent.Unexpected -> showUnexpectedErrorOccurredDialog()
+            is NetworkUiEvent.FetchFail -> showIllegalAccessDialog()
         }
     }
 
