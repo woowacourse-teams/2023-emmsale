@@ -5,7 +5,7 @@ import com.emmsale.data.model.Message
 
 fun List<MessageResponse>.toData(): List<Message> = map { it.toData() }
 
-fun MessageResponse.toData(): Message = Message.create(
+fun MessageResponse.toData(): Message = Message(
     id = id,
     sender = sender.toData(),
     content = content,
