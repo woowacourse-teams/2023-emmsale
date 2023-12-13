@@ -63,6 +63,7 @@ abstract class NetworkViewModel : ViewModel() {
             NetworkError -> {
                 onNetworkError()
                 if (_networkUiState.value == NetworkUiState.NETWORK_ERROR) {
+                    loadingJob.cancel()
                     onFinish()
                     return@launch
                 }
