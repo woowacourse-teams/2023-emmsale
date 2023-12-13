@@ -61,9 +61,7 @@ class RecruitmentDetailViewModel @Inject constructor(
     fun deleteRecruitment(): Job = command(
         command = { recruitmentRepository.deleteRecruitment(eventId, recruitmentId) },
         onSuccess = { _uiEvent.value = RecruitmentPostDetailUiEvent.PostDeleteComplete },
-        onFailure = { _, _ ->
-            _uiEvent.value = RecruitmentPostDetailUiEvent.PostDeleteFail
-        },
+        onFailure = { _, _ -> _uiEvent.value = RecruitmentPostDetailUiEvent.PostDeleteFail },
     )
 
     fun reportRecruitment(): Job = command(
@@ -98,9 +96,7 @@ class RecruitmentDetailViewModel @Inject constructor(
                 otherId = _recruitment.value.recruitment.writer.id,
             )
         },
-        onFailure = { _, _ ->
-            _uiEvent.value = RecruitmentPostDetailUiEvent.MessageSendFail
-        },
+        onFailure = { _, _ -> _uiEvent.value = RecruitmentPostDetailUiEvent.MessageSendFail },
         onStart = { _canSendMessage.value = false },
         onFinish = { _canSendMessage.value = true },
     )
