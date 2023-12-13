@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.common.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.NetworkUiState" />
 
         <variable
             name="vm"
@@ -145,7 +145,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:noContentImageResId="@drawable/ic_no_result3"
             app:title="@string/messagelist_no_content_view_title"
-            app:visible="@{vm.messages.empty &amp;&amp; vm.screenUiState == ScreenUiState.NONE}" />
+            app:visible="@{vm.messages.empty &amp;&amp; vm.networkUiState == NetworkUiState.NONE}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

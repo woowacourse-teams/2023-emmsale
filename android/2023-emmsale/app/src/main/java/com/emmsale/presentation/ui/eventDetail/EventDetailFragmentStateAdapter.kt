@@ -4,9 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
-import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState.INFORMATION
-import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState.POST
-import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState.RECRUITMENT
 import com.emmsale.presentation.ui.eventDetailInfo.EventInfoFragment
 import com.emmsale.presentation.ui.feedList.FeedListFragment
 import com.emmsale.presentation.ui.recruitmentList.RecruitmentsFragment
@@ -20,9 +17,9 @@ class EventDetailFragmentStateAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (EventDetailScreenUiState.from(position)) {
-            INFORMATION -> EventInfoFragment.create()
-            POST -> FeedListFragment.create(eventId)
-            RECRUITMENT -> RecruitmentsFragment.create(eventId)
+            EventDetailScreenUiState.INFORMATION -> EventInfoFragment.create()
+            EventDetailScreenUiState.POST -> FeedListFragment.create(eventId)
+            EventDetailScreenUiState.RECRUITMENT -> RecruitmentsFragment.create(eventId)
         }
     }
 }

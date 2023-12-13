@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.common.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.NetworkUiState" />
 
         <variable
             name="viewModel"
@@ -44,7 +44,7 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{viewModel.screenUiState == ScreenUiState.LOADING}"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintTop_toBottomOf="@id/tb_notifications"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:visible="@{viewModel.screenUiState == ScreenUiState.NETWORK_ERROR}"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}"
             app:onRefresh="@{() -> viewModel.refresh()}"
             app:layout_constraintTop_toBottomOf="@id/tb_notifications"
             app:layout_constraintStart_toStartOf="parent"

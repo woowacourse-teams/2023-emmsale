@@ -9,7 +9,7 @@ import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
 import com.emmsale.presentation.common.CommonUiEvent
-import com.emmsale.presentation.common.ScreenUiState
+import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
@@ -19,18 +19,18 @@ import kotlinx.coroutines.launch
 
 abstract class NetworkViewModel : ViewModel() {
 
-    protected val _screenUiState = NotNullMutableLiveData(ScreenUiState.NONE)
-    val screenUiState: NotNullLiveData<ScreenUiState> = _screenUiState
+    protected val _networkUiState = NotNullMutableLiveData(NetworkUiState.NONE)
+    val networkUiState: NotNullLiveData<NetworkUiState> = _networkUiState
 
     protected val _commonUiEvent = SingleLiveEvent<CommonUiEvent>()
     val commonUiEvent: LiveData<CommonUiEvent> = _commonUiEvent
 
     protected fun changeToLoadingState() {
-        _screenUiState.value = ScreenUiState.LOADING
+        _networkUiState.value = NetworkUiState.LOADING
     }
 
     protected fun changeToNetworkErrorState() {
-        _screenUiState.value = ScreenUiState.NETWORK_ERROR
+        _networkUiState.value = NetworkUiState.NETWORK_ERROR
     }
 
     protected fun dispatchNetworkErrorEvent() {
@@ -58,7 +58,7 @@ abstract class NetworkViewModel : ViewModel() {
             is Failure -> onFailure(result.code, result.message)
             NetworkError -> {
                 onNetworkError()
-                if (_screenUiState.value == ScreenUiState.NETWORK_ERROR) {
+                if (_networkUiState.value == NetworkUiState.NETWORK_ERROR) {
                     onFinish()
                     return@launch
                 }
@@ -68,7 +68,7 @@ abstract class NetworkViewModel : ViewModel() {
                 _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
         }
         loadingJob.cancel()
-        _screenUiState.value = ScreenUiState.NONE
+        _networkUiState.value = NetworkUiState.NONE
         onFinish()
     }
 

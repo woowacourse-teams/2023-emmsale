@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.emmsale.presentation.common.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.NetworkUiState" />
 
         <variable
             name="showAlbum"
@@ -123,6 +123,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}" />
+            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

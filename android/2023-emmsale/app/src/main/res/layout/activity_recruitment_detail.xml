@@ -9,7 +9,7 @@
 
         <import type="kotlin.Unit" />
 
-        <import type="com.emmsale.presentation.common.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.NetworkUiState" />
 
         <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
 
@@ -150,7 +150,7 @@
             android:id="@+id/progressBar2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
+            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -159,7 +159,7 @@
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:visible="@{vm.screenUiState == ScreenUiState.NETWORK_ERROR}"
+            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}"
             app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

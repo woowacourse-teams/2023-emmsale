@@ -9,7 +9,7 @@
 
         <import type="com.emmsale.presentation.common.FetchResult" />
 
-        <import type="com.emmsale.presentation.common.ScreenUiState" />
+        <import type="com.emmsale.presentation.common.NetworkUiState" />
 
         <variable
             name="vm"
@@ -100,7 +100,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:noContentImageResId="@drawable/ic_no_result1"
                     app:title="@string/scrappedevent_no_content_view_desc"
-                    app:visible="@{vm.scrappedEvents.empty &amp;&amp; vm.screenUiState == ScreenUiState.NONE}" />
+                    app:visible="@{vm.scrappedEvents.empty &amp;&amp; vm.networkUiState == NetworkUiState.NONE}" />
 
                 <ProgressBar
                     android:layout_width="wrap_content"
@@ -109,7 +109,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:visible="@{vm.screenUiState == ScreenUiState.LOADING}"
+                    app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
                     tools:visibility="gone" />
 
                 <com.emmsale.presentation.common.views.NetworkErrorView
@@ -117,7 +117,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:onRefresh="@{() -> vm.refresh()}"
-                    app:visible="@{vm.screenUiState == ScreenUiState.NETWORK_ERROR}"
+                    app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

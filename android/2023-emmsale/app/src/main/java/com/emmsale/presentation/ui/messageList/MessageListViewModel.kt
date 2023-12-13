@@ -15,7 +15,7 @@ import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.CommonUiEvent
-import com.emmsale.presentation.common.ScreenUiState
+import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
@@ -88,7 +88,7 @@ class MessageListViewModel @Inject constructor(
             }
         }
 
-        _screenUiState.value = ScreenUiState.NONE
+        _networkUiState.value = NetworkUiState.NONE
     }
 
     fun sendMessage(message: String): Job = commandAndRefresh(

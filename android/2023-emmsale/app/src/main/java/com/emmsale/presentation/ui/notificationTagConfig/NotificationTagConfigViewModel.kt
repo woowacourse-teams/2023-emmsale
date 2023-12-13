@@ -12,7 +12,7 @@ import com.emmsale.data.repository.interfaces.EventTagRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.CommonUiEvent
-import com.emmsale.presentation.common.ScreenUiState
+import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
@@ -79,7 +79,7 @@ class NotificationTagConfigViewModel @Inject constructor(
                 )
             }
         }
-        _screenUiState.value = ScreenUiState.NONE
+        _networkUiState.value = NetworkUiState.NONE
     }
 
     override fun refresh(): Job = viewModelScope.launch {
@@ -109,7 +109,7 @@ class NotificationTagConfigViewModel @Inject constructor(
                 )
             }
         }
-        _screenUiState.value = ScreenUiState.NONE
+        _networkUiState.value = NetworkUiState.NONE
     }
 
     fun saveInterestEventTag(): Job = command(
