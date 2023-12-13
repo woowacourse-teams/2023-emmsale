@@ -53,8 +53,42 @@ class MessageListViewModel @Inject constructor(
     val uiEvent: LiveData<MessageListUiEvent> = _uiEvent
 
     init {
+        fetchMessages()
+    }
+
+    private fun fetchMessages(): Job = viewModelScope.launch {
         changeToLoadingState()
-        refresh()
+        val (otherMemberResult, messagesResult) = listOf(
+            async { memberRepository.getMember(otherUid) },
+            async { messageRoomRepository.getMessagesByRoomId(roomId, myUid) },
+        ).awaitAll()
+
+        when {
+            otherMemberResult is Unexpected -> {
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(otherMemberResult.error?.message.toString())
+            }
+
+            messagesResult is Unexpected -> {
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(messagesResult.error?.message.toString())
+            }
+
+            otherMemberResult is Failure || messagesResult is Failure -> dispatchFetchFailEvent()
+
+            otherMemberResult is NetworkError || messagesResult is NetworkError -> {
+                changeToNetworkErrorState()
+                return@launch
+            }
+
+            otherMemberResult is Success && messagesResult is Success -> {
+                _otherMember.value = otherMemberResult.data as Member
+                _messages.value =
+                    MessagesUiState.create(messagesResult.data as List<Message>, myUid)
+            }
+        }
+
+        _networkUiState.value = NetworkUiState.NONE
     }
 
     override fun refresh(): Job = viewModelScope.launch {
