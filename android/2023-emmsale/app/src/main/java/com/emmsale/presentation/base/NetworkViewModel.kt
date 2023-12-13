@@ -8,7 +8,7 @@ import com.emmsale.data.common.retrofit.callAdapter.Failure
 import com.emmsale.data.common.retrofit.callAdapter.NetworkError
 import com.emmsale.data.common.retrofit.callAdapter.Success
 import com.emmsale.data.common.retrofit.callAdapter.Unexpected
-import com.emmsale.presentation.common.CommonUiEvent
+import com.emmsale.presentation.common.NetworkUiEvent
 import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
@@ -22,8 +22,8 @@ abstract class NetworkViewModel : ViewModel() {
     protected val _networkUiState = NotNullMutableLiveData(NetworkUiState.NONE)
     val networkUiState: NotNullLiveData<NetworkUiState> = _networkUiState
 
-    protected val _commonUiEvent = SingleLiveEvent<CommonUiEvent>()
-    val commonUiEvent: LiveData<CommonUiEvent> = _commonUiEvent
+    protected val _networkUiEvent = SingleLiveEvent<NetworkUiEvent>()
+    val networkUiEvent: LiveData<NetworkUiEvent> = _networkUiEvent
 
     protected fun changeToLoadingState() {
         _networkUiState.value = NetworkUiState.LOADING
@@ -34,7 +34,11 @@ abstract class NetworkViewModel : ViewModel() {
     }
 
     protected fun dispatchNetworkErrorEvent() {
-        _commonUiEvent.value = CommonUiEvent.RequestFailByNetworkError
+        _networkUiEvent.value = NetworkUiEvent.RequestFailByNetworkError
+    }
+
+    protected fun dispatchFetchFailEvent() {
+        _networkUiEvent.value = NetworkUiEvent.FetchFail
     }
 
     protected suspend fun delayLoading(timeMillis: Long = LOADING_DELAY) {
@@ -65,7 +69,7 @@ abstract class NetworkViewModel : ViewModel() {
             }
 
             is Unexpected ->
-                _commonUiEvent.value = CommonUiEvent.Unexpected(result.error.toString())
+                _networkUiEvent.value = NetworkUiEvent.Unexpected(result.error.toString())
         }
         loadingJob.cancel()
         _networkUiState.value = NetworkUiState.NONE

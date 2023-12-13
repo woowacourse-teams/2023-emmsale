@@ -15,7 +15,7 @@ import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
-import com.emmsale.presentation.common.CommonUiEvent
+import com.emmsale.presentation.common.NetworkUiEvent
 import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.firebase.analytics.logComment
 import com.emmsale.presentation.common.livedata.NotNullLiveData
@@ -86,13 +86,13 @@ class FeedDetailViewModel @Inject constructor(
 
         when {
             feedResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(feedResult.error?.message.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(feedResult.error?.message.toString())
             }
 
             commentResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(commentResult.error?.message.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(commentResult.error?.message.toString())
             }
 
             feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {
@@ -126,13 +126,13 @@ class FeedDetailViewModel @Inject constructor(
 
         when {
             feedResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(feedResult.error?.message.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(feedResult.error?.message.toString())
             }
 
             commentResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(commentResult.error?.message.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(commentResult.error?.message.toString())
             }
 
             feedResult is Failure && feedResult.code == DELETED_FEED_FETCH_ERROR_CODE -> {

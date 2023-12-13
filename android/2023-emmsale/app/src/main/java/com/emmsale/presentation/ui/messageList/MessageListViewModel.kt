@@ -14,7 +14,7 @@ import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
-import com.emmsale.presentation.common.CommonUiEvent
+import com.emmsale.presentation.common.NetworkUiEvent
 import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
@@ -65,13 +65,13 @@ class MessageListViewModel @Inject constructor(
 
         when {
             otherMemberResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(otherMemberResult.error?.message.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(otherMemberResult.error?.message.toString())
             }
 
             messagesResult is Unexpected -> {
-                _commonUiEvent.value =
-                    CommonUiEvent.Unexpected(messagesResult.error?.message.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(messagesResult.error?.message.toString())
             }
 
             otherMemberResult is Failure || messagesResult is Failure -> dispatchFetchFailEvent()
