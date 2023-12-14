@@ -82,7 +82,7 @@ class ChildCommentsActivity :
     }
 
     private fun startToEditComment(commentId: Long) {
-        val position = getCommentPosition(commentId)
+        val position = viewModel.comments.value.getPosition(commentId)
 
         lifecycleScope.launch {
             delay(KEYBOARD_SHOW_WAITING_TIME)
@@ -211,7 +211,7 @@ class ChildCommentsActivity :
         viewModel.isAlreadyFirstFetched || viewModel.comments.value.commentUiStates.isEmpty()
 
     private fun highlightCommentOnFirstEnter() {
-        val position = getCommentPosition(highlightCommentId)
+        val position = viewModel.comments.value.getPosition(highlightCommentId)
 
         binding.rvChildcommentsChildcomments.scrollToPosition(position)
         lifecycleScope.launch {
@@ -221,11 +221,6 @@ class ChildCommentsActivity :
                 ?.startSmoothScroll(centerSmoothScroller.apply { targetPosition = position })
         }
     }
-
-    private fun getCommentPosition(commentId: Long): Int = viewModel.comments.value.commentUiStates
-        .indexOfFirst { commentUiState ->
-            commentUiState.comment.id == commentId
-        }
 
     private fun observeUiEvent() {
         viewModel.uiEvent.observe(this, ::handleUiEvent)

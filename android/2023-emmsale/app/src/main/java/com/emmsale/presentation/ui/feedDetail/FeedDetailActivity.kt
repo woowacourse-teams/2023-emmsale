@@ -87,7 +87,7 @@ class FeedDetailActivity :
     }
 
     private fun startToEditComment(commentId: Long) {
-        val position = getCommentPosition(commentId) + 1 // 게시글을 포함한 멀티 뷰 타입 리사이클러 뷰라서 1을 더함
+        val position = viewModel.feedDetailUiState.value.getCommentPosition(commentId)
 
         lifecycleScope.launch {
             delay(KEYBOARD_SHOW_WAITING_TIME)
@@ -248,8 +248,7 @@ class FeedDetailActivity :
         viewModel.isAlreadyFirstFetched || viewModel.commentUiStates.isEmpty()
 
     private fun highlightCommentOnFirstEnter() {
-        val position =
-            getCommentPosition(highlightCommentId) + 1 // 게시글을 포함한 멀티 뷰 타입 리사이클러 뷰라서 1을 더함
+        val position = viewModel.feedDetailUiState.value.getCommentPosition(highlightCommentId)
 
         binding.rvFeedAndComments.scrollToPosition(position)
         lifecycleScope.launch {
@@ -259,11 +258,6 @@ class FeedDetailActivity :
                 ?.startSmoothScroll(centerSmoothScroller.apply { targetPosition = position })
         }
     }
-
-    private fun getCommentPosition(commentId: Long): Int = viewModel.commentUiStates
-        .indexOfFirst { commentUiState ->
-            commentUiState.comment.id == commentId
-        }
 
     private fun observeUiEvent() {
         viewModel.uiEvent.observe(this, ::handleUiEvent)
