@@ -52,68 +52,65 @@
             app:swipeRefreshColor="@{@color/primary_color}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/barrier_input_windows"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_childcomments_toolbar">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_childcomments_childcomments"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toTopOf="@id/btiw_comment_post"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     tools:itemCount="10"
                     tools:listitem="@layout/item_all_comment" />
-
-                <com.emmsale.presentation.common.views.BasicTextInputWindow
-                    android:id="@+id/btiw_comment_post"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:hint="@string/comments_edit_comment_hint"
-                    app:onSubmit="@{(content) -> onCommentSubmitButtonClick.invoke(content)}"
-                    app:isSubmitEnabled="@{viewModel.canSubmitComment}"
-                    app:submitButtonLabel="@string/comments_comment_submit_button_label" />
-
-                <com.emmsale.presentation.common.views.SubTextInputWindow
-                    android:id="@+id/stiw_comment_update"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:text="@{viewModel.editingCommentContent}"
-                    app:visible="@{viewModel.editingCommentId != null}"
-                    app:isSubmitEnabled="@{viewModel.canSubmitComment}"
-                    app:submitButtonLabel="@string/all_update_button_label"
-                    app:cancelButtonLabel="@string/all_cancel"
-                    app:onCancel="@{() -> onCommentUpdateCancelButtonClick.invoke()}"
-                    app:onSubmit="@{(content) -> onUpdatedCommentSubmitButtonClick.invoke(content)}" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.networkUiState == NetworkUiState.LOADING ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="@+id/rv_childcomments_childcomments"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.emmsale.presentation.common.views.BasicTextInputWindow
+            android:id="@+id/btiw_comment_post"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:hint="@string/comments_edit_comment_hint"
+            app:visible="@{viewModel.editingCommentId == null}"
+            app:onSubmit="@{(content) -> onCommentSubmitButtonClick.invoke(content)}"
+            app:isSubmitEnabled="@{viewModel.canSubmitComment}"
+            app:submitButtonLabel="@string/comments_comment_submit_button_label" />
+
+        <com.emmsale.presentation.common.views.SubTextInputWindow
+            android:id="@+id/stiw_comment_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:text="@{viewModel.editingCommentContent}"
+            app:visible="@{viewModel.editingCommentId != null}"
+            app:isSubmitEnabled="@{viewModel.canSubmitComment}"
+            app:submitButtonLabel="@string/all_update_button_label"
+            app:cancelButtonLabel="@string/all_cancel"
+            app:onCancel="@{() -> onCommentUpdateCancelButtonClick.invoke()}"
+            app:onSubmit="@{(content) -> onUpdatedCommentSubmitButtonClick.invoke(content)}" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_input_windows"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="btiw_comment_post,stiw_comment_update" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.networkUiState == NetworkUiState.LOADING ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_childcomments_toolbar" />
 
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
