@@ -28,6 +28,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -68,6 +69,8 @@ class FeedDetailViewModel @Inject constructor(
 
     private val _canSubmitComment = NotNullMutableLiveData(true)
     val canSubmitComment: NotNullLiveData<Boolean> = _canSubmitComment
+
+    private var unhighlightJob: Job? = null
 
     private val _uiEvent = SingleLiveEvent<FeedDetailUiEvent>()
     val uiEvent: LiveData<FeedDetailUiEvent> = _uiEvent
@@ -198,12 +201,21 @@ class FeedDetailViewModel @Inject constructor(
 
     fun startEditComment(commentId: Long) {
         _editingCommentId.value = commentId
-        highlightComment(commentId)
+        unhighlightJob?.cancel()
+        _feedDetailUiState.value = _feedDetailUiState.value.highlightComment(commentId)
     }
 
     fun cancelEditComment() {
         _editingCommentId.value = null
-        unhighlightComment()
+        _feedDetailUiState.value = _feedDetailUiState.value.unhighlightComment()
+    }
+
+    fun highlightCommentOnFirstEnter(commentId: Long) {
+        _feedDetailUiState.value = _feedDetailUiState.value.highlightComment(commentId)
+        unhighlightJob = viewModelScope.launch {
+            delay(COMMENT_HIGHLIGHTING_DURATION_ON_FIRST_ENTER)
+            _feedDetailUiState.value = _feedDetailUiState.value.unhighlightComment()
+        }
     }
 
     fun reportComment(commentId: Long): Job = command(
@@ -223,20 +235,13 @@ class FeedDetailViewModel @Inject constructor(
         },
     )
 
-    fun highlightComment(commentId: Long) {
-        _feedDetailUiState.value = _feedDetailUiState.value.highlightComment(commentId)
-        _uiEvent.value = FeedDetailUiEvent.CommentHighlight(commentId)
-    }
-
-    private fun unhighlightComment() {
-        _feedDetailUiState.value = _feedDetailUiState.value.unhighlightComment()
-    }
-
     companion object {
         const val KEY_FEED_ID: String = "KEY_FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
 
         private const val DELETED_FEED_FETCH_ERROR_CODE = 403
         private const val REPORT_DUPLICATE_ERROR_CODE = 400
+
+        private const val COMMENT_HIGHLIGHTING_DURATION_ON_FIRST_ENTER = 2000L
     }
 }
