@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
@@ -14,6 +15,8 @@ import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.properties.Delegates.vetoable
 
@@ -45,6 +48,8 @@ class ChildCommentsViewModel @Inject constructor(
 
     private val _canSubmitComment = NotNullMutableLiveData(true)
     val canSubmitComment: NotNullLiveData<Boolean> = _canSubmitComment
+
+    private var unhighlightJob: Job? = null
 
     private val _uiEvent = SingleLiveEvent<ChildCommentsUiEvent>()
     val uiEvent: LiveData<ChildCommentsUiEvent> = _uiEvent
@@ -80,8 +85,23 @@ class ChildCommentsViewModel @Inject constructor(
         onFailure = { _, _ -> _uiEvent.value = ChildCommentsUiEvent.CommentDeleteFail },
     )
 
-    fun setEditMode(isEditMode: Boolean, commentId: Long = INVALID_COMMENT_ID) {
-        _editingCommentId.value = if (isEditMode) commentId else null
+    fun startEditComment(commentId: Long) {
+        _editingCommentId.value = commentId
+        unhighlightJob?.cancel()
+        _comments.value = _comments.value.highlight(commentId)
+    }
+
+    fun cancelEditComment() {
+        _editingCommentId.value = null
+        _comments.value = _comments.value.unhighlight()
+    }
+
+    fun highlightCommentOnFirstEnter(commentId: Long) {
+        _comments.value = _comments.value.highlight(commentId)
+        unhighlightJob = viewModelScope.launch {
+            delay(COMMENT_HIGHLIGHTING_DURATION_ON_FIRST_ENTER)
+            _comments.value = _comments.value.unhighlight()
+        }
     }
 
     fun reportComment(commentId: Long): Job = command(
@@ -106,24 +126,12 @@ class ChildCommentsViewModel @Inject constructor(
         onSuccess = { _comments.value = CommentsUiState(uid, it) },
     )
 
-    fun highlight(commentId: Long) {
-        val comment = _comments.value.commentUiStates.find { it.comment.id == commentId } ?: return
-        if (comment.isHighlight) return
-        _comments.value = _comments.value.highlight(commentId)
-    }
-
-    fun unhighlight(commentId: Long) {
-        val comment = _comments.value.commentUiStates.find { it.comment.id == commentId } ?: return
-        if (!comment.isHighlight) return
-        _comments.value = _comments.value.unhighlight()
-    }
-
     companion object {
         const val KEY_FEED_ID = "KEY_FEED_ID"
         const val KEY_PARENT_COMMENT_ID = "KEY_PARENT_COMMENT_ID"
 
-        private const val INVALID_COMMENT_ID: Long = -1
-
         private const val REPORT_DUPLICATE_ERROR_CODE = 400
+
+        private const val COMMENT_HIGHLIGHTING_DURATION_ON_FIRST_ENTER = 2000L
     }
 }
