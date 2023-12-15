@@ -61,11 +61,10 @@ class FeedDetailViewModel @Inject constructor(
     val isFeedDetailWrittenByLoginUser: Boolean
         get() = feed.writer.id == uid
 
-    private val _editingCommentId = MutableLiveData<Long?>()
-    val editingCommentId: LiveData<Long?> = _editingCommentId
-    val editingCommentContent: LiveData<String?> = _editingCommentId.map { commentId ->
-        if (commentId == null) null else commentUiStates.find { it.comment.id == commentId }?.comment?.content
-    }
+    private val _editingComment = MutableLiveData<Comment?>()
+    val editingComment: LiveData<Comment?> = _editingComment
+
+    val isEditingComment: LiveData<Boolean> = _editingComment.map { it != null }
 
     private val _canSubmitComment = NotNullMutableLiveData(true)
     val canSubmitComment: NotNullLiveData<Boolean> = _canSubmitComment
@@ -188,7 +187,7 @@ class FeedDetailViewModel @Inject constructor(
 
     fun updateComment(commentId: Long, content: String): Job = commandAndRefresh(
         command = { commentRepository.updateComment(commentId, content) },
-        onSuccess = { _editingCommentId.value = null },
+        onSuccess = { _editingComment.value = null },
         onFailure = { _, _ -> _uiEvent.value = FeedDetailUiEvent.CommentUpdateFail },
         onStart = { _canSubmitComment.value = false },
         onFinish = { _canSubmitComment.value = true },
@@ -200,13 +199,16 @@ class FeedDetailViewModel @Inject constructor(
     )
 
     fun startEditComment(commentId: Long) {
-        _editingCommentId.value = commentId
+        _editingComment.value = commentUiStates
+            .find { it.comment.id == commentId }
+            ?.comment
+            ?: return
         unhighlightJob?.cancel()
         _feedDetailUiState.value = _feedDetailUiState.value.highlightComment(commentId)
     }
 
     fun cancelEditComment() {
-        _editingCommentId.value = null
+        _editingComment.value = null
         _feedDetailUiState.value = _feedDetailUiState.value.unhighlightComment()
     }
 

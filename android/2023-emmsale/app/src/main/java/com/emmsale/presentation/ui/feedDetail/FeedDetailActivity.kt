@@ -162,8 +162,8 @@ class FeedDetailActivity :
             hideKeyboard()
         }
         binding.onUpdatedCommentSubmitButtonClick = {
-            val commentId = viewModel.editingCommentId.value
-            if (commentId != null) viewModel.updateComment(commentId, it)
+            val comment = viewModel.editingComment.value
+            if (comment != null) viewModel.updateComment(comment.id, it)
             hideKeyboard()
         }
     }
