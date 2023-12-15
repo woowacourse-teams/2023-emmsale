@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.emmsale.data.model.Comment
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
@@ -39,12 +40,10 @@ class ChildCommentsViewModel @Inject constructor(
     private val _comments = NotNullMutableLiveData(CommentsUiState())
     val comments: NotNullLiveData<CommentsUiState> = _comments
 
-    private val _editingCommentId = MutableLiveData<Long?>()
-    val editingCommentId: LiveData<Long?> = _editingCommentId
+    private val _editingComment = MutableLiveData<Comment?>()
+    val editingComment: LiveData<Comment?> = _editingComment
 
-    val editingCommentContent: LiveData<String?> = _editingCommentId.map { commentId ->
-        if (commentId == null) null else _comments.value[commentId]?.comment?.content
-    }
+    val isEditingComment: LiveData<Boolean> = _editingComment.map { it != null }
 
     private val _canSubmitComment = NotNullMutableLiveData(true)
     val canSubmitComment: NotNullLiveData<Boolean> = _canSubmitComment
@@ -74,7 +73,7 @@ class ChildCommentsViewModel @Inject constructor(
 
     fun updateComment(commentId: Long, content: String): Job = commandAndRefresh(
         command = { commentRepository.updateComment(commentId, content) },
-        onSuccess = { _editingCommentId.value = null },
+        onSuccess = { _editingComment.value = null },
         onFailure = { _, _ -> _uiEvent.value = ChildCommentsUiEvent.CommentUpdateFail },
         onStart = { _canSubmitComment.value = false },
         onFinish = { _canSubmitComment.value = true },
@@ -86,13 +85,16 @@ class ChildCommentsViewModel @Inject constructor(
     )
 
     fun startEditComment(commentId: Long) {
-        _editingCommentId.value = commentId
+        _editingComment.value = comments.value.commentUiStates
+            .find { it.comment.id == commentId }
+            ?.comment
+            ?: return
         unhighlightJob?.cancel()
         _comments.value = _comments.value.highlight(commentId)
     }
 
     fun cancelEditComment() {
-        _editingCommentId.value = null
+        _editingComment.value = null
         _comments.value = _comments.value.unhighlight()
     }
 
