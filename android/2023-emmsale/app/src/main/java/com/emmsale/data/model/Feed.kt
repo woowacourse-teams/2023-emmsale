@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class Feed(
     val id: Long = -1,
-    val eventId: Long = -1,
+    val event: Event = Event(),
     val title: String = "",
     val content: String = "",
     val writer: Member = Member(),
