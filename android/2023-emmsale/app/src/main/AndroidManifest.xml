@@ -22,6 +22,9 @@
         android:theme="@style/Theme.Emmsale"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
+        <activity
+            android:name=".presentation.ui.myPostListPage.MyPostsActivity"
+            android:exported="false" />
         <activity android:name=".presentation.ui.eventSearch.EventSearchActivity" />
         <activity android:name=".presentation.ui.feedDetail.FeedDetailActivity" />
         <activity
@@ -35,10 +38,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.ui.myRecruitmentList.MyRecruitmentActivity" />
         <activity android:name=".presentation.ui.notificationTagConfig.NotificationTagConfigActivity" />
         <activity android:name=".presentation.ui.notificationList.NotificationsActivity" />
         <activity android:name=".presentation.ui.myCommentList.MyCommentsActivity" />

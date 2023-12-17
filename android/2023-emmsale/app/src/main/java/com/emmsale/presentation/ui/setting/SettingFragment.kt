@@ -15,7 +15,7 @@ import com.emmsale.presentation.common.views.WarningDialog
 import com.emmsale.presentation.ui.blockMemberList.BlockedMembersActivity
 import com.emmsale.presentation.ui.login.LoginActivity
 import com.emmsale.presentation.ui.myCommentList.MyCommentsActivity
-import com.emmsale.presentation.ui.myRecruitmentList.MyRecruitmentActivity
+import com.emmsale.presentation.ui.myPostListPage.MyPostsActivity
 import com.emmsale.presentation.ui.notificationConfig.NotificationConfigActivity
 import com.emmsale.presentation.ui.setting.uiState.SettingUiEvent
 import com.emmsale.presentation.ui.useTerm.UseTermWebViewActivity
@@ -43,7 +43,7 @@ class SettingFragment :
 
     private fun setupDataBinding() {
         binding.viewModel = viewModel
-        binding.onWritingsButtonClick = { MyRecruitmentActivity.startActivity(requireContext()) }
+        binding.onWritingsButtonClick = { MyPostsActivity.startActivity(requireContext()) }
         binding.onWrittenCommentsButtonClick =
             { MyCommentsActivity.startActivity(requireContext()) }
         binding.onNotificationSettingButtonClick =
