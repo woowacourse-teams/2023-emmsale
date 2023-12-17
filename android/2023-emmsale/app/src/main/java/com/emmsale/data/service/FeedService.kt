@@ -20,6 +20,9 @@ interface FeedService {
         @Query("event-id") eventId: Long,
     ): ApiResponse<List<FeedResponse>>
 
+    @GET("/feeds/my")
+    suspend fun getMyFeeds(): ApiResponse<List<FeedResponse>>
+
     @GET("/feeds/{feedId}")
     suspend fun getFeed(
         @Path("feedId") feedId: Long,
