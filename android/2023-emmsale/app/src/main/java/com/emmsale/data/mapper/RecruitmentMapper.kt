@@ -15,7 +15,10 @@ fun RecruitmentResponse.toData(): Recruitment = Recruitment(
     content = content,
     updatedDate = updatedAt.toLocalDate(),
     writer = member.toData(),
-    event = Event(id = eventId),
+    event = Event(
+        id = eventId,
+        name = eventName,
+    ),
 )
 
 private fun String.toLocalDate(): LocalDate {

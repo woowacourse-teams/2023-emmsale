@@ -15,6 +15,8 @@ data class RecruitmentResponse(
     val member: MemberResponse,
     @SerialName("eventId")
     val eventId: Long,
+    @SerialName("eventName")
+    val eventName: String = "",
 )
 
 @Serializable
