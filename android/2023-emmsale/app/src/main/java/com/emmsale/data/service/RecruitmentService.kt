@@ -3,7 +3,6 @@ package com.emmsale.data.service
 import com.emmsale.data.apiModel.request.RecruitmentCreateRequest
 import com.emmsale.data.apiModel.request.RecruitmentDeleteRequest
 import com.emmsale.data.apiModel.request.RecruitmentReportCreateRequest
-import com.emmsale.data.apiModel.response.MyPostResponse
 import com.emmsale.data.apiModel.response.RecruitmentReportResponse
 import com.emmsale.data.apiModel.response.RecruitmentResponse
 import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
@@ -31,7 +30,7 @@ interface RecruitmentService {
     @GET("/events/recruitment-posts")
     suspend fun getMemberRecruitments(
         @Query("member-id") memberId: Long,
-    ): ApiResponse<List<MyPostResponse>>
+    ): ApiResponse<List<RecruitmentResponse>>
 
     @POST("/events/{eventId}/recruitment-posts")
     suspend fun postRecruitment(
