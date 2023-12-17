@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="feed"
+            type="com.emmsale.data.model.Feed" />
+
+        <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_my_feed_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="17dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/nanum_square_bold"
+            android:maxLines="1"
+            android:text="@{feed.title}"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="인프콘 2023" />
+
+        <TextView
+            android:id="@+id/tv_my_feed_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="17dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/nanum_square_regular"
+            android:maxLines="5"
+            android:text="@{feed.content}"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_my_feed_title"
+            tools:text="아무나 같이가실 분 구합니다! 역에서 만나서 같이가면 좋을 것 같아요! 많이들 신청해 주세용!!!" />
+
+        <TextView
+            android:id="@+id/tv_my_feed_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="17dp"
+            android:fontFamily="@font/nanum_square_regular"
+            app:dateText="@{feed.updatedAt}"
+            app:dateTimeFormatter="@{DateTimePattern.YEAR_MONTH_DAY_WEEKDAY}"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_my_feed_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="2023.08.03" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
+

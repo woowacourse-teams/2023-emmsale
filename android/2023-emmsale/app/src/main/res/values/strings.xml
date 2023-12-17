@@ -51,6 +51,9 @@
     <string name="all_fetch_error_dialog_title">오류</string>
     <string name="all_fetch_error_dialog_message">데이터를 불러올 수 없습니다.</string>
     <string name="all_unexpected_error_occurred_dialog_message">알 수 없는 오류가 발생했습니다.</string>
+    <string name="all_image_permission_request_dialog_message">이미지 권한 허용을 위해 설정창으로 이동하시겠습니까?</string>
+    <string name="all_image_permission_request_dialog_title">이미지 권한이 거부되었어요</string>
+    <string name="all_choose_image_picker_type">갤러리 종류를 선택하세요</string>
 
     <string name="splash_app_update_title">업데이트</string>
     <string name="splash_app_update_message">새로운 버전이 출시되었어요!\n지금 바로 커디 스토어로 이동하시겠어요?</string>
@@ -71,8 +74,6 @@
     <string name="onboardingfield_sub_message">복수 선택이 최대 4개까지 가능합니다.</string>
     <string name="onboardingfield_selection_limit_exceed">선택할 수 있는 개수를 초과했어요!</string>
 
-    <string name="eventdetail_date_format">%s ~ %s</string>
-    <string name="eventdetail_tab_post">게시판</string>
     <string name="onboardingeducation_page">3/4</string>
     <string name="onboardingeducation_title">교육 활동</string>
     <string name="onboardingeducation_message">교육 이력이 있나요?</string>
@@ -250,6 +251,8 @@
     <string name="eventdetail_tablayout_content_description">상세정보 보기 탭</string>
     <string name="eventdetail_scrap_fail">스크랩 불가</string>
     <string name="eventdetail_scrap_off_fail">스크랩 해제 불가</string>
+    <string name="eventdetail_date_format">%s ~ %s</string>
+    <string name="eventdetail_tab_post">게시판</string>
 
     <string name="eventInfo_cost">비용</string>
     <string name="eventInfo_place">장소</string>
@@ -455,9 +458,9 @@
     <string name="eventsearch_search_history_delete_all">전체 삭제</string>
     <string name="eventsearch_delete_all_query_dialog_title">전체 삭제</string>
     <string name="eventsearch_delete_all_query_dialog_desc">최근 검색어를 모두 삭제하시겠어요?</string>
-    <string name="all_image_permission_request_dialog_message">이미지 권한 허용을 위해 설정창으로 이동하시겠습니까?</string>
-    <string name="all_image_permission_request_dialog_title">이미지 권한이 거부되었어요</string>
-    <string name="all_choose_image_picker_type">갤러리 종류를 선택하세요</string>
+
+    <string name="myposts_tab_feeds">행사 게시판</string>
+    <string name="myposts_tab_recruitments">함께해요</string>
 
     <string name="splash_not_installed_playstore">플레이스토어가 설치되지 않았거나 로그인하지 않았어요 😥</string>
 </resources>
