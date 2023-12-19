@@ -14,7 +14,8 @@ class FeedDetailViewHolder(
     parent: ViewGroup,
     onAuthorImageClick: (authorId: Long) -> Unit,
 ) : FeedOrCommentViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_feeddetail_feed_detail, parent, false),
+    LayoutInflater.from(parent.context)
+        .inflate(R.layout.item_feeddetail_feed_detail, parent, false),
 ) {
     private val binding = ItemFeeddetailFeedDetailBinding.bind(itemView)
 

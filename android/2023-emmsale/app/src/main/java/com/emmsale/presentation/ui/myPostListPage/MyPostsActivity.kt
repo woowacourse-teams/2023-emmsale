@@ -11,7 +11,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyPostsActivity() : BaseActivity<ActivityMyPostsBinding>(R.layout.activity_my_posts) {
+class MyPostsActivity : BaseActivity<ActivityMyPostsBinding>(R.layout.activity_my_posts) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

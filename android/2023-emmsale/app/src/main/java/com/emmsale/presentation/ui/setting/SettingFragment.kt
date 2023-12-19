@@ -48,7 +48,8 @@ class SettingFragment :
             { MyCommentsActivity.startActivity(requireContext()) }
         binding.onNotificationSettingButtonClick =
             { NotificationConfigActivity.startActivity(requireContext()) }
-        binding.onBlockMembersButtonClick = { BlockedMembersActivity.startActivity(requireContext()) }
+        binding.onBlockMembersButtonClick =
+            { BlockedMembersActivity.startActivity(requireContext()) }
         binding.onUseTermButtonClick = { UseTermWebViewActivity.startActivity(requireContext()) }
         binding.onLogoutButtonClick = ::showLogoutConfirmDialog
         binding.onInquirePageButtonClick = ::navigateToInquirePage
