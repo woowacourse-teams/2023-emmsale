@@ -7,9 +7,11 @@ import com.kakao.sdk.common.util.KakaoCustomTabsClient
 import com.kakao.sdk.share.ShareClient
 import com.kakao.sdk.share.WebSharerClient
 import com.kakao.sdk.template.model.FeedTemplate
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class EventSharer(
-    private val context: Context,
+class EventSharer @Inject constructor(
+    @ApplicationContext private val context: Context,
 ) {
     private val isNotKakaoTalkInstalled
         get() = !ShareClient.instance.isKakaoTalkSharingAvailable(context)

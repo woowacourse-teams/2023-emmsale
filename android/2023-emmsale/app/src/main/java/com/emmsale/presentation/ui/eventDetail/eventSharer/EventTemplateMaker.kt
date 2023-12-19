@@ -7,8 +7,12 @@ import com.kakao.sdk.template.model.Button
 import com.kakao.sdk.template.model.Content
 import com.kakao.sdk.template.model.FeedTemplate
 import com.kakao.sdk.template.model.Link
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class EventTemplateMaker(private val context: Context) {
+class EventTemplateMaker @Inject constructor(
+    @ApplicationContext private val context: Context,
+) {
     fun create(
         eventId: Long,
         eventName: String,
