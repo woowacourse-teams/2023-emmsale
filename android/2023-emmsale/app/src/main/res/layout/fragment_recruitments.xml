@@ -45,19 +45,19 @@
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:onRefresh="@{() -> vm.refresh()}" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onRefresh="@{() -> vm.refresh()}"
+            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
         <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.recruitments.empty &amp;&amp; vm.networkUiState == NetworkUiState.NONE}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            app:visible="@{vm.recruitments.empty &amp;&amp; vm.networkUiState == NetworkUiState.NONE}">
 
             <com.emmsale.presentation.common.views.NoContentView
                 android:layout_width="match_parent"
