@@ -74,6 +74,10 @@
     <string name="eventdetail_date_format">%s ~ %s</string>
     <string name="eventdetail_tab_post">게시판</string>
     <string name="eventdetail_share">행사 공유</string>
+    <string name="eventdetail_share_template_description">친구로부터 행사를 공유받았어요!\n커디에서 게시글을 구경하고 동행자를 모집해보세요.</string>
+    <string name="eventdetail_share_button_title">행사 구경하기!</string>
+    <string name="eventdetail_kakao_share_fail">카카오톡 공유에 실패했어요 🥲</string>
+    <string name="eventdetail_no_exist_browser">지원되는 브라우저가 없어요 🥲</string>
 
     <string name="onboardingeducation_page">3/4</string>
     <string name="onboardingeducation_title">교육 활동</string>
