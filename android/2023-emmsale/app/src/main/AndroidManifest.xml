@@ -58,7 +58,20 @@
             android:name=".presentation.ui.main.MainActivity"
             android:launchMode="singleTask" />
         <activity android:name=".presentation.ui.onboarding.OnboardingActivity" />
-        <activity android:name=".presentation.ui.eventDetail.EventDetailActivity" />
+        <activity
+            android:name=".presentation.ui.eventDetail.EventDetailActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/kakao_host"
+                    android:scheme="@string/kakao_scheme" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:exported="true"

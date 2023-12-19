@@ -72,10 +72,10 @@
             android:text="@string/all_is_updated"
             android:textColor="@color/gray"
             android:textSize="11sp"
-            app:visible="@{feed.isUpdated}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_feeddetail_last_modified_date"
             app:layout_constraintStart_toEndOf="@+id/tv_feeddetail_last_modified_date"
-            app:layout_constraintTop_toTopOf="@+id/tv_feeddetail_last_modified_date" />
+            app:layout_constraintTop_toTopOf="@+id/tv_feeddetail_last_modified_date"
+            app:visible="@{feed.isUpdated}" />
 
         <TextView
             android:id="@+id/tv_feeddetail_title"

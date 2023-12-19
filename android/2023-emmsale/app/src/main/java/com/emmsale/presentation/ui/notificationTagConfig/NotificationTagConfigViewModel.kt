@@ -63,7 +63,8 @@ class NotificationTagConfigViewModel @Inject constructor(
                 _networkUiEvent.value = NetworkUiEvent.Unexpected(eventTagsResult.error.toString())
 
             interestTagsResult is Unexpected ->
-                _networkUiEvent.value = NetworkUiEvent.Unexpected(interestTagsResult.error.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(interestTagsResult.error.toString())
 
             eventTagsResult is Failure || interestTagsResult is Failure -> dispatchFetchFailEvent()
             eventTagsResult is NetworkError || interestTagsResult is NetworkError -> {
@@ -93,7 +94,8 @@ class NotificationTagConfigViewModel @Inject constructor(
                 _networkUiEvent.value = NetworkUiEvent.Unexpected(eventTagsResult.error.toString())
 
             interestTagsResult is Unexpected ->
-                _networkUiEvent.value = NetworkUiEvent.Unexpected(interestTagsResult.error.toString())
+                _networkUiEvent.value =
+                    NetworkUiEvent.Unexpected(interestTagsResult.error.toString())
 
             eventTagsResult is Failure || interestTagsResult is Failure -> dispatchFetchFailEvent()
             eventTagsResult is NetworkError || interestTagsResult is NetworkError -> {

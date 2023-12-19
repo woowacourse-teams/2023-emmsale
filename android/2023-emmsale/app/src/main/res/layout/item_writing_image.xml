@@ -26,12 +26,12 @@
             android:id="@+id/iv_item_post_image"
             android:layout_width="140dp"
             android:layout_height="140dp"
+            app:canZoomIn="@{true}"
             app:imageUrl="@{imageUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:roundedImageRadius="@{10}"
-            app:canZoomIn="@{true}"
             tools:src="@drawable/img_all_loading" />
 
         <ImageView

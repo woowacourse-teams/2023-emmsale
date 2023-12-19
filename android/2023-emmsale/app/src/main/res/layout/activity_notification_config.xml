@@ -167,9 +167,9 @@
                             android:layout_width="60dp"
                             android:layout_height="32dp"
                             android:layout_marginTop="22dp"
-                            android:onClick="@{() -> onTagAddButtonClick.invoke()}"
                             android:background="@drawable/bg_notificationconfig_add"
-                            android:contentDescription="@string/notificationconfig_add_notification_tag" />
+                            android:contentDescription="@string/notificationconfig_add_notification_tag"
+                            android:onClick="@{() -> onTagAddButtonClick.invoke()}" />
 
                     </com.google.android.material.chip.ChipGroup>
 
@@ -236,21 +236,21 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_notification_config" />
+            app:layout_constraintTop_toBottomOf="@id/tb_notification_config"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}" />
 
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}"
-            app:onRefresh="@{() -> viewModel.refresh()}"
-            app:layout_constraintTop_toBottomOf="@id/tb_notification_config"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tb_notification_config"
+            app:onRefresh="@{() -> viewModel.refresh()}"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

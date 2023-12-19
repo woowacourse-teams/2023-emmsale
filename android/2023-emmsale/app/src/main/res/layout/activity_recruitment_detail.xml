@@ -85,10 +85,10 @@
                     android:layout_marginStart="9dp"
                     android:layout_marginTop="6dp"
                     android:fontFamily="@font/nanum_square_regular"
-                    app:dateText="@{vm.recruitment.recruitment.updatedDate}"
-                    app:dateTimeFormatter="@{DateTimePattern.YEAR_DOT_MONTH_DOT_DAY}"
                     android:textColor="@color/gray"
                     android:textSize="11sp"
+                    app:dateText="@{vm.recruitment.recruitment.updatedDate}"
+                    app:dateTimeFormatter="@{DateTimePattern.YEAR_DOT_MONTH_DOT_DAY}"
                     app:layout_constraintStart_toEndOf="@+id/iv_recruitmentdetail_profile_image"
                     app:layout_constraintTop_toBottomOf="@+id/tv_recruitmentdetail_membername"
                     tools:text="2023.08.03" />
@@ -115,13 +115,13 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="17dp"
                     android:layout_marginTop="14dp"
+                    android:contentDescription="@string/recruitmentpostdetail_writer_image_description"
+                    android:onClick="@{() -> onProfileImageClick.invoke(vm.recruitment.recruitment.writer.id)}"
                     app:imageUrl="@{vm.recruitment.recruitment.writer.profileImageUrl}"
                     app:isCircle="@{true}"
-                    android:onClick="@{() -> onProfileImageClick.invoke(vm.recruitment.recruitment.writer.id)}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@tools:sample/avatars"
-                    android:contentDescription="@string/recruitmentpostdetail_writer_image_description" />
+                    tools:srcCompat="@tools:sample/avatars" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -137,34 +137,34 @@
             android:clickable="true"
             android:fontFamily="@font/nanum_square_bold"
             android:gravity="center"
+            android:onClick="@{() -> onRequestRecruitmentButtonClick.invoke()}"
             android:text="@string/recruitmentpostdetail_request_button_text"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:onClick="@{() -> onRequestRecruitmentButtonClick.invoke()}"
-            app:visible="@{!vm.recruitment.isMyPost}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:visible="@{!vm.recruitment.isMyPost}" />
 
         <ProgressBar
             android:id="@+id/progressBar2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}" />
 
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}"
-            app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:onRefresh="@{() -> vm.refresh()}" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+            app:onRefresh="@{() -> vm.refresh()}"
+            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

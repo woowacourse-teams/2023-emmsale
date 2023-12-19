@@ -128,12 +128,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:hint="@string/messagelist_message_send_hint"
-            app:submitButtonLabel="@string/messagelist_send_message"
             app:isSubmitEnabled="@{vm.canSendMessage}"
-            app:onSubmit="@{(message) -> vm.sendMessage(message)}"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:onSubmit="@{(message) -> vm.sendMessage(message)}"
+            app:submitButtonLabel="@string/messagelist_send_message" />
 
         <com.emmsale.presentation.common.views.NoContentView
             android:layout_width="0dp"
@@ -150,21 +150,21 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
-            app:layout_constraintTop_toBottomOf="@id/tb_message_list"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_message_list"
+            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}" />
 
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}"
-            app:onRefresh="@{() -> vm.refresh()}"
-            app:layout_constraintTop_toBottomOf="@id/tb_message_list"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_message_list"
+            app:onRefresh="@{() -> vm.refresh()}"
+            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

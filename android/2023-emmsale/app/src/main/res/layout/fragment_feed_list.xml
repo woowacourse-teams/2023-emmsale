@@ -47,27 +47,27 @@
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:onRefresh="@{() -> vm.refresh()}" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onRefresh="@{() -> vm.refresh()}"
+            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
         <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{vm.feeds.empty &amp;&amp; vm.networkUiState == NetworkUiState.NONE}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            app:visible="@{vm.feeds.empty &amp;&amp; vm.networkUiState == NetworkUiState.NONE}">
 
             <com.emmsale.presentation.common.views.NoContentView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp"
                 app:description="@string/postlist_no_content_view_desc"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:noContentImageResId="@drawable/ic_no_result2"
                 app:title="@string/postlist_no_content_view_title" />
         </androidx.core.widget.NestedScrollView>

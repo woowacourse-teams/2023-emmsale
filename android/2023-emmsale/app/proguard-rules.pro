@@ -10,3 +10,10 @@
 
 # ApiResponse 클래스 축소 및 난독화 해제하여 CallAdapter에서 retrofit2.Call<ApiResponse>를 반환하는 CallAdapter 만들 수 있도록 변경
 -keepnames class com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+
+# 카카오 공유하기
+-if interface * { @retrofit2.http.* public *** *(...); }
+-keep,allowoptimization,allowshrinking,allowobfuscation class <3>
+-keep interface com.kakao.sdk.**.*Api
+-keep class com.kakao.sdk.**.model.* { <fields>; }
+-keep class * extends com.google.gson.TypeAdapter

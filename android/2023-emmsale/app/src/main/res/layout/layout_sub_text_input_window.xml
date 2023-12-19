@@ -34,28 +34,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="17dp"
-            android:paddingBottom="5dp"
             android:background="@android:color/transparent"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:lineSpacingExtra="2dp"
             android:maxLength="255"
             android:maxLines="5"
-            android:textSize="13sp"
             android:paddingTop="8dp"
+            android:paddingBottom="5dp"
+            android:textSize="13sp"
             app:layout_constraintBottom_toTopOf="@id/tv_submit_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="LabelFor"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="LabelFor" />
 
         <TextView
             android:id="@+id/tv_cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> onCancelListener.onCancel()}"
             android:paddingHorizontal="17dp"
             android:paddingVertical="13dp"
-            android:onClick="@{() -> onCancelListener.onCancel()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_submit_button" />
 
@@ -63,10 +63,10 @@
             android:id="@+id/tv_submit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="17dp"
-            android:paddingVertical="13dp"
             android:enabled="@{!etSubTextInput.text.toString().isBlank() &amp;&amp; isSubmitEnabled}"
             android:onClick="@{() -> onSubmitListener.onSubmit(etSubTextInput.getText().toString())}"
+            android:paddingHorizontal="17dp"
+            android:paddingVertical="13dp"
             android:textColor="@color/all_enable_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

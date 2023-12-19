@@ -48,14 +48,14 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_comments"
-            app:onRefresh1="@{viewModel::refresh}"
-            app:swipeRefreshColor="@{@color/primary_color}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_childcomments_toolbar">
+            app:layout_constraintTop_toBottomOf="@id/tb_childcomments_toolbar"
+            app:onRefresh1="@{viewModel::refresh}"
+            app:swipeRefreshColor="@{@color/primary_color}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -77,28 +77,28 @@
                     android:id="@+id/btiw_comment_post"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:hint="@string/comments_edit_comment_hint"
-                    app:onSubmit="@{(content) -> onCommentSubmitButtonClick.invoke(content)}"
                     app:isSubmitEnabled="@{viewModel.canSubmitComment}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:onSubmit="@{(content) -> onCommentSubmitButtonClick.invoke(content)}"
                     app:submitButtonLabel="@string/comments_comment_submit_button_label" />
 
                 <com.emmsale.presentation.common.views.SubTextInputWindow
                     android:id="@+id/stiw_comment_update"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:text="@{viewModel.editingCommentContent}"
-                    app:visible="@{viewModel.editingCommentId != null}"
-                    app:isSubmitEnabled="@{viewModel.canSubmitComment}"
-                    app:submitButtonLabel="@string/all_update_button_label"
                     app:cancelButtonLabel="@string/all_cancel"
+                    app:isSubmitEnabled="@{viewModel.canSubmitComment}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:onCancel="@{() -> onCommentUpdateCancelButtonClick.invoke()}"
-                    app:onSubmit="@{(content) -> onUpdatedCommentSubmitButtonClick.invoke(content)}" />
+                    app:onSubmit="@{(content) -> onUpdatedCommentSubmitButtonClick.invoke(content)}"
+                    app:submitButtonLabel="@string/all_update_button_label"
+                    app:text="@{viewModel.editingCommentContent}"
+                    app:visible="@{viewModel.editingCommentId != null}" />
 
                 <ProgressBar
                     android:id="@+id/progressBar"
@@ -118,12 +118,12 @@
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/tb_childcomments_toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}"
-            app:onRefresh="@{() -> viewModel.refresh()}" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_childcomments_toolbar"
+            app:onRefresh="@{() -> viewModel.refresh()}"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

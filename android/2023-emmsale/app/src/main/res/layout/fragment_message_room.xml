@@ -41,13 +41,13 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_message_room_list"
-            app:onRefresh1="@{() -> vm.refresh()}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider"
+            app:onRefresh1="@{() -> vm.refresh()}"
             app:swipeRefreshColor="@{@color/primary_color}">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -67,12 +67,12 @@
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}"
-            app:onRefresh="@{() -> vm.refresh()}"
-            app:layout_constraintTop_toBottomOf="@id/tb_message_room_list"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_message_room_list"
+            app:onRefresh="@{() -> vm.refresh()}"
+            app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
         <com.emmsale.presentation.common.views.NoContentView
             android:layout_width="0dp"
@@ -90,11 +90,11 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_message_room_list" />
+            app:layout_constraintTop_toBottomOf="@id/tb_message_room_list"
+            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

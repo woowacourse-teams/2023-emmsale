@@ -51,23 +51,24 @@
             android:id="@+id/tb_eventdetail"
             android:layout_width="0dp"
             android:layout_height="56dp"
+            app:layout_constraintEnd_toEndOf="@id/guide_line_center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_eventdetail_toolbar"
+            app:navigationIcon="@drawable/ic_all_back"
             app:title="@{vm.event.name}"
             app:titleTextAppearance="@style/event_detail_toolbar_text_appearance"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guide_line_center"
-            app:navigationIcon="@drawable/ic_all_back"
             tools:title="AWS 부산 클라우드데이 2023 AWS" />
 
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="10dp"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toTopOf="@id/button_eventdetail_navigatewebsite"
             app:layout_constraintEnd_toStartOf="@+id/guide_line_center"
             app:layout_constraintStart_toStartOf="parent"
-            android:scrollbars="none"
-            app:layout_constraintTop_toBottomOf="@id/tb_eventdetail"
-            app:layout_constraintBottom_toTopOf="@id/button_eventdetail_navigatewebsite">
+            app:layout_constraintTop_toBottomOf="@id/tb_eventdetail">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -204,16 +205,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guide_line_center"
+            app:layout_constraintTop_toTopOf="parent"
             app:tabBackground="@drawable/bg_tablayout_indicator"
+            app:tabGravity="fill"
             app:tabIndicatorColor="@color/primary_color"
             app:tabIndicatorFullWidth="true"
-            app:tabGravity="fill"
             app:tabIndicatorHeight="2dp"
             app:tabSelectedTextAppearance="@style/EventDetail_SelectedTabStyle"
             app:tabSelectedTextColor="@color/primary_color"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guide_line_center"
-            app:layout_constraintEnd_toEndOf="parent"
             app:tabTextAppearance="@style/EventDetail_NotSelectedTabStyle"
             app:tabTextColor="@color/black" />
 
@@ -221,10 +222,10 @@
             android:id="@+id/vp_eventdetail"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="@id/guide_line_center"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tablayout_eventdetail"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="@id/guide_line_center"
+            app:layout_constraintTop_toBottomOf="@id/tablayout_eventdetail" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btn_eventdetail_writing"
@@ -234,23 +235,23 @@
             android:layout_marginEnd="17dp"
             android:layout_marginBottom="17dp"
             android:background="@drawable/bg_recruitment_writing_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:onClick="@{()->navigateToWritingPost.invoke()}"
             android:src="@drawable/ic_recruitment_pencil"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:visible="@{vm.currentScreen != Screen.INFORMATION}" />
 
         <ProgressBar
+            android:id="@+id/progressBar3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone"
-            android:id="@+id/progressBar3" />
+            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
+            tools:visibility="gone" />
 
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="match_parent"

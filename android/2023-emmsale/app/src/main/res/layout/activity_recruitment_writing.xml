@@ -43,12 +43,12 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="17dp"
-            android:text="@={vm.content}"
             android:background="@null"
             android:gravity="start"
             android:hint="@string/recruitmentpostwriting_hint_message"
             android:inputType="textMultiLine"
             android:maxLength="250"
+            android:text="@={vm.content}"
             android:textAppearance="@style/KerdyTextStyleBlackRegular13"
             android:textColorHint="@color/gray"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -59,10 +59,10 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tb_toolbar" />
+            app:layout_constraintTop_toTopOf="@+id/tb_toolbar"
+            app:visible="@{vm.networkUiState == NetworkUiState.LOADING}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
