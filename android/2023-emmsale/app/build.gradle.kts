@@ -25,15 +25,16 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField(
-            "String",
-            "GITHUB_CLIENT_ID",
-            getApiKey("GH_CLIENT_ID"),
-        )
+        buildConfigField("String", "GITHUB_CLIENT_ID", getApiKey("GH_CLIENT_ID"))
+        resValue("string", "kakao_app_key", getApiKey("KAKAO_APP_KEY"))
+        resValue("string", "kakao_scheme", getApiKey("KAKAO_SCHEME"))
+        resValue("string", "kakao_host", getApiKey("KAKAO_HOST"))
     }
+
     buildFeatures {
         buildConfig = true
     }
+
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", "\"https://dev.kerdy.kro.kr\"")
@@ -59,16 +60,20 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
     }
+
     dataBinding {
         enable = true
     }
+
     tasks.withType(Test::class) {
         testLogging {
             events.addAll(
@@ -80,6 +85,7 @@ android {
             )
         }
     }
+
     testOptions {
         unitTests.isReturnDefaultValues = true
         unitTests.isIncludeAndroidResources = true
