@@ -179,7 +179,7 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
 
     // Kakao Share
-    implementation("com.kakao.sdk:v2-share:2.11.2")
+    implementation("com.kakao.sdk:v2-share:2.12.0")
 }
 
 kapt {
