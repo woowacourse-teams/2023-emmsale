@@ -12,5 +12,8 @@
 -keepnames class com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 
 # 카카오 공유하기
+-if interface * { @retrofit2.http.* public *** *(...); }
+-keep,allowoptimization,allowshrinking,allowobfuscation class <3>
+-keep interface com.kakao.sdk.**.*Api
 -keep class com.kakao.sdk.**.model.* { <fields>; }
 -keep class * extends com.google.gson.TypeAdapter
