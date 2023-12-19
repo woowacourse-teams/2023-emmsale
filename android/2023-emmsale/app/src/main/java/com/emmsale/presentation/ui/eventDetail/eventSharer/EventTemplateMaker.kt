@@ -22,7 +22,7 @@ class EventTemplateMaker @Inject constructor(
             title = eventName,
             description = context.getString(R.string.eventdetail_share_template_description),
             imageUrl = posterUrl ?: "",
-            link = Link(),
+            link = Link(androidExecutionParams = mapOf(EventDetailViewModel.EVENT_ID_KEY to eventId.toString())),
         ),
         buttons = listOf(
             Button(
