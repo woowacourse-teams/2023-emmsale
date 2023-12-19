@@ -17,24 +17,19 @@ class MyFeedsFragment : NetworkFragment<FragmentMyFeedsBinding>(R.layout.fragmen
     override val viewModel: MyFeedsViewModel by viewModels()
 
     private val myFeedAdapter: MyFeedAdapter by lazy {
-        MyFeedAdapter(navigateToDetail = ::navigateToDetail)
+        MyFeedAdapter(onItemClick = ::navigateToDetail)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupBinding()
+        setupDataBinding()
         setupRecyclerView()
-        observeMyRecruitments()
+
+        observeMyFeeds()
     }
 
-    private fun setupBinding() {
+    private fun setupDataBinding() {
         binding.vm = viewModel
-    }
-
-    private fun observeMyRecruitments() {
-        viewModel.myFeeds.observe(viewLifecycleOwner) { myFeeds ->
-            myFeedAdapter.submitList(myFeeds)
-        }
     }
 
     private fun setupRecyclerView() {
@@ -42,6 +37,12 @@ class MyFeedsFragment : NetworkFragment<FragmentMyFeedsBinding>(R.layout.fragmen
             adapter = myFeedAdapter
             itemAnimator = null
             addItemDecoration(DividerItemDecoration(context = context))
+        }
+    }
+
+    private fun observeMyFeeds() {
+        viewModel.myFeeds.observe(viewLifecycleOwner) { myFeeds ->
+            myFeedAdapter.submitList(myFeeds)
         }
     }
 

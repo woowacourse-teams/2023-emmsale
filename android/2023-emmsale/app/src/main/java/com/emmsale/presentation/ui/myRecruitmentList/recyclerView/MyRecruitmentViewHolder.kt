@@ -27,11 +27,11 @@ class MyRecruitmentViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
-            navigateToDetail: (eventId: Long, recruitmentId: Long) -> Unit,
+            onItemClick: (eventId: Long, recruitmentId: Long) -> Unit,
         ): MyRecruitmentViewHolder {
             val binding =
                 ItemMyRecruitmentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return MyRecruitmentViewHolder(binding, navigateToDetail)
+            return MyRecruitmentViewHolder(binding, onItemClick)
         }
     }
 }

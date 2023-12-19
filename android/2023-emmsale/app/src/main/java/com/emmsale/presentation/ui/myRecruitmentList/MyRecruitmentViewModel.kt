@@ -28,12 +28,18 @@ class MyRecruitmentViewModel @Inject constructor(
     private fun fetchMyRecruitments() {
         fetchData(
             fetchData = { recruitmentRepository.getMemberRecruitments(uid) },
-            onSuccess = { _myRecruitments.value = it },
+            onSuccess = {
+                _myRecruitments.value =
+                    it.sortedByDescending { recruitment -> recruitment.updatedDate }
+            },
         )
     }
 
     override fun refresh(): Job = refreshData(
         refresh = { recruitmentRepository.getMemberRecruitments(uid) },
-        onSuccess = { _myRecruitments.value = it },
+        onSuccess = {
+            _myRecruitments.value =
+                it.sortedByDescending { recruitment -> recruitment.updatedDate }
+        },
     )
 }

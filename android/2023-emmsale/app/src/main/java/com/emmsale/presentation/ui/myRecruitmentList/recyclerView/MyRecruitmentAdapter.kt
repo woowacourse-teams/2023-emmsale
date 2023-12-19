@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.emmsale.data.model.Recruitment
 
 class MyRecruitmentAdapter(
-    private val navigateToDetail: (eventId: Long, recruitmentId: Long) -> Unit,
+    private val onItemClick: (eventId: Long, recruitmentId: Long) -> Unit,
 ) : ListAdapter<Recruitment, MyRecruitmentViewHolder>(
     object : DiffUtil.ItemCallback<Recruitment>() {
         override fun areItemsTheSame(
@@ -22,7 +22,7 @@ class MyRecruitmentAdapter(
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyRecruitmentViewHolder {
-        return MyRecruitmentViewHolder.create(parent, navigateToDetail)
+        return MyRecruitmentViewHolder.create(parent, onItemClick)
     }
 
     override fun onBindViewHolder(holder: MyRecruitmentViewHolder, position: Int) {

@@ -18,13 +18,14 @@ class MyRecruitmentsFragment :
     override val viewModel: MyRecruitmentViewModel by viewModels()
 
     private val myRecruitmentAdapter: MyRecruitmentAdapter by lazy {
-        MyRecruitmentAdapter(navigateToDetail = ::navigateToDetail)
+        MyRecruitmentAdapter(onItemClick = ::navigateToDetail)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupBinding()
         setupRecyclerView()
+
         observeMyRecruitments()
     }
 
@@ -32,17 +33,17 @@ class MyRecruitmentsFragment :
         binding.vm = viewModel
     }
 
-    private fun observeMyRecruitments() {
-        viewModel.myRecruitments.observe(viewLifecycleOwner) { myRecruitments ->
-            myRecruitmentAdapter.submitList(myRecruitments)
-        }
-    }
-
     private fun setupRecyclerView() {
         binding.rvMyPost.apply {
             adapter = myRecruitmentAdapter
             itemAnimator = null
             addItemDecoration(DividerItemDecoration(context = context))
+        }
+    }
+
+    private fun observeMyRecruitments() {
+        viewModel.myRecruitments.observe(viewLifecycleOwner) { myRecruitments ->
+            myRecruitmentAdapter.submitList(myRecruitments)
         }
     }
 

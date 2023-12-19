@@ -1,14 +1,12 @@
 package com.emmsale.presentation.ui.myFeedList.recyclerView
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.emmsale.data.model.Feed
-import com.emmsale.databinding.ItemMyFeedBinding
 
 class MyFeedAdapter(
-    private val navigateToDetail: (recruitmentId: Long) -> Unit,
+    private val onItemClick: (recruitmentId: Long) -> Unit,
 ) : ListAdapter<Feed, MyFeedViewHolder>(
     object : DiffUtil.ItemCallback<Feed>() {
         override fun areItemsTheSame(
@@ -24,9 +22,7 @@ class MyFeedAdapter(
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyFeedViewHolder {
-        val binding =
-            ItemMyFeedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyFeedViewHolder(binding, navigateToDetail)
+        return MyFeedViewHolder.create(parent, onItemClick)
     }
 
     override fun onBindViewHolder(holder: MyFeedViewHolder, position: Int) {

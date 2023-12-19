@@ -23,11 +23,15 @@ class MyFeedsViewModel @Inject constructor(
 
     private fun fetchMyFeeds(): Job = fetchData(
         fetchData = { feedRepository.getMyFeeds() },
-        onSuccess = { _myFeeds.value = it },
+        onSuccess = {
+            _myFeeds.value = it.sortedByDescending { feed -> feed.createdAt }
+        },
     )
 
     override fun refresh(): Job = refreshData(
         refresh = { feedRepository.getMyFeeds() },
-        onSuccess = { _myFeeds.value = it },
+        onSuccess = {
+            _myFeeds.value = it.sortedByDescending { feed -> feed.createdAt }
+        },
     )
 }

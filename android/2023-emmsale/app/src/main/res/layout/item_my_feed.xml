@@ -60,7 +60,7 @@
             android:layout_marginBottom="17dp"
             android:fontFamily="@font/nanum_square_regular"
             app:dateText="@{feed.updatedAt}"
-            app:dateTimeFormatter="@{DateTimePattern.YEAR_MONTH_DAY_WEEKDAY}"
+            app:dateTimeFormatter="@{DateTimePattern.YEAR_DOT_MONTH_DOT_DAY}"
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
