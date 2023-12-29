@@ -8,12 +8,6 @@ data class CommentUiState(
     val comment: Comment,
 ) : FeedOrCommentUiState {
 
-    constructor(uid: Long, comment: Comment, isHighlight: Boolean = false) : this(
-        isWrittenByLoginUser = uid == comment.writer.id,
-        isHighlight = isHighlight,
-        comment = comment,
-    )
-
     override val id: Long = comment.id
 
     override val viewType: Int = VIEW_TYPE
@@ -28,5 +22,12 @@ data class CommentUiState(
 
     companion object {
         const val VIEW_TYPE = 1
+
+        fun create(uid: Long, comment: Comment, isHighlight: Boolean = false): CommentUiState =
+            CommentUiState(
+                isWrittenByLoginUser = uid == comment.writer.id,
+                isHighlight = isHighlight,
+                comment = comment,
+            )
     }
 }
