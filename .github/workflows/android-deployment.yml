@@ -28,21 +28,21 @@ jobs:
 
     - name: Access KAKAO_APP_KEY
       run: |
-        echo KAKAO_APP_KEY=\"$KAKAO_APP_KEY\" > android/2023-emmsale/local.properties
+        echo KAKAO_APP_KEY=\"$KAKAO_APP_KEY\" >> android/2023-emmsale/local.properties
       shell: bash
       env:
         KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
      
     - name: Access KAKAO_SCHEME
       run: |
-        echo KAKAO_SCHEME=\"$KAKAO_SCHEME\" > android/2023-emmsale/local.properties
+        echo KAKAO_SCHEME=\"$KAKAO_SCHEME\" >> android/2023-emmsale/local.properties
       shell: bash
       env:
         KAKAO_SCHEME: ${{ secrets.KAKAO_SCHEME }}
 
     - name: Access KAKAO_HOST
       run: |
-        echo KAKAO_HOST=\"$KAKAO_HOST\" > android/2023-emmsale/local.properties
+        echo KAKAO_HOST=\"$KAKAO_HOST\" >> android/2023-emmsale/local.properties
       shell: bash
       env:
         KAKAO_HOST: ${{ secrets.KAKAO_HOST }}
