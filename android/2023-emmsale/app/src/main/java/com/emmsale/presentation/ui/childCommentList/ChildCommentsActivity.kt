@@ -74,7 +74,6 @@ class ChildCommentsActivity :
 
     private fun BottomMenuDialog.addCommentUpdateButton(commentId: Long) {
         addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
-            viewModel.startEditComment(commentId)
             binding.stiwCommentUpdate.requestFocusOnEditText()
             showKeyboard()
             startToEditComment(commentId)
@@ -82,7 +81,7 @@ class ChildCommentsActivity :
     }
 
     private fun startToEditComment(commentId: Long) {
-        val position = viewModel.comments.value.getPosition(commentId)
+        val position = viewModel.startEditComment(commentId) ?: return
 
         lifecycleScope.launch {
             delay(KEYBOARD_SHOW_WAITING_TIME)
@@ -203,7 +202,6 @@ class ChildCommentsActivity :
         if (highlightCommentId == INVALID_COMMENT_ID || isNotRealFirstEnter()) return
 
         viewModel.isAlreadyFirstFetched = true
-        viewModel.highlightCommentOnFirstEnter(highlightCommentId)
         highlightCommentOnFirstEnter()
     }
 
@@ -211,7 +209,7 @@ class ChildCommentsActivity :
         viewModel.isAlreadyFirstFetched || viewModel.comments.value.commentUiStates.isEmpty()
 
     private fun highlightCommentOnFirstEnter() {
-        val position = viewModel.comments.value.getPosition(highlightCommentId)
+        val position = viewModel.highlightCommentOnFirstEnter(highlightCommentId) ?: return
 
         binding.rvChildcommentsChildcomments.scrollToPosition(position)
         lifecycleScope.launch {
