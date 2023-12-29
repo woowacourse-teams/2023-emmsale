@@ -8,5 +8,5 @@
 # is used.
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
-# ApiResponse 클래스 축소 및 난독화 해제하여 CallAdapter에서 retrofit2.Call<ApiResponse>를 반환하는 CallAdapter 만들 수 있도록 변경
--keepnames class com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+# ApiResponse 클래스의 타입 매개변수를 유지하기 위해 추가. 안하면 CallAdapter에서 retrofit2.Call<ApiResponse>를 반환하는 CallAdapter 만들 수 없음.
+-keepnames, allowobfuscation class com.emmsale.data.common.retrofit.callAdapter.ApiResponse
