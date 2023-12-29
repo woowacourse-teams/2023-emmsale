@@ -198,13 +198,17 @@ class FeedDetailViewModel @Inject constructor(
         onFailure = { _, _ -> _uiEvent.value = FeedDetailUiEvent.CommentDeleteFail },
     )
 
-    fun startEditComment(commentId: Long) {
+    /**
+     * @return 수정할 댓글의 위치
+     */
+    fun startEditComment(commentId: Long): Int? {
         _editingComment.value = commentUiStates
             .find { it.comment.id == commentId }
             ?.comment
-            ?: return
+            ?: return null
         unhighlightJob?.cancel()
         _feedDetailUiState.value = _feedDetailUiState.value.highlightComment(commentId)
+        return feedDetailUiState.value.getCommentPosition(commentId)
     }
 
     fun cancelEditComment() {
@@ -212,12 +216,16 @@ class FeedDetailViewModel @Inject constructor(
         _feedDetailUiState.value = _feedDetailUiState.value.unhighlightComment()
     }
 
-    fun highlightCommentOnFirstEnter(commentId: Long) {
+    /**
+     * @return 하이라이팅할 댓글의 위치
+     */
+    fun highlightCommentOnFirstEnter(commentId: Long): Int? {
         _feedDetailUiState.value = _feedDetailUiState.value.highlightComment(commentId)
         unhighlightJob = viewModelScope.launch {
             delay(COMMENT_HIGHLIGHTING_DURATION_ON_FIRST_ENTER)
             _feedDetailUiState.value = _feedDetailUiState.value.unhighlightComment()
         }
+        return _feedDetailUiState.value.getCommentPosition(commentId)
     }
 
     fun reportComment(commentId: Long): Job = command(

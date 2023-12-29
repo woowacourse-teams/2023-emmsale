@@ -84,13 +84,17 @@ class ChildCommentsViewModel @Inject constructor(
         onFailure = { _, _ -> _uiEvent.value = ChildCommentsUiEvent.CommentDeleteFail },
     )
 
-    fun startEditComment(commentId: Long) {
+    /**
+     * @return 수정할 댓글 위치
+     */
+    fun startEditComment(commentId: Long): Int? {
         _editingComment.value = comments.value.commentUiStates
             .find { it.comment.id == commentId }
             ?.comment
-            ?: return
+            ?: return null
         unhighlightJob?.cancel()
         _comments.value = _comments.value.highlight(commentId)
+        return _comments.value.getPosition(commentId)
     }
 
     fun cancelEditComment() {
@@ -98,12 +102,16 @@ class ChildCommentsViewModel @Inject constructor(
         _comments.value = _comments.value.unhighlight()
     }
 
-    fun highlightCommentOnFirstEnter(commentId: Long) {
+    /**
+     * @return 하이라이팅할 댓글 위치
+     */
+    fun highlightCommentOnFirstEnter(commentId: Long): Int? {
         _comments.value = _comments.value.highlight(commentId)
         unhighlightJob = viewModelScope.launch {
             delay(COMMENT_HIGHLIGHTING_DURATION_ON_FIRST_ENTER)
             _comments.value = _comments.value.unhighlight()
         }
+        return _comments.value.getPosition(commentId)
     }
 
     fun reportComment(commentId: Long): Job = command(

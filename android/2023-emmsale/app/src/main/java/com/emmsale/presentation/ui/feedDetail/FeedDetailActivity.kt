@@ -81,13 +81,12 @@ class FeedDetailActivity :
         addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
             binding.stiwCommentUpdate.requestFocusOnEditText()
             showKeyboard()
-            viewModel.startEditComment(commentId)
             startToEditComment(commentId)
         }
     }
 
     private fun startToEditComment(commentId: Long) {
-        val position = viewModel.feedDetailUiState.value.getCommentPosition(commentId)
+        val position = viewModel.startEditComment(commentId) ?: return
 
         lifecycleScope.launch {
             delay(KEYBOARD_SHOW_WAITING_TIME)
@@ -240,7 +239,6 @@ class FeedDetailActivity :
         if (highlightCommentId == INVALID_COMMENT_ID || isNotRealFirstEnter()) return
 
         viewModel.isAlreadyFirstFetched = true
-        viewModel.highlightCommentOnFirstEnter(highlightCommentId)
         highlightCommentOnFirstEnter()
     }
 
@@ -248,7 +246,7 @@ class FeedDetailActivity :
         viewModel.isAlreadyFirstFetched || viewModel.commentUiStates.isEmpty()
 
     private fun highlightCommentOnFirstEnter() {
-        val position = viewModel.feedDetailUiState.value.getCommentPosition(highlightCommentId)
+        val position = viewModel.highlightCommentOnFirstEnter(highlightCommentId) ?: return
 
         binding.rvFeedAndComments.scrollToPosition(position)
         lifecycleScope.launch {
