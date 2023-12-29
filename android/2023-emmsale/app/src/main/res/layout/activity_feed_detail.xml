@@ -53,7 +53,7 @@
             app:swipeRefreshColor="@{@color/primary_color}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/barrier_input_windows"
+            app:layout_constraintBottom_toTopOf="@id/btiw_comment_post"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_feeddetail_toolbar">
@@ -74,7 +74,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:hint="@string/comments_edit_comment_hint"
-            app:visible="@{!vm.isEditingComment}"
             app:onSubmit="@{(content) -> onCommentSubmitButtonClick.invoke(content)}"
             app:isSubmitEnabled="@{vm.canSubmitComment}"
             app:submitButtonLabel="@string/comments_comment_submit_button_label" />
@@ -86,20 +85,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:text="@{vm.editingComment.content}"
-            app:visible="@{vm.isEditingComment}"
+            app:text="@{vm.editingCommentContent}"
+            app:visible="@{vm.editingCommentId != null}"
             app:isSubmitEnabled="@{vm.canSubmitComment}"
             app:submitButtonLabel="@string/all_update_button_label"
             app:cancelButtonLabel="@string/all_cancel"
             app:onCancel="@{() -> onCommentUpdateCancelButtonClick.invoke()}"
             app:onSubmit="@{(content) -> onUpdatedCommentSubmitButtonClick.invoke(content)}" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier_input_windows"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:barrierDirection="top"
-            app:constraint_referenced_ids="btiw_comment_post,stiw_comment_update" />
 
         <ProgressBar
             android:layout_width="wrap_content"

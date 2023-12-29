@@ -7,7 +7,6 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.emmsale.R
 import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityChildCommentsBinding
@@ -15,8 +14,6 @@ import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.layoutManager.CenterSmoothScroller
-import com.emmsale.presentation.common.layoutManager.EndSmoothScroller
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
@@ -27,11 +24,9 @@ import com.emmsale.presentation.ui.childCommentList.ChildCommentsViewModel.Compa
 import com.emmsale.presentation.ui.childCommentList.recyclerView.CommentsAdapter
 import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.feedDetail.FeedDetailActivity
+import com.emmsale.presentation.ui.feedDetail.uiState.CommentsUiState
 import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChildCommentsActivity :
@@ -39,14 +34,8 @@ class ChildCommentsActivity :
 
     override val viewModel: ChildCommentsViewModel by viewModels()
 
-    @Inject
-    lateinit var centerSmoothScroller: CenterSmoothScroller
-
-    @Inject
-    lateinit var endSmoothScroller: EndSmoothScroller
-
     private val commentsAdapter: CommentsAdapter = CommentsAdapter(
-        onCommentClick = { },
+        onCommentClick = { comment -> viewModel.unhighlight(comment.id) },
         onAuthorImageClick = { authorId -> ProfileActivity.startActivity(this, authorId) },
         onCommentMenuClick = ::showCommentMenuDialog,
     )
@@ -74,21 +63,9 @@ class ChildCommentsActivity :
 
     private fun BottomMenuDialog.addCommentUpdateButton(commentId: Long) {
         addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
-            viewModel.startEditComment(commentId)
+            viewModel.setEditMode(true, commentId)
             binding.stiwCommentUpdate.requestFocusOnEditText()
             showKeyboard()
-            startToEditComment(commentId)
-        }
-    }
-
-    private fun startToEditComment(commentId: Long) {
-        val position = viewModel.comments.value.getPosition(commentId)
-
-        lifecycleScope.launch {
-            delay(KEYBOARD_SHOW_WAITING_TIME)
-            binding.rvChildcommentsChildcomments
-                .layoutManager
-                ?.startSmoothScroll(endSmoothScroller.apply { targetPosition = position })
         }
     }
 
@@ -153,12 +130,12 @@ class ChildCommentsActivity :
             hideKeyboard()
         }
         binding.onCommentUpdateCancelButtonClick = {
-            viewModel.cancelEditComment()
+            viewModel.setEditMode(false)
             hideKeyboard()
         }
         binding.onUpdatedCommentSubmitButtonClick = {
-            val comment = viewModel.editingComment.value
-            if (comment != null) viewModel.updateComment(comment.id, it)
+            val commentId = viewModel.editingCommentId.value
+            if (commentId != null) viewModel.updateComment(commentId, it)
             hideKeyboard()
         }
     }
@@ -195,31 +172,23 @@ class ChildCommentsActivity :
 
     private fun observeComments() {
         viewModel.comments.observe(this) {
-            commentsAdapter.submitList(it.commentUiStates) { handleHighlightComment() }
+            commentsAdapter.submitList(it.commentUiStates) { scrollToIfFirstFetch(it) }
         }
     }
 
-    private fun handleHighlightComment() {
-        if (highlightCommentId == INVALID_COMMENT_ID || isNotRealFirstEnter()) return
+    private fun scrollToIfFirstFetch(commentUiState: CommentsUiState) {
+        fun cantScroll(): Boolean =
+            viewModel.isAlreadyFirstFetched || commentUiState.commentUiStates.isEmpty()
 
-        viewModel.isAlreadyFirstFetched = true
-        viewModel.highlightCommentOnFirstEnter(highlightCommentId)
-        highlightCommentOnFirstEnter()
-    }
-
-    private fun isNotRealFirstEnter(): Boolean =
-        viewModel.isAlreadyFirstFetched || viewModel.comments.value.commentUiStates.isEmpty()
-
-    private fun highlightCommentOnFirstEnter() {
-        val position = viewModel.comments.value.getPosition(highlightCommentId)
-
+        if (highlightCommentId == INVALID_COMMENT_ID || cantScroll()) return
+        val position = viewModel.comments.value.commentUiStates
+            .indexOfFirst {
+                it.comment.id == highlightCommentId
+            }
         binding.rvChildcommentsChildcomments.scrollToPosition(position)
-        lifecycleScope.launch {
-            delay(100L) // 버그 때문에
-            binding.rvChildcommentsChildcomments
-                .layoutManager
-                ?.startSmoothScroll(centerSmoothScroller.apply { targetPosition = position })
-        }
+
+        viewModel.highlight(highlightCommentId)
+        viewModel.isAlreadyFirstFetched = true
     }
 
     private fun observeUiEvent() {
@@ -273,7 +242,6 @@ class ChildCommentsActivity :
         private const val KEY_HIGHLIGHT_COMMENT_ID = "KEY_HIGHLIGHT_COMMENT_ID"
         private const val KEY_FROM_POST_DETAIL = "KEY_FROM_POST_DETAIL"
         private const val INVALID_COMMENT_ID: Long = -1
-        private const val KEYBOARD_SHOW_WAITING_TIME = 300L
 
         fun startActivity(
             context: Context,

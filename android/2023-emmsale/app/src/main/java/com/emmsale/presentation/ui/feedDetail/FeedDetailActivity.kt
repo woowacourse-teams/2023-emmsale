@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearSmoothScroller
 import com.emmsale.R
 import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityFeedDetailBinding
@@ -12,8 +13,6 @@ import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showKeyboard
 import com.emmsale.presentation.common.extension.showSnackBar
-import com.emmsale.presentation.common.layoutManager.CenterSmoothScroller
-import com.emmsale.presentation.common.layoutManager.EndSmoothScroller
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration
 import com.emmsale.presentation.common.views.InfoDialog
 import com.emmsale.presentation.common.views.WarningDialog
@@ -27,7 +26,6 @@ import com.emmsale.presentation.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeedDetailActivity :
@@ -38,12 +36,6 @@ class FeedDetailActivity :
     }
 
     override val viewModel: FeedDetailViewModel by viewModels()
-
-    @Inject
-    lateinit var centerSmoothScroller: CenterSmoothScroller
-
-    @Inject
-    lateinit var endSmoothScroller: EndSmoothScroller
 
     private val bottomMenuDialog: BottomMenuDialog by lazy { BottomMenuDialog(this) }
 
@@ -79,21 +71,9 @@ class FeedDetailActivity :
 
     private fun BottomMenuDialog.addCommentUpdateButton(commentId: Long) {
         addMenuItemBelow(context.getString(R.string.all_update_button_label)) {
+            viewModel.startEditComment(commentId)
             binding.stiwCommentUpdate.requestFocusOnEditText()
             showKeyboard()
-            viewModel.startEditComment(commentId)
-            startToEditComment(commentId)
-        }
-    }
-
-    private fun startToEditComment(commentId: Long) {
-        val position = viewModel.feedDetailUiState.value.getCommentPosition(commentId)
-
-        lifecycleScope.launch {
-            delay(KEYBOARD_SHOW_WAITING_TIME)
-            binding.rvFeedAndComments
-                .layoutManager
-                ?.startSmoothScroll(endSmoothScroller.apply { targetPosition = position })
         }
     }
 
@@ -162,8 +142,8 @@ class FeedDetailActivity :
             hideKeyboard()
         }
         binding.onUpdatedCommentSubmitButtonClick = {
-            val comment = viewModel.editingComment.value
-            if (comment != null) viewModel.updateComment(comment.id, it)
+            val commentId = viewModel.editingCommentId.value
+            if (commentId != null) viewModel.updateComment(commentId, it)
             hideKeyboard()
         }
     }
@@ -232,32 +212,16 @@ class FeedDetailActivity :
     private fun observeFeedDetail() {
         viewModel.feedDetailUiState.observe(this) {
             val feedAndComments = listOf(it.feedUiState) + it.commentsUiState.commentUiStates
-            feedAndCommentsAdapter.submitList(feedAndComments) { handleHighlightComment() }
+            feedAndCommentsAdapter.submitList(feedAndComments) {
+                if (highlightCommentId == INVALID_COMMENT_ID || isNotRealFirstFetch()) return@submitList
+                viewModel.highlightComment(highlightCommentId)
+                viewModel.isAlreadyFirstFetched = true
+            }
         }
     }
 
-    private fun handleHighlightComment() {
-        if (highlightCommentId == INVALID_COMMENT_ID || isNotRealFirstEnter()) return
-
-        viewModel.isAlreadyFirstFetched = true
-        viewModel.highlightCommentOnFirstEnter(highlightCommentId)
-        highlightCommentOnFirstEnter()
-    }
-
-    private fun isNotRealFirstEnter(): Boolean =
+    private fun isNotRealFirstFetch(): Boolean =
         viewModel.isAlreadyFirstFetched || viewModel.commentUiStates.isEmpty()
-
-    private fun highlightCommentOnFirstEnter() {
-        val position = viewModel.feedDetailUiState.value.getCommentPosition(highlightCommentId)
-
-        binding.rvFeedAndComments.scrollToPosition(position)
-        lifecycleScope.launch {
-            delay(100L) // 버그 때문에
-            binding.rvFeedAndComments
-                .layoutManager
-                ?.startSmoothScroll(centerSmoothScroller.apply { targetPosition = position })
-        }
-    }
 
     private fun observeUiEvent() {
         viewModel.uiEvent.observe(this, ::handleUiEvent)
@@ -310,6 +274,8 @@ class FeedDetailActivity :
                 binding.btiwCommentPost.clearText()
                 scrollToLastPosition()
             }
+
+            is FeedDetailUiEvent.CommentHighlight -> highlightComment(uiEvent.commentId)
         }
     }
 
@@ -318,10 +284,26 @@ class FeedDetailActivity :
         binding.rvFeedAndComments.smoothScrollToPosition(commentsCount)
     }
 
+    private fun highlightComment(commentId: Long) {
+        val position = viewModel.commentUiStates
+            .indexOfFirst {
+                it.comment.id == commentId
+            }
+
+        binding.rvFeedAndComments.scrollToPosition(position + 1)
+        lifecycleScope.launch {
+            delay(200L)
+            binding.rvFeedAndComments.layoutManager?.startSmoothScroll(
+                object : LinearSmoothScroller(this@FeedDetailActivity) {
+                    override fun getVerticalSnapPreference(): Int = SNAP_TO_START
+                }.apply { targetPosition = position + 1 },
+            )
+        }
+    }
+
     companion object {
         private const val KEY_HIGHLIGHT_COMMENT_ID = "KEY_HIGHLIGHT_COMMENT_ID"
         private const val INVALID_COMMENT_ID: Long = -1
-        private const val KEYBOARD_SHOW_WAITING_TIME = 300L
 
         fun startActivity(
             context: Context,
