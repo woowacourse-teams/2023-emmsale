@@ -16,14 +16,14 @@ abstract class NetworkFragment<V : ViewDataBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observeCommentUiEvent()
+        observeCommonUiEvent()
     }
 
-    private fun observeCommentUiEvent() {
-        viewModel.networkUiEvent.observe(this) { handleCommentUiEvent(it) }
+    private fun observeCommonUiEvent() {
+        viewModel.networkUiEvent.observe(this) { handleCommonUiEvent(it) }
     }
 
-    private fun handleCommentUiEvent(event: NetworkUiEvent) {
+    private fun handleCommonUiEvent(event: NetworkUiEvent) {
         when (event) {
             NetworkUiEvent.RequestFailByNetworkError -> binding.root.showSnackBar(getString(R.string.all_network_check_message))
             is NetworkUiEvent.Unexpected -> showUnexpectedErrorOccurredDialog()
