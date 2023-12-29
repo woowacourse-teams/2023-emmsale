@@ -1,7 +1,9 @@
 package com.emmsale.data.apiModel.response
 
+import com.emmsale.data.apiModel.serializer.DateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.LocalDate
 
 @Serializable
 data class MyPostResponse(
@@ -16,5 +18,6 @@ data class MyPostResponse(
     @SerialName("content")
     val content: String,
     @SerialName("updatedAt")
-    val updatedAt: String,
+    @Serializable(with = DateSerializer::class)
+    val updatedAt: LocalDate,
 )
