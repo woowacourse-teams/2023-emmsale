@@ -7,11 +7,19 @@
 
         <import type="android.view.View" />
 
+        <import type="kotlin.Unit" />
+
         <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
+
+        <import type="com.emmsale.data.model.OnOfflineMode" />
 
         <variable
             name="vm"
             type="com.emmsale.presentation.ui.eventDetail.EventDetailViewModel" />
+
+        <variable
+            name="onMapSearchButtonClick"
+            type="kotlin.jvm.functions.Function1&lt;String, Unit>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -108,19 +116,37 @@
 
                     <TextView
                         android:id="@+id/tv_event_info_place"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constrainedWidth="true"
                         android:layout_marginStart="42dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="17dp"
                         android:fontFamily="@font/nanum_square_regular"
                         android:text="@{vm.event.location}"
                         android:textColor="@color/black"
                         android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/iv_map_search"
                         app:layout_constraintStart_toEndOf="@+id/tv_event_info_place_title"
                         app:layout_constraintTop_toBottomOf="@id/tv_event_info_date"
-                        tools:text="삼성동 코엑스 몰 2층 101" />
+                        tools:text="삼성동 코엑스 몰 2층 101"
+                        app:layout_constraintHorizontal_chainStyle="packed" />
+
+                    <ImageView
+                        android:id="@+id/iv_map_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_eventinformation_map"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="17dp"
+                        android:onClick="@{() -> onMapSearchButtonClick.invoke(tvEventInfoPlace.text)}"
+                        app:visible="@{vm.event.onOfflineMode != OnOfflineMode.ONLINE}"
+                        app:layout_constraintTop_toTopOf="@id/tv_event_info_place"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_event_info_place"
+                        app:layout_constraintStart_toEndOf="@id/tv_event_info_place"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:contentDescription="@string/eventInfo_map_search_button_description" />
 
                     <TextView
                         android:id="@+id/tv_event_info_cost_title"
