@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
+import com.emmsale.data.model.Comment
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel
@@ -14,6 +16,8 @@ import com.emmsale.presentation.ui.childCommentList.uiState.ChildCommentsUiEvent
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.properties.Delegates.vetoable
 
@@ -36,15 +40,15 @@ class ChildCommentsViewModel @Inject constructor(
     private val _comments = NotNullMutableLiveData(CommentsUiState())
     val comments: NotNullLiveData<CommentsUiState> = _comments
 
-    private val _editingCommentId = MutableLiveData<Long?>()
-    val editingCommentId: LiveData<Long?> = _editingCommentId
+    private val _editingComment = MutableLiveData<Comment?>()
+    val editingComment: LiveData<Comment?> = _editingComment
 
-    val editingCommentContent: LiveData<String?> = _editingCommentId.map { commentId ->
-        if (commentId == null) null else _comments.value[commentId]?.comment?.content
-    }
+    val isEditingComment: LiveData<Boolean> = _editingComment.map { it != null }
 
     private val _canSubmitComment = NotNullMutableLiveData(true)
     val canSubmitComment: NotNullLiveData<Boolean> = _canSubmitComment
+
+    private var unhighlightJob: Job? = null
 
     private val _uiEvent = SingleLiveEvent<ChildCommentsUiEvent>()
     val uiEvent: LiveData<ChildCommentsUiEvent> = _uiEvent
@@ -69,7 +73,7 @@ class ChildCommentsViewModel @Inject constructor(
 
     fun updateComment(commentId: Long, content: String): Job = commandAndRefresh(
         command = { commentRepository.updateComment(commentId, content) },
-        onSuccess = { _editingCommentId.value = null },
+        onSuccess = { _editingComment.value = null },
         onFailure = { _, _ -> _uiEvent.value = ChildCommentsUiEvent.CommentUpdateFail },
         onStart = { _canSubmitComment.value = false },
         onFinish = { _canSubmitComment.value = true },
@@ -80,8 +84,34 @@ class ChildCommentsViewModel @Inject constructor(
         onFailure = { _, _ -> _uiEvent.value = ChildCommentsUiEvent.CommentDeleteFail },
     )
 
-    fun setEditMode(isEditMode: Boolean, commentId: Long = INVALID_COMMENT_ID) {
-        _editingCommentId.value = if (isEditMode) commentId else null
+    /**
+     * @return 수정할 댓글 위치
+     */
+    fun startEditComment(commentId: Long): Int? {
+        _editingComment.value = comments.value.commentUiStates
+            .find { it.comment.id == commentId }
+            ?.comment
+            ?: return null
+        unhighlightJob?.cancel()
+        _comments.value = _comments.value.highlight(commentId)
+        return _comments.value.getPosition(commentId)
+    }
+
+    fun cancelEditComment() {
+        _editingComment.value = null
+        _comments.value = _comments.value.unhighlight()
+    }
+
+    /**
+     * @return 하이라이팅할 댓글 위치
+     */
+    fun highlightCommentOnFirstEnter(commentId: Long): Int? {
+        _comments.value = _comments.value.highlight(commentId)
+        unhighlightJob = viewModelScope.launch {
+            delay(COMMENT_HIGHLIGHTING_DURATION_ON_FIRST_ENTER)
+            _comments.value = _comments.value.unhighlight()
+        }
+        return _comments.value.getPosition(commentId)
     }
 
     fun reportComment(commentId: Long): Job = command(
@@ -106,24 +136,12 @@ class ChildCommentsViewModel @Inject constructor(
         onSuccess = { _comments.value = CommentsUiState(uid, it) },
     )
 
-    fun highlight(commentId: Long) {
-        val comment = _comments.value.commentUiStates.find { it.comment.id == commentId } ?: return
-        if (comment.isHighlight) return
-        _comments.value = _comments.value.highlight(commentId)
-    }
-
-    fun unhighlight(commentId: Long) {
-        val comment = _comments.value.commentUiStates.find { it.comment.id == commentId } ?: return
-        if (!comment.isHighlight) return
-        _comments.value = _comments.value.unhighlight()
-    }
-
     companion object {
         const val KEY_FEED_ID = "KEY_FEED_ID"
         const val KEY_PARENT_COMMENT_ID = "KEY_PARENT_COMMENT_ID"
 
-        private const val INVALID_COMMENT_ID: Long = -1
-
         private const val REPORT_DUPLICATE_ERROR_CODE = 400
+
+        private const val COMMENT_HIGHLIGHTING_DURATION_ON_FIRST_ENTER = 2000L
     }
 }
