@@ -46,6 +46,7 @@ class SubTextInputWindow @JvmOverloads constructor(
     init {
         applyStyledAttributes(attrs)
         addView(binding.root)
+        isClickable = true
         background = context.getColor(R.color.white).toDrawable()
         elevation = 5f.dp
     }

@@ -12,6 +12,8 @@ data class FeedDetailUiState(
         commentsUiState = CommentsUiState(uid, comments),
     )
 
+    fun getCommentPosition(commentId: Long): Int = commentsUiState.getPosition(commentId) + 1
+
     fun highlightComment(commentId: Long): FeedDetailUiState =
         copy(commentsUiState = commentsUiState.highlight(commentId))
 
