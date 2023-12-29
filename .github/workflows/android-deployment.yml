@@ -53,7 +53,7 @@ jobs:
       run: echo '${{ secrets.GOOGLE_SERVICE }}' > android/2023-emmsale/app/google-services.json
       
     - name: build release 
-      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale assembleDebug --stacktrace
+      run: ./android/2023-emmsale/gradlew -p android/2023-emmsale assembleDebug
       
     - name: upload artifact to Firebase App Distribution
       uses: wzieba/Firebase-Distribution-Github-Action@v1
