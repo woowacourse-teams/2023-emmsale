@@ -115,7 +115,7 @@
     <string name="profile_toolbar_title">프로필 조회</string>
     <string name="profile_more_button_title">더보기</string>
     <string name="profile_block_complete_dialog_title">차단 완료</string>
-    <string name="profile_block_complete_dialog_message">해당 회원의 댓글, 같이가요 요청이\n차단됩니다.</string>
+    <string name="profile_block_complete_dialog_message">해당 회원의 게시글, 댓글이 차단됩니다.</string>
     <string name="profile_block_fail_message">차단에 실패했어요 😥</string>
     <string name="profile_block_warning_dialog_message">해당 회원을 차단 하시겠습니까?</string>
     <string name="profile_unblock_complete_message">차단 해제 했습니다</string>
@@ -365,7 +365,7 @@
 
     <string name="editmyprofilebottomdialog_field_selection_guide">최대 %d개까지 선택 가능합니다.</string>
 
-    <string name="memberblock_block_description">차단된 사용자의 댓글, 같이가요 요청이 보이지 않습니다.</string>
+    <string name="memberblock_block_description">차단된 사용자의 게시글, 댓글이 보이지 않습니다.</string>
     <string name="memberblock_block_button_label">차단 해제</string>
     <string name="memberblock_menu_close_title">종료</string>
     <string name="memberblock_loading_blocked_members_failed_message">차단 목록을 불러오는 데에 실패했어요!</string>
