@@ -36,6 +36,12 @@ class DefaultFeedRepository @Inject constructor(
             .map(FeedResponse::toData)
     }
 
+    override suspend fun getMyFeeds(): ApiResponse<List<Feed>> = withContext(dispatcher) {
+        feedService
+            .getMyFeeds()
+            .map { it.toData() }
+    }
+
     override suspend fun deleteFeed(
         feedId: Long,
     ): ApiResponse<Unit> = withContext(dispatcher) {

@@ -10,6 +10,8 @@ interface FeedRepository {
 
     suspend fun getFeed(feedId: Long): ApiResponse<Feed>
 
+    suspend fun getMyFeeds(): ApiResponse<List<Feed>>
+
     suspend fun deleteFeed(feedId: Long): ApiResponse<Unit>
 
     suspend fun uploadFeed(

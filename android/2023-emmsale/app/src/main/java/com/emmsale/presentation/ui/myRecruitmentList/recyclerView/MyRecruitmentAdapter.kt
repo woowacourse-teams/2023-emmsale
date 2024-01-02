@@ -3,31 +3,29 @@ package com.emmsale.presentation.ui.myRecruitmentList.recyclerView
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.presentation.ui.myRecruitmentList.uiState.MyRecruitmentUiState
+import com.emmsale.data.model.Recruitment
 
 class MyRecruitmentAdapter(
-    private val navigateToDetail: (eventId: Long, recruitmentId: Long) -> Unit,
-) : ListAdapter<MyRecruitmentUiState, MyRecruitmentViewHolder>(diffUtil) {
+    private val onItemClick: (eventId: Long, recruitmentId: Long) -> Unit,
+) : ListAdapter<Recruitment, MyRecruitmentViewHolder>(
+    object : DiffUtil.ItemCallback<Recruitment>() {
+        override fun areItemsTheSame(
+            oldItem: Recruitment,
+            newItem: Recruitment,
+        ): Boolean = oldItem == newItem
+
+        override fun areContentsTheSame(
+            oldItem: Recruitment,
+            newItem: Recruitment,
+        ): Boolean = (oldItem.id == newItem.id && oldItem.event.id == newItem.event.id)
+    },
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyRecruitmentViewHolder {
-        return MyRecruitmentViewHolder.create(parent, navigateToDetail)
+        return MyRecruitmentViewHolder.create(parent, onItemClick)
     }
 
     override fun onBindViewHolder(holder: MyRecruitmentViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-
-    companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<MyRecruitmentUiState>() {
-            override fun areItemsTheSame(
-                oldItem: MyRecruitmentUiState,
-                newItem: MyRecruitmentUiState,
-            ): Boolean = oldItem == newItem
-
-            override fun areContentsTheSame(
-                oldItem: MyRecruitmentUiState,
-                newItem: MyRecruitmentUiState,
-            ): Boolean = (oldItem.postId == newItem.postId && oldItem.eventId == newItem.eventId)
-        }
     }
 }

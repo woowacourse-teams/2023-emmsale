@@ -13,5 +13,8 @@ fun RecruitmentResponse.toData(): Recruitment = Recruitment(
     content = content,
     updatedDate = updatedAt,
     writer = member.toData(),
-    event = Event(id = eventId),
+    event = Event(
+        id = eventId,
+        name = eventName,
+    ),
 )
