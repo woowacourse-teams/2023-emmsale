@@ -143,7 +143,11 @@ class MessageListActivity :
                 message = messageContent,
                 notificationId = otherRoomId.hashCode(),
                 channelId = R.id.id_all_message_notification_channel,
-                intent = intent,
+                intent = getIntent(
+                    this@MessageListActivity,
+                    otherRoomId,
+                    viewModel.otherMember.value!!.id,
+                ),
                 largeIconUrl = profileUrl,
                 groupKey = otherRoomId,
             )
