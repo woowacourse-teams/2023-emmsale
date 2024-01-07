@@ -109,7 +109,7 @@ class MessageListActivity :
         super.onNewIntent(intent)
 
         val roomId = intent.getStringExtra(KEY_ROOM_ID) ?: return
-        if (intent.getBooleanExtra(KEY_IS_SEND_BY_LOGIN_USER, false)) {
+        if (intent.getBooleanExtra(KEY_IS_SEND_NEW_MESSAGE_BY_LOGIN_USER, false)) {
             viewModel.refresh()
             smoothScrollToEnd()
             return
@@ -198,26 +198,27 @@ class MessageListActivity :
         private const val KEY_PROFILE_URL = "KEY_PROFILE_URL"
         private const val KEY_OTHER_NAME = "KEY_OTHER_NAME"
         private const val KEY_MESSAGE_CONTENT = "KEY_MESSAGE_CONTENT"
-        private const val KEY_IS_SEND_BY_LOGIN_USER = "KEY_IS_SEND_BY_LOGIN_USER"
+        private const val KEY_IS_SEND_NEW_MESSAGE_BY_LOGIN_USER =
+            "KEY_IS_SEND_NEW_MESSAGE_BY_LOGIN_USER"
 
         fun startActivity(
             context: Context,
             roomId: String,
             otherUid: Long,
-            isSendByLoginUser: Boolean = false,
+            isSendNewMessageByLoginUser: Boolean = false,
         ) {
-            context.startActivity(getIntent(context, roomId, otherUid, isSendByLoginUser))
+            context.startActivity(getIntent(context, roomId, otherUid, isSendNewMessageByLoginUser))
         }
 
         fun getIntent(
             context: Context,
             roomId: String,
             otherUid: Long,
-            isSendByLoginUser: Boolean = false,
+            isSendNewMessageByLoginUser: Boolean = false,
         ) = Intent(context, MessageListActivity::class.java)
             .putExtra(KEY_ROOM_ID, roomId)
             .putExtra(KEY_OTHER_UID, otherUid)
-            .putExtra(KEY_IS_SEND_BY_LOGIN_USER, isSendByLoginUser)
+            .putExtra(KEY_IS_SEND_NEW_MESSAGE_BY_LOGIN_USER, isSendNewMessageByLoginUser)
 
         fun getIntent(
             context: Context,
