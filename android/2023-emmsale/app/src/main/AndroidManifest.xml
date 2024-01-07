@@ -26,7 +26,7 @@
         <activity android:name=".presentation.ui.feedDetail.FeedDetailActivity" />
         <activity
             android:name=".presentation.ui.messageList.MessageListActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:parentActivityName=".presentation.ui.main.MainActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".presentation.ui.feedWriting.FeedWritingActivity" />
