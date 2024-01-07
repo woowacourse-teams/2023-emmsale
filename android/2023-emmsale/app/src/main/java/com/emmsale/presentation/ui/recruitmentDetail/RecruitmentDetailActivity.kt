@@ -143,6 +143,7 @@ class RecruitmentDetailActivity :
                     this,
                     uiEvent.roomId,
                     uiEvent.otherId,
+                    true,
                 )
                 sendMessageDialog.clearText()
                 sendMessageDialog.dismiss()

@@ -148,6 +148,7 @@ class ProfileActivity : NetworkActivity<ActivityProfileBinding>(R.layout.activit
                     this,
                     uiEvent.roomId,
                     uiEvent.otherId,
+                    true,
                 )
                 sendMessageDialog.clearText()
                 sendMessageDialog.dismiss()
