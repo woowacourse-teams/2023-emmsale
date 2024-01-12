@@ -160,6 +160,13 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
       final Event savedEvent = eventRepository.findById(response.getId()).get();
 
       //then
+      assertThat(response.getTags())
+          .extracting("name")
+          .containsExactlyInAnyOrderElementsOf(
+              tagRequests.stream()
+                  .map(TagRequest::getName)
+                  .collect(Collectors.toList())
+          );
       assertAll(
           () -> assertEquals(eventName, savedEvent.getName()),
           () -> assertEquals(eventLocation, savedEvent.getLocation()),
@@ -167,13 +174,6 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(beforeDateTime, savedEvent.getEventPeriod().getStartDate()),
           () -> assertEquals(afterDateTime, savedEvent.getEventPeriod().getEndDate())
       );
-      assertThat(response.getTags())
-          .extracting("name")
-          .containsExactlyInAnyOrder(
-              tagRequests.stream()
-                  .map(TagRequest::getName)
-                  .collect(Collectors.toList())
-          );
     }
 
     @Test
@@ -320,6 +320,13 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
       final Event updatedEvent = eventRepository.findById(eventId).get();
 
       //then
+      assertThat(response.getTags())
+          .extracting("name")
+          .containsExactlyInAnyOrderElementsOf(
+              newTagRequests.stream()
+                  .map(TagRequest::getName)
+                  .collect(Collectors.toList())
+          );
       assertAll(
           () -> assertEquals(newName, updatedEvent.getName()),
           () -> assertEquals(newLocation, updatedEvent.getLocation()),
@@ -327,13 +334,6 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(newEndDateTime, updatedEvent.getEventPeriod().getEndDate()),
           () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl())
       );
-      assertThat(response.getTags())
-          .extracting("name")
-          .containsExactlyInAnyOrder(
-              newTagRequests.stream()
-                  .map(TagRequest::getName)
-                  .collect(Collectors.toList())
-          );
     }
 
     @Test
