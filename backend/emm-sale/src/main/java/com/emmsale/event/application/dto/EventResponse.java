@@ -6,7 +6,7 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventStatus;
 import com.emmsale.event.domain.EventTag;
 import com.emmsale.image.domain.AllImagesOfContent;
-import com.emmsale.tag.domain.Tag;
+import com.emmsale.tag.application.dto.TagResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class EventResponse {
   @JsonFormat(pattern = DATE_TIME_FORMAT)
   private final LocalDateTime applyEndDate;
   private final String location;
-  private final List<String> tags;
+  private final List<TagResponse> tags;
   private final String thumbnailUrl;
   private final String type;
   private final List<String> imageUrls;
@@ -46,9 +46,9 @@ public class EventResponse {
       final Event event,
       final AllImagesOfContent images
   ) {
-    final List<String> tagNames = event.getTags().stream()
+    final List<TagResponse> tagResponses = event.getTags().stream()
         .map(EventTag::getTag)
-        .map(Tag::getName)
+        .map(TagResponse::from)
         .collect(toUnmodifiableList());
 
     return new EventResponse(
@@ -60,7 +60,7 @@ public class EventResponse {
         event.getEventPeriod().getApplyStartDate(),
         event.getEventPeriod().getApplyEndDate(),
         event.getLocation(),
-        tagNames,
+        tagResponses,
         images.extractThumbnailImage(),
         event.getType().toString(),
         images.extractInformationImages(),

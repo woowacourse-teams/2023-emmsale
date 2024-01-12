@@ -24,6 +24,7 @@ import com.emmsale.event.domain.PaymentType;
 import com.emmsale.member.domain.Member;
 import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.application.dto.TagRequest;
+import com.emmsale.tag.application.dto.TagResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -76,6 +77,8 @@ class EventApiTest extends MockMvcTestHelper {
           .description("신청 종료일자(nullable)"),
       fieldWithPath("location").type(JsonFieldType.STRING).description("장소"),
       fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("태그들"),
+      fieldWithPath("tags[].id").type(JsonFieldType.NUMBER).description("행사 태그 ID"),
+      fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("행사 태그 이름"),
       fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING)
           .description("섬네일 이미지 Url(포스터)"),
       fieldWithPath("type").type(JsonFieldType.STRING)
@@ -100,7 +103,9 @@ class EventApiTest extends MockMvcTestHelper {
       fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
           .description("행사 신청 종료 일자(nullable)"),
       fieldWithPath("[].location").type(JsonFieldType.STRING).description("행사 장소"),
-      fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY).description("행사 태그들"),
+      fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY).description("태그들"),
+      fieldWithPath("[].tags[].id").type(JsonFieldType.NUMBER).description("행사 태그 ID"),
+      fieldWithPath("[].tags[].name").type(JsonFieldType.STRING).description("행사 태그 이름"),
       fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING)
           .description("행사 섬네일 이미지 Url(포스터)"),
       fieldWithPath("[].type").type(JsonFieldType.STRING)
@@ -116,11 +121,14 @@ class EventApiTest extends MockMvcTestHelper {
   void findEvent() throws Exception {
     //given
     final Long eventId = 1L;
+    final List<TagResponse> tagResponses = List.of(
+        new TagResponse(1L, "코틀린"), new TagResponse(2L, "백엔드"), new TagResponse(3L, "안드로이드")
+    );
     final EventResponse eventResponse = new EventResponse(eventId, "인프콘 2023",
         "http://infcon.com", LocalDateTime.of(2023, 8, 15, 12, 0),
         LocalDateTime.of(2023, 8, 15, 12, 0), LocalDateTime.of(2023, 8, 1, 12, 0),
         LocalDateTime.of(2023, 8, 15, 12, 0), "코엑스",
-        List.of("코틀린", "백엔드", "안드로이드"),
+        tagResponses,
         "https://www.image.com", EventType.COMPETITION.toString(),
         List.of("imageUrl1", "imageUrl2"), "인프런", "유료", "온라인");
 
@@ -163,7 +171,7 @@ class EventApiTest extends MockMvcTestHelper {
             LocalDateTime.parse("2023-08-03T12:00:00"),
             LocalDateTime.parse("2023-06-23T10:00:00"),
             LocalDateTime.parse("2023-07-03T12:00:00"),
-            "코엑스", List.of("백엔드", "프론트엔드"),
+            "코엑스", List.of(new TagResponse(1L, "백엔드"), new TagResponse(2L, "프론트엔드")),
             "imageUrl0", EventType.CONFERENCE.name(),
             List.of("imageUrl1", "imageUrl2"), "인프런",
             PaymentType.PAID.getValue(),
@@ -175,7 +183,7 @@ class EventApiTest extends MockMvcTestHelper {
             LocalDateTime.parse("2023-07-30T12:00:00"),
             LocalDateTime.parse("2023-07-01T00:00:00"),
             LocalDateTime.parse("2023-07-21T23:59:59"),
-            "코엑스", List.of("AI"),
+            "코엑스", List.of(new TagResponse(5L, "AI")),
             "imageUrl0", EventType.CONFERENCE.name(),
             List.of("imageUrl1", "imageUrl2"), "인프런",
             PaymentType.PAID.getValue(),
@@ -234,7 +242,7 @@ class EventApiTest extends MockMvcTestHelper {
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
         request.getApplyStartDateTime(), request.getApplyEndDateTime(),
         request.getLocation(),
-        tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
+        List.of(new TagResponse(1L, "백엔드"), new TagResponse(2L, "안드로이드")),
         "image1.jpg", request.getType().toString(),
         List.of("imageUrl1", "imageUrl2"), "행사기관", "유료", "온라인");
 
@@ -339,7 +347,7 @@ class EventApiTest extends MockMvcTestHelper {
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
           request.getApplyStartDateTime(), request.getApplyEndDateTime(),
           request.getLocation(),
-          tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
+          List.of(new TagResponse(1L, "백엔드"), new TagResponse(2L, "안드로이드")),
           "image1.jpg", request.getType().toString(),
           List.of("imageUrl1", "imageUrl2"), "행사기관", "무료", "오프라인");
 
