@@ -168,7 +168,8 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(afterDateTime, savedEvent.getEventPeriod().getEndDate())
       );
       assertThat(response.getTags())
-          .containsAll(
+          .extracting("name")
+          .containsExactlyInAnyOrder(
               tagRequests.stream()
                   .map(TagRequest::getName)
                   .collect(Collectors.toList())
@@ -327,7 +328,8 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl())
       );
       assertThat(response.getTags())
-          .containsAll(
+          .extracting("name")
+          .containsExactlyInAnyOrder(
               newTagRequests.stream()
                   .map(TagRequest::getName)
                   .collect(Collectors.toList())
