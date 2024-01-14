@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: workflow_dispatch에서 지정한 branch로 checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
           token: ${{ secrets.SUBMODULE_TOKEN }}
           submodules: true
