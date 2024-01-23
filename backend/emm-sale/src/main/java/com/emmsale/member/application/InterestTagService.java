@@ -33,6 +33,17 @@ public class InterestTagService {
     return InterestTagResponse.convertAllFrom(interestTags);
   }
 
+  public void initializeInterestTags(final Member member, final List<String> tagNames) {
+    if (member.isOnboarded()) {
+      throw new MemberException(MemberExceptionType.ALREADY_ONBOARDING);
+    }
+    final List<Tag> tags = tagRepository.findByNameIn(tagNames);
+    final List<InterestTag> interestTags = tags.stream()
+        .map(tag -> new InterestTag(member, tag))
+        .collect(Collectors.toList());
+    interestTagRepository.saveAll(interestTags);
+  }
+
   public List<InterestTagResponse> addInterestTag(final Member member,
       final InterestTagAddRequest request) {
     final List<Long> tagIds = request.getTagIds();

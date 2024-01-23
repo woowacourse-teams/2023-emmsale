@@ -6,7 +6,6 @@ import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.activity.domain.ActivityRepository;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
-import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberActivity;
 import com.emmsale.member.domain.MemberActivityRepository;
@@ -26,7 +25,7 @@ public class MemberActivityCommandService {
   private final MemberActivityRepository memberActivityRepository;
   private final ActivityRepository activityRepository;
 
-  public void registerActivities(
+  public List<MemberActivity> registerActivities(
       final Member member,
       final MemberActivityInitialRequest memberActivityInitialRequest
   ) {
@@ -34,20 +33,19 @@ public class MemberActivityCommandService {
       throw new MemberException(MemberExceptionType.ALREADY_ONBOARDING);
     }
     final List<Long> activityIds = memberActivityInitialRequest.getActivityIds();
-    saveMemberActivities(member, activityIds);
-
-    member.updateName(memberActivityInitialRequest.getName());
+    return saveMemberActivities(member, activityIds);
   }
 
-  private void saveMemberActivities(final Member member, final List<Long> activityIds) {
+  private List<MemberActivity> saveMemberActivities(final Member member,
+      final List<Long> activityIds) {
     final List<MemberActivity> memberActivities = activityRepository.findAllById(activityIds)
         .stream()
         .map(it -> new MemberActivity(it, member))
         .collect(toUnmodifiableList());
 
     validateAllActivityIdsExist(activityIds, memberActivities);
-
     memberActivityRepository.saveAll(memberActivities);
+    return memberActivities;
   }
 
   private void validateAllActivityIdsExist(

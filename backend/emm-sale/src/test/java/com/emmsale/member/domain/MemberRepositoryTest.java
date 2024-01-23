@@ -19,7 +19,7 @@ class MemberRepositoryTest extends JpaRepositorySliceTestHelper {
   @DisplayName("countMembersById() : 주어진 ids에서 존재하는 members의 개수를 구할 수 있다.")
   void test_existsMembersByInIds() throws Exception {
     //given
-    final List<Long> memberIds = List.of(1L, 2L, 3L);
+    final List<Long> memberIds = List.of(1L, 2L, 4L);
 
     //when
     final Long count = memberRepository.countMembersById(memberIds);
@@ -32,7 +32,7 @@ class MemberRepositoryTest extends JpaRepositorySliceTestHelper {
   @DisplayName("findAllByIdIn() : 주어진 id들에 속한 member들을 조회할 수 있다.")
   void test_findAllByIdIn() throws Exception {
     //given
-    final Set<Long> memberIds = Set.of(1L, 2L, 3L);
+    final Set<Long> memberIds = Set.of(1L, 2L, 4L);
 
     final List<Member> expected = List.of(
         memberRepository.findById(1L).get(),

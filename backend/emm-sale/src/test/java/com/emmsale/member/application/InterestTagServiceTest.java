@@ -42,6 +42,7 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
   private TagRepository tagRepository;
 
   private Member 사용자;
+  private Member 새로운_사용자;
   private Tag 백엔드;
   private Tag 프론트엔드;
   private Tag 안드로이드;
@@ -50,6 +51,7 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
   @BeforeEach
   void init() {
     사용자 = memberRepository.findById(1L).get();
+    새로운_사용자 = memberRepository.findById(3L).get();
 
     백엔드 = tagRepository.save(백엔드());
     프론트엔드 = tagRepository.save(프론트엔드());
@@ -58,6 +60,23 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
 
     interestTagRepository.save(new InterestTag(사용자, 백엔드));
     interestTagRepository.save(new InterestTag(사용자, 프론트엔드));
+  }
+
+  @Test
+  @DisplayName("태그 이름을 입력받으면 부합하는 태그가 관심 태그로 설정된다.")
+  void initializeInterestTags() {
+    // given
+    final List<String> tagNames = List.of("백엔드", "프론트엔드");
+    final List<InterestTagResponse> expected = InterestTagResponse.convertAllFrom(
+        List.of(new InterestTag(새로운_사용자, 백엔드), new InterestTag(새로운_사용자, 프론트엔드)));
+
+    // when
+    interestTagService.initializeInterestTags(새로운_사용자, tagNames);
+    final List<InterestTagResponse> actual = interestTagService.findInterestTags(새로운_사용자.getId());
+    // then
+    assertThat(actual)
+        .usingRecursiveComparison()
+        .isEqualTo(expected);
   }
 
   @Test

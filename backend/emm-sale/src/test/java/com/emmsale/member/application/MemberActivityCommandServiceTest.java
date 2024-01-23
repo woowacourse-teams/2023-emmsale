@@ -2,19 +2,18 @@ package com.emmsale.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.domain.Member;
+import com.emmsale.member.domain.MemberActivityRepository;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,27 +25,35 @@ class MemberActivityCommandServiceTest extends ServiceIntegrationTestHelper {
   private MemberActivityCommandService memberActivityCommandService;
 
   @Autowired
+  private MemberCommandService memberCommandService;
+
+  @Autowired
   private MemberRepository memberRepository;
 
+  @Autowired
+  private MemberActivityRepository memberActivityRepository;
+
   @Test
-  @DisplayName("Activity의 id를 통해서, 사용자의 Activity를 등록하고 사용자의 이름을 수정할 수 있다.")
+  @DisplayName("Activity의 id를 통해서, 사용자의 Activity를 등록할 수 있다.")
   void registerActivities() throws Exception {
-    //given
-    final List<Long> activityIds = List.of(1L, 2L, 3L);
-    final long savedMemberId = 1L;
+    // given
+    final List<Long> expected = List.of(1L, 2L, 3L);
+    final long savedMemberId = 3L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
     final String updateName = "우르";
 
     final MemberActivityInitialRequest request = new MemberActivityInitialRequest(updateName,
-        activityIds);
+        expected);
 
-    //when & then
-    assertAll(
-        () -> assertDoesNotThrow(
-            () -> memberActivityCommandService.registerActivities(member, request)),
-        () -> assertEquals(updateName, member.getName())
-    );
+    // when
+    memberActivityCommandService.registerActivities(member, request);
+    final List<Long> actual = memberActivityRepository.findAllByMember(member)
+        .stream()
+        .map(memberActivity -> memberActivity.getActivity().getId())
+        .collect(Collectors.toList());
+    // then
+    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
   }
 
   @Test
@@ -63,7 +70,7 @@ class MemberActivityCommandServiceTest extends ServiceIntegrationTestHelper {
         activityIds);
 
     // when
-    memberActivityCommandService.registerActivities(member, request);
+    memberCommandService.initializeMember(member, request);
     final ThrowingCallable actual = () -> memberActivityCommandService.registerActivities(member,
         request);
 
