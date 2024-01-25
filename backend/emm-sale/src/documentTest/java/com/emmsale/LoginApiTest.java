@@ -60,8 +60,8 @@ class LoginApiTest extends MockMvcTestHelper {
   }
 
   @Test
-  @DisplayName("code가 유효할 경우 200과 함께 apple TokenResponse를 반환해 준다.")
-  void availableAppleLoginTest() throws Exception {
+  @DisplayName("code와 oauthType이 유효할 경우 200과 함께 TokenResponse를 반환해 준다.")
+  void availableLoginTest() throws Exception {
     // given
     final String code = "code";
     final TokenResponse tokenResponse = new TokenResponse(1L, false, "access_token");

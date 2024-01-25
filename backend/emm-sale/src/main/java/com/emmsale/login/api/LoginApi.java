@@ -5,6 +5,7 @@ import com.emmsale.login.application.dto.TokenResponse;
 import com.emmsale.login.exception.LoginException;
 import com.emmsale.login.exception.LoginExceptionType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,11 +29,13 @@ public class LoginApi {
     return ResponseEntity.ok().body(loginService.createTokenByGithub(code));
   }
 
-  @PostMapping("/apple/callback")
-  public ResponseEntity<TokenResponse> loginWithApple(@RequestParam final String code) {
+  @PostMapping("/{oauthTypeName}/callback")
+  public ResponseEntity<TokenResponse> loginWithApple(
+      @RequestParam final String code, @PathVariable final String oauthTypeName
+  ) {
     if (code == null) {
       throw new LoginException(LoginExceptionType.NOT_FOUND_GITHUB_CODE);
     }
-    return ResponseEntity.ok().body(loginService.createTokenByGithub(code));
+    return ResponseEntity.ok().body(loginService.createToken(code, oauthTypeName));
   }
 }
