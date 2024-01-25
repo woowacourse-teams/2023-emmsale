@@ -13,13 +13,14 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class MessageDao {
 
+  //TODO : message에서 반환할 떄 oauth_provider도 반환할지 고민해보기
   private static final RowMapper<MessageOverview> ROW_MAPPER = (rs, rowNum) ->
       new MessageOverview(
           rs.getLong("m2.id"),
           rs.getString("content"),
           new Member(
               rs.getLong("sender.id"),
-              rs.getLong("github_id"),
+              rs.getLong("oauth_id"),
               rs.getString("image_url"),
               rs.getString("name"),
               rs.getString("description"),
@@ -37,7 +38,7 @@ public class MessageDao {
     sqlBuilder
         .append("SELECT m2.id, m2.content, m2.sender_id, m2.created_at, m2.room_id, ")
         .append(
-            "sender.id, sender.github_id, sender.image_url, sender.name, sender.description, sender.github_username ")
+            "sender.id, sender.oauth_id, sender.image_url, sender.name, sender.description, sender.github_username ")
         .append("FROM room r ")
         .append("JOIN (SELECT room_id, MAX(created_at) as max_created_at ")
         .append("      FROM message ")
