@@ -1,10 +1,13 @@
 package com.emmsale.member.domain;
 
 import com.emmsale.base.BaseEntity;
+import com.emmsale.login.domain.OAuthProviderType;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +28,7 @@ public class Member extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Column(unique = true, nullable = false)
-  private Long githubId;
+  private Long oauthId;
   private String name;
   @Column(nullable = false)
   private String description;
@@ -33,12 +36,16 @@ public class Member extends BaseEntity {
   private String imageUrl;
   @Column(nullable = false)
   private String githubUsername;
+  //TODO : 작업 이후 NULLABLE 추가하기
+  @Column
+  @Enumerated(value = EnumType.STRING)
+  private OAuthProviderType oauthProviderType;
 
   public Member(final Long id, final Long githubId, final String imageUrl, final String name,
       final String description,
       final String githubUsername) {
     this.id = id;
-    this.githubId = githubId;
+    this.oauthId = githubId;
     this.imageUrl = imageUrl;
     this.name = name;
     this.description = description;

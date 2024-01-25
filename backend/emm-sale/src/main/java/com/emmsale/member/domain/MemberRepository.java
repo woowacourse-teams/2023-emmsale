@@ -2,6 +2,7 @@ package com.emmsale.member.domain;
 
 import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 
+import com.emmsale.login.domain.OAuthProviderType;
 import com.emmsale.member.exception.MemberException;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-  Optional<Member> findByGithubId(Long githubId);
+  Optional<Member> findByOauthId(Long oauthId);
 
   @Query("select count(*) from Member m where m.id in :ids")
   Long countMembersById(@Param("ids") final List<Long> ids);
@@ -26,4 +27,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   default Member getByIdOrElseThrow(final Long id) {
     return findById(id).orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
   }
+
+  Optional<Member> findByOauthIdAndOauthProviderType(final Long oauthId,
+      final OAuthProviderType oauthProviderType);
 }

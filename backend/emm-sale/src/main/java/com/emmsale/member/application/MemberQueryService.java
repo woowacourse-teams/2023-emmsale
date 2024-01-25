@@ -33,7 +33,7 @@ public class MemberQueryService {
   public MemberQueryResponse findOrCreateMember(
       final GithubProfileResponse githubProfileFromGithub
   ) {
-    final Member member = memberRepository.findByGithubId(githubProfileFromGithub.getGithubId())
+    final Member member = memberRepository.findByOauthId(githubProfileFromGithub.getGithubId())
         .orElseGet(() -> memberRepository.save(githubProfileFromGithub.toMember()));
     return new MemberQueryResponse(member.getId(), member.isOnboarded());
   }
@@ -42,6 +42,6 @@ public class MemberQueryService {
     final Member member = memberRepository.getByIdOrElseThrow(memberId);
     final List<MemberActivity> memberActivities = memberActivityRepository.findAllByMember(member);
 
-    return MemberDetailResponse.of(member,memberActivities);
+    return MemberDetailResponse.of(member, memberActivities);
   }
 }
