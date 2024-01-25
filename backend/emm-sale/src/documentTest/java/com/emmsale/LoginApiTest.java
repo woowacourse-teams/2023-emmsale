@@ -31,8 +31,8 @@ import org.springframework.test.web.servlet.ResultActions;
 class LoginApiTest extends MockMvcTestHelper {
 
   @Test
-  @DisplayName("code가 유효할 경우 200과 함께 TokenResponse를 반환해 준다.")
-  void availableLoginTest() throws Exception {
+  @DisplayName("code가 유효할 경우 200과 함께 github TokenResponse를 반환해 준다.")
+  void availableLoginByGithubTest() throws Exception {
     // given
     final String code = "code";
     final TokenResponse tokenResponse = new TokenResponse(1L, false, "access_token");
@@ -52,6 +52,35 @@ class LoginApiTest extends MockMvcTestHelper {
     // when
     final ResultActions result = mockMvc.perform(
         post("/login/github/callback").param("code", code)
+    );
+
+    // then
+    result.andExpect(status().isOk())
+        .andDo(document("login-snippet", requestFields, responseFields));
+  }
+
+  @Test
+  @DisplayName("code가 유효할 경우 200과 함께 apple TokenResponse를 반환해 준다.")
+  void availableAppleLoginTest() throws Exception {
+    // given
+    final String code = "code";
+    final TokenResponse tokenResponse = new TokenResponse(1L, false, "access_token");
+
+    BDDMockito.given(loginService.createTokenByGithub(code)).willReturn(tokenResponse);
+
+    final RequestParametersSnippet requestFields = requestParameters(
+        parameterWithName("code").description("apple 로그인 코드")
+    );
+
+    final ResponseFieldsSnippet responseFields = responseFields(
+        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버 id"),
+        fieldWithPath("onboarded").type(JsonFieldType.BOOLEAN).description("온보딩 수행 여부"),
+        fieldWithPath("accessToken").type(JsonFieldType.STRING).description("Access Token 값")
+    );
+
+    // when
+    final ResultActions result = mockMvc.perform(
+        post("/login/apple/callback").param("code", code)
     );
 
     // then
