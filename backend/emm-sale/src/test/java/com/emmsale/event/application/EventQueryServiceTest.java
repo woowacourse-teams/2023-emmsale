@@ -39,6 +39,7 @@ import com.emmsale.image.domain.AllImagesOfContent;
 import com.emmsale.image.domain.Image;
 import com.emmsale.image.domain.ImageType;
 import com.emmsale.image.domain.repository.ImageRepository;
+import com.emmsale.tag.application.dto.TagResponse;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
 import com.emmsale.tag.exception.TagException;
@@ -58,32 +59,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class EventQueryServiceTest extends ServiceIntegrationTestHelper {
 
+  private static final TagResponse 백엔드 = new TagResponse(1L, "백엔드");
   private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
+      null, null, null, null, null, "코엑스", List.of(백엔드),
       "이미지1", EventType.CONFERENCE.name(), List.of(), "인프런", PaymentType.PAID.getValue(),
       EventMode.OFFLINE.getValue());
   private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null,
       null, null,
-      null, null, "코엑스", List.of("백엔드"), "이미지1", EventType.CONFERENCE.name(),
+      null, null, "코엑스", List.of(백엔드), "이미지1", EventType.CONFERENCE.name(),
       List.of(), "주최기관", PaymentType.PAID.getValue(), EventMode.ONLINE.getValue());
   private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
+      null, null, null, null, null, "코엑스", List.of(백엔드),
       "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
       EventMode.ONLINE.getValue());
   private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
+      null, null, null, null, null, "코엑스", List.of(백엔드),
       "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
       EventMode.ONLINE.getValue());
   private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
+      null, null, null, null, null, "코엑스", List.of(백엔드),
       "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
       EventMode.ONLINE.getValue());
   private static final EventResponse AI_아이디어_공모전 = new EventResponse(null,
       "AI 아이디어 공모전", null, null, null, null, null, "코엑스",
-      List.of("백엔드"), "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관",
+      List.of(백엔드), "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관",
       PaymentType.PAID.getValue(), EventMode.ONLINE.getValue());
   private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null,
-      null, null, null, null, "코엑스", List.of("백엔드"),
+      null, null, null, null, "코엑스", List.of(백엔드),
       "이미지1", EventType.COMPETITION.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
       EventMode.ONLINE.getValue());
 
@@ -468,7 +470,7 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
           EventType.CONFERENCE,
           TODAY,
-          null, null, List.of("안드로이드", "백엔드"), null, null);
+          null, null, List.of("안드로이드", 백엔드.getName()), null, null);
 
       // then
       assertThat(actualEvents)
@@ -539,7 +541,8 @@ class EventQueryServiceTest extends ServiceIntegrationTestHelper {
       final List<EventResponse> actualEvents = eventQueryService.findEvents(
           EventType.CONFERENCE,
           TODAY,
-          "2023-09-01", "2023-09-30", List.of("안드로이드", "백엔드"), List.of(EventStatus.UPCOMING), null);
+          "2023-09-01", "2023-09-30", List.of("안드로이드", 백엔드.getName())
+          , List.of(EventStatus.UPCOMING), null);
 
       // then
       assertThat(actualEvents)

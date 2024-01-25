@@ -17,7 +17,7 @@ import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.scrap.domain.Scrap;
 import com.emmsale.scrap.domain.ScrapRepository;
-import com.emmsale.tag.domain.Tag;
+import com.emmsale.tag.application.dto.TagResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
@@ -63,7 +63,7 @@ class ScrapQueryServiceTest extends ServiceIntegrationTestHelper {
             event1.getTags()
                 .stream()
                 .map(EventTag::getTag)
-                .map(Tag::getName)
+                .map(TagResponse::from)
                 .collect(Collectors.toList()),
             행사_이미지1(event1.getId()).getName(), event1.getType().name(),
             List.of(행사_이미지2(event1.getId()).getName(), 행사_이미지3(event1.getId()).getName(),
@@ -77,7 +77,7 @@ class ScrapQueryServiceTest extends ServiceIntegrationTestHelper {
             event2.getTags()
                 .stream()
                 .map(EventTag::getTag)
-                .map(Tag::getName)
+                .map(TagResponse::from)
                 .collect(Collectors.toList()),
             null, event2.getType().name(),
             List.of(),
