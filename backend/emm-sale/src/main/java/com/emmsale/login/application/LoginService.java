@@ -25,7 +25,7 @@ public class LoginService {
     this.memberQueryService = memberQueryService;
   }
 
-  public TokenResponse createToken(final String code) {
+  public TokenResponse createTokenByGithub(final String code) {
     final String githubAccessToken = githubClient.getAccessTokenFromGithub(code);
     final GithubProfileResponse githubProfileFromGithub = githubClient.getGithubProfileFromGithub(
         githubAccessToken);

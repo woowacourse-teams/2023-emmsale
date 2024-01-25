@@ -37,7 +37,7 @@ class LoginApiTest extends MockMvcTestHelper {
     final String code = "code";
     final TokenResponse tokenResponse = new TokenResponse(1L, false, "access_token");
 
-    BDDMockito.given(loginService.createToken(code)).willReturn(tokenResponse);
+    BDDMockito.given(loginService.createTokenByGithub(code)).willReturn(tokenResponse);
 
     final RequestParametersSnippet requestFields = requestParameters(
         parameterWithName("code").description("깃허브 로그인 코드")

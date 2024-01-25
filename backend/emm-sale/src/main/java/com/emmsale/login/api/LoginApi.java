@@ -21,10 +21,18 @@ public class LoginApi {
   }
 
   @PostMapping("/github/callback")
-  public ResponseEntity<TokenResponse> login(@RequestParam final String code) {
+  public ResponseEntity<TokenResponse> loginWithGithub(@RequestParam final String code) {
     if (code == null) {
       throw new LoginException(LoginExceptionType.NOT_FOUND_GITHUB_CODE);
     }
-    return ResponseEntity.ok().body(loginService.createToken(code));
+    return ResponseEntity.ok().body(loginService.createTokenByGithub(code));
+  }
+
+  @PostMapping("/apple/callback")
+  public ResponseEntity<TokenResponse> loginWithApple(@RequestParam final String code) {
+    if (code == null) {
+      throw new LoginException(LoginExceptionType.NOT_FOUND_GITHUB_CODE);
+    }
+    return ResponseEntity.ok().body(loginService.createTokenByGithub(code));
   }
 }

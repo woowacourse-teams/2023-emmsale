@@ -39,7 +39,7 @@ class LoginServiceTest extends ServiceIntegrationTestHelper {
     given(githubClient.getGithubProfileFromGithub(validAccessToken)).willReturn(githubProfile);
 
     // when
-    final TokenResponse actualToken = loginService.createToken(validCode);
+    final TokenResponse actualToken = loginService.createTokenByGithub(validCode);
 
     // then
     assertEquals(expectTokenResponse.getMemberId(), actualToken.getMemberId());
@@ -61,7 +61,7 @@ class LoginServiceTest extends ServiceIntegrationTestHelper {
     // when
     final BaseExceptionType actualExceptionType = assertThrowsExactly(
         LoginException.class,
-        () -> loginService.createToken(validCode)
+        () -> loginService.createTokenByGithub(validCode)
     ).exceptionType();
 
     // then
@@ -85,7 +85,7 @@ class LoginServiceTest extends ServiceIntegrationTestHelper {
     // when
     final BaseExceptionType actualExceptionType = assertThrowsExactly(
         LoginException.class,
-        () -> loginService.createToken(invalidCode)
+        () -> loginService.createTokenByGithub(invalidCode)
     ).exceptionType();
 
     // then
