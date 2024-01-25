@@ -4,6 +4,8 @@ import static com.emmsale.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 
 import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.MemberQueryResponse;
+import com.emmsale.login.domain.OAuthProfileResponse;
+import com.emmsale.login.domain.OAuthProviderType;
 import com.emmsale.member.application.dto.MemberDetailResponse;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberActivity;
@@ -35,6 +37,15 @@ public class MemberQueryService {
   ) {
     final Member member = memberRepository.findByOauthId(githubProfileFromGithub.getGithubId())
         .orElseGet(() -> memberRepository.save(githubProfileFromGithub.toMember()));
+    return new MemberQueryResponse(member.getId(), member.isOnboarded());
+  }
+
+  @Transactional
+  public MemberQueryResponse findOrCreateMemberByOAuthProfileAndType(
+      final OAuthProfileResponse profile, final OAuthProviderType type
+  ) {
+    final Member member = memberRepository.findByOauthIdAndOauthProviderType(profile.getId(), type)
+        .orElseGet(() -> memberRepository.save(profile.toMember()));
     return new MemberQueryResponse(member.getId(), member.isOnboarded());
   }
 

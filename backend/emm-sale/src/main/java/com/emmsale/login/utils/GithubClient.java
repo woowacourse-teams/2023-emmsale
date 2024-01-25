@@ -3,6 +3,9 @@ package com.emmsale.login.utils;
 import com.emmsale.login.application.dto.GithubAccessTokenRequest;
 import com.emmsale.login.application.dto.GithubAccessTokenResponse;
 import com.emmsale.login.application.dto.GithubProfileResponse;
+import com.emmsale.login.domain.OAuthClient;
+import com.emmsale.login.domain.OAuthProfileResponse;
+import com.emmsale.login.domain.OAuthProviderType;
 import com.emmsale.login.exception.LoginException;
 import com.emmsale.login.exception.LoginExceptionType;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @RequiredArgsConstructor
-public class GithubClient {
+public class GithubClient implements OAuthClient {
 
   @Value("${github.client.id}")
   private String clientId;
@@ -88,5 +91,16 @@ public class GithubClient {
     if (accessToken == null || accessToken.isBlank()) {
       throw new LoginException(LoginExceptionType.NOT_FOUND_GITHUB_ACCESS_TOKEN);
     }
+  }
+
+  @Override
+  public OAuthProfileResponse getOAuthProfileResponse(final String code) {
+    final String accessTokenFromGithub = getAccessTokenFromGithub(code);
+    return getGithubProfileResponse(accessTokenFromGithub);
+  }
+
+  @Override
+  public OAuthProviderType supportServer() {
+    return OAuthProviderType.GITHUB;
   }
 }

@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.login.application.dto.GithubProfileResponse;
 import com.emmsale.login.application.dto.MemberQueryResponse;
+import com.emmsale.login.domain.OAuthProfileResponse;
+import com.emmsale.login.domain.OAuthProviderType;
 import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberDetailResponse;
 import com.emmsale.member.exception.MemberException;
@@ -106,5 +108,25 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
           .isInstanceOf(MemberException.class)
           .hasMessage(MemberExceptionType.NOT_FOUND_MEMBER.errorMessage());
     }
+  }
+
+  @Test
+  @DisplayName("OAuthProfile과 OAuthProviderType로 member를 조회한다.")
+  void findProfileByOAuthProfileAndType() {
+    //given
+    final OAuthProviderType providerType = OAuthProviderType.GITHUB;
+    final OAuthProfileResponse profile = new GithubProfileResponse("1", "name",
+        "username", "https://imageUrl.com");
+
+    final MemberQueryResponse expectResponse = new MemberQueryResponse(1L, false);
+
+    //when
+    final MemberQueryResponse actualResponse = memberQueryService
+        .findOrCreateMemberByOAuthProfileAndType(profile, providerType);
+
+    //then
+    assertThat(expectResponse)
+        .usingRecursiveComparison()
+        .isEqualTo(actualResponse);
   }
 }

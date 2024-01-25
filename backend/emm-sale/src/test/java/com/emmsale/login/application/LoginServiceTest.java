@@ -94,4 +94,28 @@ class LoginServiceTest extends ServiceIntegrationTestHelper {
         () -> assertEquals(actualExceptionType.errorMessage(), expectExceptionType.errorMessage())
     );
   }
+
+  @Test
+  @DisplayName("OAuth type과 auth code를 받아서, 실제 member의 JWT를 생성해준다.")
+  void createToken() {
+    // given
+    final String memberId = "1";
+    final String validCode = "valid_code";
+    final String validAccessToken = "valid_access_token";
+    final String oauthType = "github";
+    final GithubProfileResponse githubProfile
+        = new GithubProfileResponse(memberId, "name", "username", "imageUrl");
+
+    final String expectAccessToken = "expect_access_token";
+    final TokenResponse expectTokenResponse = new TokenResponse(1L, false, expectAccessToken);
+
+    given(githubClient.getAccessTokenFromGithub(validCode)).willReturn(validAccessToken);
+    given(githubClient.getGithubProfileFromGithub(validAccessToken)).willReturn(githubProfile);
+
+    // when
+    final TokenResponse actualToken = loginService.createToken(validCode, oauthType);
+
+    // then
+    assertEquals(expectTokenResponse.getMemberId(), actualToken.getMemberId());
+  }
 }
