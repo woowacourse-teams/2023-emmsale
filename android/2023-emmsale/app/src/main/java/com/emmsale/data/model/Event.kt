@@ -12,7 +12,7 @@ data class Event(
     val applyingStartDate: LocalDateTime = DEFAULT_LOCAL_DATE_TIME,
     val applyingEndDate: LocalDateTime = DEFAULT_LOCAL_DATE_TIME,
     val location: String = "",
-    val tags: List<String> = emptyList(),
+    val tags: List<EventTag> = emptyList(),
     val posterImageUrl: String? = "",
     val paymentType: PaymentType = DEFAULT_PAYMENT_TYPE,
     val onOfflineMode: OnOfflineMode = DEFAULT_ON_OFFLINE_MODE,
