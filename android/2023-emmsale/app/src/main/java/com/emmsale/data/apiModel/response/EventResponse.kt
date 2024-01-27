@@ -28,7 +28,7 @@ data class EventResponse(
     @SerialName("location")
     val location: String,
     @SerialName("tags")
-    val tags: List<String>,
+    val tags: List<EventTagResponse>,
     @SerialName("thumbnailUrl")
     val thumbnailUrl: String?,
     @SerialName("type")

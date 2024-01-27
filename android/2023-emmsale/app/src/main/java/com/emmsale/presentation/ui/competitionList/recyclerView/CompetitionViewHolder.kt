@@ -1,14 +1,11 @@
 package com.emmsale.presentation.ui.competitionList.recyclerView
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
 import com.emmsale.data.model.Event
 import com.emmsale.databinding.ItemCompetitionBinding
-import com.emmsale.presentation.common.views.EventTagChip
-import com.emmsale.presentation.common.views.eventChipOf
 
 class CompetitionViewHolder(
     parent: ViewGroup,
@@ -24,18 +21,5 @@ class CompetitionViewHolder(
 
     fun bind(event: Event) {
         binding.event = event
-        binding.cgEventTags.removeAllViews()
-        event.tags.forEach(::addEventChip)
-    }
-
-    private fun addEventChip(tagName: String) {
-        binding.cgEventTags.addView(createEventChip(itemView.context, tagName))
-    }
-
-    private fun createEventChip(
-        context: Context,
-        tagName: String,
-    ): EventTagChip = context.eventChipOf {
-        text = tagName
     }
 }
