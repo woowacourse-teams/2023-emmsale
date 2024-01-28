@@ -12,11 +12,7 @@ class MyFeedViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        itemView.setOnClickListener {
-            navigateToDetail(
-                binding.feed!!.id,
-            )
-        }
+        itemView.setOnClickListener { navigateToDetail(binding.feed!!.id) }
     }
 
     fun bind(feed: Feed) {
