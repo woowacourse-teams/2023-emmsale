@@ -11,7 +11,6 @@ import com.emmsale.data.service.FeedService
 import com.emmsale.data.service.LoginService
 import com.emmsale.data.service.MemberService
 import com.emmsale.data.service.MessageRoomService
-import com.emmsale.data.service.MyPostService
 import com.emmsale.data.service.NotificationService
 import com.emmsale.data.service.RecruitmentService
 import dagger.Module
@@ -87,12 +86,6 @@ class ServiceModule {
     fun provideBlockedMemberService(
         serviceFactory: ServiceFactory,
     ): BlockedMemberService = serviceFactory.create(BlockedMemberService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideMyPostService(
-        serviceFactory: ServiceFactory,
-    ): MyPostService = serviceFactory.create(MyPostService::class.java)
 
     @Provides
     @Singleton
