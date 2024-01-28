@@ -31,7 +31,6 @@ class MyPostsActivity : BaseActivity<ActivityMyPostsBinding>(R.layout.activity_m
         TabLayoutMediator(binding.tablayoutMyposts, binding.vpMyPosts) { tab, position ->
             tab.text = tabNames[position]
         }.attach()
-        binding.vpMyPosts.isUserInputEnabled = false
     }
 
     private fun setupMyPostsTabLayoutSelectedListener() {
