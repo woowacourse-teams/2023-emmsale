@@ -61,10 +61,10 @@
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="17dp"
+                android:layout_marginTop="2dp"
                 android:contentDescription="@string/setting_member_image_description"
                 app:imageUrl="@{viewModel.member.profileImageUrl}"
                 app:isCircle="@{true}"
-                android:layout_marginTop="2dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
@@ -346,21 +346,21 @@
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}" />
 
             <com.emmsale.presentation.common.views.NetworkErrorView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}"
-                app:onRefresh="@{() -> viewModel.refresh()}"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:onRefresh="@{() -> viewModel.refresh()}"
+                app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

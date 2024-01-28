@@ -12,6 +12,8 @@ import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
+import com.emmsale.presentation.ui.eventDetail.eventSharer.EventSharer
+import com.emmsale.presentation.ui.eventDetail.eventSharer.EventTemplateMaker
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +26,10 @@ class EventDetailViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val eventRepository: EventRepository,
     private val recruitmentRepository: RecruitmentRepository,
+    private val eventTemplateMaker: EventTemplateMaker,
+    private val eventSharer: EventSharer,
 ) : RefreshableViewModel() {
-    val eventId = stateHandle[EVENT_ID_KEY] ?: DEFAULT_EVENT_ID
+    var eventId = stateHandle[EVENT_ID_KEY] ?: DEFAULT_EVENT_ID
 
     private val _event = NotNullMutableLiveData(Event())
     val event: NotNullLiveData<Event> = _event
@@ -51,17 +55,12 @@ class EventDetailViewModel @Inject constructor(
     private val _uiEvent = SingleLiveEvent<EventDetailUiEvent>()
     val uiEvent: LiveData<EventDetailUiEvent> = _uiEvent
 
-    init {
-        fetchEvent()
-        fetchIsScrapped()
-    }
-
-    private fun fetchEvent(): Job = fetchData(
+    fun fetchEvent(): Job = fetchData(
         fetchData = { eventRepository.getEventDetail(eventId) },
         onSuccess = { _event.value = it },
     )
 
-    private fun fetchIsScrapped(): Job = viewModelScope.launch {
+    fun fetchIsScrapped(): Job = viewModelScope.launch {
         when (val result = eventRepository.isScraped(eventId)) {
             is Success -> _isScraped.value = result.data
             else -> {}
@@ -116,6 +115,15 @@ class EventDetailViewModel @Inject constructor(
         onStart = { _canStartToWriteRecruitment.value = false },
         onFinish = { _canStartToWriteRecruitment.value = true },
     )
+
+    fun shareEvent() {
+        val eventShareTemplate = eventTemplateMaker.create(
+            eventId = eventId,
+            eventName = event.value.name,
+            posterUrl = event.value.posterImageUrl,
+        )
+        eventSharer.shareEvent(eventShareTemplate)
+    }
 
     companion object {
         const val EVENT_ID_KEY = "EVENT_ID_KEY"

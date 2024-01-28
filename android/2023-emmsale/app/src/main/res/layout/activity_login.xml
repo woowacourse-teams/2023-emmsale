@@ -41,8 +41,8 @@
             android:layout_marginHorizontal="40dp"
             android:layout_marginBottom="58dp"
             android:background="@drawable/bg_login_github"
-            android:onClick="@{() -> onLoginButtonClick.invoke()}"
             android:gravity="center"
+            android:onClick="@{() -> onLoginButtonClick.invoke()}"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="280:63"
@@ -70,11 +70,11 @@
             android:id="@+id/pb_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

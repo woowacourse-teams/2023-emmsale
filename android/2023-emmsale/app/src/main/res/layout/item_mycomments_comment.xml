@@ -23,8 +23,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> onCommentClick.invoke(comment.feed.id, comment.id)}"
-        android:background="?attr/selectableItemBackground">
+        android:background="?attr/selectableItemBackground"
+        android:onClick="@{() -> onCommentClick.invoke(comment.feed.id, comment.id)}">
 
         <TextView
             android:id="@+id/tv_mycomments_event_name"
@@ -59,10 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="17dp"
-            app:dateText="@{comment.updatedAt}"
-            app:dateTimeFormatter="@{DateTimePattern.YEAR_DOT_MONTH_DOT_DAY}"
             android:textColor="@color/gray"
             android:textSize="11sp"
+            app:dateText="@{comment.updatedAt}"
+            app:dateTimeFormatter="@{DateTimePattern.YEAR_DOT_MONTH_DOT_DAY}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_mycomments_event_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_mycomments_content"
@@ -76,9 +76,9 @@
             android:text="@string/all_is_updated"
             android:textColor="@color/gray"
             android:textSize="11sp"
-            app:visible="@{comment.isUpdated}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_mycomment_last_modified_date"
             app:layout_constraintStart_toEndOf="@+id/tv_mycomment_last_modified_date"
-            app:layout_constraintTop_toTopOf="@+id/tv_mycomment_last_modified_date" />
+            app:layout_constraintTop_toTopOf="@+id/tv_mycomment_last_modified_date"
+            app:visible="@{comment.isUpdated}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

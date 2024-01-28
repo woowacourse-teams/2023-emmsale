@@ -72,11 +72,11 @@
                     android:layout_marginEnd="19dp"
                     android:text="@{viewModel.profile.description.isBlank() ? @string/profile_no_description : viewModel.profile.description }"
                     android:textSize="13sp"
+                    app:layout_constraintBottom_toTopOf="@+id/cg_myprofile_fields"
                     app:layout_constraintEnd_toStartOf="@+id/iv_myprofile_member_image"
                     app:layout_constraintStart_toStartOf="@+id/tv_myprofile_membername"
                     app:layout_constraintTop_toBottomOf="@+id/tv_myprofile_membername"
-                    tools:text="안녕하세요 커디입니다."
-                    app:layout_constraintBottom_toTopOf="@+id/cg_myprofile_fields" />
+                    tools:text="안녕하세요 커디입니다." />
 
                 <ImageView
                     android:id="@+id/iv_myprofile_image_decoration"
@@ -84,10 +84,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
                     android:layout_marginEnd="17dp"
+                    android:importantForAccessibility="no"
                     android:src="@drawable/img_profile_image_decoration"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:importantForAccessibility="no" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/iv_myprofile_member_image"
@@ -97,11 +97,11 @@
                     android:layout_marginEnd="22dp"
                     android:contentDescription="@string/profile_memberimagedescription"
                     android:importantForAccessibility="no"
-                    app:imageUrl="@{viewModel.profile.profileImageUrl}"
-                    app:mask="@{@drawable/img_profile_image_masking}"
                     app:canZoomIn="@{true}"
+                    app:imageUrl="@{viewModel.profile.profileImageUrl}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:mask="@{@drawable/img_profile_image_masking}"
                     tools:src="@tools:sample/avatars" />
 
                 <com.emmsale.presentation.common.views.HorizontalDivider
@@ -218,21 +218,21 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_myprofile_toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/tb_myprofile_toolbar"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}" />
 
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/tb_myprofile_toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}"
-            app:onRefresh="@{() -> viewModel.refresh()}" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_myprofile_toolbar"
+            app:onRefresh="@{() -> viewModel.refresh()}"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

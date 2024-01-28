@@ -22,9 +22,9 @@
         tools:background="@color/white">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            app:onRefresh1="@{() -> vm.refresh()}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:onRefresh1="@{() -> vm.refresh()}"
             app:swipeRefreshColor="@{@color/primary_color}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -116,12 +116,12 @@
                     android:id="@+id/network_error_view"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:onRefresh="@{() -> vm.refresh()}"
-                    app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:onRefresh="@{() -> vm.refresh()}"
+                    app:visible="@{vm.networkUiState == NetworkUiState.NETWORK_ERROR}" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
