@@ -30,7 +30,7 @@ abstract class RefreshableViewModel : NetworkViewModel() {
         onSuccess: suspend (T) -> Unit = {},
         onFailure: suspend (code: Int, message: String?) -> Unit = { _, _ -> dispatchFetchFailEvent() },
         onLoading: suspend () -> Unit = {},
-        onNetworkError: suspend () -> Unit = {},
+        onNetworkError: suspend () -> Unit = { dispatchNetworkErrorEvent() },
         onStart: suspend () -> Unit = {},
         onFinish: suspend () -> Unit = {},
     ): Job = requestNetwork(

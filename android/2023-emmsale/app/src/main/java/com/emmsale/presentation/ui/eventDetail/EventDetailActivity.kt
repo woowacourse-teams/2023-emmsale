@@ -35,6 +35,7 @@ class EventDetailActivity :
 
         registerScreen(this)
 
+        fetchEvent()
         setupDataBinding()
         setupFragmentStateAdapter()
         setupBackPressedDispatcher()
@@ -42,6 +43,14 @@ class EventDetailActivity :
         setupOnTabSelectedListener()
 
         observeUiEvent()
+    }
+
+    private fun fetchEvent() {
+        val eventId = intent.data?.getQueryParameter(EVENT_ID_KEY)?.toLong()
+        if (eventId != null) viewModel.eventId = eventId
+
+        viewModel.fetchEvent()
+        viewModel.fetchIsScrapped()
     }
 
     private fun setupDataBinding() {
@@ -79,7 +88,6 @@ class EventDetailActivity :
         TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
             tab.text = tabNames[position]
         }.attach()
-        binding.vpEventdetail.isUserInputEnabled = false
     }
 
     private fun setupBackPressedDispatcher() {
@@ -96,6 +104,10 @@ class EventDetailActivity :
 
     private fun setupToolbar() {
         binding.tbEventdetail.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding.tbEventdetail.setOnMenuItemClickListener { item ->
+            if (item.itemId == R.id.share_event) viewModel.shareEvent()
+            true
+        }
     }
 
     private fun setupOnTabSelectedListener() {

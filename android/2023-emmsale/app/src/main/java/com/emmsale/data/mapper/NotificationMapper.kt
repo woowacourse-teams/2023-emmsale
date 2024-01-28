@@ -12,8 +12,6 @@ import com.emmsale.data.model.notification.ChildCommentNotification
 import com.emmsale.data.model.notification.InterestEventNotification
 import com.emmsale.data.model.notification.Notification
 import kotlinx.serialization.json.Json
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @JvmName("NotificationResponse")
 fun List<NotificationResponse>.toData(): List<Notification> = map { it.toData() }
@@ -26,7 +24,7 @@ fun NotificationResponse.toData(): Notification = when (notificationType) {
         InterestEventNotification(
             id = notificationId,
             receiverId = receiverId,
-            createdAt = createdAt.toLocalDateTime(),
+            createdAt = createdAt,
             isRead = isRead,
             event = Event(
                 id = redirectId,
@@ -44,7 +42,7 @@ fun NotificationResponse.toData(): Notification = when (notificationType) {
         ChildCommentNotification(
             id = notificationId,
             receiverId = receiverId,
-            createdAt = createdAt.toLocalDateTime(),
+            createdAt = createdAt,
             isRead = isRead,
             comment = Comment(
                 id = redirectId,
@@ -55,9 +53,4 @@ fun NotificationResponse.toData(): Notification = when (notificationType) {
             ),
         )
     }
-}
-
-private fun String.toLocalDateTime(): LocalDateTime {
-    val formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")
-    return LocalDateTime.parse(this, formatter)
 }

@@ -12,6 +12,11 @@ data class FeedDetailUiState(
         commentsUiState = CommentsUiState(uid, comments),
     )
 
+    fun getCommentPosition(commentId: Long): Int? {
+        val commentPosition = commentsUiState.getPosition(commentId) ?: return null
+        return commentPosition + 1 // 게시글까지 계산해서 1을 더함
+    }
+
     fun highlightComment(commentId: Long): FeedDetailUiState =
         copy(commentsUiState = commentsUiState.highlight(commentId))
 

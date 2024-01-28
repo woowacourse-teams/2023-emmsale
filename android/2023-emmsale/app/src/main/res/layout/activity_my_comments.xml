@@ -50,21 +50,21 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/rv_mycomments_mycomments"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_mycomments_toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/tb_mycomments_toolbar"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.LOADING}" />
 
         <com.emmsale.presentation.common.views.NetworkErrorView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}"
-            app:layout_constraintTop_toBottomOf="@id/tb_mycomments_toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:onRefresh="@{() -> viewModel.refresh()}" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_mycomments_toolbar"
+            app:onRefresh="@{() -> viewModel.refresh()}"
+            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

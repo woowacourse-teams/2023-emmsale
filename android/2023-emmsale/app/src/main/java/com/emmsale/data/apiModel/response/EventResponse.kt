@@ -1,7 +1,9 @@
 package com.emmsale.data.apiModel.response
 
+import com.emmsale.data.apiModel.serializer.DateTimeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 @Serializable
 data class EventResponse(
@@ -12,17 +14,21 @@ data class EventResponse(
     @SerialName("informationUrl")
     val informationUrl: String,
     @SerialName("startDate")
-    val startDate: String,
+    @Serializable(with = DateTimeSerializer::class)
+    val startDate: LocalDateTime,
     @SerialName("endDate")
-    val endDate: String,
+    @Serializable(with = DateTimeSerializer::class)
+    val endDate: LocalDateTime,
     @SerialName("applyStartDate")
-    val applyStartDate: String,
+    @Serializable(with = DateTimeSerializer::class)
+    val applyStartDate: LocalDateTime,
     @SerialName("applyEndDate")
-    val applyEndDate: String,
+    @Serializable(with = DateTimeSerializer::class)
+    val applyEndDate: LocalDateTime,
     @SerialName("location")
     val location: String,
     @SerialName("tags")
-    val tags: List<String>,
+    val tags: List<EventTagResponse>,
     @SerialName("thumbnailUrl")
     val thumbnailUrl: String?,
     @SerialName("type")

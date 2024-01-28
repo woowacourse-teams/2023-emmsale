@@ -53,10 +53,10 @@
             android:layout_marginTop="12dp"
             android:textSize="13sp"
             android:textStyle="bold"
-            app:visible="@{!(event.progressStatus instanceof EventProgressStatus.Ended)}"
             app:eventApplyingStatus="@{event.applicationStatus}"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
+            app:visible="@{!(event.progressStatus instanceof EventProgressStatus.Ended)}"
             tools:text="D-21"
             tools:textColor="@color/primary_color" />
 
@@ -65,11 +65,11 @@
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_marginStart="6dp"
-            app:visible="@{!(event.progressStatus instanceof EventProgressStatus.Ended)}"
             android:background="@color/light_gray"
             app:layout_constraintBottom_toBottomOf="@+id/tv_application_status"
             app:layout_constraintStart_toEndOf="@+id/tv_application_status"
-            app:layout_constraintTop_toTopOf="@+id/tv_application_status" />
+            app:layout_constraintTop_toTopOf="@+id/tv_application_status"
+            app:visible="@{!(event.progressStatus instanceof EventProgressStatus.Ended)}" />
 
         <TextView
             android:id="@+id/tv_progress_status"
@@ -79,10 +79,10 @@
             android:layout_marginTop="12dp"
             android:textSize="13sp"
             android:textStyle="bold"
-            app:layout_goneMarginStart="0dp"
             app:eventProgressStatus="@{event.progressStatus}"
             app:layout_constraintStart_toEndOf="@+id/divider_event_status"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_poster"
+            app:layout_goneMarginStart="0dp"
             tools:text="D-21"
             tools:textColor="@color/primary_color" />
 
@@ -90,10 +90,10 @@
             android:id="@+id/tv_event_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
             android:text="@{event.name}"
             android:textColor="@color/black"
             android:textSize="15sp"
-            android:layout_marginTop="9dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/tv_progress_status"
@@ -141,6 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="10dp"
+            app:eventChips="@{event.tags}"
             app:layout_constraintEnd_toEndOf="@+id/iv_event_poster"
             app:layout_constraintStart_toStartOf="@+id/iv_event_poster"
             app:layout_constraintTop_toBottomOf="@+id/tv_is_online" />
