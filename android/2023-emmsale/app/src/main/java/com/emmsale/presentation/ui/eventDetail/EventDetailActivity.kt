@@ -88,7 +88,6 @@ class EventDetailActivity :
         TabLayoutMediator(binding.tablayoutEventdetail, binding.vpEventdetail) { tab, position ->
             tab.text = tabNames[position]
         }.attach()
-        binding.vpEventdetail.isUserInputEnabled = false
     }
 
     private fun setupBackPressedDispatcher() {
