@@ -5,8 +5,6 @@ import com.emmsale.data.apiModel.response.EventResponse
 import com.emmsale.data.model.Event
 import com.emmsale.data.model.OnOfflineMode
 import com.emmsale.data.model.PaymentType
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 fun List<EventResponse>.toData(): List<Event> = map { it.toData() }
 
@@ -15,23 +13,18 @@ fun EventResponse.toData(): Event = Event(
     name = name,
     organization = organization,
     informationUrl = informationUrl,
-    startDate = startDate.toLocalDateTime(),
-    endDate = endDate.toLocalDateTime(),
-    applyingStartDate = applyStartDate.toLocalDateTime(),
-    applyingEndDate = applyEndDate.toLocalDateTime(),
+    startDate = startDate,
+    endDate = endDate,
+    applyingStartDate = applyStartDate,
+    applyingEndDate = applyEndDate,
     location = location,
-    tags = tags,
+    tags = tags.toData(),
     posterImageUrl = thumbnailUrl?.let { BuildConfig.IMAGE_URL_PREFIX + it } ?: "",
     type = type,
     paymentType = paymentType.toPaymentType(),
     onOfflineMode = onOfflineMode.toData(),
     detailImageUrls = imageUrls.map { BuildConfig.IMAGE_URL_PREFIX + it },
 )
-
-private fun String.toLocalDateTime(): LocalDateTime {
-    val format = DateTimeFormatter.ofPattern("yyyy:MM:dd:HH:mm:ss")
-    return LocalDateTime.parse(this, format)
-}
 
 private fun EventResponse.PaymentType.toPaymentType(): PaymentType = when (this) {
     EventResponse.PaymentType.PAID -> PaymentType.PAID

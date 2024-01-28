@@ -260,6 +260,9 @@
     <string name="eventInfo_cost">비용</string>
     <string name="eventInfo_place">장소</string>
     <string name="eventInfo_date">일시</string>
+    <string name="eventInfo_map_search_button_description">지도 앱에 행사 장소 검색하는 버튼</string>
+    <string name="eventInfo_not_found_map_app_dialog_title">지도 앱 없음</string>
+    <string name="eventInfo_not_found_map_app_dialog_message">검색할 수 있는 지도 앱이 없습니다.</string>
 
     <string name="eventrecruitment_fetch_recruitments_error_message">글을 불러올 수 없습니다. 관리자에게 문의하세요.</string>
     <string name="eventrecruitment_has_not_permission_writing">모집글은 한 번만 작성이 가능합니다!!</string>

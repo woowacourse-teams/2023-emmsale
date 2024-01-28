@@ -1,7 +1,9 @@
 package com.emmsale.data.apiModel.response
 
+import com.emmsale.data.apiModel.serializer.DateTimeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 @Serializable
 data class CommentResponse(
@@ -16,9 +18,11 @@ data class CommentResponse(
     @SerialName("feedTitle")
     val feedTitle: String,
     @SerialName("createdAt")
-    val createdAt: String,
+    @Serializable(with = DateTimeSerializer::class)
+    val createdAt: LocalDateTime,
     @SerialName("updatedAt")
-    val updatedAt: String,
+    @Serializable(with = DateTimeSerializer::class)
+    val updatedAt: LocalDateTime,
     @SerialName("memberId")
     val memberId: Long,
     @SerialName("memberImageUrl")
@@ -50,5 +54,6 @@ data class CommentReportResponse(
     @SerialName("contentId")
     val contentId: Long,
     @SerialName("createdAt")
-    val createdAt: String,
+    @Serializable(with = DateTimeSerializer::class)
+    val createdAt: LocalDateTime,
 )
