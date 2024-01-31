@@ -64,9 +64,8 @@ class MemberCommandServiceTest extends ServiceIntegrationTestHelper {
         activityIds);
 
     //when & then
+    assertDoesNotThrow(() -> memberCommandService.initializeMember(member, request));
     assertAll(
-        () -> assertDoesNotThrow(
-            () -> memberCommandService.initializeMember(member, request)),
         () -> assertEquals(updateName, member.getName()),
         () -> assertEquals(1,
             interestTagRepository.findInterestTagsByMemberId(savedMemberId).size())
