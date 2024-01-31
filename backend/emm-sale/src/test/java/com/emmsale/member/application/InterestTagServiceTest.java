@@ -1,5 +1,6 @@
 package com.emmsale.member.application;
 
+import static com.emmsale.member.MemberFixture.newMember;
 import static com.emmsale.tag.TagFixture.IOS;
 import static com.emmsale.tag.TagFixture.백엔드;
 import static com.emmsale.tag.TagFixture.안드로이드;
@@ -51,7 +52,7 @@ class InterestTagServiceTest extends ServiceIntegrationTestHelper {
   @BeforeEach
   void init() {
     사용자 = memberRepository.findById(1L).get();
-    새로운_사용자 = memberRepository.findById(3L).get();
+    새로운_사용자 = memberRepository.save(newMember());
 
     백엔드 = tagRepository.save(백엔드());
     프론트엔드 = tagRepository.save(프론트엔드());

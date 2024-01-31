@@ -45,7 +45,7 @@ class MemberQueryServiceTest extends ServiceIntegrationTestHelper {
   @DisplayName("사용자를 조회하고 존재하지 않으므로 새로 생성하고 생성한 결과를 반환한다.")
   void findOrCreateMemberTestWithNewMember() {
     //given
-    final MemberQueryResponse expectResponse = new MemberQueryResponse(4L, false);
+    final MemberQueryResponse expectResponse = new MemberQueryResponse(3L, false);
 
     final GithubProfileResponse githubProfileFromGithub = new GithubProfileResponse("0", "name",
         "username", "https://imageUrl.com");

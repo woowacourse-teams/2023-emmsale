@@ -1,5 +1,6 @@
 package com.emmsale.member.application;
 
+import static com.emmsale.member.MemberFixture.newMember;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -14,6 +15,7 @@ import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,15 @@ class MemberActivityCommandServiceTest extends ServiceIntegrationTestHelper {
   private MemberActivityCommandService memberActivityCommandService;
 
   @Autowired
-  private MemberCommandService memberCommandService;
-
-  @Autowired
   private MemberRepository memberRepository;
 
   @Autowired
   private MemberActivityRepository memberActivityRepository;
+
+  @BeforeEach
+  void init() {
+    memberRepository.save(newMember());
+  }
 
   @Test
   @DisplayName("Activity의 id를 통해서, 사용자의 Activity를 등록할 수 있다.")
