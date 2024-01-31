@@ -14,7 +14,6 @@ import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,31 +53,6 @@ class MemberActivityCommandServiceTest extends ServiceIntegrationTestHelper {
         .collect(Collectors.toList());
     // then
     assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
-  }
-
-  @Test
-  @DisplayName("특정 사용자에 대해 이미 등록되어 있는 Activity를 등록하려고 하면 예외를 반환한다.")
-  void registerActivities_fail() throws Exception {
-    //given
-    final List<Long> activityIds = List.of(1L, 2L, 3L, 4L);
-    final long savedMemberId = 1L;
-
-    final Member member = memberRepository.findById(savedMemberId).get();
-    final String updateName = "우르";
-
-    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(updateName,
-        activityIds);
-
-    // when
-    memberCommandService.initializeMember(member, request);
-    final ThrowingCallable actual = () -> memberActivityCommandService.registerActivities(member,
-        request);
-
-    // then
-    assertThatThrownBy(actual)
-        .isInstanceOf(MemberException.class)
-        .hasMessage(MemberExceptionType.ALREADY_ONBOARDING.errorMessage());
-
   }
 
   @Test

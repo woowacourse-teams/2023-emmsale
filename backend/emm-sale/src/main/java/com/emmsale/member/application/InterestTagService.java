@@ -34,9 +34,6 @@ public class InterestTagService {
   }
 
   public void initializeInterestTags(final Member member, final List<String> tagNames) {
-    if (member.isOnboarded()) {
-      throw new MemberException(MemberExceptionType.ALREADY_ONBOARDING);
-    }
     final List<Tag> tags = tagRepository.findByNameIn(tagNames);
     final List<InterestTag> interestTags = tags.stream()
         .map(tag -> new InterestTag(member, tag))

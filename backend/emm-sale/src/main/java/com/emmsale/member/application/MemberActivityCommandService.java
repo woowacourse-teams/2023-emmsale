@@ -29,9 +29,6 @@ public class MemberActivityCommandService {
       final Member member,
       final MemberActivityInitialRequest memberActivityInitialRequest
   ) {
-    if (member.isOnboarded()) {
-      throw new MemberException(MemberExceptionType.ALREADY_ONBOARDING);
-    }
     final List<Long> activityIds = memberActivityInitialRequest.getActivityIds();
     return saveMemberActivities(member, activityIds);
   }

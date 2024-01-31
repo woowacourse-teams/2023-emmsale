@@ -27,6 +27,9 @@ public class MemberCommandService {
   private final S3Client s3Client;
 
   public void initializeMember(final Member member, final MemberActivityInitialRequest request) {
+    if (member.isOnboarded()) {
+      throw new MemberException(MemberExceptionType.ALREADY_ONBOARDING);
+    }
     final List<MemberActivity> memberActivities = memberActivityCommandService.registerActivities(
         member, request);
     final List<String> activityNames = memberActivities.stream()

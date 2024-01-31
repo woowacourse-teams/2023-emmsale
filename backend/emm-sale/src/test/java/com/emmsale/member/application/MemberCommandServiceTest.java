@@ -50,7 +50,7 @@ class MemberCommandServiceTest extends ServiceIntegrationTestHelper {
   private TagRepository tagRepository;
 
   @Test
-  @DisplayName("Activity의 id를 통해서, 사용자의 Activity를 등록하고 사용자의 이름을 수정할 수 있다.")
+  @DisplayName("Activity의 id를 통해서, 사용자의 Activity와 관심 태그를 등록하고 사용자의 이름을 수정할 수 있다.")
   void registerActivities() throws Exception {
     //given
     tagRepository.save(new Tag("Backend"));
@@ -71,6 +71,31 @@ class MemberCommandServiceTest extends ServiceIntegrationTestHelper {
         () -> assertEquals(1,
             interestTagRepository.findInterestTagsByMemberId(savedMemberId).size())
     );
+  }
+
+  @Test
+  @DisplayName("온보딩을 마친 사용자의 정보를 초기화하면 예외를 반환한다.")
+  void initializeMember_fail_duplicate_register() throws Exception {
+    //given
+    final List<Long> activityIds = List.of(1L, 2L, 3L, 4L);
+    final long savedMemberId = 1L;
+
+    final Member member = memberRepository.findById(savedMemberId).get();
+    final String updateName = "우르";
+
+    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(updateName,
+        activityIds);
+
+    // when
+    memberCommandService.initializeMember(member, request);
+    final ThrowingCallable actual = () -> memberCommandService.initializeMember(member,
+        request);
+
+    // then
+    assertThatThrownBy(actual)
+        .isInstanceOf(MemberException.class)
+        .hasMessage(MemberExceptionType.ALREADY_ONBOARDING.errorMessage());
+
   }
 
   @Nested
