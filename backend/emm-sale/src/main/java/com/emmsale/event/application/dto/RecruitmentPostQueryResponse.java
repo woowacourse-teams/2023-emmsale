@@ -20,6 +20,7 @@ public class RecruitmentPostQueryResponse {
   private final LocalDate updatedAt;
   private final MemberReferenceResponse member;
   private final Long eventId;
+  private final String eventName;
 
   public static RecruitmentPostQueryResponse from(final RecruitmentPost recruitmentPost) {
     final Member member = recruitmentPost.getMember();
@@ -28,7 +29,8 @@ public class RecruitmentPostQueryResponse {
         recruitmentPost.getContent(),
         recruitmentPost.getUpdatedAt().toLocalDate(),
         MemberReferenceResponse.from(member),
-        recruitmentPost.getEvent().getId()
+        recruitmentPost.getEvent().getId(),
+        recruitmentPost.getEvent().getName()
     );
   }
 }

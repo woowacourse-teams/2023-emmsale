@@ -67,9 +67,9 @@ class RecruitmentPostQueryServiceTest extends ServiceIntegrationTestHelper {
 
     final List<RecruitmentPostQueryResponse> expected = List.of(
         new RecruitmentPostQueryResponse(멤버1_참가글_ID, requestMember1.getContent(), LocalDate.now(),
-            MemberReferenceResponse.from(사용자1), 인프콘.getId()),
+            MemberReferenceResponse.from(사용자1), 인프콘.getId(), 인프콘.getName()),
         new RecruitmentPostQueryResponse(멤버2_참가글_ID, requestMember2.getContent(), LocalDate.now(),
-            MemberReferenceResponse.from(사용자2), 인프콘.getId())
+            MemberReferenceResponse.from(사용자2), 인프콘.getId(), 인프콘.getName())
     );
 
     //when
@@ -93,7 +93,7 @@ class RecruitmentPostQueryServiceTest extends ServiceIntegrationTestHelper {
 
     final RecruitmentPostQueryResponse expected = new RecruitmentPostQueryResponse(멤버1_참가글_ID,
         requestMember1.getContent(), LocalDate.now(), MemberReferenceResponse.from(사용자1),
-        인프콘.getId());
+        인프콘.getId(), 인프콘.getName());
 
     //when
     final RecruitmentPostQueryResponse actual = postQueryService.findRecruitmentPost(
