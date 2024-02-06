@@ -632,6 +632,20 @@ include::{snippets}/delete-notifications/http-response.adoc[]
 
 == 관리자 API
 
+=== `POST` : 관리자 로그인
+
+.HTTP request
+include::{snippets}/admin-login-snippet/http-request.adoc[]
+
+.HTTP request 설명
+include::{snippets}/admin-login-snippet/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/admin-login-snippet/http-response.adoc[]
+
+.HTTP response 설명
+include::{snippets}/admin-login-snippet/response-fields.adoc[]
+
 === `POST` : 행사 생성
 
 .HTTP request

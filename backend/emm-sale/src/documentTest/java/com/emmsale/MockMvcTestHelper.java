@@ -3,13 +3,16 @@ package com.emmsale;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
-import com.emmsale.activity.application.ActivityCommandService;
 import com.emmsale.activity.application.ActivityQueryService;
+import com.emmsale.admin.activity.application.ActivityCommandService;
+import com.emmsale.admin.event.application.EventCommandService;
+import com.emmsale.admin.login.application.AdminLoginService;
+import com.emmsale.admin.report.application.ReportQueryService;
+import com.emmsale.admin.tag.application.TagCommandService;
 import com.emmsale.block.application.BlockCommandService;
 import com.emmsale.block.application.BlockQueryService;
 import com.emmsale.comment.application.CommentCommandService;
 import com.emmsale.comment.application.CommentQueryService;
-import com.emmsale.event.application.EventCommandService;
 import com.emmsale.event.application.EventQueryService;
 import com.emmsale.event.application.RecruitmentPostCommandService;
 import com.emmsale.event.application.RecruitmentPostQueryService;
@@ -27,11 +30,9 @@ import com.emmsale.notification.application.FcmTokenRegisterService;
 import com.emmsale.notification.application.NotificationCommandService;
 import com.emmsale.notification.application.NotificationQueryService;
 import com.emmsale.report.application.ReportCommandService;
-import com.emmsale.report.application.ReportQueryService;
 import com.emmsale.resolver.MemberArgumentResolver;
 import com.emmsale.scrap.application.ScrapCommandService;
 import com.emmsale.scrap.application.ScrapQueryService;
-import com.emmsale.tag.application.TagCommandService;
 import com.emmsale.tag.application.TagQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,6 +81,8 @@ abstract class MockMvcTestHelper {
   protected InterestTagService interestTagService;
   @MockBean
   protected LoginService loginService;
+  @MockBean
+  protected AdminLoginService adminLoginService;
   @MockBean
   protected EventQueryService eventQueryService;
   @MockBean

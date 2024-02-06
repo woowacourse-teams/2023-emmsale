@@ -1,5 +1,6 @@
 package com.emmsale;
 
+import static com.emmsale.member.MemberFixture.adminMember;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.emmsale.admin.event.api.AdminEventApi;
 import com.emmsale.event.EventFixture;
 import com.emmsale.event.api.EventApi;
 import com.emmsale.event.application.dto.EventDetailRequest;
@@ -19,8 +21,10 @@ import com.emmsale.event.domain.Event;
 import com.emmsale.event.domain.EventMode;
 import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.PaymentType;
+import com.emmsale.member.domain.Member;
 import com.emmsale.tag.TagFixture;
 import com.emmsale.tag.application.dto.TagRequest;
+import com.emmsale.tag.application.dto.TagResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -49,11 +53,14 @@ import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.restdocs.request.RequestPartsSnippet;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-@WebMvcTest(EventApi.class)
+@WebMvcTest({EventApi.class, AdminEventApi.class})
 class EventApiTest extends MockMvcTestHelper {
+
+  private static final String accessToken = "Bearer accessToken";
 
   private static final ResponseFieldsSnippet EVENT_DETAIL_RESPONSE_FILED = PayloadDocumentation.responseFields(
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("event 식별자"),
@@ -70,6 +77,8 @@ class EventApiTest extends MockMvcTestHelper {
           .description("신청 종료일자(nullable)"),
       fieldWithPath("location").type(JsonFieldType.STRING).description("장소"),
       fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("태그들"),
+      fieldWithPath("tags[].id").type(JsonFieldType.NUMBER).description("행사 태그 ID"),
+      fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("행사 태그 이름"),
       fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING)
           .description("섬네일 이미지 Url(포스터)"),
       fieldWithPath("type").type(JsonFieldType.STRING)
@@ -94,7 +103,9 @@ class EventApiTest extends MockMvcTestHelper {
       fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
           .description("행사 신청 종료 일자(nullable)"),
       fieldWithPath("[].location").type(JsonFieldType.STRING).description("행사 장소"),
-      fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY).description("행사 태그들"),
+      fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY).description("태그들"),
+      fieldWithPath("[].tags[].id").type(JsonFieldType.NUMBER).description("행사 태그 ID"),
+      fieldWithPath("[].tags[].name").type(JsonFieldType.STRING).description("행사 태그 이름"),
       fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING)
           .description("행사 섬네일 이미지 Url(포스터)"),
       fieldWithPath("[].type").type(JsonFieldType.STRING)
@@ -110,11 +121,14 @@ class EventApiTest extends MockMvcTestHelper {
   void findEvent() throws Exception {
     //given
     final Long eventId = 1L;
+    final List<TagResponse> tagResponses = List.of(
+        new TagResponse(1L, "코틀린"), new TagResponse(2L, "백엔드"), new TagResponse(3L, "안드로이드")
+    );
     final EventResponse eventResponse = new EventResponse(eventId, "인프콘 2023",
         "http://infcon.com", LocalDateTime.of(2023, 8, 15, 12, 0),
         LocalDateTime.of(2023, 8, 15, 12, 0), LocalDateTime.of(2023, 8, 1, 12, 0),
         LocalDateTime.of(2023, 8, 15, 12, 0), "코엑스",
-        List.of("코틀린", "백엔드", "안드로이드"),
+        tagResponses,
         "https://www.image.com", EventType.COMPETITION.toString(),
         List.of("imageUrl1", "imageUrl2"), "인프런", "유료", "온라인");
 
@@ -157,7 +171,7 @@ class EventApiTest extends MockMvcTestHelper {
             LocalDateTime.parse("2023-08-03T12:00:00"),
             LocalDateTime.parse("2023-06-23T10:00:00"),
             LocalDateTime.parse("2023-07-03T12:00:00"),
-            "코엑스", List.of("백엔드", "프론트엔드"),
+            "코엑스", List.of(new TagResponse(1L, "백엔드"), new TagResponse(2L, "프론트엔드")),
             "imageUrl0", EventType.CONFERENCE.name(),
             List.of("imageUrl1", "imageUrl2"), "인프런",
             PaymentType.PAID.getValue(),
@@ -169,7 +183,7 @@ class EventApiTest extends MockMvcTestHelper {
             LocalDateTime.parse("2023-07-30T12:00:00"),
             LocalDateTime.parse("2023-07-01T00:00:00"),
             LocalDateTime.parse("2023-07-21T23:59:59"),
-            "코엑스", List.of("AI"),
+            "코엑스", List.of(new TagResponse(5L, "AI")),
             "imageUrl0", EventType.CONFERENCE.name(),
             List.of("imageUrl1", "imageUrl2"), "인프런",
             PaymentType.PAID.getValue(),
@@ -228,11 +242,12 @@ class EventApiTest extends MockMvcTestHelper {
         request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
         request.getApplyStartDateTime(), request.getApplyEndDateTime(),
         request.getLocation(),
-        tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
+        List.of(new TagResponse(1L, "백엔드"), new TagResponse(2L, "안드로이드")),
         "image1.jpg", request.getType().toString(),
         List.of("imageUrl1", "imageUrl2"), "행사기관", "유료", "온라인");
 
-    Mockito.when(eventCommandService.updateEvent(eq(eventId), any(EventDetailRequest.class), any()))
+    Mockito.when(
+            eventCommandService.updateEvent(eq(eventId), any(EventDetailRequest.class), any(), any()))
         .thenReturn(response);
 
     final String contents = objectMapper.writeValueAsString(request);
@@ -258,12 +273,13 @@ class EventApiTest extends MockMvcTestHelper {
     );
 
     //when
-    final MockMultipartHttpServletRequestBuilder builder = multipart(HttpMethod.PUT,
-        "/events/" + eventId)
+    final MockHttpServletRequestBuilder builder = multipart(HttpMethod.PUT,
+        "/admin/events/" + eventId)
         .file("images", image1.getBytes())
         .file("images", image2.getBytes())
         .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
-            StandardCharsets.UTF_8)));
+            StandardCharsets.UTF_8)))
+        .header("Authorization", accessToken);
 
     final ResultActions result = mockMvc.perform(builder);
 
@@ -282,10 +298,11 @@ class EventApiTest extends MockMvcTestHelper {
     //given
     final long eventId = 1L;
 
-    Mockito.doNothing().when(eventCommandService).deleteEvent(eventId);
+    Mockito.doNothing().when(eventCommandService).deleteEvent(eventId, adminMember());
     //when
     final ResultActions result = mockMvc.perform(
-        delete("/events/" + eventId));
+        delete("/admin/events/" + eventId)
+            .header("Authorization", accessToken));
 
     //then
     result.andExpect(status().isNoContent())
@@ -330,11 +347,12 @@ class EventApiTest extends MockMvcTestHelper {
           request.getInformationUrl(), request.getStartDateTime(), request.getEndDateTime(),
           request.getApplyStartDateTime(), request.getApplyEndDateTime(),
           request.getLocation(),
-          tags.stream().map(TagRequest::getName).collect(Collectors.toList()),
+          List.of(new TagResponse(1L, "백엔드"), new TagResponse(2L, "안드로이드")),
           "image1.jpg", request.getType().toString(),
           List.of("imageUrl1", "imageUrl2"), "행사기관", "무료", "오프라인");
 
-      Mockito.when(eventCommandService.addEvent(any(EventDetailRequest.class), any()))
+      Mockito.when(
+              eventCommandService.addEvent(any(EventDetailRequest.class), any(), any(Member.class)))
           .thenReturn(response);
 
       final String contents = objectMapper.writeValueAsString(request);
@@ -360,13 +378,13 @@ class EventApiTest extends MockMvcTestHelper {
       );
 
       //when
-      final MockMultipartHttpServletRequestBuilder builder = multipart("/events")
+      final MockMultipartHttpServletRequestBuilder builder = multipart("/admin/events")
           .file("images", image1.getBytes())
           .file("images", image2.getBytes())
           .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
               StandardCharsets.UTF_8)));
 
-      final ResultActions result = mockMvc.perform(builder);
+      final ResultActions result = mockMvc.perform(builder.header("Authorization", accessToken));
 
       //then
       result.andExpect(status().isCreated())
@@ -407,11 +425,12 @@ class EventApiTest extends MockMvcTestHelper {
           event.getPaymentType(), event.getOrganization());
       final String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(multipart("/events")
+      mockMvc.perform(multipart("/admin/events")
               .file("images", image1.getBytes())
               .file("images", image2.getBytes())
               .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
                   StandardCharsets.UTF_8)))
+              .header("Authorization", accessToken)
           )
           .andExpect(status().isBadRequest());
     }
@@ -448,11 +467,12 @@ class EventApiTest extends MockMvcTestHelper {
           event.getPaymentType(), event.getOrganization());
       final String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(multipart("/events")
+      mockMvc.perform(multipart("/admin/events")
               .file("images", image1.getBytes())
               .file("images", image2.getBytes())
               .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
                   StandardCharsets.UTF_8)))
+              .header("Authorization", accessToken)
           )
           .andExpect(status().isBadRequest());
     }
@@ -490,11 +510,12 @@ class EventApiTest extends MockMvcTestHelper {
           event.getPaymentType(), event.getOrganization());
       final String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(multipart("/events")
+      mockMvc.perform(multipart("/admin/events")
               .file("images", image1.getBytes())
               .file("images", image2.getBytes())
               .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
                   StandardCharsets.UTF_8)))
+              .header("Authorization", accessToken)
           )
           .andExpect(status().isBadRequest());
     }
@@ -538,11 +559,12 @@ class EventApiTest extends MockMvcTestHelper {
 
       final String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(multipart("/events")
+      mockMvc.perform(multipart("/admin/events")
               .file("images", image1.getBytes())
               .file("images", image2.getBytes())
               .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
                   StandardCharsets.UTF_8)))
+              .header("Authorization", accessToken)
           )
           .andExpect(status().isBadRequest());
     }
@@ -585,11 +607,12 @@ class EventApiTest extends MockMvcTestHelper {
 
       final String contents = objectMapper.writeValueAsString(request);
       //when & then
-      mockMvc.perform(multipart("/events")
+      mockMvc.perform(multipart("/admin/events")
               .file("images", image1.getBytes())
               .file("images", image2.getBytes())
               .file(new MockMultipartFile("request", "", "application/json", contents.getBytes(
                   StandardCharsets.UTF_8)))
+              .header("Authorization", accessToken)
           )
           .andExpect(status().isBadRequest());
     }

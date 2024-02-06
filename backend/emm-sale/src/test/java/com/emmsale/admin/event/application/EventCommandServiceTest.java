@@ -1,8 +1,6 @@
-package com.emmsale.event.application;
+package com.emmsale.admin.event.application;
 
-import static com.emmsale.event.EventFixture.AI_아이디어_공모전;
 import static com.emmsale.event.EventFixture.AI_컨퍼런스;
-import static com.emmsale.event.EventFixture.구름톤;
 import static com.emmsale.event.EventFixture.모바일_컨퍼런스;
 import static com.emmsale.event.EventFixture.안드로이드_컨퍼런스;
 import static com.emmsale.event.EventFixture.웹_컨퍼런스;
@@ -13,6 +11,9 @@ import static com.emmsale.event.exception.EventExceptionType.START_DATE_TIME_AFT
 import static com.emmsale.image.ImageFixture.행사_이미지1;
 import static com.emmsale.image.ImageFixture.행사_이미지2;
 import static com.emmsale.image.ImageFixture.행사_이미지3;
+import static com.emmsale.login.exception.LoginExceptionType.INVALID_ADMIN_ACCESS_TOKEN;
+import static com.emmsale.member.MemberFixture.adminMember;
+import static com.emmsale.member.MemberFixture.generalMember;
 import static com.emmsale.tag.TagFixture.AI;
 import static com.emmsale.tag.TagFixture.IOS;
 import static com.emmsale.tag.TagFixture.백엔드;
@@ -39,11 +40,11 @@ import com.emmsale.event.domain.repository.EventTagRepository;
 import com.emmsale.event.exception.EventException;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.image.domain.repository.ImageRepository;
+import com.emmsale.login.exception.LoginException;
 import com.emmsale.notification.domain.Notification;
 import com.emmsale.tag.application.dto.TagRequest;
 import com.emmsale.tag.domain.Tag;
 import com.emmsale.tag.domain.TagRepository;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,35 +58,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 class EventCommandServiceTest extends ServiceIntegrationTestHelper {
-
-  private static final EventResponse 인프콘_2023 = new EventResponse(null, "인프콘 2023",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
-      "이미지1", EventType.CONFERENCE.name(), List.of(), "인프런", PaymentType.PAID.getValue(),
-      EventMode.OFFLINE.getValue());
-  private static final EventResponse 웹_컨퍼런스 = new EventResponse(null, "웹 컨퍼런스", null,
-      null, null,
-      null, null, "코엑스", List.of("백엔드"), "이미지1", EventType.CONFERENCE.name(),
-      List.of(), "주최기관", PaymentType.PAID.getValue(), EventMode.ONLINE.getValue());
-  private static final EventResponse 안드로이드_컨퍼런스 = new EventResponse(null, "안드로이드 컨퍼런스",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
-      "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
-      EventMode.ONLINE.getValue());
-  private static final EventResponse AI_컨퍼런스 = new EventResponse(null, "AI 컨퍼런스",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
-      "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
-      EventMode.ONLINE.getValue());
-  private static final EventResponse 모바일_컨퍼런스 = new EventResponse(null, "모바일 컨퍼런스",
-      null, null, null, null, null, "코엑스", List.of("백엔드"),
-      "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
-      EventMode.ONLINE.getValue());
-  private static final EventResponse AI_아이디어_공모전 = new EventResponse(null,
-      "AI 아이디어 공모전", null, null, null, null, null, "코엑스",
-      List.of("백엔드"), "이미지1", EventType.CONFERENCE.name(), List.of(), "주최기관",
-      PaymentType.PAID.getValue(), EventMode.ONLINE.getValue());
-  private static final EventResponse 구름톤 = new EventResponse(null, "구름톤", null,
-      null, null, null, null, "코엑스", List.of("백엔드"),
-      "이미지1", EventType.COMPETITION.name(), List.of(), "주최기관", PaymentType.PAID.getValue(),
-      EventMode.ONLINE.getValue());
 
   @Autowired
   private EventCommandService eventCommandService;
@@ -113,8 +85,6 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
     final Event 모바일_컨퍼런스 = eventRepository.save(모바일_컨퍼런스());
     final Event 안드로이드_컨퍼런스 = eventRepository.save(안드로이드_컨퍼런스());
     final Event 웹_컨퍼런스 = eventRepository.save(웹_컨퍼런스());
-    final Event AI_아이디어_공모전 = eventRepository.save(AI_아이디어_공모전());
-    final Event 구름톤 = eventRepository.save(구름톤());
 
     eventTagRepository.saveAll(List.of(
         new EventTag(인프콘_2023, 백엔드), new EventTag(인프콘_2023, 프론트엔드), new EventTag(인프콘_2023, 안드로이드),
@@ -157,11 +127,9 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
     private final String eventName = "새로운 이름";
     private final String eventLocation = "새로운 장소";
     private final String eventInformationUrl = "https://새로운-상세-URL.com";
-    private final String imageUrl = "https://image.com";
     private final PaymentType paymentType = PaymentType.FREE_PAID;
     private final EventMode eventMode = EventMode.ON_OFFLINE;
     private final EventType type = EventType.CONFERENCE;
-    private final LocalDate now = LocalDate.now();
     private final String organization = "행사기관";
 
     @Test
@@ -188,10 +156,17 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
 
       //when
       final EventResponse response = eventCommandService.addEvent(request,
-          mockMultipartFiles);
+          mockMultipartFiles, adminMember());
       final Event savedEvent = eventRepository.findById(response.getId()).get();
 
       //then
+      assertThat(response.getTags())
+          .extracting("name")
+          .containsExactlyInAnyOrderElementsOf(
+              tagRequests.stream()
+                  .map(TagRequest::getName)
+                  .collect(Collectors.toList())
+          );
       assertAll(
           () -> assertEquals(eventName, savedEvent.getName()),
           () -> assertEquals(eventLocation, savedEvent.getLocation()),
@@ -199,12 +174,6 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(beforeDateTime, savedEvent.getEventPeriod().getStartDate()),
           () -> assertEquals(afterDateTime, savedEvent.getEventPeriod().getEndDate())
       );
-      assertThat(response.getTags())
-          .containsAll(
-              tagRequests.stream()
-                  .map(TagRequest::getName)
-                  .collect(Collectors.toList())
-          );
     }
 
     @Test
@@ -234,7 +203,7 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventCommandService.addEvent(request, mockMultipartFiles));
+          () -> eventCommandService.addEvent(request, mockMultipartFiles, adminMember()));
 
       assertEquals(START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
     }
@@ -269,9 +238,38 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventCommandService.addEvent(request, mockMultipartFiles));
+          () -> eventCommandService.addEvent(request, mockMultipartFiles, adminMember()));
 
       assertEquals(NOT_FOUND_TAG, exception.exceptionType());
+    }
+
+    @Test
+    @DisplayName("관리자가 아닌 회원이 행사를 추가할 경우 LoginException이 발생한다.")
+    void addEvent_fail_authorization() {
+      //given
+      final EventDetailRequest request = new EventDetailRequest(
+          eventName,
+          eventLocation,
+          eventInformationUrl,
+          beforeDateTime,
+          afterDateTime,
+          beforeDateTime,
+          afterDateTime,
+          tagRequests,
+          type,
+          eventMode,
+          paymentType,
+          organization
+      );
+
+      doNothing().when(firebaseCloudMessageClient)
+          .sendMessageTo(any(Notification.class), anyLong());
+
+      //when & then
+      final LoginException exception = assertThrowsExactly(LoginException.class,
+          () -> eventCommandService.addEvent(request, mockMultipartFiles, generalMember()));
+
+      assertEquals(INVALID_ADMIN_ACCESS_TOKEN, exception.exceptionType());
     }
   }
 
@@ -287,7 +285,6 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
     private final String newName = "새로운 이름";
     private final String newLocation = "새로운 장소";
     private final String newInformationUrl = "https://새로운-상세-URL.com";
-    private final LocalDate now = LocalDate.now();
     private final PaymentType paymentType = PaymentType.FREE_PAID;
     private final EventMode eventMode = EventMode.ON_OFFLINE;
     private final String organization = "행사기관";
@@ -319,10 +316,17 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
 
       //when
       final EventResponse response = eventCommandService.updateEvent(eventId, updateRequest,
-          mockMultipartFiles);
+          mockMultipartFiles, adminMember());
       final Event updatedEvent = eventRepository.findById(eventId).get();
 
       //then
+      assertThat(response.getTags())
+          .extracting("name")
+          .containsExactlyInAnyOrderElementsOf(
+              newTagRequests.stream()
+                  .map(TagRequest::getName)
+                  .collect(Collectors.toList())
+          );
       assertAll(
           () -> assertEquals(newName, updatedEvent.getName()),
           () -> assertEquals(newLocation, updatedEvent.getLocation()),
@@ -330,12 +334,6 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
           () -> assertEquals(newEndDateTime, updatedEvent.getEventPeriod().getEndDate()),
           () -> assertEquals(newInformationUrl, updatedEvent.getInformationUrl())
       );
-      assertThat(response.getTags())
-          .containsAll(
-              newTagRequests.stream()
-                  .map(TagRequest::getName)
-                  .collect(Collectors.toList())
-          );
     }
 
     @Test
@@ -362,7 +360,7 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
           () -> eventCommandService.updateEvent(notExistsEventId, updateRequest,
-              mockMultipartFiles));
+              mockMultipartFiles, adminMember()));
 
       assertEquals(NOT_FOUND_EVENT, exception.exceptionType());
     }
@@ -394,7 +392,8 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventCommandService.updateEvent(eventId, updateRequest, mockMultipartFiles));
+          () -> eventCommandService.updateEvent(eventId, updateRequest, mockMultipartFiles,
+              adminMember()));
 
       assertEquals(START_DATE_TIME_AFTER_END_DATE_TIME, exception.exceptionType());
     }
@@ -427,9 +426,40 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventCommandService.updateEvent(eventId, updateRequest, mockMultipartFiles));
+          () -> eventCommandService.updateEvent(eventId, updateRequest, mockMultipartFiles,
+              adminMember()));
 
       assertEquals(NOT_FOUND_TAG, exception.exceptionType());
+    }
+
+    @Test
+    @DisplayName("관리자가 아닌 회원이 행사를 수정할 경우 LoginException이 발생한다.")
+    void updateEvent_fail_authorization() {
+      //given
+      final EventDetailRequest updateRequest = new EventDetailRequest(
+          newName,
+          newLocation,
+          newInformationUrl,
+          beforeDateTime,
+          afterDateTime,
+          beforeDateTime,
+          afterDateTime,
+          newTagRequests,
+          EventType.CONFERENCE,
+          eventMode,
+          paymentType,
+          organization
+      );
+
+      final Event event = eventRepository.save(인프콘_2023());
+      final Long eventId = event.getId();
+
+      //when & then
+      final LoginException exception = assertThrowsExactly(LoginException.class,
+          () -> eventCommandService.updateEvent(eventId, updateRequest, mockMultipartFiles,
+              generalMember()));
+
+      assertEquals(INVALID_ADMIN_ACCESS_TOKEN, exception.exceptionType());
     }
   }
 
@@ -444,7 +474,7 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
       final Long eventId = event.getId();
 
       //when
-      eventCommandService.deleteEvent(eventId);
+      eventCommandService.deleteEvent(eventId, adminMember());
 
       //then
       assertFalse(eventRepository.findById(eventId).isPresent());
@@ -458,9 +488,23 @@ class EventCommandServiceTest extends ServiceIntegrationTestHelper {
 
       //when & then
       final EventException exception = assertThrowsExactly(EventException.class,
-          () -> eventCommandService.deleteEvent(notExistsEventId));
+          () -> eventCommandService.deleteEvent(notExistsEventId, adminMember()));
 
       assertEquals(NOT_FOUND_EVENT, exception.exceptionType());
+    }
+
+    @Test
+    @DisplayName("관지자가 아닌 회원이 행사를 삭제할 경우 LoginException이 발생한다.")
+    void deleteEvent_fail_authorization() {
+      //given
+      final Event event = eventRepository.save(인프콘_2023());
+      final Long eventId = event.getId();
+
+      //when & then
+      final LoginException exception = assertThrowsExactly(LoginException.class,
+          () -> eventCommandService.deleteEvent(eventId, generalMember()));
+
+      assertEquals(INVALID_ADMIN_ACCESS_TOKEN, exception.exceptionType());
     }
   }
 

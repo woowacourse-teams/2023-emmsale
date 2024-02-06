@@ -16,6 +16,7 @@ import com.emmsale.event.domain.EventType;
 import com.emmsale.event.domain.PaymentType;
 import com.emmsale.scrap.api.ScrapApi;
 import com.emmsale.scrap.application.dto.ScrapRequest;
+import com.emmsale.tag.application.dto.TagResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +32,13 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 @WebMvcTest(ScrapApi.class)
 class ScrapApiTest extends MockMvcTestHelper {
 
-  final ResponseFieldsSnippet SCRAPPED_EVENT_RESPONSE_FIELDS = PayloadDocumentation.responseFields(
+  private static final List<TagResponse> TAG_RESPONSES = List.of(
+      new TagResponse(1L, "백엔드"), new TagResponse(2L, "프론트엔드"),
+      new TagResponse(3L, "안드로이드"), new TagResponse(4L, "IOS"),
+      new TagResponse(5L, "AI")
+  );
+
+  static final ResponseFieldsSnippet SCRAPPED_EVENT_RESPONSE_FIELDS = PayloadDocumentation.responseFields(
       fieldWithPath("id").type(JsonFieldType.NUMBER).description("행사 식별자"),
       fieldWithPath("name").type(JsonFieldType.STRING)
           .description("행사 이름"),
@@ -45,7 +52,9 @@ class ScrapApiTest extends MockMvcTestHelper {
       fieldWithPath("applyEndDate").type(JsonFieldType.STRING)
           .description("행사 신청 종료 일자(nullable)"),
       fieldWithPath("location").type(JsonFieldType.STRING).description("행사 장소"),
-      fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("행사 태그들"),
+      fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("태그들"),
+      fieldWithPath("tags[].id").type(JsonFieldType.NUMBER).description("행사 태그 ID"),
+      fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("행사 태그 이름"),
       fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING)
           .description("행사 섬네일 이미지 Url(포스터)"),
       fieldWithPath("type").type(JsonFieldType.STRING)
@@ -70,7 +79,7 @@ class ScrapApiTest extends MockMvcTestHelper {
             LocalDateTime.parse("2023-09-01T00:00:00"),
             LocalDateTime.parse("2023-09-02T23:59:59"),
             "코엑스",
-            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"),
+            TAG_RESPONSES,
             "image0.jpg",
             EventType.CONFERENCE.name(),
             List.of("image1.jpg", "image2.jpg", "image3.jpg"),
@@ -87,7 +96,7 @@ class ScrapApiTest extends MockMvcTestHelper {
             LocalDateTime.parse("2023-09-01T00:00:00"),
             LocalDateTime.parse("2023-09-02T23:59:59"),
             "코엑스",
-            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"),
+            TAG_RESPONSES,
             "image0.jpg",
             EventType.CONFERENCE.name(),
             List.of("image1.jpg", "image2.jpg", "image3.jpg"),
@@ -102,7 +111,7 @@ class ScrapApiTest extends MockMvcTestHelper {
             LocalDateTime.parse("2023-09-01T00:00:00"),
             LocalDateTime.parse("2023-09-02T23:59:59"),
             "코엑스",
-            List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"),
+            TAG_RESPONSES,
             "image0.jpg",
             EventType.CONFERENCE.name(),
             List.of("image1.jpg", "image2.jpg", "image3.jpg"),
@@ -125,7 +134,9 @@ class ScrapApiTest extends MockMvcTestHelper {
         fieldWithPath("[].applyEndDate").type(JsonFieldType.STRING)
             .description("행사 신청 종료 일자(nullable)"),
         fieldWithPath("[].location").type(JsonFieldType.STRING).description("행사 장소"),
-        fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY).description("행사 태그들"),
+        fieldWithPath("[].tags[]").type(JsonFieldType.ARRAY).description("태그들"),
+        fieldWithPath("[].tags[].id").type(JsonFieldType.NUMBER).description("행사 태그 ID"),
+        fieldWithPath("[].tags[].name").type(JsonFieldType.STRING).description("행사 태그 이름"),
         fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING)
             .description("행사 섬네일 이미지 Url(포스터)"),
         fieldWithPath("[].type").type(JsonFieldType.STRING)
@@ -161,7 +172,7 @@ class ScrapApiTest extends MockMvcTestHelper {
         LocalDateTime.parse("2023-09-01T00:00:00"),
         LocalDateTime.parse("2023-09-02T23:59:59"),
         "코엑스",
-        List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"),
+        TAG_RESPONSES,
         "image0.jpg",
         EventType.CONFERENCE.name(),
         List.of("image1.jpg", "image2.jpg", "image3.jpg"),
@@ -199,7 +210,7 @@ class ScrapApiTest extends MockMvcTestHelper {
         LocalDateTime.parse("2023-09-01T00:00:00"),
         LocalDateTime.parse("2023-09-02T23:59:59"),
         "코엑스",
-        List.of("백엔드", "프론트엔드", "안드로이드", "IOS", "AI"),
+        TAG_RESPONSES,
         "image0.jpg",
         EventType.CONFERENCE.name(),
         List.of("image1.jpg", "image2.jpg", "image3.jpg"),
