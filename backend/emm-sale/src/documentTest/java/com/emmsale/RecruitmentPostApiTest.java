@@ -126,9 +126,9 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     final LocalDate postedAt = LocalDate.of(2023, 7, 15);
     final List<RecruitmentPostQueryResponse> response = List.of(
         new RecruitmentPostQueryResponse(1L, "함께해요~", postedAt,
-            MemberReferenceResponse.from(member1), 21L),
+            MemberReferenceResponse.from(member1), 21L, "21번 행사"),
         new RecruitmentPostQueryResponse(2L, "같이 가요~", postedAt,
-            MemberReferenceResponse.from(member2), 43L)
+            MemberReferenceResponse.from(member2), 43L, "43번 행사")
     );
 
     when(postQueryService.findRecruitmentPosts(eventId)).thenReturn(response);
@@ -151,7 +151,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
 
     final RecruitmentPostQueryResponse response = new RecruitmentPostQueryResponse(1L, "함께해요~",
         postedAt,
-        MemberReferenceResponse.from(member), 21L);
+        MemberReferenceResponse.from(member), 21L, "21번 행사");
     when(postQueryService.findRecruitmentPost(eventId, postId)).thenReturn(response);
 
     //when && then
@@ -213,9 +213,9 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
     final LocalDate postedAt = LocalDate.of(2023, 7, 15);
     final List<RecruitmentPostQueryResponse> response = List.of(
         new RecruitmentPostQueryResponse(1L, "함께해요~", postedAt,
-            MemberReferenceResponse.from(member), 21L),
+            MemberReferenceResponse.from(member), 21L,"21번 행사"),
         new RecruitmentPostQueryResponse(2L, "같이 가요~", postedAt,
-            MemberReferenceResponse.from(member), 43L)
+            MemberReferenceResponse.from(member), 43L, "43번 행사")
     );
 
     //when
@@ -223,8 +223,7 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
 
     //then
     mockMvc.perform(
-            get("/events/recruitment-posts?member-id={memberId}",
-                memberId)
+            get("/events/recruitment-posts?member-id={memberId}", memberId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer AccessToken"))
         .andExpect(status().isOk())
         .andDo(document("find-all-by-member-id-recruitment-post",
