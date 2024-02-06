@@ -63,7 +63,8 @@ class RecruitmentPostApiTest extends MockMvcTestHelper {
           .description("member의 이미지 url"),
       fieldWithPath("member.githubUrl").type(JsonFieldType.STRING)
           .description("member의 github Url"),
-      fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("행사의 식별자")
+      fieldWithPath("eventId").type(JsonFieldType.NUMBER).description("행사의 식별자"),
+      fieldWithPath("eventName").type(JsonFieldType.STRING).description("행사의 이름")
   );
 
   @Test
