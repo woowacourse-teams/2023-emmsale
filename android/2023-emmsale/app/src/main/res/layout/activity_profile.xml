@@ -35,11 +35,12 @@
             android:id="@+id/layout_profile"
             layout="@layout/layout_profile"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/tb_profile_toolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            bind:member="@{viewModel.profile.member}" />
+            bind:member="@{viewModel.profile.member}"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <ProgressBar
             android:id="@+id/pb_profile_loading"
@@ -60,7 +61,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_profile_toolbar"
             app:onRefresh="@{() -> viewModel.refresh()}"
-            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}" />
+            app:visible="@{viewModel.networkUiState == NetworkUiState.NETWORK_ERROR}"
+            android:id="@+id/networkErrorView2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
