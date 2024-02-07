@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.emmsale.R
 import com.emmsale.data.model.Event
 import com.emmsale.databinding.FragmentConferenceBinding
@@ -21,8 +19,6 @@ import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilt
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @AndroidEntryPoint
@@ -64,16 +60,6 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>(R.layout.frag
         initView()
         setupEventsObserver()
         setupFiltersObserver()
-
-        if (savedInstanceState != null) {
-            val index = savedInstanceState.getInt(STATE_POSITION_INDEX)
-            val offset = savedInstanceState.getInt(STATE_POSITION_OFFSET)
-            val layoutManager = binding.rvEvents.layoutManager as LinearLayoutManager
-            lifecycleScope.launch {
-                delay(DELAY_RECYCLER_VIEW_ITEM_READY)
-                layoutManager.scrollToPositionWithOffset(index, offset)
-            }
-        }
     }
 
     private fun initView() {
@@ -167,21 +153,5 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>(R.layout.frag
             selectedEndDate = selectedFilter.selectedEndDate?.date,
         )
         filterActivityLauncher.launch(filterActivityIntent)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val layoutManager = binding.rvEvents.layoutManager as LinearLayoutManager
-        val index = layoutManager.findFirstVisibleItemPosition()
-        val topView = binding.rvEvents.getChildAt(0)
-        val offset = topView.top
-        outState.putInt(STATE_POSITION_INDEX, index)
-        outState.putInt(STATE_POSITION_OFFSET, offset)
-    }
-
-    companion object {
-        private const val STATE_POSITION_INDEX = "STATE_POSITION_INDEX"
-        private const val STATE_POSITION_OFFSET = "STATE_POSITION_OFFSET"
-        private const val DELAY_RECYCLER_VIEW_ITEM_READY = 300L
     }
 }
