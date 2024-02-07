@@ -1,22 +1,26 @@
 package com.emmsale.presentation.ui.conferenceList.recyclerView
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
 import com.emmsale.data.model.Event
-import com.emmsale.databinding.ItemConferenceBinding
+import com.emmsale.databinding.ItemEventBinding
 
-class ConferenceViewHolder(
+class EventViewHolder(
     parent: ViewGroup,
     onClickConference: (Event) -> Unit,
+    onEventPosterPreDraw: (View) -> Unit,
 ) : ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false),
+    LayoutInflater.from(parent.context).inflate(R.layout.item_event, parent, false),
 ) {
-    private val binding = ItemConferenceBinding.bind(itemView)
+    private val binding = ItemEventBinding.bind(itemView)
 
     init {
         binding.onClickConference = onClickConference
+        binding.ivEventPoster.doOnPreDraw { onEventPosterPreDraw(it) }
     }
 
     fun bind(event: Event) {

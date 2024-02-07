@@ -14,7 +14,7 @@ import com.emmsale.presentation.common.extension.getSerializableExtraCompat
 import com.emmsale.presentation.common.views.FilterTag
 import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.ui.conferenceFilter.ConferenceFilterActivity
-import com.emmsale.presentation.ui.conferenceList.recyclerView.ConferenceRecyclerViewAdapter
+import com.emmsale.presentation.ui.conferenceList.recyclerView.EventRecyclerViewAdapter
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.conferenceList.uiState.ConferenceSelectedFilteringOptionUiState
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
@@ -25,7 +25,13 @@ import java.time.LocalDate
 class ConferenceFragment : BaseFragment<FragmentConferenceBinding>(R.layout.fragment_conference) {
 
     private val viewModel: ConferenceViewModel by viewModels()
-    private val eventAdapter by lazy { ConferenceRecyclerViewAdapter(::navigateToEventDetail) }
+    private val eventAdapter: EventRecyclerViewAdapter by lazy {
+        EventRecyclerViewAdapter(
+            fragment = this,
+            onClickConference = ::navigateToEventDetail,
+            onPreloaderReady = { binding.rvEvents.addOnScrollListener(it) },
+        )
+    }
     private val filterActivityLauncher =
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result == null || result.resultCode != RESULT_OK) return@registerForActivityResult
