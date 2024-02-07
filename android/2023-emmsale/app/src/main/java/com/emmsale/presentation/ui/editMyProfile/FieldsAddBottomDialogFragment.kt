@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.emmsale.R
+import com.emmsale.data.model.Activity
 import com.emmsale.databinding.FragmentEditmyprofileFieldsAddBottomDialogBinding
 import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.activityChipOf
-import com.emmsale.presentation.ui.editMyProfile.uiState.ActivityUiState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +38,6 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
         initDataBinding()
         setupUiLogic()
-        viewModel.fetchUnselectedActivities()
     }
 
     override fun getTheme(): Int = R.style.RoundBottomSheetDialogStyle
@@ -49,7 +48,7 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun addFields() {
-        viewModel.addSelectedFields()
+        viewModel.updateFields()
         dismiss()
     }
 
@@ -58,25 +57,25 @@ class FieldsAddBottomDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupFieldsUiLogic() {
-        viewModel.activities.observe(viewLifecycleOwner) { allActivities ->
+        viewModel.fields.observe(viewLifecycleOwner) { fields ->
             binding.cgEditmyprofilefieldsdialogFields.removeAllViews()
-            binding.cgEditmyprofilefieldsdialogFields.addChips(allActivities.fields)
+            binding.cgEditmyprofilefieldsdialogFields.addChips(fields)
         }
     }
 
-    private fun ChipGroup.addChips(fields: List<ActivityUiState>) {
+    private fun ChipGroup.addChips(fields: List<Activity>) {
         fields.forEach { field ->
             val chip = getActivityTag(field)
             addView(chip)
         }
     }
 
-    private fun getActivityTag(field: ActivityUiState): ActivityTag {
+    private fun getActivityTag(field: Activity): ActivityTag {
         return activityChipOf {
-            text = field.activity.name
-            isChecked = field.isSelected
-            setOnCheckedChangeListener { _, _ ->
-                viewModel.toggleActivitySelection(field.activity.id)
+            text = field.name
+            isChecked = field in viewModel.selectedFields.value!!
+            setOnCheckedChangeListener { _, isChecked ->
+                viewModel.setActivitySelection(field.id, isChecked)
             }
         }
     }

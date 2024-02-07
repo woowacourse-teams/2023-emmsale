@@ -40,7 +40,7 @@
             android:id="@+id/iv_editmyprfileactivities_activity_remove_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/editmyprofile_activity_remote_button_description"
+            android:contentDescription="@string/editmyprofile_activity_remove_button_description"
             android:padding="7dp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_editmyprofileactivities_activityname"
             app:layout_constraintEnd_toEndOf="parent"

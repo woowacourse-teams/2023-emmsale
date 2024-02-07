@@ -6,7 +6,7 @@ data class Member(
     val name: String = "",
     val description: String = "",
     val profileImageUrl: String = "",
-    val activities: List<Activity> = emptyList(),
+    val activities: Set<Activity> = emptySet(),
 ) {
     val fields: List<Activity>
         get() = activities.filter { it.activityType == ActivityType.INTEREST_FIELD }

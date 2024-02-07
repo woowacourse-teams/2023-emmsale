@@ -9,5 +9,5 @@ fun MemberResponse.toData() = Member(
     name = name,
     description = description,
     profileImageUrl = imageUrl,
-    activities = activities.toData(),
+    activities = activities.toData().toSet(),
 )

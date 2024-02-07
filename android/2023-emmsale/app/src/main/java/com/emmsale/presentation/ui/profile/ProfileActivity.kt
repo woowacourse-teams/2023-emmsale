@@ -86,8 +86,8 @@ class ProfileActivity : NetworkActivity<ActivityProfileBinding>(R.layout.activit
     private fun setupActivitiesRecyclerView() {
         val decoration = IntervalItemDecoration(height = 13.dp)
         listOf(
-            binding.rvProfileEducations,
-            binding.rvProfileClubs,
+            binding.layoutProfile.rvProfileEducations,
+            binding.layoutProfile.rvProfileClubs,
         ).forEach {
             it.apply {
                 adapter = ActivitiesAdapter()
@@ -112,20 +112,20 @@ class ProfileActivity : NetworkActivity<ActivityProfileBinding>(R.layout.activit
     }
 
     private fun handleFields(profile: ProfileUiState) {
-        binding.cgProfileFields.removeAllViews()
+        binding.layoutProfile.cgProfileFields.removeAllViews()
 
         profile.member.fields.forEach {
             val tagView = CategoryTagChip(this).apply { text = it.name }
-            binding.cgProfileFields.addView(tagView)
+            binding.layoutProfile.cgProfileFields.addView(tagView)
         }
     }
 
     private fun handleActivities(profile: ProfileUiState) {
-        (binding.rvProfileEducations.adapter as ActivitiesAdapter).submitList(
+        (binding.layoutProfile.rvProfileEducations.adapter as ActivitiesAdapter).submitList(
             profile.member.educations,
         )
 
-        (binding.rvProfileClubs.adapter as ActivitiesAdapter).submitList(
+        (binding.layoutProfile.rvProfileClubs.adapter as ActivitiesAdapter).submitList(
             profile.member.clubs,
         )
     }

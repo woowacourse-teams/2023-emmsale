@@ -7,10 +7,11 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.view.isVisible
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEditMyProfileBinding
 import com.emmsale.presentation.base.NetworkActivity
@@ -88,10 +89,11 @@ class EditMyProfileActivity :
 
     private fun setupDataBinding() {
         binding.viewModel = viewModel
-        binding.onFieldTagsAddButtonClick = ::showFieldTags
+        binding.onFieldAddButtonClick = ::showFieldTags
         binding.onEducationAddButtonClick = ::showEducations
         binding.onClubAddButtonClick = ::showClubs
-        binding.onProfileImageUpdateUiClick = ::startToEditProfileImage
+        binding.onProfileImageUiClick = ::startToEditProfileImage
+        binding.onDescriptionEditButtonClick = ::startToEditDescription
     }
 
     private fun showFieldTags() {
@@ -129,6 +131,20 @@ class EditMyProfileActivity :
         )
     }
 
+    private fun startToEditDescription() {
+        showKeyboard(binding.etEditmyprofileDescription)
+        binding.etEditmyprofileDescription.moveCursorToLast()
+    }
+
+    private fun showKeyboard(view: EditText) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        if (view.requestFocus()) imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    private fun EditText.moveCursorToLast() {
+        setSelection(text.length)
+    }
+
     private fun setupBackPressedDispatcher() {
         onBackPressedDispatcher.addCallback(
             this,
@@ -159,9 +175,6 @@ class EditMyProfileActivity :
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    binding.ivEditmyprofileDescriptionPlaceholderIcon.isVisible =
-                        s?.length == 0 || s == null
-
                     if (s.toString().contains('\n')) {
                         binding.etEditmyprofileDescription.setText(
                             s.toString().filterNot { it == '\n' },
@@ -202,7 +215,10 @@ class EditMyProfileActivity :
         WarningDialog(
             context = this,
             title = getString(R.string.editmyprofile_activity_remove_warning_title),
-            message = getString(R.string.editmyprofile_activity_remove_warning_message),
+            message = getString(
+                R.string.editmyprofile_activity_remove_warning_message,
+                viewModel.activities.value.first { it.id == activityId }.name,
+            ),
             positiveButtonLabel = getString(R.string.all_delete_button_label),
             negativeButtonLabel = getString(R.string.all_cancel),
             onPositiveButtonClick = { viewModel.removeActivity(activityId) },

@@ -56,8 +56,8 @@ class MyProfileFragment : NetworkFragment<FragmentMyProfileBinding>(R.layout.fra
     private fun setupActivitiesRecyclerView() {
         val decoration = IntervalItemDecoration(height = 13.dp)
         listOf(
-            binding.rvMyprofileEducations,
-            binding.rvMyprofileClubs,
+            binding.layoutProfile.rvProfileEducations,
+            binding.layoutProfile.rvProfileClubs,
         ).forEach {
             it.apply {
                 adapter = ActivitiesAdapter()
@@ -76,20 +76,20 @@ class MyProfileFragment : NetworkFragment<FragmentMyProfileBinding>(R.layout.fra
     }
 
     private fun handleFields(fields: List<Activity>) {
-        binding.cgMyprofileFields.removeAllViews()
+        binding.layoutProfile.cgProfileFields.removeAllViews()
 
         fields.forEach {
             val tagView = CategoryTagChip(requireContext()).apply { text = it.name }
-            binding.cgMyprofileFields.addView(tagView)
+            binding.layoutProfile.cgProfileFields.addView(tagView)
         }
     }
 
     private fun handleEducations(educations: List<Activity>) {
-        (binding.rvMyprofileEducations.adapter as ActivitiesAdapter).submitList(educations)
+        (binding.layoutProfile.rvProfileEducations.adapter as ActivitiesAdapter).submitList(educations)
     }
 
     private fun handleClubs(clubs: List<Activity>) {
-        (binding.rvMyprofileClubs.adapter as ActivitiesAdapter).submitList(clubs)
+        (binding.layoutProfile.rvProfileClubs.adapter as ActivitiesAdapter).submitList(clubs)
     }
 
     companion object {
