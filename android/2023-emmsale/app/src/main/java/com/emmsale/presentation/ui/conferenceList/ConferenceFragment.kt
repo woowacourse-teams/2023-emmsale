@@ -25,7 +25,7 @@ import java.time.LocalDate
 class ConferenceFragment : BaseFragment<FragmentConferenceBinding>(R.layout.fragment_conference) {
 
     private val viewModel: ConferenceViewModel by viewModels()
-    private val eventAdapter by lazy {
+    private val eventAdapter: EventRecyclerViewAdapter by lazy {
         EventRecyclerViewAdapter(
             fragment = this,
             onClickConference = ::navigateToEventDetail,

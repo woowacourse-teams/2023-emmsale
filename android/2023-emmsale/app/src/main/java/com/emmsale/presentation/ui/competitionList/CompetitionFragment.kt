@@ -14,9 +14,9 @@ import com.emmsale.presentation.common.extension.getSerializableExtraCompat
 import com.emmsale.presentation.common.views.FilterTag
 import com.emmsale.presentation.common.views.filterChipOf
 import com.emmsale.presentation.ui.competitionFilter.CompetitionFilterActivity
-import com.emmsale.presentation.ui.competitionList.recyclerView.CompetitionRecyclerViewAdapter
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringDateOptionUiState
 import com.emmsale.presentation.ui.competitionList.uiState.CompetitionSelectedFilteringOptionUiState
+import com.emmsale.presentation.ui.conferenceList.recyclerView.EventRecyclerViewAdapter
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -26,8 +26,12 @@ class CompetitionFragment :
     BaseFragment<FragmentCompetitionBinding>(R.layout.fragment_competition) {
 
     private val viewModel: CompetitionViewModel by viewModels()
-    private val eventAdapter: CompetitionRecyclerViewAdapter by lazy {
-        CompetitionRecyclerViewAdapter(::navigateToEventDetail)
+    private val eventAdapter: EventRecyclerViewAdapter by lazy {
+        EventRecyclerViewAdapter(
+            fragment = this,
+            onClickConference = ::navigateToEventDetail,
+            onPreloaderReady = { binding.rvEvents.addOnScrollListener(it) },
+        )
     }
     private val filterActivityLauncher =
         registerForActivityResult(StartActivityForResult()) { result ->
