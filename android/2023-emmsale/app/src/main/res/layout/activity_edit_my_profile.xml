@@ -263,7 +263,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="@string/editmyprofile_education_label"
+                    android:text="@string/editmyprofile_club_label"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_editmyprofile_club_icon"
@@ -276,15 +276,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
                     android:paddingVertical="9dp"
-                    android:onClick="@{() -> onEducationAddButtonClick.invoke()}"
+                    android:onClick="@{() -> onClubAddButtonClick.invoke()}"
                     android:src="@drawable/img_editmyprofile_certain_activity_add_button"
                     app:layout_constraintTop_toTopOf="@id/tv_editmyprofile_club_label"
                     app:layout_constraintBottom_toBottomOf="@id/tv_editmyprofile_club_label"
                     app:layout_constraintStart_toEndOf="@id/tv_editmyprofile_club_label"
-                    android:contentDescription="@string/editmyprofile_education_add_button_description" />
+                    android:contentDescription="@string/editmyprofile_club_add_button_description" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_editmyprofile_educations"
+                    android:id="@+id/rv_editmyprofile_clubs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
@@ -313,7 +313,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="@string/editmyprofile_club_label"
+                    android:text="@string/editmyprofile_education_label"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_editmyprofile_education_icon"
@@ -326,7 +326,7 @@
                     android:layout_height="wrap_content"
                     android:paddingVertical="9dp"
                     android:layout_marginStart="7dp"
-                    android:onClick="@{() -> onClubAddButtonClick.invoke()}"
+                    android:onClick="@{() -> onEducationAddButtonClick.invoke()}"
                     android:src="@drawable/img_editmyprofile_certain_activity_add_button"
                     app:layout_constraintTop_toTopOf="@id/tv_editmyprofile_education_label"
                     app:layout_constraintBottom_toBottomOf="@id/tv_editmyprofile_education_label"
@@ -334,7 +334,7 @@
                     android:contentDescription="@string/editmyprofile_education_add_button_description" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_editmyprofile_clubs"
+                    android:id="@+id/rv_editmyprofile_educations"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -364,7 +364,7 @@
                     android:background="@drawable/bg_profile_activityicon"
                     android:importantForAccessibility="no"
                     app:layout_constraintStart_toStartOf="@+id/iv_editmyprofile_education_icon"
-                    app:layout_constraintTop_toBottomOf="@+id/rv_editmyprofile_clubs" />
+                    app:layout_constraintTop_toBottomOf="@+id/rv_editmyprofile_educations" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

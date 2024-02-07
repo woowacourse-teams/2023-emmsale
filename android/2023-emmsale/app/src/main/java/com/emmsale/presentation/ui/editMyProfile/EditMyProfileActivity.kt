@@ -215,7 +215,10 @@ class EditMyProfileActivity :
         WarningDialog(
             context = this,
             title = getString(R.string.editmyprofile_activity_remove_warning_title),
-            message = getString(R.string.editmyprofile_activity_remove_warning_message),
+            message = getString(
+                R.string.editmyprofile_activity_remove_warning_message,
+                viewModel.activities.value.first { it.id == activityId }.name,
+            ),
             positiveButtonLabel = getString(R.string.all_delete_button_label),
             negativeButtonLabel = getString(R.string.all_cancel),
             onPositiveButtonClick = { viewModel.removeActivity(activityId) },

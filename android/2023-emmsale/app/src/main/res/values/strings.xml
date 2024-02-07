@@ -364,9 +364,9 @@
     <string name="editmyprofile_club_add_button_description">동아리 활동 추가 버튼</string>
     <string name="editmyprofile_education_add_button_description">교육 활동 추가 버튼</string>
     <string name="editmyprofile_activity_remove_button_description">활동 삭제 버튼</string>
-    <string name="editmyprofile_add">추가하기</string>
+    <string name="editmyprofile_update">변경하기</string>
     <string name="editmyprofile_activity_remove_warning_title">활동 삭제</string>
-    <string name="editmyprofile_activity_remove_warning_message">해당 활동을 삭제하시겠습니까?</string>
+    <string name="editmyprofile_activity_remove_warning_message">%s 활동을 삭제하시겠습니까?</string>
     <string name="editmyprofile_profile_fetching_error_message">프로필을 불러오는 데 실패했어요 😥</string>
     <string name="editmyprofile_update_description_error_message">한 줄 소개를 수정하는 데 실패했어요 😥</string>
     <string name="editmyprofile_all_activities_fetching_error_message">활동 정보를 불러오는 데 실패했어요 😥</string>

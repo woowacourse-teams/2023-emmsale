@@ -57,7 +57,7 @@ class DefaultMemberRepository @Inject constructor(
         activitiesApiResponse: ApiResponse<List<Activity>>,
     ): ApiResponse<Member> {
         return when (activitiesApiResponse) {
-            is Success -> Success(member.copy(activities = activitiesApiResponse.data))
+            is Success -> Success(member.copy(activities = activitiesApiResponse.data.toSet()))
             is Failure -> Failure(activitiesApiResponse.code, activitiesApiResponse.message)
             NetworkError -> NetworkError
             is Unexpected -> Unexpected(activitiesApiResponse.error)

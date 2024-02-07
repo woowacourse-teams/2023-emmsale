@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.emmsale.R
+import com.emmsale.data.model.Activity
 import com.emmsale.databinding.FragmentEditmyprofileEducationsAddBottomDialogBinding
 import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.activityChipOf
-import com.emmsale.presentation.ui.editMyProfile.uiState.ActivityUiState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +38,6 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
 
         initDataBinding()
         setupUiLogic()
-        viewModel.fetchUnselectedActivities()
     }
 
     override fun getTheme(): Int = R.style.RoundBottomSheetDialogStyle
@@ -58,25 +57,25 @@ class EducationsAddBottomDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupEducationsUiLogic() {
-        viewModel.activities.observe(viewLifecycleOwner) { allActivities ->
+        viewModel.educations.observe(viewLifecycleOwner) { educations ->
             binding.cgEditmyprofileeducationsdialogEducations.removeAllViews()
-            binding.cgEditmyprofileeducationsdialogEducations.addChips(allActivities.educations)
+            binding.cgEditmyprofileeducationsdialogEducations.addChips(educations)
         }
     }
 
-    private fun ChipGroup.addChips(educations: List<ActivityUiState>) {
+    private fun ChipGroup.addChips(educations: List<Activity>) {
         educations.forEach { education ->
             val chip = getActivityTag(education)
             addView(chip)
         }
     }
 
-    private fun getActivityTag(education: ActivityUiState): ActivityTag {
+    private fun getActivityTag(education: Activity): ActivityTag {
         return activityChipOf {
-            text = education.activity.name
-            isChecked = education.isSelected
-            setOnCheckedChangeListener { _, _ ->
-                viewModel.toggleActivitySelection(education.activity.id)
+            text = education.name
+            isChecked = education in viewModel.selectedEducations.value!!
+            setOnCheckedChangeListener { _, isChecked ->
+                viewModel.setActivitySelection(education.id, isChecked)
             }
         }
     }
