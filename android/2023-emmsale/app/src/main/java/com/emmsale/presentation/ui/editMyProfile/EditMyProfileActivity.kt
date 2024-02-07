@@ -7,6 +7,8 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -91,6 +93,7 @@ class EditMyProfileActivity :
         binding.onEducationAddButtonClick = ::showEducations
         binding.onClubAddButtonClick = ::showClubs
         binding.onProfileImageUiClick = ::startToEditProfileImage
+        binding.onDescriptionEditButtonClick = ::startToEditDescription
     }
 
     private fun showFieldTags() {
@@ -126,6 +129,20 @@ class EditMyProfileActivity :
             onConfirm = { navigateToApplicationDetailSetting(permissionSettingLauncher) },
             onDenied = {},
         )
+    }
+
+    private fun startToEditDescription() {
+        showKeyboard(binding.etEditmyprofileDescription)
+        binding.etEditmyprofileDescription.moveCursorToLast()
+    }
+
+    private fun showKeyboard(view: EditText) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        if (view.requestFocus()) imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    private fun EditText.moveCursorToLast() {
+        setSelection(text.length)
     }
 
     private fun setupBackPressedDispatcher() {

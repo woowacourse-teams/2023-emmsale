@@ -28,6 +28,10 @@
         <variable
             name="onProfileImageUiClick"
             type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onDescriptionEditButtonClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -182,13 +186,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:importantForAccessibility="no"
+                    android:padding="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     app:layout_constraintBottom_toBottomOf="@+id/et_editmyprofile_description"
                     app:srcCompat="@drawable/ic_editmyprofile_description_edit"
                     app:layout_constraintStart_toEndOf="@+id/et_editmyprofile_description"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="1dp"
+                    android:onClick="@{() -> onDescriptionEditButtonClick.invoke()}"
                     app:layout_constraintEnd_toStartOf="@+id/iv_editmyprofile_member_image"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="1dp" />
+                    android:layout_marginBottom="-3dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_editmyprofile_fields"
