@@ -23,6 +23,7 @@ class DefaultEventSearchRepository @Inject constructor(
 
     override suspend fun save(searchQuery: String) {
         withContext(dispatcher) {
+            dao.deleteByQuery(searchQuery)
             dao.save(EventSearchHistoryEntity(query = searchQuery))
         }
     }

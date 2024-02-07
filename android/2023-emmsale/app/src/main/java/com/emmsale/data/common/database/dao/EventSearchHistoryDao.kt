@@ -17,6 +17,9 @@ interface EventSearchHistoryDao {
     @Delete
     fun delete(eventSearch: EventSearchHistoryEntity)
 
+    @Query("DELETE FROM event_search WHERE query = :query")
+    fun deleteByQuery(query: String)
+
     @Query("DELETE FROM event_search")
     fun deleteAll()
 }
