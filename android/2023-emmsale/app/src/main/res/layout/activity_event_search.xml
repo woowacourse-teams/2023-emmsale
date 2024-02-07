@@ -146,7 +146,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider"
             app:spanCount="@integer/event_search_column_size"
             app:visible="@{!etEventSearch.text.toString().isBlank()}"
-            tools:listitem="@layout/item_conference"
+            tools:listitem="@layout/item_event"
             tools:visibility="gone" />
 
         <com.emmsale.presentation.common.views.NoContentView

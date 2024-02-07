@@ -72,7 +72,7 @@
                     app:spanCount="@integer/event_column_size"
                     tools:background="@drawable/bg_event_recyclerview"
                     tools:itemCount="2"
-                    tools:listitem="@layout/item_conference" />
+                    tools:listitem="@layout/item_event" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fab_scroll_top"

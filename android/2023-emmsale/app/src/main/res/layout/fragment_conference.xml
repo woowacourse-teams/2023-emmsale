@@ -118,7 +118,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/sv_filters"
                 app:spanCount="@integer/event_column_size"
                 tools:itemCount="5"
-                tools:listitem="@layout/item_conference" />
+                tools:listitem="@layout/item_event" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_scroll_top"

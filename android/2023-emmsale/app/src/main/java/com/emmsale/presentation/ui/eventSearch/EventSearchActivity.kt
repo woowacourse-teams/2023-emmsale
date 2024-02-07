@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.emmsale.R
 import com.emmsale.databinding.ActivityEventSearchBinding
 import com.emmsale.presentation.common.views.ConfirmDialog
@@ -50,12 +49,7 @@ class EventSearchActivity : AppCompatActivity() {
     }
 
     private fun setupSearchResultRecyclerView() {
-        with(binding.rvEventSearchResult) {
-            adapter = eventSearchAdapter
-            addItemDecoration(
-                DividerItemDecoration(this@EventSearchActivity, DividerItemDecoration.VERTICAL),
-            )
-        }
+        binding.rvEventSearchResult.adapter = eventSearchAdapter
     }
 
     private fun setupSearchHistoryRecyclerView() {

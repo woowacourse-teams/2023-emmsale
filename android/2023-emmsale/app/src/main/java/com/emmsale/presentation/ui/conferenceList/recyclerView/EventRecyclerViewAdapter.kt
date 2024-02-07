@@ -15,11 +15,11 @@ import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.emmsale.data.model.Event
 import com.emmsale.presentation.common.extension.dp
 
-class ConferenceRecyclerViewAdapter(
+class EventRecyclerViewAdapter(
     private val fragment: Fragment,
     private val onClickConference: (Event) -> Unit,
     private val onPreloaderReady: (preloader: RecyclerViewPreloader<Event>) -> Unit,
-) : ListAdapter<Event, ConferenceViewHolder>(EventDiffUtil), PreloadModelProvider<Event> {
+) : ListAdapter<Event, EventViewHolder>(EventDiffUtil), PreloadModelProvider<Event> {
 
     private var isFirstPreloader: Boolean = true
 
@@ -28,7 +28,7 @@ class ConferenceRecyclerViewAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): ConferenceViewHolder = ConferenceViewHolder(
+    ): EventViewHolder = EventViewHolder(
         parent = parent,
         onClickConference = onClickConference,
         onEventPosterPreDraw = { view ->
@@ -45,7 +45,7 @@ class ConferenceRecyclerViewAdapter(
         },
     )
 
-    override fun onBindViewHolder(holder: ConferenceViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

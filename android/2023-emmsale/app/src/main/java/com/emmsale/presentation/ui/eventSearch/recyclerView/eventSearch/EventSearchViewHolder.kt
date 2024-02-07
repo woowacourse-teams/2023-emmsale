@@ -5,15 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
 import com.emmsale.data.model.Event
-import com.emmsale.databinding.ItemConferenceBinding
+import com.emmsale.databinding.ItemEventBinding
 
 class EventSearchViewHolder(
     parent: ViewGroup,
     onEventClick: (event: Event) -> Unit,
 ) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false),
+    LayoutInflater.from(parent.context).inflate(R.layout.item_event, parent, false),
 ) {
-    private val binding = ItemConferenceBinding.bind(itemView)
+    private val binding = ItemEventBinding.bind(itemView)
 
     init {
         binding.onClickConference = onEventClick
