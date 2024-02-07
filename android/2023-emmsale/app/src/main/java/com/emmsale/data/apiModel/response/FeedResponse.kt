@@ -11,6 +11,8 @@ data class FeedResponse(
     val id: Long,
     @SerialName("eventId")
     val eventId: Long,
+    @SerialName("eventName")
+    val eventName: String = "",
     @SerialName("title")
     val title: String,
     @SerialName("content")

@@ -95,11 +95,29 @@
                 tools:text="git1234567@github.com" />
 
             <TextView
+                android:id="@+id/tv_written_posts_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginStart="17dp"
+                android:background="@drawable/bg_setting_button"
+                android:gravity="center"
+                android:onClick="@{() -> onWritingsButtonClick.invoke()}"
+                android:paddingVertical="12dp"
+                android:text="@string/setting_written_posts_button_label"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="@id/guide_line_center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image" />
+
+            <TextView
                 android:id="@+id/tv_setting_written_comments_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="17dp"
+                android:layout_marginStart="2dp"
                 android:background="@drawable/bg_setting_button"
                 android:gravity="center"
                 android:onClick="@{() -> onWrittenCommentsButtonClick.invoke()}"
@@ -107,8 +125,18 @@
                 android:text="@string/setting_written_comments_button_label"
                 android:textSize="11sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/iv_setting_member_image"
+                app:layout_constraintStart_toStartOf="@id/guide_line_center"
                 app:layout_constraintTop_toBottomOf="@+id/iv_setting_member_image" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_line_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintGuide_percent="0.5" />
 
             <com.emmsale.presentation.common.views.HorizontalDivider
                 android:id="@+id/verticaldivider_setting_vertical_divider"
