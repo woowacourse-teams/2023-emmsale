@@ -20,8 +20,8 @@ android {
         applicationId = "com.emmsale"
         minSdk = 28
         targetSdk = 33
-        versionCode = 60
-        versionName = "2.2.5"
+        versionCode = 62
+        versionName = "2.3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

@@ -126,7 +126,7 @@
             android:id="@+id/iv_comment_menu_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="-2dp"
+            android:layout_marginEnd="-4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/comment_menu_button"
             android:onClick="@{() -> onCommentMenuClick.invoke(uiState.isWrittenByLoginUser, uiState.comment)}"

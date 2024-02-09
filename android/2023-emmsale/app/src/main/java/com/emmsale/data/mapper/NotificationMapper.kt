@@ -49,7 +49,10 @@ fun NotificationResponse.toData(): Notification = when (notificationType) {
                 content = commentNotificationInformation.content,
                 parentCommentId = commentNotificationInformation.parentId,
                 feed = Feed(id = commentNotificationInformation.feedId),
-                writer = Member(profileImageUrl = commentNotificationInformation.writerProfileImageUrl),
+                writer = Member(
+                    name = commentNotificationInformation.writerName,
+                    profileImageUrl = commentNotificationInformation.writerProfileImageUrl,
+                ),
             ),
         )
     }

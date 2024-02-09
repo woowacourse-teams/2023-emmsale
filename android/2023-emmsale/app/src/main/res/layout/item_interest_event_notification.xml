@@ -51,7 +51,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_comment"
+            android:id="@+id/tv_event_notification_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -67,17 +67,17 @@
             app:layout_constraintTop_toTopOf="@+id/iv_member_profile" />
 
         <TextView
-            android:id="@+id/tv_comment_event_title"
+            android:id="@+id/tv_event_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/nanum_square_bold"
             android:text="@{interestEventNotification.event.name}"
             android:textColor="@color/black"
             android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_comment"
-            app:layout_constraintTop_toBottomOf="@+id/tv_comment"
+            app:layout_constraintStart_toStartOf="@+id/tv_event_notification_message"
+            app:layout_constraintTop_toBottomOf="@+id/tv_event_notification_message"
             tools:text="안드로이드 최대 행사 드로이드 나이츠" />
 
 
@@ -91,8 +91,8 @@
             android:textSize="12sp"
             app:dateText="@{interestEventNotification.createdAt}"
             app:dateTimeFormatter="@{DateTimePattern.RELATIVE_TIME}"
-            app:layout_constraintStart_toStartOf="@+id/tv_comment"
-            app:layout_constraintTop_toBottomOf="@+id/tv_comment_event_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_event_notification_message"
+            app:layout_constraintTop_toBottomOf="@+id/tv_event_title"
             tools:text="07.28" />
 
         <ImageView
@@ -105,9 +105,9 @@
             android:onClick="@{() -> onDeleteClick.invoke(interestEventNotification.id)}"
             android:padding="6dp"
             android:src="@drawable/ic_notification_delete"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_comment"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_event_notification_message"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_comment" />
+            app:layout_constraintTop_toTopOf="@+id/tv_event_notification_message" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -39,7 +39,7 @@
         android:focusable="true"
         android:onClick="@{() -> onNotificationClick.invoke(commentNotification)}"
         android:paddingHorizontal="17dp"
-        android:paddingVertical="21dp">
+        android:paddingVertical="18dp">
 
         <ImageView
             android:id="@+id/iv_member_profile"
@@ -49,10 +49,23 @@
             android:scaleType="centerCrop"
             app:imageUrl="@{commentNotification.comment.writer.profileImageUrl}"
             app:isCircle="@{true}"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_writer_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="12dp"
+            android:textSize="14sp"
+            android:text="@{commentNotification.comment.writer.name}"
+            app:layout_constraintTop_toTopOf="@id/iv_member_profile"
+            app:layout_constraintStart_toEndOf="@id/iv_member_profile"
+            app:layout_constraintEnd_toStartOf="@id/btn_delete"
+            android:fontFamily="@font/nanum_square_extra_bold"
+            tools:text="토마스" />
 
         <TextView
             android:id="@+id/tv_comment"
@@ -66,9 +79,10 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/btn_delete"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_member_profile"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_writer_name"
             tools:text="이번 행사 너무 재밌었어요! 저는 그래도 더 재밌었던 것 같아요. 다음에 또 만나요!" />
 
         <TextView
@@ -77,6 +91,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/dark_gray"
             android:textSize="12sp"
+            android:layout_marginTop="10dp"
             app:dateText="@{commentNotification.createdAt}"
             app:dateTimeFormatter="@{DateTimePattern.RELATIVE_TIME}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -94,9 +109,9 @@
             android:onClick="@{() -> onDeleteClick.invoke(commentNotification.id)}"
             android:padding="6dp"
             android:src="@drawable/ic_notification_delete"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_comment"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_writer_name"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_comment" />
+            app:layout_constraintTop_toTopOf="@+id/tv_writer_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
