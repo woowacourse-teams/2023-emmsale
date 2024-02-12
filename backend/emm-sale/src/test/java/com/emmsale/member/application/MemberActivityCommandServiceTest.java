@@ -1,21 +1,21 @@
 package com.emmsale.member.application;
 
+import static com.emmsale.member.MemberFixture.newMember;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.emmsale.activity.application.dto.ActivityResponse;
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.domain.Member;
+import com.emmsale.member.domain.MemberActivityRepository;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import java.util.List;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,50 +28,35 @@ class MemberActivityCommandServiceTest extends ServiceIntegrationTestHelper {
   @Autowired
   private MemberRepository memberRepository;
 
-  @Test
-  @DisplayName("Activity의 id를 통해서, 사용자의 Activity를 등록하고 사용자의 이름을 수정할 수 있다.")
-  void registerActivities() throws Exception {
-    //given
-    final List<Long> activityIds = List.of(1L, 2L, 3L);
-    final long savedMemberId = 1L;
+  @Autowired
+  private MemberActivityRepository memberActivityRepository;
 
-    final Member member = memberRepository.findById(savedMemberId).get();
-    final String updateName = "우르";
-
-    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(updateName,
-        activityIds);
-
-    //when & then
-    assertAll(
-        () -> assertDoesNotThrow(
-            () -> memberActivityCommandService.registerActivities(member, request)),
-        () -> assertEquals(updateName, member.getName())
-    );
+  @BeforeEach
+  void init() {
+    memberRepository.save(newMember());
   }
 
   @Test
-  @DisplayName("특정 사용자에 대해 이미 등록되어 있는 Activity를 등록하려고 하면 예외를 반환한다.")
-  void registerActivities_fail() throws Exception {
-    //given
-    final List<Long> activityIds = List.of(1L, 2L, 3L, 4L);
-    final long savedMemberId = 1L;
+  @DisplayName("Activity의 id를 통해서, 사용자의 Activity를 등록할 수 있다.")
+  void registerActivities() throws Exception {
+    // given
+    final List<Long> expected = List.of(1L, 2L, 3L);
+    final long savedMemberId = 3L;
 
     final Member member = memberRepository.findById(savedMemberId).get();
     final String updateName = "우르";
 
     final MemberActivityInitialRequest request = new MemberActivityInitialRequest(updateName,
-        activityIds);
+        expected);
 
     // when
     memberActivityCommandService.registerActivities(member, request);
-    final ThrowingCallable actual = () -> memberActivityCommandService.registerActivities(member,
-        request);
-
+    final List<Long> actual = memberActivityRepository.findAllByMember(member)
+        .stream()
+        .map(memberActivity -> memberActivity.getActivity().getId())
+        .collect(Collectors.toList());
     // then
-    assertThatThrownBy(actual)
-        .isInstanceOf(MemberException.class)
-        .hasMessage(MemberExceptionType.ALREADY_ONBOARDING.errorMessage());
-
+    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
   }
 
   @Test

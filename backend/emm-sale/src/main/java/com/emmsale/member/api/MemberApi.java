@@ -8,7 +8,6 @@ import com.emmsale.member.application.MemberQueryService;
 import com.emmsale.member.application.dto.DescriptionRequest;
 import com.emmsale.member.application.dto.MemberActivityAddRequest;
 import com.emmsale.member.application.dto.MemberActivityInitialRequest;
-import com.emmsale.member.application.dto.MemberActivityResponse;
 import com.emmsale.member.application.dto.MemberDetailResponse;
 import com.emmsale.member.application.dto.MemberImageResponse;
 import com.emmsale.member.domain.Member;
@@ -42,7 +41,7 @@ public class MemberApi {
       final Member member,
       @RequestBody final MemberActivityInitialRequest memberActivityInitialRequest
   ) {
-    memberActivityCommandService.registerActivities(member, memberActivityInitialRequest);
+    memberCommandService.initializeMember(member, memberActivityInitialRequest);
     return ResponseEntity.noContent().build();
   }
 

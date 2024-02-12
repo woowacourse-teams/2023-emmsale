@@ -45,4 +45,8 @@ public class MemberFixture {
     member.updateName(name);
     return member;
   }
+
+  public static Member newMember() {
+    return new Member(1313L, "imageUrl", "amaama");
+  }
 }

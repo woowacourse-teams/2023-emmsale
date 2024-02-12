@@ -2,12 +2,15 @@ package com.emmsale.member.application;
 
 import com.emmsale.image.application.S3Client;
 import com.emmsale.member.application.dto.DescriptionRequest;
+import com.emmsale.member.application.dto.MemberActivityInitialRequest;
 import com.emmsale.member.application.dto.MemberImageResponse;
 import com.emmsale.member.domain.Member;
+import com.emmsale.member.domain.MemberActivity;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,24 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberCommandService {
 
   private final MemberRepository memberRepository;
+  private final MemberActivityCommandService memberActivityCommandService;
+  private final InterestTagService interestTagService;
   private final S3Client s3Client;
+
+  public void initializeMember(final Member member, final MemberActivityInitialRequest request) {
+    if (member.isOnboarded()) {
+      throw new MemberException(MemberExceptionType.ALREADY_ONBOARDING);
+    }
+    final List<MemberActivity> memberActivities = memberActivityCommandService.registerActivities(
+        member, request);
+    final List<String> activityNames = memberActivities.stream()
+        .filter(MemberActivity::isJobActivity)
+        .map(MemberActivity::getActivityName)
+        .collect(Collectors.toList());
+    interestTagService.initializeInterestTags(member, activityNames);
+
+    member.updateName(request.getName());
+  }
 
   public void updateDescription(final Member member, final DescriptionRequest descriptionRequest) {
     final String description = descriptionRequest.getDescription();

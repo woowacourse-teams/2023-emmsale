@@ -1,6 +1,7 @@
 package com.emmsale.member.domain;
 
 import com.emmsale.activity.domain.Activity;
+import com.emmsale.activity.domain.ActivityType;
 import com.emmsale.base.BaseEntity;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,5 +34,13 @@ public class MemberActivity extends BaseEntity {
   public MemberActivity(final Activity activity, final Member member) {
     this.activity = activity;
     this.member = member;
+  }
+
+  public String getActivityName() {
+    return activity.getName();
+  }
+
+  public Boolean isJobActivity() {
+    return activity.getActivityType() == ActivityType.JOB;
   }
 }

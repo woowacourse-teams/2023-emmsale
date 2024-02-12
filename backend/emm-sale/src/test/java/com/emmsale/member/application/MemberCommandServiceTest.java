@@ -5,6 +5,8 @@ import static com.emmsale.member.exception.MemberExceptionType.FORBIDDEN_UPDATE_
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
@@ -13,10 +15,15 @@ import static org.mockito.Mockito.when;
 
 import com.emmsale.helper.ServiceIntegrationTestHelper;
 import com.emmsale.member.application.dto.DescriptionRequest;
+import com.emmsale.member.application.dto.MemberActivityInitialRequest;
+import com.emmsale.member.domain.InterestTagRepository;
 import com.emmsale.member.domain.Member;
 import com.emmsale.member.domain.MemberRepository;
 import com.emmsale.member.exception.MemberException;
 import com.emmsale.member.exception.MemberExceptionType;
+import com.emmsale.tag.domain.Tag;
+import com.emmsale.tag.domain.TagRepository;
+import java.util.List;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +44,58 @@ class MemberCommandServiceTest extends ServiceIntegrationTestHelper {
   private MemberCommandService memberCommandService;
   @Autowired
   private MemberRepository memberRepository;
+  @Autowired
+  private InterestTagRepository interestTagRepository;
+  @Autowired
+  private TagRepository tagRepository;
+
+  @Test
+  @DisplayName("Activity의 id를 통해서, 사용자의 Activity와 관심 태그를 등록하고 사용자의 이름을 수정할 수 있다.")
+  void registerActivities() throws Exception {
+    //given
+    tagRepository.save(new Tag("Backend"));
+    final List<Long> activityIds = List.of(1L, 2L, 6L);
+    final long savedMemberId = 1L;
+
+    final Member member = memberRepository.findById(savedMemberId).get();
+    final String updateName = "우르";
+
+    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(updateName,
+        activityIds);
+
+    //when & then
+    assertDoesNotThrow(() -> memberCommandService.initializeMember(member, request));
+    assertAll(
+        () -> assertEquals(updateName, member.getName()),
+        () -> assertEquals(1,
+            interestTagRepository.findInterestTagsByMemberId(savedMemberId).size())
+    );
+  }
+
+  @Test
+  @DisplayName("온보딩을 마친 사용자의 정보를 초기화하면 예외를 반환한다.")
+  void initializeMember_fail_duplicate_register() throws Exception {
+    //given
+    final List<Long> activityIds = List.of(1L, 2L, 3L, 4L);
+    final long savedMemberId = 1L;
+
+    final Member member = memberRepository.findById(savedMemberId).get();
+    final String updateName = "우르";
+
+    final MemberActivityInitialRequest request = new MemberActivityInitialRequest(updateName,
+        activityIds);
+
+    // when
+    memberCommandService.initializeMember(member, request);
+    final ThrowingCallable actual = () -> memberCommandService.initializeMember(member,
+        request);
+
+    // then
+    assertThatThrownBy(actual)
+        .isInstanceOf(MemberException.class)
+        .hasMessage(MemberExceptionType.ALREADY_ONBOARDING.errorMessage());
+
+  }
 
   @Nested
   @DisplayName("한줄 자기소개를 업데이트한다.")
