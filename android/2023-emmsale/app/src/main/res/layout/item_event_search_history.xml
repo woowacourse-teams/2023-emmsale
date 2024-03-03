@@ -7,7 +7,7 @@
 
         <import type="kotlin.jvm.functions.Function1" />
 
-        <import type="com.emmsale.data.model.EventSearchHistory" />
+        <import type="com.emmsale.model.EventSearchHistory" />
 
         <import type="kotlin.Unit" />
 

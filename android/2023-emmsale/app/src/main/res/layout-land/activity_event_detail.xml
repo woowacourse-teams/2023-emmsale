@@ -14,7 +14,7 @@
 
         <import type="com.emmsale.presentation.common.NetworkUiState" />
 
-        <import type="com.emmsale.data.model.EventProgressStatus" />
+        <import type="com.emmsale.model.EventProgressStatus" />
 
         <import
             alias="Screen"

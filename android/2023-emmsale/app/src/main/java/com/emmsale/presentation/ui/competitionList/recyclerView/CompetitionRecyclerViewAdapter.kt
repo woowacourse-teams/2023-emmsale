@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
-import com.emmsale.data.model.Event
+import com.emmsale.model.Event
 import com.emmsale.presentation.ui.conferenceList.recyclerView.EventDiffUtil
 
 class CompetitionRecyclerViewAdapter(

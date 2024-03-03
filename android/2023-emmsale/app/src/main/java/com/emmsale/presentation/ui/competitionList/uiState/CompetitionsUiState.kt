@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.competitionList.uiState
 
-import com.emmsale.data.model.Event
+import com.emmsale.model.Event
 
 data class CompetitionsUiState(
     val events: List<Event> = emptyList(),

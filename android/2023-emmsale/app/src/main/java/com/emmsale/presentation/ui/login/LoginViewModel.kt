@@ -1,17 +1,17 @@
 package com.emmsale.presentation.ui.login
 
 import androidx.lifecycle.LiveData
-import com.emmsale.data.model.Login
-import com.emmsale.data.model.Token
+import androidx.lifecycle.viewModelScope
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.FcmTokenRepository
 import com.emmsale.data.repository.interfaces.LoginRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
+import com.emmsale.model.Login
+import com.emmsale.model.Token
 import com.emmsale.presentation.base.NetworkViewModel
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import com.emmsale.presentation.ui.login.uiState.LoginUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -38,11 +38,11 @@ class LoginViewModel @Inject constructor(
         onLoading = { changeToLoadingState() },
     )
 
-    private fun saveTokens(token: Token, fcmToken: String) {
-        CoroutineScope(Dispatchers.Default).launch {
+    private suspend fun saveTokens(token: Token, fcmToken: String) {
+        viewModelScope.launch((Dispatchers.Default)) {
             fcmTokenRepository.saveFcmToken(token.uid, fcmToken)
+            tokenRepository.saveToken(token)
         }
-        tokenRepository.saveToken(token)
     }
 
     private fun handleLoginComplete(login: Login) {

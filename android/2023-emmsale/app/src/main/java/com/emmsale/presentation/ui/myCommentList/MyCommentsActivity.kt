@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.emmsale.R
-import com.emmsale.data.model.Comment
+import com.emmsale.model.Comment
 import com.emmsale.databinding.ActivityMyCommentsBinding
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.recyclerView.DividerItemDecoration

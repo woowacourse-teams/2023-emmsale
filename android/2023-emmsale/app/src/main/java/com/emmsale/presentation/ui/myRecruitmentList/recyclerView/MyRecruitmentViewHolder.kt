@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.myRecruitmentList.recyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.data.model.Recruitment
+import com.emmsale.model.Recruitment
 import com.emmsale.databinding.ItemMyRecruitmentBinding
 
 class MyRecruitmentViewHolder(

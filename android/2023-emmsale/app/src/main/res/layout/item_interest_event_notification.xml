@@ -11,7 +11,7 @@
 
         <import type="com.emmsale.presentation.common.extension.LocalDateTimeExt" />
 
-        <import type="com.emmsale.data.model.notification.Notification" />
+        <import type="com.emmsale.model.notification.Notification" />
 
         <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
 
@@ -19,7 +19,7 @@
 
         <variable
             name="interestEventNotification"
-            type="com.emmsale.data.model.notification.InterestEventNotification" />
+            type="com.emmsale.model.notification.InterestEventNotification" />
 
         <variable
             name="onDeleteClick"

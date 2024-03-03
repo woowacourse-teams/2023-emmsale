@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.interfaces
 
-import com.emmsale.data.model.CompetitionStatus
+import com.emmsale.model.CompetitionStatus
 
 interface CompetitionStatusRepository {
 

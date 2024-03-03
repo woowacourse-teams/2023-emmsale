@@ -1,10 +1,10 @@
 package com.emmsale.data.mapper
 
 import com.emmsale.BuildConfig
-import com.emmsale.data.apiModel.response.EventResponse
-import com.emmsale.data.model.Event
-import com.emmsale.data.model.OnOfflineMode
-import com.emmsale.data.model.PaymentType
+import com.emmsale.data.network.apiModel.response.EventResponse
+import com.emmsale.model.Event
+import com.emmsale.model.OnOfflineMode
+import com.emmsale.model.PaymentType
 
 fun List<EventResponse>.toData(): List<Event> = map { it.toData() }
 

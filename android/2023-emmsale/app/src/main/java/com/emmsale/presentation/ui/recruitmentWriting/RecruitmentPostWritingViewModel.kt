@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import com.emmsale.data.common.retrofit.callAdapter.Failure
+import com.emmsale.data.network.callAdapter.Failure
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.presentation.base.NetworkViewModel
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

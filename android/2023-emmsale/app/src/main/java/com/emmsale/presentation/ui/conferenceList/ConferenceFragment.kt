@@ -6,7 +6,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
 import com.emmsale.R
-import com.emmsale.data.model.Event
+import com.emmsale.model.Event
 import com.emmsale.databinding.FragmentConferenceBinding
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.ScrollTopListener

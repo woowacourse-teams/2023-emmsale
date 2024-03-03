@@ -1,8 +1,8 @@
 package com.emmsale.data.repository.concretes
 
 import android.content.SharedPreferences
-import com.emmsale.data.model.Token
 import com.emmsale.data.repository.interfaces.TokenRepository
+import com.emmsale.model.Token
 import javax.inject.Inject
 
 class DefaultTokenRepository @Inject constructor(

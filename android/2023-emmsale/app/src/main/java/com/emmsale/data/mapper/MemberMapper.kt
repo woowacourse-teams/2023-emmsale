@@ -1,7 +1,7 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.MemberResponse
-import com.emmsale.data.model.Member
+import com.emmsale.data.network.apiModel.response.MemberResponse
+import com.emmsale.model.Member
 
 fun MemberResponse.toData() = Member(
     id = id,

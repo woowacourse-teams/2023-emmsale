@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.messageRoomList
 
-import com.emmsale.data.model.MessageRoom
+import com.emmsale.model.MessageRoom
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel

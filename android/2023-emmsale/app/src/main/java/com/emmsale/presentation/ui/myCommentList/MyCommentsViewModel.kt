@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.myCommentList
 
-import com.emmsale.data.model.Comment
+import com.emmsale.model.Comment
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel

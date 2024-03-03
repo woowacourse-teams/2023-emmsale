@@ -2,7 +2,7 @@ package com.emmsale.presentation.ui.scrappedEventList.recyclerView
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.Event
+import com.emmsale.model.Event
 
 class ScrappedEventAdapter(
     private val onClickConference: (Event) -> Unit,

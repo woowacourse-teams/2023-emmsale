@@ -7,7 +7,7 @@
 
         <variable
             name="member"
-            type="com.emmsale.data.model.Member" />
+            type="com.emmsale.model.Member" />
     </data>
 
     <androidx.core.widget.NestedScrollView

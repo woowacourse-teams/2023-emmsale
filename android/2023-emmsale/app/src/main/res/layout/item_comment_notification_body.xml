@@ -11,7 +11,7 @@
 
         <import type="com.emmsale.presentation.common.extension.LocalDateTimeExt" />
 
-        <import type="com.emmsale.data.model.notification.Notification" />
+        <import type="com.emmsale.model.notification.Notification" />
 
         <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
 
@@ -19,7 +19,7 @@
 
         <variable
             name="commentNotification"
-            type="com.emmsale.data.model.notification.ChildCommentNotification" />
+            type="com.emmsale.model.notification.ChildCommentNotification" />
 
         <variable
             name="onDeleteClick"

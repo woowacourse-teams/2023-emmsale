@@ -11,7 +11,7 @@
 
         <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
 
-        <import type="com.emmsale.data.model.OnOfflineMode" />
+        <import type="com.emmsale.model.OnOfflineMode" />
 
         <variable
             name="vm"

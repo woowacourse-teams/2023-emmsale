@@ -1,10 +1,10 @@
 package com.emmsale.data.repository.interfaces
 
-import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
-import com.emmsale.data.model.CompetitionStatus
-import com.emmsale.data.model.ConferenceStatus
-import com.emmsale.data.model.Event
-import com.emmsale.data.model.EventTag
+import com.emmsale.data.network.callAdapter.ApiResponse
+import com.emmsale.model.CompetitionStatus
+import com.emmsale.model.ConferenceStatus
+import com.emmsale.model.Event
+import com.emmsale.model.EventTag
 import java.time.LocalDate
 
 interface EventRepository {

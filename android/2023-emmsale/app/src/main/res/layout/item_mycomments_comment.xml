@@ -13,7 +13,7 @@
 
         <variable
             name="comment"
-            type="com.emmsale.data.model.Comment" />
+            type="com.emmsale.model.Comment" />
 
         <variable
             name="onCommentClick"

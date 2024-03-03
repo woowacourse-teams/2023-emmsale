@@ -1,9 +1,9 @@
 package com.emmsale.data.mapper
 
 import com.emmsale.BuildConfig
-import com.emmsale.data.apiModel.response.FeedResponse
-import com.emmsale.data.model.Event
-import com.emmsale.data.model.Feed
+import com.emmsale.data.network.apiModel.response.FeedResponse
+import com.emmsale.model.Event
+import com.emmsale.model.Feed
 
 fun List<FeedResponse>.toData(): List<Feed> = map { it.toData() }
 

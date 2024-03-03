@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.myFeedList.recyclerView
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.Feed
+import com.emmsale.model.Feed
 
 class MyFeedAdapter(
     private val onItemClick: (recruitmentId: Long) -> Unit,

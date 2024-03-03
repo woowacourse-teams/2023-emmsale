@@ -2,14 +2,14 @@ package com.emmsale.presentation.ui.conferenceList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
-import com.emmsale.data.model.ConferenceStatus
-import com.emmsale.data.model.Event
-import com.emmsale.data.model.EventTag
+import com.emmsale.data.network.callAdapter.ApiResponse
+import com.emmsale.data.network.callAdapter.Failure
+import com.emmsale.data.network.callAdapter.NetworkError
+import com.emmsale.data.network.callAdapter.Success
+import com.emmsale.data.network.callAdapter.Unexpected
+import com.emmsale.model.ConferenceStatus
+import com.emmsale.model.Event
+import com.emmsale.model.EventTag
 import com.emmsale.data.repository.interfaces.ConferenceStatusRepository
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository

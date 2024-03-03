@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.editMyProfile.recyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.data.model.Activity
+import com.emmsale.model.Activity
 import com.emmsale.databinding.ItemEditmyprofileFieldBinding
 
 class FieldViewHolder(

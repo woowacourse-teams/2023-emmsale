@@ -1,7 +1,7 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.BlockedMemberResponse
-import com.emmsale.data.model.BlockedMember
+import com.emmsale.data.network.apiModel.response.BlockedMemberResponse
+import com.emmsale.model.BlockedMember
 
 fun List<BlockedMemberResponse>.toData(): List<BlockedMember> = map(BlockedMemberResponse::toData)
 

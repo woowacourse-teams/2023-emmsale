@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.myCommentList.recyclerView
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.Comment
+import com.emmsale.model.Comment
 
 class MyCommentsAdapter(
     private val onCommentClick: (feedId: Long, commentId: Long) -> Unit,

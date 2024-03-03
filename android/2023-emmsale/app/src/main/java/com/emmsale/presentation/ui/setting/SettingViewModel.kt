@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.setting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.emmsale.BuildConfig
-import com.emmsale.data.model.Member
+import com.emmsale.model.Member
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel

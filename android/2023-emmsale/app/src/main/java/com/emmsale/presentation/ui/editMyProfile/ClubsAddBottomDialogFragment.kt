@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.emmsale.R
-import com.emmsale.data.model.Activity
+import com.emmsale.model.Activity
 import com.emmsale.databinding.FragmentEditmyprofileClubsAddBottomDialogBinding
 import com.emmsale.presentation.common.views.ActivityTag
 import com.emmsale.presentation.common.views.activityChipOf

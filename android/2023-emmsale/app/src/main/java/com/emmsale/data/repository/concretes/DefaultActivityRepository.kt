@@ -1,13 +1,13 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.ActivityResponse
-import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
-import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.network.apiModel.response.ActivityResponse
+import com.emmsale.data.network.callAdapter.ApiResponse
+import com.emmsale.data.network.callAdapter.Success
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.model.Activity
+import com.emmsale.model.Activity
 import com.emmsale.data.repository.interfaces.ActivityRepository
-import com.emmsale.data.service.ActivityService
-import com.emmsale.di.modules.other.IoDispatcher
+import com.emmsale.data.network.service.ActivityService
+import com.emmsale.data.network.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

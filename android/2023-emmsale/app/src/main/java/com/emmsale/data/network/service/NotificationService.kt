@@ -1,0 +1,29 @@
+package com.emmsale.data.network.service
+
+import com.emmsale.data.network.apiModel.request.NotificationListDeleteRequest
+import com.emmsale.data.network.apiModel.response.NotificationResponse
+import com.emmsale.data.network.callAdapter.ApiResponse
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.HTTP
+import retrofit2.http.PATCH
+import retrofit2.http.Path
+import retrofit2.http.Query
+
+interface NotificationService {
+
+    @GET("/notifications")
+    suspend fun getNotifications(
+        @Query("member-id") memberId: Long,
+    ): ApiResponse<List<NotificationResponse>>
+
+    @PATCH("/notifications/{notification-id}/read")
+    suspend fun readNotification(
+        @Path("notification-id") notificationId: Long,
+    ): ApiResponse<Unit>
+
+    @HTTP(method = "DELETE", path = "/notifications", hasBody = true)
+    suspend fun deleteNotification(
+        @Body notificationIds: NotificationListDeleteRequest,
+    ): ApiResponse<Unit>
+}

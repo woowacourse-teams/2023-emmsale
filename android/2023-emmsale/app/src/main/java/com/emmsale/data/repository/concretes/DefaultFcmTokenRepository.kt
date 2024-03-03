@@ -1,10 +1,10 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.FcmTokenResponse
-import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.network.apiModel.response.FcmTokenResponse
+import com.emmsale.data.network.callAdapter.ApiResponse
 import com.emmsale.data.repository.interfaces.FcmTokenRepository
-import com.emmsale.data.service.FcmTokenService
-import com.emmsale.di.modules.other.IoDispatcher
+import com.emmsale.data.network.service.FcmTokenService
+import com.emmsale.data.network.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

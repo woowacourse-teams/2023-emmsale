@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.myRecruitmentList
 
-import com.emmsale.data.model.Recruitment
+import com.emmsale.model.Recruitment
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel

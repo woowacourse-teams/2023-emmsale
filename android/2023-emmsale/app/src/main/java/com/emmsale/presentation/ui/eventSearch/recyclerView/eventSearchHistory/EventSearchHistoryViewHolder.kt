@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
-import com.emmsale.data.model.EventSearchHistory
+import com.emmsale.model.EventSearchHistory
 import com.emmsale.databinding.ItemEventSearchHistoryBinding
 
 class EventSearchHistoryViewHolder(

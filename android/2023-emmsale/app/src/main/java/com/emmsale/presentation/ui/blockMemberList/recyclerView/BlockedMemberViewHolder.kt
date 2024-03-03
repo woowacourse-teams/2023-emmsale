@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
-import com.emmsale.data.model.BlockedMember
+import com.emmsale.model.BlockedMember
 import com.emmsale.databinding.ItemBlockMemberBinding
 
 class BlockedMemberViewHolder(

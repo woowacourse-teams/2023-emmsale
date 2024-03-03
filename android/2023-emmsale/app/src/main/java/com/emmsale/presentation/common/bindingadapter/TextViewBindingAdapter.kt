@@ -4,10 +4,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.emmsale.R
-import com.emmsale.data.model.EventApplyingStatus
-import com.emmsale.data.model.EventProgressStatus
-import com.emmsale.data.model.OnOfflineMode
-import com.emmsale.data.model.PaymentType
+import com.emmsale.model.EventApplyingStatus
+import com.emmsale.model.EventProgressStatus
+import com.emmsale.model.OnOfflineMode
+import com.emmsale.model.PaymentType
 
 private const val D_DAY = 0
 

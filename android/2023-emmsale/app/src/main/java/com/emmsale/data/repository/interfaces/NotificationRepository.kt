@@ -1,7 +1,7 @@
 package com.emmsale.data.repository.interfaces
 
-import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
-import com.emmsale.data.model.notification.Notification
+import com.emmsale.data.network.callAdapter.ApiResponse
+import com.emmsale.model.notification.Notification
 
 interface NotificationRepository {
 

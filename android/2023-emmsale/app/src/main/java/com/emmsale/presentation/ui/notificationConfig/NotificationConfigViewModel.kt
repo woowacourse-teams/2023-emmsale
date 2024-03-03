@@ -2,8 +2,8 @@ package com.emmsale.presentation.ui.notificationConfig
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.model.Config
-import com.emmsale.data.model.EventTag
+import com.emmsale.model.Config
+import com.emmsale.model.EventTag
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
 import com.emmsale.data.repository.interfaces.TokenRepository

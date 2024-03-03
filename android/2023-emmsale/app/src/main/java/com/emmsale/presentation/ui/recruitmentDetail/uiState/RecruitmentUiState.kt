@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.recruitmentDetail.uiState
 
-import com.emmsale.data.model.Recruitment
+import com.emmsale.model.Recruitment
 
 data class RecruitmentUiState(
     val recruitment: Recruitment = Recruitment(),

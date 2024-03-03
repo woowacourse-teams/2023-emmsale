@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.conferenceList.recyclerView
 
 import androidx.recyclerview.widget.DiffUtil
-import com.emmsale.data.model.Event
+import com.emmsale.model.Event
 
 object EventDiffUtil : DiffUtil.ItemCallback<Event>() {
     override fun areItemsTheSame(

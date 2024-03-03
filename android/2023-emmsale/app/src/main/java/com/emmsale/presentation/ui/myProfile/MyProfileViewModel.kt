@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.myProfile
 
-import com.emmsale.data.model.Member
+import com.emmsale.model.Member
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
 import com.emmsale.presentation.base.RefreshableViewModel

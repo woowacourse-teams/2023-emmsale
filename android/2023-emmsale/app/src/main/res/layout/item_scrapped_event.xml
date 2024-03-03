@@ -7,17 +7,17 @@
 
         <import type="kotlin.Unit" />
 
-        <import type="com.emmsale.data.model.Event" />
+        <import type="com.emmsale.model.Event" />
 
-        <import type="com.emmsale.data.model.EventProgressStatus" />
+        <import type="com.emmsale.model.EventProgressStatus" />
 
-        <import type="com.emmsale.data.model.OnOfflineMode" />
+        <import type="com.emmsale.model.OnOfflineMode" />
 
-        <import type="com.emmsale.data.model.PaymentType" />
+        <import type="com.emmsale.model.PaymentType" />
 
         <variable
             name="event"
-            type="com.emmsale.data.model.Event" />
+            type="com.emmsale.model.Event" />
 
         <variable
             name="onClickScrappedEvent"

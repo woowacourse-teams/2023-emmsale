@@ -1,8 +1,8 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.RecruitmentResponse
-import com.emmsale.data.model.Event
-import com.emmsale.data.model.Recruitment
+import com.emmsale.data.network.apiModel.response.RecruitmentResponse
+import com.emmsale.model.Event
+import com.emmsale.model.Recruitment
 
 fun List<RecruitmentResponse>.toData(): List<Recruitment> = map {
     it.toData()

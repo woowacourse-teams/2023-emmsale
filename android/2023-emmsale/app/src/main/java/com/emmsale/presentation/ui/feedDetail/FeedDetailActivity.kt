@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.emmsale.R
-import com.emmsale.data.model.Comment
+import com.emmsale.model.Comment
 import com.emmsale.databinding.ActivityFeedDetailBinding
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.hideKeyboard

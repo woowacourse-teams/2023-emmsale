@@ -1,8 +1,8 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.model.CompetitionStatus
+import com.emmsale.model.CompetitionStatus
 import com.emmsale.data.repository.interfaces.CompetitionStatusRepository
-import com.emmsale.di.modules.other.IoDispatcher
+import com.emmsale.data.network.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

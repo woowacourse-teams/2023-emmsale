@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.messageList.uistate
 
-import com.emmsale.data.model.Message
+import com.emmsale.model.Message
 
 class MyMessageUiState(
     override val messageType: MessageType = MessageType.MY,

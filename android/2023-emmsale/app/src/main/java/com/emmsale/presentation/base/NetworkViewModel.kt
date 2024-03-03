@@ -3,11 +3,11 @@ package com.emmsale.presentation.base
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.common.retrofit.callAdapter.NetworkError
-import com.emmsale.data.common.retrofit.callAdapter.Success
-import com.emmsale.data.common.retrofit.callAdapter.Unexpected
+import com.emmsale.data.network.callAdapter.ApiResponse
+import com.emmsale.data.network.callAdapter.Failure
+import com.emmsale.data.network.callAdapter.NetworkError
+import com.emmsale.data.network.callAdapter.Success
+import com.emmsale.data.network.callAdapter.Unexpected
 import com.emmsale.presentation.common.NetworkUiEvent
 import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData

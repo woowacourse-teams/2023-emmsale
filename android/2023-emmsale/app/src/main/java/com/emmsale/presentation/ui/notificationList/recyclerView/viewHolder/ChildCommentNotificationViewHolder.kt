@@ -3,8 +3,8 @@ package com.emmsale.presentation.ui.notificationList.recyclerView.viewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.emmsale.R
-import com.emmsale.data.model.notification.ChildCommentNotification
-import com.emmsale.data.model.notification.Notification
+import com.emmsale.model.notification.ChildCommentNotification
+import com.emmsale.model.notification.Notification
 import com.emmsale.databinding.ItemCommentNotificationBodyBinding
 
 class ChildCommentNotificationViewHolder(

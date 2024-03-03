@@ -1,7 +1,7 @@
 package com.emmsale.presentation.common.bindingadapter
 
 import androidx.databinding.BindingAdapter
-import com.emmsale.data.model.EventTag
+import com.emmsale.model.EventTag
 import com.emmsale.presentation.common.views.EventTagChip
 import com.google.android.material.chip.ChipGroup
 
