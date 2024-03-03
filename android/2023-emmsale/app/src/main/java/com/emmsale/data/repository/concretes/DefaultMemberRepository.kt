@@ -1,5 +1,6 @@
 package com.emmsale.data.repository.concretes
 
+import com.emmsale.data.mapper.toData
 import com.emmsale.data.network.apiModel.request.MemberActivitiesAddRequest
 import com.emmsale.data.network.apiModel.request.MemberBlockCreateRequest
 import com.emmsale.data.network.apiModel.request.MemberCreateRequest
@@ -9,13 +10,12 @@ import com.emmsale.data.network.callAdapter.Failure
 import com.emmsale.data.network.callAdapter.NetworkError
 import com.emmsale.data.network.callAdapter.Success
 import com.emmsale.data.network.callAdapter.Unexpected
-import com.emmsale.data.mapper.toData
-import com.emmsale.model.Activity
-import com.emmsale.model.Member
-import com.emmsale.data.repository.interfaces.MemberRepository
+import com.emmsale.data.network.di.IoDispatcher
 import com.emmsale.data.network.service.ActivityService
 import com.emmsale.data.network.service.MemberService
-import com.emmsale.data.network.di.IoDispatcher
+import com.emmsale.data.repository.interfaces.MemberRepository
+import com.emmsale.model.Activity
+import com.emmsale.model.Member
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext

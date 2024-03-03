@@ -3,8 +3,8 @@ package com.emmsale.presentation.ui.feedList.recyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.model.Feed
 import com.emmsale.databinding.ItemFeedBinding
+import com.emmsale.model.Feed
 
 class FeedViewHolder(
     private val binding: ItemFeedBinding,

@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
-import com.emmsale.model.Event
 import com.emmsale.databinding.ItemScrappedEventBinding
+import com.emmsale.model.Event
 
 class ScrappedEventViewHolder(
     parent: ViewGroup,

@@ -6,8 +6,8 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.viewModels
 import com.emmsale.R
-import com.emmsale.model.Event
 import com.emmsale.databinding.FragmentCompetitionBinding
+import com.emmsale.model.Event
 import com.emmsale.presentation.base.BaseFragment
 import com.emmsale.presentation.common.ScrollTopListener
 import com.emmsale.presentation.common.extension.getSerializableExtraCompat

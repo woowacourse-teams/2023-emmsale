@@ -3,9 +3,9 @@ package com.emmsale.presentation.ui.notificationList.recyclerView.viewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.emmsale.R
+import com.emmsale.databinding.ItemInterestEventNotificationBinding
 import com.emmsale.model.notification.InterestEventNotification
 import com.emmsale.model.notification.Notification
-import com.emmsale.databinding.ItemInterestEventNotificationBinding
 
 class InterestEventNotificationViewHolder(
     parent: ViewGroup,

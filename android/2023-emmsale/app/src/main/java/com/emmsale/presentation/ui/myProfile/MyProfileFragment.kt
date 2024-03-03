@@ -6,8 +6,8 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.emmsale.R
-import com.emmsale.model.Activity
 import com.emmsale.databinding.FragmentMyProfileBinding
+import com.emmsale.model.Activity
 import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.common.extension.dp
 import com.emmsale.presentation.common.recyclerView.IntervalItemDecoration

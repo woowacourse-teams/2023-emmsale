@@ -3,8 +3,8 @@ package com.emmsale.presentation.ui.myCommentList.recyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.model.Comment
 import com.emmsale.databinding.ItemMycommentsCommentBinding
+import com.emmsale.model.Comment
 
 class MyCommentViewHolder(
     private val binding: ItemMycommentsCommentBinding,

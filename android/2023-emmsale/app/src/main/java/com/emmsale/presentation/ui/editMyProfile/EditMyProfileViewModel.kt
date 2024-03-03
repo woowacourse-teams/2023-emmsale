@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.emmsale.model.Activity
-import com.emmsale.model.ActivityType
-import com.emmsale.model.Member
 import com.emmsale.data.repository.interfaces.ActivityRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
+import com.emmsale.model.Activity
+import com.emmsale.model.ActivityType
+import com.emmsale.model.Member
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

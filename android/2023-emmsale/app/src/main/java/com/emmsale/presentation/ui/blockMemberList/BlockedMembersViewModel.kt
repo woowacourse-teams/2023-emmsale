@@ -1,8 +1,8 @@
 package com.emmsale.presentation.ui.blockMemberList
 
 import androidx.lifecycle.LiveData
-import com.emmsale.model.BlockedMember
 import com.emmsale.data.repository.interfaces.BlockedMemberRepository
+import com.emmsale.model.BlockedMember
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

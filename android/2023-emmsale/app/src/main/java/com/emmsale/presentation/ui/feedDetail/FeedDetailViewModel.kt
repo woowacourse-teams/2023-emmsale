@@ -9,11 +9,11 @@ import com.emmsale.data.network.callAdapter.Failure
 import com.emmsale.data.network.callAdapter.NetworkError
 import com.emmsale.data.network.callAdapter.Success
 import com.emmsale.data.network.callAdapter.Unexpected
-import com.emmsale.model.Comment
-import com.emmsale.model.Feed
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.FeedRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
+import com.emmsale.model.Comment
+import com.emmsale.model.Feed
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.NetworkUiEvent
 import com.emmsale.presentation.common.NetworkUiState

@@ -1,8 +1,8 @@
 package com.emmsale.data.repository.concretes
 
 import android.content.SharedPreferences
-import com.emmsale.model.Config
 import com.emmsale.data.repository.interfaces.ConfigRepository
+import com.emmsale.model.Config
 import javax.inject.Inject
 
 class DefaultConfigRepository @Inject constructor(

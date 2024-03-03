@@ -10,10 +10,10 @@ import com.emmsale.data.network.callAdapter.Failure
 import com.emmsale.data.network.callAdapter.NetworkError
 import com.emmsale.data.network.callAdapter.Success
 import com.emmsale.data.network.callAdapter.Unexpected
-import com.emmsale.model.Event
-import com.emmsale.model.EventSearchHistory
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.EventSearchRepository
+import com.emmsale.model.Event
+import com.emmsale.model.EventSearchHistory
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.ui.eventSearch.uistate.EventSearchResultsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel

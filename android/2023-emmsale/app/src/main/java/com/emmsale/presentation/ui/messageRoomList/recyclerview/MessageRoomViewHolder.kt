@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
-import com.emmsale.model.MessageRoom
 import com.emmsale.databinding.ItemMessageRoomBinding
+import com.emmsale.model.MessageRoom
 
 class MessageRoomViewHolder(
     parent: ViewGroup,

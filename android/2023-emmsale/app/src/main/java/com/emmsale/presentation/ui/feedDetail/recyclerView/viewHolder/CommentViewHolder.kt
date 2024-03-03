@@ -3,8 +3,8 @@ package com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.emmsale.R
-import com.emmsale.model.Comment
 import com.emmsale.databinding.ItemAllCommentBinding
+import com.emmsale.model.Comment
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 import com.emmsale.presentation.ui.feedDetail.uiState.FeedOrCommentUiState
 
