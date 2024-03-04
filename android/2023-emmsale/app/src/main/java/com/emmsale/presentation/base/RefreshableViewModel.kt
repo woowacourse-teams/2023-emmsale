@@ -54,7 +54,6 @@ abstract class RefreshableViewModel : NetworkViewModel() {
         onNetworkError: suspend () -> Unit = { dispatchNetworkErrorEvent() },
         onStart: suspend () -> Unit = {},
         onFinish: suspend () -> Unit = {},
-        refresh: suspend () -> Job = { this@RefreshableViewModel.refresh() },
     ): Job = requestNetwork(
         request = { command() },
         onSuccess = { onSuccess(it) },
