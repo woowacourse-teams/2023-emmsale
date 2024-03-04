@@ -181,9 +181,6 @@ dependencies {
 
     // Kakao Share
     implementation("com.kakao.sdk:v2-share:2.12.0")
-
-    // datastore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }
 
 kapt {
