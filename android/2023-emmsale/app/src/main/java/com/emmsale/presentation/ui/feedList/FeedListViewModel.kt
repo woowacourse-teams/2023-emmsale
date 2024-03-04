@@ -1,8 +1,8 @@
 package com.emmsale.presentation.ui.feedList
 
 import androidx.lifecycle.SavedStateHandle
-import com.emmsale.model.Feed
 import com.emmsale.data.repository.interfaces.FeedRepository
+import com.emmsale.model.Feed
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

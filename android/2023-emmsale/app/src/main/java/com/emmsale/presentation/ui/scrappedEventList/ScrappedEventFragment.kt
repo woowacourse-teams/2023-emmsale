@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
-import com.emmsale.model.Event
 import com.emmsale.databinding.FragmentScrappedEventBinding
+import com.emmsale.model.Event
 import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.common.ScrollTopListener
 import com.emmsale.presentation.ui.eventDetail.EventDetailActivity

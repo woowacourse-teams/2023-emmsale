@@ -7,12 +7,12 @@ import com.emmsale.data.network.callAdapter.Failure
 import com.emmsale.data.network.callAdapter.NetworkError
 import com.emmsale.data.network.callAdapter.Success
 import com.emmsale.data.network.callAdapter.Unexpected
-import com.emmsale.model.CompetitionStatus
-import com.emmsale.model.Event
-import com.emmsale.model.EventTag
 import com.emmsale.data.repository.interfaces.CompetitionStatusRepository
 import com.emmsale.data.repository.interfaces.EventRepository
 import com.emmsale.data.repository.interfaces.EventTagRepository
+import com.emmsale.model.CompetitionStatus
+import com.emmsale.model.Event
+import com.emmsale.model.EventTag
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.viewModel.Refreshable
