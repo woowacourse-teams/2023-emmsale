@@ -3,8 +3,8 @@ package com.emmsale.presentation.ui.recruitmentList.recyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.data.model.Recruitment
 import com.emmsale.databinding.ItemRecruitmentBinding
+import com.emmsale.model.Recruitment
 
 class RecruitmentViewHolder(
     private val binding: ItemRecruitmentBinding,

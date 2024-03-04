@@ -1,10 +1,10 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.CommentFamilyApiModel
-import com.emmsale.data.apiModel.response.CommentResponse
-import com.emmsale.data.model.Comment
-import com.emmsale.data.model.Feed
-import com.emmsale.data.model.Member
+import com.emmsale.data.network.apiModel.response.CommentFamilyApiModel
+import com.emmsale.data.network.apiModel.response.CommentResponse
+import com.emmsale.model.Comment
+import com.emmsale.model.Feed
+import com.emmsale.model.Member
 
 @JvmName("mapCommentFamilyApiModelsToData")
 fun List<CommentFamilyApiModel>.toData(): List<Comment> = map(CommentFamilyApiModel::toData)

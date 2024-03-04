@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.onboarding.uiState
 
-import com.emmsale.data.model.Activity
+import com.emmsale.model.Activity
 
 data class ActivityUiState(
     val activity: Activity,

@@ -10,7 +10,7 @@
 
         <variable
             name="blockedMember"
-            type="com.emmsale.data.model.BlockedMember" />
+            type="com.emmsale.model.BlockedMember" />
 
         <variable
             name="onUnblockMemberClick"

@@ -3,8 +3,8 @@ package com.emmsale.presentation.ui.profile.recyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.emmsale.data.model.Activity
 import com.emmsale.databinding.ItemProfileActivitiesBinding
+import com.emmsale.model.Activity
 
 class ActivityViewHolder(
     private val binding: ItemProfileActivitiesBinding,

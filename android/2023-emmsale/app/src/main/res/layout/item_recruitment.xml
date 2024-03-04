@@ -9,7 +9,7 @@
 
         <variable
             name="recruitment"
-            type="com.emmsale.data.model.Recruitment" />
+            type="com.emmsale.model.Recruitment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

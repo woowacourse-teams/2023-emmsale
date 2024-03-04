@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.notificationList.uiState
 
-import com.emmsale.data.model.notification.Notification
+import com.emmsale.model.notification.Notification
 
 data class NotificationsUiState(
     val recentNotifications: List<Notification> = emptyList(),

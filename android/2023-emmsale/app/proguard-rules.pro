@@ -9,7 +9,7 @@
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
 # ApiResponse 클래스의 타입 매개변수를 유지하기 위해 추가. 안하면 CallAdapter에서 retrofit2.Call<ApiResponse>를 반환하는 CallAdapter 만들 수 없음.
--keepnames, allowobfuscation class com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+-keepnames, allowobfuscation class com.emmsale.data.network.callAdapter.ApiResponse
 
 # 카카오 공유하기
 -if interface * { @retrofit2.http.* public *** *(...); }

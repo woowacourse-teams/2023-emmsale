@@ -1,8 +1,8 @@
 package com.emmsale.presentation.ui.recruitmentList
 
 import androidx.lifecycle.SavedStateHandle
-import com.emmsale.data.model.Recruitment
 import com.emmsale.data.repository.interfaces.RecruitmentRepository
+import com.emmsale.model.Recruitment
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

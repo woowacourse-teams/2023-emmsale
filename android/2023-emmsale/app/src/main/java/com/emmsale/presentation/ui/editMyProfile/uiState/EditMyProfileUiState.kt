@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.editMyProfile.uiState
 
-import com.emmsale.data.model.Member
+import com.emmsale.model.Member
 
 data class EditMyProfileUiState(
     val member: Member = Member(),

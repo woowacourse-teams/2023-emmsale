@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.scrappedEventList
 
-import com.emmsale.data.model.Event
 import com.emmsale.data.repository.interfaces.EventRepository
+import com.emmsale.model.Event
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData

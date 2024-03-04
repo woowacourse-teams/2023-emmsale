@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.emmsale.R
-import com.emmsale.data.model.Event
 import com.emmsale.databinding.ItemEventBinding
+import com.emmsale.model.Event
 
 class EventViewHolder(
     parent: ViewGroup,

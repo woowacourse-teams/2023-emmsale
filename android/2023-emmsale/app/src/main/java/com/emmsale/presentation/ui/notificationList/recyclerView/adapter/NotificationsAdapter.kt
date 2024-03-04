@@ -2,9 +2,9 @@ package com.emmsale.presentation.ui.notificationList.recyclerView.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.notification.ChildCommentNotification
-import com.emmsale.data.model.notification.InterestEventNotification
-import com.emmsale.data.model.notification.Notification
+import com.emmsale.model.notification.ChildCommentNotification
+import com.emmsale.model.notification.InterestEventNotification
+import com.emmsale.model.notification.Notification
 import com.emmsale.presentation.ui.notificationList.recyclerView.diffutil.NotificationDiffUtil
 import com.emmsale.presentation.ui.notificationList.recyclerView.viewHolder.ChildCommentNotificationViewHolder
 import com.emmsale.presentation.ui.notificationList.recyclerView.viewHolder.InterestEventNotificationViewHolder

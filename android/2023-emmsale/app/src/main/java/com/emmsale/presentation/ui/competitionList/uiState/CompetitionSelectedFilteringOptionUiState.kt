@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.competitionList.uiState
 
-import com.emmsale.data.model.CompetitionStatus
-import com.emmsale.data.model.EventTag
+import com.emmsale.model.CompetitionStatus
+import com.emmsale.model.EventTag
 
 data class CompetitionSelectedFilteringOptionUiState(
     val id: Long,

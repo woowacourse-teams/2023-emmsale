@@ -1,12 +1,12 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.common.database.dao.EventSearchHistoryDao
-import com.emmsale.data.common.database.entity.EventSearchHistoryEntity
 import com.emmsale.data.mapper.toData
 import com.emmsale.data.mapper.toEntity
-import com.emmsale.data.model.EventSearchHistory
+import com.emmsale.data.network.di.IoDispatcher
+import com.emmsale.data.persistence.database.EventSearchHistoryDao
+import com.emmsale.data.persistence.database.EventSearchHistoryEntity
 import com.emmsale.data.repository.interfaces.EventSearchRepository
-import com.emmsale.di.modules.other.IoDispatcher
+import com.emmsale.model.EventSearchHistory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

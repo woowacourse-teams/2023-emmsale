@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.emmsale.R
-import com.emmsale.data.model.Recruitment
 import com.emmsale.databinding.FragmentRecruitmentsBinding
+import com.emmsale.model.Recruitment
 import com.emmsale.presentation.base.NetworkFragment
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegate
 import com.emmsale.presentation.common.firebase.analytics.FirebaseAnalyticsDelegateImpl

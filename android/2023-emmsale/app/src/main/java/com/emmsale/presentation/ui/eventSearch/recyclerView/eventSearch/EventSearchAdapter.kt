@@ -2,7 +2,7 @@ package com.emmsale.presentation.ui.eventSearch.recyclerView.eventSearch
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.Event
+import com.emmsale.model.Event
 import com.emmsale.presentation.ui.conferenceList.recyclerView.EventDiffUtil
 
 class EventSearchAdapter(

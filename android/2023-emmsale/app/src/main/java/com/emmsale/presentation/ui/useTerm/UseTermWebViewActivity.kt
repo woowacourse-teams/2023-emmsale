@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emmsale.BuildConfig
 import com.emmsale.R
 import com.emmsale.databinding.ActivityUseTermWebViewBinding
+import com.google.firebase.messaging.FirebaseMessaging
 
 class UseTermWebViewActivity : AppCompatActivity() {
     private val binding by lazy { ActivityUseTermWebViewBinding.inflate(layoutInflater) }
@@ -17,6 +18,7 @@ class UseTermWebViewActivity : AppCompatActivity() {
         setContentView(binding.root)
         initCloseButtonClick()
         initWebViewSetting()
+        FirebaseMessaging.getInstance().token
     }
 
     private fun initWebViewSetting() {

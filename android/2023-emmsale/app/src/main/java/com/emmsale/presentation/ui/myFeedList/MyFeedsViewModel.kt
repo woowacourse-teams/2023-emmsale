@@ -2,8 +2,8 @@ package com.emmsale.presentation.ui.myFeedList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.emmsale.data.model.Feed
 import com.emmsale.data.repository.interfaces.FeedRepository
+import com.emmsale.model.Feed
 import com.emmsale.presentation.base.RefreshableViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

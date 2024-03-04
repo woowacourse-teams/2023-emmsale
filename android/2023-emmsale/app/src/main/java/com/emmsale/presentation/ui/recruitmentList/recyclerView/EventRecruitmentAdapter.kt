@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.recruitmentList.recyclerView
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.Recruitment
+import com.emmsale.model.Recruitment
 
 class EventRecruitmentAdapter(
     private val navigateToDetail: (Recruitment) -> Unit,

@@ -7,7 +7,7 @@
 
         <variable
             name="activity"
-            type="com.emmsale.data.model.Activity" />
+            type="com.emmsale.model.Activity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

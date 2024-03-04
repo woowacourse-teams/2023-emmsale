@@ -2,7 +2,7 @@ package com.emmsale.presentation.ui.childCommentList.recyclerView
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.Comment
+import com.emmsale.model.Comment
 import com.emmsale.presentation.ui.feedDetail.recyclerView.viewHolder.CommentViewHolder
 import com.emmsale.presentation.ui.feedDetail.uiState.CommentUiState
 

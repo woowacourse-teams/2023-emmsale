@@ -1,6 +1,6 @@
 package com.emmsale.presentation.base
 
-import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
+import com.emmsale.data.network.callAdapter.ApiResponse
 import kotlinx.coroutines.Job
 
 abstract class RefreshableViewModel : NetworkViewModel() {

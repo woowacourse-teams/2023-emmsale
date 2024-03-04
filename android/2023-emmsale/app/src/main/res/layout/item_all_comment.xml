@@ -11,7 +11,7 @@
 
         <import type="kotlin.Unit" />
 
-        <import type="com.emmsale.data.model.Comment" />
+        <import type="com.emmsale.model.Comment" />
 
         <variable
             name="uiState"

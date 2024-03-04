@@ -3,7 +3,7 @@ package com.emmsale.presentation.service
 import android.content.Intent
 import android.net.Uri
 import com.emmsale.R
-import com.emmsale.data.common.retrofit.callAdapter.Success
+import com.emmsale.data.network.callAdapter.Success
 import com.emmsale.data.repository.interfaces.CommentRepository
 import com.emmsale.data.repository.interfaces.ConfigRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
@@ -66,7 +66,8 @@ class KerdyFirebaseMessagingService : FirebaseMessagingService() {
     private fun showNotification(message: RemoteMessage, isUpdateNeeded: Boolean) {
         val config = configRepository.getConfig()
         val isNotificationReceive = config.isNotificationReceive
-        if (!isNotificationReceive || tokenRepository.getToken() == null) return
+        val token = runBlocking { tokenRepository.getToken() }
+        if (!isNotificationReceive || token == null) return
 
         when (message.data["notificationType"]?.uppercase()) {
             COMMENT_NOTIFICATION_TYPE -> {

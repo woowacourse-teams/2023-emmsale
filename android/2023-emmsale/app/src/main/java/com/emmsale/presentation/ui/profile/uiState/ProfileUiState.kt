@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.profile.uiState
 
-import com.emmsale.data.model.Member
+import com.emmsale.model.Member
 
 data class ProfileUiState(
     val isLoginMember: Boolean,

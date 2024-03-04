@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.feedDetail.uiState
 
-import com.emmsale.data.model.Comment
+import com.emmsale.model.Comment
 
 data class CommentsUiState(val commentUiStates: List<CommentUiState> = emptyList()) {
 

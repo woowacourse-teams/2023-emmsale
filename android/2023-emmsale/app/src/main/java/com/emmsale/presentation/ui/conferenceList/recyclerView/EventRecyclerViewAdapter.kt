@@ -12,7 +12,7 @@ import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.util.ViewPreloadSizeProvider
-import com.emmsale.data.model.Event
+import com.emmsale.model.Event
 import com.emmsale.presentation.common.extension.dp
 
 class EventRecyclerViewAdapter(

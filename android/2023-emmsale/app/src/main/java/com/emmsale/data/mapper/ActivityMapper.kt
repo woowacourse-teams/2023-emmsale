@@ -1,8 +1,8 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.ActivityResponse
-import com.emmsale.data.model.Activity
-import com.emmsale.data.model.ActivityType
+import com.emmsale.data.network.apiModel.response.ActivityResponse
+import com.emmsale.model.Activity
+import com.emmsale.model.ActivityType
 
 fun List<ActivityResponse>.toData(): List<Activity> = map { it.toData() }
 

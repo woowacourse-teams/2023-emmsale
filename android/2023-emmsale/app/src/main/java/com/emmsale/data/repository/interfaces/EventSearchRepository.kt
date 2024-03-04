@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.interfaces
 
-import com.emmsale.data.model.EventSearchHistory
+import com.emmsale.model.EventSearchHistory
 
 interface EventSearchRepository {
     suspend fun getAll(): List<EventSearchHistory>

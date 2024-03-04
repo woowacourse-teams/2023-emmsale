@@ -6,10 +6,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import com.emmsale.R
-import com.emmsale.data.model.notification.ChildCommentNotification
-import com.emmsale.data.model.notification.InterestEventNotification
-import com.emmsale.data.model.notification.Notification
 import com.emmsale.databinding.ActivityNotificationsBinding
+import com.emmsale.model.notification.ChildCommentNotification
+import com.emmsale.model.notification.InterestEventNotification
+import com.emmsale.model.notification.Notification
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.showSnackBar
 import com.emmsale.presentation.common.views.WarningDialog

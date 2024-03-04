@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emmsale.R
-import com.emmsale.data.model.Event
 import com.emmsale.databinding.ItemEventBinding
+import com.emmsale.model.Event
 
 class EventSearchViewHolder(
     parent: ViewGroup,

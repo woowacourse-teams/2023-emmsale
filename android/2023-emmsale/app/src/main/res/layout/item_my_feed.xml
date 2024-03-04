@@ -7,7 +7,7 @@
 
         <variable
             name="feed"
-            type="com.emmsale.data.model.Feed" />
+            type="com.emmsale.model.Feed" />
 
         <import type="com.emmsale.presentation.common.bindingadapter.DateTimePattern" />
     </data>

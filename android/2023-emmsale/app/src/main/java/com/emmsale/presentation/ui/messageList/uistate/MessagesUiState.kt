@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.messageList.uistate
 
-import com.emmsale.data.model.Message
+import com.emmsale.model.Message
 
 data class MessagesUiState(
     val messages: List<MessageUiState> = emptyList(),

@@ -1,12 +1,12 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.response.FeedResponse
-import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.model.Feed
+import com.emmsale.data.network.apiModel.response.FeedResponse
+import com.emmsale.data.network.callAdapter.ApiResponse
+import com.emmsale.data.network.di.IoDispatcher
+import com.emmsale.data.network.service.FeedService
 import com.emmsale.data.repository.interfaces.FeedRepository
-import com.emmsale.data.service.FeedService
-import com.emmsale.di.modules.other.IoDispatcher
+import com.emmsale.model.Feed
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

@@ -1,7 +1,7 @@
 package com.emmsale.presentation.ui.feedDetail.uiState
 
-import com.emmsale.data.model.Comment
-import com.emmsale.data.model.Feed
+import com.emmsale.model.Comment
+import com.emmsale.model.Feed
 
 data class FeedDetailUiState(
     val feedUiState: FeedUiState = FeedUiState(),

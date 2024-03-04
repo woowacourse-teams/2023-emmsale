@@ -2,7 +2,7 @@ package com.emmsale.presentation.ui.blockMemberList.recyclerView
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.BlockedMember
+import com.emmsale.model.BlockedMember
 
 class BlockedMemberAdapter(
     private val onUnblockMemberClick: (memberId: Long) -> Unit,

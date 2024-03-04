@@ -3,13 +3,13 @@ package com.emmsale.presentation.ui.profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.emmsale.data.common.retrofit.callAdapter.Failure
-import com.emmsale.data.model.BlockedMember
-import com.emmsale.data.model.Member
+import com.emmsale.data.network.callAdapter.Failure
 import com.emmsale.data.repository.interfaces.BlockedMemberRepository
 import com.emmsale.data.repository.interfaces.MemberRepository
 import com.emmsale.data.repository.interfaces.MessageRoomRepository
 import com.emmsale.data.repository.interfaces.TokenRepository
+import com.emmsale.model.BlockedMember
+import com.emmsale.model.Member
 import com.emmsale.presentation.base.RefreshableViewModel
 import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData

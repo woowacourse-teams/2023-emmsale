@@ -1,6 +1,6 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.model.CompetitionStatus
+import com.emmsale.model.CompetitionStatus
 
 fun List<CompetitionStatus>.toApiModel(): List<String> = map { it.toApiModel() }
 

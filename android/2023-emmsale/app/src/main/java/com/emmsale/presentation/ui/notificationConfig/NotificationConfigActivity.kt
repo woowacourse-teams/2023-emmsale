@@ -7,8 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.emmsale.R
-import com.emmsale.data.model.EventTag
 import com.emmsale.databinding.ActivityNotificationConfigBinding
+import com.emmsale.model.EventTag
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.checkPostNotificationPermission
 import com.emmsale.presentation.common.extension.navigateToNotificationSettings

@@ -30,6 +30,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -87,7 +88,7 @@ class SplashActivity : ComponentActivity() {
             },
             onFailed = {
                 showToast(R.string.splash_not_installed_playstore)
-                navigateToPlayStore()
+                navigateToLogin()
             },
         )
     }
@@ -113,8 +114,10 @@ class SplashActivity : ComponentActivity() {
         startActivity(intent)
     }
 
-    private fun canAutoLogin(): Boolean =
-        tokenRepository.getToken() != null && configRepository.getConfig().isAutoLogin
+    private fun canAutoLogin(): Boolean {
+        val token = runBlocking { tokenRepository.getToken() }
+        return token != null && configRepository.getConfig().isAutoLogin
+    }
 
     private fun navigateToMain() {
         MainActivity.startActivity(this)

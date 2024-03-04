@@ -1,6 +1,6 @@
 package com.emmsale.data.repository.interfaces
 
-import com.emmsale.data.model.Token
+import com.emmsale.model.Token
 
 interface TokenRepository {
     fun saveToken(token: Token)

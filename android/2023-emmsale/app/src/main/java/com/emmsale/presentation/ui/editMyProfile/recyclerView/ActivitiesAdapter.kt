@@ -2,7 +2,7 @@ package com.emmsale.presentation.ui.editMyProfile.recyclerView
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.Activity
+import com.emmsale.model.Activity
 
 class ActivitiesAdapter(
     private val removeActivity: (activityId: Long) -> Unit,

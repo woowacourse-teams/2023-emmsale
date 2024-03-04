@@ -13,7 +13,7 @@
 
         <variable
             name="feed"
-            type="com.emmsale.data.model.Feed" />
+            type="com.emmsale.model.Feed" />
 
         <variable
             name="onAuthorImageClick"

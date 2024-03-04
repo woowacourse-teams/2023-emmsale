@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.notificationTagConfig.uiState
 
-import com.emmsale.data.model.EventTag
+import com.emmsale.model.EventTag
 
 data class NotificationTagConfigUiState(
     val eventTag: EventTag,

@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.eventSearch.recyclerView.eventSearchHistory
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.EventSearchHistory
+import com.emmsale.model.EventSearchHistory
 
 class EventSearchHistoryAdapter(
     private val onHistoryClick: (eventSearch: EventSearchHistory) -> Unit,

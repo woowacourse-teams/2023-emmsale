@@ -9,8 +9,8 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.emmsale.R
-import com.emmsale.data.model.Comment
 import com.emmsale.databinding.ActivityChildCommentsBinding
+import com.emmsale.model.Comment
 import com.emmsale.presentation.base.NetworkActivity
 import com.emmsale.presentation.common.extension.hideKeyboard
 import com.emmsale.presentation.common.extension.showKeyboard

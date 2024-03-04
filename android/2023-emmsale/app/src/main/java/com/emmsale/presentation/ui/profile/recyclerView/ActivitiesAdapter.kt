@@ -3,7 +3,7 @@ package com.emmsale.presentation.ui.profile.recyclerView
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.emmsale.data.model.Activity
+import com.emmsale.model.Activity
 
 class ActivitiesAdapter : ListAdapter<Activity, ActivityViewHolder>(diffUtil) {
 

@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.feedDetail.uiState
 
-import com.emmsale.data.model.Feed
+import com.emmsale.model.Feed
 
 data class FeedUiState(
     val feed: Feed = Feed(),

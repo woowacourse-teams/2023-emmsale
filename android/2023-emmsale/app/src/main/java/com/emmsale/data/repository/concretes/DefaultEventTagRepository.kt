@@ -1,31 +1,31 @@
 package com.emmsale.data.repository.concretes
 
-import com.emmsale.data.apiModel.request.InterestEventTagUpdateRequest
-import com.emmsale.data.apiModel.response.EventTagResponse
-import com.emmsale.data.common.retrofit.callAdapter.ApiResponse
-import com.emmsale.data.dataSource.remote.EventTagRemoteDataSource
 import com.emmsale.data.mapper.toData
-import com.emmsale.data.model.EventTag
+import com.emmsale.data.network.apiModel.request.InterestEventTagUpdateRequest
+import com.emmsale.data.network.apiModel.response.EventTagResponse
+import com.emmsale.data.network.callAdapter.ApiResponse
+import com.emmsale.data.network.di.IoDispatcher
+import com.emmsale.data.network.service.EventTagService
 import com.emmsale.data.repository.interfaces.EventTagRepository
-import com.emmsale.di.modules.other.IoDispatcher
+import com.emmsale.model.EventTag
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DefaultEventTagRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
-    private val eventTagRemoteDataSource: EventTagRemoteDataSource,
+    private val eventTagService: EventTagService,
 ) : EventTagRepository {
 
     override suspend fun getEventTags(): ApiResponse<List<EventTag>> = withContext(dispatcher) {
-        eventTagRemoteDataSource
+        eventTagService
             .getEventTags()
             .map(List<EventTagResponse>::toData)
     }
 
     override suspend fun getEventTagByIds(tagIds: Array<Long>): ApiResponse<List<EventTag>> =
         withContext(dispatcher) {
-            eventTagRemoteDataSource
+            eventTagService
                 .getEventTags()
                 .map { eventTags ->
                     eventTags.filter { eventTag -> tagIds.contains(eventTag.id) }
@@ -35,14 +35,14 @@ class DefaultEventTagRepository @Inject constructor(
 
     override suspend fun getInterestEventTags(memberId: Long): ApiResponse<List<EventTag>> =
         withContext(dispatcher) {
-            eventTagRemoteDataSource
+            eventTagService
                 .getInterestEventTags(memberId)
                 .map(List<EventTagResponse>::toData)
         }
 
     override suspend fun updateInterestEventTags(interestEventTags: List<EventTag>): ApiResponse<Unit> =
         withContext(dispatcher) {
-            eventTagRemoteDataSource.updateInterestEventTags(
+            eventTagService.updateInterestEventTags(
                 InterestEventTagUpdateRequest(interestEventTags.map { it.id }),
             ).map { }
         }

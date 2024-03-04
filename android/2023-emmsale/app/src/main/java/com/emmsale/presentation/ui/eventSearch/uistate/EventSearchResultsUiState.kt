@@ -1,6 +1,6 @@
 package com.emmsale.presentation.ui.eventSearch.uistate
 
-import com.emmsale.data.model.Event
+import com.emmsale.model.Event
 import com.emmsale.presentation.common.FetchResult
 import com.emmsale.presentation.common.FetchResultUiState
 

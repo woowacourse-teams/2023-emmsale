@@ -1,16 +1,16 @@
 package com.emmsale.data.mapper
 
-import com.emmsale.data.apiModel.response.CommentTypeNotificationResponse
-import com.emmsale.data.apiModel.response.EventTypeNotificationResponse
-import com.emmsale.data.apiModel.response.NotificationResponse
-import com.emmsale.data.apiModel.response.NotificationResponse.NotificationType
-import com.emmsale.data.model.Comment
-import com.emmsale.data.model.Event
-import com.emmsale.data.model.Feed
-import com.emmsale.data.model.Member
-import com.emmsale.data.model.notification.ChildCommentNotification
-import com.emmsale.data.model.notification.InterestEventNotification
-import com.emmsale.data.model.notification.Notification
+import com.emmsale.data.network.apiModel.response.CommentTypeNotificationResponse
+import com.emmsale.data.network.apiModel.response.EventTypeNotificationResponse
+import com.emmsale.data.network.apiModel.response.NotificationResponse
+import com.emmsale.data.network.apiModel.response.NotificationResponse.NotificationType
+import com.emmsale.model.Comment
+import com.emmsale.model.Event
+import com.emmsale.model.Feed
+import com.emmsale.model.Member
+import com.emmsale.model.notification.ChildCommentNotification
+import com.emmsale.model.notification.InterestEventNotification
+import com.emmsale.model.notification.Notification
 import kotlinx.serialization.json.Json
 
 @JvmName("NotificationResponse")
