@@ -134,6 +134,7 @@ class EventDetailActivity :
             EventDetailUiEvent.RecruitmentIsAlreadyPosted -> binding.root.showSnackBar(R.string.eventrecruitment_has_not_permission_writing)
             EventDetailUiEvent.RecruitmentPostApproval -> navigateToRecruitmentWriting()
             EventDetailUiEvent.RecruitmentPostedCheckFail -> binding.root.showSnackBar(R.string.eventrecruitment_has_not_permission_writing_check_fail_message)
+            EventDetailUiEvent.KakaoShareFail -> binding.root.showSnackBar(R.string.eventdetail_kakao_share_fail)
         }
     }
 

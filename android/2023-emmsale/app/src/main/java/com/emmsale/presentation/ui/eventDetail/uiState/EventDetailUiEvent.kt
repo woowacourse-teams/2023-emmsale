@@ -6,4 +6,5 @@ sealed interface EventDetailUiEvent {
     object RecruitmentPostApproval : EventDetailUiEvent
     object RecruitmentIsAlreadyPosted : EventDetailUiEvent
     object RecruitmentPostedCheckFail : EventDetailUiEvent
+    object KakaoShareFail : EventDetailUiEvent
 }

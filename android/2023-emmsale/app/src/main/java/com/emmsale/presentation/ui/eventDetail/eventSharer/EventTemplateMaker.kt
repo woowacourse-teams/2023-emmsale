@@ -16,19 +16,26 @@ class EventTemplateMaker @Inject constructor(
     fun create(
         eventId: Long,
         eventName: String,
-        posterUrl: String?,
-    ): FeedTemplate = FeedTemplate(
-        content = Content(
-            title = eventName,
-            description = context.getString(R.string.eventdetail_share_template_description),
-            imageUrl = posterUrl ?: "",
-            link = Link(androidExecutionParams = mapOf(EventDetailViewModel.EVENT_ID_KEY to eventId.toString())),
-        ),
-        buttons = listOf(
-            Button(
-                context.getString(R.string.eventdetail_share_button_title),
-                Link(androidExecutionParams = mapOf(EventDetailViewModel.EVENT_ID_KEY to eventId.toString())),
+        posterUrl: String,
+    ): FeedTemplate {
+        val shareLink = Link(
+            androidExecutionParams = mapOf(EventDetailViewModel.EVENT_ID_KEY to eventId.toString()),
+            iosExecutionParams = mapOf(EventDetailViewModel.EVENT_ID_KEY to eventId.toString())
+        )
+
+        return FeedTemplate(
+            content = Content(
+                title = eventName,
+                description = context.getString(R.string.eventdetail_share_template_description),
+                imageUrl = posterUrl,
+                link = shareLink,
             ),
-        ),
-    )
+            buttons = listOf(
+                Button(
+                    title = context.getString(R.string.eventdetail_share_button_title),
+                    link = shareLink,
+                ),
+            ),
+        )
+    }
 }

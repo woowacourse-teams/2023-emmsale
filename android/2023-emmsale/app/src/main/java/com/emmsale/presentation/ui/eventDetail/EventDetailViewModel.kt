@@ -117,10 +117,16 @@ class EventDetailViewModel @Inject constructor(
     )
 
     fun shareEvent() {
+        val posterImageUrl = event.value.posterImageUrl
+        if (posterImageUrl == null) {
+            _uiEvent.value = EventDetailUiEvent.KakaoShareFail
+            return
+        }
+
         val eventShareTemplate = eventTemplateMaker.create(
             eventId = eventId,
             eventName = event.value.name,
-            posterUrl = event.value.posterImageUrl,
+            posterUrl = posterImageUrl,
         )
         eventSharer.shareEvent(eventShareTemplate)
     }
