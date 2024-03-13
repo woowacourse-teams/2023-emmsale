@@ -13,7 +13,6 @@ import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
 import com.emmsale.presentation.ui.eventDetail.eventSharer.EventSharer
-import com.emmsale.presentation.ui.eventDetail.eventSharer.EventTemplateMaker
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailScreenUiState
 import com.emmsale.presentation.ui.eventDetail.uiState.EventDetailUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +25,6 @@ class EventDetailViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val eventRepository: EventRepository,
     private val recruitmentRepository: RecruitmentRepository,
-    private val eventTemplateMaker: EventTemplateMaker,
     private val eventSharer: EventSharer,
 ) : RefreshableViewModel() {
     var eventId = stateHandle[EVENT_ID_KEY] ?: DEFAULT_EVENT_ID
@@ -119,16 +117,15 @@ class EventDetailViewModel @Inject constructor(
     fun shareEvent() {
         val posterImageUrl = event.value.posterImageUrl
         if (posterImageUrl == null) {
-            _uiEvent.value = EventDetailUiEvent.KakaoShareFail
+            _uiEvent.value = EventDetailUiEvent.EventShareFail
             return
         }
 
-        val eventShareTemplate = eventTemplateMaker.create(
+        eventSharer.shareEvent(
             eventId = eventId,
             eventName = event.value.name,
             posterUrl = posterImageUrl,
         )
-        eventSharer.shareEvent(eventShareTemplate)
     }
 
     companion object {

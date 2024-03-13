@@ -12,11 +12,22 @@ import javax.inject.Inject
 
 class EventSharer @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val eventTemplateMaker: EventTemplateMaker,
 ) {
     private val isNotKakaoTalkInstalled
         get() = !ShareClient.instance.isKakaoTalkSharingAvailable(context)
 
-    fun shareEvent(eventTemplate: FeedTemplate) {
+    fun shareEvent(
+        eventId: Long,
+        eventName: String,
+        posterUrl: String,
+    ) {
+        val eventTemplate = eventTemplateMaker.create(
+            eventId = eventId,
+            eventName = eventName,
+            posterUrl = posterUrl,
+        )
+
         if (isNotKakaoTalkInstalled) {
             handleKakaoNotInstalledError(eventTemplate)
             return
