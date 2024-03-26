@@ -13,9 +13,11 @@ import com.emmsale.presentation.common.NetworkUiState
 import com.emmsale.presentation.common.livedata.NotNullLiveData
 import com.emmsale.presentation.common.livedata.NotNullMutableLiveData
 import com.emmsale.presentation.common.livedata.SingleLiveEvent
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 
 abstract class NetworkViewModel : ViewModel() {
 
@@ -54,27 +56,22 @@ abstract class NetworkViewModel : ViewModel() {
         onNetworkError: suspend () -> Unit,
         onStart: suspend () -> Unit = {},
         onFinish: suspend () -> Unit = {},
-    ): Job = viewModelScope.launch {
-        onStart()
-        val loadingJob = launch { onLoading() }
+    ) = flow<T> {
         when (val result = request()) {
             is Success -> onSuccess(result.data)
             is Failure -> onFailure(result.code, result.message)
-            NetworkError -> {
-                onNetworkError()
-                if (_networkUiState.value == NetworkUiState.NETWORK_ERROR) {
-                    loadingJob.cancel()
-                    onFinish()
-                    return@launch
-                }
-            }
-
+            is NetworkError -> onNetworkError()
             is Unexpected ->
                 _networkUiEvent.value = NetworkUiEvent.Unexpected(result.error.toString())
         }
-        loadingJob.cancel()
-        _networkUiState.value = NetworkUiState.NONE
+    }.onStart {
+        onStart()
+        onLoading()
+    }.onCompletion {
         onFinish()
+        if (networkUiState.value != NetworkUiState.NETWORK_ERROR) {
+            _networkUiState.value = NetworkUiState.NONE
+        }
     }
 
     protected fun <T : Any> command(
@@ -85,7 +82,7 @@ abstract class NetworkViewModel : ViewModel() {
         onNetworkError: suspend () -> Unit = { dispatchNetworkErrorEvent() },
         onStart: suspend () -> Unit = {},
         onFinish: suspend () -> Unit = {},
-    ): Job = requestNetwork(
+    ) = requestNetwork(
         request = { command() },
         onSuccess = { onSuccess(it) },
         onFailure = { code, message -> onFailure(code, message) },
@@ -93,7 +90,7 @@ abstract class NetworkViewModel : ViewModel() {
         onNetworkError = { onNetworkError() },
         onStart = { onStart() },
         onFinish = { onFinish() },
-    )
+    ).launchIn(viewModelScope)
 
     companion object {
         private const val LOADING_DELAY: Long = 1000

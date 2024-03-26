@@ -1,7 +1,10 @@
 package com.emmsale.presentation.base
 
+import androidx.lifecycle.viewModelScope
 import com.emmsale.data.network.callAdapter.ApiResponse
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 
 abstract class RefreshableViewModel : NetworkViewModel() {
 
@@ -23,7 +26,7 @@ abstract class RefreshableViewModel : NetworkViewModel() {
         onNetworkError = { onNetworkError() },
         onStart = { onStart() },
         onFinish = { onFinish() },
-    )
+    ).launchIn(viewModelScope)
 
     protected fun <T : Any> refreshData(
         refresh: suspend () -> ApiResponse<T>,
@@ -41,7 +44,7 @@ abstract class RefreshableViewModel : NetworkViewModel() {
         onNetworkError = { onNetworkError() },
         onStart = { onStart() },
         onFinish = { onFinish() },
-    )
+    ).launchIn(viewModelScope)
 
     protected fun <T : Any> commandAndRefresh(
         command: suspend () -> ApiResponse<T>,
@@ -51,17 +54,13 @@ abstract class RefreshableViewModel : NetworkViewModel() {
         onNetworkError: suspend () -> Unit = { dispatchNetworkErrorEvent() },
         onStart: suspend () -> Unit = {},
         onFinish: suspend () -> Unit = {},
-        refresh: suspend () -> Job = { this@RefreshableViewModel.refresh() },
     ): Job = requestNetwork(
         request = { command() },
-        onSuccess = {
-            refresh().join()
-            onSuccess(it)
-        },
+        onSuccess = { onSuccess(it) },
         onFailure = { code, message -> onFailure(code, message) },
         onLoading = { onLoading() },
         onNetworkError = { onNetworkError() },
         onStart = { onStart() },
         onFinish = { onFinish() },
-    )
+    ).onCompletion { refresh() }.launchIn(viewModelScope)
 }
